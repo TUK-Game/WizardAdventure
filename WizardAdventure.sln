@@ -9,11 +9,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Editor", "Editor", "{7B294A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{0AD500FA-7545-4C68-9F55-43C551BCE23E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\Client.vcxproj", "{D80BB777-EF2B-4809-958C-E6709F3D9D93}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Project\Client\Client.vcxproj", "{D80BB777-EF2B-4809-958C-E6709F3D9D93}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A7A56375-7AE0-4FE8-A20F-2EE7702E55A4} = {A7A56375-7AE0-4FE8-A20F-2EE7702E55A4}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor", "Editor\Editor.vcxproj", "{42B98D62-AC34-468D-B758-62B6C400053B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor", "Project\Editor\Editor.vcxproj", "{42B98D62-AC34-468D-B758-62B6C400053B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{A7A56375-7AE0-4FE8-A20F-2EE7702E55A4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Project\Engine\Engine.vcxproj", "{A7A56375-7AE0-4FE8-A20F-2EE7702E55A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
