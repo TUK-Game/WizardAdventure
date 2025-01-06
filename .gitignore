@@ -1,0 +1,10 @@
+# File
+*.user
+*.pdb
+*.idb
+*.exe
+*.cso
+
+# Directory
+.vs
+x64
