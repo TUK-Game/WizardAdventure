@@ -1,12 +1,9 @@
 #include "pch.h"
 #include "Engine.h"
+#include "Device.h"
 
 CEngine::CEngine()
-    : m_hInstance(nullptr)
-    , m_hAccelTable(nullptr)
-    , m_hMainWnd(nullptr)
-    , m_hMainDC(nullptr)
-    , m_Resolution{}
+    : m_WindowInfo{}
 {
 }
 
@@ -14,15 +11,22 @@ CEngine::~CEngine()
 {
 }
 
-int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wcex, const std::wstring& titleName, int width, int height)
+int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wcex, const std::wstring& titleName, int width, int height, bool bWindowed)
 {
-    m_hInstance = hInstance;
-    m_hAccelTable = hAccelTable;
-    m_TitleName = titleName;
-    m_Resolution = { width, height };
+    m_WindowInfo.hInstance = hInstance;
+    m_WindowInfo.hAccelTable = hAccelTable;
+    m_WindowInfo.TitleName = titleName;
+    m_WindowInfo.Width = width;
+    m_WindowInfo.Height = height;
+    m_WindowInfo.bWindowed = bWindowed;
 
     if (FAILED(CreateMainWindow(wcex)))
         return E_FAIL;
+
+    if (FAILED(CDevice::GetInst()->Init()))
+        return E_FAIL;
+
+    ResizeWindow(m_WindowInfo.Width, m_WindowInfo.Height);
 
     return S_OK;
 }
@@ -38,7 +42,7 @@ int CEngine::Run()
             if (msg.message == WM_QUIT)
                 break;
 
-            if (!TranslateAccelerator(msg.hwnd, m_hAccelTable, &msg))
+            if (!TranslateAccelerator(msg.hwnd, m_WindowInfo.hAccelTable, &msg))
             {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
@@ -53,37 +57,56 @@ int CEngine::Run()
     return (int)msg.wParam;
 }
 
+void CEngine::ResizeWindow(int width, int height)
+{
+    // 실제 해상도에 맞는 크기로 다시 계산
+    RECT rc = { 0, 0, m_WindowInfo.Width, m_WindowInfo.Height };
+    AdjustWindowRect(&rc, WS_EX_OVERLAPPEDWINDOW, !!GetMenu(m_WindowInfo.hWnd));
+    SetWindowPos(m_WindowInfo.hWnd, nullptr, 0, 0, rc.right - rc.left, rc.bottom - rc.top, 0);
+
+    // 화면 중앙으로 이동
+    POINT pos = { ::GetDeviceCaps(m_WindowInfo.hDC, HORZRES) / 2, ::GetDeviceCaps(m_WindowInfo.hDC, VERTRES) / 2 };
+    pos.x -= m_WindowInfo.Width / 2;
+    pos.y -= m_WindowInfo.Height / 2 - rc.top;
+    SetWindowPos(m_WindowInfo.hWnd, nullptr, pos.x, pos.y, rc.right - rc.left, rc.bottom - rc.top, 0);
+
+    CDevice::GetInst()->GetDepthStencilBuffer()->Init(m_WindowInfo);
+}
+
 int CEngine::CreateMainWindow(const WNDCLASSEXW& wcex)
 {
     RegisterClassExW(&wcex);
 
-    m_hMainWnd = CreateWindowW(wcex.lpszClassName, m_TitleName.c_str(), WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, m_hInstance, nullptr);
+    m_WindowInfo.hWnd = CreateWindowW(wcex.lpszClassName, m_WindowInfo.TitleName.c_str(), WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, m_WindowInfo.hInstance, nullptr);
 
-    if (!m_hMainWnd)
+    if (!m_WindowInfo.hWnd)
         return E_FAIL;
 
-    ShowWindow(m_hMainWnd, SW_SHOW);
-    UpdateWindow(m_hMainWnd);
+    ShowWindow(m_WindowInfo.hWnd, SW_SHOW);
+    UpdateWindow(m_WindowInfo.hWnd);
 
-    m_hMainDC = GetDC(m_hMainWnd);
+    m_WindowInfo.hDC = GetDC(m_WindowInfo.hWnd);
 
-    // 입력된 해상도에 맞는 윈도우 크기 설정
-
-    // 실제 해상도에 맞는 크기로 다시 계산
-    RECT rc = { 0, 0, (int)m_Resolution.x, (int)m_Resolution.y };
-    AdjustWindowRect(&rc, WS_EX_OVERLAPPEDWINDOW, !!GetMenu(m_hMainWnd));
-    SetWindowPos(m_hMainWnd, nullptr, 0, 0, rc.right - rc.left, rc.bottom - rc.top, 0);
+    // ResizeWindow
+    RECT rc = { 0, 0, m_WindowInfo.Width, m_WindowInfo.Height };
+    AdjustWindowRect(&rc, WS_EX_OVERLAPPEDWINDOW, !!GetMenu(m_WindowInfo.hWnd));
+    SetWindowPos(m_WindowInfo.hWnd, nullptr, 0, 0, rc.right - rc.left, rc.bottom - rc.top, 0);
 
     // 화면 중앙으로 이동
-    POINT pos = { ::GetDeviceCaps(m_hMainDC, HORZRES) / 2, ::GetDeviceCaps(m_hMainDC, VERTRES) / 2 };
-    pos.x -= (int)m_Resolution.x / 2;
-    pos.y -= (int)m_Resolution.y / 2 - rc.top;
-    SetWindowPos(m_hMainWnd, nullptr, pos.x, pos.y, rc.right - rc.left, rc.bottom - rc.top, 0);
+    POINT pos = { ::GetDeviceCaps(m_WindowInfo.hDC, HORZRES) / 2, ::GetDeviceCaps(m_WindowInfo.hDC, VERTRES) / 2 };
+    pos.x -= m_WindowInfo.Width / 2;
+    pos.y -= m_WindowInfo.Height / 2 - rc.top;
+    SetWindowPos(m_WindowInfo.hWnd, nullptr, pos.x, pos.y, rc.right - rc.left, rc.bottom - rc.top, 0);
 
     return S_OK;
 }
 
 void CEngine::Progress()
 {
+    CDevice::GetInst()->RenderBegin();
+
+    // TODO
+
+    CDevice::GetInst()->RenderEnd();
 }

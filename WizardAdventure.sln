@@ -15,6 +15,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Project\Client\Cl
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor", "Project\Editor\Editor.vcxproj", "{42B98D62-AC34-468D-B758-62B6C400053B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A7A56375-7AE0-4FE8-A20F-2EE7702E55A4} = {A7A56375-7AE0-4FE8-A20F-2EE7702E55A4}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Project\Engine\Engine.vcxproj", "{A7A56375-7AE0-4FE8-A20F-2EE7702E55A4}"
 EndProject

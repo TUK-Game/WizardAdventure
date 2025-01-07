@@ -1,19 +1,19 @@
 #include "pch.h"
-#include "ClientManager.h"
+#include "EditorManager.h"
 #include <Engine/Engine.h>
 
-CClientManager::CClientManager()
+CEditorManager::CEditorManager()
     : m_hInstance(nullptr)
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     //_CrtSetBreakAlloc(0);
 }
 
-CClientManager::~CClientManager()
+CEditorManager::~CEditorManager()
 {
 }
 
-int CClientManager::Init(HINSTANCE instance)
+int CEditorManager::Init(HINSTANCE instance)
 {
     m_hInstance = instance;
 
@@ -23,12 +23,12 @@ int CClientManager::Init(HINSTANCE instance)
     return S_OK;
 }
 
-int CClientManager::Run()
+int CEditorManager::Run()
 {
     return CEngine::GetInst()->Run();
 }
 
-LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CEditorManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
@@ -55,7 +55,7 @@ LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     return 0;
 }
 
-int CClientManager::InitEngine()
+int CEditorManager::InitEngine()
 {
     WNDCLASSEXW wcex = {};
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -64,14 +64,14 @@ int CClientManager::InitEngine()
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = m_hInstance;
-    wcex.hIcon = LoadIcon(m_hInstance, MAKEINTRESOURCE(IDI_CLIENT));
+    wcex.hIcon = LoadIcon(m_hInstance, MAKEINTRESOURCE(IDI_EDITOR));
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wcex.lpszMenuName = L"";//MAKEINTRESOURCEW(IDC_CLIENT);
     wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
-    wcex.lpszClassName = L"WIZARD ADVENTURE";
+    wcex.lpszClassName = L"WIZARD ADVENTURE EDITOR";
 
-    HACCEL hAccelTable = LoadAccelerators(m_hInstance, MAKEINTRESOURCE(IDC_CLIENT));
+    HACCEL hAccelTable = LoadAccelerators(m_hInstance, MAKEINTRESOURCE(IDC_EDITOR));
 
-    return CEngine::GetInst()->Init(m_hInstance, hAccelTable, wcex, L"Wizard Adventure", 1280, 720);
+    return CEngine::GetInst()->Init(m_hInstance, hAccelTable, wcex, L"Wizard Adventure Editor", 1280, 720);
 }
