@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "AssetManager.h"
+#include "PathManager.h"
+#include "GraphicShader.h"
 
 CAssetManager::CAssetManager()
 {
@@ -64,6 +66,16 @@ int CAssetManager::LoadMaterial()
 
 int CAssetManager::LoadGraphicShader()
 {
+	CGraphicShader* shader = new CGraphicShader;
+
+	auto path = CPathManager::GetInst()->FindPath(HLSL_PATH);
+	path /= L"default.hlsli";
+
+	if (FAILED(shader->Init(path)))
+		return E_FAIL;
+
+	AddAsset(L"default", shader);
+
 	return S_OK;
 }
 
@@ -132,10 +144,12 @@ int CAssetManager::CreateCubeMesh()
 	vecIndex[30] = 20; vecIndex[31] = 21; vecIndex[32] = 22;
 	vecIndex[33] = 20; vecIndex[34] = 22; vecIndex[35] = 23;
 
-	std::shared_ptr<CMesh> mesh = std::make_shared<CMesh>();
+	CMesh* mesh = new CMesh;
 
 	if (FAILED(mesh->Init(vecVertex, vecIndex)))
 		return E_FAIL;
+
+	AddAsset(L"Cube", mesh);
 
 	return S_OK;
 }
@@ -247,10 +261,12 @@ int CAssetManager::CreateSphereMesh()
 		vecIndex.push_back(lastRingStartIndex + i + 1);
 	}
 
-	std::shared_ptr<CMesh> mesh = std::make_shared<CMesh>();
+	CMesh* mesh = new CMesh;
 
 	if (FAILED(mesh->Init(vecVertex, vecIndex)))
 		return E_FAIL;
+
+	AddAsset(L"Sphere", mesh);
 
 	return S_OK;
 }

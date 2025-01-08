@@ -18,9 +18,6 @@
     <Filter Include="01. Manager\01. Device">
       <UniqueIdentifier>{88a3901b-c1c4-4c45-a41e-c3a6ead1e6b0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\Math">
-      <UniqueIdentifier>{85c8b677-c264-4383-88a9-da0a23f4c833}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Manager\01. Device\CommandQueue">
       <UniqueIdentifier>{0cf39d87-9766-45e4-958c-d615439c7c37}</UniqueIdentifier>
     </Filter>
@@ -47,18 +44,6 @@
     </Filter>
     <Filter Include="01. Manager\02. Timer">
       <UniqueIdentifier>{711e9c7b-6cc7-48ad-a1f4-7a3bb61df551}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Manager\03. Input">
-      <UniqueIdentifier>{eec1de5d-35a5-4792-b603-29036913d206}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Manager\04. Asset">
-      <UniqueIdentifier>{aedc9c49-c474-4213-9ba4-19f71262ef8b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Manager\05. Level">
-      <UniqueIdentifier>{d2bc51e2-107d-4d9b-940d-cd883e12bf8a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="헤더 파일\Memory">
-      <UniqueIdentifier>{fbcec771-0b1a-4efb-b09a-0478766b9227}</UniqueIdentifier>
     </Filter>
     <Filter Include="04. GameObject">
       <UniqueIdentifier>{d7b6a118-d08d-4972-91d0-84166a729129}</UniqueIdentifier>
@@ -90,9 +75,6 @@
     <Filter Include="05. Component\Script">
       <UniqueIdentifier>{3910a399-fc3e-4a9d-893e-dbead3f536f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Manager\06. Render">
-      <UniqueIdentifier>{54ce3ffa-01df-4f08-ba50-59be15cff567}</UniqueIdentifier>
-    </Filter>
     <Filter Include="06. Asset">
       <UniqueIdentifier>{ccec870a-f288-4382-b965-324e3a229dc9}</UniqueIdentifier>
     </Filter>
@@ -104,6 +86,33 @@
     </Filter>
     <Filter Include="06. Asset\03. Texture">
       <UniqueIdentifier>{023782df-5e16-4d35-87d0-232570d69666}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\04. Shader">
+      <UniqueIdentifier>{d1efdb37-6524-4220-9f2b-162a94794f40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL">
+      <UniqueIdentifier>{eeb7dc13-2e3f-48cc-923a-c0fd2f4017be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\04. Input">
+      <UniqueIdentifier>{eec1de5d-35a5-4792-b603-29036913d206}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\05. Math">
+      <UniqueIdentifier>{85c8b677-c264-4383-88a9-da0a23f4c833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\06. Memory">
+      <UniqueIdentifier>{fbcec771-0b1a-4efb-b09a-0478766b9227}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\07. Asset">
+      <UniqueIdentifier>{aedc9c49-c474-4213-9ba4-19f71262ef8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\08. Level">
+      <UniqueIdentifier>{d2bc51e2-107d-4d9b-940d-cd883e12bf8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\09. Render">
+      <UniqueIdentifier>{54ce3ffa-01df-4f08-ba50-59be15cff567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\03. Path">
+      <UniqueIdentifier>{f8e63680-9b22-482d-ad3b-6e1ffc601758}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +135,7 @@
       <Filter>01. Manager</Filter>
     </ClInclude>
     <ClInclude Include="SimpleMath.h">
-      <Filter>헤더 파일\Math</Filter>
+      <Filter>01. Manager\05. Math</Filter>
     </ClInclude>
     <ClInclude Include="d3dx12.h">
       <Filter>헤더 파일</Filter>
@@ -153,16 +162,16 @@
       <Filter>01. Manager\01. Device\TableDescriptorHeap</Filter>
     </ClInclude>
     <ClInclude Include="LevelManager.h">
-      <Filter>01. Manager\05. Level</Filter>
+      <Filter>01. Manager\08. Level</Filter>
     </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>03. Level</Filter>
     </ClInclude>
     <ClInclude Include="Ref.h">
-      <Filter>헤더 파일\Memory</Filter>
+      <Filter>01. Manager\06. Memory</Filter>
     </ClInclude>
     <ClInclude Include="SharedPtr.h">
-      <Filter>헤더 파일\Memory</Filter>
+      <Filter>01. Manager\06. Memory</Filter>
     </ClInclude>
     <ClInclude Include="Layer.h">
       <Filter>03. Level</Filter>
@@ -183,19 +192,34 @@
       <Filter>05. Component\Script</Filter>
     </ClInclude>
     <ClInclude Include="RenderManager.h">
-      <Filter>01. Manager\06. Render</Filter>
+      <Filter>01. Manager\09. Render</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>05. Component\02. Camera</Filter>
     </ClInclude>
     <ClInclude Include="AssetManager.h">
-      <Filter>01. Manager\04. Asset</Filter>
+      <Filter>01. Manager\07. Asset</Filter>
     </ClInclude>
     <ClInclude Include="Asset.h">
       <Filter>06. Asset</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>06. Asset\01. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>01. Manager\02. Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>06. Asset\04. Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeShader.h">
+      <Filter>06. Asset\04. Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicShader.h">
+      <Filter>06. Asset\04. Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="PathManager.h">
+      <Filter>01. Manager\03. Path</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -206,7 +230,7 @@
       <Filter>01. Manager</Filter>
     </ClCompile>
     <ClCompile Include="SimpleMath.cpp">
-      <Filter>헤더 파일\Math</Filter>
+      <Filter>01. Manager\05. Math</Filter>
     </ClCompile>
     <ClCompile Include="Device.cpp">
       <Filter>01. Manager\01. Device</Filter>
@@ -230,13 +254,13 @@
       <Filter>01. Manager\01. Device\TableDescriptorHeap</Filter>
     </ClCompile>
     <ClCompile Include="LevelManager.cpp">
-      <Filter>01. Manager\05. Level</Filter>
+      <Filter>01. Manager\08. Level</Filter>
     </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>03. Level</Filter>
     </ClCompile>
     <ClCompile Include="Ref.cpp">
-      <Filter>헤더 파일\Memory</Filter>
+      <Filter>01. Manager\06. Memory</Filter>
     </ClCompile>
     <ClCompile Include="Layer.cpp">
       <Filter>03. Level</Filter>
@@ -257,13 +281,13 @@
       <Filter>05. Component\Script</Filter>
     </ClCompile>
     <ClCompile Include="RenderManager.cpp">
-      <Filter>01. Manager\06. Render</Filter>
+      <Filter>01. Manager\09. Render</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>05. Component\02. Camera</Filter>
     </ClCompile>
     <ClCompile Include="AssetManager.cpp">
-      <Filter>01. Manager\04. Asset</Filter>
+      <Filter>01. Manager\07. Asset</Filter>
     </ClCompile>
     <ClCompile Include="Asset.cpp">
       <Filter>06. Asset</Filter>
@@ -271,10 +295,28 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>06. Asset\01. Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>01. Manager\02. Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>06. Asset\04. Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeShader.cpp">
+      <Filter>06. Asset\04. Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicShader.cpp">
+      <Filter>06. Asset\04. Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="PathManager.cpp">
+      <Filter>01. Manager\03. Path</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
-      <Filter>헤더 파일\Math</Filter>
+      <Filter>01. Manager\05. Math</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\default.hlsli">
+      <Filter>HLSL</Filter>
     </None>
   </ItemGroup>
 </Project>

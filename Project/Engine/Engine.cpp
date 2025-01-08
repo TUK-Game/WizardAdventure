@@ -1,17 +1,21 @@
 #include "pch.h"
 #include "Engine.h"
 #include "Device.h"
+#include "Timer.h"
+#include "PathManager.h"
+#include "AssetManager.h"
 #include "LevelManager.h"
 #include "RenderManager.h"
-#include "AssetManager.h"
 
 CEngine::CEngine()
     : m_WindowInfo{}
+    , m_Timer(nullptr)
 {
 }
 
 CEngine::~CEngine()
 {
+    delete m_Timer;
 }
 
 int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wcex, const std::wstring& titleName, int width, int height, bool bWindowed)
@@ -30,6 +34,11 @@ int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wc
         return E_FAIL;
 
     ResizeWindow(m_WindowInfo.Width, m_WindowInfo.Height);
+
+    m_Timer = new CTimer;
+    m_Timer->Init();
+
+    CPathManager::GetInst()->Init();
 
     if (FAILED(CAssetManager::GetInst()->Init()))
         return E_FAIL;
@@ -113,6 +122,7 @@ int CEngine::CreateMainWindow(const WNDCLASSEXW& wcex)
 
 void CEngine::Progress()
 {
+    m_Timer->Update();
     CLevelManager::GetInst()->Progress();
 
     CRenderManager::GetInst()->Render();

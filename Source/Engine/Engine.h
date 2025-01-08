@@ -1,6 +1,8 @@
 #pragma once
 
 class CDevice;
+class CTimer;
+
 
 class CEngine :
 	public CSingleton<CEngine>
@@ -21,6 +23,7 @@ private:
 	void Progress();
 
 private:
-	WindowInfo					m_WindowInfo;
+	WindowInfo	m_WindowInfo;
+	CTimer*		m_Timer;
 };
 

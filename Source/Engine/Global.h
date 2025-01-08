@@ -10,6 +10,8 @@
 #include <list>
 #include <unordered_set>
 #include <unordered_map>
+#include <chrono>
+#include <filesystem>
 #include <d3d12.h>
 #include <wrl.h>
 #include <d3dcompiler.h>

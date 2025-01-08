@@ -24,4 +24,8 @@ private:\
 #define REGISTER_COUNT				CBV_REGISTER_COUNT + SRV_REGISTER_COUNT
 
 
+#define ROOT_PATH	L"RootPath"
+#define HLSL_PATH	L"HLSLPath"
+
+
 #define MAX_LAYER	32
