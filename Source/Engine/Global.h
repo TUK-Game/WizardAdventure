@@ -31,6 +31,7 @@ using namespace Microsoft::WRL;
 #include "Singleton.h"
 #include "Flag.h"
 #include "Define.h"
+#include "Ref.h"
 
 using Vec2		= DirectX::SimpleMath::Vector2;
 using Vec3		= DirectX::SimpleMath::Vector3;

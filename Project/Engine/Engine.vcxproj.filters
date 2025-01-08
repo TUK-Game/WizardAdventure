@@ -39,6 +39,60 @@
     <Filter Include="01. Manager\01. Device\TableDescriptorHeap">
       <UniqueIdentifier>{dd20d6d9-abdd-4bcb-b0ab-9017b7e6e90a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Asset">
+      <UniqueIdentifier>{5c97570a-6321-4144-ad55-7179548b75a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Level">
+      <UniqueIdentifier>{4511727d-a05b-4456-948b-e6e4ea8a08c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\02. Timer">
+      <UniqueIdentifier>{711e9c7b-6cc7-48ad-a1f4-7a3bb61df551}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\03. Input">
+      <UniqueIdentifier>{eec1de5d-35a5-4792-b603-29036913d206}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\04. Asset">
+      <UniqueIdentifier>{aedc9c49-c474-4213-9ba4-19f71262ef8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\05. Level">
+      <UniqueIdentifier>{d2bc51e2-107d-4d9b-940d-cd883e12bf8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Memory">
+      <UniqueIdentifier>{fbcec771-0b1a-4efb-b09a-0478766b9227}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. GameObject">
+      <UniqueIdentifier>{d7b6a118-d08d-4972-91d0-84166a729129}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component">
+      <UniqueIdentifier>{445beb6d-4381-4029-9037-d0d4856e1cb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\01. RenderComponent">
+      <UniqueIdentifier>{0f04681f-22de-43d0-b3ae-c8a1ceb1ac7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\01. RenderComponent\ParticleSystem">
+      <UniqueIdentifier>{28eb4740-bed7-4885-a6cd-da12b5955ab3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\01. RenderComponent\MeshRenderer">
+      <UniqueIdentifier>{c46337f8-aca9-4375-8760-557fb55dc3b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\01. RenderComponent\Skybox">
+      <UniqueIdentifier>{0f08e9ec-ec99-4bc6-8b4a-4f57d7df3ea8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\02. Camera">
+      <UniqueIdentifier>{a30ec56f-a86c-4463-aa20-580a43ec7a76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\03. Transform">
+      <UniqueIdentifier>{4eb6377f-8898-43ea-ac76-a51f7a008690}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\04. Collider">
+      <UniqueIdentifier>{fabf8a13-6332-4c1c-99b4-992d1c1e4ef9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\Script">
+      <UniqueIdentifier>{3910a399-fc3e-4a9d-893e-dbead3f536f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\06. Render">
+      <UniqueIdentifier>{54ce3ffa-01df-4f08-ba50-59be15cff567}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -86,6 +140,42 @@
     <ClInclude Include="TableDescriptorHeap.h">
       <Filter>01. Manager\01. Device\TableDescriptorHeap</Filter>
     </ClInclude>
+    <ClInclude Include="LevelManager.h">
+      <Filter>01. Manager\05. Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>03. Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Ref.h">
+      <Filter>헤더 파일\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedPtr.h">
+      <Filter>헤더 파일\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Layer.h">
+      <Filter>03. Level</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>04. GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>05. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderComponent.h">
+      <Filter>05. Component\01. RenderComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderer.h">
+      <Filter>05. Component\01. RenderComponent\MeshRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>05. Component\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderManager.h">
+      <Filter>01. Manager\06. Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>05. Component\02. Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -117,6 +207,39 @@
     </ClCompile>
     <ClCompile Include="TableDescriptorHeap.cpp">
       <Filter>01. Manager\01. Device\TableDescriptorHeap</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>01. Manager\05. Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>03. Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Ref.cpp">
+      <Filter>헤더 파일\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Layer.cpp">
+      <Filter>03. Level</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>04. GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>05. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
+      <Filter>05. Component\01. RenderComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRenderer.cpp">
+      <Filter>05. Component\01. RenderComponent\MeshRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>05. Component\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderManager.cpp">
+      <Filter>01. Manager\06. Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>05. Component\02. Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

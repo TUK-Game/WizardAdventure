@@ -22,3 +22,18 @@ enum class SRV_REGISTER : unsigned char
 	END
 };
 
+enum class EComponent_Type
+{
+	Transform,
+	Camera,
+	Collider,
+	
+	// Rendering Component
+	MeshRenderer,
+	ParticleSystem,
+	Skybox,
+
+	END,
+
+	Script
+};

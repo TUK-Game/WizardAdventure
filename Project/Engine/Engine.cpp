@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Engine.h"
 #include "Device.h"
+#include "LevelManager.h"
+#include "RenderManager.h"
 
 CEngine::CEngine()
     : m_WindowInfo{}
@@ -27,6 +29,9 @@ int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wc
         return E_FAIL;
 
     ResizeWindow(m_WindowInfo.Width, m_WindowInfo.Height);
+
+    if (FAILED(CLevelManager::GetInst()->Init()))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -83,9 +88,6 @@ int CEngine::CreateMainWindow(const WNDCLASSEXW& wcex)
     if (!m_WindowInfo.hWnd)
         return E_FAIL;
 
-    ShowWindow(m_WindowInfo.hWnd, SW_SHOW);
-    UpdateWindow(m_WindowInfo.hWnd);
-
     m_WindowInfo.hDC = GetDC(m_WindowInfo.hWnd);
 
     // ResizeWindow
@@ -99,14 +101,15 @@ int CEngine::CreateMainWindow(const WNDCLASSEXW& wcex)
     pos.y -= m_WindowInfo.Height / 2 - rc.top;
     SetWindowPos(m_WindowInfo.hWnd, nullptr, pos.x, pos.y, rc.right - rc.left, rc.bottom - rc.top, 0);
 
+    ShowWindow(m_WindowInfo.hWnd, SW_SHOW);
+    UpdateWindow(m_WindowInfo.hWnd);
+
     return S_OK;
 }
 
 void CEngine::Progress()
 {
-    CDevice::GetInst()->RenderBegin();
+    CLevelManager::GetInst()->Progress();
 
-    // TODO
-
-    CDevice::GetInst()->RenderEnd();
+    CRenderManager::GetInst()->Render();
 }
