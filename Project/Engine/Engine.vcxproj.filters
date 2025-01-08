@@ -93,6 +93,18 @@
     <Filter Include="01. Manager\06. Render">
       <UniqueIdentifier>{54ce3ffa-01df-4f08-ba50-59be15cff567}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. Asset">
+      <UniqueIdentifier>{ccec870a-f288-4382-b965-324e3a229dc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\01. Mesh">
+      <UniqueIdentifier>{d6f80dd1-031c-4f17-bc9b-7c3bdacc86a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\02. Material">
+      <UniqueIdentifier>{49c3bce8-aa65-43df-805b-371af99023e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\03. Texture">
+      <UniqueIdentifier>{023782df-5e16-4d35-87d0-232570d69666}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -176,6 +188,15 @@
     <ClInclude Include="Camera.h">
       <Filter>05. Component\02. Camera</Filter>
     </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>01. Manager\04. Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Asset.h">
+      <Filter>06. Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>06. Asset\01. Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -240,6 +261,15 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>05. Component\02. Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>01. Manager\04. Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Asset.cpp">
+      <Filter>06. Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>06. Asset\01. Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

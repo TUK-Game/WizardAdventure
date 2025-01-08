@@ -37,3 +37,14 @@ enum class EComponent_Type
 
 	Script
 };
+
+enum class EAsset_Type
+{
+	Mesh,
+	Texture,
+	Material,
+	GraphicShader,
+	ComputeShader,
+
+	END
+};

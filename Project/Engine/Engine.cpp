@@ -3,6 +3,7 @@
 #include "Device.h"
 #include "LevelManager.h"
 #include "RenderManager.h"
+#include "AssetManager.h"
 
 CEngine::CEngine()
     : m_WindowInfo{}
@@ -29,6 +30,9 @@ int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wc
         return E_FAIL;
 
     ResizeWindow(m_WindowInfo.Width, m_WindowInfo.Height);
+
+    if (FAILED(CAssetManager::GetInst()->Init()))
+        return E_FAIL;
 
     if (FAILED(CLevelManager::GetInst()->Init()))
         return E_FAIL;

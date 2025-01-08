@@ -32,6 +32,7 @@ using namespace Microsoft::WRL;
 #include "Flag.h"
 #include "Define.h"
 #include "Ref.h"
+#include "SharedPtr.h"
 
 using Vec2		= DirectX::SimpleMath::Vector2;
 using Vec3		= DirectX::SimpleMath::Vector3;
@@ -51,4 +52,18 @@ struct WindowInfo
 	int				Width;
 	int				Height;
 	bool			bWindowed;	// 전체화면 or 창모드
+};
+
+struct Vertex
+{
+	Vertex() {}
+	Vertex(Vec3 pos, Vec2 uv, Vec3 normal, Vec3 tangent)
+		: Pos(pos), UV(uv), Normal(normal), Tangent(tangent)
+	{
+	}
+
+	Vec3	Pos;
+	Vec2	UV;
+	Vec3	Normal;
+	Vec3	Tangent;
 };
