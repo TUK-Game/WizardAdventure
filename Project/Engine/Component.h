@@ -1,5 +1,12 @@
 #pragma once
 
+#include "GameObject.h"
+
+class CTransform;
+class CMeshRenderer;
+class CCamera;
+
+
 class CComponent :
 	public CRef
 {
@@ -12,6 +19,11 @@ public:
 public:
 	EComponent_Type GetType() const	{ return m_Type; }
 	CGameObject* GetOwner() const	{ return m_Owner; }
+
+protected:
+	CTransform* GetTransform()			{ return m_Owner->GetTransform(); }
+	CMeshRenderer* GetMeshRenderer()	{ return m_Owner->GetMeshRenderer(); }
+	CCamera* GetCamera()				{ return m_Owner->GetCamera(); }
 
 public:
 	virtual void Begin() {};

@@ -46,7 +46,7 @@ int CDevice::Init()
 	if (FAILED(m_DepthStencilBuffer->Init(CEngine::GetInst()->GetWindowInfo())))
 		return E_FAIL;
 
-	//CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformParams), 256);
+	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformParams), 256);
 	//CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 256);
 
 	return S_OK;

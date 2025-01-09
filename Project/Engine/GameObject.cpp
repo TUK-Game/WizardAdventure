@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "GameObject.h"
+#include "LevelManager.h"
+#include "Level.h"
+#include "Layer.h"
 #include "Component.h"
 #include "RenderComponent.h"
 #include "Script.h"
@@ -8,7 +11,7 @@ CGameObject::CGameObject()
 	: m_arrComponent{}
 	, m_RenderComponent(nullptr)
 	, m_Parent(nullptr)
-	, m_LayerIdx(-1)
+	, m_LayerIndex(-1)
 {
 }
 
@@ -70,7 +73,10 @@ void CGameObject::FinalUpdate()
 			m_arrComponent[i]->FinalUpdate();
 	}
 
-	// TODO: Layer 에 GameObject 등록
+	// Layer 에 GameObject 등록
+	CLevel* curLevel = CLevelManager::GetInst()->GetCurrentLevel();
+	CLayer* layer = curLevel->GetLayer(m_LayerIndex);
+	layer->RegisterGameObject(this);
 
 	for (size_t i = 0; i < m_vecChild.size(); ++i)
 	{
@@ -84,4 +90,34 @@ void CGameObject::Render()
 		return;
 
 	m_RenderComponent->Render();
+}
+
+void CGameObject::AddComponent(CComponent* component)
+{
+	if (!component)
+		return;
+
+	EComponent_Type type = component->GetType();
+
+	if (type == EComponent_Type::Script)
+	{
+		m_vecScript.push_back((CScript*)component);
+	}
+	else
+	{
+		// 이미 가지고 있는 컴포넌트인 경우
+		assert(!m_arrComponent[(int)type]);
+		m_arrComponent[(int)type] = component;
+
+		if (dynamic_cast<CRenderComponent*>(component))
+		{
+			// 한 종류의 RenderComonent 만 가질 수 있다.
+			if (m_RenderComponent)
+				assert(nullptr);
+
+			m_RenderComponent = (CRenderComponent*)component;
+		}
+	}
+
+	component->m_Owner = this;
 }

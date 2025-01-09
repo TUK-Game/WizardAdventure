@@ -2,8 +2,9 @@
 
 enum class EConstantBuffer_Type : unsigned char
 {
-	TRANSFORM,
-	MATERIAL,
+	Transform,
+	Material,
+
 	END
 };
 

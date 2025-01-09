@@ -1,6 +1,7 @@
 #pragma once
 
 class CLayer;
+class CGameObject;
 
 
 class CLevel :
@@ -11,9 +12,16 @@ public:
 	~CLevel();
 
 public:
+	CLayer* GetLayer(int index) const	{ return m_Layer[index]; }
+	void Deregister();
+
+public:
 	void Begin();
 	void Update();
 	void FinalUpdate();
+
+public:
+	void AddGameObject(CGameObject* object, int layerIndex, bool bChildMove);
 
 public:
 	virtual CLevel* Clone() override	{ return new CLevel(*this); }

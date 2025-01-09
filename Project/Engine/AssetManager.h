@@ -4,7 +4,7 @@
 #include "Mesh.h"
 //#include "Material.h"
 //#include "Texture.h"
-//#include "GraphicShader.h"
+#include "GraphicShader.h"
 //#include "ComputeShader.h"
 
 class CAssetManager
@@ -48,8 +48,8 @@ EAsset_Type CAssetManager::GetAssetType()
 	//	return EAsset_Type::Texture;
 	//else if constexpr (std::is_same_v<CMaterial, T>)
 	//	return EAsset_Type::Material;
-	//else if constexpr (std::is_same_v<CGraphicShader, T>)
-	//	return EAsset_Type::GraphicShader;
+	else if constexpr (std::is_same_v<CGraphicShader, T>)
+		return EAsset_Type::GraphicShader;
 	//else if constexpr (std::is_same_v<CComputeShader, T>)
 	//	return EAsset_Type::ComputeShader;
 

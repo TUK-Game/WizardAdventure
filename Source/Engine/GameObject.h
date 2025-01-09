@@ -3,6 +3,9 @@
 class CComponent;
 class CScript;
 class CRenderComponent;
+class CTransform;
+class CMeshRenderer;
+class CCamera;
 
 
 class CGameObject :
@@ -13,6 +16,17 @@ class CGameObject :
 public:
     CGameObject();
     ~CGameObject();
+
+public:
+    CGameObject* GetParent() const                      { return m_Parent; }
+    const std::vector<CGameObject*>& GetChild() const   { return m_vecChild; }
+    CComponent* GetComponent(EComponent_Type type)      { return m_arrComponent[(int)type]; }
+    CRenderComponent* GetRenderComponent()              { return m_RenderComponent; }
+    CTransform* GetTransform()                          { return (CTransform*)GetComponent(EComponent_Type::Transform); }
+    CMeshRenderer* GetMeshRenderer()                    { return (CMeshRenderer*)GetComponent(EComponent_Type::MeshRenderer); }
+    CCamera* GetCamera()                                { return (CCamera*)GetComponent(EComponent_Type::Camera); }
+
+    void AddComponent(CComponent* component);
 
 public:
     void Begin();
@@ -31,6 +45,6 @@ private:
     CGameObject*                m_Parent;
     std::vector<CGameObject*>   m_vecChild;
 
-    int m_LayerIdx; // 소속 레이어 번호
+    int m_LayerIndex; // 소속 레이어 번호
 };
 

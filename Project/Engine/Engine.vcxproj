@@ -191,6 +191,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="TableDescriptorHeap.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Asset.cpp" />
@@ -204,6 +205,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Global.cpp" />
     <ClCompile Include="GraphicShader.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -227,6 +229,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="TableDescriptorHeap.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Content\Shaders\default.hlsli" />

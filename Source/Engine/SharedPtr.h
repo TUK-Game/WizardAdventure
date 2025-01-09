@@ -49,6 +49,8 @@ public:
 	T* operator->()									{ return m_ptr; }
 	const T* operator->() const						{ return m_ptr; }
 
+	T* Get()										{ return m_ptr; }
+	T** GetAdressOf()								{ return &m_ptr; }
 	bool IsNull()									{ return m_ptr == nullptr; }
 
 public:

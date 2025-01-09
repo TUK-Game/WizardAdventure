@@ -82,8 +82,8 @@ void CCommandQueue::RenderBegin(const D3D12_VIEWPORT* vp, const D3D12_RECT* rect
 
 	m_CmdList->SetGraphicsRootSignature(ROOT_SIGNATURE.Get());
 
-	//CONST_BUFFER(EConstantBuffer_Type::TRANSFORM)->Clear();
-	//CONST_BUFFER(EConstantBuffer_Type::MATERIAL)->Clear();
+	CONST_BUFFER(EConstantBuffer_Type::Transform)->Clear();
+	//CONST_BUFFER(EConstantBuffer_Type::Material)->Clear();
 
 	CDevice::GetInst()->GetTableDescHeap()->Clear();
 

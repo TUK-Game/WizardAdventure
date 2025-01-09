@@ -11,6 +11,7 @@ class CEngine :
 
 public:
 	WindowInfo GetWindowInfo() const	{ return m_WindowInfo; }
+	Vec2 GetResolution() const			{ return Vec2((float)m_WindowInfo.Width, (float)m_WindowInfo.Height); }
 
 public:
 	int Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wcex, const std::wstring& titleName, int width, int height, bool bWindowed = true);

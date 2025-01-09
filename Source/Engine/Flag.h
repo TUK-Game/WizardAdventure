@@ -48,3 +48,19 @@ enum class EAsset_Type
 
 	END
 };
+
+enum class EProjection_Type
+{
+	Perspective,
+	Orthographic,
+};
+
+// πÊ«‚
+enum class EDir
+{
+	Right,
+	Up,
+	Front,
+
+	END
+};

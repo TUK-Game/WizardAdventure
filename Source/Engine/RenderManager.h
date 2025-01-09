@@ -12,7 +12,7 @@ public:
 	void Render();
 
 public:
-	// TODO: 카메라 등록
+	void RegisterCamera(CCamera* camera, int priority);
 
 private:
 	std::vector<CCamera*>	m_vecCamera;

@@ -24,3 +24,18 @@ void CRenderManager::Render()
 	// Present
 	CDevice::GetInst()->RenderEnd();
 }
+
+void CRenderManager::RegisterCamera(CCamera* camera, int priority)
+{
+	if (m_vecCamera.size() <= priority)
+	{
+		m_vecCamera.resize(priority + 1);
+	}
+
+	if (m_vecCamera[priority] != nullptr)
+	{
+		m_vecCamera[priority]->m_Priority = -1;
+	}
+
+	m_vecCamera[priority] = camera;
+}

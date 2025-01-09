@@ -69,3 +69,10 @@ struct Vertex
 	Vec3	Normal;
 	Vec3	Tangent;
 };
+
+struct TransformParams
+{
+	Matrix	matWVP;
+};
+
+extern TransformParams	g_Transform;
