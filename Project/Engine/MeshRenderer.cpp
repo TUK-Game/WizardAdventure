@@ -24,8 +24,7 @@ void CMeshRenderer::Render()
 
 	// 사용할 쉐이더 바인딩
 	// Temp
-	CSharedPtr<CGraphicShader> shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"default");
-	shader->Update();
+	GetMaterial()->Binding();
 	// TODO: GetMaterial()->Binding();
 
 	// 렌더링 시작

@@ -1,0 +1,52 @@
+#include "pch.h"
+#include "CameraScript.h"
+#include "InputManager.h"
+#include "Transform.h"
+#include "Engine.h"
+
+CCameraScript::CCameraScript()
+	: m_Speed(300.f)
+{
+}
+
+CCameraScript::~CCameraScript()
+{
+}
+
+void CCameraScript::Update()
+{
+	// 카메라 컴포넌트가 없다면 종료
+	if (!GetCamera())
+		return;
+
+	Move();
+}
+
+void CCameraScript::Move()
+{
+	Vec3 pos = GetTransform()->GetRelativePosition();
+
+	Vec3 front = GetTransform()->GetRelativeDir(EDir::Front);
+	Vec3 right = GetTransform()->GetRelativeDir(EDir::Right);
+
+	if (KEY_PUSH(EKey::W))
+		pos += front * DELTA_TIME * m_Speed;
+	if (KEY_PUSH(EKey::S))
+		pos -= front * DELTA_TIME * m_Speed;
+	if (KEY_PUSH(EKey::A))
+		pos -= right * DELTA_TIME * m_Speed;
+	if (KEY_PUSH(EKey::D))
+		pos += right * DELTA_TIME * m_Speed;
+
+	GetTransform()->SetRelativePosition(pos);
+
+
+	if (!KEY_PUSH(EKey::RButton))
+		return;
+
+	Vec2 dragDir = CInputManager::GetInst()->GetDragDir();
+	Vec3 rot = GetTransform()->GetRelativeRotation();
+	rot.x += dragDir.y * DELTA_TIME * 360.f;
+	rot.y += dragDir.x * DELTA_TIME * 360.f;
+	GetTransform()->SetRelativeRotation(rot);
+}

@@ -6,10 +6,12 @@
 #include "AssetManager.h"
 #include "LevelManager.h"
 #include "RenderManager.h"
+#include "InputManager.h"
 
 CEngine::CEngine()
     : m_WindowInfo{}
     , m_Timer(nullptr)
+    , m_DeltaTime(0.f)
 {
 }
 
@@ -41,6 +43,9 @@ int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wc
     CPathManager::GetInst()->Init();
 
     if (FAILED(CAssetManager::GetInst()->Init()))
+        return E_FAIL;
+
+    if (FAILED(CInputManager::GetInst()->Init()))
         return E_FAIL;
 
     if (FAILED(CLevelManager::GetInst()->Init()))
@@ -123,6 +128,9 @@ int CEngine::CreateMainWindow(const WNDCLASSEXW& wcex)
 void CEngine::Progress()
 {
     m_Timer->Update();
+    m_DeltaTime = m_Timer->GetDeltaTime();
+
+    CInputManager::GetInst()->Update();
     CLevelManager::GetInst()->Progress();
 
     CRenderManager::GetInst()->Render();

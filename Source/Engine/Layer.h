@@ -1,9 +1,12 @@
 #pragma once
 
+#include "Ref.h"
+
 class CGameObject;
 
 
-class CLayer
+class CLayer :
+	public CRef
 {
 	friend class CLevel;
 
@@ -21,6 +24,9 @@ public:
 	void Begin();
 	void Update();
 	void FinalUpdate();
+
+public:
+	virtual CLayer* Clone() override { return new CLayer(*this); }
 
 private:
 	std::vector<CGameObject*>	m_vecParentObjects;	// 최상위 부모 오브젝트

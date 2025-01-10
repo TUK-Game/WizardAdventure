@@ -23,7 +23,7 @@ void CPathManager::Init()
 	m_mapPath.insert(std::make_pair(ROOT_PATH, path));
 
 	AddPath(HLSL_PATH, TEXT("Shaders"));
-	//AddPath(TEXTURE_PATH, TEXT("Texture"));
+	AddPath(TEXTURE_PATH, TEXT("Texture"));
 	//AddPath(SOUND_PATH, TEXT("Sound"));
 	//AddPath(FONT_PATH, TEXT("Font"));
 }

@@ -19,6 +19,8 @@
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
 #include <DirectXColors.h>
+#include <DirectXTex/DirectXTex.h>
+#include <DirectXTex/DirectXTex.inl>
 #include "d3dx12.h"
 #include "SimpleMath.h"
 using namespace DirectX;
@@ -29,6 +31,12 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "dxgi")
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "d3dcompiler")
+
+#ifndef _DEBUG
+#pragma comment(lib, "DirectxTex/DirectXTex.lib")
+#else
+#pragma comment(lib, "DirectxTex/DirectXTex_d.lib")
+#endif
 
 #include "Singleton.h"
 #include "Flag.h"
@@ -73,6 +81,19 @@ struct Vertex
 struct TransformParams
 {
 	Matrix	matWVP;
+};
+
+#define MATERIAL_INT_COUNT		5
+#define MATERIAL_FLOAT_COUNT	5
+#define MATERIAL_TEXTURE_COUNT	5
+
+struct MaterialParams
+{
+	void SetInt(unsigned char index, int value) { IntParams[index] = value; }
+	void SetFloat(unsigned char index, float value) { FloatParams[index] = value; }
+
+	std::array<int, MATERIAL_INT_COUNT> IntParams;
+	std::array<float, MATERIAL_FLOAT_COUNT> FloatParams;
 };
 
 extern TransformParams	g_Transform;

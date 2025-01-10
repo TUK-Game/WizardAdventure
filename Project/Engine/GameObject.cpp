@@ -23,6 +23,12 @@ CGameObject::~CGameObject()
 			delete component;
 	}
 
+	for (auto& component : m_vecScript)
+	{
+		if (component)
+			delete component;
+	}
+
 	for (auto& child : m_vecChild)
 		delete child;
 }

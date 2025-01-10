@@ -10,6 +10,7 @@ class CEngine :
 	DECLARE_SINGLETON(CEngine)
 
 public:
+	float GetDeltaTime() const			{ return m_DeltaTime; }
 	WindowInfo GetWindowInfo() const	{ return m_WindowInfo; }
 	Vec2 GetResolution() const			{ return Vec2((float)m_WindowInfo.Width, (float)m_WindowInfo.Height); }
 
@@ -26,5 +27,6 @@ private:
 private:
 	WindowInfo	m_WindowInfo;
 	CTimer*		m_Timer;
+	float		m_DeltaTime;
 };
 

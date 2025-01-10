@@ -2,6 +2,8 @@
 #include "AssetManager.h"
 #include "PathManager.h"
 #include "GraphicShader.h"
+#include "Texture.h"
+#include "Material.h"
 
 CAssetManager::CAssetManager()
 {
@@ -19,10 +21,10 @@ int CAssetManager::Init()
 	if (FAILED(LoadTexture()))
 		return E_FAIL;
 
-	if (FAILED(LoadMaterial()))
+	if (FAILED(LoadGraphicShader()))
 		return E_FAIL;
 
-	if (FAILED(LoadGraphicShader()))
+	if (FAILED(LoadMaterial()))
 		return E_FAIL;
 
 	if (FAILED(LoadComputeShader()))
@@ -56,11 +58,33 @@ int CAssetManager::LoadMesh()
 
 int CAssetManager::LoadTexture()
 {
+	// ===================
+	// 텍스쳐 한장 로딩하기
+	// ===================
+	CTexture* tex = new CTexture;
+	auto path = CPathManager::GetInst()->FindPath(TEXTURE_PATH);
+	tex->Init(path / L"kita.jpg");
+	AddAsset(L"Kita", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"mushroom.png");
+	AddAsset(L"Mushroom", tex);
+
 	return S_OK;
 }
 
 int CAssetManager::LoadMaterial()
 {
+	CMaterial* material = new CMaterial;
+	material->SetShader(FindAsset<CGraphicShader>(L"Default"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Kita"));
+	AddAsset(L"Kita", material);
+
+	material = new CMaterial;
+	material->SetShader(FindAsset<CGraphicShader>(L"Default"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Mushroom"));
+	AddAsset(L"Mushroom", material);
+
 	return S_OK;
 }
 
@@ -74,7 +98,7 @@ int CAssetManager::LoadGraphicShader()
 	if (FAILED(shader->Init(path)))
 		return E_FAIL;
 
-	AddAsset(L"default", shader);
+	AddAsset(L"Default", shader);
 
 	return S_OK;
 }
