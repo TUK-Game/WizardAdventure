@@ -19,6 +19,7 @@ public:
 	void Begin();
 	void Update();
 	void FinalUpdate();
+	void End();
 
 public:
 	void AddGameObject(CGameObject* object, int layerIndex, bool bChildMove);

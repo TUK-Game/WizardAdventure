@@ -14,8 +14,13 @@ public:
 public:
 	int Init();
 	void Progress();
+	void ChangeLevel(CLevel* newLevel);
+
+private:
+	void CleanUpCurrentLevel();
 
 private:
 	class CLevel* m_CurLevel;
+	float m_timer = 0.f;
 };
 

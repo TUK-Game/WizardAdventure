@@ -66,3 +66,20 @@ void CLevelManager::Progress()
 
 	m_CurLevel->FinalUpdate();
 }
+
+
+void CLevelManager::CleanUpCurrentLevel()
+{
+	if (m_CurLevel)
+	{
+		m_CurLevel->End(); // 현재 레벨 종료 작업
+		delete m_CurLevel; // 메모리 해제
+		m_CurLevel = nullptr;
+	}
+}
+
+void CLevelManager::ChangeLevel(CLevel* newLevel)
+{
+	CleanUpCurrentLevel();
+	// m_CurLevel을 newLevel로 
+}
