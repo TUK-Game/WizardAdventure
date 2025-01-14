@@ -8,6 +8,8 @@
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "CameraScript.h"
+#include "BoxCollider.h"
+#include "OrientedBoxCollider.h"
 
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)
@@ -50,6 +52,7 @@ int CLevelManager::Init()
 	object4->SetName(L"Cube4");
 	object4->AddComponent(new CTransform);
 	object4->AddComponent(new CMeshRenderer);
+	object4->AddComponent(new COrientedBoxCollider);
 	object4->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
 	object4->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object4->GetTransform()->SetRelativePosition(100.f, 0.f, 0.f);
@@ -59,7 +62,8 @@ int CLevelManager::Init()
 	object3->SetName(L"Cube3");
 	object3->AddComponent(new CTransform);
 	object3->AddComponent(new CMeshRenderer);
-	object3->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
+	object3->AddComponent(new COrientedBoxCollider);
+	object3->GetTransform()->SetRelativeScale(	100.f, 100.f, 100.f);
 	object3->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object3->GetTransform()->SetRelativePosition(300.f, 0.f, 0.f);
 	object3->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
@@ -69,6 +73,7 @@ int CLevelManager::Init()
 	object2->SetName(L"Cube2");
 	object2->AddComponent(new CTransform);
 	object2->AddComponent(new CMeshRenderer);
+	object2->AddComponent(new COrientedBoxCollider);
 	object2->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
 	object2->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object2->GetTransform()->SetRelativePosition(200.f, 0.f, 0.f);
@@ -78,6 +83,7 @@ int CLevelManager::Init()
 	object->SetName(L"Cube");
 	object->AddComponent(new CTransform);
 	object->AddComponent(new CMeshRenderer);
+	object->AddComponent(new COrientedBoxCollider);
 	object->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
 	object->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object->GetTransform()->SetRelativePosition(-300.f, 0.f, 300.f);

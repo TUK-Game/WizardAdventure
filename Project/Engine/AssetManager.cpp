@@ -207,7 +207,7 @@ int CAssetManager::CreateCubeMesh()
 int CAssetManager::CreateSphereMesh()
 {
 	float radius = 0.5f; // 구의 반지름
-	UINT stackCount = 20; // 가로 분할
+	UINT stackCount = 20; // 가로 분할 
 	UINT sliceCount = 20; // 세로 분할
 
 	std::vector<Vertex> vecVertex;

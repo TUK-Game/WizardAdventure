@@ -69,7 +69,7 @@ Vec3 CTransform::GetRelativeRotation()
 
 Vec3 CTransform::GetWorldPosition()
 {
-	return Vec3();
+	return Vec3(m_matWorld._41, m_matWorld._42, m_matWorld._43);
 }
 
 Vec3 CTransform::GetWorldScale()
@@ -79,8 +79,40 @@ Vec3 CTransform::GetWorldScale()
 
 Vec3 CTransform::GetWorldRotation()
 {
-	return Vec3();
+	Matrix worldMatrix = GetWorldMatrix();
+
+	// 월드 행렬을 분해하여 스케일, 회전 Quaternion, 위치 추출
+	XMVECTOR scale, rotationQuat, translation;
+	XMMatrixDecompose(&scale, &rotationQuat, &translation, XMLoadFloat4x4(&worldMatrix));
+
+	// 축-각도 추출
+	XMVECTOR axis;
+	float angle;
+	XMQuaternionToAxisAngle(&axis, &angle, rotationQuat);
+
+	// 축과 각도를 사용해 회전 벡터 생성 (각도를 곱함)
+	XMFLOAT3 axisFloat3;
+	XMStoreFloat3(&axisFloat3, axis);
+	Vec3 rotation(axisFloat3.x * angle, axisFloat3.y * angle, axisFloat3.z * angle);
+
+	return rotation;
 }
+
+Matrix CTransform::GetWorldRotationMatrix()
+{
+	// 월드 변환 행렬
+	Matrix worldMatrix = GetWorldMatrix();
+
+	// 월드 행렬을 분해하여 스케일, 회전 Quaternion, 위치 추출
+	XMVECTOR scale, rotationQuat, translation;
+	XMMatrixDecompose(&scale, &rotationQuat, &translation, XMLoadFloat4x4(&worldMatrix));
+
+	// 회전 Quaternion을 회전 행렬로 변환
+	Matrix rotationMatrix = XMMatrixRotationQuaternion(rotationQuat);
+
+	return rotationMatrix;
+}
+
 
 void CTransform::SetRelativeRotation(Vec3 rotation)
 {

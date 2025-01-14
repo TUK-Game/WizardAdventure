@@ -6,7 +6,7 @@ class CRenderComponent;
 class CTransform;
 class CMeshRenderer;
 class CCamera;
-
+class CBaseCollider;
 
 class CGameObject :
     public CRef
@@ -23,9 +23,12 @@ public:
     CComponent* GetComponent(EComponent_Type type)      { return m_arrComponent[(int)type]; }
     CRenderComponent* GetRenderComponent()              { return m_RenderComponent; }
     CTransform* GetTransform()                          { return (CTransform*)GetComponent(EComponent_Type::Transform); }
-    CMeshRenderer* GetMeshRenderer()                    { return (CMeshRenderer*)GetComponent(EComponent_Type::MeshRenderer); }
+    CMeshRenderer* GetMeshRenderer() { return (CMeshRenderer*)GetComponent(EComponent_Type::MeshRenderer); }
+    CBaseCollider* GetCollider()                    { return (CBaseCollider*)GetComponent(EComponent_Type::Collider); }
     CCamera* GetCamera()                                { return (CCamera*)GetComponent(EComponent_Type::Camera); }
+    bool GetCheckFrustum() { return _checkFrustum; }
 
+    void SetCheckFrustum(bool checkFrustum) { _checkFrustum = checkFrustum; }
     void SetParentTransform(CTransform* transform);
     void SetParent(CGameObject* parent) { m_Parent = parent; } 
 
@@ -49,5 +52,6 @@ private:
     std::vector<CGameObject*>   m_vecChild;
 
     int m_LayerIndex; // 소속 레이어 번호
+    bool _checkFrustum = true; // 프러스텀 여부
 };
 

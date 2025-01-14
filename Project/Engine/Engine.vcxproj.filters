@@ -114,6 +114,9 @@
     <Filter Include="05. Asset\04. Shader">
       <UniqueIdentifier>{d1efdb37-6524-4220-9f2b-162a94794f40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Component\02. Camera\Frustum">
+      <UniqueIdentifier>{92113a21-5c17-45e0-9b24-df2f6ee83d48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -236,6 +239,18 @@
     <ClInclude Include="Texture.h">
       <Filter>05. Asset\03. Texture</Filter>
     </ClInclude>
+    <ClInclude Include="Frustum.h">
+      <Filter>04. Component\02. Camera\Frustum</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseCollider.h">
+      <Filter>04. Component\04. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>04. Component\04. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="OrientedBoxCollider.h">
+      <Filter>04. Component\04. Collider</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -342,6 +357,18 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>05. Asset\03. Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>04. Component\02. Camera\Frustum</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseCollider.cpp">
+      <Filter>04. Component\04. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>04. Component\04. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="OrientedBoxCollider.cpp">
+      <Filter>04. Component\04. Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
