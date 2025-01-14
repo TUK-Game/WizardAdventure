@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "Transform.h"
 #include "Engine.h"
+#include "LevelManager.h"
 
 CCameraScript::CCameraScript()
 	: m_Speed(300.f)
@@ -41,12 +42,24 @@ void CCameraScript::Move()
 	GetTransform()->SetRelativePosition(pos);
 
 
-	if (!KEY_PUSH(EKey::RButton))
-		return;
+	if (KEY_PUSH(EKey::RButton))
+	{
+		Vec2 dragDir = CInputManager::GetInst()->GetDragDir();
+		Vec3 rot = GetTransform()->GetRelativeRotation();
+		rot.x += dragDir.y * DELTA_TIME * 360.f;
+		rot.y += dragDir.x * DELTA_TIME * 360.f;
+		GetTransform()->SetRelativeRotation(rot);
+	}
 
-	Vec2 dragDir = CInputManager::GetInst()->GetDragDir();
-	Vec3 rot = GetTransform()->GetRelativeRotation();
-	rot.x += dragDir.y * DELTA_TIME * 360.f;
-	rot.y += dragDir.x * DELTA_TIME * 360.f;
-	GetTransform()->SetRelativeRotation(rot);
+	if (KEY_PUSH(EKey::LButton))
+	{
+		const Vec2& pos = CInputManager::GetInst()->GetMousePosition();
+		CGameObject* obj = CLevelManager::GetInst()->Pick(pos.x, pos.y);
+		if (obj)
+		{
+			obj->ReleaseRef();
+		}
+	}
+
 }
+	

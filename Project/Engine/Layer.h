@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Ref.h"
 
@@ -19,6 +19,7 @@ public:
 
 	void RegisterGameObject(CGameObject* object)	{ m_vecObjects.push_back(object); }
 	void AddGameObject(CGameObject* parent, bool bChildMove);
+	void PopParentObject(CGameObject* parent);
 
 public:
 	void Begin();
@@ -29,8 +30,8 @@ public:
 	virtual CLayer* Clone() override { return new CLayer(*this); }
 
 private:
-	std::vector<CGameObject*>	m_vecParentObjects;	// ÃÖ»óÀ§ ºÎ¸ğ ¿ÀºêÁ§Æ®
-	std::vector<CGameObject*>	m_vecObjects;		// ¸ğµç ¿ÀºêÁ§Æ®
-	int							m_LayerIndex;		// ·¹ÀÌ¾î ¹øÈ£
+	std::vector<CGameObject*>	m_vecParentObjects;	// ìµœìƒìœ„ ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸
+	std::vector<CGameObject*>	m_vecObjects;		// ëª¨ë“  ì˜¤ë¸Œì íŠ¸
+	int							m_LayerIndex;		// ë ˆì´ì–´ ë²ˆí˜¸
 };
 

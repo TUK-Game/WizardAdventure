@@ -15,6 +15,9 @@ public:
 	int Init();
 	void Progress();
 
+public:
+	class CGameObject* Pick(INT32 x, INT32 y);
+
 private:
 	class CLevel* m_CurLevel;
 };

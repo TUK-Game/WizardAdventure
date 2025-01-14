@@ -12,7 +12,7 @@ public:
 	~CLevel();
 
 public:
-	CLayer* GetLayer(int index) const	{ return m_Layer[index]; }
+	CLayer* GetLayer(int index) const { return m_Layer[index]; }
 	void Deregister();
 
 public:

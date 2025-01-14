@@ -32,6 +32,24 @@ CGameObject::~CGameObject()
 
 	for (auto& child : m_vecChild)
 		delete child;
+
+	// 부모가 있을 경우 부모의 child에서 자신을 제거
+	// 부모가 없는 경우 자신이 최상단 부모이므로 Layer에서 parentVector에서 제거
+	if (m_Parent)
+	{
+		auto IsFind = std::find_if(m_Parent->m_vecChild.begin(), m_Parent->m_vecChild.end(), [&](CGameObject* obj) {
+			return obj->GetName() == GetName();
+		});
+
+		if (IsFind != m_Parent->m_vecChild.end())
+		{
+			m_Parent->m_vecChild.erase(IsFind);
+		}
+	}
+	else
+	{
+		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(m_LayerIndex)->PopParentObject(this);
+	}
 }
 
 void CGameObject::Begin()
@@ -141,8 +159,4 @@ void CGameObject::AddChild(CGameObject* obj)
 {
 	m_vecChild.push_back(obj);
 	obj->SetParent(this);
-	//if (obj->m_arrComponent[(int)EComponent_Type::Transform] != NULL)
-	//{
-	//	obj->SetParentTransform(GetTransform());
-	//}
 }

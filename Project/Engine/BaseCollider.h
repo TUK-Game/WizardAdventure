@@ -18,7 +18,7 @@ public:
 	EColliderType GetColldiderType() { return m_ColliderType; }
 
 public:
-	virtual bool Intersects() = 0;
+	virtual bool Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance) = 0;
 	virtual bool IsFrustum(class CFrustum frustum) = 0;
 
 public:

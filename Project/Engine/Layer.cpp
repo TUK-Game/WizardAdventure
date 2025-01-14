@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Layer.h"
 #include "GameObject.h"
 
@@ -18,7 +18,7 @@ void CLayer::AddGameObject(CGameObject* parent, bool bChildMove)
 	m_vecParentObjects.push_back(parent);
 	parent->m_LayerIndex = m_LayerIndex;
 
-	// ÀÚ½ÄÀÌ ÀÖ´Ù¸é, ÀÚ½Äµµ ÇØ´ç ·¹ÀÌ¾î ¼Ò¼ÓÀ¸·Î º¯°æ
+	// ìì‹ì´ ìˆë‹¤ë©´, ìì‹ë„ í•´ë‹¹ ë ˆì´ì–´ ì†Œì†ìœ¼ë¡œ ë³€ê²½
 	static std::list<CGameObject*> queue;
 	queue.clear();
 	queue.push_back(parent);
@@ -34,13 +34,25 @@ void CLayer::AddGameObject(CGameObject* parent, bool bChildMove)
 			queue.push_back(vecChild[i]);
 		}
 
-		// case 1. ÃÖ»óÀ§ ºÎ¸ğ ¿ÀºêÁ§Æ®
-		// case 2. ÀÚ½Ä¿ÀºêÁ§Æ®Áö¸¸ ÀÚ½Ä±îÁö °°ÀÌ ÀÌµ¿ÇÏ±â·Î ÇÑ °æ¿ì 
-		// case 3. ÃÖ»óÀ§ºÎ¸ğ¿ÀºêÁ§Æ® X, ÀÚ½ÄÀÌµ¿ X ¶óµµ ¼Ò¼ÓÀÌ ¾ø´Â ¿ÀºêÁ§Æ®ÀÎ °æ¿ì
+		// case 1. ìµœìƒìœ„ ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸
+		// case 2. ìì‹ì˜¤ë¸Œì íŠ¸ì§€ë§Œ ìì‹ê¹Œì§€ ê°™ì´ ì´ë™í•˜ê¸°ë¡œ í•œ ê²½ìš° 
+		// case 3. ìµœìƒìœ„ë¶€ëª¨ì˜¤ë¸Œì íŠ¸ X, ìì‹ì´ë™ X ë¼ë„ ì†Œì†ì´ ì—†ëŠ” ì˜¤ë¸Œì íŠ¸ì¸ ê²½ìš°
 		if (!pObject->GetParent() || bChildMove || pObject->m_LayerIndex == -1)
 		{
 			pObject->m_LayerIndex = m_LayerIndex;
 		}
+	}
+}
+
+void CLayer::PopParentObject(CGameObject* parent)
+{
+	auto IsFind = std::find_if(m_vecParentObjects.begin(), m_vecParentObjects.end(), [&](CGameObject* obj) {
+		return obj->GetName() == parent->GetName();
+	});
+
+	if (IsFind != m_vecParentObjects.end())
+	{
+		m_vecParentObjects.erase(IsFind);
 	}
 }
 

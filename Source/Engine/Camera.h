@@ -18,7 +18,8 @@ public:
     float GetAspectRatio() const            { return m_AspectRatio; }
     float GetFar() const                    { return m_Far; }
     float GetFOV() const                    { return (m_FOV / XM_PI) * 180.f; }
-    Matrix GetProjMat() const               { return m_matProjection; }
+    Matrix GetProjMat() const { return m_matProjection; }
+    Matrix GetViewMat() const               { return m_matView; }
 
     void SetProjType(EProjection_Type type) { m_ProjectionType = type; }
     void SetOrthoScaleX(float sale)         { m_OrthoScaleX = sale; }

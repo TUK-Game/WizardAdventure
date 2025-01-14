@@ -11,7 +11,7 @@ public:
 	BoundingBox& GetBoundingBox() { return m_BoundingBox; }
 
 public:
-	virtual bool Intersects() { return false; }
+	virtual bool Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance);
 	virtual bool IsFrustum(class CFrustum frustum);
 
 public:

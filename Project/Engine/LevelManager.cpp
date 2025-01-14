@@ -10,6 +10,8 @@
 #include "CameraScript.h"
 #include "BoxCollider.h"
 #include "OrientedBoxCollider.h"
+#include "Engine.h"
+#include "RenderManager.h"
 
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)
@@ -26,10 +28,10 @@ int CLevelManager::Init()
 	m_CurLevel = new CLevel;
 
 	// example
-	m_CurLevel->GetLayer(0)->SetName(L"Default");
-	m_CurLevel->GetLayer(1)->SetName(L"Background");
-	m_CurLevel->GetLayer(2)->SetName(L"Player");
-	m_CurLevel->GetLayer(3)->SetName(L"Enermy");
+	m_CurLevel->GetLayer(0)->SetName(L"Camera");
+	m_CurLevel->GetLayer(1)->SetName(L"BackGround");
+	m_CurLevel->GetLayer(2)->SetName(L"Other");
+	m_CurLevel->GetLayer(3)->SetName(L"Others");
 
 	// 카메라 역할 오브젝트 생성
 	CGameObject* camera = new CGameObject;
@@ -91,7 +93,7 @@ int CLevelManager::Init()
 	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Hitori"));
 	object->AddChild(object2);
 	object->AddChild(object3);
-	m_CurLevel->AddGameObject(object, 0, false);
+	m_CurLevel->AddGameObject(object, 3, false);
 
 	m_CurLevel->Begin();
 
@@ -105,4 +107,56 @@ void CLevelManager::Progress()
 	m_CurLevel->Deregister();
 
 	m_CurLevel->FinalUpdate();
+}
+
+CGameObject* CLevelManager::Pick(INT32 x, INT32 y)
+{
+	CCamera* camera = CRenderManager::GetInst()->GetMainCamera();
+
+	float width = static_cast<float>(CEngine::GetInst()->GetWindowInfo().Width);
+	float height = static_cast<float>(CEngine::GetInst()->GetWindowInfo().Height);
+
+	Matrix projectionMatrix = camera->GetProjMat();
+
+	// ViewSpace에서 Picking 진행
+	float viewX = (+2.0f * x / width - 1.0f) / projectionMatrix(0, 0);
+	float viewY = (-2.0f * y / height + 1.0f) / projectionMatrix(1, 1);
+
+	Matrix viewMatrix = camera->GetViewMat();
+	Matrix viewMatrixInv = viewMatrix.Invert();
+
+	float minDistance = FLT_MAX;
+	CGameObject* picked = nullptr;
+
+	for (int j = 0; j < MAX_LAYER; ++j)
+	{
+		auto& gameObjects = GetCurrentLevel()->GetLayer(j)->GetObjects();
+		for (auto& gameObject : gameObjects)
+		{
+			if (gameObject->GetCollider() == nullptr)
+				continue;
+
+			// ViewSpace에서의 Ray 정의
+			Vec4 rayOrigin = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
+			Vec4 rayDir = Vec4(viewX, viewY, 1.0f, 0.0f);
+
+			// WorldSpace에서의 Ray 정의
+			rayOrigin = XMVector3TransformCoord(rayOrigin, viewMatrixInv);
+			rayDir = XMVector3TransformNormal(rayDir, viewMatrixInv);
+			rayDir.Normalize();
+
+			// WorldSpace에서 연산
+			float distance = 0.f;
+			if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+				continue;
+
+			if (distance < minDistance)
+			{
+				minDistance = distance;
+				picked = gameObject;
+			}
+		}
+	}
+
+	return picked;
 }
