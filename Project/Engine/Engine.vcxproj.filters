@@ -117,6 +117,9 @@
     <Filter Include="04. Component\02. Camera\Frustum">
       <UniqueIdentifier>{92113a21-5c17-45e0-9b24-df2f6ee83d48}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Manager\10. Collision">
+      <UniqueIdentifier>{69928252-5624-45b2-b106-18f73ac1da6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -251,6 +254,12 @@
     <ClInclude Include="OrientedBoxCollider.h">
       <Filter>04. Component\04. Collider</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>01. Manager\10. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelCollision.h">
+      <Filter>02. Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -369,6 +378,12 @@
     </ClCompile>
     <ClCompile Include="OrientedBoxCollider.cpp">
       <Filter>04. Component\04. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>01. Manager\10. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelCollision.cpp">
+      <Filter>02. Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

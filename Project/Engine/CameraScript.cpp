@@ -57,7 +57,7 @@ void CCameraScript::Move()
 		CGameObject* obj = CLevelManager::GetInst()->Pick(pos.x, pos.y);
 		if (obj)
 		{
-			obj->ReleaseRef();
+			obj->SetActive(false);
 		}
 	}
 

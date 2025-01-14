@@ -66,9 +66,22 @@ void CLayer::Begin()
 
 void CLayer::Update()
 {
-	for (auto& object : m_vecParentObjects)
+	auto iter = m_vecParentObjects.begin();
+	auto iterEnd = m_vecParentObjects.end();
+	for (; iter != iterEnd;)
 	{
-		object->Update();
+		if (!(*iter)->GetActive())
+		{
+			iter = m_vecParentObjects.erase(iter);
+			iterEnd = m_vecParentObjects.end();
+			continue;
+		}
+		else if ((*iter)->GetEnable())
+		{
+			(*iter)->Update();
+		}
+
+		++iter;
 	}
 }
 

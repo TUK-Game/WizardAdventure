@@ -97,3 +97,12 @@ struct MaterialParams
 };
 
 extern TransformParams	g_Transform;
+
+
+struct CollisionProfile
+{
+	std::string							name;
+	ECollision_Channel					channel;
+	bool								enable = true;
+	std::vector<ECollision_Interaction>	vecCollisionInteraction;
+};

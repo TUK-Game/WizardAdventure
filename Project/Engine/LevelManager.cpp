@@ -12,6 +12,7 @@
 #include "OrientedBoxCollider.h"
 #include "Engine.h"
 #include "RenderManager.h"
+#include "CollisionManager.h"
 
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)
@@ -54,7 +55,9 @@ int CLevelManager::Init()
 	object4->SetName(L"Cube4");
 	object4->AddComponent(new CTransform);
 	object4->AddComponent(new CMeshRenderer);
-	object4->AddComponent(new COrientedBoxCollider);
+	object4->AddComponent(new CBoxCollider);
+	object4->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//object4->GetCollider()->CreateCollisionProfile("Default", ECollision_Channel::Default);
 	object4->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
 	object4->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object4->GetTransform()->SetRelativePosition(100.f, 0.f, 0.f);
@@ -64,7 +67,9 @@ int CLevelManager::Init()
 	object3->SetName(L"Cube3");
 	object3->AddComponent(new CTransform);
 	object3->AddComponent(new CMeshRenderer);
-	object3->AddComponent(new COrientedBoxCollider);
+	object3->AddComponent(new CBoxCollider);
+	object3->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//object3->GetCollider()->CreateCollisionProfile("Default", ECollision_Channel::Default);
 	object3->GetTransform()->SetRelativeScale(	100.f, 100.f, 100.f);
 	object3->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object3->GetTransform()->SetRelativePosition(300.f, 0.f, 0.f);
@@ -75,7 +80,9 @@ int CLevelManager::Init()
 	object2->SetName(L"Cube2");
 	object2->AddComponent(new CTransform);
 	object2->AddComponent(new CMeshRenderer);
-	object2->AddComponent(new COrientedBoxCollider);
+	object2->AddComponent(new CBoxCollider);
+	object2->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//object2->GetCollider()->CreateCollisionProfile("Default", ECollision_Channel::Default);
 	object2->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
 	object2->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object2->GetTransform()->SetRelativePosition(200.f, 0.f, 0.f);
@@ -85,7 +92,9 @@ int CLevelManager::Init()
 	object->SetName(L"Cube");
 	object->AddComponent(new CTransform);
 	object->AddComponent(new CMeshRenderer);
-	object->AddComponent(new COrientedBoxCollider);
+	object->AddComponent(new CBoxCollider);
+	object->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//object->GetCollider()->CreateCollisionProfile("Default", ECollision_Channel::Default);
 	object->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
 	object->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object->GetTransform()->SetRelativePosition(-300.f, 0.f, 300.f);

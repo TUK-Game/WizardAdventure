@@ -84,9 +84,24 @@ void CGameObject::Update()
 		m_vecScript[i]->Update();
 	}
 
-	for (size_t i = 0; i < m_vecChild.size(); ++i)
+	auto iter = m_vecChild.begin();
+	auto iterEnd = m_vecChild.end();
+	for (; iter != iterEnd;)
 	{
-		m_vecChild[i]->Update();
+		if (!(*iter)->GetActive())
+		{
+			auto unActiveIter = *iter;
+			iter = m_vecChild.erase(iter);
+			iterEnd = m_vecChild.end();
+			unActiveIter->ReleaseRef();
+			continue;
+		}
+		else if ((*iter)->GetEnable())
+		{
+			(*iter)->Update();
+		}
+
+		++iter;
 	}
 }
 
@@ -118,7 +133,12 @@ void CGameObject::Render()
 		return;
 
 	m_RenderComponent->Render();
-}	
+}
+void CGameObject::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
+{
+	GetTransform()->SetRelativeScale(10.f, 10.f, 10.f);
+}
+
 
 void CGameObject::SetParentTransform(CTransform* transform)
 {

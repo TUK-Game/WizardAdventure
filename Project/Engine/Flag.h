@@ -64,3 +64,16 @@ enum class EDir
 
 	END
 };
+
+enum class ECollision_Channel
+{
+	Default,
+	Player,
+	Max
+};
+
+enum class ECollision_Interaction
+{
+	Ignore,
+	Collision
+};

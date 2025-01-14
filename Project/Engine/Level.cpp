@@ -2,6 +2,7 @@
 #include "Level.h"
 #include "Layer.h"
 #include "GameObject.h"
+#include "LevelCollision.h"
 
 CLevel::CLevel()
 	: m_Layer{}
@@ -11,12 +12,15 @@ CLevel::CLevel()
 		m_Layer[i] = new CLayer;
 		m_Layer[i]->m_LayerIndex = i;
 	}
+	m_collision = new CLevelCollision();
 }
 
 CLevel::~CLevel()
 {
 	for (auto& layer : m_Layer)
 		delete layer;
+	delete m_collision;
+	m_collision = nullptr;
 }
 
 void CLevel::Begin()
@@ -41,6 +45,8 @@ void CLevel::FinalUpdate()
 	{
 		layer->FinalUpdate();
 	}
+
+	m_collision->Collision();
 }
 
 void CLevel::Deregister()

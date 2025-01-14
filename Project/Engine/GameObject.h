@@ -43,6 +43,9 @@ public:
 public:
     virtual CGameObject* Clone() override { return new CGameObject(*this); }
 
+    virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest);
+    virtual void CollisionEnd(CBaseCollider* src, CBaseCollider* dest) {}
+
 private:
     std::array<CComponent*, (int)EComponent_Type::END>  m_arrComponent;
     std::vector<CScript*>   m_vecScript;

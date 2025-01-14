@@ -4,7 +4,7 @@
 #include "Frustum.h"
 
 COrientedBoxCollider::COrientedBoxCollider()
-	: CBaseCollider(EColliderType::Box)
+	: CBaseCollider(ECollider_Type::Box)
 {
 }
 
@@ -32,3 +32,4 @@ void COrientedBoxCollider::FinalUpdate()
 	Matrix rotationMatrix = GetOwner()->GetTransform()->GetWorldRotationMatrix();
 	XMStoreFloat4(&m_BoundingOrientedBox.Orientation, XMQuaternionRotationMatrix(rotationMatrix));
 }
+
