@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "AssetManager.h"
 #include "PathManager.h"
 #include "GraphicShader.h"
@@ -59,7 +59,7 @@ int CAssetManager::LoadMesh()
 int CAssetManager::LoadTexture()
 {
 	// ===================
-	// ÅØ½ºÃÄ ÇÑÀå ·ÎµùÇÏ±â
+	// í…ìŠ¤ì³ í•œì¥ ë¡œë”©í•˜ê¸°
 	// ===================
 	CTexture* tex = new CTexture;
 	auto path = CPathManager::GetInst()->FindPath(TEXTURE_PATH);
@@ -69,6 +69,18 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"mushroom.png");
 	AddAsset(L"Mushroom", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Ryo.jpg");
+	AddAsset(L"Ryo", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Nigika.jpg");
+	AddAsset(L"Nigika", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Hitori.jpg");
+	AddAsset(L"Hitori", tex);
 
 	return S_OK;
 }
@@ -85,6 +97,20 @@ int CAssetManager::LoadMaterial()
 	material->SetTexture(0, FindAsset<CTexture>(L"Mushroom"));
 	AddAsset(L"Mushroom", material);
 
+	material = new CMaterial;
+	material->SetShader(FindAsset<CGraphicShader>(L"Default"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Ryo"));
+	AddAsset(L"Ryo", material);
+
+	material = new CMaterial;
+	material->SetShader(FindAsset<CGraphicShader>(L"Default"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Nigika"));
+	AddAsset(L"Nigika", material);
+
+	material = new CMaterial;
+	material->SetShader(FindAsset<CGraphicShader>(L"Default"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Hitori"));
+	AddAsset(L"Hitori", material);
 	return S_OK;
 }
 
@@ -116,32 +142,32 @@ int CAssetManager::CreateCubeMesh()
 
 	std::vector<Vertex> vecVertex(24);
 
-	// ¾Õ¸é
+	// ì•ë©´
 	vecVertex[0] = Vertex(Vec3(-w2, -h2, -d2), Vec2(0.0f, 1.0f), Vec3(0.0f, 0.0f, -1.0f), Vec3(1.0f, 0.0f, 0.0f));
 	vecVertex[1] = Vertex(Vec3(-w2, +h2, -d2), Vec2(0.0f, 0.0f), Vec3(0.0f, 0.0f, -1.0f), Vec3(1.0f, 0.0f, 0.0f));
 	vecVertex[2] = Vertex(Vec3(+w2, +h2, -d2), Vec2(1.0f, 0.0f), Vec3(0.0f, 0.0f, -1.0f), Vec3(1.0f, 0.0f, 0.0f));
 	vecVertex[3] = Vertex(Vec3(+w2, -h2, -d2), Vec2(1.0f, 1.0f), Vec3(0.0f, 0.0f, -1.0f), Vec3(1.0f, 0.0f, 0.0f));
-	// µŞ¸é
+	// ë’·ë©´
 	vecVertex[4] = Vertex(Vec3(-w2, -h2, +d2), Vec2(1.0f, 1.0f), Vec3(0.0f, 0.0f, 1.0f), Vec3(-1.0f, 0.0f, 0.0f));
 	vecVertex[5] = Vertex(Vec3(+w2, -h2, +d2), Vec2(0.0f, 1.0f), Vec3(0.0f, 0.0f, 1.0f), Vec3(-1.0f, 0.0f, 0.0f));
 	vecVertex[6] = Vertex(Vec3(+w2, +h2, +d2), Vec2(0.0f, 0.0f), Vec3(0.0f, 0.0f, 1.0f), Vec3(-1.0f, 0.0f, 0.0f));
 	vecVertex[7] = Vertex(Vec3(-w2, +h2, +d2), Vec2(1.0f, 0.0f), Vec3(0.0f, 0.0f, 1.0f), Vec3(-1.0f, 0.0f, 0.0f));
-	// À­¸é
+	// ìœ—ë©´
 	vecVertex[8] = Vertex(Vec3(-w2, +h2, -d2), Vec2(0.0f, 1.0f), Vec3(0.0f, 1.0f, 0.0f), Vec3(1.0f, 0.0f, 0.0f));
 	vecVertex[9] = Vertex(Vec3(-w2, +h2, +d2), Vec2(0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f), Vec3(1.0f, 0.0f, 0.0f));
 	vecVertex[10] = Vertex(Vec3(+w2, +h2, +d2), Vec2(1.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f), Vec3(1.0f, 0.0f, 0.0f));
 	vecVertex[11] = Vertex(Vec3(+w2, +h2, -d2), Vec2(1.0f, 1.0f), Vec3(0.0f, 1.0f, 0.0f), Vec3(1.0f, 0.0f, 0.0f));
-	// ¾Æ·§¸é
+	// ì•„ë«ë©´
 	vecVertex[12] = Vertex(Vec3(-w2, -h2, -d2), Vec2(1.0f, 1.0f), Vec3(0.0f, -1.0f, 0.0f), Vec3(-1.0f, 0.0f, 0.0f));
 	vecVertex[13] = Vertex(Vec3(+w2, -h2, -d2), Vec2(0.0f, 1.0f), Vec3(0.0f, -1.0f, 0.0f), Vec3(-1.0f, 0.0f, 0.0f));
 	vecVertex[14] = Vertex(Vec3(+w2, -h2, +d2), Vec2(0.0f, 0.0f), Vec3(0.0f, -1.0f, 0.0f), Vec3(-1.0f, 0.0f, 0.0f));
 	vecVertex[15] = Vertex(Vec3(-w2, -h2, +d2), Vec2(1.0f, 0.0f), Vec3(0.0f, -1.0f, 0.0f), Vec3(-1.0f, 0.0f, 0.0f));
-	// ¿ŞÂÊ¸é
+	// ì™¼ìª½ë©´
 	vecVertex[16] = Vertex(Vec3(-w2, -h2, +d2), Vec2(0.0f, 1.0f), Vec3(-1.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, -1.0f));
 	vecVertex[17] = Vertex(Vec3(-w2, +h2, +d2), Vec2(0.0f, 0.0f), Vec3(-1.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, -1.0f));
 	vecVertex[18] = Vertex(Vec3(-w2, +h2, -d2), Vec2(1.0f, 0.0f), Vec3(-1.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, -1.0f));
 	vecVertex[19] = Vertex(Vec3(-w2, -h2, -d2), Vec2(1.0f, 1.0f), Vec3(-1.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, -1.0f));
-	// ¿À¸¥ÂÊ¸é
+	// ì˜¤ë¥¸ìª½ë©´
 	vecVertex[20] = Vertex(Vec3(+w2, -h2, -d2), Vec2(0.0f, 1.0f), Vec3(1.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 1.0f));
 	vecVertex[21] = Vertex(Vec3(+w2, +h2, -d2), Vec2(0.0f, 0.0f), Vec3(1.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 1.0f));
 	vecVertex[22] = Vertex(Vec3(+w2, +h2, +d2), Vec2(1.0f, 0.0f), Vec3(1.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 1.0f));
@@ -149,22 +175,22 @@ int CAssetManager::CreateCubeMesh()
 
 	std::vector<UINT> vecIndex(36);
 
-	// ¾Õ¸é
+	// ì•ë©´
 	vecIndex[0] = 0; vecIndex[1] = 1; vecIndex[2] = 2;
 	vecIndex[3] = 0; vecIndex[4] = 2; vecIndex[5] = 3;
-	// µŞ¸é
+	// ë’·ë©´
 	vecIndex[6] = 4; vecIndex[7] = 5; vecIndex[8] = 6;
 	vecIndex[9] = 4; vecIndex[10] = 6; vecIndex[11] = 7;
-	// À­¸é
+	// ìœ—ë©´
 	vecIndex[12] = 8; vecIndex[13] = 9; vecIndex[14] = 10;
 	vecIndex[15] = 8; vecIndex[16] = 10; vecIndex[17] = 11;
-	// ¾Æ·§¸é
+	// ì•„ë«ë©´
 	vecIndex[18] = 12; vecIndex[19] = 13; vecIndex[20] = 14;
 	vecIndex[21] = 12; vecIndex[22] = 14; vecIndex[23] = 15;
-	// ¿ŞÂÊ¸é
+	// ì™¼ìª½ë©´
 	vecIndex[24] = 16; vecIndex[25] = 17; vecIndex[26] = 18;
 	vecIndex[27] = 16; vecIndex[28] = 18; vecIndex[29] = 19;
-	// ¿À¸¥ÂÊ¸é
+	// ì˜¤ë¥¸ìª½ë©´
 	vecIndex[30] = 20; vecIndex[31] = 21; vecIndex[32] = 22;
 	vecIndex[33] = 20; vecIndex[34] = 22; vecIndex[35] = 23;
 
@@ -180,15 +206,15 @@ int CAssetManager::CreateCubeMesh()
 
 int CAssetManager::CreateSphereMesh()
 {
-	float radius = 0.5f; // ±¸ÀÇ ¹İÁö¸§
-	UINT stackCount = 20; // °¡·Î ºĞÇÒ
-	UINT sliceCount = 20; // ¼¼·Î ºĞÇÒ
+	float radius = 0.5f; // êµ¬ì˜ ë°˜ì§€ë¦„
+	UINT stackCount = 20; // ê°€ë¡œ ë¶„í• 
+	UINT sliceCount = 20; // ì„¸ë¡œ ë¶„í• 
 
 	std::vector<Vertex> vecVertex;
 
 	Vertex v;
 
-	// ºÏ±Ø
+	// ë¶ê·¹
 	v.Pos = Vec3(0.0f, radius, 0.0f);
 	v.UV = Vec2(0.5f, 0.0f);
 	v.Normal = v.Pos;
@@ -202,12 +228,12 @@ int CAssetManager::CreateSphereMesh()
 	float deltaU = 1.f / static_cast<float>(sliceCount);
 	float deltaV = 1.f / static_cast<float>(stackCount);
 
-	// °í¸®¸¶´Ù µ¹¸é¼­ Á¤Á¡À» °è»êÇÑ´Ù (ºÏ±Ø/³²±Ø ´ÜÀÏÁ¡Àº °í¸®°¡ X)
+	// ê³ ë¦¬ë§ˆë‹¤ ëŒë©´ì„œ ì •ì ì„ ê³„ì‚°í•œë‹¤ (ë¶ê·¹/ë‚¨ê·¹ ë‹¨ì¼ì ì€ ê³ ë¦¬ê°€ X)
 	for (UINT y = 1; y <= stackCount - 1; ++y)
 	{
 		float phi = y * stackAngle;
 
-		// °í¸®¿¡ À§Ä¡ÇÑ Á¤Á¡
+		// ê³ ë¦¬ì— ìœ„ì¹˜í•œ ì •ì 
 		for (UINT x = 0; x <= sliceCount; ++x)
 		{
 			float theta = x * sliceAngle;
@@ -230,7 +256,7 @@ int CAssetManager::CreateSphereMesh()
 		}
 	}
 
-	// ³²±Ø
+	// ë‚¨ê·¹
 	v.Pos = Vec3(0.0f, -radius, 0.0f);
 	v.UV = Vec2(0.5f, 1.0f);
 	v.Normal = v.Pos;
@@ -240,7 +266,7 @@ int CAssetManager::CreateSphereMesh()
 
 	std::vector<UINT> vecIndex(36);
 
-	// ºÏ±Ø ÀÎµ¦½º
+	// ë¶ê·¹ ì¸ë±ìŠ¤
 	for (UINT i = 0; i <= sliceCount; ++i)
 	{
 		//  [0]
@@ -251,7 +277,7 @@ int CAssetManager::CreateSphereMesh()
 		vecIndex.push_back(i + 1);
 	}
 
-	// ¸öÅë ÀÎµ¦½º
+	// ëª¸í†µ ì¸ë±ìŠ¤
 	UINT ringVertexCount = sliceCount + 1;
 	for (UINT y = 0; y < stackCount - 2; ++y)
 	{
@@ -272,7 +298,7 @@ int CAssetManager::CreateSphereMesh()
 		}
 	}
 
-	// ³²±Ø ÀÎµ¦½º
+	// ë‚¨ê·¹ ì¸ë±ìŠ¤
 	UINT bottomIndex = static_cast<UINT>(vecVertex.size()) - 1;
 	UINT lastRingStartIndex = bottomIndex - ringVertexCount;
 	for (UINT i = 0; i < sliceCount; ++i)

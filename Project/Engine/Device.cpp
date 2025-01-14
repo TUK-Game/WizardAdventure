@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Device.h"
 #include "Engine.h"
 
@@ -40,19 +40,20 @@ int CDevice::Init()
 	if (FAILED(m_RootSignature->Init()))
 		return E_FAIL;
 
-	if (FAILED(m_TableDescHeap->Init(256)))
+	if (FAILED(m_TableDescHeap->Init(5)))
 		return E_FAIL;
 
 	if (FAILED(m_DepthStencilBuffer->Init(CEngine::GetInst()->GetWindowInfo())))
 		return E_FAIL;
 
-	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformParams), 256);
-	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 256);
+	// 사용할 수에 맞게 레지스터 개수 생성 ex) 렌더링 오브젝트 2개면 각 2개씩
+	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformParams), 5);
+	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 5);
 
 	return S_OK;
 }
 
-void CDevice::RenderBegin()
+void CDevice::RenderBegin()	
 {
 	m_CmdQueue->RenderBegin(&m_Viewport, &m_ScissorRect);
 }

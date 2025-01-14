@@ -22,9 +22,9 @@ private:\
 #define SWAP_CHAIN_BUFFER_COUNT		2
 #define CBV_REGISTER_COUNT			(int)CBV_REGISTER::END
 #define SRV_REGISTER_COUNT			(int)(static_cast<unsigned char>(SRV_REGISTER::END) - CBV_REGISTER_COUNT)
-#define REGISTER_COUNT				CBV_REGISTER_COUNT + SRV_REGISTER_COUNT
+#define REGISTER_COUNT				(CBV_REGISTER_COUNT + SRV_REGISTER_COUNT)
 
-
+	
 /*----------
 	Path
 -----------*/

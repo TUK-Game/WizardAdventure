@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Transform.h"
 #include "Device.h"
 #include "Camera.h"
@@ -14,7 +14,7 @@ CTransform::~CTransform()
 
 void CTransform::FinalUpdate()
 {
-	// ¿ùµåÇà·Ä·Î º¯È¯
+	// ì›”ë“œí–‰ë ¬ë¡œ ë³€í™˜
 	// Scale 
 	Matrix matScale = XMMatrixScaling(m_RelativeScale.x, m_RelativeScale.y, m_RelativeScale.z);
 
@@ -26,21 +26,33 @@ void CTransform::FinalUpdate()
 	// Translation
 	Matrix matTrans = XMMatrixTranslation(m_RelativePos.x, m_RelativePos.y, m_RelativePos.z);
 
-	// Å©±â È¸Àü ÀÌµ¿ ºÎ¸ğ ¼ø¼­·Î Àû¿ë
+	// í¬ê¸° íšŒì „ ì´ë™ ë¶€ëª¨ ìˆœì„œë¡œ ì ìš©
 	m_matWorld = matScale * matRotation * matTrans;
+	m_matRT = matRotation * matTrans;
 
-	// ¿ÀºêÁ§Æ®ÀÇ ¹æÇâÁ¤º¸ °è»ê
+	// ì˜¤ë¸Œì íŠ¸ì˜ ë°©í–¥ì •ë³´ ê³„ì‚°
 	m_RelativeDir[(UINT)EDir::Right] = Vec3(1.f, 0.f, 0.f);
 	m_RelativeDir[(UINT)EDir::Up] = Vec3(0.f, 1.f, 0.f);
 	m_RelativeDir[(UINT)EDir::Front] = Vec3(0.f, 0.f, 1.f);
 
-	// ¹æÇâº¤ÅÍ¿¡ È¸ÀüÇà·ÄÀ» Àû¿ëÇØ¼­ ÇöÀç ¹æÇâ°ªÀ» °è»ê
+	// ë°©í–¥ë²¡í„°ì— íšŒì „í–‰ë ¬ì„ ì ìš©í•´ì„œ í˜„ì¬ ë°©í–¥ê°’ì„ ê³„ì‚°
 	for (int i = 0; i < (int)EDir::END; ++i)
 	{
 		m_WorldDir[i] = m_RelativeDir[i] = XMVector3TransformNormal(m_RelativeDir[i], matRotation);
 	}
 
-	// TODO: ºÎ¸ğ ¿ÀºêÁ§Æ®°¡ ÀÖ´Ù¸é, ºÎ¸ğÀÇ ¿ùµåÇà·Ä ´©Àû
+	// TODO: ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸ê°€ ìˆë‹¤ë©´, ë¶€ëª¨ì˜ ì›”ë“œí–‰ë ¬ ëˆ„ì 
+	if (m_ParentTransform) // ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸ê°€ ì¡´ì¬í•˜ë©´
+	{
+		m_matWorld = m_matWorld * m_ParentTransform->GetRTMatrix();
+		m_matRT = m_matRT * m_ParentTransform->GetRTMatrix();
+
+		// ë¶€ëª¨ì˜ ì›”ë“œ ë°©í–¥ ë²¡í„°ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ìì‹ ì˜¤ë¸Œì íŠ¸ì˜ ì›”ë“œ ë°©í–¥ ë²¡í„° ê³„ì‚°
+		for (int i = 0; i < (int)EDir::END; ++i)
+		{
+			m_WorldDir[i] = XMVector3TransformNormal(m_RelativeDir[i], m_ParentTransform->GetRTMatrix());
+		}
+	}
 }
 
 void CTransform::Binding()

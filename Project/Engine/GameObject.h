@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 class CComponent;
 class CScript;
@@ -26,8 +26,11 @@ public:
     CMeshRenderer* GetMeshRenderer()                    { return (CMeshRenderer*)GetComponent(EComponent_Type::MeshRenderer); }
     CCamera* GetCamera()                                { return (CCamera*)GetComponent(EComponent_Type::Camera); }
 
-    void AddComponent(CComponent* component);
+    void SetParentTransform(CTransform* transform);
+    void SetParent(CGameObject* parent) { m_Parent = parent; } 
 
+    void AddComponent(CComponent* component);
+    void AddChild(CGameObject* obj);
 public:
     void Begin();
     void Update();
@@ -40,11 +43,11 @@ public:
 private:
     std::array<CComponent*, (int)EComponent_Type::END>  m_arrComponent;
     std::vector<CScript*>   m_vecScript;
-    CRenderComponent*       m_RenderComponent;  // m_arrComponent ¿¡¼­ ÇöÀç ·»´õ¸µ ÄÄÆ÷³ÍÆ®¸¦ °¡¸®Å°´Â Æ÷ÀÎÅÍ
+    CRenderComponent*       m_RenderComponent;  // m_arrComponent ì—ì„œ í˜„ì¬ ë Œë”ë§ ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ë¦¬í‚¤ëŠ” í¬ì¸í„°
 
     CGameObject*                m_Parent;
     std::vector<CGameObject*>   m_vecChild;
 
-    int m_LayerIndex; // ¼Ò¼Ó ·¹ÀÌ¾î ¹øÈ£
+    int m_LayerIndex; // ì†Œì† ë ˆì´ì–´ ë²ˆí˜¸
 };
 

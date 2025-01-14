@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Component.h"
 
@@ -19,7 +19,8 @@ public:
     Vec3 GetWorldRotation();
     Vec3 GetWorldDir(EDir dirType)      { return m_WorldDir[(UINT)dirType]; }
     Matrix GetWorldMatrix()             { return m_matWorld; }
-
+    Matrix GetRTMatrix()             { return m_matRT; }
+    
 
     void SetRelativePosition(Vec3 position)             { m_RelativePos = position; }
     void SetRelativePosition(float x, float y, float z) { m_RelativePos = Vec3(x, y, z); }
@@ -28,6 +29,7 @@ public:
     void SetRelativeRotation(Vec3 rotation);
     void SetRelativeRotation(float x, float y, float z);
     void SetWorldMatrix(const Matrix& matrix)           { m_matWorld = matrix; }
+    void SetParentTransform(CTransform* parent) { m_ParentTransform = parent; }
 
 public:
     virtual void FinalUpdate() override;
@@ -37,17 +39,20 @@ public:
     virtual CTransform* Clone() override { return new CTransform(*this); }
 
 private:
-    // TODO: ¿ÀºêÁ§Æ® °èÃş±¸Á¶ ¼³°è
+    // TODO: ì˜¤ë¸Œì íŠ¸ ê³„ì¸µêµ¬ì¡° ì„¤ê³„
+    CTransform* m_ParentTransform = NULL;
 
-    // ºÎ¸ğ°¡ ÀÖ´Ù¸é, ºÎ¸ğ·ÎºÎÅÍ »ó´ëÀûÀÎ °ª
+    // ë¶€ëª¨ê°€ ìˆë‹¤ë©´, ë¶€ëª¨ë¡œë¶€í„° ìƒëŒ€ì ì¸ ê°’
     Vec3    m_RelativePos;  
-    Vec3    m_RelativeScale;
+    Vec3    m_RelativeScale = Vec3(1.0f, 1.0f, 1.0f);
     Vec3    m_RelativeRotation;  
 
-    // ¿ÀºêÁ§Æ®ÀÇ ¹æÇâÁ¤º¸
+    // ì˜¤ë¸Œì íŠ¸ì˜ ë°©í–¥ì •ë³´
     Vec3    m_RelativeDir[(int)EDir::END];
     Vec3    m_WorldDir[(int)EDir::END];
 
-    Matrix  m_matWorld;     // ¿ùµå º¯È¯Çà·Ä
+    Matrix  m_matWorld;  // ì›”ë“œ ë³€í™˜í–‰ë ¬
+    Matrix  m_matRT;     // ì›”ë“œ ë³€í™˜í–‰ë ¬(scailing ì œì™¸)
+
 };
 

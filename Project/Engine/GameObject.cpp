@@ -1,10 +1,11 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "GameObject.h"
 #include "LevelManager.h"
 #include "Level.h"
 #include "Layer.h"
 #include "Component.h"
 #include "RenderComponent.h"
+#include "Transform.h"
 #include "Script.h"
 
 CGameObject::CGameObject()
@@ -79,13 +80,16 @@ void CGameObject::FinalUpdate()
 			m_arrComponent[i]->FinalUpdate();
 	}
 
-	// Layer ¿¡ GameObject µî·Ï
+	// Layer ì— GameObject ë“±ë¡
 	CLevel* curLevel = CLevelManager::GetInst()->GetCurrentLevel();
 	CLayer* layer = curLevel->GetLayer(m_LayerIndex);
 	layer->RegisterGameObject(this);
 
 	for (size_t i = 0; i < m_vecChild.size(); ++i)
 	{
+		if(m_vecChild[i]->GetTransform())
+			m_vecChild[i]->SetParentTransform(GetTransform());
+
 		m_vecChild[i]->FinalUpdate();
 	}
 }
@@ -96,6 +100,11 @@ void CGameObject::Render()
 		return;
 
 	m_RenderComponent->Render();
+}	
+
+void CGameObject::SetParentTransform(CTransform* transform)
+{
+	GetTransform()->SetParentTransform(transform);
 }
 
 void CGameObject::AddComponent(CComponent* component)
@@ -111,13 +120,13 @@ void CGameObject::AddComponent(CComponent* component)
 	}
 	else
 	{
-		// ÀÌ¹Ì °¡Áö°í ÀÖ´Â ÄÄÆ÷³ÍÆ®ÀÎ °æ¿ì
+		// ì´ë¯¸ ê°€ì§€ê³  ìˆëŠ” ì»´í¬ë„ŒíŠ¸ì¸ ê²½ìš°
 		assert(!m_arrComponent[(int)type]);
 		m_arrComponent[(int)type] = component;
 
 		if (dynamic_cast<CRenderComponent*>(component))
 		{
-			// ÇÑ Á¾·ùÀÇ RenderComonent ¸¸ °¡Áú ¼ö ÀÖ´Ù.
+			// í•œ ì¢…ë¥˜ì˜ RenderComonent ë§Œ ê°€ì§ˆ ìˆ˜ ìˆë‹¤.
 			if (m_RenderComponent)
 				assert(nullptr);
 
@@ -126,4 +135,14 @@ void CGameObject::AddComponent(CComponent* component)
 	}
 
 	component->m_Owner = this;
+}
+
+void CGameObject::AddChild(CGameObject* obj)
+{
+	m_vecChild.push_back(obj);
+	obj->SetParent(this);
+	//if (obj->m_arrComponent[(int)EComponent_Type::Transform] != NULL)
+	//{
+	//	obj->SetParentTransform(GetTransform());
+	//}
 }
