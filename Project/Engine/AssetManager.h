@@ -31,6 +31,7 @@ private:
 	int LoadMaterial();
 	int LoadGraphicShader();
 	int LoadComputeShader();
+	int LoadShader(class CShader* shader, std::wstring& shaderName, ShaderInfo info = ShaderInfo()) const;
 
 	int CreateCubeMesh();
 	int CreateSphereMesh();

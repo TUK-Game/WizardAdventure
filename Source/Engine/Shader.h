@@ -2,6 +2,28 @@
 
 #include "Asset.h"
 
+enum class RASTERIZER_TYPE
+{
+	CULL_NONE,
+	CULL_FRONT,
+	CULL_BACK,
+	WIREFRAME,
+};
+
+enum class DEPTH_STENCIL_TYPE
+{
+	LESS,
+	LESS_EQUAL,
+	GREATER,
+	GREATER_EQUAL,
+};
+
+struct ShaderInfo
+{
+	RASTERIZER_TYPE rasterizerType = RASTERIZER_TYPE::CULL_BACK;
+	DEPTH_STENCIL_TYPE depthStencilType = DEPTH_STENCIL_TYPE::LESS;
+};
+
 class CShader :
     public CAsset
 {
@@ -17,5 +39,6 @@ protected:
 
 public:
     virtual CShader* Clone() override   { return nullptr; }
+	virtual int Init(const std::wstring& path, ShaderInfo info = ShaderInfo()) { return 0; };
 };
 

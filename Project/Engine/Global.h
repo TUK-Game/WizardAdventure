@@ -78,11 +78,6 @@ struct Vertex
 	Vec3	Tangent;
 };
 
-struct TransformParams
-{
-	Matrix	matWVP;
-};
-
 #define MATERIAL_INT_COUNT		5
 #define MATERIAL_FLOAT_COUNT	5
 #define MATERIAL_TEXTURE_COUNT	5
@@ -96,7 +91,14 @@ struct MaterialParams
 	std::array<float, MATERIAL_FLOAT_COUNT> FloatParams;
 };
 
-extern TransformParams	g_Transform;
+struct TransformParams
+{
+	Matrix matWorld;
+	Matrix matView;
+	Matrix matProjection;
+	Matrix matWV;
+	Matrix matWVP;
+};
 
 
 struct CollisionProfile

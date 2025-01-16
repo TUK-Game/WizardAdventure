@@ -1,3 +1,7 @@
+#ifndef _SKYBOX_HLSLI_
+#define _SKYBOX_HLSLI_
+
+//#include "params.hlsli"
 
 cbuffer TRANSFORM_PARAMS : register(b0)
 {
@@ -22,31 +26,34 @@ cbuffer MATERIAL_PARAMS : register(b1)
     float float_4;
 };
 
-Texture2D tex_0 : register(t0);
-Texture2D tex_1 : register(t1);
-Texture2D tex_2 : register(t2);
-Texture2D tex_3 : register(t3);
-Texture2D tex_4 : register(t4);
+TextureCube cubmap : register(t0);
 
 SamplerState sam_0 : register(s0);
 
 struct VS_IN
 {
-    float3 pos : POSITION;
+    float3 localPos : POSITION;
     float2 uv : TEXCOORD;
 };
 
 struct VS_OUT
 {
     float4 pos : SV_Position;
+    float3 position : Position;
     float2 uv : TEXCOORD;
 };
 
 VS_OUT VS_Main(VS_IN input)
 {
-    VS_OUT output = (VS_OUT)0;
+    VS_OUT output = (VS_OUT) 0;
 
-    output.pos = mul(float4(input.pos, 1.f), matWVP);
+    // Translation은 하지 않고 Rotation만 적용한다
+    float4 viewPos = mul(float4(input.localPos, 0), matView);
+    float4 clipSpacePos = mul(viewPos, matProjection);
+
+    // w/w=1이기 때문에 항상 깊이가 1로 유지된다
+    output.pos = clipSpacePos.xyww;
+    output.position = input.localPos;
     output.uv = input.uv;
 
     return output;
@@ -54,6 +61,8 @@ VS_OUT VS_Main(VS_IN input)
 
 float4 PS_Main(VS_OUT input) : SV_Target
 {
-    float4 color = tex_0.Sample(sam_0, input.uv);
+    float4 color = cubmap.Sample(sam_0, input.position);
     return color;
 }
+
+#endif

@@ -12,12 +12,12 @@ CGraphicShader::~CGraphicShader()
 {
 }
 
-int CGraphicShader::Init(const std::wstring& path)
+int CGraphicShader::Init(const std::wstring& path, ShaderInfo info)
 {
-	if (FAILED(CreateVertexShader(path, "VS_Main", "vs_5_0")))
+	if (FAILED(CreateVertexShader(path, "VS_Main", "vs_5_1")))
 		return E_FAIL;
 
-	if (FAILED(CreatePixelShader(path, "PS_Main", "ps_5_0")))
+	if (FAILED(CreatePixelShader(path, "PS_Main", "ps_5_1")))
 		return E_FAIL;
 
 	D3D12_INPUT_ELEMENT_DESC desc[] =
@@ -41,6 +41,46 @@ int CGraphicShader::Init(const std::wstring& path)
 	m_PipelineDesc.SampleDesc.Count = 1;
 	m_PipelineDesc.DSVFormat = CDevice::GetInst()->GetDepthStencilBuffer()->GetDSVFormat();
 
+	switch (info.rasterizerType)
+	{
+	case RASTERIZER_TYPE::CULL_BACK:
+		m_PipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
+		m_PipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
+		break;
+	case RASTERIZER_TYPE::CULL_FRONT:
+		m_PipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
+		m_PipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
+		break;
+	case RASTERIZER_TYPE::CULL_NONE:
+		m_PipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
+		m_PipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+		break;
+	case RASTERIZER_TYPE::WIREFRAME:
+		m_PipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
+		m_PipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+		break;
+	}
+
+	switch (info.depthStencilType)
+	{
+	case DEPTH_STENCIL_TYPE::LESS:
+		m_PipelineDesc.DepthStencilState.DepthEnable = TRUE;
+		m_PipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+		break;
+	case DEPTH_STENCIL_TYPE::LESS_EQUAL:
+		m_PipelineDesc.DepthStencilState.DepthEnable = TRUE;
+		m_PipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+		break;
+	case DEPTH_STENCIL_TYPE::GREATER:
+		m_PipelineDesc.DepthStencilState.DepthEnable = TRUE;
+		m_PipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_GREATER;
+		break;
+	case DEPTH_STENCIL_TYPE::GREATER_EQUAL:
+		m_PipelineDesc.DepthStencilState.DepthEnable = TRUE;
+		m_PipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_GREATER_EQUAL;
+		break;
+	}
+
 	DEVICE->CreateGraphicsPipelineState(&m_PipelineDesc, IID_PPV_ARGS(&m_PipelineState));
 
 	return S_OK;
@@ -58,7 +98,7 @@ int CGraphicShader::CreateShader(const std::wstring& path, const std::string& na
 	compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
-	if (FAILED(::D3DCompileFromFile(path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
+	if (HRESULT HR = FAILED(::D3DCompileFromFile(path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
 		, name.c_str(), version.c_str(), compileFlag, 0, &blob, &m_ErrBlob)))
 	{
 		::MessageBoxA(nullptr, "Shader Create Failed !", nullptr, MB_OK);

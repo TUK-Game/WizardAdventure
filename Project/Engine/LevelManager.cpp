@@ -47,6 +47,15 @@ int CLevelManager::Init()
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
 	m_CurLevel->AddGameObject(camera, 0, false);
 
+	CGameObject* skybox = new CGameObject;
+	skybox->SetName(L"Skybox");
+	skybox->AddComponent(new CTransform);
+	skybox->AddComponent(new CMeshRenderer);
+	skybox->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+	skybox->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Skybox"));
+	m_CurLevel->AddGameObject(skybox, 1, false);
+
+
 	CGameObject* object = new CGameObject;
 	CGameObject* object2 = new CGameObject;
 	CGameObject* object3 = new CGameObject;

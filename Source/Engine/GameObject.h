@@ -26,9 +26,9 @@ public:
     CMeshRenderer* GetMeshRenderer() { return (CMeshRenderer*)GetComponent(EComponent_Type::MeshRenderer); }
     CBaseCollider* GetCollider()                    { return (CBaseCollider*)GetComponent(EComponent_Type::Collider); }
     CCamera* GetCamera()                                { return (CCamera*)GetComponent(EComponent_Type::Camera); }
-    bool GetCheckFrustum() { return _checkFrustum; }
+    bool GetCheckFrustum() { return m_CheckFrustum; }
 
-    void SetCheckFrustum(bool checkFrustum) { _checkFrustum = checkFrustum; }
+    void SetCheckFrustum(bool checkFrustum) { m_CheckFrustum = checkFrustum; }
     void SetParentTransform(CTransform* transform);
     void SetParent(CGameObject* parent) { m_Parent = parent; } 
 
@@ -55,6 +55,6 @@ private:
     std::vector<CGameObject*>   m_vecChild;
 
     int m_LayerIndex; // 소속 레이어 번호
-    bool _checkFrustum = true; // 프러스텀 여부
+    bool m_CheckFrustum = true; // 프러스텀 여부
 };
 

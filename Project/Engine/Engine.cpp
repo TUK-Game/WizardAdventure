@@ -33,7 +33,7 @@ int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wc
         return E_FAIL;
 
     if (FAILED(CDevice::GetInst()->Init()))
-        return E_FAIL;
+        return E_FAIL;  
 
     ResizeWindow(m_WindowInfo.Width, m_WindowInfo.Height);
 

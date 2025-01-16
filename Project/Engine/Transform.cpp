@@ -57,8 +57,13 @@ void CTransform::FinalUpdate()
 
 void CTransform::Binding()
 {
-	Matrix matWVP = m_matWorld * CCamera::s_matView * CCamera::s_matProjection;
-	CONST_BUFFER(EConstantBuffer_Type::Transform)->PushData(&matWVP, sizeof(matWVP));
+	TransformParams transformParams = {};
+	transformParams.matWorld = m_matWorld;
+	transformParams.matView = CCamera::s_matView;
+	transformParams.matProjection = CCamera::s_matProjection;
+	transformParams.matWV = m_matWorld * CCamera::s_matView;
+	transformParams.matWVP = m_matWorld * CCamera::s_matView * CCamera::s_matProjection;
+	CONST_BUFFER(EConstantBuffer_Type::Transform)->PushData(&transformParams, sizeof(transformParams));
 }
 
 Vec3 CTransform::GetRelativeRotation()

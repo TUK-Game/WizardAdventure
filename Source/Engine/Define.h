@@ -53,3 +53,12 @@ private:\
 	Level
 -----------*/
 #define MAX_LAYER	32
+
+/*----------
+    Texture
+-----------*/
+#define RESOURCE_TEXTURE2D			0x01
+#define RESOURCE_TEXTURE2D_ARRAY	0x02	//[]
+#define RESOURCE_TEXTURE2DARRAY		0x03
+#define RESOURCE_TEXTURE_CUBE		0x04
+#define RESOURCE_BUFFER				0x05

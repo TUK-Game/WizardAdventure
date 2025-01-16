@@ -14,16 +14,18 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHandle() { return m_SrvHandle; }
 
 public:
-	int Init(const std::wstring& path);
+	int Init(const std::wstring& path, UINT textureType = RESOURCE_TEXTURE2D);
 
 public:
 	int CreateTexture(const std::wstring& path);
-	int CreateView();
+	int CreateView(UINT textureType);
 
 public:
 	virtual CTexture* Clone() override { return nullptr; }
 
 private:
+	UINT							m_TextureType = RESOURCE_TEXTURE2D;
+
 	ScratchImage			 		m_Image;
 	ComPtr<ID3D12Resource>			m_Tex2D;
 

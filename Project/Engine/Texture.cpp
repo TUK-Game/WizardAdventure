@@ -12,12 +12,12 @@ CTexture::~CTexture()
 {
 }
 
-int CTexture::Init(const std::wstring& path)
+int CTexture::Init(const std::wstring& path, UINT textureType)
 {
 	if (FAILED(CreateTexture(path)))
 		return E_FAIL;
 
-	if (FAILED(CreateView()))
+	if (FAILED(CreateView(textureType)))
 		return E_FAIL;
 
 	return S_OK;
@@ -88,7 +88,7 @@ int CTexture::CreateTexture(const std::wstring& path)
 	return S_OK;
 }
 
-int CTexture::CreateView()
+int CTexture::CreateView(UINT textureType)
 {
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
 	srvHeapDesc.NumDescriptors = 1;
@@ -101,9 +101,23 @@ int CTexture::CreateView()
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Format = m_Image.GetMetadata().format;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Texture2D.MipLevels = 1;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
+
+	switch (textureType)
+	{
+	case RESOURCE_TEXTURE2D: 
+	case RESOURCE_TEXTURE2D_ARRAY:
+		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.PlaneSlice = 0;
+		break;
+	case RESOURCE_TEXTURE_CUBE: 
+		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
+		break;
+	}
+
 	DEVICE->CreateShaderResourceView(m_Tex2D.Get(), &srvDesc, m_SrvHandle);
 
 	return S_OK;

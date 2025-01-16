@@ -82,6 +82,9 @@ int CAssetManager::LoadTexture()
 	tex->Init(path / L"Hitori.jpg");
 	AddAsset(L"Hitori", tex);
 
+	tex = new CTexture;
+	tex->Init(path / L"Skybox03.dds", RESOURCE_TEXTURE_CUBE);
+	AddAsset(L"Skybox", tex);
 	return S_OK;
 }
 
@@ -111,26 +114,45 @@ int CAssetManager::LoadMaterial()
 	material->SetShader(FindAsset<CGraphicShader>(L"Default"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Hitori"));
 	AddAsset(L"Hitori", material);
+
+	material = new CMaterial;
+	material->SetShader(FindAsset<CGraphicShader>(L"Skybox"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Skybox"));
+	AddAsset(L"Skybox", material);
 	return S_OK;
 }
 
 int CAssetManager::LoadGraphicShader()
 {
 	CGraphicShader* shader = new CGraphicShader;
-
-	auto path = CPathManager::GetInst()->FindPath(HLSL_PATH);
-	path /= L"default.hlsli";
-
-	if (FAILED(shader->Init(path)))
-		return E_FAIL;
-
+	std::wstring name = L"default.hlsli";
+	LoadShader(shader, name);
 	AddAsset(L"Default", shader);
+
+
+	shader = new CGraphicShader;
+	name = L"Skybox.hlsl";
+	LoadShader(shader, name, { RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_EQUAL });
+	AddAsset(L"Skybox", shader);
+
 
 	return S_OK;
 }
 
 int CAssetManager::LoadComputeShader()
 {
+	return S_OK;
+}
+
+int CAssetManager::LoadShader(CShader* shader, std::wstring& shaderName, ShaderInfo info) const
+{
+	auto path = CPathManager::GetInst()->FindPath(HLSL_PATH);
+
+	path /= shaderName;
+
+	if (FAILED(shader->Init(path, info)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
