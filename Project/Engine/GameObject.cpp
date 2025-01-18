@@ -46,10 +46,6 @@ CGameObject::~CGameObject()
 			m_Parent->m_vecChild.erase(IsFind);
 		}
 	}
-	else
-	{
-		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(m_LayerIndex)->PopParentObject(this);
-	}
 }
 
 void CGameObject::Begin()
@@ -136,7 +132,7 @@ void CGameObject::Render()
 }
 void CGameObject::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
 {
-	GetTransform()->SetRelativeScale(10.f, 10.f, 10.f);
+	//GetTransform()->SetRelativeScale(10.f, 10.f, 10.f);
 }
 
 

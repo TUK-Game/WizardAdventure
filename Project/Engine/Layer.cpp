@@ -44,18 +44,6 @@ void CLayer::AddGameObject(CGameObject* parent, bool bChildMove)
 	}
 }
 
-void CLayer::PopParentObject(CGameObject* parent)
-{
-	auto IsFind = std::find_if(m_vecParentObjects.begin(), m_vecParentObjects.end(), [&](CGameObject* obj) {
-		return obj->GetName() == parent->GetName();
-	});
-
-	if (IsFind != m_vecParentObjects.end())
-	{
-		m_vecParentObjects.erase(IsFind);
-	}
-}
-
 void CLayer::Begin()
 {
 	for (auto& object : m_vecParentObjects)

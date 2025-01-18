@@ -40,15 +40,15 @@ int CDevice::Init()
 	if (FAILED(m_RootSignature->Init()))
 		return E_FAIL;
 
-	if (FAILED(m_TableDescHeap->Init(5)))
+	if (FAILED(m_TableDescHeap->Init(100000)))
 		return E_FAIL;
 
 	if (FAILED(m_DepthStencilBuffer->Init(CEngine::GetInst()->GetWindowInfo())))
 		return E_FAIL;
 
 	// 사용할 수에 맞게 레지스터 개수 생성 ex) 렌더링 오브젝트 2개면 각 2개씩
-	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformParams), 5);
-	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 5);
+	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformParams), 100000);
+	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 100000);
 
 	return S_OK;
 }

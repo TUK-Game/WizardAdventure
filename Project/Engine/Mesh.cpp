@@ -1,13 +1,12 @@
 #include "pch.h"
 #include "Mesh.h"
 #include "Device.h"
+#include "FBXLoader.h"
 
 CMesh::CMesh()
 	: CAsset(EAsset_Type::Mesh)
 	, m_VertexBufferView{}
 	, m_VertexCount(0)
-	, m_IndexBufferView{}
-	, m_IndexCount(0)
 {
 }
 
@@ -26,15 +25,39 @@ int CMesh::Init(const std::vector<Vertex>& vecVertex, const std::vector<UINT>& v
 	return S_OK;
 }
 
-void CMesh::Render()
+void CMesh::Render(UINT32 idx)
 {
 	CMD_LIST->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	CMD_LIST->IASetVertexBuffers(0, 1, &m_VertexBufferView); // Slot: (0~15)
-	CMD_LIST->IASetIndexBuffer(&m_IndexBufferView);
+	CMD_LIST->IASetIndexBuffer(&m_VecIndexInfo[idx].bufferView);
 
 	CDevice::GetInst()->GetTableDescHeap()->CommitTable();
 
-	CMD_LIST->DrawIndexedInstanced(m_IndexCount, 1, 0, 0, 0);
+	CMD_LIST->DrawIndexedInstanced(m_VecIndexInfo[idx].count, 1, 0, 0, 0);
+}
+
+CMesh* CMesh::CreateFromFBX(const FbxMeshInfo* meshInfo)
+{
+	CMesh* mesh = new CMesh;
+	mesh->CreateVertexBuffer(meshInfo->vertices);
+	mesh->SetMeshSize(meshInfo->maxPos);
+	mesh->SetName(meshInfo->name);
+
+	for (const std::vector<UINT32>& buffer : meshInfo->indices)
+	{
+		if (buffer.empty())
+		{
+			// FBX 파일이 이상하다. IndexBuffer가 없으면 에러 나니까 임시 처리
+			std::vector<UINT32> defaultBuffer{ 0 };
+			mesh->CreateIndexBuffer(defaultBuffer);
+		}
+		else
+		{
+			mesh->CreateIndexBuffer(buffer);
+		}
+	}
+
+	return mesh;
 }
 
 int CMesh::CreateVertexBuffer(const std::vector<Vertex>& vecVertex)
@@ -71,34 +94,43 @@ int CMesh::CreateVertexBuffer(const std::vector<Vertex>& vecVertex)
 	return S_OK;
 }
 
-int CMesh::CreateIndexBuffer(const std::vector<UINT>& vecIndex)
+int CMesh::CreateIndexBuffer(const std::vector<UINT>& buffer)
 {
-	m_IndexCount = static_cast<UINT>(vecIndex.size());
-	UINT bufferSize = m_IndexCount * sizeof(UINT);
+	UINT32 indexCount = static_cast<UINT32>(buffer.size());
+	UINT32 bufferSize = indexCount * sizeof(UINT32);
 
 	D3D12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
 
-	if (FAILED(DEVICE->CreateCommittedResource(
+	ComPtr<ID3D12Resource> indexBuffer;
+	DEVICE->CreateCommittedResource(
 		&heapProperty,
 		D3D12_HEAP_FLAG_NONE,
 		&desc,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&m_IndexBuffer))))
-	{
-		return E_FAIL;
-	}
+		IID_PPV_ARGS(&indexBuffer));
 
 	void* indexDataBuffer = nullptr;
-	CD3DX12_RANGE readRange(0, 0); // We do not intend to read from this resource on the CPU.
-	m_IndexBuffer->Map(0, &readRange, &indexDataBuffer);
-	::memcpy(indexDataBuffer, &vecIndex[0], bufferSize);
-	m_IndexBuffer->Unmap(0, nullptr);
+	CD3DX12_RANGE readRange(0, 0);
+	indexBuffer->Map(0, &readRange, &indexDataBuffer);
+	::memcpy(indexDataBuffer, &buffer[0], bufferSize);
+	indexBuffer->Unmap(0, nullptr);
 
-	m_IndexBufferView.BufferLocation = m_IndexBuffer->GetGPUVirtualAddress();
-	m_IndexBufferView.Format = DXGI_FORMAT_R32_UINT;
-	m_IndexBufferView.SizeInBytes = bufferSize;
+	D3D12_INDEX_BUFFER_VIEW	indexBufferView;
+	indexBufferView.BufferLocation = indexBuffer->GetGPUVirtualAddress();
+	indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+	indexBufferView.SizeInBytes = bufferSize;
+
+	IndexBufferInfo info =
+	{
+		indexBuffer,
+		indexBufferView,
+		DXGI_FORMAT_R32_UINT,
+		indexCount
+	};
+
+	m_VecIndexInfo.push_back(info);
 
 	return S_OK;
 }

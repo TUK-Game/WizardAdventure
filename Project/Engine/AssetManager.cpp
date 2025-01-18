@@ -4,6 +4,7 @@
 #include "GraphicShader.h"
 #include "Texture.h"
 #include "Material.h"
+#include "MeshData.h"
 
 CAssetManager::CAssetManager()
 {
@@ -30,6 +31,9 @@ int CAssetManager::Init()
 	if (FAILED(LoadComputeShader()))
 		return E_FAIL;
 
+	if (FAILED(LoadMeshData()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -39,7 +43,8 @@ void CAssetManager::AddAsset(const std::wstring& key, CSharedPtr<CAsset> asset)
 
 	auto iter = m_mapAsset[(int)type].find(key);
 
-	assert(iter == m_mapAsset[(int)type].end());
+	if(iter != m_mapAsset[(int)type].end())
+		return;
 
 	asset->m_Key = key;
 	m_mapAsset[(int)type].insert(std::make_pair(key, asset));
@@ -119,6 +124,17 @@ int CAssetManager::LoadMaterial()
 	material->SetShader(FindAsset<CGraphicShader>(L"Skybox"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Skybox"));
 	AddAsset(L"Skybox", material);
+
+	return S_OK;
+}
+
+int CAssetManager::LoadMeshData()
+{
+	CMeshData* data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/Dragon.fbx");
+	AddAsset(L"Dragon", data);
+
+	//data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/floor_world.fbx");
+	//AddAsset(L"Floor", data);
 	return S_OK;
 }
 
@@ -154,6 +170,21 @@ int CAssetManager::LoadShader(CShader* shader, std::wstring& shaderName, ShaderI
 		return E_FAIL;
 
 	return S_OK;
+}
+
+CMeshData* CAssetManager::LoadFBX(const std::wstring& path)
+{
+	std::wstring key = path;
+
+	CMeshData* meshData = FindAsset<CMeshData>(key);
+	if (meshData)
+		return meshData;
+
+	meshData = CMeshData::LoadFromFBX(path);
+	meshData->SetName(key);
+	AddAsset(key, meshData);
+
+	return meshData;
 }
 
 int CAssetManager::CreateCubeMesh()
@@ -220,6 +251,8 @@ int CAssetManager::CreateCubeMesh()
 
 	if (FAILED(mesh->Init(vecVertex, vecIndex)))
 		return E_FAIL;
+
+	mesh->SetMeshSize(Vec3(w2, h2, d2));
 
 	AddAsset(L"Cube", mesh);
 

@@ -6,6 +6,7 @@
 #include "LevelManager.h"
 #include "Level.h"
 #include "LevelCollision.h"
+#include "MeshRenderer.h"
 
 CBoxCollider::CBoxCollider()
 	: CBaseCollider(ECollider_Type::Box)
@@ -46,8 +47,8 @@ void CBoxCollider::FinalUpdate()
 {
 	m_BoundingBox.Center = GetOwner()->GetTransform()->GetWorldPosition();
 
-	Vec3 scale = GetOwner()->GetTransform()->GetRelativeScale();
-	m_BoundingBox.Extents = XMFLOAT3(scale.x * 0.5f, scale.y * 0.5f, scale.z * 0.5f);
+	Vec3 scale = GetOwner()->GetMeshRenderer()->GetMesh()->GetMeshSize() * (GetOwner()->GetTransform()->GetRelativeScale());
+	m_BoundingBox.Extents = XMFLOAT3(scale.x, scale.y, scale.z);
 
 	CLevelManager::GetInst()->GetCurrentLevel()->GetLevelCollision()->AddCollider(this);
 }

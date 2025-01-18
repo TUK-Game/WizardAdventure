@@ -19,7 +19,6 @@ public:
 
 	void RegisterGameObject(CGameObject* object)	{ m_vecObjects.push_back(object); }
 	void AddGameObject(CGameObject* parent, bool bChildMove);
-	void PopParentObject(CGameObject* parent);
 
 public:
 	void Begin();

@@ -19,14 +19,16 @@ void CMeshRenderer::FinalUpdate()
 
 void CMeshRenderer::Render()
 {
-	// 위치정보 업데이트
-	GetTransform()->Binding();
-
-	// 사용할 쉐이더 바인딩
-	// Temp
-	GetMaterial()->Binding();
-	// TODO: GetMaterial()->Binding();
-
 	// 렌더링 시작
-	GetMesh()->Render();
+	for (UINT32 i = 0; i < m_Materials.size(); ++i)
+	{
+		CMaterial* material = m_Materials[i];
+
+		if (material == nullptr || material->GetShader() == nullptr)
+			continue;
+
+		GetTransform()->Binding();
+		GetMaterial()->Binding();
+		GetMesh()->Render(i);
+	}
 }

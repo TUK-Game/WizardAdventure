@@ -45,6 +45,7 @@ enum class EAsset_Type
 	Material,
 	GraphicShader,
 	ComputeShader,
+	FBX,
 
 	END
 };

@@ -29,6 +29,7 @@ void CCameraScript::Move()
 
 	Vec3 front = GetTransform()->GetRelativeDir(EDir::Front);
 	Vec3 right = GetTransform()->GetRelativeDir(EDir::Right);
+	Vec3 up = GetTransform()->GetRelativeDir(EDir::Up);
 
 	if (KEY_PUSH(EKey::W))
 		pos += front * DELTA_TIME * m_Speed;
@@ -38,6 +39,10 @@ void CCameraScript::Move()
 		pos -= right * DELTA_TIME * m_Speed;
 	if (KEY_PUSH(EKey::D))
 		pos += right * DELTA_TIME * m_Speed;
+	if (KEY_PUSH(EKey::Q))
+		pos -= up * DELTA_TIME * m_Speed;
+	if (KEY_PUSH(EKey::E))
+		pos += up * DELTA_TIME * m_Speed;
 
 	GetTransform()->SetRelativePosition(pos);
 
@@ -51,7 +56,7 @@ void CCameraScript::Move()
 		GetTransform()->SetRelativeRotation(rot);
 	}
 
-	if (KEY_PUSH(EKey::LButton))
+	if (KEY_DOWN(EKey::LButton))
 	{
 		const Vec2& pos = CInputManager::GetInst()->GetMousePosition();
 		CGameObject* obj = CLevelManager::GetInst()->Pick(pos.x, pos.y);

@@ -74,13 +74,13 @@
     <OutDir>$(SolutionDir)Bin\$(ProjectName)\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
     <LibraryPath>$(SolutionDir)3rdParty\;$(LibraryPath)</LibraryPath>
-    <ExternalIncludePath>$(SolutionDir)3rdParty\;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)3rdParty\FBX\;$(SolutionDir)3rdParty\;$(ExternalIncludePath)</ExternalIncludePath>
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Bin\$(ProjectName)\</OutDir>
     <LibraryPath>$(SolutionDir)3rdParty\;$(LibraryPath)</LibraryPath>
-    <ExternalIncludePath>$(SolutionDir)3rdParty\;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)3rdParty\FBX\;$(SolutionDir)3rdParty\;$(ExternalIncludePath)</ExternalIncludePath>
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -178,6 +178,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="DepthStencilBuffer.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="FBXLoader.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="GameObject.h" />
@@ -190,6 +191,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshData.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="OrientedBoxCollider.h" />
     <ClInclude Include="PathManager.h" />
@@ -224,6 +226,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="DepthStencilBuffer.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="FBXLoader.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Global.cpp" />
@@ -235,6 +238,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="OrientedBoxCollider.cpp" />
     <ClCompile Include="PathManager.cpp" />

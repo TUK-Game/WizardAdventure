@@ -13,6 +13,7 @@
 #include "Engine.h"
 #include "RenderManager.h"
 #include "CollisionManager.h"
+#include "MeshData.h"
 
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)
@@ -79,7 +80,7 @@ int CLevelManager::Init()
 	object3->AddComponent(new CBoxCollider);
 	object3->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
 	//object3->GetCollider()->CreateCollisionProfile("Default", ECollision_Channel::Default);
-	object3->GetTransform()->SetRelativeScale(	100.f, 100.f, 100.f);
+	object3->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
 	object3->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object3->GetTransform()->SetRelativePosition(300.f, 0.f, 0.f);
 	object3->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
@@ -112,6 +113,30 @@ int CLevelManager::Init()
 	object->AddChild(object2);
 	object->AddChild(object3);
 	m_CurLevel->AddGameObject(object, 3, false);
+	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
+	std::vector<CGameObject*> obj = data->Instantiate();
+
+	for (int i = 0; i < 1; ++i)
+	{
+		std::string name = "Dragon" + std::to_string(i);
+		obj[i]->SetName(s2ws(name));
+		obj[i]->AddComponent(new CBoxCollider);
+		obj[i]->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+		//o->GetTransform()->SetRelativePosition(200, 0, 100);
+		//o->GetTransform()->SetRelativeScale(100, 100, 100);
+		m_CurLevel->AddGameObject(obj[i], 3, false);
+	}
+
+	//for (int i = 0; i < 51; ++i)
+	//{
+	//	std::string name = "Floor" + std::to_string(i);
+	//	obj[i]->SetName(s2ws(name));
+	//	obj[i]->AddComponent(new CBoxCollider);
+	//	obj[i]->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//	//o->GetTransform()->SetRelativePosition(200, 0, 100);
+	//	//o->GetTransform()->SetRelativeScale(100, 100, 100);
+	//	m_CurLevel->AddGameObject(obj[i], 3, false);
+	//}
 
 	m_CurLevel->Begin();
 
