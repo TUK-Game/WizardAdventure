@@ -111,9 +111,9 @@ void FBXLoader::LoadMesh(FbxMesh* mesh)
 
 	// Position
 	FbxVector4* controlPoints = mesh->GetControlPoints();
-	double px = a[3][0];
-	double py = a[3][1];
-	double pz = a[3][2];
+	double px = 0;//a[3][0];
+	double py = 0;//a[3][1];
+	double pz = 0;//a[3][2];
 
 
 	for (INT32 i = 0; i < vertexCount; ++i)
@@ -607,7 +607,7 @@ FbxAMatrix FBXLoader::GetTransform(FbxNode* node)
 	FbxVector4 geoScaling = node->GetGeometricScaling(FbxNode::eSourcePivot);
 	FbxAMatrix geoTransform(geoTranslation, geoRotation, geoScaling);
 
-	FbxAMatrix matrix = node->EvaluateGlobalTransform();
+	//FbxAMatrix matrix = node->EvaluateGlobalTransform();
 
-	return matrix;
+	return geoTransform;
 }

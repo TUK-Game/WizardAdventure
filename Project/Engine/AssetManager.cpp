@@ -133,6 +133,9 @@ int CAssetManager::LoadMeshData()
 	CMeshData* data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/Dragon.fbx");
 	AddAsset(L"Dragon", data);
 
+	data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/wolf.fbx");
+	AddAsset(L"Wolf", data);
+
 	//data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/floor_world.fbx");
 	//AddAsset(L"Floor", data);
 	return S_OK;

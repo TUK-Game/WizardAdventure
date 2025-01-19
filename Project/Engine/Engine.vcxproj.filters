@@ -120,6 +120,9 @@
     <Filter Include="01. Manager\10. Collision">
       <UniqueIdentifier>{69928252-5624-45b2-b106-18f73ac1da6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Component\05. Animation">
+      <UniqueIdentifier>{d32a399f-441b-4b12-8e9b-5594e20da075}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -266,6 +269,9 @@
     <ClInclude Include="MeshData.h">
       <Filter>05. Asset\01. Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>04. Component\05. Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -396,6 +402,9 @@
     </ClCompile>
     <ClCompile Include="MeshData.cpp">
       <Filter>05. Asset\01. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>04. Component\05. Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

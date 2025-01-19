@@ -115,6 +115,9 @@ int CLevelManager::Init()
 	m_CurLevel->AddGameObject(object, 3, false);
 	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
 	std::vector<CGameObject*> obj = data->Instantiate();
+	
+	data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Wolf");
+	std::vector<CGameObject*> obj2 = data->Instantiate();
 
 	for (int i = 0; i < 1; ++i)
 	{
@@ -125,6 +128,17 @@ int CLevelManager::Init()
 		//o->GetTransform()->SetRelativePosition(200, 0, 100);
 		//o->GetTransform()->SetRelativeScale(100, 100, 100);
 		m_CurLevel->AddGameObject(obj[i], 3, false);
+	}
+
+	for(auto& o : obj2)
+	{
+		std::string name = "Wolf";
+		o->SetName(s2ws(name));
+		o->AddComponent(new CBoxCollider);
+		o->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+		o->GetTransform()->SetRelativePosition(200, 0, 100);
+		o->GetTransform()->SetRelativeScale(100, 100, 100);
+		m_CurLevel->AddGameObject(o, 3, false);
 	}
 
 	//for (int i = 0; i < 51; ++i)
