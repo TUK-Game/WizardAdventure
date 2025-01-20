@@ -35,14 +35,14 @@ int CLevelManager::Init()
 	m_CurLevel->GetLayer(2)->SetName(L"Other");
 	m_CurLevel->GetLayer(3)->SetName(L"Others");
 
-	// ī�޶� ���� ������Ʈ ����
+	// 카메라 역할 오브젝트 생성
 	CGameObject* camera = new CGameObject;
 	camera->SetName(L"MainCamera");
 	camera->AddComponent(new CTransform);
 	camera->AddComponent(new CCamera);
 	camera->AddComponent(new CCameraScript);
 	camera->GetCamera()->SetProjType(EProjection_Type::Perspective);
-	camera->GetCamera()->SetPriority(0); // 0 : ���� ī�޶�� ����	
+	camera->GetCamera()->SetPriority(0); // 0 : 메인 카메라로 설정	
 	camera->GetCamera()->CheckLayerAll();
 	camera->GetCamera()->CheckLayer(31);
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
@@ -166,23 +166,6 @@ void CLevelManager::Progress()
 	m_CurLevel->FinalUpdate();
 }
 
-
-void CLevelManager::CleanUpCurrentLevel()
-{
-	if (m_CurLevel)
-	{
-		m_CurLevel->End(); // 현재 레벨 종료 작업
-		delete m_CurLevel; // 메모리 해제
-		m_CurLevel = nullptr;
-	}
-}
-
-void CLevelManager::ChangeLevel(CLevel* newLevel)
-{
-	CleanUpCurrentLevel();
-	// m_CurLevel을 newLevel로 
-}
-
 CGameObject* CLevelManager::Pick(INT32 x, INT32 y)
 {
 	CCamera* camera = CRenderManager::GetInst()->GetMainCamera();
@@ -233,4 +216,20 @@ CGameObject* CLevelManager::Pick(INT32 x, INT32 y)
 	}
 
 	return picked;
+}
+
+void CLevelManager::CleanUpCurrentLevel()
+{
+	if (m_CurLevel)
+	{
+		m_CurLevel->End(); // 현재 레벨 종료 작업
+		delete m_CurLevel; // 메모리 해제
+		m_CurLevel = nullptr;
+	}
+}
+
+void CLevelManager::ChangeLevel(CLevel* newLevel)
+{
+	CleanUpCurrentLevel();
+	// m_CurLevel을 newLevel로 
 }
