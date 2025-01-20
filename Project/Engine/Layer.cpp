@@ -9,8 +9,7 @@ CLayer::CLayer()
 
 CLayer::~CLayer()
 {
-	for (auto& object : m_vecParentObjects)
-		delete object;
+	ClearObjects(); 
 }
 
 void CLayer::AddGameObject(CGameObject* parent, bool bChildMove)
@@ -79,4 +78,14 @@ void CLayer::FinalUpdate()
 	{
 		object->FinalUpdate();
 	}
+}
+
+void CLayer::ClearObjects()
+{
+	for (auto& object : m_vecParentObjects)
+	{
+		delete object; 
+	}
+	m_vecParentObjects.clear(); 
+	m_vecObjects.clear();       
 }

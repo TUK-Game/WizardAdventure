@@ -61,3 +61,14 @@ void CLevel::AddGameObject(CGameObject* object, int layerIndex, bool bChildMove)
 {
 	m_Layer[layerIndex]->AddGameObject(object, bChildMove);
 }
+
+void CLevel::End()
+{
+	for (auto& layer : m_Layer)
+	{
+		if (layer)
+		{
+			layer->ClearObjects(); // 각 레이어의 오브젝트 정리
+		}
+	}
+}
