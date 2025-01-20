@@ -27,13 +27,13 @@ int CMesh::Init(const std::vector<Vertex>& vecVertex, const std::vector<UINT>& v
 
 void CMesh::Render(UINT32 idx)
 {
-	CMD_LIST->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	CMD_LIST->IASetVertexBuffers(0, 1, &m_VertexBufferView); // Slot: (0~15)
-	CMD_LIST->IASetIndexBuffer(&m_VecIndexInfo[idx].bufferView);
+	GRAPHICS_CMD_LIST->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	GRAPHICS_CMD_LIST->IASetVertexBuffers(0, 1, &m_VertexBufferView); // Slot: (0~15)
+	GRAPHICS_CMD_LIST->IASetIndexBuffer(&m_VecIndexInfo[idx].bufferView);
 
-	CDevice::GetInst()->GetTableDescHeap()->CommitTable();
+	CDevice::GetInst()->GetGraphicsDescHeap()->CommitTable();
 
-	CMD_LIST->DrawIndexedInstanced(m_VecIndexInfo[idx].count, 1, 0, 0, 0);
+	GRAPHICS_CMD_LIST->DrawIndexedInstanced(m_VecIndexInfo[idx].count, 1, 0, 0, 0);
 }
 
 CMesh* CMesh::CreateFromFBX(const FbxMeshInfo* meshInfo)

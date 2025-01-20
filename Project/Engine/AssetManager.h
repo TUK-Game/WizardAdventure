@@ -26,6 +26,12 @@ public:
 	CSharedPtr<T> FindAsset(const std::wstring& key);
 
 	class CMeshData* LoadFBX(const std::wstring& path);
+
+	CTexture* CreateTexture(const std::wstring& name, DXGI_FORMAT format, WindowInfo info,
+		const D3D12_HEAP_PROPERTIES& heapProperty, D3D12_HEAP_FLAGS heapFlags,
+		D3D12_RESOURCE_FLAGS resFlags = D3D12_RESOURCE_FLAG_NONE, Vec4 clearColor = Vec4());
+
+	CTexture* CreateTextureFromResource(const std::wstring& name, ComPtr<ID3D12Resource> tex2D);
 private:
 	int LoadMesh();
 	int LoadTexture();

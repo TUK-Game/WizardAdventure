@@ -21,7 +21,9 @@ public:
 	void SetFloat(unsigned char index, float value) { m_Params.SetFloat(index, value); }
 	void SetTexture(unsigned char index, CSharedPtr<CTexture> texture) { m_arrTexture[index] = texture; }
 
-	void Binding();
+	void GraphicsBinding();
+	void ComputeBinding();
+	void Dispatch(UINT32 x, UINT32 y, UINT32 z);
 
 public:
 	virtual CMaterial* Clone() override { return new CMaterial(*this); }

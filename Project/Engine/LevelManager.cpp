@@ -14,6 +14,7 @@
 #include "RenderManager.h"
 #include "CollisionManager.h"
 #include "MeshData.h"
+#include "Device.h"
 
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)
@@ -34,6 +35,7 @@ int CLevelManager::Init()
 	m_CurLevel->GetLayer(1)->SetName(L"BackGround");
 	m_CurLevel->GetLayer(2)->SetName(L"Other");
 	m_CurLevel->GetLayer(3)->SetName(L"Others");
+	m_CurLevel->GetLayer(4)->SetName(L"UI");
 
 	// 카메라 역할 오브젝트 생성
 	CGameObject* camera = new CGameObject;
@@ -45,8 +47,24 @@ int CLevelManager::Init()
 	camera->GetCamera()->SetPriority(0); // 0 : 메인 카메라로 설정	
 	camera->GetCamera()->CheckLayerAll();
 	camera->GetCamera()->CheckLayer(31);
+	camera->GetCamera()->CheckLayer(4);
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
 	m_CurLevel->AddGameObject(camera, 0, false);
+
+#pragma region UI_Camera
+	{
+		CGameObject* c = new CGameObject();
+		c->SetName(L"Orthographic_Camera");
+		c->AddComponent(new CTransform);
+		c->AddComponent(new CCamera); // Near=1, Far=1000, 800*600
+		c->GetCamera()->SetProjType(EProjection_Type::Orthographic);
+		c->GetCamera()->SetPriority(1); // 0 : 메인 카메라로 설정	
+		c->GetCamera()->CheckLayerClear(); // 다 끄고
+		c->GetCamera()->CheckLayer(4); // UI만 찍음
+		c->GetTransform()->SetRelativePosition(Vec3(0.f, 0.f, 0.f));
+		m_CurLevel->AddGameObject(c, 0, false);
+	}
+#pragma endregion
 
 	CGameObject* skybox = new CGameObject;
 	skybox->SetName(L"Skybox");
@@ -141,16 +159,25 @@ int CLevelManager::Init()
 		m_CurLevel->AddGameObject(o, 3, false);
 	}
 
-	//for (int i = 0; i < 51; ++i)
-	//{
-	//	std::string name = "Floor" + std::to_string(i);
-	//	obj[i]->SetName(s2ws(name));
-	//	obj[i]->AddComponent(new CBoxCollider);
-	//	obj[i]->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	//	//o->GetTransform()->SetRelativePosition(200, 0, 100);
-	//	//o->GetTransform()->SetRelativeScale(100, 100, 100);
-	//	m_CurLevel->AddGameObject(obj[i], 3, false);
-	//}
+#pragma region UI_TEST
+	for (INT32 i = 0; i < 3; ++i)
+	{
+		CGameObject* obj = new CGameObject;
+		obj->AddComponent(new CTransform);
+		obj->AddComponent(new CMeshRenderer);
+		obj->GetTransform()->SetRelativeScale(Vec3(200.f, 200.f, 200.f));
+		obj->GetTransform()->SetRelativePosition(Vec3(-350.f + (i * 240), 250.f, 500.f));
+		obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+		CMaterial* material = new CMaterial;
+		CTexture* texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
+		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Default");
+		material->SetTexture(0, texture);
+		material->SetShader(shader);
+		obj->GetMeshRenderer()->SetMaterial(material);
+		m_CurLevel->AddGameObject(obj, 4, false);
+	}
+
+#pragma endregion
 
 	m_CurLevel->Begin();
 

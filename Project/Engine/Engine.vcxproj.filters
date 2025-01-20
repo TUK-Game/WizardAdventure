@@ -123,6 +123,9 @@
     <Filter Include="04. Component\05. Animation">
       <UniqueIdentifier>{d32a399f-441b-4b12-8e9b-5594e20da075}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Manager\01. Device\RenderTargetGroup">
+      <UniqueIdentifier>{a43e03d0-b34c-4be4-898a-9fa584455fdd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -154,9 +157,6 @@
     </ClInclude>
     <ClInclude Include="CommandQueue.h">
       <Filter>01. Manager\01. Device\CommandQueue</Filter>
-    </ClInclude>
-    <ClInclude Include="DepthStencilBuffer.h">
-      <Filter>01. Manager\01. Device\DepthStencilBuffer</Filter>
     </ClInclude>
     <ClInclude Include="RootSignature.h">
       <Filter>01. Manager\01. Device\RootSignature</Filter>
@@ -272,6 +272,9 @@
     <ClInclude Include="Animator.h">
       <Filter>04. Component\05. Animation</Filter>
     </ClInclude>
+    <ClInclude Include="RenderTargetGroup.h">
+      <Filter>01. Manager\01. Device\RenderTargetGroup</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -288,9 +291,6 @@
     </ClCompile>
     <ClCompile Include="CommandQueue.cpp">
       <Filter>01. Manager\01. Device\CommandQueue</Filter>
-    </ClCompile>
-    <ClCompile Include="DepthStencilBuffer.cpp">
-      <Filter>01. Manager\01. Device\DepthStencilBuffer</Filter>
     </ClCompile>
     <ClCompile Include="RootSignature.cpp">
       <Filter>01. Manager\01. Device\RootSignature</Filter>
@@ -406,6 +406,9 @@
     <ClCompile Include="Animator.cpp">
       <Filter>04. Component\05. Animation</Filter>
     </ClCompile>
+    <ClCompile Include="RenderTargetGroup.cpp">
+      <Filter>01. Manager\01. Device\RenderTargetGroup</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -417,6 +420,15 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Skybox.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Compute.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Params.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Deferred.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

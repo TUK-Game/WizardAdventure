@@ -27,8 +27,8 @@ void CMeshRenderer::Render()
 		if (material == nullptr || material->GetShader() == nullptr)
 			continue;
 
-		GetTransform()->Binding();
-		GetMaterial()->Binding();
+		GetTransform()->GraphicsBinding();
+		GetMaterial()->GraphicsBinding();
 		GetMesh()->Render(i);
 	}
 }

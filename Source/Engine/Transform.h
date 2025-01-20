@@ -34,7 +34,7 @@ public:
 
 public:
     virtual void FinalUpdate() override;
-    void Binding();
+    void GraphicsBinding();
 
 public:
     virtual CTransform* Clone() override { return new CTransform(*this); }

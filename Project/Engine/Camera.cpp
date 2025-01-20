@@ -8,6 +8,8 @@
 #include "Transform.h"
 #include "RenderComponent.h"
 #include "BaseCollider.h"
+#include "MeshRenderer.h"
+#include "Device.h"
 
 Matrix CCamera::s_matView;
 Matrix CCamera::s_matProjection;
@@ -18,7 +20,7 @@ CCamera::CCamera()
 	, m_OrthoScaleX(1.f)
 	, m_AspectRatio(1.f)
 	, m_FOV(XM_PI / 2.f)
-	, m_Far(10000.f)
+	, m_Far(1000.f)
 	, m_Priority(-1)
 	, m_LayerCheck(0)
 {
@@ -61,7 +63,8 @@ void CCamera::FinalUpdate()
 		m_matProjection = XMMatrixPerspectiveFovLH(m_FOV, m_AspectRatio, 1.f, m_Far);
 	}
 
-	// 카메라의 View, Proj 행렬을 세팅
+
+	// 카메라의 View, Proj 행렬을 세팅	
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
@@ -70,16 +73,32 @@ void CCamera::FinalUpdate()
 
 void CCamera::Render()
 {
+	// 카메라의 View, Proj 행렬을 세팅
+	s_matView = m_matView;
+	s_matProjection = m_matProjection;
+
 	// 오브젝트 분류
 	SortObject();
 
-	// 오브젝트 렌더링
-	for (auto& object : m_vecObjects)
+	// Deferred
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->OMSetRenderTargets();
+	for (auto& object : m_vecDeferred)
 	{
 		object->Render();
 	}
 
-	m_vecObjects.clear();
+	// Light OMSet
+
+	// Swapchain
+	INT8 backIndex = CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex();
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->OMSetRenderTargets(1, backIndex);
+	for (auto& object : m_vecForward)
+	{
+		object->Render();
+	}
+
+	m_vecForward.clear();
+	m_vecDeferred.clear();
 }
 
 void CCamera::SetPriority(int priority)
@@ -119,7 +138,17 @@ void CCamera::SortObject()
 				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
 				continue;
 
-			m_vecObjects.push_back(vecObjects[j]);
+			SHADER_TYPE shaderType = vecObjects[j]->GetMeshRenderer()->GetMaterial()->GetShader()->GetShaderType();
+			switch (shaderType)
+			{
+			case SHADER_TYPE::DEFERRED:
+				m_vecDeferred.push_back(vecObjects[j]);
+				break;
+			case SHADER_TYPE::FORWARD:
+				m_vecForward.push_back(vecObjects[j]);
+				break;
+			}
+			//m_vecObjects.push_back(vecObjects[j]);
 
 			// TODO: Material 구현시 타입에 따른 분류 작성
 		}

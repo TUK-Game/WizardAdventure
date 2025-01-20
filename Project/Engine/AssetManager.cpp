@@ -2,6 +2,7 @@
 #include "AssetManager.h"
 #include "PathManager.h"
 #include "GraphicShader.h"
+#include "ComputeShader.h"
 #include "Texture.h"
 #include "Material.h"
 #include "MeshData.h"
@@ -96,7 +97,7 @@ int CAssetManager::LoadTexture()
 int CAssetManager::LoadMaterial()
 {
 	CMaterial* material = new CMaterial;
-	material->SetShader(FindAsset<CGraphicShader>(L"Default"));
+	material->SetShader(FindAsset<CGraphicShader>(L"Deferred"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Kita"));
 	AddAsset(L"Kita", material);
 
@@ -106,17 +107,17 @@ int CAssetManager::LoadMaterial()
 	AddAsset(L"Mushroom", material);
 
 	material = new CMaterial;
-	material->SetShader(FindAsset<CGraphicShader>(L"Default"));
+	material->SetShader(FindAsset<CGraphicShader>(L"Deferred"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Ryo"));
 	AddAsset(L"Ryo", material);
 
 	material = new CMaterial;
-	material->SetShader(FindAsset<CGraphicShader>(L"Default"));
+	material->SetShader(FindAsset<CGraphicShader>(L"Deferred"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Nigika"));
 	AddAsset(L"Nigika", material);
 
 	material = new CMaterial;
-	material->SetShader(FindAsset<CGraphicShader>(L"Default"));
+	material->SetShader(FindAsset<CGraphicShader>(L"Deferred"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Hitori"));
 	AddAsset(L"Hitori", material);
 
@@ -151,15 +152,24 @@ int CAssetManager::LoadGraphicShader()
 
 	shader = new CGraphicShader;
 	name = L"Skybox.hlsl";
-	LoadShader(shader, name, { RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_EQUAL });
+	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_EQUAL });
 	AddAsset(L"Skybox", shader);
 
-
+	shader = new CGraphicShader;
+	name = L"Deferred.hlsl";
+	LoadShader(shader, name, { SHADER_TYPE::DEFERRED });
+	AddAsset(L"Deferred", shader);
 	return S_OK;
 }
 
 int CAssetManager::LoadComputeShader()
 {
+	CComputeShader* shader = new CComputeShader;
+	std::wstring name = L"Compute.hlsl";
+	LoadShader(shader, name);
+	AddAsset(L"Compute", shader);
+
+
 	return S_OK;
 }
 
@@ -169,7 +179,7 @@ int CAssetManager::LoadShader(CShader* shader, std::wstring& shaderName, ShaderI
 
 	path /= shaderName;
 
-	if (FAILED(shader->Init(path, info)))
+	if (FAILED(shader->Init(path, ws2s(shaderName), info)))
 		return E_FAIL;
 
 	return S_OK;
@@ -377,4 +387,22 @@ int CAssetManager::CreateSphereMesh()
 	AddAsset(L"Sphere", mesh);
 
 	return S_OK;
+}
+
+CTexture* CAssetManager::CreateTexture(const std::wstring& name, DXGI_FORMAT format, WindowInfo info, const D3D12_HEAP_PROPERTIES& heapProperty, D3D12_HEAP_FLAGS heapFlags, D3D12_RESOURCE_FLAGS resFlags, Vec4 clearColor)
+{
+	CTexture* texture = new CTexture;
+	texture->Create(format, info.Width, info.Height, heapProperty, heapFlags, resFlags, clearColor);
+	AddAsset(name, texture);
+
+	return texture;
+}
+
+CTexture* CAssetManager::CreateTextureFromResource(const std::wstring& name, ComPtr<ID3D12Resource> tex2D)
+{
+	CTexture* texture = new CTexture;
+	texture->CreateFromResource(tex2D);
+	AddAsset(name, texture);
+
+	return texture;
 }

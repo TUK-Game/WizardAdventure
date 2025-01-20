@@ -1,2 +1,36 @@
 #include "pch.h"
 #include "ComputeShader.h"
+#include "Device.h"
+
+CComputeShader::CComputeShader()
+	: CShader(EAsset_Type::ComputeShader)
+	, m_ComputePipelineDesc{}
+{
+}
+
+CComputeShader::~CComputeShader()
+{
+}
+
+int CComputeShader::Init(const std::wstring& path, const std::string& name, ShaderInfo info)
+{
+	m_Info = info;
+
+	if (FAILED(CreateShader(path, "CS_Main", "cs_5_1", m_CsBlob, m_ComputePipelineDesc.CS)))
+		return E_FAIL;
+
+	m_ComputePipelineDesc.pRootSignature = COMPUTE_ROOT_SIGNATURE.Get();
+
+	DEVICE->CreateComputePipelineState(&m_ComputePipelineDesc, IID_PPV_ARGS(&m_PipelineState));
+
+	return S_OK;
+}
+
+void CComputeShader::Update()
+{
+	if (GetType() == EAsset_Type::ComputeShader)
+		COMPUTE_CMD_LIST->SetPipelineState(m_PipelineState.Get());
+	else
+		GRAPHICS_CMD_LIST->SetPipelineState(m_PipelineState.Get());
+}
+
