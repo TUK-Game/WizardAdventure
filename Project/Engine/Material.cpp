@@ -28,7 +28,7 @@ void CMaterial::GraphicsBinding()
 	}
 
 	// 파이프라인 세팅
-	m_Shader->Update();
+	m_GraphicsShader->Update();
 }
 
 void CMaterial::ComputeBinding()
@@ -47,7 +47,7 @@ void CMaterial::ComputeBinding()
 	}
 
 	// 파이프라인 세팅
-	m_Shader->Update();
+	m_ComputeShader->Update();
 }
 
 void CMaterial::Dispatch(UINT32 x, UINT32 y, UINT32 z)

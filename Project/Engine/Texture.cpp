@@ -113,18 +113,22 @@ void CTexture::Create(DXGI_FORMAT format, UINT32 width, UINT32 height, const D3D
 	desc.Flags = resFlags;
 
 	D3D12_CLEAR_VALUE optimizedClearValue = {};
+	D3D12_CLEAR_VALUE* pOptimizedClearValue = nullptr;
+
 	D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COMMON;
 
 	if (resFlags & D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)
 	{
 		resourceStates = D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_DEPTH_WRITE;
 		optimizedClearValue = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D32_FLOAT, 1.0f, 0);
+		pOptimizedClearValue = &optimizedClearValue;
 	}
 	else if (resFlags & D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET)
 	{
 		resourceStates = D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET;
 		float arrFloat[4] = { clearColor.x, clearColor.y, clearColor.z, clearColor.w };
 		optimizedClearValue = CD3DX12_CLEAR_VALUE(format, arrFloat);
+		pOptimizedClearValue = &optimizedClearValue;
 	}
 
 	// Create Texture2D
@@ -133,7 +137,7 @@ void CTexture::Create(DXGI_FORMAT format, UINT32 width, UINT32 height, const D3D
 		heapFlags,
 		&desc,
 		resourceStates,
-		&optimizedClearValue,
+		pOptimizedClearValue,
 		IID_PPV_ARGS(&m_Tex2D));
 
 	assert(SUCCEEDED(hr));
@@ -178,6 +182,25 @@ void CTexture::CreateFromResource(ComPtr<ID3D12Resource> tex2D)
 
 			D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapBegin = m_RtvHeap->GetCPUDescriptorHandleForHeapStart();
 			DEVICE->CreateRenderTargetView(m_Tex2D.Get(), nullptr, rtvHeapBegin);
+		}
+
+		if (desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS)
+		{
+			// UAV
+			D3D12_DESCRIPTOR_HEAP_DESC uavHeapDesc = {};
+			uavHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+			uavHeapDesc.NumDescriptors = 1;
+			uavHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+			uavHeapDesc.NodeMask = 0;
+			DEVICE->CreateDescriptorHeap(&uavHeapDesc, IID_PPV_ARGS(&m_UavHeap));
+
+			m_UavHandle = m_UavHeap->GetCPUDescriptorHandleForHeapStart();
+
+			D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+			uavDesc.Format = m_Image.GetMetadata().format;
+			uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+
+			DEVICE->CreateUnorderedAccessView(m_Tex2D.Get(), nullptr, &uavDesc, m_UavHandle);
 		}
 
 		// SRV

@@ -5,7 +5,7 @@
 #include "Material.h"
 #include "Texture.h"
 #include "GraphicShader.h"
-//#include "ComputeShader.h"
+#include "ComputeShader.h"
 
 class CAssetManager
 	: public CSingleton<CAssetManager>
@@ -27,7 +27,7 @@ public:
 
 	class CMeshData* LoadFBX(const std::wstring& path);
 
-	CTexture* CreateTexture(const std::wstring& name, DXGI_FORMAT format, WindowInfo info,
+	CTexture* CreateTexture(const std::wstring& name, DXGI_FORMAT format, UINT32 width, UINT32 height,
 		const D3D12_HEAP_PROPERTIES& heapProperty, D3D12_HEAP_FLAGS heapFlags,
 		D3D12_RESOURCE_FLAGS resFlags = D3D12_RESOURCE_FLAG_NONE, Vec4 clearColor = Vec4());
 
@@ -59,8 +59,8 @@ EAsset_Type CAssetManager::GetAssetType()
 		return EAsset_Type::Material;
 	else if constexpr (std::is_same_v<CGraphicShader, T>)
 		return EAsset_Type::GraphicShader;
-	//else if constexpr (std::is_same_v<CComputeShader, T>)	
-	//	return EAsset_Type::ComputeShader;
+	else if constexpr (std::is_same_v<CComputeShader, T>)	
+		return EAsset_Type::ComputeShader;
 	else if constexpr (std::is_same_v<CMeshData, T>)
 		return EAsset_Type::FBX;
 	return EAsset_Type::END;

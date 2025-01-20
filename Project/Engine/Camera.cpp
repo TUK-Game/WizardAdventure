@@ -138,7 +138,7 @@ void CCamera::SortObject()
 				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
 				continue;
 
-			SHADER_TYPE shaderType = vecObjects[j]->GetMeshRenderer()->GetMaterial()->GetShader()->GetShaderType();
+			SHADER_TYPE shaderType = vecObjects[j]->GetMeshRenderer()->GetMaterial()->GetGraphicsShader()->GetShaderType();
 			switch (shaderType)
 			{
 			case SHADER_TYPE::DEFERRED:

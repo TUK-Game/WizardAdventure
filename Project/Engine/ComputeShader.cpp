@@ -28,9 +28,7 @@ int CComputeShader::Init(const std::wstring& path, const std::string& name, Shad
 
 void CComputeShader::Update()
 {
-	if (GetType() == EAsset_Type::ComputeShader)
-		COMPUTE_CMD_LIST->SetPipelineState(m_PipelineState.Get());
-	else
-		GRAPHICS_CMD_LIST->SetPipelineState(m_PipelineState.Get());
+	COMPUTE_CMD_LIST->SetPipelineState(m_PipelineState.Get());
 }
+
 

@@ -83,7 +83,7 @@ void CDevice::CreateRenderTargetGroups()
 {
 	// DepthStencil
 	CTexture* dsTexture = CAssetManager::GetInst()->CreateTexture(L"DepthStencil",
-		DXGI_FORMAT_D32_FLOAT, CEngine::GetInst()->GetWindowInfo(),
+		DXGI_FORMAT_D32_FLOAT, CEngine::GetInst()->GetWindowInfo().Width, CEngine::GetInst()->GetWindowInfo().Height,
 		CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
 
@@ -109,17 +109,17 @@ void CDevice::CreateRenderTargetGroups()
 		std::vector<RenderTarget> rtVec(RENDER_TARGET_G_BUFFER_GROUP_MEMBER_COUNT);
 
 		rtVec[0].target = CAssetManager::GetInst()->CreateTexture(L"PositionTarget",
-			DXGI_FORMAT_R32G32B32A32_FLOAT, CEngine::GetInst()->GetWindowInfo(),
+			DXGI_FORMAT_R32G32B32A32_FLOAT, CEngine::GetInst()->GetWindowInfo().Width, CEngine::GetInst()->GetWindowInfo().Height,
 			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 
 		rtVec[1].target = CAssetManager::GetInst()->CreateTexture(L"NormalTarget",
-			DXGI_FORMAT_R32G32B32A32_FLOAT, CEngine::GetInst()->GetWindowInfo(),
+			DXGI_FORMAT_R32G32B32A32_FLOAT, CEngine::GetInst()->GetWindowInfo().Width, CEngine::GetInst()->GetWindowInfo().Height,
 			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 
 		rtVec[2].target = CAssetManager::GetInst()->CreateTexture(L"DiffuseTarget",
-			DXGI_FORMAT_R8G8B8A8_UNORM, CEngine::GetInst()->GetWindowInfo(),
+			DXGI_FORMAT_R8G8B8A8_UNORM, CEngine::GetInst()->GetWindowInfo().Width, CEngine::GetInst()->GetWindowInfo().Height,
 			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 

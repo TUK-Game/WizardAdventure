@@ -34,8 +34,7 @@ CGameObject::~CGameObject()
 		delete child;
 
 	// 부모가 있을 경우 부모의 child에서 자신을 제거
-	// 부모가 없는 경우 자신이 최상단 부모이므로 Layer에서 parentVector에서 제거
-	if (m_Parent)
+	/*if (m_Parent)
 	{
 		auto IsFind = std::find_if(m_Parent->m_vecChild.begin(), m_Parent->m_vecChild.end(), [&](CGameObject* obj) {
 			return obj->GetName() == GetName();
@@ -45,7 +44,7 @@ CGameObject::~CGameObject()
 		{
 			m_Parent->m_vecChild.erase(IsFind);
 		}
-	}
+	}*/
 }
 
 void CGameObject::Begin()

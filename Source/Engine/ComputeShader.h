@@ -8,7 +8,6 @@ public:
 	virtual ~CComputeShader();
 
 	int Init(const std::wstring& path, const std::string& name, ShaderInfo info = ShaderInfo());
-
 	void Update();
 
 private:

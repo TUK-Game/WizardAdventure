@@ -431,5 +431,8 @@
     <FxCompile Include="..\..\Content\Shaders\Deferred.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Forward.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

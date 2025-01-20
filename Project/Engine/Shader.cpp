@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Shader.h"
+#include "Device.h"
 
 CShader::CShader(EAsset_Type type)
 	: CAsset(type)
@@ -28,3 +29,4 @@ int CShader::CreateShader(const std::wstring& path, const std::string& name, con
 
 	return S_OK;
 }
+
