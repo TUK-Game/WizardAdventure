@@ -1,10 +1,11 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "GameObject.h"
 #include "LevelManager.h"
 #include "Level.h"
 #include "Layer.h"
 #include "Component.h"
 #include "RenderComponent.h"
+#include "Transform.h"
 #include "Script.h"
 
 CGameObject::CGameObject()
@@ -31,6 +32,20 @@ CGameObject::~CGameObject()
 
 	for (auto& child : m_vecChild)
 		delete child;
+
+	// ë¶€ëª¨ê°€ ìˆì„ ê²½ìš° ë¶€ëª¨ì˜ childì—ì„œ ìì‹ ì„ ì œê±°
+	// ë¶€ëª¨ê°€ ì—†ëŠ” ê²½ìš° ìì‹ ì´ ìµœìƒë‹¨ ë¶€ëª¨ì´ë¯€ë¡œ Layerì—ì„œ parentVectorì—ì„œ ì œê±°
+	if (m_Parent)
+	{
+		auto IsFind = std::find_if(m_Parent->m_vecChild.begin(), m_Parent->m_vecChild.end(), [&](CGameObject* obj) {
+			return obj->GetName() == GetName();
+		});
+
+		if (IsFind != m_Parent->m_vecChild.end())
+		{
+			m_Parent->m_vecChild.erase(IsFind);
+		}
+	}
 }
 
 void CGameObject::Begin()
@@ -65,9 +80,24 @@ void CGameObject::Update()
 		m_vecScript[i]->Update();
 	}
 
-	for (size_t i = 0; i < m_vecChild.size(); ++i)
+	auto iter = m_vecChild.begin();
+	auto iterEnd = m_vecChild.end();
+	for (; iter != iterEnd;)
 	{
-		m_vecChild[i]->Update();
+		if (!(*iter)->GetActive())
+		{
+			auto unActiveIter = *iter;
+			iter = m_vecChild.erase(iter);
+			iterEnd = m_vecChild.end();
+			unActiveIter->ReleaseRef();
+			continue;
+		}
+		else if ((*iter)->GetEnable())
+		{
+			(*iter)->Update();
+		}
+
+		++iter;
 	}
 }
 
@@ -79,13 +109,16 @@ void CGameObject::FinalUpdate()
 			m_arrComponent[i]->FinalUpdate();
 	}
 
-	// Layer ¿¡ GameObject µî·Ï
+	// Layer ì— GameObject ë“±ë¡
 	CLevel* curLevel = CLevelManager::GetInst()->GetCurrentLevel();
 	CLayer* layer = curLevel->GetLayer(m_LayerIndex);
 	layer->RegisterGameObject(this);
 
 	for (size_t i = 0; i < m_vecChild.size(); ++i)
 	{
+		if(m_vecChild[i]->GetTransform())
+			m_vecChild[i]->SetParentTransform(GetTransform());
+
 		m_vecChild[i]->FinalUpdate();
 	}
 }
@@ -96,6 +129,16 @@ void CGameObject::Render()
 		return;
 
 	m_RenderComponent->Render();
+}
+void CGameObject::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
+{
+	//GetTransform()->SetRelativeScale(10.f, 10.f, 10.f);
+}
+
+
+void CGameObject::SetParentTransform(CTransform* transform)
+{
+	GetTransform()->SetParentTransform(transform);
 }
 
 void CGameObject::AddComponent(CComponent* component)
@@ -111,13 +154,13 @@ void CGameObject::AddComponent(CComponent* component)
 	}
 	else
 	{
-		// ÀÌ¹Ì °¡Áö°í ÀÖ´Â ÄÄÆ÷³ÍÆ®ÀÎ °æ¿ì
+		// ì´ë¯¸ ê°€ì§€ê³  ìˆëŠ” ì»´í¬ë„ŒíŠ¸ì¸ ê²½ìš°
 		assert(!m_arrComponent[(int)type]);
 		m_arrComponent[(int)type] = component;
 
 		if (dynamic_cast<CRenderComponent*>(component))
 		{
-			// ÇÑ Á¾·ùÀÇ RenderComonent ¸¸ °¡Áú ¼ö ÀÖ´Ù.
+			// í•œ ì¢…ë¥˜ì˜ RenderComonent ë§Œ ê°€ì§ˆ ìˆ˜ ìˆë‹¤.
 			if (m_RenderComponent)
 				assert(nullptr);
 
@@ -126,4 +169,10 @@ void CGameObject::AddComponent(CComponent* component)
 	}
 
 	component->m_Owner = this;
+}
+
+void CGameObject::AddChild(CGameObject* obj)
+{
+	m_vecChild.push_back(obj);
+	obj->SetParent(this);
 }

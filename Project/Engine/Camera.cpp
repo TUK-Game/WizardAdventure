@@ -7,6 +7,7 @@
 #include "Layer.h"
 #include "Transform.h"
 #include "RenderComponent.h"
+#include "BaseCollider.h"
 
 Matrix CCamera::s_matView;
 Matrix CCamera::s_matProjection;
@@ -63,6 +64,8 @@ void CCamera::FinalUpdate()
 	// 카메라의 View, Proj 행렬을 세팅
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
+
+	m_Frustum.FinalUpdate();
 }
 
 void CCamera::Render()
@@ -101,6 +104,15 @@ void CCamera::SortObject()
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
+			// 프러스텀 컬링
+			if (vecObjects[j]->GetCheckFrustum() && vecObjects[j]->GetCollider())
+			{
+				if (!vecObjects[j]->GetCollider()->IsFrustum(m_Frustum))
+				{
+					continue;
+				}
+			}
+
 			// 레이어 안에있는 물체들 중에서 렌더링 기능이 없는 물체는 거른다.
 			// TODO: Material 구현시 예외처리 추가
 			if (vecObjects[j]->GetRenderComponent() == nullptr

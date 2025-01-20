@@ -25,12 +25,15 @@ public:
 	template<typename T>
 	CSharedPtr<T> FindAsset(const std::wstring& key);
 
+	class CMeshData* LoadFBX(const std::wstring& path);
 private:
 	int LoadMesh();
 	int LoadTexture();
 	int LoadMaterial();
+	int LoadMeshData();
 	int LoadGraphicShader();
 	int LoadComputeShader();
+	int LoadShader(class CShader* shader, std::wstring& shaderName, ShaderInfo info = ShaderInfo()) const;
 
 	int CreateCubeMesh();
 	int CreateSphereMesh();
@@ -50,9 +53,10 @@ EAsset_Type CAssetManager::GetAssetType()
 		return EAsset_Type::Material;
 	else if constexpr (std::is_same_v<CGraphicShader, T>)
 		return EAsset_Type::GraphicShader;
-	//else if constexpr (std::is_same_v<CComputeShader, T>)
+	//else if constexpr (std::is_same_v<CComputeShader, T>)	
 	//	return EAsset_Type::ComputeShader;
-
+	else if constexpr (std::is_same_v<CMeshData, T>)
+		return EAsset_Type::FBX;
 	return EAsset_Type::END;
 }
 

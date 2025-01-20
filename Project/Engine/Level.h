@@ -12,7 +12,8 @@ public:
 	~CLevel();
 
 public:
-	CLayer* GetLayer(int index) const	{ return m_Layer[index]; }
+	CLayer* GetLayer(int index) const { return m_Layer[index]; }
+	class CLevelCollision* GetLevelCollision() { return m_collision; }
 	void Deregister();
 
 public:
@@ -28,5 +29,7 @@ public:
 
 private:
 	std::array<CLayer*, MAX_LAYER>	m_Layer;
+	class CLevelCollision* m_collision;
+
 };
 

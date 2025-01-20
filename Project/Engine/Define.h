@@ -22,9 +22,9 @@ private:\
 #define SWAP_CHAIN_BUFFER_COUNT		2
 #define CBV_REGISTER_COUNT			(int)CBV_REGISTER::END
 #define SRV_REGISTER_COUNT			(int)(static_cast<unsigned char>(SRV_REGISTER::END) - CBV_REGISTER_COUNT)
-#define REGISTER_COUNT				CBV_REGISTER_COUNT + SRV_REGISTER_COUNT
+#define REGISTER_COUNT				(CBV_REGISTER_COUNT + SRV_REGISTER_COUNT)
 
-
+	
 /*----------
 	Path
 -----------*/
@@ -53,3 +53,12 @@ private:\
 	Level
 -----------*/
 #define MAX_LAYER	32
+
+/*----------
+    Texture
+-----------*/
+#define RESOURCE_TEXTURE2D			0x01
+#define RESOURCE_TEXTURE2D_ARRAY	0x02	//[]
+#define RESOURCE_TEXTURE2DARRAY		0x03
+#define RESOURCE_TEXTURE_CUBE		0x04
+#define RESOURCE_BUFFER				0x05

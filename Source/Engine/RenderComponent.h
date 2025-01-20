@@ -13,16 +13,16 @@ public:
 
 public:
     CSharedPtr<CMesh> GetMesh()         { return m_Mesh; }
-    CSharedPtr<CMaterial> GetMaterial() { return m_Material; }
+    CSharedPtr<CMaterial> GetMaterial(UINT32 idx = 0) { return m_Materials[idx]; }
 
     void SetMesh(CSharedPtr<CMesh> mesh)                { m_Mesh = mesh; }
-    void SetMaterial(CSharedPtr<CMaterial> material)    { m_Material = material; }
+    void SetMaterial(CSharedPtr<CMaterial> material, UINT32 idx = 0);
 
 public:
     virtual void Render() = 0;
 
-private:
+protected:
     CSharedPtr<CMesh>       m_Mesh;
-    CSharedPtr<CMaterial>   m_Material;
+    std::vector<CSharedPtr<CMaterial>>   m_Materials;
 };
 

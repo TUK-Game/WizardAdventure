@@ -1,6 +1,7 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Component.h"
+#include "Frustum.h"
 
 class CCamera :
 	public CComponent
@@ -17,7 +18,8 @@ public:
     float GetAspectRatio() const            { return m_AspectRatio; }
     float GetFar() const                    { return m_Far; }
     float GetFOV() const                    { return (m_FOV / XM_PI) * 180.f; }
-    Matrix GetProjMat() const               { return m_matProjection; }
+    Matrix GetProjMat() const { return m_matProjection; }
+    Matrix GetViewMat() const               { return m_matView; }
 
     void SetProjType(EProjection_Type type) { m_ProjectionType = type; }
     void SetOrthoScaleX(float sale)         { m_OrthoScaleX = sale; }
@@ -42,17 +44,19 @@ public:
 
 private:
     EProjection_Type    m_ProjectionType;
-    float               m_OrthoScaleX;  // Á÷±³Åõ¿µ °¡·Î±æÀÌ
-    float               m_AspectRatio;  // Á¾È¾ºñ
-    float               m_FOV;          // ½Ã¾ß°¢(FieldOfView)
-    float               m_Far;          // ÃÖ´ë ½Ã¾ß°Å¸®
+    float               m_OrthoScaleX;  // ì§êµíˆ¬ì˜ ê°€ë¡œê¸¸ì´
+    float               m_AspectRatio;  // ì¢…íš¡ë¹„
+    float               m_FOV;          // ì‹œì•¼ê°(FieldOfView)
+    float               m_Far;          // ìµœëŒ€ ì‹œì•¼ê±°ë¦¬
 
     Matrix              m_matView;
     Matrix              m_matProjection;
 
-    int                 m_Priority;     // Ä«¸Ş¶ó ¿ì¼±¼øÀ§, -1 : ¹Ìµî·Ï Ä«¸Ş¶ó, 0 : ¸ŞÀÎ Ä«¸Ş¶ó, 1 ~ : ¼­ºê Ä«¸Ş¶ó
+    int                 m_Priority;     // ì¹´ë©”ë¼ ìš°ì„ ìˆœìœ„, -1 : ë¯¸ë“±ë¡ ì¹´ë©”ë¼, 0 : ë©”ì¸ ì¹´ë©”ë¼, 1 ~ : ì„œë¸Œ ì¹´ë©”ë¼
 
-    UINT                m_LayerCheck;   // Ä«¸Ş¶ó°¡ ·»´õ¸µÇÒ ·¹ÀÌ¾î ºñÆ®¼³Á¤
+    UINT                m_LayerCheck;   // ì¹´ë©”ë¼ê°€ ë Œë”ë§í•  ë ˆì´ì–´ ë¹„íŠ¸ì„¤ì •
+
+    CFrustum            m_Frustum;
 
     std::vector<CGameObject*>   m_vecObjects;
 

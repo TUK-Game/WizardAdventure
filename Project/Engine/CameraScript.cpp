@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "Transform.h"
 #include "Engine.h"
+#include "LevelManager.h"
 
 CCameraScript::CCameraScript()
 	: m_Speed(300.f)
@@ -28,6 +29,7 @@ void CCameraScript::Move()
 
 	Vec3 front = GetTransform()->GetRelativeDir(EDir::Front);
 	Vec3 right = GetTransform()->GetRelativeDir(EDir::Right);
+	Vec3 up = GetTransform()->GetRelativeDir(EDir::Up);
 
 	if (KEY_PUSH(EKey::W))
 		pos += front * DELTA_TIME * m_Speed;
@@ -37,16 +39,32 @@ void CCameraScript::Move()
 		pos -= right * DELTA_TIME * m_Speed;
 	if (KEY_PUSH(EKey::D))
 		pos += right * DELTA_TIME * m_Speed;
+	if (KEY_PUSH(EKey::Q))
+		pos -= up * DELTA_TIME * m_Speed;
+	if (KEY_PUSH(EKey::E))
+		pos += up * DELTA_TIME * m_Speed;
 
 	GetTransform()->SetRelativePosition(pos);
 
 
-	if (!KEY_PUSH(EKey::RButton))
-		return;
+	if (KEY_PUSH(EKey::RButton))
+	{
+		Vec2 dragDir = CInputManager::GetInst()->GetDragDir();
+		Vec3 rot = GetTransform()->GetRelativeRotation();
+		rot.x += dragDir.y * DELTA_TIME * 360.f;
+		rot.y += dragDir.x * DELTA_TIME * 360.f;
+		GetTransform()->SetRelativeRotation(rot);
+	}
 
-	Vec2 dragDir = CInputManager::GetInst()->GetDragDir();
-	Vec3 rot = GetTransform()->GetRelativeRotation();
-	rot.x += dragDir.y * DELTA_TIME * 360.f;
-	rot.y += dragDir.x * DELTA_TIME * 360.f;
-	GetTransform()->SetRelativeRotation(rot);
+	if (KEY_DOWN(EKey::LButton))
+	{
+		const Vec2& pos = CInputManager::GetInst()->GetMousePosition();
+		CGameObject* obj = CLevelManager::GetInst()->Pick(pos.x, pos.y);
+		if (obj)
+		{
+			obj->SetActive(false);
+		}
+	}
+
 }
+	

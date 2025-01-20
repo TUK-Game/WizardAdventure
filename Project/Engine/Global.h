@@ -21,8 +21,10 @@
 #include <DirectXColors.h>
 #include <DirectXTex/DirectXTex.h>
 #include <DirectXTex/DirectXTex.inl>
+#include <FBX/fbxsdk.h>
 #include "d3dx12.h"
 #include "SimpleMath.h"
+
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 using namespace Microsoft::WRL;
@@ -32,11 +34,24 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "d3dcompiler")
 
+
 #ifndef _DEBUG
 #pragma comment(lib, "DirectxTex/DirectXTex.lib")
 #else
 #pragma comment(lib, "DirectxTex/DirectXTex_d.lib")
 #endif
+
+#ifdef _DEBUG
+#pragma comment(lib, "FBX/lib/debug/libfbxsdk-md.lib")
+#pragma comment(lib, "FBX/lib/debug/libxml2-md.lib")
+#pragma comment(lib, "FBX/lib/debug/zlib-md.lib")
+#else
+#pragma comment(lib, "FBX/lib/release/libfbxsdk-md.lib")
+#pragma comment(lib, "FBX/lib/release/libxml2-md.lib")
+#pragma comment(lib, "FBX/lib/release/zlib-md.lib")
+#endif 
+
+
 
 #include "Singleton.h"
 #include "Flag.h"
@@ -76,11 +91,8 @@ struct Vertex
 	Vec2	UV;
 	Vec3	Normal;
 	Vec3	Tangent;
-};
-
-struct TransformParams
-{
-	Matrix	matWVP;
+	Vec4	weights;
+	Vec4	indices;
 };
 
 #define MATERIAL_INT_COUNT		5
@@ -96,4 +108,21 @@ struct MaterialParams
 	std::array<float, MATERIAL_FLOAT_COUNT> FloatParams;
 };
 
-extern TransformParams	g_Transform;
+struct TransformParams
+{
+	Matrix matWorld;
+	Matrix matView;
+	Matrix matProjection;
+	Matrix matWV;
+	Matrix matWVP;
+};
+
+
+struct CollisionProfile
+{
+	std::string							name;
+	ECollision_Channel					channel;
+	bool								enable = true;
+	std::vector<ECollision_Interaction>	vecCollisionInteraction;
+};
+

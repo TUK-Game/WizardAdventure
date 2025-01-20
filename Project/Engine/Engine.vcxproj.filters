@@ -114,6 +114,15 @@
     <Filter Include="05. Asset\04. Shader">
       <UniqueIdentifier>{d1efdb37-6524-4220-9f2b-162a94794f40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Component\02. Camera\Frustum">
+      <UniqueIdentifier>{92113a21-5c17-45e0-9b24-df2f6ee83d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\10. Collision">
+      <UniqueIdentifier>{69928252-5624-45b2-b106-18f73ac1da6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\05. Animation">
+      <UniqueIdentifier>{d32a399f-441b-4b12-8e9b-5594e20da075}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -236,6 +245,33 @@
     <ClInclude Include="Texture.h">
       <Filter>05. Asset\03. Texture</Filter>
     </ClInclude>
+    <ClInclude Include="Frustum.h">
+      <Filter>04. Component\02. Camera\Frustum</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseCollider.h">
+      <Filter>04. Component\04. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>04. Component\04. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="OrientedBoxCollider.h">
+      <Filter>04. Component\04. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>01. Manager\10. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelCollision.h">
+      <Filter>02. Level</Filter>
+    </ClInclude>
+    <ClInclude Include="FBXLoader.h">
+      <Filter>05. Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshData.h">
+      <Filter>05. Asset\01. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>04. Component\05. Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -343,6 +379,33 @@
     <ClCompile Include="Texture.cpp">
       <Filter>05. Asset\03. Texture</Filter>
     </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>04. Component\02. Camera\Frustum</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseCollider.cpp">
+      <Filter>04. Component\04. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>04. Component\04. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="OrientedBoxCollider.cpp">
+      <Filter>04. Component\04. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>01. Manager\10. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelCollision.cpp">
+      <Filter>02. Level</Filter>
+    </ClCompile>
+    <ClCompile Include="FBXLoader.cpp">
+      <Filter>05. Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshData.cpp">
+      <Filter>05. Asset\01. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>04. Component\05. Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -351,5 +414,10 @@
     <None Include="default.hlsli">
       <Filter>HLSL</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Skybox.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

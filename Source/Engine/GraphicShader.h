@@ -10,7 +10,7 @@ public:
 	~CGraphicShader();
 
 public:
-	int Init(const std::wstring& path);
+	virtual int Init(const std::wstring& path, ShaderInfo info = ShaderInfo());
 	void Update();
 
 private:

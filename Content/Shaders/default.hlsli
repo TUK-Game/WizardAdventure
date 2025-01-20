@@ -1,6 +1,10 @@
 
 cbuffer TRANSFORM_PARAMS : register(b0)
 {
+    row_major matrix matWorld;
+    row_major matrix matView;
+    row_major matrix matProjection;
+    row_major matrix matWV;
     row_major matrix matWVP;
 };
 

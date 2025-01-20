@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 class CComponent;
 class CScript;
@@ -6,7 +6,7 @@ class CRenderComponent;
 class CTransform;
 class CMeshRenderer;
 class CCamera;
-
+class CBaseCollider;
 
 class CGameObject :
     public CRef
@@ -23,11 +23,17 @@ public:
     CComponent* GetComponent(EComponent_Type type)      { return m_arrComponent[(int)type]; }
     CRenderComponent* GetRenderComponent()              { return m_RenderComponent; }
     CTransform* GetTransform()                          { return (CTransform*)GetComponent(EComponent_Type::Transform); }
-    CMeshRenderer* GetMeshRenderer()                    { return (CMeshRenderer*)GetComponent(EComponent_Type::MeshRenderer); }
+    CMeshRenderer* GetMeshRenderer() { return (CMeshRenderer*)GetComponent(EComponent_Type::MeshRenderer); }
+    CBaseCollider* GetCollider()                    { return (CBaseCollider*)GetComponent(EComponent_Type::Collider); }
     CCamera* GetCamera()                                { return (CCamera*)GetComponent(EComponent_Type::Camera); }
+    bool GetCheckFrustum() { return m_CheckFrustum; }
+
+    void SetCheckFrustum(bool checkFrustum) { m_CheckFrustum = checkFrustum; }
+    void SetParentTransform(CTransform* transform);
+    void SetParent(CGameObject* parent) { m_Parent = parent; } 
 
     void AddComponent(CComponent* component);
-
+    void AddChild(CGameObject* obj);
 public:
     void Begin();
     void Update();
@@ -37,14 +43,18 @@ public:
 public:
     virtual CGameObject* Clone() override { return new CGameObject(*this); }
 
+    virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest);
+    virtual void CollisionEnd(CBaseCollider* src, CBaseCollider* dest) {}
+
 private:
     std::array<CComponent*, (int)EComponent_Type::END>  m_arrComponent;
     std::vector<CScript*>   m_vecScript;
-    CRenderComponent*       m_RenderComponent;  // m_arrComponent ¿¡¼­ ÇöÀç ·»´õ¸µ ÄÄÆ÷³ÍÆ®¸¦ °¡¸®Å°´Â Æ÷ÀÎÅÍ
+    CRenderComponent*       m_RenderComponent;  // m_arrComponent ì—ì„œ í˜„ì¬ ë Œë”ë§ ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ë¦¬í‚¤ëŠ” í¬ì¸í„°
 
     CGameObject*                m_Parent;
     std::vector<CGameObject*>   m_vecChild;
 
-    int m_LayerIndex; // ¼Ò¼Ó ·¹ÀÌ¾î ¹øÈ£
+    int m_LayerIndex; // ì†Œì† ë ˆì´ì–´ ë²ˆí˜¸
+    bool m_CheckFrustum = true; // í”„ëŸ¬ìŠ¤í…€ ì—¬ë¶€
 };
 

@@ -45,6 +45,7 @@ enum class EAsset_Type
 	Material,
 	GraphicShader,
 	ComputeShader,
+	FBX,
 
 	END
 };
@@ -63,4 +64,17 @@ enum class EDir
 	Front,
 
 	END
+};
+
+enum class ECollision_Channel
+{
+	Default,
+	Player,
+	Max
+};
+
+enum class ECollision_Interaction
+{
+	Ignore,
+	Collision
 };
