@@ -42,7 +42,7 @@ int CLevelManager::Init()
 	camera->AddComponent(new CCamera);
 	camera->AddComponent(new CCameraScript);
 	camera->GetCamera()->SetProjType(EProjection_Type::Perspective);
-	camera->GetCamera()->SetPriority(0); // 0 : 메인 카메라로 설정
+	camera->GetCamera()->SetPriority(0); // 0 : 메인 카메라로 설정	
 	camera->GetCamera()->CheckLayerAll();
 	camera->GetCamera()->CheckLayer(31);
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
