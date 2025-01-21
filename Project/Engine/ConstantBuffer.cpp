@@ -130,7 +130,7 @@ void CConstantBuffer::SetGlobalData(void* buffer, UINT size)
 
 	::memcpy(&m_MappedBuffer[0], buffer, size);
 
-	CMD_LIST->SetGraphicsRootConstantBufferView(0, GetGpuVirtualAddress(0));
+	GRAPHICS_CMD_LIST->SetGraphicsRootConstantBufferView(0, GetGpuVirtualAddress(0));
 }
 
 

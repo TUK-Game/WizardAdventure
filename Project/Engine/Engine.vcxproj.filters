@@ -119,6 +119,7 @@
     </Filter>
     <Filter Include="04. Component\06. Light">
       <UniqueIdentifier>{3a79a9b4-0ba4-48ff-bd7d-739ae3606368}</UniqueIdentifier>
+    </Filter>
     <Filter Include="01. Manager\01. Device\RenderTargetGroup">
       <UniqueIdentifier>{a43e03d0-b34c-4be4-898a-9fa584455fdd}</UniqueIdentifier>
     </Filter>
@@ -274,8 +275,6 @@
     <ClInclude Include="Animator.h">
       <Filter>04. Component\05. Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>04. Component\06. Light</Filter>
     <ClInclude Include="RenderTargetGroup.h">
       <Filter>01. Manager\01. Device\RenderTargetGroup</Filter>
     </ClInclude>
@@ -284,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="ParticleSystem.h">
       <Filter>04. Component\01. RenderComponent\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>04. Component\06. Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -416,8 +418,6 @@
     <ClCompile Include="Animator.cpp">
       <Filter>04. Component\05. Animation</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>04. Component\06. Light</Filter>
     <ClCompile Include="RenderTargetGroup.cpp">
       <Filter>01. Manager\01. Device\RenderTargetGroup</Filter>
     </ClCompile>
@@ -426,6 +426,9 @@
     </ClCompile>
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>04. Component\01. RenderComponent\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>04. Component\06. Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -438,9 +441,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Skybox.hlsl">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\Content\Shaders\Light.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\..\Content\Shaders\Compute.hlsl">
@@ -459,6 +459,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\..\Content\Shaders\Utils.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Light.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

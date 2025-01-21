@@ -29,7 +29,7 @@ public:
     CBaseCollider* GetCollider()                        { return (CBaseCollider*)GetComponent(EComponent_Type::Collider); }
     CCamera* GetCamera()                                { return (CCamera*)GetComponent(EComponent_Type::Camera); }
     CLight* GetLight()                                  { return (CLight*)GetComponent(EComponent_Type::Light); }
-    CParticleSystem* GetParticleSystem()                                { return (CParticleSystem*)GetComponent(EComponent_Type::ParticleSystem); }
+    CParticleSystem* GetParticleSystem()                { return (CParticleSystem*)GetComponent(EComponent_Type::ParticleSystem); }
     bool GetCheckFrustum() { return m_CheckFrustum; }
 
     void SetCheckFrustum(bool checkFrustum) { m_CheckFrustum = checkFrustum; }
