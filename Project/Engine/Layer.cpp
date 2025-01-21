@@ -59,6 +59,7 @@ void CLayer::Update()
 	{
 		if (!(*iter)->GetActive())
 		{
+			delete* iter;
 			iter = m_vecParentObjects.erase(iter);
 			iterEnd = m_vecParentObjects.end();
 			continue;

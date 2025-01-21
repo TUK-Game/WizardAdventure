@@ -5,7 +5,7 @@
 #include "Material.h"
 #include "Texture.h"
 #include "GraphicShader.h"
-//#include "ComputeShader.h"
+#include "ComputeShader.h"
 
 class CAssetManager
 	: public CSingleton<CAssetManager>
@@ -26,15 +26,24 @@ public:
 	CSharedPtr<T> FindAsset(const std::wstring& key);
 
 	class CMeshData* LoadFBX(const std::wstring& path);
+
+	CTexture* CreateTexture(const std::wstring& name, DXGI_FORMAT format, UINT32 width, UINT32 height,
+		const D3D12_HEAP_PROPERTIES& heapProperty, D3D12_HEAP_FLAGS heapFlags,
+		D3D12_RESOURCE_FLAGS resFlags = D3D12_RESOURCE_FLAG_NONE, Vec4 clearColor = Vec4());
+
+	CTexture* CreateTextureFromResource(const std::wstring& name, ComPtr<ID3D12Resource> tex2D);
 private:
 	int LoadMesh();
 	int LoadTexture();
 	int LoadMaterial();
 	int LoadMeshData();
+	int LoadParticle();
 	int LoadGraphicShader();
 	int LoadComputeShader();
-	int LoadShader(class CShader* shader, std::wstring& shaderName, ShaderInfo info = ShaderInfo()) const;
+	int LoadShader(class CShader* shader, std::wstring& shaderName, ShaderInfo info = ShaderInfo(), 
+		const std::string& vs = "VS_Main", const std::string& ps = "PS_Main", const std::string& gs = "", const std::string& cs = "") const;
 
+	int CreatePointMesh();
 	int CreateCubeMesh();
 	int CreateSphereMesh();
 
@@ -53,8 +62,8 @@ EAsset_Type CAssetManager::GetAssetType()
 		return EAsset_Type::Material;
 	else if constexpr (std::is_same_v<CGraphicShader, T>)
 		return EAsset_Type::GraphicShader;
-	//else if constexpr (std::is_same_v<CComputeShader, T>)	
-	//	return EAsset_Type::ComputeShader;
+	else if constexpr (std::is_same_v<CComputeShader, T>)	
+		return EAsset_Type::ComputeShader;
 	else if constexpr (std::is_same_v<CMeshData, T>)
 		return EAsset_Type::FBX;
 	return EAsset_Type::END;

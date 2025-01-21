@@ -365,7 +365,7 @@ void FBXLoader::CreateMaterials()
 			CMaterial* material = new CMaterial;
 			std::wstring key = _meshes[i].materials[j].name;
 			material->SetName(key);
-			material->SetShader(CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Default"));
+			material->SetGraphicsShader(CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Default"));
 
 			{
 				std::wstring diffuseName = _meshes[i].materials[j].diffuseTexName.c_str();

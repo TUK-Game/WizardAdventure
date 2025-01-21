@@ -3,15 +3,19 @@
 class CSwapChain;
 class CDescriptorHeap;
 
-class CCommandQueue
+// ************************
+// GraphicsCommandQueue
+// ************************
+
+class CGraphicsCommandQueue
 {
 public:
-	CCommandQueue();
-	~CCommandQueue();
+	CGraphicsCommandQueue();
+	~CGraphicsCommandQueue();
 
 public:
-	ComPtr<ID3D12CommandQueue> GetCmdQueue()				{ return m_CmdQueue; }
-	ComPtr<ID3D12GraphicsCommandList> GetCmdList()			{ return m_CmdList; }
+	ComPtr<ID3D12CommandQueue> GetCmdQueue()				{ return m_GraphicsCmdQueue; }
+	ComPtr<ID3D12GraphicsCommandList> GetGraphicsCmdList()			{ return m_CmdList; }
 	ComPtr<ID3D12GraphicsCommandList> GetResourceCmdList()	{ return m_ResCmdList; }
 
 public:
@@ -24,7 +28,7 @@ public:
 	void FlushResourceCommandQueue();
 
 private:
-	ComPtr<ID3D12CommandQueue>			m_CmdQueue;
+	ComPtr<ID3D12CommandQueue>			m_GraphicsCmdQueue;
 	ComPtr<ID3D12CommandAllocator>		m_CmdAlloc;
 	ComPtr<ID3D12GraphicsCommandList>	m_CmdList;
 
@@ -38,3 +42,31 @@ private:
 	std::shared_ptr<CSwapChain>			m_SwapChain;
 };
 
+// ************************
+// ComputeCommandQueue
+// ************************
+
+class CComputeCommandQueue
+{
+public:
+	CComputeCommandQueue();
+	~CComputeCommandQueue();
+
+public:
+	ComPtr<ID3D12CommandQueue> GetCmdQueue() { return m_CmdQueue; }
+	ComPtr<ID3D12GraphicsCommandList> GetComputeCmdList() { return m_CmdList; }
+
+public:
+	int Init(ComPtr<ID3D12Device> device);
+	void WaitSync();
+	void FlushResourceCommandQueue();
+
+private:
+	ComPtr<ID3D12CommandQueue>			m_CmdQueue;
+	ComPtr<ID3D12CommandAllocator>		m_CmdAlloc;
+	ComPtr<ID3D12GraphicsCommandList>	m_CmdList;
+
+	ComPtr<ID3D12Fence>					m_Fence;
+	UINT								m_FenceValue;
+	HANDLE								m_FenceEvent;
+};

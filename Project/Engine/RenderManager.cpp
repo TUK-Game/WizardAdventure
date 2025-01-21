@@ -16,6 +16,13 @@ void CRenderManager::Render()
 	// Target Clear
 	CDevice::GetInst()->RenderBegin();
 
+	INT8 backIndex = CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex();
+	// swapchain
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->ClearRenderTargetView(backIndex);
+	
+	// Deferred
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->ClearRenderTargetView();
+
 	for (auto& camera : m_vecCamera)
 	{
 		camera->Render();

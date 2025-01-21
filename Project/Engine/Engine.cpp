@@ -32,10 +32,11 @@ int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wc
     if (FAILED(CreateMainWindow(wcex)))
         return E_FAIL;
 
+    ResizeWindow(m_WindowInfo.Width, m_WindowInfo.Height);
+
     if (FAILED(CDevice::GetInst()->Init()))
         return E_FAIL;  
 
-    ResizeWindow(m_WindowInfo.Width, m_WindowInfo.Height);
 
     m_Timer = new CTimer;
     m_Timer->Init();
@@ -96,7 +97,7 @@ void CEngine::ResizeWindow(int width, int height)
     pos.y -= m_WindowInfo.Height / 2 - rc.top;
     SetWindowPos(m_WindowInfo.hWnd, nullptr, pos.x, pos.y, rc.right - rc.left, rc.bottom - rc.top, 0);
 
-    CDevice::GetInst()->GetDepthStencilBuffer()->Init(m_WindowInfo);
+    //CDevice::GetInst()->GetDepthStencilBuffer()->Init(m_WindowInfo);
 }
 
 int CEngine::CreateMainWindow(const WNDCLASSEXW& wcex)

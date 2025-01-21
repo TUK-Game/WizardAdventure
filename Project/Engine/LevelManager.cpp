@@ -15,6 +15,9 @@
 #include "RenderManager.h"
 #include "CollisionManager.h"
 #include "MeshData.h"
+#include "Device.h"
+#include "ComputeShader.h"
+#include "ParticleSystem.h"
 
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)
@@ -35,6 +38,28 @@ int CLevelManager::Init()
 	m_CurLevel->GetLayer(1)->SetName(L"BackGround");
 	m_CurLevel->GetLayer(2)->SetName(L"Other");
 	m_CurLevel->GetLayer(3)->SetName(L"Others");
+	m_CurLevel->GetLayer(4)->SetName(L"UI");
+
+#pragma region ComputeShader
+	{
+		CComputeShader* shader = CAssetManager::GetInst()->FindAsset<CComputeShader>(L"Compute");
+
+		// UAV 용 Texture 생성
+		CTexture* texture = CAssetManager::GetInst()->CreateTexture(L"UAVTexture",
+			DXGI_FORMAT_R8G8B8A8_UNORM, 1024, 1024,
+			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE,
+			D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+
+		//CMaterial* material = GET_SINGLE(Resources)->Get<CMaterial>(L"ComputeShader");
+		std::shared_ptr<CMaterial> material = std::make_shared<CMaterial>();
+		material->SetComputeShader(shader);
+		material->SetInt(0, 1);
+		CDevice::GetInst()->GetComputeDescHeap()->SetUAV(texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
+
+		// 쓰레드 그룹 (1 * 1024 * 1)
+		material->Dispatch(1, 1024, 1);
+	}
+#pragma endregion
 
 	// 카메라 역할 오브젝트 생성
 	CGameObject* camera = new CGameObject;
@@ -46,8 +71,24 @@ int CLevelManager::Init()
 	camera->GetCamera()->SetPriority(0); // 0 : 메인 카메라로 설정	
 	camera->GetCamera()->CheckLayerAll();
 	camera->GetCamera()->CheckLayer(31);
+	camera->GetCamera()->CheckLayer(4);
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
 	m_CurLevel->AddGameObject(camera, 0, false);
+
+#pragma region UI_Camera
+	{
+		CGameObject* c = new CGameObject();
+		c->SetName(L"Orthographic_Camera");
+		c->AddComponent(new CTransform);
+		c->AddComponent(new CCamera); // Near=1, Far=1000, 800*600
+		c->GetCamera()->SetProjType(EProjection_Type::Orthographic);
+		c->GetCamera()->SetPriority(1); // 0 : 메인 카메라로 설정	
+		c->GetCamera()->CheckLayerClear(); // 다 끄고
+		c->GetCamera()->CheckLayer(4); // UI만 찍음
+		c->GetTransform()->SetRelativePosition(Vec3(0.f, 0.f, 0.f));
+		m_CurLevel->AddGameObject(c, 0, false);
+	}
+#pragma endregion
 
 	CGameObject* skybox = new CGameObject;
 	skybox->SetName(L"Skybox");
@@ -114,8 +155,7 @@ int CLevelManager::Init()
 	object4->AddComponent(new CBoxCollider);
 	
 	object4->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	//object4->GetCollider()->CreateCollisionProfile("Default", ECollision_Channel::Default);
-	object4->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
+	object4->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f) ;
 	object4->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object4->GetTransform()->SetRelativePosition(100.f, 0.f, 0.f);
 	object4->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
@@ -126,7 +166,6 @@ int CLevelManager::Init()
 	object3->AddComponent(new CMeshRenderer);
 	object3->AddComponent(new CBoxCollider);
 	object3->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	//object3->GetCollider()->CreateCollisionProfile("Default", ECollision_Channel::Default);
 	object3->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
 	object3->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object3->GetTransform()->SetRelativePosition(300.f, 0.f, 0.f);
@@ -139,7 +178,6 @@ int CLevelManager::Init()
 	object2->AddComponent(new CMeshRenderer);
 	object2->AddComponent(new CBoxCollider);
 	object2->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	//object2->GetCollider()->CreateCollisionProfile("Default", ECollision_Channel::Default);
 	object2->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
 	object2->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object2->GetTransform()->SetRelativePosition(200.f, 0.f, 0.f);
@@ -151,7 +189,6 @@ int CLevelManager::Init()
 	object->AddComponent(new CMeshRenderer);
 	object->AddComponent(new CBoxCollider);
 	object->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	//object->GetCollider()->CreateCollisionProfile("Default", ECollision_Channel::Default);
 	object->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
 	object->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object->GetTransform()->SetRelativePosition(-300.f, 0.f, 300.f);
@@ -160,44 +197,74 @@ int CLevelManager::Init()
 	object->AddChild(object2);
 	object->AddChild(object3);
 	m_CurLevel->AddGameObject(object, 3, false);
-	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
-	std::vector<CGameObject*> obj = data->Instantiate();
-	
-	data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Wolf");
-	std::vector<CGameObject*> obj2 = data->Instantiate();
+	//CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
+	//std::vector<CGameObject*> obj = data->Instantiate();
+	//
+	//data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Wolf");
+	//std::vector<CGameObject*> obj2 = data->Instantiate();
 
-	for (int i = 0; i < 1; ++i)
-	{
-		std::string name = "Dragon" + std::to_string(i);
-		obj[i]->SetName(s2ws(name));
-		obj[i]->AddComponent(new CBoxCollider);
-		obj[i]->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-		//o->GetTransform()->SetRelativePosition(200, 0, 100);
-		//o->GetTransform()->SetRelativeScale(100, 100, 100);
-		m_CurLevel->AddGameObject(obj[i], 3, false);
-	}
-
-	for(auto& o : obj2)
-	{
-		std::string name = "Wolf";
-		o->SetName(s2ws(name));
-		o->AddComponent(new CBoxCollider);
-		o->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-		o->GetTransform()->SetRelativePosition(200, 0, 100);
-		o->GetTransform()->SetRelativeScale(100, 100, 100);
-		m_CurLevel->AddGameObject(o, 3, false);
-	}
-
-	//for (int i = 0; i < 51; ++i)
+	//for (int i = 0; i < 1; ++i)
 	//{
-	//	std::string name = "Floor" + std::to_string(i);
+	//	std::string name = "Dragon" + std::to_string(i);
 	//	obj[i]->SetName(s2ws(name));
 	//	obj[i]->AddComponent(new CBoxCollider);
 	//	obj[i]->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//	CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred");
+	//	obj[i]->GetMeshRenderer()->GetMaterial(0)->SetShader(shader);
 	//	//o->GetTransform()->SetRelativePosition(200, 0, 100);
 	//	//o->GetTransform()->SetRelativeScale(100, 100, 100);
 	//	m_CurLevel->AddGameObject(obj[i], 3, false);
 	//}
+
+	//for(auto& o : obj2)
+	//{
+	//	std::string name = "Wolf";
+	//	o->SetName(s2ws(name));
+	//	o->AddComponent(new CBoxCollider);
+	//	o->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//	o->GetTransform()->SetRelativePosition(200, 0, 100);
+	//	o->GetTransform()->SetRelativeScale(100, 100, 100);
+	//	CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred");
+	//	o->GetMeshRenderer()->GetMaterial(0)->SetShader(shader);
+	//	m_CurLevel->AddGameObject(o, 3, false);
+	//}
+
+#pragma region UI_TEST
+	for (INT32 i = 0; i < 4; ++i)
+	{
+		CGameObject* obj = new CGameObject;
+		obj->AddComponent(new CTransform);
+		obj->AddComponent(new CMeshRenderer);
+		obj->GetTransform()->SetRelativeScale(Vec3(200.f, 200.f, 200.f));
+		obj->GetTransform()->SetRelativePosition(Vec3(-350.f + (i * 240), 250.f, 500.f));
+		obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+		CMaterial* material = new CMaterial;
+		CTexture* texture;
+
+		if (i < 3)
+			texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
+		else
+			texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"UAVTexture");
+
+		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Forward");
+		material->SetTexture(0, texture);
+		material->SetGraphicsShader(shader);
+		obj->GetMeshRenderer()->SetMaterial(material);
+		m_CurLevel->AddGameObject(obj, 4, false);
+	}
+
+#pragma endregion
+
+#pragma region ParticleSystem
+	{
+		CGameObject* particle = new CGameObject;
+		particle->AddComponent(new CTransform);
+		particle->AddComponent(new CParticleSystem);
+		particle->SetCheckFrustum(false);		
+		particle->GetTransform()->SetRelativePosition(Vec3(0.f, 0.f, 100.f));
+		m_CurLevel->AddGameObject(particle, 3, false);
+	}
+#pragma endregion
 
 	m_CurLevel->Begin();
 

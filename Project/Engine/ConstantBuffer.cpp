@@ -81,7 +81,7 @@ int CConstantBuffer::CreateView()
 
 	for (UINT i = 0; i < m_ElementCount; ++i)
 	{
-		D3D12_CPU_DESCRIPTOR_HANDLE cbvHandle = GetCpuHandle(i);
+		D3D12_CPU_DESCRIPTOR_HANDLE cbvHandle = GetSRVCpuHandle(i);
 
 		D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
 		cbvDesc.BufferLocation = m_CBVBuffer->GetGPUVirtualAddress() + static_cast<UINT64>(m_ElementSize) * i;
@@ -98,15 +98,28 @@ void CConstantBuffer::Clear()
 	m_CurrentIndex = 0;
 }
 
-void CConstantBuffer::PushData(void* buffer, UINT size)
+void CConstantBuffer::PushGraphicsData(void* buffer, UINT size)
 {
 	assert(m_CurrentIndex < m_ElementCount);
 	assert(m_ElementSize == ((size + 255) & ~255));
 
 	::memcpy(&m_MappedBuffer[m_CurrentIndex * m_ElementSize], buffer, size);
 
-	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = GetCpuHandle(m_CurrentIndex);
-	CDevice::GetInst()->GetTableDescHeap()->SetCBV(cpuHandle, m_Register);
+	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = GetSRVCpuHandle(m_CurrentIndex);
+	CDevice::GetInst()->GetGraphicsDescHeap()->SetCBV(cpuHandle, m_Register);
+
+	m_CurrentIndex++;
+}
+
+void CConstantBuffer::PushComputeData(void* buffer, UINT size)
+{
+	assert(m_CurrentIndex < m_ElementCount);
+	assert(m_ElementSize == ((size + 255) & ~255));
+
+	::memcpy(&m_MappedBuffer[m_CurrentIndex * m_ElementSize], buffer, size);
+
+	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = GetSRVCpuHandle(m_CurrentIndex);
+	CDevice::GetInst()->GetComputeDescHeap()->SetCBV(cpuHandle, m_Register);
 
 	m_CurrentIndex++;
 }
@@ -128,7 +141,7 @@ D3D12_GPU_VIRTUAL_ADDRESS CConstantBuffer::GetGpuVirtualAddress(UINT index)
 	return objCBAddress;
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE CConstantBuffer::GetCpuHandle(UINT index)
+D3D12_CPU_DESCRIPTOR_HANDLE CConstantBuffer::GetSRVCpuHandle(UINT index)
 {
 	return CD3DX12_CPU_DESCRIPTOR_HANDLE(m_CPUHandleBegin, index * m_HandleIncrementSize);
 }

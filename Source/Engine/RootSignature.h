@@ -7,17 +7,19 @@ public:
 	~CRootSignature();
 
 public:
-	ComPtr<ID3D12RootSignature>	GetSignature()	{ return m_Signature; }
+	ComPtr<ID3D12RootSignature>	GetGraphicsRootSignature() { return m_GraphicsRootSignature; }
+	ComPtr<ID3D12RootSignature>	GetComputeRootSignature()	{ return m_ComputeRootSignature; }
 
 public:
 	int Init();
 
 private:
-	void CreateSamplerDesc();
-	int CreateRootSignature();
+	int CreateGraphicsRootSignature();
+	int CreateComputeRootSignature();
 
 private:
-	ComPtr<ID3D12RootSignature>	m_Signature;
 	D3D12_STATIC_SAMPLER_DESC	m_SamplerDesc;
+	ComPtr<ID3D12RootSignature>	m_GraphicsRootSignature;
+	ComPtr<ID3D12RootSignature>	m_ComputeRootSignature;
 };
 

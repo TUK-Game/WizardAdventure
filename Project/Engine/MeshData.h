@@ -31,7 +31,7 @@ public:
 	virtual CMeshData* Clone() override { return new CMeshData(*this); }
 
 private:
-	std::shared_ptr<CMesh>				_mesh;
+	std::shared_ptr<CMesh>				m_Mesh;
 	std::vector<std::shared_ptr<CMaterial>>	_materials;
 
 	std::vector<MeshRenderInfo> _meshRenders;

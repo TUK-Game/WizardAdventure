@@ -1,6 +1,6 @@
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN             // °ÅÀÇ »ç¿ëµÇÁö ¾Ê´Â ³»¿ëÀ» Windows Çì´õ¿¡¼­ Á¦¿ÜÇÕ´Ï´Ù.
+#define WIN32_LEAN_AND_MEAN             // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Windows ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
 
 #include <windows.h>
 #include <crtdbg.h>
@@ -76,7 +76,7 @@ struct WindowInfo
 	std::wstring	TitleName;
 	int				Width;
 	int				Height;
-	bool			bWindowed;	// ÀüÃ¼È­¸é or Ã¢¸ðµå
+	bool			bWindowed;	// ï¿½ï¿½Ã¼È­ï¿½ï¿½ or Ã¢ï¿½ï¿½ï¿½
 };
 
 struct Vertex
@@ -95,17 +95,25 @@ struct Vertex
 	Vec4	indices;
 };
 
-#define MATERIAL_INT_COUNT		5
-#define MATERIAL_FLOAT_COUNT	5
-#define MATERIAL_TEXTURE_COUNT	5
+#define MATERIAL_INT_COUNT		4
+#define MATERIAL_FLOAT_COUNT	4
+#define MATERIAL_TEXTURE_COUNT	4
+#define MATERIAL_VECTOR2_COUNT	4
+#define MATERIAL_VECTOR4_COUNT	4
 
 struct MaterialParams
 {
 	void SetInt(unsigned char index, int value) { IntParams[index] = value; }
 	void SetFloat(unsigned char index, float value) { FloatParams[index] = value; }
+	void SetTexOn(unsigned char index, int value) { texOnParams[index] = value; }
+	void SetVec2(unsigned char index, Vec2 value) { Vec2Params[index] = value; }
+	void SetVec4(unsigned char index, Vec4 value) { Vec4Params[index] = value; }
 
 	std::array<int, MATERIAL_INT_COUNT> IntParams;
 	std::array<float, MATERIAL_FLOAT_COUNT> FloatParams;
+	std::array<int, MATERIAL_TEXTURE_COUNT> texOnParams;
+	std::array<Vec2, MATERIAL_VECTOR2_COUNT> Vec2Params;
+	std::array<Vec4, MATERIAL_VECTOR4_COUNT> Vec4Params;
 };
 
 struct TransformParams
@@ -157,3 +165,34 @@ struct LightParams
 	Vec3		padding;
 	LightInfo	lights[50];
 };
+
+#include <shlobj.h>
+#include <filesystem>
+static std::wstring GetLatestWinPixGpuCapturerPath_Cpp17()
+{
+	LPWSTR programFilesPath = nullptr;
+	SHGetKnownFolderPath(FOLDERID_ProgramFiles, KF_FLAG_DEFAULT, NULL, &programFilesPath);
+
+	std::filesystem::path pixInstallationPath = programFilesPath;
+	pixInstallationPath /= "Microsoft PIX";
+
+	std::wstring newestVersionFound;
+
+	for (auto const& directory_entry : std::filesystem::directory_iterator(pixInstallationPath))
+	{
+		if (directory_entry.is_directory())
+		{
+			if (newestVersionFound.empty() || newestVersionFound < directory_entry.path().filename().c_str())
+			{
+				newestVersionFound = directory_entry.path().filename().c_str();
+			}
+		}
+	}
+
+	if (newestVersionFound.empty())
+	{
+		// TODO: Error, no PIX installation found
+	}
+
+	return pixInstallationPath / newestVersionFound / L"WinPixGpuCapturer.dll";
+}

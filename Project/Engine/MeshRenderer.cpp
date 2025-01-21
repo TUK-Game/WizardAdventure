@@ -24,11 +24,11 @@ void CMeshRenderer::Render()
 	{
 		CMaterial* material = m_Materials[i];
 
-		if (material == nullptr || material->GetShader() == nullptr)
+		if (material == nullptr || material->GetGraphicsShader() == nullptr)
 			continue;
 
-		GetTransform()->Binding();
-		GetMaterial()->Binding();
-		GetMesh()->Render(i);
+		GetTransform()->GraphicsBinding();
+		GetMaterial()->GraphicsBinding();
+		GetMesh()->Render(1, i);
 	}
 }

@@ -22,13 +22,14 @@ public:
 	
 public:
 	D3D12_GPU_VIRTUAL_ADDRESS GetGpuVirtualAddress(UINT index);
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHandle(UINT index);
+	D3D12_CPU_DESCRIPTOR_HANDLE GetSRVCpuHandle(UINT index);
 
 public:
 	int Init(CBV_REGISTER reg, UINT size, UINT count);
 
 	void Clear();
-	void PushData(void* buffer, UINT size);
+	void PushGraphicsData(void* buffer, UINT size);
+	void PushComputeData(void* buffer, UINT size);
 
 	void SetGlobalData(void* buffer, UINT size);
 

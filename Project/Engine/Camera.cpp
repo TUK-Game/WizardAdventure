@@ -9,7 +9,10 @@
 #include "RenderComponent.h"
 #include "BaseCollider.h"
 #include "Light.h"
+#include "MeshRenderer.h"
 #include "Device.h"
+#include "ParticleSystem.h"
+
 Matrix CCamera::s_matView;
 Matrix CCamera::s_matProjection;
 
@@ -19,7 +22,7 @@ CCamera::CCamera()
 	, m_OrthoScaleX(1.f)
 	, m_AspectRatio(1.f)
 	, m_FOV(XM_PI / 2.f)
-	, m_Far(10000.f)
+	, m_Far(1000.f)
 	, m_Priority(-1)
 	, m_LayerCheck(0)
 {
@@ -34,12 +37,12 @@ CCamera::~CCamera()
 
 void CCamera::FinalUpdate()
 {
-	// ºäÇà·Ä °è»ê
-	// ÀÌµ¿
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+	// ï¿½Ìµï¿½
 	Vec3 vCamPos = GetTransform()->GetRelativePosition();
 	Matrix matTrans = XMMatrixTranslation(-vCamPos.x, -vCamPos.y, -vCamPos.z);
 
-	// È¸Àü
+	// È¸ï¿½ï¿½
 	Vec3 vR = GetTransform()->GetWorldDir(EDir::Right);
 	Vec3 vU = GetTransform()->GetWorldDir(EDir::Up);
 	Vec3 vF = GetTransform()->GetWorldDir(EDir::Front);
@@ -52,7 +55,7 @@ void CCamera::FinalUpdate()
 	m_matView = matTrans * matRot;
 
 
-	// Åõ¿µÇà·Ä °è»êÇÏ±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
 	if (m_ProjectionType == EProjection_Type::Orthographic)
 	{
 		m_matProjection = XMMatrixOrthographicLH(m_OrthoScaleX, m_OrthoScaleX / m_AspectRatio, 1.f, m_Far);
@@ -62,7 +65,8 @@ void CCamera::FinalUpdate()
 		m_matProjection = XMMatrixPerspectiveFovLH(m_FOV, m_AspectRatio, 1.f, m_Far);
 	}
 
-	// Ä«¸Þ¶óÀÇ View, Proj Çà·ÄÀ» ¼¼ÆÃ
+
+	// Ä«ï¿½Þ¶ï¿½ï¿½ï¿½ View, Proj ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½	
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
@@ -71,18 +75,40 @@ void CCamera::FinalUpdate()
 
 void CCamera::Render()
 {
-	// ¿ÀºêÁ§Æ® ºÐ·ù
+	// Ä«ï¿½Þ¶ï¿½ï¿½ï¿½ View, Proj ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	s_matView = m_matView;
+	s_matProjection = m_matProjection;
+
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ð·ï¿½
 	SortObject();
 
 	PushLightData();
 
-	// ¿ÀºêÁ§Æ® ·»´õ¸µ
-	for (auto& object : m_vecObjects)
+	// Deferred
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->OMSetRenderTargets();
+	for (auto& object : m_vecDeferred)
 	{
 		object->Render();
 	}
 
-	m_vecObjects.clear();
+	// Light OMSet
+
+	// Swapchain
+	INT8 backIndex = CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex();
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->OMSetRenderTargets(1, backIndex);
+	for (auto& object : m_vecForward)
+	{
+		object->Render();
+	}
+
+	for (auto& object : m_vecParticle)
+	{
+		object->GetParticleSystem()->Render();
+	}
+
+	m_vecForward.clear();
+	m_vecDeferred.clear();
+	m_vecParticle.clear();
 }
 
 void CCamera::SetPriority(int priority)
@@ -97,17 +123,24 @@ void CCamera::SortObject()
 
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
-		// Ä«¸Þ¶ó°¡ ·»´õ¸µÇÏÁö ¾Ê´Â ·¹ÀÌ¾î´Â ¹«½ÃÇÑ´Ù.
+		// Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 		if (!(m_LayerCheck & (1 << i)))
 			continue;
 
-		// ·¹ÀÌ¾î¿¡ ¼ÓÇÑ ¿ÀºêÁ§Æ®¸¦ °¡Á®¿Â´Ù.
+		// ï¿½ï¿½ï¿½Ì¾î¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½.
 		CLayer* pLayer = pCurLevel->GetLayer(i);
 		const std::vector<CGameObject*>& vecObjects = pLayer->GetObjects();
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
-			// ÇÁ·¯½ºÅÒ ÄÃ¸µ
+			// ï¿½ï¿½ï¿½Ì¾ï¿½ ï¿½È¿ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ß¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½.
+			// TODO: Material ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ ï¿½ß°ï¿½
+			if ((vecObjects[j]->GetRenderComponent() == nullptr
+				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
+				&& vecObjects[j]->GetParticleSystem() == nullptr)
+				continue;
+
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¸ï¿½
 			if (vecObjects[j]->GetCheckFrustum() && vecObjects[j]->GetCollider())
 			{
 				if (!vecObjects[j]->GetCollider()->IsFrustum(m_Frustum))
@@ -116,15 +149,26 @@ void CCamera::SortObject()
 				}
 			}
 
-			// ·¹ÀÌ¾î ¾È¿¡ÀÖ´Â ¹°Ã¼µé Áß¿¡¼­ ·»´õ¸µ ±â´ÉÀÌ ¾ø´Â ¹°Ã¼´Â °Å¸¥´Ù.
-			// TODO: Material ±¸Çö½Ã ¿¹¿ÜÃ³¸® Ãß°¡
-			if ((vecObjects[j]->GetRenderComponent() == nullptr
-				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr) && vecObjects[j]->GetLight() == nullptr)
-				continue;
+			if (vecObjects[j]->GetMeshRenderer())
+			{
+				SHADER_TYPE shaderType = vecObjects[j]->GetMeshRenderer()->GetMaterial()->GetGraphicsShader()->GetShaderType();
+				switch (shaderType)
+				{
+				case SHADER_TYPE::DEFERRED:
+					m_vecDeferred.push_back(vecObjects[j]);
+					break;
+				case SHADER_TYPE::FORWARD:
+					m_vecForward.push_back(vecObjects[j]);
+					break;
+				}
+			}
+			else
+			{
+				m_vecParticle.push_back(vecObjects[j]);
+			}
+			//m_vecObjects.push_back(vecObjects[j]);
 
-			m_vecObjects.push_back(vecObjects[j]);
-
-			// TODO: Material ±¸Çö½Ã Å¸ÀÔ¿¡ µû¸¥ ºÐ·ù ÀÛ¼º
+			// TODO: Material ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð·ï¿½ ï¿½Û¼ï¿½
 		}
 	}
 }
