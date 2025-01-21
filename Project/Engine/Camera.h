@@ -35,6 +35,8 @@ public:
 public:
 	virtual void FinalUpdate() override;
 	void Render();
+    void Render_Deferred();
+    void Render_Forward();
 
 private:
     void SortObject();

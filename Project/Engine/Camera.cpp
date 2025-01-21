@@ -100,15 +100,34 @@ void CCamera::Render()
 	{
 		object->Render();
 	}
+}
+
+
+void CCamera::Render_Deferred()
+{
+	s_matView = m_matView;
+	s_matProjection = m_matProjection;
+
+	for (auto& gameObject : m_vecDeferred)
+	{
+		gameObject->GetMeshRenderer()->Render();
+	}
+}
+
+void CCamera::Render_Forward()
+{
+	s_matView = m_matView;
+	s_matProjection = m_matProjection;
+
+	for (auto& gameObject : m_vecForward)
+	{
+		gameObject->GetMeshRenderer()->Render();
+	}
 
 	for (auto& object : m_vecParticle)
 	{
 		object->GetParticleSystem()->Render();
 	}
-
-	m_vecForward.clear();
-	m_vecDeferred.clear();
-	m_vecParticle.clear();
 }
 
 void CCamera::SetPriority(int priority)
@@ -119,6 +138,10 @@ void CCamera::SetPriority(int priority)
 
 void CCamera::SortObject()
 {
+	m_vecForward.clear();
+	m_vecDeferred.clear();
+	m_vecParticle.clear();
+
 	CLevel* pCurLevel = CLevelManager::GetInst()->GetCurrentLevel();
 
 	for (UINT i = 0; i < MAX_LAYER; ++i)

@@ -64,6 +64,11 @@ int CGraphicShader::Init(const std::wstring& path, ShaderInfo info, const std::s
 		m_GraphicsPipelineDesc.NumRenderTargets = 1;
 		m_GraphicsPipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 		break;
+	case SHADER_TYPE::LIGHTING:
+		m_GraphicsPipelineDesc.NumRenderTargets = 2;
+		m_GraphicsPipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		m_GraphicsPipelineDesc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		break;
 	case SHADER_TYPE::PARTICLE:
 		m_GraphicsPipelineDesc.NumRenderTargets = 1;
 		m_GraphicsPipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;

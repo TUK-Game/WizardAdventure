@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "Material.h"
 #include "MeshData.h"
+#include "Engine.h"
 
 CAssetManager::CAssetManager()
 {
@@ -64,6 +65,9 @@ int CAssetManager::LoadMesh()
 	if (FAILED(CreateSphereMesh()))
 		return E_FAIL;
 
+	if (FAILED(CreateRectangleMesh()))
+		return E_FAIL;
+	
 	return S_OK;
 }
 
@@ -135,6 +139,29 @@ int CAssetManager::LoadMaterial()
 	material->SetTexture(0, FindAsset<CTexture>(L"Skybox"));
 	AddAsset(L"Skybox", material);
 
+	// LIGHT
+	{
+		material = new CMaterial;
+		material->SetGraphicsShader(FindAsset<CGraphicShader>(L"DirLight"));
+		material->SetTexture(0, FindAsset<CTexture>(L"PositionTarget"));
+		material->SetTexture(1, FindAsset<CTexture>(L"NormalTarget"));
+		AddAsset(L"DirLight", material);
+
+		material = new CMaterial;
+		material->SetGraphicsShader(FindAsset<CGraphicShader>(L"PointLight"));
+		material->SetTexture(0, FindAsset<CTexture>(L"PositionTarget"));
+		material->SetTexture(1, FindAsset<CTexture>(L"NormalTarget"));
+		material->SetVec2(0, { static_cast<float>(CEngine::GetInst()->GetWindowInfo().Width), static_cast<float>(CEngine::GetInst()->GetInst()->GetWindowInfo().Height) });
+		AddAsset(L"PointLight", material);
+
+		material = new CMaterial;
+		material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Final"));
+		material->SetTexture(0, FindAsset<CTexture>(L"DiffuseTarget"));
+		material->SetTexture(1, FindAsset<CTexture>(L"DiffuseLightTarget"));
+		material->SetTexture(2, FindAsset<CTexture>(L"SpecularLightTarget"));
+		AddAsset(L"Final", material);
+	}
+
 	return S_OK;
 }
 
@@ -164,7 +191,6 @@ int CAssetManager::LoadGraphicShader()
 	LoadShader(shader, name);
 	AddAsset(L"Forward", shader);
 
-
 	shader = new CGraphicShader;
 	name = L"Skybox.hlsl";
 	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_EQUAL });
@@ -180,6 +206,32 @@ int CAssetManager::LoadGraphicShader()
 	LoadShader(shader, name, {SHADER_TYPE::PARTICLE, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND, D3D_PRIMITIVE_TOPOLOGY_POINTLIST},
 		"VS_Main", "PS_Main", "GS_Main");
 	AddAsset(L"Particle", shader);
+
+	shader = new CGraphicShader;
+	name = L"Forward.hlsl";
+	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE}, "VS_Tex", "PS_Tex");
+	AddAsset(L"Texture", shader);
+
+	// LIGHT
+	{
+		// DirLight
+		shader = new CGraphicShader;
+		name = L"Light.hlsl";
+		LoadShader(shader, name, { SHADER_TYPE::LIGHTING, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ONE_TO_ONE_BLEND }, "VS_DirLight", "PS_DirLight");
+		AddAsset(L"DirLight", shader);
+
+		// PointLight
+		shader = new CGraphicShader;
+		name = L"Light.hlsl";
+		LoadShader(shader, name, { SHADER_TYPE::LIGHTING, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ONE_TO_ONE_BLEND }, "VS_PointLight", "PS_PointLight");
+		AddAsset(L"PointLight", shader);
+
+		// Final
+		shader = new CGraphicShader;
+		name = L"Light.hlsl";
+		LoadShader(shader, name, { SHADER_TYPE::LIGHTING, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE }, "VS_Final", "PS_Final");
+		AddAsset(L"Final", shader);
+	}
 
 	return S_OK;
 }
@@ -438,6 +490,34 @@ int CAssetManager::CreateSphereMesh()
 		return E_FAIL;
 
 	AddAsset(L"Sphere", mesh);
+
+	return S_OK;
+}
+
+int CAssetManager::CreateRectangleMesh()
+{
+	float w2 = 0.5f;
+	float h2 = 0.5f;
+
+	std::vector<Vertex> vec(4);
+
+	// 앞면
+	vec[0] = Vertex(Vec3(-w2, -h2, 0), Vec2(0.0f, 1.0f), Vec3(0.0f, 0.0f, -1.0f), Vec3(1.0f, 0.0f, 0.0f));
+	vec[1] = Vertex(Vec3(-w2, +h2, 0), Vec2(0.0f, 0.0f), Vec3(0.0f, 0.0f, -1.0f), Vec3(1.0f, 0.0f, 0.0f));
+	vec[2] = Vertex(Vec3(+w2, +h2, 0), Vec2(1.0f, 0.0f), Vec3(0.0f, 0.0f, -1.0f), Vec3(1.0f, 0.0f, 0.0f));
+	vec[3] = Vertex(Vec3(+w2, -h2, 0), Vec2(1.0f, 1.0f), Vec3(0.0f, 0.0f, -1.0f), Vec3(1.0f, 0.0f, 0.0f));
+
+	std::vector<UINT> idx(6);
+
+	// 앞면
+	idx[0] = 0; idx[1] = 1; idx[2] = 2;
+	idx[3] = 0; idx[4] = 2; idx[5] = 3;
+
+	CMesh* mesh = new CMesh;
+	if (FAILED(mesh->Init(vec, idx)))
+		return E_FAIL;
+
+	AddAsset(L"Rectangle", mesh);
 
 	return S_OK;
 }

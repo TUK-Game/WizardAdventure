@@ -34,6 +34,15 @@ void CRenderTargetGroup::Create(RENDER_TARGET_GROUP_TYPE groupType, std::vector<
 
 		DEVICE->CopyDescriptors(1, &destHandle, &destSize, 1, &srcHandle, &srcSize, D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	}
+
+	for (int i = 0; i < m_RenderTargetCount; ++i)
+	{
+		m_TargetToResource[i] = CD3DX12_RESOURCE_BARRIER::Transition(m_RenderTargetVec[i].target->GetTex2D().Get(),
+			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COMMON);
+
+		m_ResourceToTarget[i] = CD3DX12_RESOURCE_BARRIER::Transition(m_RenderTargetVec[i].target->GetTex2D().Get(),
+			D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	}
 }
 
 void CRenderTargetGroup::OMSetRenderTargets(UINT32 count, UINT32 offset)
@@ -58,6 +67,8 @@ void CRenderTargetGroup::ClearRenderTargetView(UINT32 index)
 
 void CRenderTargetGroup::ClearRenderTargetView()
 {
+	WaitResourceToTarget();
+
 	for (UINT32 i = 0; i < m_RenderTargetCount; i++)
 	{
 		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_RtvHeapBegin, i * m_RtvHeapSize);
@@ -65,4 +76,14 @@ void CRenderTargetGroup::ClearRenderTargetView()
 	}
 
 	GRAPHICS_CMD_LIST->ClearDepthStencilView(m_DsvHeapBegin, D3D12_CLEAR_FLAG_DEPTH, 1.f, 0, 0, nullptr);
+}
+
+void CRenderTargetGroup::WaitTargetToResource()
+{
+	GRAPHICS_CMD_LIST->ResourceBarrier(m_RenderTargetCount, m_TargetToResource);
+}
+
+void CRenderTargetGroup::WaitResourceToTarget()
+{
+	GRAPHICS_CMD_LIST->ResourceBarrier(m_RenderTargetCount, m_ResourceToTarget);
 }

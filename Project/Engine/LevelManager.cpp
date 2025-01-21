@@ -105,12 +105,13 @@ int CLevelManager::Init()
 		light->SetName(L"DirectionalLight");
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
-		light->GetTransform()->SetRelativePosition(0.f, 1000.f, 0.f);
-		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
+		//light->GetTransform()->SetRelativePosition(0.f, 1000.f, 0.f);
+		light->GetLight()->SetLightDirection(Vec3(0, 0, 1.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.1f, 1.f, 0.1f));
-		light->GetLight()->SetAmbient(Vec3(0.f, 0.1f, 0.f));
-		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetDiffuse(Vec3(0.f, 0.f, 0.f));
+		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetSpecular(Vec3(0.2f, 0.2f, 0.2f));
+		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
 		m_CurLevel->AddGameObject(light, 3, false);
 	}
@@ -118,14 +119,16 @@ int CLevelManager::Init()
 	{
 		CGameObject* light = new CGameObject;
 		light->AddComponent(new CTransform);
-		light->GetTransform()->SetRelativePosition(150.f, 150.f, 150.f);
+		light->GetTransform()->SetRelativePosition(0.f, 0.f, 150.f);
 		light->AddComponent(new CLight);
 		light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(1.f, 0.1f, 0.1f));
-		light->GetLight()->SetAmbient(Vec3(0.1f, 0.f, 0.f));
-		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetDiffuse(Vec3(0.0f, 1.0f, 10.0f));
+		light->GetLight()->SetAmbient(Vec3(0.0f, 1.0f, 10.0f));
+		light->GetLight()->SetSpecular(Vec3(0.0f, 0.3f, 0.0f));
 		light->GetLight()->SetLightRange(10000.f);
 		//light->GetLight()->SetLightAngle(XM_PI / 4);
+		CRenderManager::GetInst()->RegisterLight(light->GetLight());
+
 		m_CurLevel->AddGameObject(light, 3, false);
 	}
 	// spot light
@@ -136,11 +139,13 @@ int CLevelManager::Init()
 		light->AddComponent(new CLight);
 		light->GetLight()->SetLightDirection(Vec3(1.f, 0.f, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::SPOT_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.f, 0.1f, 1.f));
-		//light->GetLight()->SetAmbient(Vec3(0.f, 0.f, 0.1f));
-		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.f, 0.5f));
+		light->GetLight()->SetAmbient(Vec3(0.0f, 0.0f, 0.1f));
+		light->GetLight()->SetSpecular(Vec3(0.0f, 0.0f, 0.1f));
 		light->GetLight()->SetLightRange(10000.f);
 		light->GetLight()->SetLightAngle(XM_PI / 4);
+		CRenderManager::GetInst()->RegisterLight(light->GetLight());
+
 		m_CurLevel->AddGameObject(light, 3, false);
 	}
 
@@ -210,7 +215,7 @@ int CLevelManager::Init()
 	//	obj[i]->AddComponent(new CBoxCollider);
 	//	obj[i]->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
 	//	CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred");
-	//	obj[i]->GetMeshRenderer()->GetMaterial(0)->SetShader(shader);
+	//	obj[i]->GetMeshRenderer()->GetMaterial(0)->SetGraphicsShader(shader);
 	//	//o->GetTransform()->SetRelativePosition(200, 0, 100);
 	//	//o->GetTransform()->SetRelativeScale(100, 100, 100);
 	//	m_CurLevel->AddGameObject(obj[i], 3, false);
@@ -225,28 +230,30 @@ int CLevelManager::Init()
 	//	o->GetTransform()->SetRelativePosition(200, 0, 100);
 	//	o->GetTransform()->SetRelativeScale(100, 100, 100);
 	//	CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred");
-	//	o->GetMeshRenderer()->GetMaterial(0)->SetShader(shader);
+	//	o->GetMeshRenderer()->GetMaterial(0)->SetGraphicsShader(shader);
 	//	m_CurLevel->AddGameObject(o, 3, false);
 	//}
 
 #pragma region UI_TEST
-	for (INT32 i = 0; i < 4; ++i)
+	for (INT32 i = 0; i < 6; ++i)
 	{
 		CGameObject* obj = new CGameObject;
 		obj->AddComponent(new CTransform);
 		obj->AddComponent(new CMeshRenderer);
-		obj->GetTransform()->SetRelativeScale(Vec3(200.f, 200.f, 200.f));
-		obj->GetTransform()->SetRelativePosition(Vec3(-350.f + (i * 240), 250.f, 500.f));
-		obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-		CMaterial* material = new CMaterial;
+		obj->GetTransform()->SetRelativeScale(Vec3(160.f, 160.f, 160.f));
+		obj->GetTransform()->SetRelativePosition(Vec3(-500.f + (i * 200), 250.f, 500.f));
+		obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
+		CMaterial* material = new CMaterial;	
 		CTexture* texture;
 
 		if (i < 3)
 			texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
+		else if (i < 5)
+			texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
 		else
 			texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"UAVTexture");
 
-		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Forward");
+		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
 		material->SetTexture(0, texture);
 		material->SetGraphicsShader(shader);
 		obj->GetMeshRenderer()->SetMaterial(material);
