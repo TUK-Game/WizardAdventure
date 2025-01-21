@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "Transform.h"
+#include "Light.h"
 #include "MeshRenderer.h"
 #include "CameraScript.h"
 #include "BoxCollider.h"
@@ -56,6 +57,51 @@ int CLevelManager::Init()
 	skybox->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Skybox"));
 	m_CurLevel->AddGameObject(skybox, 1, false);
 
+	
+	// directional light
+	{
+		CGameObject* light = new CGameObject;
+		light->SetName(L"DirectionalLight");
+		light->AddComponent(new CTransform);
+		light->AddComponent(new CLight);
+		light->GetTransform()->SetRelativePosition(0.f, 1000.f, 0.f);
+		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
+		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
+		light->GetLight()->SetDiffuse(Vec3(0.1f, 1.f, 0.1f));
+		light->GetLight()->SetAmbient(Vec3(0.f, 0.1f, 0.f));
+		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+
+		m_CurLevel->AddGameObject(light, 3, false);
+	}
+	// point light
+	{
+		CGameObject* light = new CGameObject;
+		light->AddComponent(new CTransform);
+		light->GetTransform()->SetRelativePosition(150.f, 150.f, 150.f);
+		light->AddComponent(new CLight);
+		light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+		light->GetLight()->SetDiffuse(Vec3(1.f, 0.1f, 0.1f));
+		light->GetLight()->SetAmbient(Vec3(0.1f, 0.f, 0.f));
+		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetLightRange(10000.f);
+		//light->GetLight()->SetLightAngle(XM_PI / 4);
+		m_CurLevel->AddGameObject(light, 3, false);
+	}
+	// spot light
+	{
+		CGameObject* light = new CGameObject;
+		light->AddComponent(new CTransform);
+		light->GetTransform()->SetRelativePosition(-150.f, 0.f, 150.f);
+		light->AddComponent(new CLight);
+		light->GetLight()->SetLightDirection(Vec3(1.f, 0.f, 0.f));
+		light->GetLight()->SetLightType(LIGHT_TYPE::SPOT_LIGHT);
+		light->GetLight()->SetDiffuse(Vec3(0.f, 0.1f, 1.f));
+		//light->GetLight()->SetAmbient(Vec3(0.f, 0.f, 0.1f));
+		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetLightRange(10000.f);
+		light->GetLight()->SetLightAngle(XM_PI / 4);
+		m_CurLevel->AddGameObject(light, 3, false);
+	}
 
 	CGameObject* object = new CGameObject;
 	CGameObject* object2 = new CGameObject;
@@ -66,6 +112,7 @@ int CLevelManager::Init()
 	object4->AddComponent(new CTransform);
 	object4->AddComponent(new CMeshRenderer);
 	object4->AddComponent(new CBoxCollider);
+	
 	object4->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
 	//object4->GetCollider()->CreateCollisionProfile("Default", ECollision_Channel::Default);
 	object4->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
@@ -108,7 +155,7 @@ int CLevelManager::Init()
 	object->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
 	object->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object->GetTransform()->SetRelativePosition(-300.f, 0.f, 300.f);
-	object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+	object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Sphere"));
 	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Hitori"));
 	object->AddChild(object2);
 	object->AddChild(object3);

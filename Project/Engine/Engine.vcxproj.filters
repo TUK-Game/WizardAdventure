@@ -428,5 +428,8 @@
     <FxCompile Include="Skybox.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Light.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

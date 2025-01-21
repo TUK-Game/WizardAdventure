@@ -19,7 +19,7 @@ int CTableDescriptorHeap::Init(UINT count)
 	m_GroupCount = count;
 
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-	desc.NumDescriptors = count * REGISTER_COUNT;
+	desc.NumDescriptors = count * (REGISTER_COUNT - 1);  // b0는 전역
 	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 
@@ -27,7 +27,7 @@ int CTableDescriptorHeap::Init(UINT count)
 		return E_FAIL;
 
 	m_HandleSize = DEVICE->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	m_GroupSize = m_HandleSize * REGISTER_COUNT;
+	m_GroupSize = m_HandleSize * (REGISTER_COUNT - 1);  // b0는 전역
 
 	return S_OK;
 }
@@ -59,7 +59,7 @@ void CTableDescriptorHeap::CommitTable()
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_DescHeap->GetGPUDescriptorHandleForHeapStart();
 	handle.ptr += m_CurrentGroupIndex * m_GroupSize;
-	CMD_LIST->SetGraphicsRootDescriptorTable(0, handle);
+	CMD_LIST->SetGraphicsRootDescriptorTable(1, handle);
 
 	m_CurrentGroupIndex++;
 }
@@ -76,8 +76,9 @@ D3D12_CPU_DESCRIPTOR_HANDLE CTableDescriptorHeap::GetCPUHandle(SRV_REGISTER reg)
 
 D3D12_CPU_DESCRIPTOR_HANDLE CTableDescriptorHeap::GetCPUHandle(unsigned char reg)
 {
+	assert(reg > 0);
 	D3D12_CPU_DESCRIPTOR_HANDLE handle = m_DescHeap->GetCPUDescriptorHandleForHeapStart();
 	handle.ptr += m_CurrentGroupIndex * m_GroupSize;
-	handle.ptr += reg * m_HandleSize;
+	handle.ptr += (reg - 1) * m_HandleSize;
 	return handle;
 }

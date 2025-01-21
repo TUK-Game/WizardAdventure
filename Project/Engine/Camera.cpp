@@ -8,7 +8,8 @@
 #include "Transform.h"
 #include "RenderComponent.h"
 #include "BaseCollider.h"
-
+#include "Light.h"
+#include "Device.h"
 Matrix CCamera::s_matView;
 Matrix CCamera::s_matProjection;
 
@@ -73,6 +74,8 @@ void CCamera::Render()
 	// 오브젝트 분류
 	SortObject();
 
+	PushLightData();
+
 	// 오브젝트 렌더링
 	for (auto& object : m_vecObjects)
 	{
@@ -115,8 +118,8 @@ void CCamera::SortObject()
 
 			// 레이어 안에있는 물체들 중에서 렌더링 기능이 없는 물체는 거른다.
 			// TODO: Material 구현시 예외처리 추가
-			if (vecObjects[j]->GetRenderComponent() == nullptr
-				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
+			if ((vecObjects[j]->GetRenderComponent() == nullptr
+				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr) && vecObjects[j]->GetLight() == nullptr)
 				continue;
 
 			m_vecObjects.push_back(vecObjects[j]);
@@ -124,4 +127,21 @@ void CCamera::SortObject()
 			// TODO: Material 구현시 타입에 따른 분류 작성
 		}
 	}
+}
+
+void CCamera::PushLightData()
+{
+	LightParams lightParams = {};
+
+	for (auto& vecObject : m_vecObjects)
+	{
+		if (vecObject->GetLight() == nullptr)
+			continue;
+
+		const LightInfo& lightInfo = vecObject->GetLight()->GetLightInfo();
+		lightParams.lights[lightParams.lightCount] = lightInfo;
+		++lightParams.lightCount;
+	}
+
+	CONST_BUFFER(EConstantBuffer_Type::Global)->SetGlobalData(&lightParams, sizeof(lightParams));
 }

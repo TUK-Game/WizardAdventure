@@ -27,6 +27,7 @@ enum class EComponent_Type
 	Transform,
 	Camera,
 	Collider,
+	Light,
 	
 	// Rendering Component
 	MeshRenderer,

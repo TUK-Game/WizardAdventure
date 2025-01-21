@@ -3,7 +3,7 @@
 
 //#include "params.hlsli"
 
-cbuffer TRANSFORM_PARAMS : register(b0)
+cbuffer TRANSFORM_PARAMS : register(b1)
 {
     row_major matrix matWorld;
     row_major matrix matView;
@@ -12,7 +12,7 @@ cbuffer TRANSFORM_PARAMS : register(b0)
     row_major matrix matWVP;
 };
 
-cbuffer MATERIAL_PARAMS : register(b1)
+cbuffer MATERIAL_PARAMS : register(b2)
 {
     int int_0;
     int int_1;

@@ -38,6 +38,7 @@ public:
 
 private:
     void SortObject();
+    void PushLightData();
 
 public:
 	virtual CCamera* Clone() override { return new CCamera(*this); }
