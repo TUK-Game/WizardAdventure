@@ -16,6 +16,7 @@
 #include "MeshData.h"
 #include "Device.h"
 #include "ComputeShader.h"
+#include "ParticleSystem.h"
 
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)
@@ -205,6 +206,17 @@ int CLevelManager::Init()
 		m_CurLevel->AddGameObject(obj, 4, false);
 	}
 
+#pragma endregion
+
+#pragma region ParticleSystem
+	{
+		CGameObject* particle = new CGameObject;
+		particle->AddComponent(new CTransform);
+		particle->AddComponent(new CParticleSystem);
+		particle->SetCheckFrustum(false);		
+		particle->GetTransform()->SetRelativePosition(Vec3(0.f, 0.f, 100.f));
+		m_CurLevel->AddGameObject(particle, 3, false);
+	}
 #pragma endregion
 
 	m_CurLevel->Begin();

@@ -20,7 +20,7 @@ public:
 
 public:
 	int Init(const std::vector<Vertex>& vecVertex, const std::vector<UINT>& vecIndex);
-	void Render(UINT32 idx);
+	void Render(UINT32 instanceCount = 1, UINT32 idx = 0);
 
 	static CMesh* CreateFromFBX(const struct FbxMeshInfo* meshInfo);
 private:

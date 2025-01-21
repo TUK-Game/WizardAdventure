@@ -37,10 +37,13 @@ private:
 	int LoadTexture();
 	int LoadMaterial();
 	int LoadMeshData();
+	int LoadParticle();
 	int LoadGraphicShader();
 	int LoadComputeShader();
-	int LoadShader(class CShader* shader, std::wstring& shaderName, ShaderInfo info = ShaderInfo()) const;
+	int LoadShader(class CShader* shader, std::wstring& shaderName, ShaderInfo info = ShaderInfo(), 
+		const std::string& vs = "VS_Main", const std::string& ps = "PS_Main", const std::string& gs = "", const std::string& cs = "") const;
 
+	int CreatePointMesh();
 	int CreateCubeMesh();
 	int CreateSphereMesh();
 

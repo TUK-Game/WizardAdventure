@@ -34,7 +34,7 @@ void CMaterial::GraphicsBinding()
 void CMaterial::ComputeBinding()
 {
 	// CBV 업로드
-	CONST_BUFFER(EConstantBuffer_Type::Material)->PushGraphicsData(&m_Params, sizeof(m_Params));
+	CONST_BUFFER(EConstantBuffer_Type::Material)->PushComputeData(&m_Params, sizeof(m_Params));
 
 	// SRV 업로드
 	for (size_t i = 0; i < m_arrTexture.size(); i++)

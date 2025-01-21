@@ -10,6 +10,7 @@
 #include "BaseCollider.h"
 #include "MeshRenderer.h"
 #include "Device.h"
+#include "ParticleSystem.h"
 
 Matrix CCamera::s_matView;
 Matrix CCamera::s_matProjection;
@@ -97,8 +98,14 @@ void CCamera::Render()
 		object->Render();
 	}
 
+	for (auto& object : m_vecParticle)
+	{
+		object->GetParticleSystem()->Render();
+	}
+
 	m_vecForward.clear();
 	m_vecDeferred.clear();
+	m_vecParticle.clear();
 }
 
 void CCamera::SetPriority(int priority)
@@ -123,6 +130,13 @@ void CCamera::SortObject()
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
+			// 레이어 안에있는 물체들 중에서 렌더링 기능이 없는 물체는 거른다.
+			// TODO: Material 구현시 예외처리 추가
+			if ((vecObjects[j]->GetRenderComponent() == nullptr
+				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
+				&& vecObjects[j]->GetParticleSystem() == nullptr)
+				continue;
+
 			// 프러스텀 컬링
 			if (vecObjects[j]->GetCheckFrustum() && vecObjects[j]->GetCollider())
 			{
@@ -132,21 +146,22 @@ void CCamera::SortObject()
 				}
 			}
 
-			// 레이어 안에있는 물체들 중에서 렌더링 기능이 없는 물체는 거른다.
-			// TODO: Material 구현시 예외처리 추가
-			if (vecObjects[j]->GetRenderComponent() == nullptr
-				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
-				continue;
-
-			SHADER_TYPE shaderType = vecObjects[j]->GetMeshRenderer()->GetMaterial()->GetGraphicsShader()->GetShaderType();
-			switch (shaderType)
+			if (vecObjects[j]->GetMeshRenderer())
 			{
-			case SHADER_TYPE::DEFERRED:
-				m_vecDeferred.push_back(vecObjects[j]);
-				break;
-			case SHADER_TYPE::FORWARD:
-				m_vecForward.push_back(vecObjects[j]);
-				break;
+				SHADER_TYPE shaderType = vecObjects[j]->GetMeshRenderer()->GetMaterial()->GetGraphicsShader()->GetShaderType();
+				switch (shaderType)
+				{
+				case SHADER_TYPE::DEFERRED:
+					m_vecDeferred.push_back(vecObjects[j]);
+					break;
+				case SHADER_TYPE::FORWARD:
+					m_vecForward.push_back(vecObjects[j]);
+					break;
+				}
+			}
+			else
+			{
+				m_vecParticle.push_back(vecObjects[j]);
 			}
 			//m_vecObjects.push_back(vecObjects[j]);
 

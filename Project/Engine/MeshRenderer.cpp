@@ -29,6 +29,6 @@ void CMeshRenderer::Render()
 
 		GetTransform()->GraphicsBinding();
 		GetMaterial()->GraphicsBinding();
-		GetMesh()->Render(i);
+		GetMesh()->Render(1, i);
 	}
 }

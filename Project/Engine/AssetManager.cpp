@@ -35,6 +35,8 @@ int CAssetManager::Init()
 	if (FAILED(LoadMeshData()))
 		return E_FAIL;
 
+	if (FAILED(LoadParticle()))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -53,6 +55,9 @@ void CAssetManager::AddAsset(const std::wstring& key, CSharedPtr<CAsset> asset)
 
 int CAssetManager::LoadMesh()
 {
+	if (FAILED(CreatePointMesh()))
+		return E_FAIL;
+
 	if (FAILED(CreateCubeMesh()))
 		return E_FAIL;
 
@@ -91,6 +96,10 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"Skybox03.dds", RESOURCE_TEXTURE_CUBE);
 	AddAsset(L"Skybox", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"bubble.png");
+	AddAsset(L"Bubble", tex);
 	return S_OK;
 }
 
@@ -142,6 +151,12 @@ int CAssetManager::LoadMeshData()
 	return S_OK;
 }
 
+int CAssetManager::LoadParticle()
+{
+
+	return S_OK;
+}
+
 int CAssetManager::LoadGraphicShader()
 {
 	CGraphicShader* shader = new CGraphicShader;
@@ -159,6 +174,13 @@ int CAssetManager::LoadGraphicShader()
 	name = L"Deferred.hlsl";
 	LoadShader(shader, name, { SHADER_TYPE::DEFERRED });
 	AddAsset(L"Deferred", shader);
+
+	shader = new CGraphicShader;
+	name = L"particle.hlsl";
+	LoadShader(shader, name, {SHADER_TYPE::PARTICLE, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND, D3D_PRIMITIVE_TOPOLOGY_POINTLIST},
+		"VS_Main", "PS_Main", "GS_Main");
+	AddAsset(L"Particle", shader);
+
 	return S_OK;
 }
 
@@ -166,21 +188,33 @@ int CAssetManager::LoadComputeShader()
 {
 	CComputeShader* shader = new CComputeShader;
 	std::wstring name = L"Compute.hlsl";
-	LoadShader(shader, name);
+	LoadShader(shader, name, {SHADER_TYPE::COMPUTE}, "", "", "", "CS_Main");
 	AddAsset(L"Compute", shader);
 
-
+	shader = new CComputeShader;
+	name = L"particle.hlsl";
+	LoadShader(shader, name, {SHADER_TYPE::COMPUTE}, "", "", "", "CS_Main");
+	AddAsset(L"ComputeParticle", shader);
 	return S_OK;
 }
 
-int CAssetManager::LoadShader(CShader* shader, std::wstring& shaderName, ShaderInfo info) const
+int CAssetManager::LoadShader(CShader* shader, std::wstring& shaderName, ShaderInfo info, 
+	const std::string& vs, const std::string& ps, const std::string& gs, const std::string& cs) const
 {
 	auto path = CPathManager::GetInst()->FindPath(HLSL_PATH);
 
 	path /= shaderName;
 
-	if (FAILED(shader->Init(path, ws2s(shaderName), info)))
-		return E_FAIL;
+	if (info.shaderType == SHADER_TYPE::COMPUTE)
+	{
+		if (FAILED(((CComputeShader*)shader)->Init(path, info, cs)))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(((CGraphicShader*)shader)->Init(path, info, vs, ps, gs)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -198,6 +232,25 @@ CMeshData* CAssetManager::LoadFBX(const std::wstring& path)
 	AddAsset(key, meshData);
 
 	return meshData;
+}
+
+int CAssetManager::CreatePointMesh()
+{
+	std::vector<Vertex> vec(1);
+	vec[0] = Vertex(Vec3(0, 0, 0), Vec2(0.5f, 0.5f), Vec3(0.0f, 0.0f, -1.0f), Vec3(1.0f, 0.0f, 0.0f));
+
+	std::vector<UINT> idx(1);
+	idx[0] = 0;
+
+	CMesh* mesh = new CMesh;
+	if (FAILED(mesh->Init(vec, idx)))
+		return E_FAIL;
+
+	//mesh->SetMeshSize(Vec3(w2, h2, d2));
+
+	AddAsset(L"Point", mesh);
+
+	return S_OK;
 }
 
 int CAssetManager::CreateCubeMesh()

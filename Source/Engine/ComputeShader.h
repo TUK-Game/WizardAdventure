@@ -7,7 +7,7 @@ public:
 	CComputeShader();
 	virtual ~CComputeShader();
 
-	int Init(const std::wstring& path, const std::string& name, ShaderInfo info = ShaderInfo());
+	int Init(const std::wstring& path, ShaderInfo info = ShaderInfo(), const std::string& cs = "CS_Main");
 	void Update();
 
 private:

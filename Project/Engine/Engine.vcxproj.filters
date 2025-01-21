@@ -21,9 +21,6 @@
     <Filter Include="01. Manager\01. Device\CommandQueue">
       <UniqueIdentifier>{0cf39d87-9766-45e4-958c-d615439c7c37}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Manager\01. Device\DepthStencilBuffer">
-      <UniqueIdentifier>{b9cd3fd8-1bd6-462a-8b44-031c447cc579}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Manager\01. Device\RootSignature">
       <UniqueIdentifier>{2a8a6048-76fa-4500-a63e-f90b7374129a}</UniqueIdentifier>
     </Filter>
@@ -53,9 +50,6 @@
     </Filter>
     <Filter Include="01. Manager\07. Asset">
       <UniqueIdentifier>{aedc9c49-c474-4213-9ba4-19f71262ef8b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Manager\08. Level">
-      <UniqueIdentifier>{d2bc51e2-107d-4d9b-940d-cd883e12bf8a}</UniqueIdentifier>
     </Filter>
     <Filter Include="01. Manager\09. Render">
       <UniqueIdentifier>{54ce3ffa-01df-4f08-ba50-59be15cff567}</UniqueIdentifier>
@@ -125,6 +119,12 @@
     </Filter>
     <Filter Include="01. Manager\01. Device\RenderTargetGroup">
       <UniqueIdentifier>{a43e03d0-b34c-4be4-898a-9fa584455fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\01. Device\StructedBuffer">
+      <UniqueIdentifier>{063b86b6-fd65-4cc0-b764-5056f8e91790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\08. Level">
+      <UniqueIdentifier>{d2bc51e2-107d-4d9b-940d-cd883e12bf8a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -275,6 +275,12 @@
     <ClInclude Include="RenderTargetGroup.h">
       <Filter>01. Manager\01. Device\RenderTargetGroup</Filter>
     </ClInclude>
+    <ClInclude Include="StructuredBuffer.h">
+      <Filter>01. Manager\01. Device\StructedBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>04. Component\01. RenderComponent\ParticleSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -409,6 +415,12 @@
     <ClCompile Include="RenderTargetGroup.cpp">
       <Filter>01. Manager\01. Device\RenderTargetGroup</Filter>
     </ClCompile>
+    <ClCompile Include="StructuredBuffer.cpp">
+      <Filter>01. Manager\01. Device\StructedBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>04. Component\01. RenderComponent\ParticleSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -432,6 +444,12 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\..\Content\Shaders\Forward.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\particle.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Utils.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

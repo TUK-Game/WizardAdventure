@@ -22,7 +22,10 @@ public:
 	void SetComputeShader(CSharedPtr<CComputeShader> shader) { m_ComputeShader = shader; }
 	void SetInt(unsigned char index, int value) { m_Params.SetInt(index, value); }
 	void SetFloat(unsigned char index, float value) { m_Params.SetFloat(index, value); }
-	void SetTexture(unsigned char index, CSharedPtr<CTexture> texture) { m_arrTexture[index] = texture; }
+	void SetTexture(unsigned char index, CSharedPtr<CTexture> texture) { m_arrTexture[index] = texture; m_Params.SetTexOn(index, (texture == nullptr ? 0 : 1)); }
+
+	void SetVec2(unsigned char index, Vec2 value) { m_Params.SetVec2(index, value); }
+	void SetVec4(unsigned char index, Vec4 value) { m_Params.SetVec4(index, value); }
 
 	void GraphicsBinding();
 	void ComputeBinding();

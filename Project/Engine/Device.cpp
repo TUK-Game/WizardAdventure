@@ -45,15 +45,15 @@ int CDevice::Init()
 	if (FAILED(m_RootSignature->Init()))
 		return E_FAIL;
 
-	if (FAILED(m_GraphicsDescHeap->Init(1000)))
+	if (FAILED(m_GraphicsDescHeap->Init(5000)))
 		return E_FAIL;
 
 	if (FAILED(m_ComputeDescHeap->Init()))
 		return E_FAIL;
 
 	// 사용할 수에 맞게 레지스터 개수 생성 ex) 렌더링 오브젝트 2개면 각 2개씩
-	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformParams), 1000);
-	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 1000);
+	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformParams), 5000);
+	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 5000);
 
 	CreateRenderTargetGroups();
 	return S_OK;

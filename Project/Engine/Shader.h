@@ -6,6 +6,7 @@ enum class SHADER_TYPE : UINT8
 {
 	DEFERRED,
 	FORWARD,
+	PARTICLE,
 	COMPUTE,
 };
 
@@ -23,6 +24,17 @@ enum class DEPTH_STENCIL_TYPE : UINT8
 	LESS_EQUAL,
 	GREATER,
 	GREATER_EQUAL,
+	NO_DEPTH_TEST, // ±Ì¿Ã ≈◊Ω∫∆Æ(X) + ±Ì¿Ã ±‚∑œ(O)
+	NO_DEPTH_TEST_NO_WRITE, // ±Ì¿Ã ≈◊Ω∫∆Æ(X) + ±Ì¿Ã ±‚∑œ(X)
+	LESS_NO_WRITE, // ±Ì¿Ã ≈◊Ω∫∆Æ(O) + ±Ì¿Ã ±‚∑œ(X)
+};
+
+enum class BLEND_TYPE : UINT8
+{
+	DEFAULT,
+	ALPHA_BLEND,
+	ONE_TO_ONE_BLEND,
+	END,
 };
 
 struct ShaderInfo
@@ -30,7 +42,8 @@ struct ShaderInfo
 	SHADER_TYPE shaderType = SHADER_TYPE::FORWARD;
 	RASTERIZER_TYPE rasterizerType = RASTERIZER_TYPE::CULL_BACK;
 	DEPTH_STENCIL_TYPE depthStencilType = DEPTH_STENCIL_TYPE::LESS;
-	D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	BLEND_TYPE blendType = BLEND_TYPE::DEFAULT;
+	D3D_PRIMITIVE_TOPOLOGY topology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 };
 
 class CShader :
@@ -53,6 +66,5 @@ protected:
 
 public:
     virtual CShader* Clone() override   { return nullptr; }
-	virtual int Init(const std::wstring& path, const std::string& name, ShaderInfo info = ShaderInfo()) { return 0; };
 };
 

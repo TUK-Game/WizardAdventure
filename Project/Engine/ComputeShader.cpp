@@ -12,11 +12,11 @@ CComputeShader::~CComputeShader()
 {
 }
 
-int CComputeShader::Init(const std::wstring& path, const std::string& name, ShaderInfo info)
+int CComputeShader::Init(const std::wstring& path, ShaderInfo info, const std::string& cs)
 {
 	m_Info = info;
 
-	if (FAILED(CreateShader(path, "CS_Main", "cs_5_1", m_CsBlob, m_ComputePipelineDesc.CS)))
+	if (FAILED(CreateShader(path, cs, "cs_5_1", m_CsBlob, m_ComputePipelineDesc.CS)))
 		return E_FAIL;
 
 	m_ComputePipelineDesc.pRootSignature = COMPUTE_ROOT_SIGNATURE.Get();

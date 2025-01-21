@@ -194,6 +194,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="MeshData.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="OrientedBoxCollider.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="PathManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Ref.h" />
@@ -206,6 +207,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="SharedPtr.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="StructuredBuffer.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="TableDescriptorHeap.h" />
     <ClInclude Include="Texture.h" />
@@ -242,6 +244,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="OrientedBoxCollider.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="PathManager.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -257,6 +260,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
+    <ClCompile Include="StructuredBuffer.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="TableDescriptorHeap.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -281,6 +285,14 @@ call EngineCopy.bat</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="..\..\Content\Shaders\Params.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\particle.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Utils.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

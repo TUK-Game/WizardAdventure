@@ -61,6 +61,8 @@ private:
     std::vector<CGameObject*>   m_vecObjects;
     std::vector<CGameObject*>	m_vecDeferred;
     std::vector<CGameObject*>	m_vecForward;
+    std::vector<CGameObject*>	m_vecParticle;
+    
 
 public:
     static Matrix s_matView;

@@ -95,17 +95,25 @@ struct Vertex
 	Vec4	indices;
 };
 
-#define MATERIAL_INT_COUNT		5
-#define MATERIAL_FLOAT_COUNT	5
-#define MATERIAL_TEXTURE_COUNT	5
+#define MATERIAL_INT_COUNT		4
+#define MATERIAL_FLOAT_COUNT	4
+#define MATERIAL_TEXTURE_COUNT	4
+#define MATERIAL_VECTOR2_COUNT	4
+#define MATERIAL_VECTOR4_COUNT	4
 
 struct MaterialParams
 {
 	void SetInt(unsigned char index, int value) { IntParams[index] = value; }
 	void SetFloat(unsigned char index, float value) { FloatParams[index] = value; }
+	void SetTexOn(unsigned char index, int value) { texOnParams[index] = value; }
+	void SetVec2(unsigned char index, Vec2 value) { Vec2Params[index] = value; }
+	void SetVec4(unsigned char index, Vec4 value) { Vec4Params[index] = value; }
 
 	std::array<int, MATERIAL_INT_COUNT> IntParams;
 	std::array<float, MATERIAL_FLOAT_COUNT> FloatParams;
+	std::array<int, MATERIAL_TEXTURE_COUNT> texOnParams;
+	std::array<Vec2, MATERIAL_VECTOR2_COUNT> Vec2Params;
+	std::array<Vec4, MATERIAL_VECTOR4_COUNT> Vec4Params;
 };
 
 struct TransformParams
