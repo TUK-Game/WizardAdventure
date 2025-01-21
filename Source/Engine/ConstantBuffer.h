@@ -2,6 +2,7 @@
 
 enum class EConstantBuffer_Type : unsigned char
 {
+	Global, 
 	Transform,
 	Material,
 
@@ -28,6 +29,8 @@ public:
 
 	void Clear();
 	void PushData(void* buffer, UINT size);
+
+	void SetGlobalData(void* buffer, UINT size);
 
 private:
 	int CreateBuffer();

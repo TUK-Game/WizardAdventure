@@ -123,6 +123,9 @@
     <Filter Include="04. Component\05. Animation">
       <UniqueIdentifier>{d32a399f-441b-4b12-8e9b-5594e20da075}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Component\06. Light">
+      <UniqueIdentifier>{3a79a9b4-0ba4-48ff-bd7d-739ae3606368}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -272,6 +275,9 @@
     <ClInclude Include="Animator.h">
       <Filter>04. Component\05. Animation</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>04. Component\06. Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -406,6 +412,9 @@
     <ClCompile Include="Animator.cpp">
       <Filter>04. Component\05. Animation</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>04. Component\06. Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -417,6 +426,9 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Skybox.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Light.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

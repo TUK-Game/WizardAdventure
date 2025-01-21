@@ -6,6 +6,7 @@ class CRenderComponent;
 class CTransform;
 class CMeshRenderer;
 class CCamera;
+class CLight;
 class CBaseCollider;
 
 class CGameObject :
@@ -24,8 +25,9 @@ public:
     CRenderComponent* GetRenderComponent()              { return m_RenderComponent; }
     CTransform* GetTransform()                          { return (CTransform*)GetComponent(EComponent_Type::Transform); }
     CMeshRenderer* GetMeshRenderer() { return (CMeshRenderer*)GetComponent(EComponent_Type::MeshRenderer); }
-    CBaseCollider* GetCollider()                    { return (CBaseCollider*)GetComponent(EComponent_Type::Collider); }
+    CBaseCollider* GetCollider()                        { return (CBaseCollider*)GetComponent(EComponent_Type::Collider); }
     CCamera* GetCamera()                                { return (CCamera*)GetComponent(EComponent_Type::Camera); }
+    CLight* GetLight()                                  { return (CLight*)GetComponent(EComponent_Type::Light); }
     bool GetCheckFrustum() { return m_CheckFrustum; }
 
     void SetCheckFrustum(bool checkFrustum) { m_CheckFrustum = checkFrustum; }

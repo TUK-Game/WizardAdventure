@@ -47,8 +47,9 @@ int CDevice::Init()
 		return E_FAIL;
 
 	// 사용할 수에 맞게 레지스터 개수 생성 ex) 렌더링 오브젝트 2개면 각 2개씩
-	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformParams), 100000);
-	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 100000);
+	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(LightParams), 1);
+	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(TransformParams), 100000);
+	CreateConstantBuffer(CBV_REGISTER::b2, sizeof(MaterialParams), 100000);
 
 	return S_OK;
 }

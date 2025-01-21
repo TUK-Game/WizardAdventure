@@ -126,3 +126,34 @@ struct CollisionProfile
 	std::vector<ECollision_Interaction>	vecCollisionInteraction;
 };
 
+enum class LIGHT_TYPE : UINT8
+{
+	DIRECTIONAL_LIGHT,
+	POINT_LIGHT,
+	SPOT_LIGHT,
+};
+
+struct LightColor
+{
+	Vec4	diffuse;
+	Vec4	ambient;
+	Vec4	specular;
+};
+
+struct LightInfo
+{
+	LightColor	color;
+	Vec4		position;
+	Vec4		direction;
+	INT32		lightType;
+	float		range;
+	float		angle;
+	INT32		padding;
+};
+
+struct LightParams
+{
+	UINT32		lightCount;
+	Vec3		padding;
+	LightInfo	lights[50];
+};
