@@ -190,6 +190,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelCollision.h" />
     <ClInclude Include="LevelManager.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshData.h" />
@@ -238,6 +239,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelCollision.cpp" />
     <ClCompile Include="LevelManager.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshData.cpp" />
