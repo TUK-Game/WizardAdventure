@@ -185,6 +185,8 @@ call EngineCopy.bat</Command>
     <ClInclude Include="Global.h" />
     <ClInclude Include="GraphicShader.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="InstancingBuffer.h" />
+    <ClInclude Include="InstancingManager.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelCollision.h" />
@@ -236,6 +238,8 @@ call EngineCopy.bat</Command>
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="GraphicShader.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="InstancingBuffer.cpp" />
+    <ClCompile Include="InstancingManager.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelCollision.cpp" />

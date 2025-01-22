@@ -13,9 +13,12 @@ public:
 
 public:
 	EAsset_Type GetType() const	{ return m_Type; }
-
+	UINT32 GetID() { return m_ID; }
 public:
 	virtual CAsset* Clone() = 0;
+
+protected:
+	UINT32 m_ID = 0;
 
 private:
 	EAsset_Type		m_Type;

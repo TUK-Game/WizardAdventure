@@ -204,6 +204,23 @@ int CLevelManager::Init()
 	//object->AddChild(object2);
 	object->AddChild(object3);
 	m_CurLevel->AddGameObject(object, 3, false);
+
+#pragma region INSTANCING
+	for (INT32 i = 0; i < 50; ++i)
+	{
+		CGameObject* obj = new CGameObject;
+		obj->AddComponent(new CTransform);
+		obj->AddComponent(new CMeshRenderer);
+		obj->GetTransform()->SetRelativeScale(Vec3(25.f, 25.f, 25.f));
+		obj->GetTransform()->SetRelativePosition(Vec3(-300.f + i * 10.f, 0.f, 100.f));
+		obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Sphere"));
+		obj->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+		// Int_0이 1이면 인스턴싱
+		obj->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+		m_CurLevel->AddGameObject(obj, 3, false);
+	}
+#pragma endregion
+
 	//CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
 	//std::vector<CGameObject*> obj = data->Instantiate();
 	//

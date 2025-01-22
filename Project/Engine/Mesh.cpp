@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "Device.h"
 #include "FBXLoader.h"
+#include "InstancingBuffer.h"
 
 CMesh::CMesh()
 	: CAsset(EAsset_Type::Mesh)
@@ -33,6 +34,17 @@ void CMesh::Render(UINT32 instanceCount, UINT32 idx)
 	CDevice::GetInst()->GetGraphicsDescHeap()->CommitTable();
 
 	GRAPHICS_CMD_LIST->DrawIndexedInstanced(m_VecIndexInfo[idx].count, instanceCount, 0, 0, 0);
+}
+
+void CMesh::Render(std::shared_ptr<CInstancingBuffer>& buffer, UINT32 idx)
+{
+	D3D12_VERTEX_BUFFER_VIEW bufferViews[] = { m_VertexBufferView, buffer->GetBufferView() };
+	GRAPHICS_CMD_LIST->IASetVertexBuffers(0, 2, bufferViews);
+	GRAPHICS_CMD_LIST->IASetIndexBuffer(&m_VecIndexInfo[idx].bufferView);
+
+	CDevice::GetInst()->GetGraphicsDescHeap()->CommitTable();
+
+	GRAPHICS_CMD_LIST->DrawIndexedInstanced(m_VecIndexInfo[idx].count, buffer->GetCount(), 0, 0, 0);
 }
 
 CMesh* CMesh::CreateFromFBX(const FbxMeshInfo* meshInfo)

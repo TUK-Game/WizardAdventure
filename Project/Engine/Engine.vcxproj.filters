@@ -129,6 +129,9 @@
     <Filter Include="01. Manager\08. Level">
       <UniqueIdentifier>{d2bc51e2-107d-4d9b-940d-cd883e12bf8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Manager\Inctancing">
+      <UniqueIdentifier>{33c3f251-f441-4f6b-8b97-93d3a2b77c0b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -287,6 +290,12 @@
     <ClInclude Include="Light.h">
       <Filter>04. Component\06. Light</Filter>
     </ClInclude>
+    <ClInclude Include="InstancingBuffer.h">
+      <Filter>01. Manager\Inctancing</Filter>
+    </ClInclude>
+    <ClInclude Include="InstancingManager.h">
+      <Filter>01. Manager\Inctancing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -429,6 +438,12 @@
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>04. Component\06. Light</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancingBuffer.cpp">
+      <Filter>01. Manager\Inctancing</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancingManager.cpp">
+      <Filter>01. Manager\Inctancing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

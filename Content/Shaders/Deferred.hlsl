@@ -9,6 +9,11 @@ struct VS_IN
     float2 uv : TEXCOORD;
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
+    
+    row_major matrix Instance_matWorld : W;
+    row_major matrix Instance_matWV : WV;
+    row_major matrix Instance_matWVP : WVP;
+    uint instanceID : SV_InstanceID;
 };
 
 struct VS_OUT
@@ -25,14 +30,27 @@ VS_OUT VS_Main(VS_IN input)
 {
     VS_OUT output = (VS_OUT) 0;
 
-    output.pos = mul(float4(input.pos, 1.f), matWVP);
-    output.uv = input.uv;
+    if (int_0 == 1)
+    {
+        output.pos = mul(float4(input.pos, 1.f), input.Instance_matWVP);
+        output.uv = input.uv;
 
-    output.viewPos = mul(float4(input.pos, 1.f), matWV).xyz;
-    output.viewNormal = normalize(mul(float4(input.normal, 0.f), matWV).xyz);
-    output.viewTangent = normalize(mul(float4(input.tangent, 0.f), matWV).xyz);
-    output.viewBinormal = normalize(cross(output.viewTangent, output.viewNormal));
+        output.viewPos = mul(float4(input.pos, 1.f), input.Instance_matWV).xyz;
+        output.viewNormal = normalize(mul(float4(input.normal, 0.f), input.Instance_matWV).xyz);
+        output.viewTangent = normalize(mul(float4(input.tangent, 0.f), input.Instance_matWV).xyz);
+        output.viewBinormal = normalize(cross(output.viewTangent, output.viewNormal));
+    }
+    else
+    {
+        output.pos = mul(float4(input.pos, 1.f), matWVP);
+        output.uv = input.uv;
 
+        output.viewPos = mul(float4(input.pos, 1.f), matWV).xyz;
+        output.viewNormal = normalize(mul(float4(input.normal, 0.f), matWV).xyz);
+        output.viewTangent = normalize(mul(float4(input.tangent, 0.f), matWV).xyz);
+        output.viewBinormal = normalize(cross(output.viewTangent, output.viewNormal));
+    }
+    
     return output;
 }
 

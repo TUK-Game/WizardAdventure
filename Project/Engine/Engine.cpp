@@ -8,6 +8,8 @@
 #include "RenderManager.h"
 #include "InputManager.h"
 #include "CollisionManager.h"
+#include "InstancingManager.h"
+
 CEngine::CEngine()
     : m_WindowInfo{}
     , m_Timer(nullptr)
@@ -136,6 +138,6 @@ void CEngine::Progress()
 
     CInputManager::GetInst()->Update();
     CLevelManager::GetInst()->Progress();
-
+    CInstancingManager::GetInst()->ClearBuffer();
     CRenderManager::GetInst()->Render();
 }

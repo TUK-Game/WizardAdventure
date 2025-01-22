@@ -12,6 +12,7 @@
 #include "MeshRenderer.h"
 #include "Device.h"
 #include "ParticleSystem.h"
+#include "InstancingManager.h"
 
 Matrix CCamera::s_matView;
 Matrix CCamera::s_matProjection;
@@ -108,10 +109,7 @@ void CCamera::Render_Deferred()
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-	for (auto& gameObject : m_vecDeferred)
-	{
-		gameObject->GetMeshRenderer()->Render();
-	}
+	CInstancingManager::GetInst()->Render(m_vecDeferred);
 }
 
 void CCamera::Render_Forward()
@@ -119,10 +117,7 @@ void CCamera::Render_Forward()
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-	for (auto& gameObject : m_vecForward)
-	{
-		gameObject->GetMeshRenderer()->Render();
-	}
+	CInstancingManager::GetInst()->Render(m_vecForward);
 
 	for (auto& object : m_vecParticle)
 	{
