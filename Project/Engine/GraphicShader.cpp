@@ -126,6 +126,11 @@ int CGraphicShader::Init(const std::wstring& path, ShaderInfo info, const std::s
 		m_GraphicsPipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
 		m_GraphicsPipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 		break;
+	case DEPTH_STENCIL_TYPE::GREATER_EQUAL_NO_WRITE:
+		m_GraphicsPipelineDesc.DepthStencilState.DepthEnable = TRUE;
+		m_GraphicsPipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_GREATER_EQUAL;
+		m_GraphicsPipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+		break;
 	}
 
 	D3D12_RENDER_TARGET_BLEND_DESC& rt = m_GraphicsPipelineDesc.BlendState.RenderTarget[0];

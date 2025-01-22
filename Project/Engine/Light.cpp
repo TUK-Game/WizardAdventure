@@ -22,11 +22,6 @@ void CLight::Render()
 {
 	assert(m_LightIndex >= 0);
 
-	GetTransform()->GraphicsBinding();
-
-	m_LightMaterial->SetInt(0, m_LightIndex);
-	m_LightMaterial->GraphicsBinding();
-
 	switch (static_cast<LIGHT_TYPE>(m_Light.lightType))
 	{
 	case LIGHT_TYPE::POINT_LIGHT:
@@ -36,7 +31,12 @@ void CLight::Render()
 		break;
 	}
 
-	m_VolumeMesh->Render();
+	GetTransform()->GraphicsBinding();
+
+	m_LightMaterial->SetInt(0, m_LightIndex);
+	m_LightMaterial->GraphicsBinding();
+
+	m_VolumeMesh->Render();	
 }
 
 void CLight::SetLightType(LIGHT_TYPE type)

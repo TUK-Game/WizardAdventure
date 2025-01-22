@@ -167,11 +167,11 @@ int CAssetManager::LoadMaterial()
 
 int CAssetManager::LoadMeshData()
 {
-	//CMeshData* data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/Dragon.fbx");
-	//AddAsset(L"Dragon", data);
+	/*CMeshData* data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/Dragon.fbx");
+	AddAsset(L"Dragon", data);
 
-	//data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/wolf.fbx");
-	//AddAsset(L"Wolf", data);
+	data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/wolf.fbx");
+	AddAsset(L"Wolf", data);*/
 
 	//data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/floor_world.fbx");
 	//AddAsset(L"Floor", data);
@@ -223,10 +223,10 @@ int CAssetManager::LoadGraphicShader()
 		// PointLight
 		shader = new CGraphicShader;
 		name = L"Light.hlsl";
-		LoadShader(shader, name, { SHADER_TYPE::LIGHTING, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ONE_TO_ONE_BLEND }, "VS_PointLight", "PS_PointLight");
+		LoadShader(shader, name, { SHADER_TYPE::LIGHTING, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::GREATER_EQUAL_NO_WRITE, BLEND_TYPE::ONE_TO_ONE_BLEND }, "VS_PointLight", "PS_PointLight");
 		AddAsset(L"PointLight", shader);
 
-		// Final
+		// Final	
 		shader = new CGraphicShader;
 		name = L"Light.hlsl";
 		LoadShader(shader, name, { SHADER_TYPE::LIGHTING, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE }, "VS_Final", "PS_Final");
