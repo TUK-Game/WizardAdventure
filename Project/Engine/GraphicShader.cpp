@@ -64,6 +64,11 @@ int CGraphicShader::Init(const std::wstring& path, ShaderInfo info, const std::s
 		m_GraphicsPipelineDesc.NumRenderTargets = 1;
 		m_GraphicsPipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 		break;
+	case SHADER_TYPE::LIGHTING:
+		m_GraphicsPipelineDesc.NumRenderTargets = 2;
+		m_GraphicsPipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		m_GraphicsPipelineDesc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		break;
 	case SHADER_TYPE::PARTICLE:
 		m_GraphicsPipelineDesc.NumRenderTargets = 1;
 		m_GraphicsPipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -119,6 +124,11 @@ int CGraphicShader::Init(const std::wstring& path, ShaderInfo info, const std::s
 	case DEPTH_STENCIL_TYPE::LESS_NO_WRITE:
 		m_GraphicsPipelineDesc.DepthStencilState.DepthEnable = TRUE;
 		m_GraphicsPipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+		m_GraphicsPipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+		break;
+	case DEPTH_STENCIL_TYPE::GREATER_EQUAL_NO_WRITE:
+		m_GraphicsPipelineDesc.DepthStencilState.DepthEnable = TRUE;
+		m_GraphicsPipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_GREATER_EQUAL;
 		m_GraphicsPipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 		break;
 	}
