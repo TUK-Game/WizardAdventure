@@ -7,10 +7,10 @@ CClientManager::CClientManager()
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     _CrtSetBreakAlloc(100);
-    if (GetModuleHandle(L"WinPixGpuCapturer.dll") == 0)
-    {
-        LoadLibrary(GetLatestWinPixGpuCapturerPath_Cpp17().c_str());
-    }
+    //if (GetModuleHandle(L"WinPixGpuCapturer.dll") == 0)
+    //{
+    //    LoadLibrary(GetLatestWinPixGpuCapturerPath_Cpp17().c_str());
+    //}
 }
 
 CClientManager::~CClientManager()

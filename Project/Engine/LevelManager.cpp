@@ -106,11 +106,11 @@ int CLevelManager::Init()
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
 		//light->GetTransform()->SetRelativePosition(0.f, 1000.f, 0.f);
-		light->GetLight()->SetLightDirection(Vec3(0, 0, 0.f));
+		light->GetLight()->SetLightDirection(Vec3(1.f, 0.f, 1.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.f, 0.f, 0.f));
+		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
 		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.0f));
-		light->GetLight()->SetSpecular(Vec3(0.2f, 0.2f, 0.2f));
+		light->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
 		m_CurLevel->AddGameObject(light, 3, false);
@@ -165,7 +165,7 @@ int CLevelManager::Init()
 	object4->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object4->GetTransform()->SetRelativePosition(200.f, 0.f, 0.f);
 	object4->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object4->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+	object4->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Rock"));
 
 	object3->SetName(L"Cube3");
 	object3->AddComponent(new CTransform);

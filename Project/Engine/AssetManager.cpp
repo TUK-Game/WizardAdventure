@@ -104,6 +104,23 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"bubble.png");
 	AddAsset(L"Bubble", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Leather.png");
+	AddAsset(L"Leather", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Leather_Normal.png");
+	AddAsset(L"Leather_Normal", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Rock_Normal.png");
+	AddAsset(L"Rock_Normal", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Rock.png");
+	AddAsset(L"Rock", tex);
+
 	return S_OK;
 }
 
@@ -138,6 +155,19 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Skybox"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Skybox"));
 	AddAsset(L"Skybox", material);
+
+	// Normal Mapping
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Leather"));
+	material->SetTexture(1, FindAsset<CTexture>(L"Leather_Normal"));
+	AddAsset(L"Leather", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Rock"));
+	material->SetTexture(1, FindAsset<CTexture>(L"Rock_Normal"));
+	AddAsset(L"Rock", material);
 
 	// LIGHT
 	{
