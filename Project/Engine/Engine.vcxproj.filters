@@ -296,6 +296,9 @@
     <ClInclude Include="InstancingManager.h">
       <Filter>01. Manager\11. Inctancing</Filter>
     </ClInclude>
+    <ClInclude Include="TestDragon.h">
+      <Filter>Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -445,6 +448,9 @@
     <ClCompile Include="InstancingManager.cpp">
       <Filter>01. Manager\11. Inctancing</Filter>
     </ClCompile>
+    <ClCompile Include="TestDragon.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -477,6 +483,12 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\..\Content\Shaders\Light.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Math.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Animation.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

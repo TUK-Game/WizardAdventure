@@ -4,6 +4,7 @@
 #include "AssetManager.h"
 #include "GraphicShader.h"	// Temp
 #include "InstancingBuffer.h"
+#include "Animator.h"
 
 CMeshRenderer::CMeshRenderer()
 	: CRenderComponent(EComponent_Type::MeshRenderer)
@@ -29,6 +30,13 @@ void CMeshRenderer::Render()
 			continue;
 
 		GetTransform()->GraphicsBinding();
+
+		if (GetAnimator())
+		{
+			GetAnimator()->PushData();
+			material->SetInt(1, 1);
+		}
+
 		GetMaterial()->GraphicsBinding();
 		GetMesh()->Render(1, i);
 	}
@@ -36,9 +44,24 @@ void CMeshRenderer::Render()
 
 void CMeshRenderer::Render(std::shared_ptr<CInstancingBuffer>& buffer)
 {
-	buffer->PushData();
-	m_Materials[0]->GraphicsBinding();
-	m_Mesh->Render(buffer);
+	for (UINT32 i = 0; i < m_Materials.size(); ++i)
+	{
+		CMaterial* material = m_Materials[i];
+
+		if (material == nullptr || material->GetGraphicsShader() == nullptr)
+			continue;
+
+		buffer->PushData();
+
+		if (GetAnimator())
+		{
+			GetAnimator()->PushData();
+			material->SetInt(1, 1);
+		}
+
+		material->GraphicsBinding();
+		m_Mesh->Render(buffer, i);
+	}
 }
 
 UINT64 CMeshRenderer::GetInstanceID()

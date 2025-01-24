@@ -144,13 +144,6 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Particle"));
 	AddAsset(L"Particle", material);
 
-	material = new CMaterial;
-	material->SetComputeShader(FindAsset<CComputeShader>(L"ComputeParticle"));
-	AddAsset(L"ComputeParticle", material);
-
-	material = new CMaterial;
-	material->SetComputeShader(FindAsset<CComputeShader>(L"Compute"));
-	AddAsset(L"Compute", material);
 	// LIGHT
 	{
 		material = new CMaterial;
@@ -174,16 +167,30 @@ int CAssetManager::LoadMaterial()
 		AddAsset(L"Final", material);
 	}
 
+
+	{
+		material = new CMaterial;
+		material->SetComputeShader(FindAsset<CComputeShader>(L"ComputeParticle"));
+		AddAsset(L"ComputeParticle", material);
+
+		material = new CMaterial;
+		material->SetComputeShader(FindAsset<CComputeShader>(L"Compute"));
+		AddAsset(L"Compute", material);
+
+		material = new CMaterial;
+		material->SetComputeShader(FindAsset<CComputeShader>(L"ComputeAnimation"));
+		AddAsset(L"ComputeAnimation", material);
+	}
 	return S_OK;
 }
 
 int CAssetManager::LoadMeshData()
 {
-	/*CMeshData* data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/Dragon.fbx");
+	CMeshData* data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/Dragon.fbx");
 	AddAsset(L"Dragon", data);
 
-	data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/wolf.fbx");
-	AddAsset(L"Wolf", data);*/
+	/*data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/wolf.fbx");
+	AddAsset(L"Wolf", data);*/	
 
 	//data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/floor_world.fbx");
 	//AddAsset(L"Floor", data);
@@ -258,6 +265,12 @@ int CAssetManager::LoadComputeShader()
 	name = L"particle.hlsl";
 	LoadShader(shader, name, {SHADER_TYPE::COMPUTE}, "", "", "", "CS_Main");
 	AddAsset(L"ComputeParticle", shader);
+
+	shader = new CComputeShader;
+	name = L"Animation.hlsl";
+	LoadShader(shader, name, { SHADER_TYPE::COMPUTE }, "", "", "", "CS_Main");
+	AddAsset(L"ComputeAnimation", shader);
+
 	return S_OK;
 }
 

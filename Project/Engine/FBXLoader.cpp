@@ -27,8 +27,8 @@ void FBXLoader::LoadFbx(const std::wstring& path)
 	Import(path);
 
 	// Animation	
-	//LoadBones(_scene->GetRootNode());
-	//LoadAnimationInfo();
+	LoadBones(_scene->GetRootNode());
+	LoadAnimationInfo();
 
 	// 로드된 데이터 파싱 (Mesh/Material/Skin)
 	ParseNode(_scene->GetRootNode());
@@ -365,7 +365,7 @@ void FBXLoader::CreateMaterials()
 			CMaterial* material = new CMaterial;
 			std::wstring key = _meshes[i].materials[j].name;
 			material->SetName(key);
-			material->SetGraphicsShader(CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Default"));
+			material->SetGraphicsShader(CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred"));
 
 			{
 				std::wstring diffuseName = _meshes[i].materials[j].diffuseTexName.c_str();
@@ -568,6 +568,7 @@ void FBXLoader::LoadKeyframe(INT32 animIndex, FbxNode* node, FbxCluster* cluster
 	FbxLongLong startFrame = _animClips[animIndex]->startTime.GetFrameCount(timeMode);
 	FbxLongLong endFrame = _animClips[animIndex]->endTime.GetFrameCount(timeMode);
 
+	// 느림
 	for (FbxLongLong frame = startFrame; frame < endFrame; frame++)
 	{
 		FbxKeyFrameInfo keyFrameInfo = {};

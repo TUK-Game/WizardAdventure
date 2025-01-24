@@ -9,6 +9,7 @@ class CCamera;
 class CLight;
 class CBaseCollider;
 class CParticleSystem;
+class CAnimator;
 
 class CGameObject :
     public CRef
@@ -30,6 +31,7 @@ public:
     CCamera* GetCamera()                                { return (CCamera*)GetComponent(EComponent_Type::Camera); }
     CLight* GetLight()                                  { return (CLight*)GetComponent(EComponent_Type::Light); }
     CParticleSystem* GetParticleSystem()                { return (CParticleSystem*)GetComponent(EComponent_Type::ParticleSystem); }
+    CAnimator* GetAnimator() { return (CAnimator*)GetComponent(EComponent_Type::Animator); }
     bool GetCheckFrustum() { return m_CheckFrustum; }
 
     void SetCheckFrustum(bool checkFrustum) { m_CheckFrustum = checkFrustum; }

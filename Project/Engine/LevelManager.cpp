@@ -18,6 +18,7 @@
 #include "Device.h"
 #include "ComputeShader.h"
 #include "ParticleSystem.h"
+#include "TestDragon.h"
 
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)
@@ -177,24 +178,25 @@ int CLevelManager::Init()
 	}
 #pragma endregion
 
-	//CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
-	//std::vector<CGameObject*> obj = data->Instantiate();
-	//
+	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
+	std::vector<CGameObject*> obj = data->Instantiate();
+	
 	//data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
 	//std::vector<CGameObject*> obj2 = data->Instantiate();
 
-	//for (int i = 0; i < 1; ++i)
-	//{
-	//	std::string name = "Dragon" + std::to_string(i);
-	//	obj[i]->SetName(s2ws(name));
-	//	obj[i]->AddComponent(new CBoxCollider);
-	//	obj[i]->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	//	CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred");
-	//	obj[i]->GetMeshRenderer()->GetMaterial(0)->SetGraphicsShader(shader);
-	//	//o->GetTransform()->SetRelativePosition(200, 0, 100);
-	//	//o->GetTransform()->SetRelativeScale(100, 100, 100);
-	//	m_CurLevel->AddGameObject(obj[i], 3, false);
-	//}
+	for(auto& o : obj)
+	{
+		std::string name = "Dragon";
+		o->SetName(s2ws(name));
+		o->AddComponent(new CBoxCollider);
+		o->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred");
+		o->GetMeshRenderer()->GetMaterial(0)->SetGraphicsShader(shader);
+		//o->GetTransform()->SetRelativePosition(200, 0, 100);
+		//o->GetTransform()->SetRelativeScale(100, 100, 100);
+		o->AddComponent(new CTestDragon);
+		m_CurLevel->AddGameObject(o, 3, false);
+	}
 
 	//for(auto& o : obj2)
 	//{

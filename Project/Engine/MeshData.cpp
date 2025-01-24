@@ -6,6 +6,7 @@
 #include "AssetManager.h"
 #include "Transform.h"
 #include "MeshRenderer.h"
+#include "Animator.h"
 
 CMeshData::CMeshData()
 	: CAsset(EAsset_Type::FBX)
@@ -25,10 +26,10 @@ CMeshData* CMeshData::LoadFromFBX(const std::wstring& path)
 
 	for (INT32 i = 0; i < loader.GetMeshCount(); i++)
 	{
-		CMesh* mesh = CMesh::CreateFromFBX(&loader.GetMesh(i));
+		CMesh* mesh = CMesh::CreateFromFBX(&loader.GetMesh(i), loader);
 		if (mesh == NULL)
 		{
-			mesh = CMesh::CreateFromFBX(&loader.GetMesh(i));
+			mesh = CMesh::CreateFromFBX(&loader.GetMesh(i), loader);
 			CAssetManager::GetInst()->AddAsset(mesh->GetName(), mesh);
 		}
 
@@ -72,6 +73,15 @@ std::vector<CGameObject*> CMeshData::Instantiate()
 
 		for (UINT32 i = 0; i < info.materials.size(); i++)
 			gameObject->GetMeshRenderer()->SetMaterial(info.materials[i], i);
+
+		if (info.mesh->IsAnimMesh())
+		{
+			CAnimator* animator = new CAnimator;
+			gameObject->AddComponent(animator);
+			animator->SetBones(info.mesh->GetBones());
+			animator->SetAnimClip(info.mesh->GetAnimClip());
+		}
+
 
 		v.push_back(gameObject);
 	}

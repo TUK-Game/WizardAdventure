@@ -166,6 +166,13 @@ struct LightParams
 	LightInfo	lights[50];
 };
 
+struct AnimFrameParams
+{
+	Vec4	scale;
+	Vec4	rotation; // Quaternion
+	Vec4	translation;
+};
+
 #include <shlobj.h>
 #include <filesystem>
 static std::wstring GetLatestWinPixGpuCapturerPath_Cpp17()
