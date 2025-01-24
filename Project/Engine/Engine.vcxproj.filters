@@ -72,9 +72,6 @@
     <Filter Include="04. Component\01. RenderComponent">
       <UniqueIdentifier>{0f04681f-22de-43d0-b3ae-c8a1ceb1ac7d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04. Component\01. RenderComponent\ParticleSystem">
-      <UniqueIdentifier>{28eb4740-bed7-4885-a6cd-da12b5955ab3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04. Component\01. RenderComponent\MeshRenderer">
       <UniqueIdentifier>{c46337f8-aca9-4375-8760-557fb55dc3b2}</UniqueIdentifier>
     </Filter>
@@ -129,8 +126,11 @@
     <Filter Include="01. Manager\08. Level">
       <UniqueIdentifier>{d2bc51e2-107d-4d9b-940d-cd883e12bf8a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Manager\Inctancing">
+    <Filter Include="01. Manager\11. Inctancing">
       <UniqueIdentifier>{33c3f251-f441-4f6b-8b97-93d3a2b77c0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\07. ParticleSystem">
+      <UniqueIdentifier>{28eb4740-bed7-4885-a6cd-da12b5955ab3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -285,16 +285,16 @@
       <Filter>01. Manager\01. Device\StructedBuffer</Filter>
     </ClInclude>
     <ClInclude Include="ParticleSystem.h">
-      <Filter>04. Component\01. RenderComponent\ParticleSystem</Filter>
+      <Filter>04. Component\07. ParticleSystem</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>04. Component\06. Light</Filter>
     </ClInclude>
     <ClInclude Include="InstancingBuffer.h">
-      <Filter>01. Manager\Inctancing</Filter>
+      <Filter>01. Manager\11. Inctancing</Filter>
     </ClInclude>
     <ClInclude Include="InstancingManager.h">
-      <Filter>01. Manager\Inctancing</Filter>
+      <Filter>01. Manager\11. Inctancing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -434,16 +434,16 @@
       <Filter>01. Manager\01. Device\StructedBuffer</Filter>
     </ClCompile>
     <ClCompile Include="ParticleSystem.cpp">
-      <Filter>04. Component\01. RenderComponent\ParticleSystem</Filter>
+      <Filter>04. Component\07. ParticleSystem</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>04. Component\06. Light</Filter>
     </ClCompile>
     <ClCompile Include="InstancingBuffer.cpp">
-      <Filter>01. Manager\Inctancing</Filter>
+      <Filter>01. Manager\11. Inctancing</Filter>
     </ClCompile>
     <ClCompile Include="InstancingManager.cpp">
-      <Filter>01. Manager\Inctancing</Filter>
+      <Filter>01. Manager\11. Inctancing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,7 @@
 #include "Material.h"
 #include "MeshData.h"
 #include "Engine.h"
+#include "ParticleSystem.h"
 
 CAssetManager::CAssetManager()
 {
@@ -27,10 +28,10 @@ int CAssetManager::Init()
 	if (FAILED(LoadGraphicShader()))
 		return E_FAIL;
 
-	if (FAILED(LoadMaterial()))
+	if (FAILED(LoadComputeShader()))
 		return E_FAIL;
 
-	if (FAILED(LoadComputeShader()))
+	if (FAILED(LoadMaterial()))
 		return E_FAIL;
 
 	if (FAILED(LoadMeshData()))
@@ -139,6 +140,17 @@ int CAssetManager::LoadMaterial()
 	material->SetTexture(0, FindAsset<CTexture>(L"Skybox"));
 	AddAsset(L"Skybox", material);
 
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Particle"));
+	AddAsset(L"Particle", material);
+
+	material = new CMaterial;
+	material->SetComputeShader(FindAsset<CComputeShader>(L"ComputeParticle"));
+	AddAsset(L"ComputeParticle", material);
+
+	material = new CMaterial;
+	material->SetComputeShader(FindAsset<CComputeShader>(L"Compute"));
+	AddAsset(L"Compute", material);
 	// LIGHT
 	{
 		material = new CMaterial;
@@ -180,7 +192,6 @@ int CAssetManager::LoadMeshData()
 
 int CAssetManager::LoadParticle()
 {
-
 	return S_OK;
 }
 

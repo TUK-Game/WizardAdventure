@@ -25,9 +25,16 @@ class CParticleSystem : public CComponent
 {
 public:
 	CParticleSystem();
+	CParticleSystem(UINT32 maxParticle);
 	virtual ~CParticleSystem();
 
 public:
+	void SetGarpchisMaterial(CMaterial* material) { m_GraphicsMaterial = material; }
+	void SetComputeMaterial(CMaterial* material) { m_ComputeMaterial = material; }
+	void SetTexture(class CTexture* texture);
+	void SetTexture(const std::wstring& name);
+public:
+
 	virtual void FinalUpdate();
 	void Render();
 
@@ -36,7 +43,7 @@ public:
 
 private:
 	std::shared_ptr<CStructuredBuffer>	m_ParticleBuffer;
-	std::shared_ptr<CStructuredBuffer>	m_ComputeSharedBuffer;
+	std::shared_ptr<CStructuredBuffer>	m_ComputeSharedBuffer;	
 	UINT32							m_MaxParticle = 1000;
 
 	CMaterial*						m_ComputeMaterial;

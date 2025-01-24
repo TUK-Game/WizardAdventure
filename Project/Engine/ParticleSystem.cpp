@@ -16,22 +16,42 @@ CParticleSystem::CParticleSystem() : CComponent(EComponent_Type::ParticleSystem)
 	m_ComputeSharedBuffer->Init(sizeof(ComputeSharedInfo), 1);
 
 	m_Mesh = CAssetManager::GetInst()->FindAsset<CMesh>(L"Point");
-	m_GraphicsMaterial = new CMaterial;
-	m_ComputeMaterial = new CMaterial;
-	CGraphicShader* gs = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Particle");
-	CComputeShader* cs = CAssetManager::GetInst()->FindAsset<CComputeShader>(L"ComputeParticle");
+	m_GraphicsMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"Particle");
+	m_ComputeMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"ComputeParticle");
 
 	CTexture* tex = CAssetManager::GetInst()->FindAsset<CTexture>(L"Mushroom");
-	m_GraphicsMaterial->SetGraphicsShader(gs);
 	m_GraphicsMaterial->SetTexture(0, tex);
 
-	m_ComputeMaterial->SetComputeShader(cs);
+}
+
+CParticleSystem::CParticleSystem(UINT32 maxParticle) : CComponent(EComponent_Type::ParticleSystem)
+{
+	m_MaxParticle = maxParticle;
+	m_ParticleBuffer = std::make_shared<CStructuredBuffer>();
+	m_ParticleBuffer->Init(sizeof(ParticleInfo), m_MaxParticle);
+
+	m_ComputeSharedBuffer = std::make_shared<CStructuredBuffer>();
+	m_ComputeSharedBuffer->Init(sizeof(ComputeSharedInfo), 1);
+
+	m_Mesh = CAssetManager::GetInst()->FindAsset<CMesh>(L"Point");
+	m_GraphicsMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"Particle");
+	m_ComputeMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"ComputeParticle");
 }
 
 CParticleSystem::~CParticleSystem()
 {
 	m_GraphicsMaterial->ReleaseRef();
 	m_ComputeMaterial->ReleaseRef();
+}
+
+void CParticleSystem::SetTexture(CTexture* texture)
+{
+	m_GraphicsMaterial->SetTexture(0, texture);
+}
+
+void CParticleSystem::SetTexture(const std::wstring& name)
+{
+	m_GraphicsMaterial->SetTexture(0, CAssetManager::GetInst()->FindAsset<CTexture>(name));
 }
 
 void CParticleSystem::FinalUpdate()

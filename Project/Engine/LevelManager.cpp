@@ -42,8 +42,6 @@ int CLevelManager::Init()
 
 #pragma region ComputeShader
 	{
-		CComputeShader* shader = CAssetManager::GetInst()->FindAsset<CComputeShader>(L"Compute");
-
 		// UAV 용 Texture 생성
 		CTexture* texture = CAssetManager::GetInst()->CreateTexture(L"UAVTexture",
 			DXGI_FORMAT_R8G8B8A8_UNORM, 1024, 1024,
@@ -51,8 +49,7 @@ int CLevelManager::Init()
 			D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
 		//CMaterial* material = GET_SINGLE(Resources)->Get<CMaterial>(L"ComputeShader");
-		std::shared_ptr<CMaterial> material = std::make_shared<CMaterial>();
-		material->SetComputeShader(shader);
+		CMaterial* material = CAssetManager::GetInst()->FindAsset<CMaterial>(L"Compute");
 		material->SetInt(0, 1);
 		CDevice::GetInst()->GetComputeDescHeap()->SetUAV(texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
 
@@ -151,46 +148,7 @@ int CLevelManager::Init()
 	}
 
 	CGameObject* object = new CGameObject;
-	CGameObject* object2 = new CGameObject;
-	CGameObject* object3 = new CGameObject;
-	CGameObject* object4 = new CGameObject;
-
-	object4->SetName(L"Cube4");
-	object4->AddComponent(new CTransform);
-	object4->AddComponent(new CMeshRenderer);
-	object4->AddComponent(new CBoxCollider);
 	
-	object4->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object4->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f) ;
-	object4->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object4->GetTransform()->SetRelativePosition(200.f, 0.f, 0.f);
-	object4->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object4->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
-
-	object3->SetName(L"Cube3");
-	object3->AddComponent(new CTransform);
-	object3->AddComponent(new CMeshRenderer);
-	object3->AddComponent(new CBoxCollider);
-	object3->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object3->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
-	object3->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object3->GetTransform()->SetRelativePosition(500.f, 0.f, 0.f);
-	object3->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object3->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Ryo"));
-	object3->AddChild(object4);
-
-	object2->SetName(L"Cube2");
-	object2->AddComponent(new CTransform);
-	object2->AddComponent(new CMeshRenderer);
-	object2->AddComponent(new CBoxCollider);
-	object2->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object2->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
-	object2->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object2->GetTransform()->SetRelativePosition(-700.f, 0.f, 300.f);
-	object2->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object2->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Nigika"));
-	m_CurLevel->AddGameObject(object2, 3, false);
-
 	object->SetName(L"Cube");
 	object->AddComponent(new CTransform);
 	object->AddComponent(new CMeshRenderer);
@@ -200,9 +158,7 @@ int CLevelManager::Init()
 	object->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object->GetTransform()->SetRelativePosition(-300.f, 0.f, 300.f);
 	object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Hitori"));
-	//object->AddChild(object2);
-	object->AddChild(object3);
+	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
 	m_CurLevel->AddGameObject(object, 3, false);
 
 #pragma region INSTANCING
@@ -214,7 +170,7 @@ int CLevelManager::Init()
 		obj->GetTransform()->SetRelativeScale(Vec3(25.f, 25.f, 25.f));
 		obj->GetTransform()->SetRelativePosition(Vec3(-300.f + i * 10.f, 0.f, 100.f));
 		obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Sphere"));
-		obj->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+		obj->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Hitori"));
 		// Int_0이 1이면 인스턴싱
 		obj->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		m_CurLevel->AddGameObject(obj, 3, false);
@@ -286,6 +242,7 @@ int CLevelManager::Init()
 		CGameObject* particle = new CGameObject;
 		particle->AddComponent(new CTransform);
 		particle->AddComponent(new CParticleSystem);
+		particle->GetParticleSystem()->SetTexture(L"Nigika");
 		particle->SetCheckFrustum(false);		
 		particle->GetTransform()->SetRelativePosition(Vec3(0.f, 0.f, 100.f));
 		m_CurLevel->AddGameObject(particle, 3, false);
