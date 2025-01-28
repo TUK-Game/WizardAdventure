@@ -27,8 +27,8 @@ void FBXLoader::LoadFbx(const std::wstring& path)
 	Import(path);
 
 	// Animation	
-	LoadBones(_scene->GetRootNode());
-	LoadAnimationInfo();
+	//LoadBones(_scene->GetRootNode());
+	//LoadAnimationInfo();
 
 	// 로드된 데이터 파싱 (Mesh/Material/Skin)
 	ParseNode(_scene->GetRootNode());
@@ -90,7 +90,7 @@ void FBXLoader::ParseNode(FbxNode* node)
 		FbxSurfaceMaterial* surfaceMaterial = node->GetMaterial(i);
 		LoadMaterial(surfaceMaterial);
 	}
-
+	
 	// Tree 구조 재귀 호출
 	const INT32 childCount = node->GetChildCount();
 	for (INT32 i = 0; i < childCount; ++i)

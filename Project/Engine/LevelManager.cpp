@@ -177,13 +177,9 @@ int CLevelManager::Init()
 		m_CurLevel->AddGameObject(obj, 3, false);
 	}
 #pragma endregion
-
 	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
 	std::vector<CGameObject*> obj = data->Instantiate();
 	
-	//data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
-	//std::vector<CGameObject*> obj2 = data->Instantiate();
-
 	for(auto& o : obj)
 	{
 		std::string name = "Dragon";
@@ -194,7 +190,7 @@ int CLevelManager::Init()
 		o->GetMeshRenderer()->GetMaterial(0)->SetGraphicsShader(shader);
 		//o->GetTransform()->SetRelativePosition(200, 0, 100);
 		//o->GetTransform()->SetRelativeScale(100, 100, 100);
-		o->AddComponent(new CTestDragon);
+		//o->AddComponent(new CTestDragon);
 		m_CurLevel->AddGameObject(o, 3, false);
 	}
 
