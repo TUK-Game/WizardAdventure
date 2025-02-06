@@ -192,6 +192,13 @@ int CAssetManager::LoadMaterial()
 		AddAsset(L"Final", material);
 	}
 
+	// SHADOW
+	{
+		material = new CMaterial;
+		material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Shadow"));
+		AddAsset(L"Shadow", material);
+	}
+
 	return S_OK;
 }
 
@@ -261,6 +268,14 @@ int CAssetManager::LoadGraphicShader()
 		name = L"Light.hlsl";
 		LoadShader(shader, name, { SHADER_TYPE::LIGHTING, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE }, "VS_Final", "PS_Final");
 		AddAsset(L"Final", shader);
+	}
+
+	// SHADOW
+	{
+		shader = new CGraphicShader;
+		name = L"Shadow.hlsl";
+		LoadShader(shader, name, { SHADER_TYPE::SHADOW, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::LESS}, "VS_MAIN", "PS_MAIN");
+		AddAsset(L"Shadow", shader);
 	}
 
 	return S_OK;

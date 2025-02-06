@@ -105,7 +105,7 @@ int CLevelManager::Init()
 		light->SetName(L"DirectionalLight");
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
-		//light->GetTransform()->SetRelativePosition(0.f, 1000.f, 0.f);
+		light->GetTransform()->SetRelativePosition(0.f, 1000.f, 0.f);
 		light->GetLight()->SetLightDirection(Vec3(1.f, 0.f, 1.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));

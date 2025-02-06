@@ -74,7 +74,7 @@ void CGraphicsCommandQueue::WaitSync()
 }
 
 
-void CGraphicsCommandQueue::RenderBegin(const D3D12_VIEWPORT* vp, const D3D12_RECT* rect)
+void CGraphicsCommandQueue::RenderBegin()
 {
 	m_CmdAlloc->Reset();
 	m_CmdList->Reset(m_CmdAlloc.Get(), nullptr);
@@ -98,9 +98,6 @@ void CGraphicsCommandQueue::RenderBegin(const D3D12_VIEWPORT* vp, const D3D12_RE
 
 	m_CmdList->ResourceBarrier(1, &barrier);
 
-	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
-	m_CmdList->RSSetViewports(1, vp);
-	m_CmdList->RSSetScissorRects(1, rect);
 }
 
 void CGraphicsCommandQueue::RenderEnd()

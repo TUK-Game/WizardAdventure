@@ -30,6 +30,8 @@ CCamera::CCamera()
 	Vec2 resolution = CEngine::GetInst()->GetResolution();
 	m_OrthoScaleX = resolution.x;
 	m_AspectRatio = resolution.x / resolution.y;
+	m_Width = static_cast<float>(CEngine::GetInst()->GetWindowInfo().Width);
+	m_Height = static_cast<float>(CEngine::GetInst()->GetWindowInfo().Height);
 }
 
 CCamera::~CCamera()
@@ -38,12 +40,9 @@ CCamera::~CCamera()
 
 void CCamera::FinalUpdate()
 {
-	// ����� ���
-	// �̵�
 	Vec3 vCamPos = GetTransform()->GetRelativePosition();
 	Matrix matTrans = XMMatrixTranslation(-vCamPos.x, -vCamPos.y, -vCamPos.z);
 
-	// ȸ��
 	Vec3 vR = GetTransform()->GetWorldDir(EDir::Right);
 	Vec3 vU = GetTransform()->GetWorldDir(EDir::Up);
 	Vec3 vF = GetTransform()->GetWorldDir(EDir::Front);
@@ -56,18 +55,16 @@ void CCamera::FinalUpdate()
 	m_matView = matTrans * matRot;
 
 
-	// ������� ����ϱ�
 	if (m_ProjectionType == EProjection_Type::Orthographic)
 	{
-		m_matProjection = XMMatrixOrthographicLH(m_OrthoScaleX, m_OrthoScaleX / m_AspectRatio, 1.f, m_Far);
+		m_matProjection = ::XMMatrixOrthographicLH(m_Width * m_Scale, m_Height * m_Scale, m_Near, m_Far);
 	}
 	else
 	{
-		m_matProjection = XMMatrixPerspectiveFovLH(m_FOV, m_AspectRatio, 1.f, m_Far);
+		m_matProjection = ::XMMatrixPerspectiveFovLH(m_FOV, m_Width / m_Height, m_Near, m_Far);
 	}
 
 
-	// ī�޶��� View, Proj ����� ����	
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
@@ -76,11 +73,9 @@ void CCamera::FinalUpdate()
 
 void CCamera::Render()
 {
-	// ī�޶��� View, Proj ����� ����
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-	// ������Ʈ �з�
 	SortObject();
 
 	PushLightData();
@@ -122,6 +117,17 @@ void CCamera::Render_Forward()
 	for (auto& object : m_vecParticle)
 	{
 		object->GetParticleSystem()->Render();
+	}
+}
+
+void CCamera::Render_Shadow()
+{
+	s_matView = m_matView;
+	m_matProjection = m_matProjection;
+
+	for (auto& object : m_vecShadow)
+	{
+		object->GetMeshRenderer()->RenderShadow();
 	}
 }
 
@@ -187,6 +193,48 @@ void CCamera::SortObject()
 			//m_vecObjects.push_back(vecObjects[j]);
 
 			// TODO: Material ������ Ÿ�Կ� ���� �з� �ۼ�
+		}
+	}
+}
+
+void CCamera::SortShadowObject()
+{
+	m_vecShadow.clear();
+
+	CLevel* pCurLevel = CLevelManager::GetInst()->GetCurrentLevel();
+
+	for (UINT i = 0; i < MAX_LAYER; ++i)
+	{
+		if (!(m_LayerCheck & (1 << i)))
+			continue;
+
+		CLayer* pLayer = pCurLevel->GetLayer(i);
+		const std::vector<CGameObject*>& vecObjects = pLayer->GetObjects();
+
+		for (size_t j = 0; j < vecObjects.size(); ++j)
+		{
+			if ((vecObjects[j]->GetRenderComponent() == nullptr
+				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
+				&& vecObjects[j]->GetParticleSystem() == nullptr)
+				continue;
+
+			if (vecObjects[j]->GetCheckFrustum() && vecObjects[j]->GetCollider())
+			{
+				if (!vecObjects[j]->GetCollider()->IsFrustum(m_Frustum))
+				{
+					continue;
+				}
+			}
+
+			if (vecObjects[j]->GetMeshRenderer() == nullptr)
+			{
+				continue;
+			}
+
+			if (vecObjects[j]->IsStatic())
+				continue;
+
+			m_vecShadow.push_back(vecObjects[j]);
 		}
 	}
 }

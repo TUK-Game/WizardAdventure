@@ -32,6 +32,11 @@ public:
     void SetWorldMatrix(const Matrix& matrix)           { m_matWorld = matrix; }
     void SetParentTransform(CTransform* parent) { m_ParentTransform = parent; }
 
+    void LookAt(const Vec3& dir);
+
+    static bool CloseEnough(const float& a, const float& b, const float& epsilon = std::numeric_limits<float>::epsilon());
+    static Vec3 DecomposeRotationMatrix(const Matrix& rotation);
+
 public:
     virtual void FinalUpdate() override;
     void GraphicsBinding();

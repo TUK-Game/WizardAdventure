@@ -41,6 +41,14 @@ void CMeshRenderer::Render(std::shared_ptr<CInstancingBuffer>& buffer)
 	m_Mesh->Render(buffer);
 }
 
+void CMeshRenderer::RenderShadow()
+{
+	GetTransform()->GraphicsBinding();
+	//½¦µµ¿ì material 
+	GetMaterial()->GraphicsBinding();
+	m_Mesh->Render();
+}
+
 UINT64 CMeshRenderer::GetInstanceID()
 {
 	if (m_Mesh == nullptr || m_Materials[0] == nullptr)

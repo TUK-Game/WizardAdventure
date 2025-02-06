@@ -10,10 +10,14 @@ public:
 
     virtual void FinalUpdate() override;
 	void Render();
+	void RenderShadow();
+
 public:
+	LIGHT_TYPE GetLightType() { return static_cast<LIGHT_TYPE>(m_Light.lightType); }
+
 	const LightInfo& GetLightInfo() { return m_Light; }
 
-	void SetLightDirection(const Vec3& direction) { m_Light.direction = direction; }
+	void SetLightDirection(Vec3 direction);
 
 	void SetDiffuse(const Vec3& diffuse) { m_Light.color.diffuse = diffuse; }
 	void SetAmbient(const Vec3& ambient) { m_Light.color.ambient = ambient; }
@@ -35,4 +39,6 @@ private:
 	INT8				m_LightIndex = -1;
 	class CMesh*		m_VolumeMesh;
 	class CMaterial*	m_LightMaterial;
+
+	CGameObject* m_ShadowCamera;
 };

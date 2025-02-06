@@ -31,6 +31,8 @@ public:
     CLight* GetLight()                                  { return (CLight*)GetComponent(EComponent_Type::Light); }
     CParticleSystem* GetParticleSystem()                { return (CParticleSystem*)GetComponent(EComponent_Type::ParticleSystem); }
     bool GetCheckFrustum() { return m_CheckFrustum; }
+    void SetStatic(bool flag) { m_Static = flag; }
+    bool IsStatic() { return m_Static; }
 
     void SetCheckFrustum(bool checkFrustum) { m_CheckFrustum = checkFrustum; }
     void SetParentTransform(CTransform* transform);
@@ -60,5 +62,6 @@ private:
 
     int m_LayerIndex; // 소속 레이어 번호
     bool m_CheckFrustum = true; // 프러스텀 여부
+    bool m_Static = true; // 정적/동적 오브젝트 여부 
 };
 

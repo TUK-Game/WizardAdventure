@@ -22,7 +22,7 @@ public:
 	int Init(ComPtr<ID3D12Device> device, std::shared_ptr<CSwapChain> swapChain);
 	void WaitSync();
 
-	void RenderBegin(const D3D12_VIEWPORT* vp, const D3D12_RECT* rect);
+	void RenderBegin();
 	void RenderEnd();
 
 	void FlushResourceCommandQueue();

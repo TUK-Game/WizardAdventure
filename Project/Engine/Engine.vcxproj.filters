@@ -479,5 +479,8 @@
     <FxCompile Include="..\..\Content\Shaders\Light.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Shadow.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

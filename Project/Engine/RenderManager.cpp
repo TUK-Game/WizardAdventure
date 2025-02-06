@@ -16,43 +16,19 @@ CRenderManager::~CRenderManager()
 
 void CRenderManager::Render()
 {
-	// Target Clear
-	CDevice::GetInst()->RenderBegin();
-
 	PushLightData();
 
-	INT8 backIndex = CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex();
-	// swapchain
-	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->ClearRenderTargetView(backIndex);
+	ClearRTV();
+
+	RenderShadow();
 	
-	// Deferred
-	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->ClearRenderTargetView();
-
-	// Light
-	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->ClearRenderTargetView();
-
-	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->OMSetRenderTargets();
-
-	CCamera* mainCamera = GetMainCamera();
-	mainCamera->SortObject();
-	mainCamera->Render_Deferred();
-	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->WaitTargetToResource();
-
+	RenderDeferred();
+	
 	RenderLights();
-	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->WaitTargetToResource();
 
 	RenderFinal();
 
-	mainCamera->Render_Forward();
-
-	for (auto& camera : m_vecCamera)
-	{
-		if (camera == mainCamera)
-			continue;
-
-		camera->SortObject();
-		camera->Render_Forward();
-	}
+	RenderForward();
 
 	//for (auto& camera : m_vecCamera)
 	//{
@@ -63,14 +39,65 @@ void CRenderManager::Render()
 	CDevice::GetInst()->RenderEnd();
 }
 
+void CRenderManager::ClearRTV()
+{
+	// Target Clear
+	CDevice::GetInst()->RenderBegin();
+
+	INT8 backIndex = CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex();
+	// swapchain
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->ClearRenderTargetView(backIndex);
+
+	// Shadow 
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->ClearRenderTargetView();
+
+	// Deferred
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->ClearRenderTargetView();
+
+	// Light
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->ClearRenderTargetView();
+}
+
+void CRenderManager::RenderShadow()
+{
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->OMSetRenderTargets();
+
+	for (auto& light : m_vecLight)
+	{
+		if (light->GetLightType() != LIGHT_TYPE::DIRECTIONAL_LIGHT)
+			continue;
+
+		light->RenderShadow();
+	}
+
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->WaitTargetToResource();
+}
+
+void CRenderManager::RenderDeferred()
+{
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->OMSetRenderTargets();
+
+	CCamera* mainCamera = GetMainCamera();
+	mainCamera->SortObject();
+	mainCamera->Render_Deferred();
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->WaitTargetToResource();
+
+}
+
 void CRenderManager::RenderLights()
 {
+	CCamera* mainCamera = GetMainCamera();
+	CCamera::s_matView = mainCamera->GetViewMat();
+	CCamera::s_matProjection = mainCamera->GetProjMat();
+
 	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->OMSetRenderTargets();
 
 	for (auto& light : m_vecLight)
 	{
 		light->Render();
 	}
+
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->WaitTargetToResource();
 }
 
 void CRenderManager::RenderFinal()
@@ -81,6 +108,22 @@ void CRenderManager::RenderFinal()
 	CAssetManager::GetInst()->FindAsset<CMaterial>(L"Final")->GraphicsBinding();
 	CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle")->Render();
 }
+
+void CRenderManager::RenderForward()
+{
+	CCamera* mainCamera = GetMainCamera();
+	mainCamera->Render_Forward();
+
+	for (auto& camera : m_vecCamera)
+	{
+		if (camera == mainCamera)
+			continue;
+
+		camera->SortObject();
+		camera->Render_Forward();
+	}
+}
+
 
 void CRenderManager::PushLightData()
 {
