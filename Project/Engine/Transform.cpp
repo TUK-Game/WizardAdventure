@@ -25,7 +25,7 @@ void CTransform::FinalUpdate()
 
 	// Translation
 	Matrix matTrans = XMMatrixTranslation(m_RelativePos.x, m_RelativePos.y, m_RelativePos.z);
-
+		
 	// 크기 회전 이동 부모 순서로 적용
 	m_matWorld = matScale * matRotation * matTrans;
 	m_matRT = matRotation * matTrans;
@@ -127,4 +127,43 @@ void CTransform::SetRelativeRotation(Vec3 rotation)
 void CTransform::SetRelativeRotation(float x, float y, float z)
 {
 	m_RelativeRotation = (Vec3(x, y, z) / 180.f) * XM_PI;
+}
+
+void CTransform::SetWorldMatrix(const Matrix& matrix)
+{
+	m_matWorld = matrix;
+	//SetRelativeScale(matrix._11, matrix._22, matrix._33);
+	SetRelativePosition(matrix._41, matrix._42, matrix._43);
+	// 4x4 변환 행렬에서 회전 행렬 부분 추출
+	DirectX::SimpleMath::Matrix rotationMatrix = matrix;
+	rotationMatrix._41 = 0.0f; // 제거: 위치 값
+	rotationMatrix._42 = 0.0f;
+	rotationMatrix._43 = 0.0f;
+
+	// 행렬에서 회전값(Euler angles) 추출
+	float pitch, yaw, roll;
+
+	// Pitch (X축 회전)
+	pitch = asinf(-rotationMatrix._32);
+
+	// Yaw (Y축 회전)
+	if (cosf(pitch) > 0.0001f)
+	{
+		yaw = atan2f(rotationMatrix._31, rotationMatrix._33);
+		roll = atan2f(rotationMatrix._12, rotationMatrix._22);
+	}
+	else
+	{
+		// Gimbal lock 상태일 경우
+		yaw = atan2f(-rotationMatrix._13, rotationMatrix._11);
+		roll = 0.0f;
+	}
+
+	// 라디안을 degree로 변환 후 업데이트
+	m_RelativeRotation = DirectX::SimpleMath::Vector3(
+		pitch * (180.0f / XM_PI),
+		yaw * (180.0f / XM_PI),
+		roll * (180.0f / XM_PI)
+	);
+
 }

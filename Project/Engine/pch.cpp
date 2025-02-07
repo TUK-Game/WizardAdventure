@@ -25,3 +25,14 @@ std::string ws2s(const std::wstring& s)
 	::WideCharToMultiByte(CP_ACP, 0, s.c_str(), slength, &r[0], len, 0, 0);
 	return r;
 }
+
+Matrix GetMatrix(const FbxAMatrix& matrix)
+{
+	Matrix mat;
+
+	for (INT32 y = 0; y < 4; ++y)
+		for (INT32 x = 0; x < 4; ++x)
+			mat.m[y][x] = static_cast<float>(matrix.Get(y, x));
+
+	return mat;
+}

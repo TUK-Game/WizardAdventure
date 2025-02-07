@@ -54,7 +54,6 @@ private:
 	int CreateVertexBuffer(const std::vector<Vertex>& vecVertex);
 	int CreateIndexBuffer(const std::vector<UINT>& buffer);
 	void CreateBonesAndAnimations(class FBXLoader& loader);
-	Matrix GetMatrix(FbxAMatrix& matrix);
 
 public:
 	UINT32 GetSubsetCount() { return static_cast<UINT32>(m_VecIndexInfo.size()); }

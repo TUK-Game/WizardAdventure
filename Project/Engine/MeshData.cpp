@@ -26,7 +26,7 @@ CMeshData* CMeshData::LoadFromFBX(const std::wstring& path)
 
 	for (INT32 i = 0; i < loader.GetMeshCount(); i++)
 	{
-		CMesh* mesh = CMesh::CreateFromFBX(&loader.GetMesh(i), loader);
+		CMesh* mesh = CAssetManager::GetInst()->FindAsset<CMesh>(loader.GetMesh(i).name);
 		if (mesh == NULL)
 		{
 			mesh = CMesh::CreateFromFBX(&loader.GetMesh(i), loader);
@@ -44,6 +44,7 @@ CMeshData* CMeshData::LoadFromFBX(const std::wstring& path)
 		MeshRenderInfo info = {};
 		info.mesh = mesh;
 		info.materials = materials;
+		info.matrix = GetMatrix(loader.GetMesh(i).matrix);
 		meshData->_meshRenders.push_back(info);
 	}
 
@@ -70,6 +71,7 @@ std::vector<CGameObject*> CMeshData::Instantiate()
 		gameObject->AddComponent(new CTransform);
 		gameObject->AddComponent(new CMeshRenderer);
 		gameObject->GetMeshRenderer()->SetMesh(info.mesh);
+		gameObject->GetTransform()->SetWorldMatrix(info.matrix);
 
 		for (UINT32 i = 0; i < info.materials.size(); i++)
 			gameObject->GetMeshRenderer()->SetMaterial(info.materials[i], i);

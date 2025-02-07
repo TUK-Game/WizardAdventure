@@ -104,11 +104,11 @@ int CLevelManager::Init()
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
 		//light->GetTransform()->SetRelativePosition(0.f, 1000.f, 0.f);
-		light->GetLight()->SetLightDirection(Vec3(0, 0, 0.f));
+		light->GetLight()->SetLightDirection(Vec3(1, 0, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.f, 0.f, 0.f));
-		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.0f));
-		light->GetLight()->SetSpecular(Vec3(0.2f, 0.2f, 0.2f));
+		light->GetLight()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
+		light->GetLight()->SetAmbient(Vec3(1.1f, 1.1f, 1.0f));
+		light->GetLight()->SetSpecular(Vec3(1.2f, 1.2f, 1.2f));
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
 		m_CurLevel->AddGameObject(light, 3, false);
@@ -184,13 +184,14 @@ int CLevelManager::Init()
 	{
 		std::string name = "Dragon";
 		o->SetName(s2ws(name));
-		o->AddComponent(new CBoxCollider);
-		o->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+		//o->AddComponent(new CBoxCollider);
+		//o->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
 		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred");
 		o->GetMeshRenderer()->GetMaterial(0)->SetGraphicsShader(shader);
-		//o->GetTransform()->SetRelativePosition(200, 0, 100);
-		//o->GetTransform()->SetRelativeScale(100, 100, 100);
+		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 		//o->AddComponent(new CTestDragon);
+		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+		o->SetCheckFrustum(false);
 		m_CurLevel->AddGameObject(o, 3, false);
 	}
 
