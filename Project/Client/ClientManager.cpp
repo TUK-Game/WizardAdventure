@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "ClientManager.h"
 #include <Engine/Engine.h>
+//#include <ImGui/imgui_impl_win32.h>
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 CClientManager::CClientManager()
     : m_hInstance(nullptr)
@@ -46,6 +49,9 @@ LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             DestroyWindow(hWnd);
             break;
         default:
+            if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+                return true; // ImGui가 메시지를 처리했으면 OS 기본 처리 없이 반환
+
             return DefWindowProc(hWnd, message, wParam, lParam);
         }
     }
@@ -54,6 +60,9 @@ LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         PostQuitMessage(0);
         break;
     default:
+        if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+            return true; // ImGui가 메시지를 처리했으면 OS 기본 처리 없이 반환
+
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;

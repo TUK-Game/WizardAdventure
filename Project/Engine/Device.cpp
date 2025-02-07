@@ -2,6 +2,7 @@
 #include "Device.h"
 #include "Engine.h"
 #include "AssetManager.h"
+#include "ImGuiManager.h"
 
 CDevice::CDevice()
 	: m_Viewport{}
@@ -31,6 +32,7 @@ int CDevice::Init()
 	m_SwapChain = std::make_shared<CSwapChain>();
 	m_RootSignature = std::make_shared<CRootSignature>();
 	m_GraphicsDescHeap = std::make_shared<CGraphicsDescriptorHeap>();
+	m_ImGuiDescHeap = std::make_shared<CGraphicsDescriptorHeap>();
 	m_ComputeDescHeap = std::make_shared<CComputeDescriptorHeap>();
 
 	if (FAILED(m_GraphicsCmdQueue->Init(m_Device, m_SwapChain)))
@@ -48,6 +50,9 @@ int CDevice::Init()
 	if (FAILED(m_GraphicsDescHeap->Init(10000)))
 		return E_FAIL;
 
+	if (FAILED(m_ImGuiDescHeap->Init(1000)))
+		return E_FAIL;
+
 	if (FAILED(m_ComputeDescHeap->Init()))
 		return E_FAIL;
 
@@ -57,6 +62,9 @@ int CDevice::Init()
 	CreateConstantBuffer(CBV_REGISTER::b2, sizeof(MaterialParams), 100000);
 
 	CreateRenderTargetGroups();
+
+	CImGuiManager::GetInst()->Init();
+
 	return S_OK;
 }
 

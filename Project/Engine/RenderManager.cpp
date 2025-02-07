@@ -5,6 +5,7 @@
 #include "Light.h"
 #include "AssetManager.h"
 #include "GameObject.h"
+#include "ImGuiManager.h"
 
 CRenderManager::CRenderManager()
 {
@@ -16,6 +17,8 @@ CRenderManager::~CRenderManager()
 
 void CRenderManager::Render()
 {
+	CImGuiManager::GetInst()->ReadyWindow();
+
 	// Target Clear
 	CDevice::GetInst()->RenderBegin();
 
@@ -54,10 +57,7 @@ void CRenderManager::Render()
 		camera->Render_Forward();
 	}
 
-	//for (auto& camera : m_vecCamera)
-	//{
-	//	camera->Render();
-	//}
+	CImGuiManager::GetInst()->Render();
 
 	// Present
 	CDevice::GetInst()->RenderEnd();

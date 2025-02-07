@@ -20,6 +20,7 @@ public:
 	std::shared_ptr<CComputeCommandQueue> GetComputeCmdQueue()	{ return m_ComputeCmdQueue; }
 	std::shared_ptr<CSwapChain> GetSwapChain()						{ return m_SwapChain; }
 	std::shared_ptr<CRootSignature> GetRootSignature()				{ return m_RootSignature; }
+	std::shared_ptr<CGraphicsDescriptorHeap> GetImGuiDescHeap()		{ return m_ImGuiDescHeap; }
 	std::shared_ptr<CGraphicsDescriptorHeap> GetGraphicsDescHeap()		{ return m_GraphicsDescHeap; }
 	std::shared_ptr<CComputeDescriptorHeap> GetComputeDescHeap()		{ return m_ComputeDescHeap; }
 
@@ -48,6 +49,7 @@ private:
 	std::shared_ptr<CSwapChain>					m_SwapChain;
 	std::shared_ptr<CRootSignature>				m_RootSignature;
 	std::shared_ptr<CGraphicsDescriptorHeap>	m_GraphicsDescHeap;
+	std::shared_ptr<CGraphicsDescriptorHeap>	m_ImGuiDescHeap;
 	std::shared_ptr<CComputeDescriptorHeap>		m_ComputeDescHeap;
 	
 
