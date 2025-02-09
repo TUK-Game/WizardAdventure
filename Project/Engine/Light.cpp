@@ -9,8 +9,10 @@ CLight::CLight() : CComponent(EComponent_Type::Light)
 	m_ShadowCamera = new CGameObject();
 	m_ShadowCamera->AddComponent(new CTransform);
 	m_ShadowCamera->AddComponent(new CCamera);
+	m_ShadowCamera->GetCamera()->CheckLayerAll();
 	UINT8 layerIndex = 4; // UI
 	m_ShadowCamera->GetCamera()->CheckLayer(layerIndex);
+	m_ShadowCamera->SetLayerIndex(0);
 }
 
 CLight::~CLight()
@@ -21,13 +23,12 @@ CLight::~CLight()
 void CLight::FinalUpdate()
 {
 	m_Light.position = GetTransform()->GetWorldPosition();
-	//m_Light.direction = GetTransform()->GetWorldDir(EDir::Front);
 
 	m_ShadowCamera->GetTransform()->SetRelativePosition(GetTransform()->GetRelativePosition());
 	m_ShadowCamera->GetTransform()->SetRelativeRotation(GetTransform()->GetRelativeRotation());
 	m_ShadowCamera->GetTransform()->SetRelativeScale(GetTransform()->GetRelativeScale());
 
-	//m_ShadowCamera->FinalUpdate();
+	m_ShadowCamera->FinalUpdate();
 
 }
 
@@ -71,7 +72,7 @@ void CLight::Render()
 void CLight::RenderShadow()
 {
 	m_ShadowCamera->GetCamera()->SortShadowObject();
-	m_ShadowCamera->GetCamera()->Render_Shadow();
+	m_ShadowCamera->GetCamera()->RenderShadow();
 }
 
 void CLight::SetLightDirection(Vec3 direction)

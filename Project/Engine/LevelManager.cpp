@@ -105,8 +105,8 @@ int CLevelManager::Init()
 		light->SetName(L"DirectionalLight");
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
-		light->GetTransform()->SetRelativePosition(0.f, 1000.f, 0.f);
-		light->GetLight()->SetLightDirection(Vec3(1.f, 0.f, 1.f));
+		light->GetTransform()->SetRelativePosition(0.f, 1000.f, 100.f);
+		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
 		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.0f));
@@ -270,7 +270,9 @@ int CLevelManager::Init()
 		else if (i < 5)
 			texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
 		else
-			texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"UAVTexture");
+			texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
+			//texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"UAVTexture");
+
 
 		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
 		material->SetTexture(0, texture);

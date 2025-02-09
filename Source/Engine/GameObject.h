@@ -37,6 +37,7 @@ public:
     void SetCheckFrustum(bool checkFrustum) { m_CheckFrustum = checkFrustum; }
     void SetParentTransform(CTransform* transform);
     void SetParent(CGameObject* parent) { m_Parent = parent; } 
+    void SetLayerIndex(int index) { m_LayerIndex = index; }
 
     void AddComponent(CComponent* component);
     void AddChild(CGameObject* obj);
@@ -62,6 +63,6 @@ private:
 
     int m_LayerIndex; // 소속 레이어 번호
     bool m_CheckFrustum = true; // 프러스텀 여부
-    bool m_Static = true; // 정적/동적 오브젝트 여부 
+    bool m_Static = false; // 정적/동적 오브젝트 여부 
 };
 

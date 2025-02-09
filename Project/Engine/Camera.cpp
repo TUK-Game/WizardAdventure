@@ -99,7 +99,7 @@ void CCamera::Render()
 }
 
 
-void CCamera::Render_Deferred()
+void CCamera::RenderDeferred()
 {
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
@@ -107,7 +107,7 @@ void CCamera::Render_Deferred()
 	CInstancingManager::GetInst()->Render(m_vecDeferred);
 }
 
-void CCamera::Render_Forward()
+void CCamera::RenderForward()
 {
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
@@ -120,7 +120,7 @@ void CCamera::Render_Forward()
 	}
 }
 
-void CCamera::Render_Shadow()
+void CCamera::RenderShadow()
 {
 	s_matView = m_matView;
 	m_matProjection = m_matProjection;

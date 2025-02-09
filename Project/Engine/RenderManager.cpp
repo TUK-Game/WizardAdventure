@@ -79,7 +79,7 @@ void CRenderManager::RenderDeferred()
 
 	CCamera* mainCamera = GetMainCamera();
 	mainCamera->SortObject();
-	mainCamera->Render_Deferred();
+	mainCamera->RenderDeferred();
 	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->WaitTargetToResource();
 
 }
@@ -112,7 +112,7 @@ void CRenderManager::RenderFinal()
 void CRenderManager::RenderForward()
 {
 	CCamera* mainCamera = GetMainCamera();
-	mainCamera->Render_Forward();
+	mainCamera->RenderForward();
 
 	for (auto& camera : m_vecCamera)
 	{
@@ -120,7 +120,7 @@ void CRenderManager::RenderForward()
 			continue;
 
 		camera->SortObject();
-		camera->Render_Forward();
+		camera->RenderForward();
 	}
 }
 

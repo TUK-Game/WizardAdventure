@@ -45,7 +45,7 @@ void CMeshRenderer::RenderShadow()
 {
 	GetTransform()->GraphicsBinding();
 	//½¦µµ¿ì material 
-	GetMaterial()->GraphicsBinding();
+	CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->GraphicsBinding();
 	m_Mesh->Render();
 }
 

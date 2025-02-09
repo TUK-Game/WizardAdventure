@@ -66,7 +66,7 @@ void CGameObject::Begin()
 		m_vecChild[i]->Begin();
 	}
 }
-
+ 
 void CGameObject::Update()
 {
 	for (int i = 0; i < (int)EComponent_Type::END; ++i)

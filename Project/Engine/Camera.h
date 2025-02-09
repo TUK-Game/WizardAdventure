@@ -39,9 +39,9 @@ public:
 public:
 	virtual void FinalUpdate() override;
 	void Render();
-    void Render_Deferred();
-    void Render_Forward();
-    void Render_Shadow();
+    void RenderDeferred();
+    void RenderForward();
+    void RenderShadow();
     void SortShadowObject();
 
 private:
