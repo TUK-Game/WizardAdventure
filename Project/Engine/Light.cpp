@@ -36,15 +36,6 @@ void CLight::Render()
 {
 	assert(m_LightIndex >= 0);
 
-	switch (static_cast<LIGHT_TYPE>(m_Light.lightType))
-	{
-	case LIGHT_TYPE::POINT_LIGHT:
-	case LIGHT_TYPE::SPOT_LIGHT:
-		float scale = 2 * m_Light.range;
-		GetTransform()->SetRelativeScale(Vec3(scale, scale, scale));
-		break;
-	}
-
 	GetTransform()->GraphicsBinding();
 
 

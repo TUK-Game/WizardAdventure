@@ -117,19 +117,19 @@ int CLevelManager::Init()
 	}
 	// point light
 	{
-		CGameObject* light = new CGameObject;
-		light->AddComponent(new CTransform);
-		light->GetTransform()->SetRelativePosition(300.f, 0.f, 0.f);
-		light->AddComponent(new CLight);
-		light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetAmbient(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetSpecular(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetLightRange(500.f);
-		//light->GetLight()->SetLightAngle(XM_PI / 4);
-		CRenderManager::GetInst()->RegisterLight(light->GetLight());
+		//CGameObject* light = new CGameObject;
+		//light->AddComponent(new CTransform);
+		//light->GetTransform()->SetRelativePosition(300.f, 0.f, 0.f);
+		//light->AddComponent(new CLight);
+		//light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+		//light->GetLight()->SetDiffuse(Vec3(1.0f, 1.0f, 1.0f));
+		//light->GetLight()->SetAmbient(Vec3(1.0f, 1.0f, 1.0f));
+		//light->GetLight()->SetSpecular(Vec3(1.0f, 1.0f, 1.0f));
+		//light->GetLight()->SetLightRange(500.f);
+		////light->GetLight()->SetLightAngle(XM_PI / 4);
+		//CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
-		m_CurLevel->AddGameObject(light, 3, false);
+		//m_CurLevel->AddGameObject(light, 3, false);
 	}
 	// spot light
 	{
@@ -161,9 +161,9 @@ int CLevelManager::Init()
 	object4->AddComponent(new CBoxCollider);
 	
 	object4->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object4->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f) ;
+	object4->GetTransform()->SetRelativeScale(10.f, 10.f, 10.f) ;
 	object4->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object4->GetTransform()->SetRelativePosition(200.f, 0.f, 0.f);
+	object4->GetTransform()->SetRelativePosition(0.f, 100.f, 0.f);
 	object4->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 	object4->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Rock"));
 

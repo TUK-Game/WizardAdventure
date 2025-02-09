@@ -16,9 +16,9 @@ CRenderManager::~CRenderManager()
 
 void CRenderManager::Render()
 {
-	PushLightData();
-
 	ClearRTV();
+
+	PushLightData();
 
 	RenderShadow();
 	
