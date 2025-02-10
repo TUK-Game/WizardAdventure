@@ -65,6 +65,8 @@ Texture2D tex_2 : register(t2);
 Texture2D tex_3 : register(t3);
 Texture2D tex_4 : register(t4);
 
+StructuredBuffer<Matrix> mat_bone : register(t7);
+
 SamplerState sam_0 : register(s0);
 
 #endif

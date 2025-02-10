@@ -132,6 +132,12 @@
     <Filter Include="04. Component\07. ParticleSystem">
       <UniqueIdentifier>{28eb4740-bed7-4885-a6cd-da12b5955ab3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="IMGUI">
+      <UniqueIdentifier>{be63f490-002e-4fdb-bc94-b91187f06a79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\12. ImGui">
+      <UniqueIdentifier>{1d66cf96-8c2a-4390-b8d8-4866c1b54154}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -296,6 +302,36 @@
     <ClInclude Include="InstancingManager.h">
       <Filter>01. Manager\11. Inctancing</Filter>
     </ClInclude>
+    <ClInclude Include="TestDragon.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGui\imgui_impl_dx12.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGui\imgui_impl_win32.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGui\imgui_internal.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGui\imstb_rectpack.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGui\imstb_textedit.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGui\imstb_truetype.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGui\imconfig.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGui\imgui.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiManager.h">
+      <Filter>01. Manager\12. ImGui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -445,6 +481,33 @@
     <ClCompile Include="InstancingManager.cpp">
       <Filter>01. Manager\11. Inctancing</Filter>
     </ClCompile>
+    <ClCompile Include="TestDragon.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGui\imgui_impl_dx12.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGui\imgui_impl_win32.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGui\imgui_tables.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGui\imgui_widgets.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGui\imgui.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGui\imgui_demo.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGui\imgui_draw.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiManager.cpp">
+      <Filter>01. Manager\12. ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -477,6 +540,12 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\..\Content\Shaders\Light.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Math.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Content\Shaders\Animation.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

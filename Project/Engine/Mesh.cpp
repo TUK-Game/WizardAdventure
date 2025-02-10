@@ -3,6 +3,7 @@
 #include "Device.h"
 #include "FBXLoader.h"
 #include "InstancingBuffer.h"
+#include "StructuredBuffer.h"
 
 CMesh::CMesh()
 	: CAsset(EAsset_Type::Mesh)
@@ -47,7 +48,7 @@ void CMesh::Render(std::shared_ptr<CInstancingBuffer>& buffer, UINT32 idx)
 	GRAPHICS_CMD_LIST->DrawIndexedInstanced(m_VecIndexInfo[idx].count, buffer->GetCount(), 0, 0, 0);
 }
 
-CMesh* CMesh::CreateFromFBX(const FbxMeshInfo* meshInfo)
+CMesh* CMesh::CreateFromFBX(const FbxMeshInfo* meshInfo, FBXLoader& loader)
 {
 	CMesh* mesh = new CMesh;
 	mesh->CreateVertexBuffer(meshInfo->vertices);
@@ -67,6 +68,10 @@ CMesh* CMesh::CreateFromFBX(const FbxMeshInfo* meshInfo)
 			mesh->CreateIndexBuffer(buffer);
 		}
 	}
+
+	if(meshInfo->hasAnimation)
+		mesh->CreateBonesAndAnimations(loader);
+
 
 	return mesh;
 }
@@ -144,4 +149,113 @@ int CMesh::CreateIndexBuffer(const std::vector<UINT>& buffer)
 	m_VecIndexInfo.push_back(info);
 
 	return S_OK;
+}
+
+void CMesh::CreateBonesAndAnimations(FBXLoader& loader)
+{
+#pragma region AnimClip
+	UINT32 frameCount = 0;
+	std::vector<std::shared_ptr<FbxAnimClipInfo>>& animClips = loader.GetAnimClip();
+	for (std::shared_ptr<FbxAnimClipInfo>& ac : animClips)
+	{
+		AnimClipInfo info = {};
+
+		info.animName = ac->name;
+		info.duration = ac->endTime.GetSecondDouble() - ac->startTime.GetSecondDouble();
+
+		INT32 startFrame = static_cast<INT32>(ac->startTime.GetFrameCount(ac->mode));
+		INT32 endFrame = static_cast<INT32>(ac->endTime.GetFrameCount(ac->mode));
+		info.frameCount = endFrame - startFrame;
+
+		info.keyFrames.resize(ac->keyFrames.size());
+
+		const INT32 boneCount = static_cast<INT32>(ac->keyFrames.size());
+		for (INT32 b = 0; b < boneCount; b++)
+		{
+			auto& vec = ac->keyFrames[b];
+
+			const INT32 size = static_cast<INT32>(vec.size());
+			frameCount = max(frameCount, static_cast<UINT32>(size));
+			info.keyFrames[b].resize(size);
+
+			for (INT32 f = 0; f < size; f++)
+			{
+				FbxKeyFrameInfo& kf = vec[f];
+				// FBX에서 파싱한 정보들로 채워준다
+				KeyFrameInfo& kfInfo = info.keyFrames[b][f];
+				kfInfo.time = kf.time;
+				kfInfo.frame = static_cast<INT32>(size);
+				kfInfo.scale.x = static_cast<float>(kf.matTransform.GetS().mData[0]);
+				kfInfo.scale.y = static_cast<float>(kf.matTransform.GetS().mData[1]);
+				kfInfo.scale.z = static_cast<float>(kf.matTransform.GetS().mData[2]);
+				kfInfo.rotation.x = static_cast<float>(kf.matTransform.GetQ().mData[0]);
+				kfInfo.rotation.y = static_cast<float>(kf.matTransform.GetQ().mData[1]);
+				kfInfo.rotation.z = static_cast<float>(kf.matTransform.GetQ().mData[2]);
+				kfInfo.rotation.w = static_cast<float>(kf.matTransform.GetQ().mData[3]);
+				kfInfo.translate.x = static_cast<float>(kf.matTransform.GetT().mData[0]);
+				kfInfo.translate.y = static_cast<float>(kf.matTransform.GetT().mData[1]);
+				kfInfo.translate.z = static_cast<float>(kf.matTransform.GetT().mData[2]);
+			}
+		}
+
+		_animClips.push_back(info);
+	}
+#pragma endregion
+
+#pragma region Bones
+	std::vector<std::shared_ptr<FbxBoneInfo>>& bones = loader.GetBones();
+	for (std::shared_ptr<FbxBoneInfo>& bone : bones)
+	{
+		BoneInfo boneInfo = {};
+		boneInfo.parentIdx = bone->parentIndex;
+		boneInfo.matOffset = GetMatrix(bone->matOffset);
+		boneInfo.boneName = bone->boneName;
+		_bones.push_back(boneInfo);
+	}
+#pragma endregion
+
+#pragma region SkinData
+	if (IsAnimMesh())
+	{
+		// BoneOffet 행렬
+		const INT32 boneCount = static_cast<INT32>(_bones.size());
+		std::vector<Matrix> offsetVec(boneCount);
+		for (size_t b = 0; b < boneCount; b++)
+			offsetVec[b] = _bones[b].matOffset;
+
+		// OffsetMatrix StructuredBuffer 세팅
+		_offsetBuffer = std::make_shared<CStructuredBuffer>();
+		_offsetBuffer->Init(sizeof(Matrix), static_cast<UINT32>(offsetVec.size()), offsetVec.data());
+
+		const INT32 animCount = static_cast<INT32>(_animClips.size());
+		for (INT32 i = 0; i < animCount; i++)
+		{
+			AnimClipInfo& animClip = _animClips[i];
+
+			// 애니메이션 프레임 정보
+			std::vector<AnimFrameParams> frameParams;
+			frameParams.resize(_bones.size() * animClip.frameCount);
+
+			for (INT32 b = 0; b < boneCount; b++)
+			{
+				const INT32 keyFrameCount = static_cast<INT32>(animClip.keyFrames[b].size());
+				for (INT32 f = 0; f < keyFrameCount; f++)
+				{
+					INT32 idx = static_cast<INT32>(boneCount * f + b);
+
+					frameParams[idx] = AnimFrameParams
+					{
+						Vec4(animClip.keyFrames[b][f].scale),
+						animClip.keyFrames[b][f].rotation, // Quaternion
+						Vec4(animClip.keyFrames[b][f].translate)
+					};
+				}
+			}
+
+			// StructuredBuffer 세팅
+			_frameBuffer.push_back(std::make_shared<CStructuredBuffer>());
+			_frameBuffer.back()->Init(sizeof(AnimFrameParams), static_cast<UINT32>(frameParams.size()), frameParams.data());
+		}
+	}
+#pragma endregion
 }

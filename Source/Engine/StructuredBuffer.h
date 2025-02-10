@@ -6,7 +6,7 @@ public:
 	CStructuredBuffer();
 	~CStructuredBuffer();
 
-	void Init(UINT32 elementSize, UINT32 elementCount);
+	void Init(UINT32 elementSize, UINT32 elementCount, void* initialData = nullptr);
 
 	void PushGraphicsData(SRV_REGISTER reg);
 	void PushComputeSRVData(SRV_REGISTER reg);
@@ -18,6 +18,12 @@ public:
 	void SetResourceState(D3D12_RESOURCE_STATES state) { m_ResourceState = state; }
 	D3D12_RESOURCE_STATES GetResourceState() { return m_ResourceState; }
 	ComPtr<ID3D12Resource> GetBuffer() { return m_Buffer; }
+
+	UINT32	GetElementSize() { return m_ElementSize; }
+	UINT32	GetElementCount() { return m_ElementCount; }
+	UINT	GetBufferSize() { return m_ElementSize * m_ElementCount; }
+private:
+	void CopyInitialData(UINT64 bufferSize, void* InitialData);
 
 private:
 	ComPtr<ID3D12Resource>			m_Buffer;

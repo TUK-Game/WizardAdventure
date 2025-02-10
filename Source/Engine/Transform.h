@@ -29,7 +29,7 @@ public:
     void SetRelativeScale(float x, float y, float z)    { m_RelativeScale = Vec3(x, y, z); }
     void SetRelativeRotation(Vec3 rotation);
     void SetRelativeRotation(float x, float y, float z);
-    void SetWorldMatrix(const Matrix& matrix)           { m_matWorld = matrix; }
+    void SetWorldMatrix(const Matrix& matrix);
     void SetParentTransform(CTransform* parent) { m_ParentTransform = parent; }
 
 public:
@@ -45,7 +45,7 @@ private:
 
     // 부모가 있다면, 부모로부터 상대적인 값
     Vec3    m_RelativePos;  
-    Vec3    m_RelativeScale = Vec3(1.0f, 1.0f, 1.0f);
+    Vec3    m_RelativeScale = Vec3(1.0f, 1.0f, 1.0f); 
     Vec3    m_RelativeRotation;  
 
     // 오브젝트의 방향정보

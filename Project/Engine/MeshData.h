@@ -10,6 +10,7 @@ struct MeshRenderInfo
 {
 	CMesh*				mesh;
 	std::vector<CMaterial*>	materials;
+	Matrix				matrix;
 };
 
 class CMeshData

@@ -27,8 +27,8 @@ void FBXLoader::LoadFbx(const std::wstring& path)
 	Import(path);
 
 	// Animation	
-	//LoadBones(_scene->GetRootNode());
-	//LoadAnimationInfo();
+	LoadBones(_scene->GetRootNode());
+	LoadAnimationInfo();
 
 	// 로드된 데이터 파싱 (Mesh/Material/Skin)
 	ParseNode(_scene->GetRootNode());
@@ -90,7 +90,7 @@ void FBXLoader::ParseNode(FbxNode* node)
 		FbxSurfaceMaterial* surfaceMaterial = node->GetMaterial(i);
 		LoadMaterial(surfaceMaterial);
 	}
-
+	
 	// Tree 구조 재귀 호출
 	const INT32 childCount = node->GetChildCount();
 	for (INT32 i = 0; i < childCount; ++i)
@@ -101,20 +101,17 @@ void FBXLoader::LoadMesh(FbxMesh* mesh)
 {
 	_meshes.push_back(FbxMeshInfo());
 	FbxMeshInfo& meshInfo = _meshes.back();
-
-	meshInfo.name = s2ws(mesh->GetName());	
-	FbxAMatrix a = GetTransform(mesh->GetNode());
-
+	meshInfo.name = s2ws(mesh->GetNode()->GetName());
+	//
+	FbxAMatrix worldTransform = mesh->GetNode()->EvaluateGlobalTransform();
+	meshInfo.matrix = worldTransform;// *(mesh->GetNode()->EvaluateLocalTransform());
+	//
 	const INT32 vertexCount = mesh->GetControlPointsCount();
 	meshInfo.vertices.resize(vertexCount);
 	meshInfo.boneWeights.resize(vertexCount);
 
 	// Position
 	FbxVector4* controlPoints = mesh->GetControlPoints();
-	double px = 0;//a[3][0];
-	double py = 0;//a[3][1];
-	double pz = 0;//a[3][2];
-
 
 	for (INT32 i = 0; i < vertexCount; ++i)
 	{
@@ -124,9 +121,9 @@ void FBXLoader::LoadMesh(FbxMesh* mesh)
 				controlPoints[i].mData[j] = 0;
 		}
 
-		meshInfo.vertices[i].Pos.x = static_cast<float>(controlPoints[i].mData[0]) + px;
-		meshInfo.vertices[i].Pos.y = static_cast<float>(controlPoints[i].mData[2]) + py;
-		meshInfo.vertices[i].Pos.z = static_cast<float>(controlPoints[i].mData[1]) + pz;
+		meshInfo.vertices[i].Pos.x = static_cast<float>(controlPoints[i].mData[0]);
+		meshInfo.vertices[i].Pos.y = static_cast<float>(controlPoints[i].mData[2]);
+		meshInfo.vertices[i].Pos.z = static_cast<float>(controlPoints[i].mData[1]);
 
 		if (meshInfo.vertices[i].Pos.x > meshInfo.maxPos.x)
 			meshInfo.maxPos.x = meshInfo.vertices[i].Pos.x;
@@ -365,7 +362,7 @@ void FBXLoader::CreateMaterials()
 			CMaterial* material = new CMaterial;
 			std::wstring key = _meshes[i].materials[j].name;
 			material->SetName(key);
-			material->SetGraphicsShader(CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Default"));
+			material->SetGraphicsShader(CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred"));
 
 			{
 				std::wstring diffuseName = _meshes[i].materials[j].diffuseTexName.c_str();
@@ -568,6 +565,7 @@ void FBXLoader::LoadKeyframe(INT32 animIndex, FbxNode* node, FbxCluster* cluster
 	FbxLongLong startFrame = _animClips[animIndex]->startTime.GetFrameCount(timeMode);
 	FbxLongLong endFrame = _animClips[animIndex]->endTime.GetFrameCount(timeMode);
 
+	// 느림
 	for (FbxLongLong frame = startFrame; frame < endFrame; frame++)
 	{
 		FbxKeyFrameInfo keyFrameInfo = {};
@@ -610,4 +608,15 @@ FbxAMatrix FBXLoader::GetTransform(FbxNode* node)
 	//FbxAMatrix matrix = node->EvaluateGlobalTransform();
 
 	return geoTransform;
+}
+
+FbxAMatrix FBXLoader::GetLocalTransform(FbxNode* node)
+{
+	// Lcl Translation, Rotation, Scaling 추출
+	FbxVector4 lclTranslation = node->LclTranslation.Get();
+	FbxVector4 lclRotation = node->LclRotation.Get();
+	FbxVector4 lclScaling = node->LclScaling.Get();
+	FbxAMatrix lclTransform(lclTranslation, lclRotation, lclScaling);
+
+	return lclTransform;
 }

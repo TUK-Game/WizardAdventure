@@ -52,7 +52,7 @@ struct FbxMeshInfo
 	bool									hasAnimation;
 	Vec3 maxPos{};
 	Vec3 minPos{};
-	Matrix matrix;
+	FbxAMatrix matrix;
 };
 
 struct FbxKeyFrameInfo
@@ -119,6 +119,7 @@ private:
 
 	INT32 FindBoneIndex(std::string name);
 	FbxAMatrix GetTransform(FbxNode* node);
+	FbxAMatrix GetLocalTransform(FbxNode* node);
 
 	void FillBoneWeight(FbxMesh* mesh, FbxMeshInfo* meshInfo);
 

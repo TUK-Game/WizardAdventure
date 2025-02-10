@@ -8,6 +8,7 @@
 #include "Transform.h"
 #include "Script.h"
 #include "ParticleSystem.h"
+#include "Animator.h"
 
 CGameObject::CGameObject()
 	: m_arrComponent{}

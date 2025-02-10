@@ -2,6 +2,7 @@
 #define _DEFERRED_HLSL_
 
 #include "Params.hlsl"
+#include "Utils.hlsl"
 
 struct VS_IN
 {
@@ -9,7 +10,9 @@ struct VS_IN
     float2 uv : TEXCOORD;
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
-    
+    float4 weight : WEIGHT;
+    float4 indices : INDICES;
+
     row_major matrix Instance_matWorld : W;
     row_major matrix Instance_matWV : WV;
     row_major matrix Instance_matWVP : WVP;
@@ -32,6 +35,9 @@ VS_OUT VS_Main(VS_IN input)
 
     if (int_0 == 1)
     {
+        if (int_1 == 1)
+            Skinning(input.pos, input.normal, input.tangent, input.weight, input.indices);
+        
         output.pos = mul(float4(input.pos, 1.f), input.Instance_matWVP);
         output.uv = input.uv;
 
@@ -42,6 +48,9 @@ VS_OUT VS_Main(VS_IN input)
     }
     else
     {
+        if (int_1 == 1)
+            Skinning(input.pos, input.normal, input.tangent, input.weight, input.indices);
+        
         output.pos = mul(float4(input.pos, 1.f), matWVP);
         output.uv = input.uv;
 

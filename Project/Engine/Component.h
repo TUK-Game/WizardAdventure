@@ -6,6 +6,7 @@ class CTransform;
 class CMeshRenderer;
 class CCamera;
 class CLight;
+class CAnimator;
 
 
 class CComponent :
@@ -25,6 +26,7 @@ protected:
 	CTransform* GetTransform()			{ return m_Owner->GetTransform(); }
 	CMeshRenderer* GetMeshRenderer()	{ return m_Owner->GetMeshRenderer(); }
 	CCamera* GetCamera()				{ return m_Owner->GetCamera(); }
+	CAnimator* GetAnimator()			{ return m_Owner->GetAnimator(); }
 	CLight* GetLight()					{ return m_Owner->GetLight(); }
 
 public:

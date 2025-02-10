@@ -40,8 +40,8 @@ CParticleSystem::CParticleSystem(UINT32 maxParticle) : CComponent(EComponent_Typ
 
 CParticleSystem::~CParticleSystem()
 {
-	m_GraphicsMaterial->ReleaseRef();
-	m_ComputeMaterial->ReleaseRef();
+	//m_GraphicsMaterial->ReleaseRef();
+	//m_ComputeMaterial->ReleaseRef();
 }
 
 void CParticleSystem::SetTexture(CTexture* texture)

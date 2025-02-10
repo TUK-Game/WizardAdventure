@@ -72,6 +72,10 @@ int CInputManager::Init()
 void CInputManager::Update()
 {
 	// 게임 윈도우가 포커싱 중일 때
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.WantCaptureMouse)
+		return;
+
 	if (GetFocus() == CEngine::GetInst()->GetWindowInfo().hWnd)
 	{
 		for (size_t i = 0; i < m_vecKeyInfo.size(); ++i)

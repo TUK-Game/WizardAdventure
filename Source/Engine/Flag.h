@@ -44,6 +44,7 @@ enum class EComponent_Type
 	Camera,
 	Collider,
 	Light,
+	Animator,
 	
 	// Rendering Component
 	MeshRenderer,

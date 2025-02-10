@@ -34,7 +34,6 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "d3dcompiler")
 
-
 #ifndef _DEBUG
 #pragma comment(lib, "DirectxTex/DirectXTex.lib")
 #else
@@ -50,6 +49,10 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "FBX/lib/release/libxml2-md.lib")
 #pragma comment(lib, "FBX/lib/release/zlib-md.lib")
 #endif 
+
+#include <ImGui/imgui.h>
+#include <ImGui/imgui_impl_dx12.h>
+#include <ImGui/imgui_impl_win32.h>
 
 
 
@@ -164,6 +167,13 @@ struct LightParams
 	UINT32		lightCount;
 	Vec3		padding;
 	LightInfo	lights[50];
+};
+
+struct AnimFrameParams
+{
+	Vec4	scale;
+	Vec4	rotation; // Quaternion
+	Vec4	translation;
 };
 
 #include <shlobj.h>
