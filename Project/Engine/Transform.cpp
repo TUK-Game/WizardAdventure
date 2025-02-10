@@ -204,7 +204,7 @@ Vec3 CTransform::DecomposeRotationMatrix(const Matrix& rotation)
 
 	return ret;
 }
-}
+
 
 void CTransform::SetWorldMatrix(const Matrix& matrix)
 {

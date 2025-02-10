@@ -17,9 +17,9 @@ CRenderManager::~CRenderManager()
 
 void CRenderManager::Render()
 {
+	CImGuiManager::GetInst()->ReadyWindow();
+
 	ClearRTV();
-	// Target Clear
-	CDevice::GetInst()->RenderBegin();
 
 	PushLightData();
 
