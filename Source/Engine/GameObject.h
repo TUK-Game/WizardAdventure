@@ -33,10 +33,13 @@ public:
     CParticleSystem* GetParticleSystem()                { return (CParticleSystem*)GetComponent(EComponent_Type::ParticleSystem); }
     CAnimator* GetAnimator() { return (CAnimator*)GetComponent(EComponent_Type::Animator); }
     bool GetCheckFrustum() { return m_CheckFrustum; }
+    void SetStatic(bool flag) { m_Static = flag; }
+    bool IsStatic() { return m_Static; }
 
     void SetCheckFrustum(bool checkFrustum) { m_CheckFrustum = checkFrustum; }
     void SetParentTransform(CTransform* transform);
     void SetParent(CGameObject* parent) { m_Parent = parent; } 
+    void SetLayerIndex(int index) { m_LayerIndex = index; }
 
     void AddComponent(CComponent* component);
     void AddChild(CGameObject* obj);
@@ -62,5 +65,6 @@ private:
 
     int m_LayerIndex; // 소속 레이어 번호
     bool m_CheckFrustum = true; // 프러스텀 여부
+    bool m_Static = false; // 정적/동적 오브젝트 여부 
 };
 

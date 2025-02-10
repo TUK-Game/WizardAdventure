@@ -103,31 +103,31 @@ int CLevelManager::Init()
 		light->SetName(L"DirectionalLight");
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
-		//light->GetTransform()->SetRelativePosition(0.f, 1000.f, 0.f);
-		light->GetLight()->SetLightDirection(Vec3(1, 0, 0.f));
+		light->GetTransform()->SetRelativePosition(0.f, 1000.f, 100.f);
+		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
-		light->GetLight()->SetAmbient(Vec3(1.1f, 1.1f, 1.0f));
-		light->GetLight()->SetSpecular(Vec3(1.2f, 1.2f, 1.2f));
+		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
+		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.0f));
+		light->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
 		m_CurLevel->AddGameObject(light, 3, false);
 	}
 	// point light
 	{
-		CGameObject* light = new CGameObject;
-		light->AddComponent(new CTransform);
-		light->GetTransform()->SetRelativePosition(300.f, 0.f, 0.f);
-		light->AddComponent(new CLight);
-		light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetAmbient(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetSpecular(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetLightRange(500.f);
-		//light->GetLight()->SetLightAngle(XM_PI / 4);
-		CRenderManager::GetInst()->RegisterLight(light->GetLight());
+		//CGameObject* light = new CGameObject;
+		//light->AddComponent(new CTransform);
+		//light->GetTransform()->SetRelativePosition(300.f, 0.f, 0.f);
+		//light->AddComponent(new CLight);
+		//light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+		//light->GetLight()->SetDiffuse(Vec3(1.0f, 1.0f, 1.0f));
+		//light->GetLight()->SetAmbient(Vec3(1.0f, 1.0f, 1.0f));
+		//light->GetLight()->SetSpecular(Vec3(1.0f, 1.0f, 1.0f));
+		//light->GetLight()->SetLightRange(500.f);
+		////light->GetLight()->SetLightAngle(XM_PI / 4);
+		//CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
-		m_CurLevel->AddGameObject(light, 3, false);
+		//m_CurLevel->AddGameObject(light, 3, false);
 	}
 	// spot light
 	{
@@ -149,7 +149,46 @@ int CLevelManager::Init()
 	}
 
 	CGameObject* object = new CGameObject;
+	CGameObject* object2 = new CGameObject;
+	CGameObject* object3 = new CGameObject;
+	CGameObject* object4 = new CGameObject;
+
+	object4->SetName(L"Cube4");
+	object4->AddComponent(new CTransform);
+	object4->AddComponent(new CMeshRenderer);
+	object4->AddComponent(new CBoxCollider);
 	
+	object4->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	object4->GetTransform()->SetRelativeScale(10.f, 10.f, 10.f) ;
+	object4->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
+	object4->GetTransform()->SetRelativePosition(0.f, 100.f, 0.f);
+	object4->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+	object4->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Rock"));
+
+	object3->SetName(L"Cube3");
+	object3->AddComponent(new CTransform);
+	object3->AddComponent(new CMeshRenderer);
+	object3->AddComponent(new CBoxCollider);
+	object3->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	object3->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
+	object3->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
+	object3->GetTransform()->SetRelativePosition(500.f, 0.f, 0.f);
+	object3->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+	object3->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Ryo"));
+	object3->AddChild(object4);
+
+	object2->SetName(L"Cube2");
+	object2->AddComponent(new CTransform);
+	object2->AddComponent(new CMeshRenderer);
+	object2->AddComponent(new CBoxCollider);
+	object2->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	object2->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
+	object2->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
+	object2->GetTransform()->SetRelativePosition(-700.f, 0.f, 300.f);
+	object2->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+	object2->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Nigika"));
+	m_CurLevel->AddGameObject(object2, 3, false);
+
 	object->SetName(L"Cube");
 	object->AddComponent(new CTransform);
 	object->AddComponent(new CMeshRenderer);
@@ -225,7 +264,9 @@ int CLevelManager::Init()
 		else if (i < 5)
 			texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
 		else
-			texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"UAVTexture");
+			texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
+			//texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"UAVTexture");
+
 
 		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
 		material->SetTexture(0, texture);

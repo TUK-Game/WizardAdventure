@@ -33,6 +33,7 @@ cbuffer TRANSFORM_PARAMS : register(b1)
     row_major matrix matProjection;
     row_major matrix matWV;
     row_major matrix matWVP;
+    row_major matrix matViewInv;
 };
 
 cbuffer MATERIAL_PARAMS : register(b2)
@@ -57,6 +58,10 @@ cbuffer MATERIAL_PARAMS : register(b2)
     float4 vec4_1;
     float4 vec4_2;
     float4 vec4_3;
+    row_major matrix mat_0; 
+    row_major matrix mat_1; 
+    row_major matrix mat_2;
+    row_major matrix mat_3; 
 };
 
 Texture2D tex_0 : register(t0);

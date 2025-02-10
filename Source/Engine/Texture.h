@@ -22,6 +22,9 @@ public:
 	ComPtr<ID3D12DescriptorHeap> GetDSV() { return m_DsvHeap; }
 	ComPtr<ID3D12DescriptorHeap> GetUAV() { return m_UavHeap; }
 
+	float GetWidth() { return static_cast<float>(m_Desc.Width); }
+	float GetHeight() { return static_cast<float>(m_Desc.Height); }
+
 public:
 	int Init(const std::wstring& path, UINT textureType = RESOURCE_TEXTURE2D);
 
@@ -38,6 +41,7 @@ private:
 	UINT							m_TextureType = RESOURCE_TEXTURE2D;
 
 	ScratchImage			 		m_Image;
+	D3D12_RESOURCE_DESC				m_Desc;
 	ComPtr<ID3D12Resource>			m_Tex2D;
 
 	ComPtr<ID3D12DescriptorHeap>	m_SrvHeap;

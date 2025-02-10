@@ -48,13 +48,13 @@ int CTexture::Init(const std::wstring& path, UINT textureType)
 	const UINT64 bufferSize = ::GetRequiredIntermediateSize(m_Tex2D.Get(), 0, static_cast<UINT>(subResources.size()));
 
 	D3D12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
+	m_Desc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
 
 	ComPtr<ID3D12Resource> textureUploadHeap;
 	hr = DEVICE->CreateCommittedResource(
 		&heapProperty,
 		D3D12_HEAP_FLAG_NONE,
-		&desc,
+		&m_Desc,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(textureUploadHeap.GetAddressOf()));
@@ -109,8 +109,8 @@ int CTexture::Init(const std::wstring& path, UINT textureType)
 
 void CTexture::Create(DXGI_FORMAT format, UINT32 width, UINT32 height, const D3D12_HEAP_PROPERTIES& heapProperty, D3D12_HEAP_FLAGS heapFlags, D3D12_RESOURCE_FLAGS resFlags, Vec4 clearColor)
 {
-	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(format, width, height);
-	desc.Flags = resFlags;
+	m_Desc = CD3DX12_RESOURCE_DESC::Tex2D(format, width, height);
+	m_Desc.Flags = resFlags;
 
 	D3D12_CLEAR_VALUE optimizedClearValue = {};
 	D3D12_CLEAR_VALUE* pOptimizedClearValue = nullptr;
@@ -135,7 +135,7 @@ void CTexture::Create(DXGI_FORMAT format, UINT32 width, UINT32 height, const D3D
 	HRESULT hr = DEVICE->CreateCommittedResource(
 		&heapProperty,
 		heapFlags,
-		&desc,
+		&m_Desc,
 		resourceStates,
 		pOptimizedClearValue,
 		IID_PPV_ARGS(&m_Tex2D));
@@ -149,13 +149,13 @@ void CTexture::CreateFromResource(ComPtr<ID3D12Resource> tex2D)
 {
 	m_Tex2D = tex2D;
 
-	D3D12_RESOURCE_DESC desc = tex2D->GetDesc();
+	m_Desc = tex2D->GetDesc();
 
 	// 주요 조합
 	// - DSV 단독 (조합X)
 	// - SRV
 	// - RTV + SRV
-	if (desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)
+	if (m_Desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)
 	{
 		// DSV
 		D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
@@ -170,7 +170,7 @@ void CTexture::CreateFromResource(ComPtr<ID3D12Resource> tex2D)
 	}
 	else
 	{
-		if (desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET)
+		if (m_Desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET)
 		{
 			// RTV
 			D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
@@ -184,7 +184,7 @@ void CTexture::CreateFromResource(ComPtr<ID3D12Resource> tex2D)
 			DEVICE->CreateRenderTargetView(m_Tex2D.Get(), nullptr, rtvHeapBegin);
 		}
 
-		if (desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS)
+		if (m_Desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS)
 		{
 			// UAV
 			D3D12_DESCRIPTOR_HEAP_DESC uavHeapDesc = {};

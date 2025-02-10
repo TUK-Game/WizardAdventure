@@ -70,7 +70,7 @@ int CDevice::Init()
 
 void CDevice::RenderBegin()	
 {
-	m_GraphicsCmdQueue->RenderBegin(&m_Viewport, &m_ScissorRect);
+	m_GraphicsCmdQueue->RenderBegin();
 }
 
 void CDevice::RenderEnd()
@@ -111,6 +111,24 @@ void CDevice::CreateRenderTargetGroups()
 
 		m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)] = std::make_shared<CRenderTargetGroup>();
 		m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)]->Create(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN, rtVec, dsTexture);
+	}
+
+	// Shadow Group
+	{
+		std::vector<RenderTarget> rtVec(RENDER_TARGET_SHADOW_GROUP_MEMBER_COUNT);
+
+		rtVec[0].target = CAssetManager::GetInst()->CreateTexture(L"ShadowTarget",
+			DXGI_FORMAT_R32_FLOAT, 4096, 4096,
+			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+
+		CTexture* shadowDepthTexture = CAssetManager::GetInst()->CreateTexture(L"ShadowDepthStencil",
+			DXGI_FORMAT_D32_FLOAT, 4096, 4096,
+			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+
+		m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::SHADOW)] = std::make_shared<CRenderTargetGroup>();
+		m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::SHADOW)]->Create(RENDER_TARGET_GROUP_TYPE::SHADOW, rtVec, shadowDepthTexture);
 	}
 
 	// Deferred Group

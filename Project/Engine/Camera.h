@@ -18,7 +18,7 @@ public:
     float GetAspectRatio() const            { return m_AspectRatio; }
     float GetFar() const                    { return m_Far; }
     float GetFOV() const                    { return (m_FOV / XM_PI) * 180.f; }
-    Matrix GetProjMat() const { return m_matProjection; }
+    Matrix GetProjMat() const               { return m_matProjection; }
     Matrix GetViewMat() const               { return m_matView; }
 
     void SetProjType(EProjection_Type type) { m_ProjectionType = type; }
@@ -27,6 +27,10 @@ public:
     void SetFOV(float fov)                  { m_FOV = (fov / 180.f) * XM_PI; }
     void SetFar(float _far)                  { m_Far = _far; }
     void SetPriority(int priority);
+    void SetWidth(float width)              { m_Width = width; }
+    void SetHeight(float height)            { m_Height = height; }
+    void SetScale(float scale)              { m_Scale = scale; }
+    void SetNear(float value)               { m_Near = value; }
 
     void CheckLayer(UINT layerIndex)        { m_LayerCheck ^= (1 << layerIndex); }
     void CheckLayerAll()                    { m_LayerCheck = 0xffffffff; }
@@ -35,8 +39,10 @@ public:
 public:
 	virtual void FinalUpdate() override;
 	void Render();
-    void Render_Deferred();
-    void Render_Forward();
+    void RenderDeferred();
+    void RenderForward();
+    void RenderShadow();
+    void SortShadowObject();
 
 private:
     void SortObject();
@@ -49,8 +55,14 @@ private:
     EProjection_Type    m_ProjectionType;
     float               m_OrthoScaleX;  // 직교투영 가로길이
     float               m_AspectRatio;  // 종횡비
-    float               m_FOV;          // 시야각(FieldOfView)
-    float               m_Far;          // 최대 시야거리
+    float               m_Near = 1.f;
+    float               m_Far = 1000.f;
+    float               m_FOV = XM_PI / 4.f;
+    float               m_Scale = 1.f;
+    float               m_Width = 0.f;
+    float               m_Height = 0.f;
+
+
 
     Matrix              m_matView;
     Matrix              m_matProjection;
@@ -65,6 +77,7 @@ private:
     std::vector<CGameObject*>	m_vecDeferred;
     std::vector<CGameObject*>	m_vecForward;
     std::vector<CGameObject*>	m_vecParticle;
+    std::vector<CGameObject*>   m_vecShadow;
     
 
 public:

@@ -26,6 +26,7 @@ public:
 
 	void SetVec2(unsigned char index, Vec2 value) { m_Params.SetVec2(index, value); }
 	void SetVec4(unsigned char index, Vec4 value) { m_Params.SetVec4(index, value); }
+	void SetMatrix(unsigned char index, Matrix& value) { m_Params.SetMatrix(index, value); }
 
 	void GraphicsBinding();
 	void ComputeBinding();
