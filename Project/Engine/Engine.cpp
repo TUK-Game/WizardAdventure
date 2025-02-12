@@ -135,6 +135,7 @@ void CEngine::Progress()
     m_Timer->Update();
     m_DeltaTime = m_Timer->GetDeltaTime();
 
+    CAssetManager::GetInst()->Update();
     CInputManager::GetInst()->Update();
     CLevelManager::GetInst()->Progress();
     CInstancingManager::GetInst()->ClearBuffer();

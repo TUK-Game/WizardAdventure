@@ -24,6 +24,7 @@
 #include <FBX/fbxsdk.h>
 #include "d3dx12.h"
 #include "SimpleMath.h"
+#include "fmod.hpp"
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -33,6 +34,12 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "dxgi")
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "d3dcompiler")
+
+#ifndef _DEBUG
+#pragma comment(lib, "../bin/Engine/fmodL_vc.lib") 
+#else
+#pragma comment(lib, "../bin/Engine/fmod_vc.lib") 
+#endif
 
 #ifndef _DEBUG
 #pragma comment(lib, "DirectxTex/DirectXTex.lib")
@@ -210,3 +217,5 @@ static std::wstring GetLatestWinPixGpuCapturerPath_Cpp17()
 
 	return pixInstallationPath / newestVersionFound / L"WinPixGpuCapturer.dll";
 }
+
+

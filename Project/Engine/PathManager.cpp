@@ -24,7 +24,7 @@ void CPathManager::Init()
 
 	AddPath(HLSL_PATH, TEXT("Shaders"));
 	AddPath(TEXTURE_PATH, TEXT("Texture"));
-	//AddPath(SOUND_PATH, TEXT("Sound"));
+	AddPath(SOUND_PATH, TEXT("Sound"));
 	//AddPath(FONT_PATH, TEXT("Font"));
 }
 

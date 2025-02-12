@@ -138,6 +138,15 @@
     <Filter Include="01. Manager\12. ImGui">
       <UniqueIdentifier>{1d66cf96-8c2a-4390-b8d8-4866c1b54154}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Asset\05. Sound">
+      <UniqueIdentifier>{8a036813-c3f8-45a5-8a10-6cc11a75929f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Asset\05. Sound\01. FMOD">
+      <UniqueIdentifier>{81b7a1a1-0251-4fe3-8378-f5e4797ea76a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\13. Sound">
+      <UniqueIdentifier>{d4e67145-560a-4b39-be32-21ec5558a89a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -332,6 +341,36 @@
     <ClInclude Include="ImGuiManager.h">
       <Filter>01. Manager\12. ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>05. Asset\05. Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>01. Manager\13. Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.hpp">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_codec.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_common.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp_effects.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_errors.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_output.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -508,6 +547,12 @@
     <ClCompile Include="ImGuiManager.cpp">
       <Filter>01. Manager\12. ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>05. Asset\05. Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>01. Manager\13. Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -515,6 +560,15 @@
     </None>
     <None Include="default.hlsli">
       <Filter>HLSL</Filter>
+    </None>
+    <None Include="fmod.cs">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </None>
+    <None Include="fmod_dsp.cs">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </None>
+    <None Include="fmod_errors.cs">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

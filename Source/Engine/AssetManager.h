@@ -18,6 +18,7 @@ public:
 
 public:
 	int Init();
+	void Update();
 
 public:
 	void AddAsset(const std::wstring& key, CSharedPtr<CAsset> asset);
@@ -32,6 +33,21 @@ public:
 		D3D12_RESOURCE_FLAGS resFlags = D3D12_RESOURCE_FLAG_NONE, Vec4 clearColor = Vec4());
 
 	CTexture* CreateTextureFromResource(const std::wstring& name, ComPtr<ID3D12Resource> tex2D);
+
+public:	// ============================ Sound ================================
+	bool CreateSoundChannel(const std::string& name);
+	bool LoadSound(const std::string& groupName, const std::string& name, bool loop, const char* fileName, const std::wstring& pathName = SOUND_PATH);
+	bool SetVolume(int volume);
+	bool SetVolume(const std::string& groupName, int volume);
+	bool SoundPlay(const std::string& name);
+	bool SoundStop(const std::string& name);
+	bool SoundPause(const std::string& name);
+	bool SoundResume(const std::string& name);
+
+	FMOD::ChannelGroup* FindChannelGroup(const std::string& name);
+	class CSound* FindSound(const std::string& name);
+	void ReleaseSound(const std::string& name);
+
 private:
 	int LoadMesh();
 	int LoadTexture();
@@ -50,6 +66,8 @@ private:
 
 private:
 	std::array<std::unordered_map<std::wstring, CSharedPtr<CAsset>>, (int)EAsset_Type::END>	m_mapAsset;
+	class CSoundManager* m_soundManager;
+
 };
 
 template<typename T>

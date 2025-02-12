@@ -41,6 +41,10 @@ int CLevelManager::Init()
 	m_CurLevel->GetLayer(3)->SetName(L"Others");
 	m_CurLevel->GetLayer(4)->SetName(L"UI");
 
+	CAssetManager::GetInst()->LoadSound("BGM", "Play", false, "play.mp3");
+	CAssetManager::GetInst()->SetVolume("BGM", 30);
+	CAssetManager::GetInst()->SoundPlay("Play");
+
 #pragma region ComputeShader
 	{
 		// UAV 용 Texture 생성
