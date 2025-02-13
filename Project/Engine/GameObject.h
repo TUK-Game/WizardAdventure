@@ -10,6 +10,7 @@ class CLight;
 class CBaseCollider;
 class CParticleSystem;
 class CAnimator;
+class CRigidBody;
 
 class CGameObject :
     public CRef
@@ -26,12 +27,14 @@ public:
     CComponent* GetComponent(EComponent_Type type)      { return m_arrComponent[(int)type]; }
     CRenderComponent* GetRenderComponent()              { return m_RenderComponent; }
     CTransform* GetTransform()                          { return (CTransform*)GetComponent(EComponent_Type::Transform); }
-    CMeshRenderer* GetMeshRenderer() { return (CMeshRenderer*)GetComponent(EComponent_Type::MeshRenderer); }
+    CMeshRenderer* GetMeshRenderer()                    { return (CMeshRenderer*)GetComponent(EComponent_Type::MeshRenderer); }
     CBaseCollider* GetCollider()                        { return (CBaseCollider*)GetComponent(EComponent_Type::Collider); }
     CCamera* GetCamera()                                { return (CCamera*)GetComponent(EComponent_Type::Camera); }
     CLight* GetLight()                                  { return (CLight*)GetComponent(EComponent_Type::Light); }
     CParticleSystem* GetParticleSystem()                { return (CParticleSystem*)GetComponent(EComponent_Type::ParticleSystem); }
-    CAnimator* GetAnimator() { return (CAnimator*)GetComponent(EComponent_Type::Animator); }
+    CAnimator* GetAnimator()                            { return (CAnimator*)GetComponent(EComponent_Type::Animator); }
+    CRigidBody* GetRigidBody()                          { return (CRigidBody*)GetComponent(EComponent_Type::Rigidbody); }
+
     bool GetCheckFrustum() { return m_CheckFrustum; }
     void SetStatic(bool flag) { m_Static = flag; }
     bool IsStatic() { return m_Static; }

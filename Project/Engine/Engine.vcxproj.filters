@@ -147,6 +147,9 @@
     <Filter Include="01. Manager\13. Sound">
       <UniqueIdentifier>{d4e67145-560a-4b39-be32-21ec5558a89a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Component\08. RigidBody">
+      <UniqueIdentifier>{7d39d63e-e598-4f6b-9cea-fa579c72dd27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -371,6 +374,9 @@
     <ClInclude Include="fmod_output.h">
       <Filter>05. Asset\05. Sound\01. FMOD</Filter>
     </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>04. Component\08. RigidBody</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -552,6 +558,9 @@
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>01. Manager\13. Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>04. Component\08. RigidBody</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

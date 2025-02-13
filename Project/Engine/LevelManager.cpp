@@ -18,6 +18,7 @@
 #include "Device.h"
 #include "ComputeShader.h"
 #include "ParticleSystem.h"
+#include "RigidBody.h"
 #include "TestDragon.h"
 
 CLevelManager::CLevelManager()
@@ -197,12 +198,15 @@ int CLevelManager::Init()
 	object->AddComponent(new CTransform);
 	object->AddComponent(new CMeshRenderer);
 	object->AddComponent(new CBoxCollider);
+	object->AddComponent(new CRigidBody);
+	object->GetRigidBody()->SetGravity(true);
 	object->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
 	object->GetTransform()->SetRelativeScale(500.f, 500.f, 500.f);
 	object->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object->GetTransform()->SetRelativePosition(-300.f, 0.f, 300.f);
+	object->GetTransform()->SetRelativePosition(-300.f, 7000.f, 300.f);
 	object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+	
 	m_CurLevel->AddGameObject(object, 3, false);
 
 #pragma region INSTANCING

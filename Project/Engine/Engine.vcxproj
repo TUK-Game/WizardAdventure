@@ -221,6 +221,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="RenderTargetGroup.h" />
+    <ClInclude Include="RigidBody.h" />
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="Shader.h" />
@@ -311,6 +312,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="RenderTargetGroup.cpp" />
+    <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="Shader.cpp" />
