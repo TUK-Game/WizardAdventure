@@ -203,7 +203,7 @@ int CLevelManager::Init()
 	object->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
 	object->GetTransform()->SetRelativeScale(500.f, 500.f, 500.f);
 	object->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object->GetTransform()->SetRelativePosition(-300.f, 7000.f, 300.f);
+	object->GetTransform()->SetRelativePosition(-300.f, 600.f, 300.f);
 	object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
 	
@@ -211,7 +211,7 @@ int CLevelManager::Init()
 
 #pragma region INSTANCING
 	for (INT32 i = 0; i < 50; ++i)
-	{
+	{ 
 		CGameObject* obj = new CGameObject;
 		obj->AddComponent(new CTransform);
 		obj->AddComponent(new CMeshRenderer);
