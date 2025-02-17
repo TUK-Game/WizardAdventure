@@ -11,6 +11,9 @@ struct MeshRenderInfo
 	CMesh*				mesh;
 	std::vector<CMaterial*>	materials;
 	Matrix				matrix;
+	Vec4 translation;
+	Vec4 rotation;
+	Vec3 scale;
 };
 
 class CMeshData
@@ -22,6 +25,7 @@ public:
 
 public:
 	static CMeshData* LoadFromFBX(const std::wstring& path);
+	static CMeshData* LoadFromJHD(const std::wstring& path);
 
 	virtual void Load(const std::wstring& path);
 	virtual void Save(const std::wstring& path);

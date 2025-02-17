@@ -223,7 +223,7 @@ int CAssetManager::LoadMaterial()
 
 int CAssetManager::LoadMeshData()
 {
-	CMeshData* data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/floor.fbx");
+	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/walls.jhd");
 	AddAsset(L"Dragon", data);
 
 	/*data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/wolf.fbx");
@@ -349,6 +349,21 @@ CMeshData* CAssetManager::LoadFBX(const std::wstring& path)
 		return meshData;
 
 	meshData = CMeshData::LoadFromFBX(path);
+	meshData->SetName(key);
+	AddAsset(key, meshData);
+
+	return meshData;
+}
+
+CMeshData* CAssetManager::LoadJHD(const std::wstring& path)
+{
+	std::wstring key = path;
+
+	CMeshData* meshData = FindAsset<CMeshData>(key);
+	if (meshData)
+		return meshData;
+
+	meshData = CMeshData::LoadFromJHD(path);
 	meshData->SetName(key);
 	AddAsset(key, meshData);
 

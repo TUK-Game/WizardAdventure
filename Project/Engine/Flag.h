@@ -64,7 +64,7 @@ enum class EAsset_Type
 	GraphicShader,
 	ComputeShader,
 	FBX,
-
+	JHDMeshData,
 
 	END
 };

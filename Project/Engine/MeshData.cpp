@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "Animator.h"
+#include "JHDLoader.h"
 
 CMeshData::CMeshData()
 	: CAsset(EAsset_Type::FBX)
@@ -51,6 +52,45 @@ CMeshData* CMeshData::LoadFromFBX(const std::wstring& path)
 	return meshData;
 }
 
+CMeshData* CMeshData::LoadFromJHD(const std::wstring& path)
+{
+	CJHDLoader loader;
+	loader.LoadFile(ws2s(path).c_str());
+
+	CMeshData* meshData = new CMeshData;
+
+	for (INT32 i = 0; i < loader.GetMeshCount(); i++)
+	{
+		CMesh* mesh = NULL; //= CAssetManager::GetInst()->FindAsset<CMesh>(loader.GetMesh(i).name);
+		if (mesh == NULL)
+		{
+			mesh = CMesh::CreateFromJHD(&loader.GetMesh(i), loader);
+			//CAssetManager::GetInst()->AddAsset(mesh->GetName(), mesh);
+		}
+
+		// Material 찾아서 연동
+		std::vector<CMaterial*> materials;
+		for (size_t j = 0; j < loader.GetMesh(i).materials.size(); j++)
+		{
+			JHDMeshInfo n = (loader.GetMesh(i));
+			CMaterial* material = CAssetManager::GetInst()->FindAsset<CMaterial>(loader.GetMesh(i).materials[j].name);
+			materials.push_back(material);
+		}
+
+		MeshRenderInfo info = {};
+		info.mesh = mesh;
+		info.materials = materials;
+		info.matrix = GetMatrix(loader.GetMesh(i).matrix);
+		info.translation = loader.GetMesh(i).translate;
+		info.rotation = loader.GetMesh(i).rotation;
+		info.scale = loader.GetMesh(i).scale;
+
+		meshData->_meshRenders.push_back(info);
+	}
+	 
+	return meshData;
+}
+
 void CMeshData::Load(const std::wstring& _strFilePath)
 {
 	// TODO
@@ -66,12 +106,15 @@ std::vector<CGameObject*> CMeshData::Instantiate()
 	std::vector<CGameObject*> v;
 
 	for (MeshRenderInfo& info : _meshRenders)
-	{
+	{	
 		CGameObject* gameObject = new CGameObject;
 		gameObject->AddComponent(new CTransform);
 		gameObject->AddComponent(new CMeshRenderer);
 		gameObject->GetMeshRenderer()->SetMesh(info.mesh);
-		gameObject->GetTransform()->SetWorldMatrix(info.matrix);
+		/*gameObject->GetTransform()->SetWorldMatrix(info.matrix);
+		gameObject->GetTransform()->SetRelativePosition(info.translation.x, info.translation.y, info.translation.z);
+		gameObject->GetTransform()->SetRelativeRotation(info.rotation.x, info.rotation.y, info.rotation.z);
+		*/
 
 		for (UINT32 i = 0; i < info.materials.size(); i++)
 			gameObject->GetMeshRenderer()->SetMaterial(info.materials[i], i);

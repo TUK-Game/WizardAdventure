@@ -50,6 +50,7 @@ public:
 	void Render(std::shared_ptr<class CInstancingBuffer>& buffer, UINT32 idx = 0);
 
 	static CMesh* CreateFromFBX(const struct FbxMeshInfo* meshInfo, class FBXLoader& loader);
+	static CMesh* CreateFromJHD(const struct JHDMeshInfo* meshInfo, class CJHDLoader& loader);
 private:
 	int CreateVertexBuffer(const std::vector<Vertex>& vecVertex);
 	int CreateIndexBuffer(const std::vector<UINT>& buffer);

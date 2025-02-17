@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "GraphicShader.h"
 #include "ComputeShader.h"
+#include "JHDLoader.h"
 
 class CAssetManager
 	: public CSingleton<CAssetManager>
@@ -26,6 +27,7 @@ public:
 	CSharedPtr<T> FindAsset(const std::wstring& key);
 
 	class CMeshData* LoadFBX(const std::wstring& path);
+	class CMeshData* LoadJHD(const std::wstring& path);
 
 	CTexture* CreateTexture(const std::wstring& name, DXGI_FORMAT format, UINT32 width, UINT32 height,
 		const D3D12_HEAP_PROPERTIES& heapProperty, D3D12_HEAP_FLAGS heapFlags,
@@ -67,6 +69,8 @@ EAsset_Type CAssetManager::GetAssetType()
 		return EAsset_Type::ComputeShader;
 	else if constexpr (std::is_same_v<CMeshData, T>)
 		return EAsset_Type::FBX;
+	else if constexpr (std::is_same_v<JHDMeshInfo, T>)
+		return EAsset_Type::JHDMeshData;
 	return EAsset_Type::END;
 }
 

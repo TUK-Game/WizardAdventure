@@ -17,7 +17,7 @@ int CTexture::Init(const std::wstring& path, UINT textureType)
 	// 파일 확장자 얻기
 	std::wstring ext = std::filesystem::path(path).extension();
 
-	if (ext == L".dds" || ext == L".DDS")
+	if (ext == L".dds" || ext == L".DDS")	
 		::LoadFromDDSFile(path.c_str(), DDS_FLAGS_NONE, nullptr, m_Image);
 	else if (ext == L".tga" || ext == L".TGA")
 		::LoadFromTGAFile(path.c_str(), nullptr, m_Image);

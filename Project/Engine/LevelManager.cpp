@@ -103,8 +103,8 @@ int CLevelManager::Init()
 		light->SetName(L"DirectionalLight");
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
-		light->GetTransform()->SetRelativePosition(0.f, 1000.f, 100.f);
-		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
+		light->GetTransform()->SetRelativePosition(0.f, 500.f, 100.f);
+		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.5f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
 		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.0f));
@@ -228,6 +228,9 @@ int CLevelManager::Init()
 		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred");
 		o->GetMeshRenderer()->GetMaterial(0)->SetGraphicsShader(shader);
 		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+		Vec3 rot = o->GetTransform()->GetRelativeRotation();
+		rot.x += -90;
+		o->GetTransform()->SetRelativeRotation(rot);
 		//o->AddComponent(new CTestDragon);
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(false);

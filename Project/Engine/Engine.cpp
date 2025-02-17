@@ -89,7 +89,7 @@ void CEngine::ResizeWindow(int width, int height)
 {
     // 실제 해상도에 맞는 크기로 다시 계산
     RECT rc = { 0, 0, m_WindowInfo.Width, m_WindowInfo.Height };
-    AdjustWindowRect(&rc, WS_EX_OVERLAPPEDWINDOW, !!GetMenu(m_WindowInfo.hWnd));
+    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, !!GetMenu(m_WindowInfo.hWnd));
     SetWindowPos(m_WindowInfo.hWnd, nullptr, 0, 0, rc.right - rc.left, rc.bottom - rc.top, 0);
 
     // 화면 중앙으로 이동
@@ -115,7 +115,7 @@ int CEngine::CreateMainWindow(const WNDCLASSEXW& wcex)
 
     // ResizeWindow
     RECT rc = { 0, 0, m_WindowInfo.Width, m_WindowInfo.Height };
-    AdjustWindowRect(&rc, WS_EX_OVERLAPPEDWINDOW, !!GetMenu(m_WindowInfo.hWnd));
+    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, !!GetMenu(m_WindowInfo.hWnd));
     SetWindowPos(m_WindowInfo.hWnd, nullptr, 0, 0, rc.right - rc.left, rc.bottom - rc.top, 0);
 
     // 화면 중앙으로 이동

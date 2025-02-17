@@ -6,7 +6,7 @@
 #include "LevelManager.h"
 
 CCameraScript::CCameraScript()
-	: m_Speed(300.f)
+	: m_Speed(1000.f)
 {
 }
 
@@ -66,5 +66,9 @@ void CCameraScript::Move()
 		}
 	}
 
+	if (KEY_PUSH(EKey::Esc))
+	{
+		PostQuitMessage(0);
+	}
 }
 	

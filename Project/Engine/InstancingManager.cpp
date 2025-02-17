@@ -40,6 +40,12 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects)
 		else
 		{
 			const UINT64 instanceId = pair.first;
+			if (!vec[0]->GetMeshRenderer()->GetMaterial()->GetInt(0))
+			{
+				for (const auto& obj : vec)
+					obj->GetMeshRenderer()->Render();
+				continue;
+			}
 
 			for (CGameObject* gameObject : vec)
 			{

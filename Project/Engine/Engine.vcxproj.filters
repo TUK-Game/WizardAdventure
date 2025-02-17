@@ -332,6 +332,9 @@
     <ClInclude Include="ImGuiManager.h">
       <Filter>01. Manager\12. ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="JHDLoader.h">
+      <Filter>05. Asset</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -507,6 +510,9 @@
     </ClCompile>
     <ClCompile Include="ImGuiManager.cpp">
       <Filter>01. Manager\12. ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="JHDLoader.cpp">
+      <Filter>05. Asset</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

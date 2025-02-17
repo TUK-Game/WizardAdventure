@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "Device.h"
 #include "FBXLoader.h"
+#include "JHDLoader.h"
 #include "InstancingBuffer.h"
 #include "StructuredBuffer.h"
 
@@ -71,6 +72,34 @@ CMesh* CMesh::CreateFromFBX(const FbxMeshInfo* meshInfo, FBXLoader& loader)
 
 	if(meshInfo->hasAnimation)
 		mesh->CreateBonesAndAnimations(loader);
+
+
+	return mesh;
+}
+
+CMesh* CMesh::CreateFromJHD(const JHDMeshInfo* meshInfo, CJHDLoader& loader)
+{
+	CMesh* mesh = new CMesh;
+	mesh->CreateVertexBuffer(meshInfo->vertices);
+	//mesh->SetMeshSize(meshInfo->maxPos);
+	mesh->SetName(meshInfo->name);
+
+	for (const std::vector<UINT32>& buffer : meshInfo->indices)
+	{
+		if (buffer.empty())
+		{
+			// FBX 파일이 이상하다. IndexBuffer가 없으면 에러 나니까 임시 처리
+			std::vector<UINT32> defaultBuffer{ 0 };
+			mesh->CreateIndexBuffer(defaultBuffer);
+		}
+		else
+		{
+			mesh->CreateIndexBuffer(buffer);
+		}
+	}
+
+	//if (meshInfo->hasAnimation)
+	//	mesh->CreateBonesAndAnimations(loader);
 
 
 	return mesh;
