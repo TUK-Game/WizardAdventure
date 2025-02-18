@@ -16,6 +16,10 @@ CAssetManager::CAssetManager()
 
 CAssetManager::~CAssetManager()
 {
+	if (m_soundManager) {
+		delete m_soundManager;
+		m_soundManager = nullptr;
+	}
 }
 
 int CAssetManager::Init()

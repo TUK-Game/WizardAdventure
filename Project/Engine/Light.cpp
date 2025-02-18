@@ -17,7 +17,10 @@ CLight::CLight() : CComponent(EComponent_Type::Light)
 
 CLight::~CLight()
 {
-
+	if (m_ShadowCamera) {
+		delete m_ShadowCamera;
+		m_ShadowCamera = nullptr;
+	}
 }
 
 void CLight::FinalUpdate()
