@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "MeshData.h"
-#include "FBXLoader.h"
 #include "Mesh.h"
 #include "Material.h"
 #include "AssetManager.h"
@@ -20,40 +19,6 @@ CMeshData::CMeshData()
 
 CMeshData::~CMeshData()
 {
-}
-
-CMeshData* CMeshData::LoadFromFBX(const std::wstring& path)
-{
-	FBXLoader loader;
-	loader.LoadFbx(path);
-
-	CMeshData* meshData = new CMeshData;
-
-	for (INT32 i = 0; i < loader.GetMeshCount(); i++)
-	{
-		CMesh* mesh = CAssetManager::GetInst()->FindAsset<CMesh>(loader.GetMesh(i).name);
-		if (mesh == NULL)
-		{
-			mesh = CMesh::CreateFromFBX(&loader.GetMesh(i), loader);
-			CAssetManager::GetInst()->AddAsset(mesh->GetName(), mesh);
-		}
-
-		// Material 찾아서 연동
-		std::vector<CMaterial*> materials;
-		for (size_t j = 0; j < loader.GetMesh(i).materials.size(); j++)
-		{
-			CMaterial* material = CAssetManager::GetInst()->FindAsset<CMaterial>(loader.GetMesh(i).materials[j].name);
-			materials.push_back(material);
-		}
-
-		MeshRenderInfo info = {};
-		info.mesh = mesh;
-		info.materials = materials;
-		info.matrix = GetMatrix(loader.GetMesh(i).matrix);
-		meshData->_meshRenders.push_back(info);
-	}
-
-	return meshData;
 }
 
 CMeshData* CMeshData::LoadFromJHD(const std::wstring& path, const std::wstring& texturePath)
@@ -119,9 +84,9 @@ std::vector<CGameObject*> CMeshData::Instantiate()
 		gameObject->AddComponent(new CMeshRenderer);
 		info.mesh->SetMeshSize(Vec3(info.boundingBoxMax - info.boundingBoxMin));
 		gameObject->GetMeshRenderer()->SetMesh(info.mesh);
-		gameObject->AddComponent(new CBoxCollider);
+		/*gameObject->AddComponent(new CBoxCollider);
 		gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Wall"));
-		gameObject->GetCollider()->SetMaxMinPos(info.centerPos, info.boundingBoxMax, info.boundingBoxMin);
+		gameObject->GetCollider()->SetMaxMinPos(info.centerPos, info.boundingBoxMax, info.boundingBoxMin);*/
 
 		//gameObject->GetTransform()->SetWorldMatrix(info.matrix);
 		//gameObject->GetTransform()->SetRelativeRotation(info.rotation.x, info.rotation.y, info.rotation.z);

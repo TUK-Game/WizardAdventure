@@ -20,7 +20,7 @@
 #include "ParticleSystem.h"
 #include "TestDragon.h"
 #include <iostream>
-
+#include "Animator.h"
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)
 {
@@ -227,11 +227,13 @@ int CLevelManager::Init()
 
 		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		rot.x += -90;
+		//rot.x += -90;
 		o->GetTransform()->SetRelativeRotation(rot);
+		o->GetAnimator()->Play(0);
 		//o->AddComponent(new CTestDragon);
+
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		o->SetCheckFrustum(true);
+		o->SetCheckFrustum(false);
 		m_CurLevel->AddGameObject(o, 3, false);
 
 		/*Vec3 trans = o->GetCollider()->center;
@@ -343,10 +345,6 @@ CGameObject* CLevelManager::Pick(INT32 x, INT32 y)
 	rayDir = XMVector3TransformNormal(rayDir, viewMatrixInv);
 	rayDir.Normalize();
 
-
-	std::cout << "Ray Origin: " << rayOrigin.x << ", " << rayOrigin.y << ", " << rayOrigin.z << std::endl;
-	std::cout << "Ray Direction: " << rayDir.x << ", " << rayDir.y << ", " << rayDir.z << std::endl;
-
 	for (int j = 0; j < MAX_LAYER; ++j)
 	{
 		auto& gameObjects = GetCurrentLevel()->GetLayer(j)->GetObjects();
@@ -359,9 +357,6 @@ CGameObject* CLevelManager::Pick(INT32 x, INT32 y)
 			float distance = 0.f;
 			if (!gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance))
 				continue;
-
-			std::cout << gameObject->GetCollider()->center.x << " " << gameObject->GetCollider()->center.y << " " << gameObject->GetCollider()->center.z << " " << distance << '\n';
-
 
 			if (distance < minDistance)
 			{

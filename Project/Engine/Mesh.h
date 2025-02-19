@@ -54,18 +54,18 @@ public:
 private:
 	int CreateVertexBuffer(const std::vector<Vertex>& vecVertex);
 	int CreateIndexBuffer(const std::vector<UINT>& buffer);
-	void CreateBonesAndAnimations(class FBXLoader& loader);
+	void CreateBonesAndAnimations(class CJHDLoader& loader);
 
 public:
 	UINT32 GetSubsetCount() { return static_cast<UINT32>(m_VecIndexInfo.size()); }
 	void SetMeshSize(Vec3 size) { m_MeshSize = size; }
 	Vec3 GetMeshSize() { return m_MeshSize; }
 
-	const std::vector<BoneInfo>* GetBones() { return &_bones; }
-	UINT32						GetBoneCount() { return static_cast<UINT32>(_bones.size()); }
-	const std::vector<AnimClipInfo>* GetAnimClip() { return &_animClips; }
+	const std::vector<BoneInfo>* GetBones() { return &m_Bones; }
+	UINT32						GetBoneCount() { return static_cast<UINT32>(m_Bones.size()); }
+	const std::vector<AnimClipInfo>* GetAnimClip() { return &m_AnimClips; }
 
-	bool							IsAnimMesh() { return !_animClips.empty(); }
+	bool							IsAnimMesh() { return !m_AnimClips.empty(); }
 	std::shared_ptr<CStructuredBuffer>	GetBoneFrameDataBuffer(INT32 index = 0) { return _frameBuffer[index]; } // 전체 본 프레임 정보
 	std::shared_ptr<CStructuredBuffer>	GetBoneOffsetBuffer() { return  _offsetBuffer; }
 
@@ -82,8 +82,8 @@ private:
 	Vec3 m_MeshSize;
 
 	// Animation
-	std::vector<AnimClipInfo>			_animClips;
-	std::vector<BoneInfo>				_bones;
+	std::vector<AnimClipInfo>			m_AnimClips;
+	std::vector<BoneInfo>				m_Bones;
 
 	std::shared_ptr<CStructuredBuffer>	_offsetBuffer; // 각 뼈의 offset 행렬
 	std::vector<std::shared_ptr<CStructuredBuffer>> _frameBuffer; // 전체 본 프레임 정보

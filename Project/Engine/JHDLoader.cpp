@@ -171,6 +171,92 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 				file.read(reinterpret_cast<char*>(meshInfo->indices[j].data()), colCount * sizeof(UINT32)); // 데이터 읽기
 			}
 		}
+		else if (!strcmp(pstrToken, "BoneWeight:\n"))
+		{
+			size_t size;
+			size_t size2;
+			INT32 iNum;
+			double dNum;
+			file.read(reinterpret_cast<char*>(&size), sizeof(size_t));
+
+			meshInfo->boneWeights.resize(size);
+
+			for (int j = 0; j < size; ++j)
+			{
+				file.read(reinterpret_cast<char*>(&size2), sizeof(size_t));
+				meshInfo->boneWeights[j].boneWeights.resize(size2);
+				for (int k = 0; k < size2; ++k)
+				{
+					file.read(reinterpret_cast<char*>(&iNum), sizeof(INT32));
+					file.read(reinterpret_cast<char*>(&dNum), sizeof(double));
+					meshInfo->boneWeights[j].boneWeights[k].first = iNum;
+					meshInfo->boneWeights[j].boneWeights[k].first = dNum;
+				}
+			}
+		}
+		else if (!strcmp(pstrToken, "BoneInfo:\n"))
+		{
+			size_t size;
+			file.read(reinterpret_cast<char*>(&size), sizeof(size_t));
+			m_Bones.resize(size);
+			for (int j = 0; j < size; ++j)
+			{
+				INT32 iNum;
+				double dNum;
+				FbxAMatrix matrix;
+				char mName[100] = { '\0' };
+				file.read(reinterpret_cast<char*>(&length), sizeof(length));
+				file.read(mName, length);
+				file.read(reinterpret_cast<char*>(&iNum), sizeof(INT32));
+				file.read(reinterpret_cast<char*>(&matrix), sizeof(FbxAMatrix));
+
+				m_Bones[j] = std::make_shared<FbxBoneInfo>();
+				m_Bones[j]->boneName = s2ws(mName);
+				m_Bones[j]->parentIndex = iNum;
+				m_Bones[j]->matOffset = matrix;
+			}
+		}
+		else if (!strcmp(pstrToken, "AnimClipInfo:\n"))
+		{
+			size_t size;
+			file.read(reinterpret_cast<char*>(&size), sizeof(size_t));
+			m_AnimClips.resize(size);
+			for (int j = 0; j < size; ++j)
+			{	
+				m_AnimClips[j] = std::make_shared<FbxAnimClipInfo>();
+
+				size_t outSize, innerSize;
+				char mName[100] = { '\0' };
+				long long time;
+				FbxTime::EMode mode;
+				file.read(reinterpret_cast<char*>(&length), sizeof(length));
+				file.read(mName, length);
+				file.read(reinterpret_cast<char*>(&time), sizeof(long long));
+				m_AnimClips[j]->startTime = time;
+
+				file.read(reinterpret_cast<char*>(&time), sizeof(long long));
+				m_AnimClips[j]->endTime = time;
+
+				file.read(reinterpret_cast<char*>(&mode), sizeof(mode));
+				file.read(reinterpret_cast<char*>(&outSize), sizeof(size_t));
+
+				m_AnimClips[j]->name = s2ws(mName);
+				m_AnimClips[j]->mode = mode;
+				m_AnimClips[j]->keyFrames.resize(outSize);
+				for (int k = 0; k < outSize; ++k)
+				{
+					file.read(reinterpret_cast<char*>(&innerSize), sizeof(size_t));
+					m_AnimClips[j]->keyFrames[k].resize(innerSize);
+					for (int m = 0; m < innerSize; ++m)
+					{
+						FbxKeyFrameInfo in;
+						file.read(reinterpret_cast<char*>(&in), sizeof(FbxKeyFrameInfo));
+						m_AnimClips[j]->keyFrames[k][m].matTransform = in.matTransform;
+						m_AnimClips[j]->keyFrames[k][m].time = in.time;
+					}
+				}
+			}
+		}
 	}
 	m_Meshes.pop_back();
 	file.close();

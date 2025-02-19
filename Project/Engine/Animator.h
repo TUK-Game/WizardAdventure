@@ -13,11 +13,11 @@ public:
 	virtual ~CAnimator();
 
 public:
-	void SetBones(const std::vector<BoneInfo>* bones) { _bones = bones; }
+	void SetBones(const std::vector<BoneInfo>* bones) { m_Bones = bones; }
 	void SetAnimClip(const std::vector<AnimClipInfo>* animClips);
 	void PushData();
 
-	INT32 GetAnimCount() { return static_cast<UINT32>(_animClips->size()); }
+	INT32 GetAnimCount() { return static_cast<UINT32>(m_AnimClips->size()); }
 	INT32 GetCurrentClipIndex() { return _clipIndex; }
 	void Play(UINT32 idx);
 
@@ -28,8 +28,8 @@ public:
 	virtual CAnimator* Clone() override { return new CAnimator(*this); }
 
 private:
-	const std::vector<BoneInfo>* _bones;
-	const std::vector<AnimClipInfo>* _animClips;
+	const std::vector<BoneInfo>* m_Bones;
+	const std::vector<AnimClipInfo>* m_AnimClips;
 
 	float							_updateTime = 0.f;
 	INT32							_clipIndex = 0;

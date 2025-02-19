@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Mesh.h"
 #include "Device.h"
-#include "FBXLoader.h"
 #include "JHDLoader.h"
 #include "InstancingBuffer.h"
 #include "StructuredBuffer.h"
@@ -51,30 +50,31 @@ void CMesh::Render(std::shared_ptr<CInstancingBuffer>& buffer, UINT32 idx)
 
 CMesh* CMesh::CreateFromFBX(const FbxMeshInfo* meshInfo, FBXLoader& loader)
 {
-	CMesh* mesh = new CMesh;
-	mesh->CreateVertexBuffer(meshInfo->vertices);
-	mesh->SetMeshSize(meshInfo->maxPos);
-	mesh->SetName(meshInfo->name);
+	//CMesh* mesh = new CMesh;
+	//mesh->CreateVertexBuffer(meshInfo->vertices);
+	//mesh->SetMeshSize(meshInfo->maxPos);
+	//mesh->SetName(meshInfo->name);
 
-	for (const std::vector<UINT32>& buffer : meshInfo->indices)
-	{
-		if (buffer.empty())
-		{
-			// FBX 파일이 이상하다. IndexBuffer가 없으면 에러 나니까 임시 처리
-			std::vector<UINT32> defaultBuffer{ 0 };
-			mesh->CreateIndexBuffer(defaultBuffer);
-		}
-		else
-		{
-			mesh->CreateIndexBuffer(buffer);
-		}
-	}
+	//for (const std::vector<UINT32>& buffer : meshInfo->indices)
+	//{
+	//	if (buffer.empty())
+	//	{
+	//		// FBX 파일이 이상하다. IndexBuffer가 없으면 에러 나니까 임시 처리
+	//		std::vector<UINT32> defaultBuffer{ 0 };
+	//		mesh->CreateIndexBuffer(defaultBuffer);
+	//	}
+	//	else
+	//	{
+	//		mesh->CreateIndexBuffer(buffer);
+	//	}
+	//}
 
-	if(meshInfo->hasAnimation)
-		mesh->CreateBonesAndAnimations(loader);
+	//if(meshInfo->hasAnimation)
+	//	mesh->CreateBonesAndAnimations(loader);
 
 
-	return mesh;
+	//return mesh;
+	return NULL;
 }
 
 CMesh* CMesh::CreateFromJHD(const JHDMeshInfo* meshInfo, CJHDLoader& loader)
@@ -98,8 +98,8 @@ CMesh* CMesh::CreateFromJHD(const JHDMeshInfo* meshInfo, CJHDLoader& loader)
 		}
 	}
 
-	//if (meshInfo->hasAnimation)
-	//	mesh->CreateBonesAndAnimations(loader);
+	if (meshInfo->hasAnimation)
+		mesh->CreateBonesAndAnimations(loader);
 
 
 	return mesh;
@@ -180,7 +180,7 @@ int CMesh::CreateIndexBuffer(const std::vector<UINT>& buffer)
 	return S_OK;
 }
 
-void CMesh::CreateBonesAndAnimations(FBXLoader& loader)
+void CMesh::CreateBonesAndAnimations(CJHDLoader& loader)
 {
 #pragma region AnimClip
 	UINT32 frameCount = 0;
@@ -227,7 +227,7 @@ void CMesh::CreateBonesAndAnimations(FBXLoader& loader)
 			}
 		}
 
-		_animClips.push_back(info);
+		m_AnimClips.push_back(info);
 	}
 #pragma endregion
 
@@ -239,7 +239,7 @@ void CMesh::CreateBonesAndAnimations(FBXLoader& loader)
 		boneInfo.parentIdx = bone->parentIndex;
 		boneInfo.matOffset = GetMatrix(bone->matOffset);
 		boneInfo.boneName = bone->boneName;
-		_bones.push_back(boneInfo);
+		m_Bones.push_back(boneInfo);
 	}
 #pragma endregion
 
@@ -247,23 +247,23 @@ void CMesh::CreateBonesAndAnimations(FBXLoader& loader)
 	if (IsAnimMesh())
 	{
 		// BoneOffet 행렬
-		const INT32 boneCount = static_cast<INT32>(_bones.size());
+		const INT32 boneCount = static_cast<INT32>(m_Bones.size());
 		std::vector<Matrix> offsetVec(boneCount);
 		for (size_t b = 0; b < boneCount; b++)
-			offsetVec[b] = _bones[b].matOffset;
+			offsetVec[b] = m_Bones[b].matOffset;
 
 		// OffsetMatrix StructuredBuffer 세팅
 		_offsetBuffer = std::make_shared<CStructuredBuffer>();
 		_offsetBuffer->Init(sizeof(Matrix), static_cast<UINT32>(offsetVec.size()), offsetVec.data());
 
-		const INT32 animCount = static_cast<INT32>(_animClips.size());
+		const INT32 animCount = static_cast<INT32>(m_AnimClips.size());
 		for (INT32 i = 0; i < animCount; i++)
 		{
-			AnimClipInfo& animClip = _animClips[i];
+			AnimClipInfo& animClip = m_AnimClips[i];
 
 			// 애니메이션 프레임 정보
 			std::vector<AnimFrameParams> frameParams;
-			frameParams.resize(_bones.size() * animClip.frameCount);
+			frameParams.resize(m_Bones.size() * animClip.frameCount);
 
 			for (INT32 b = 0; b < boneCount; b++)
 			{

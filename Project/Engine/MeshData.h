@@ -27,7 +27,6 @@ public:
 	virtual ~CMeshData();
 
 public:
-	static CMeshData* LoadFromFBX(const std::wstring& path);
 	static CMeshData* LoadFromJHD(const std::wstring& path, const std::wstring& texturePath);
 
 	virtual void Load(const std::wstring& path);

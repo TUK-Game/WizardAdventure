@@ -26,7 +26,6 @@ public:
 	template<typename T>
 	CSharedPtr<T> FindAsset(const std::wstring& key);
 
-	class CMeshData* LoadFBX(const std::wstring& path);
 	class CMeshData* LoadJHD(const std::wstring& path, const std::wstring& texturePath = L"");
 
 	CTexture* CreateTexture(const std::wstring& name, DXGI_FORMAT format, UINT32 width, UINT32 height,
