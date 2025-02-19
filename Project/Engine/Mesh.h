@@ -49,7 +49,6 @@ public:
 	void Render(UINT32 instanceCount = 1, UINT32 idx = 0);
 	void Render(std::shared_ptr<class CInstancingBuffer>& buffer, UINT32 idx = 0);
 
-	static CMesh* CreateFromFBX(const struct FbxMeshInfo* meshInfo, class FBXLoader& loader);
 	static CMesh* CreateFromJHD(const struct JHDMeshInfo* meshInfo, class CJHDLoader& loader);
 private:
 	int CreateVertexBuffer(const std::vector<Vertex>& vecVertex);
@@ -66,8 +65,8 @@ public:
 	const std::vector<AnimClipInfo>* GetAnimClip() { return &m_AnimClips; }
 
 	bool							IsAnimMesh() { return !m_AnimClips.empty(); }
-	std::shared_ptr<CStructuredBuffer>	GetBoneFrameDataBuffer(INT32 index = 0) { return _frameBuffer[index]; } // 전체 본 프레임 정보
-	std::shared_ptr<CStructuredBuffer>	GetBoneOffsetBuffer() { return  _offsetBuffer; }
+	std::shared_ptr<CStructuredBuffer>	GetBoneFrameDataBuffer(INT32 index = 0) { return m_FrameBuffer[index]; } // 전체 본 프레임 정보
+	std::shared_ptr<CStructuredBuffer>	GetBoneOffsetBuffer() { return  m_OffsetBuffer; }
 
 public:
 	virtual CMesh* Clone() override { return nullptr; }
@@ -85,7 +84,7 @@ private:
 	std::vector<AnimClipInfo>			m_AnimClips;
 	std::vector<BoneInfo>				m_Bones;
 
-	std::shared_ptr<CStructuredBuffer>	_offsetBuffer; // 각 뼈의 offset 행렬
-	std::vector<std::shared_ptr<CStructuredBuffer>> _frameBuffer; // 전체 본 프레임 정보
+	std::shared_ptr<CStructuredBuffer>	m_OffsetBuffer; // 각 뼈의 offset 행렬
+	std::vector<std::shared_ptr<CStructuredBuffer>> m_FrameBuffer; // 전체 본 프레임 정보
 };
 

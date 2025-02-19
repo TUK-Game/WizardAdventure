@@ -227,10 +227,9 @@ int CLevelManager::Init()
 
 		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		//rot.x += -90;
+		rot.x += -90;
 		o->GetTransform()->SetRelativeRotation(rot);
-		o->GetAnimator()->Play(0);
-		//o->AddComponent(new CTestDragon);
+		o->AddComponent(new CTestDragon);
 
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(false);

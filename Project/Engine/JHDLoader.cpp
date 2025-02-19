@@ -124,24 +124,33 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 				meshInfo->vertices[i].UV = Vec2(num[0], num[1]);
 			}
 		}
+		else if (!strcmp(pstrToken, "Weights:\n"))
+		{
+			for (int i = 0; i < meshInfo->vertices.size(); ++i)
+			{
+				float num[4];
+				file.read(reinterpret_cast<char*>(&num), sizeof(num));
+				if (bCopy)
+					continue;
+				meshInfo->vertices[i].weights = Vec4(num[0], num[1], num[2], num[3]);
+			}
+		}
+		else if (!strcmp(pstrToken, "AnimIndices:\n"))
+		{
+			for (int i = 0; i < meshInfo->vertices.size(); ++i)
+			{
+				float num[4];
+				file.read(reinterpret_cast<char*>(&num), sizeof(num));
+				if (bCopy)
+					continue;
+				meshInfo->vertices[i].indices = Vec4(num[0], num[1], num[2], num[3]);
+			}
+		}
 		else if (!strcmp(pstrToken, "Transform:\n"))
 		{
 			FbxAMatrix num;
 			file.read(reinterpret_cast<char*>(&num), sizeof(num));
 			meshInfo->matrix = num;
-			meshInfo->scale = Vector3(num.GetS().mData[0], num.GetS().mData[1], num.GetS().mData[2]);
-		}
-		else if (!strcmp(pstrToken, "Translate:\n"))
-		{
-			Vec4 num;
-			file.read(reinterpret_cast<char*>(&num), sizeof(num));
-			meshInfo->translate = num;
-		}
-		else if (!strcmp(pstrToken, "Rotation:\n"))
-		{
-			Vec4 num;
-			file.read(reinterpret_cast<char*>(&num), sizeof(num));
-			meshInfo->rotation = num;
 		}
 		else if (!strcmp(pstrToken, "BoundingBox:\n"))
 		{
@@ -169,29 +178,6 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 				file.read(reinterpret_cast<char*>(&colCount), sizeof(uint32_t)); // 열 크기 읽기
 				meshInfo->indices[j].resize(colCount);
 				file.read(reinterpret_cast<char*>(meshInfo->indices[j].data()), colCount * sizeof(UINT32)); // 데이터 읽기
-			}
-		}
-		else if (!strcmp(pstrToken, "BoneWeight:\n"))
-		{
-			size_t size;
-			size_t size2;
-			INT32 iNum;
-			double dNum;
-			file.read(reinterpret_cast<char*>(&size), sizeof(size_t));
-
-			meshInfo->boneWeights.resize(size);
-
-			for (int j = 0; j < size; ++j)
-			{
-				file.read(reinterpret_cast<char*>(&size2), sizeof(size_t));
-				meshInfo->boneWeights[j].boneWeights.resize(size2);
-				for (int k = 0; k < size2; ++k)
-				{
-					file.read(reinterpret_cast<char*>(&iNum), sizeof(INT32));
-					file.read(reinterpret_cast<char*>(&dNum), sizeof(double));
-					meshInfo->boneWeights[j].boneWeights[k].first = iNum;
-					meshInfo->boneWeights[j].boneWeights[k].first = dNum;
-				}
 			}
 		}
 		else if (!strcmp(pstrToken, "BoneInfo:\n"))

@@ -51,7 +51,7 @@ void CAnimator::PushData()
 	mesh->GetBoneOffsetBuffer()->PushComputeSRVData(SRV_REGISTER::t9);
 
 	_boneFinalMatrix->PushComputeUAVData(UAV_REGISTER::u0);
-
+	
 	_computeMaterial->SetInt(0, boneCount);
 	_computeMaterial->SetInt(1, _frame);
 	_computeMaterial->SetInt(2, _nextFrame);

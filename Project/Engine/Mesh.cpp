@@ -48,35 +48,6 @@ void CMesh::Render(std::shared_ptr<CInstancingBuffer>& buffer, UINT32 idx)
 	GRAPHICS_CMD_LIST->DrawIndexedInstanced(m_VecIndexInfo[idx].count, buffer->GetCount(), 0, 0, 0);
 }
 
-CMesh* CMesh::CreateFromFBX(const FbxMeshInfo* meshInfo, FBXLoader& loader)
-{
-	//CMesh* mesh = new CMesh;
-	//mesh->CreateVertexBuffer(meshInfo->vertices);
-	//mesh->SetMeshSize(meshInfo->maxPos);
-	//mesh->SetName(meshInfo->name);
-
-	//for (const std::vector<UINT32>& buffer : meshInfo->indices)
-	//{
-	//	if (buffer.empty())
-	//	{
-	//		// FBX 파일이 이상하다. IndexBuffer가 없으면 에러 나니까 임시 처리
-	//		std::vector<UINT32> defaultBuffer{ 0 };
-	//		mesh->CreateIndexBuffer(defaultBuffer);
-	//	}
-	//	else
-	//	{
-	//		mesh->CreateIndexBuffer(buffer);
-	//	}
-	//}
-
-	//if(meshInfo->hasAnimation)
-	//	mesh->CreateBonesAndAnimations(loader);
-
-
-	//return mesh;
-	return NULL;
-}
-
 CMesh* CMesh::CreateFromJHD(const JHDMeshInfo* meshInfo, CJHDLoader& loader)
 {
 	CMesh* mesh = new CMesh;
@@ -253,8 +224,8 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader)
 			offsetVec[b] = m_Bones[b].matOffset;
 
 		// OffsetMatrix StructuredBuffer 세팅
-		_offsetBuffer = std::make_shared<CStructuredBuffer>();
-		_offsetBuffer->Init(sizeof(Matrix), static_cast<UINT32>(offsetVec.size()), offsetVec.data());
+		m_OffsetBuffer = std::make_shared<CStructuredBuffer>();
+		m_OffsetBuffer->Init(sizeof(Matrix), static_cast<UINT32>(offsetVec.size()), offsetVec.data());
 
 		const INT32 animCount = static_cast<INT32>(m_AnimClips.size());
 		for (INT32 i = 0; i < animCount; i++)
@@ -282,8 +253,8 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader)
 			}
 
 			// StructuredBuffer 세팅
-			_frameBuffer.push_back(std::make_shared<CStructuredBuffer>());
-			_frameBuffer.back()->Init(sizeof(AnimFrameParams), static_cast<UINT32>(frameParams.size()), frameParams.data());
+			m_FrameBuffer.push_back(std::make_shared<CStructuredBuffer>());
+			m_FrameBuffer.back()->Init(sizeof(AnimFrameParams), static_cast<UINT32>(frameParams.size()), frameParams.data());
 		}
 	}
 #pragma endregion

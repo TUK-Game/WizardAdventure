@@ -224,7 +224,7 @@ int CAssetManager::LoadMaterial()
 int CAssetManager::LoadMeshData()
 {
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/walls.jhd", L"map");
-	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/Slime.jhd");
+	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/slime.jhd");
 	AddAsset(L"Dragon", data);
 
 	/*data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/wolf.fbx");
