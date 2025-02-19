@@ -51,7 +51,7 @@ void FBXLoader::Import(const std::wstring& path)
 	_scene = FbxScene::Create(_manager, "");
 
 	// 나중에 Texture 경로 계산할 때 쓸 것
-	_resourceDirectory = std::filesystem::path(path).parent_path().wstring() + L"\\" + std::filesystem::path(path).filename().stem().wstring() + L".fbm";
+	m_ResourceDirectory = std::filesystem::path(path).parent_path().wstring() + L"\\" + std::filesystem::path(path).filename().stem().wstring() + L".fbm";
 
 	_importer = FbxImporter::Create(_manager, "");
 
@@ -315,7 +315,7 @@ void FBXLoader::CreateTextures()
 			{
 				std::wstring relativePath = _meshes[i].materials[j].diffuseTexName.c_str();
 				std::wstring filename = std::filesystem::path(relativePath).filename();
-				std::wstring fullPath = _resourceDirectory + L"\\" + filename;
+				std::wstring fullPath = m_ResourceDirectory + L"\\" + filename;
 				if (filename.empty() == false)
 				{
 					CTexture* texture = new CTexture();
@@ -328,7 +328,7 @@ void FBXLoader::CreateTextures()
 			{
 				std::wstring relativePath = _meshes[i].materials[j].normalTexName.c_str();
 				std::wstring filename = std::filesystem::path(relativePath).filename();
-				std::wstring fullPath = _resourceDirectory + L"\\" + filename;
+				std::wstring fullPath = m_ResourceDirectory + L"\\" + filename;
 				if (filename.empty() == false)
 				{
 					CTexture* texture = new CTexture();
@@ -341,7 +341,7 @@ void FBXLoader::CreateTextures()
 			{
 				std::wstring relativePath = _meshes[i].materials[j].specularTexName.c_str();
 				std::wstring filename = std::filesystem::path(relativePath).filename();
-				std::wstring fullPath = _resourceDirectory + L"\\" + filename;
+				std::wstring fullPath = m_ResourceDirectory + L"\\" + filename;
 				if (filename.empty() == false)
 				{
 					CTexture* texture = new CTexture();

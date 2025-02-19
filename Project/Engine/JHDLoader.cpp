@@ -6,9 +6,12 @@
 #include "Texture.h"
 #include "AssetManager.h"
 
-void CJHDLoader::LoadFile(const char* filename)
+void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilename)
 {
-	_resourceDirectory = std::filesystem::path(filename).parent_path().wstring() + L"\\" + std::filesystem::path(filename).filename().stem().wstring() + L".fbm";
+	if (textureFilename.empty())
+		m_ResourceDirectory = std::filesystem::path(filename).parent_path().wstring() + L"\\" + std::filesystem::path(filename).filename().stem().wstring() + L".fbm";
+	else
+		m_ResourceDirectory = std::filesystem::path(filename).parent_path().wstring() + L"\\" + textureFilename + L".fbm";
 
 	std::ifstream file(filename, std::ios::binary);
 	if (!file) {
@@ -140,6 +143,18 @@ void CJHDLoader::LoadFile(const char* filename)
 			file.read(reinterpret_cast<char*>(&num), sizeof(num));
 			meshInfo->rotation = num;
 		}
+		else if (!strcmp(pstrToken, "BoundingBox:\n"))
+		{
+			Vec3 num;
+			Vec3 num2;
+			Vec4 num3;
+			file.read(reinterpret_cast<char*>(&num3), sizeof(num3));
+			file.read(reinterpret_cast<char*>(&num), sizeof(num));
+			file.read(reinterpret_cast<char*>(&num2), sizeof(num2));
+			meshInfo->centerPos = num3;
+			meshInfo->BoundingBoxMax = num;
+			meshInfo->BoundingBoxMin = num2;
+		}
 		else if (!strcmp(pstrToken, "Index Count: "))
 		{
 			size_t num;
@@ -226,7 +241,7 @@ void CJHDLoader::CreateTextures()
 			{
 				std::wstring relativePath = m_Meshes[i].materials[j].diffuseTexName.c_str();
 				std::wstring filename = std::filesystem::path(relativePath).filename();
-				std::wstring fullPath = _resourceDirectory + L"\\" + filename;
+				std::wstring fullPath = m_ResourceDirectory + L"\\" + filename;
 				if (filename.empty() == false)
 				{
 					if (!CAssetManager::GetInst()->FindAsset<CTexture>(filename))
@@ -242,7 +257,7 @@ void CJHDLoader::CreateTextures()
 			{
 				std::wstring relativePath = m_Meshes[i].materials[j].normalTexName.c_str();
 				std::wstring filename = std::filesystem::path(relativePath).filename();
-				std::wstring fullPath = _resourceDirectory + L"\\" + filename;
+				std::wstring fullPath = m_ResourceDirectory + L"\\" + filename;
 				if (filename.empty() == false)
 				{
 					if (!CAssetManager::GetInst()->FindAsset<CTexture>(filename))
@@ -258,7 +273,7 @@ void CJHDLoader::CreateTextures()
 			{
 				std::wstring relativePath = m_Meshes[i].materials[j].specularTexName.c_str();
 				std::wstring filename = std::filesystem::path(relativePath).filename();
-				std::wstring fullPath = _resourceDirectory + L"\\" + filename;
+				std::wstring fullPath = m_ResourceDirectory + L"\\" + filename;
 				if (filename.empty() == false)
 				{
 					if (!CAssetManager::GetInst()->FindAsset<CTexture>(filename))

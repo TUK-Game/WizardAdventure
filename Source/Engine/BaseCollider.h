@@ -23,6 +23,7 @@ public:
 
 public:
 	virtual bool Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance) = 0;
+	virtual void SetMaxMinPos(Vec4 centerPos, Vec3 maxPos, Vec3 minPos) {}
 	virtual bool IsFrustum(class CFrustum frustum) = 0;
 	virtual bool Collision(CBaseCollider* dest) { return false; }
 
@@ -33,6 +34,7 @@ public:
 	void ClearCollisionList();
 	void CallCollisionBegin(CBaseCollider* dest);
 	void CallCollisionEnd(CBaseCollider* dest);
+	Vec3 center;
 
 protected:
 	ECollider_Type m_ColliderType = {};

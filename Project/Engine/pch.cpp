@@ -34,9 +34,9 @@ Matrix GetMatrix(const FbxAMatrix& matrix)
 	{
 		for (INT32 x = 0; x < 4; ++x)
 		{
-			if(y == 2 || x == 2)
+			/*if(y == 2 || x == 2)
 				mat.m[y][x] = static_cast<float>(matrix.Get(y, x)) * -1;
-			else
+			else*/
 				mat.m[y][x] = static_cast<float>(matrix.Get(y, x));
 		}
 	}

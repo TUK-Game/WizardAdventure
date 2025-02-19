@@ -14,6 +14,9 @@ struct MeshRenderInfo
 	Vec4 translation;
 	Vec4 rotation;
 	Vec3 scale;
+	Vec3 boundingBoxMax;
+	Vec3 boundingBoxMin;
+	Vec4 centerPos;
 };
 
 class CMeshData
@@ -25,7 +28,7 @@ public:
 
 public:
 	static CMeshData* LoadFromFBX(const std::wstring& path);
-	static CMeshData* LoadFromJHD(const std::wstring& path);
+	static CMeshData* LoadFromJHD(const std::wstring& path, const std::wstring& texturePath);
 
 	virtual void Load(const std::wstring& path);
 	virtual void Save(const std::wstring& path);

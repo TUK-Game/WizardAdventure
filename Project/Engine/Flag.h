@@ -89,6 +89,7 @@ enum class ECollision_Channel
 {
 	Default,
 	Player,
+	Wall,
 	Max
 };
 

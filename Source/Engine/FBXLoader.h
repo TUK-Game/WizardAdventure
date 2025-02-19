@@ -127,7 +127,7 @@ private:
 	FbxManager* _manager = nullptr;
 	FbxScene* _scene = nullptr;
 	FbxImporter* _importer = nullptr;
-	std::wstring			_resourceDirectory;
+	std::wstring			m_ResourceDirectory;
 
 	std::vector<FbxMeshInfo>					_meshes;
 	std::vector<std::shared_ptr<FbxBoneInfo>>		_bones;

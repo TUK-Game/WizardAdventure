@@ -29,6 +29,9 @@ struct JHDMeshInfo : public CAsset
 	Vec4 translate;
 	Vec3 scale;
 	Vec4 rotation;
+	Vec4 centerPos;
+	Vec3 BoundingBoxMax;
+	Vec3 BoundingBoxMin;
 
 	virtual JHDMeshInfo* Clone() override { return new JHDMeshInfo(*this); }
 
@@ -42,7 +45,7 @@ public:
 	const JHDMeshInfo& GetMesh(INT32 idx) { return m_Meshes[idx]; }
 
 public:
-	void LoadFile(const char* filename);
+	void LoadFile(const char* filename, const std::wstring& textureFilename = L"");
 	void LoadMaterial(std::ifstream& file, bool bCopy);
 
 	void CreateTextures();
@@ -50,6 +53,6 @@ public:
 
 private:
 	std::vector<JHDMeshInfo>					m_Meshes;
-	std::wstring _resourceDirectory;
+	std::wstring m_ResourceDirectory;
 };
 
