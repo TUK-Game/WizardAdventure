@@ -236,7 +236,8 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 					for (int m = 0; m < innerSize; ++m)
 					{
 						FbxKeyFrameInfo in;
-						file.read(reinterpret_cast<char*>(&in), sizeof(FbxKeyFrameInfo));
+						file.read(reinterpret_cast<char*>(&in.time), sizeof(double));
+						file.read(reinterpret_cast<char*>(&in.matTransform), sizeof(FbxAMatrix));
 						m_AnimClips[j]->keyFrames[k][m].matTransform = in.matTransform;
 						m_AnimClips[j]->keyFrames[k][m].time = in.time;
 					}

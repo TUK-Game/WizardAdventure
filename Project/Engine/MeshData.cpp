@@ -41,7 +41,6 @@ CMeshData* CMeshData::LoadFromJHD(const std::wstring& path, const std::wstring& 
 		std::vector<CMaterial*> materials;
 		for (size_t j = 0; j < loader.GetMesh(i).materials.size(); j++)
 		{
-			JHDMeshInfo n = (loader.GetMesh(i));
 			CMaterial* material = CAssetManager::GetInst()->FindAsset<CMaterial>(loader.GetMesh(i).materials[j].name);
 			materials.push_back(material);
 		}
