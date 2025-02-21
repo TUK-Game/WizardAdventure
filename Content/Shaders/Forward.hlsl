@@ -90,7 +90,11 @@ VS_TEX_OUT VS_Tex(VS_TEX_IN input)
 {
     VS_TEX_OUT output = (VS_TEX_OUT) 0;
 
-    output.pos = mul(float4(input.pos, 1.f), matWVP);
+    output.pos = mul(float4(input.pos, 1.f), matWorld);
+    //output.uv = input.uv;
+
+    // 정규화된 Screen Space 좌표 설정 (-1 ~ 1 범위)
+    //output.pos = float4(input.pos.xy, 0.0f, 1.0f);
     output.uv = input.uv;
 
     return output;

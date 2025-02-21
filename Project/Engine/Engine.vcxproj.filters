@@ -150,6 +150,9 @@
     <Filter Include="04. Component\08. RigidBody">
       <UniqueIdentifier>{7d39d63e-e598-4f6b-9cea-fa579c72dd27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Component\09. UI">
+      <UniqueIdentifier>{37c7b44f-c376-4232-aaae-59c8d36919b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -377,6 +380,12 @@
     <ClInclude Include="RigidBody.h">
       <Filter>04. Component\08. RigidBody</Filter>
     </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>04. Component\09. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>04. Component\09. UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -561,6 +570,12 @@
     </ClCompile>
     <ClCompile Include="RigidBody.cpp">
       <Filter>04. Component\08. RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>04. Component\09. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>04. Component\09. UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

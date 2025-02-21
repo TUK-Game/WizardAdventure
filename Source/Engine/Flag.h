@@ -46,6 +46,8 @@ enum class EComponent_Type
 	Light,
 	Animator,
 	Rigidbody,
+	UI,
+	UIButton,
 	
 	// Rendering Component
 	MeshRenderer,
