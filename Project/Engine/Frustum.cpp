@@ -4,15 +4,11 @@
 
 void CFrustum::FinalUpdate()
 {
-	Matrix matViewInv = CCamera::s_matView.Invert();
-	Matrix matProjectionInv = CCamera::s_matProjection.Invert();
-	Matrix matInv = matProjectionInv * matViewInv;
-
-	frustum.CreateFromMatrix(frustum, XMLoadFloat4x4(&CCamera::s_matProjection));
-	XMMATRIX xmmtxInversView = XMMatrixInverse(NULL, XMLoadFloat4x4(&CCamera::s_matView));
-	frustum.Transform(frustum, xmmtxInversView);
-
-
+	Matrix projection = CCamera::s_matProjection;
+	Matrix view = CCamera::s_matView;
+	frustum.CreateFromMatrix(frustum, XMLoadFloat4x4(&projection));
+	XMMATRIX xmmtxInversView = XMMatrixInverse(NULL, XMLoadFloat4x4(&view));
+	frustum.Transform(frustum, xmmtxInversView);	
 	//std::vector<Vec3> worldPos =
 	//{
 	//	::XMVector3TransformCoord(Vec3(-1.f, 1.f, 0.f), matInv),
@@ -33,7 +29,7 @@ void CFrustum::FinalUpdate()
 	//_planes[PLANE_RIGHT] = ::XMPlaneFromPoints(worldPos[5], worldPos[6], worldPos[1]); // CCW
 }
 
-bool CFrustum::ContainsSphere(const Vec3& pos, float radius)
+bool CFrustum::ContainsSphere(const Vec3& pos, float radius) 
 {
 	for (const Vec4& plane : _planes)
 	{

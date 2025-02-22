@@ -19,7 +19,8 @@
 #include "ComputeShader.h"
 #include "ParticleSystem.h"
 #include "TestDragon.h"
-
+#include <iostream>
+#include "Animator.h"
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)
 {
@@ -40,6 +41,7 @@ int CLevelManager::Init()
 	m_CurLevel->GetLayer(2)->SetName(L"Other");
 	m_CurLevel->GetLayer(3)->SetName(L"Others");
 	m_CurLevel->GetLayer(4)->SetName(L"UI");
+	m_CurLevel->GetLayer(10)->SetName(L"Map");
 
 #pragma region ComputeShader
 	{
@@ -68,7 +70,6 @@ int CLevelManager::Init()
 	camera->GetCamera()->SetProjType(EProjection_Type::Perspective);
 	camera->GetCamera()->SetPriority(0); // 0 : 메인 카메라로 설정	
 	camera->GetCamera()->CheckLayerAll();
-	camera->GetCamera()->CheckLayer(31);
 	camera->GetCamera()->CheckLayer(4);
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
 	m_CurLevel->AddGameObject(camera, 0, false);
@@ -110,7 +111,7 @@ int CLevelManager::Init()
 		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.0f));
 		light->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
-
+	
 		m_CurLevel->AddGameObject(light, 3, false);
 	}
 	// point light
@@ -148,73 +149,73 @@ int CLevelManager::Init()
 		//m_CurLevel->AddGameObject(light, 3, false);
 	}
 
-	CGameObject* object = new CGameObject;
-	CGameObject* object2 = new CGameObject;
-	CGameObject* object3 = new CGameObject;
-	CGameObject* object4 = new CGameObject;
-
-	object4->SetName(L"Cube4");
-	object4->AddComponent(new CTransform);
-	object4->AddComponent(new CMeshRenderer);
-	object4->AddComponent(new CBoxCollider);
-	
-	object4->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object4->GetTransform()->SetRelativeScale(10.f, 10.f, 10.f) ;
-	object4->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object4->GetTransform()->SetRelativePosition(0.f, 100.f, 0.f);
-	object4->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object4->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Rock"));
-
-	object3->SetName(L"Cube3");
-	object3->AddComponent(new CTransform);
-	object3->AddComponent(new CMeshRenderer);
-	object3->AddComponent(new CBoxCollider);
-	object3->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object3->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
-	object3->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object3->GetTransform()->SetRelativePosition(500.f, 0.f, 0.f);
-	object3->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object3->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Ryo"));
-	object3->AddChild(object4);
-
-	object2->SetName(L"Cube2");
-	object2->AddComponent(new CTransform);
-	object2->AddComponent(new CMeshRenderer);
-	object2->AddComponent(new CBoxCollider);
-	object2->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object2->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
-	object2->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object2->GetTransform()->SetRelativePosition(-700.f, 0.f, 300.f);
-	object2->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object2->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Nigika"));
-	m_CurLevel->AddGameObject(object2, 3, false);
-
-	object->SetName(L"Cube");
-	object->AddComponent(new CTransform);
-	object->AddComponent(new CMeshRenderer);
-	object->AddComponent(new CBoxCollider);
-	object->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object->GetTransform()->SetRelativeScale(500.f, 500.f, 500.f);
-	object->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object->GetTransform()->SetRelativePosition(-300.f, 0.f, 300.f);
-	object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
-	m_CurLevel->AddGameObject(object, 3, false);
+	//CGameObject* object = new CGameObject;
+	//CGameObject* object2 = new CGameObject;
+	//CGameObject* object3 = new CGameObject;
+	//CGameObject* object4 = new CGameObject;
+	//
+	//object4->SetName(L"Cube4");
+	//object4->AddComponent(new CTransform);
+	//object4->AddComponent(new CMeshRenderer);
+	//object4->AddComponent(new CBoxCollider);
+	//
+	//object4->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//object4->GetTransform()->SetRelativeScale(10.f, 10.f, 10.f) ;
+	//object4->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
+	//object4->GetTransform()->SetRelativePosition(0.f, 100.f, 0.f);
+	//object4->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+	//object4->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Rock"));
+	//
+	//object3->SetName(L"Cube3");
+	//object3->AddComponent(new CTransform);
+	//object3->AddComponent(new CMeshRenderer);
+	//object3->AddComponent(new CBoxCollider);
+	//object3->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//object3->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
+	//object3->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
+	//object3->GetTransform()->SetRelativePosition(500.f, 0.f, 0.f);
+	//object3->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+	//object3->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Ryo"));
+	//object3->AddChild(object4);
+	//
+	//object2->SetName(L"Cube2");
+	//object2->AddComponent(new CTransform);
+	//object2->AddComponent(new CMeshRenderer);
+	//object2->AddComponent(new CBoxCollider);
+	//object2->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//object2->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
+	//object2->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
+	//object2->GetTransform()->SetRelativePosition(-700.f, 0.f, 300.f);
+	//object2->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+	//object2->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Nigika"));
+	//m_CurLevel->AddGameObject(object2, 3, false);
+	//
+	//object->SetName(L"Cube");
+	//object->AddComponent(new CTransform);
+	//object->AddComponent(new CMeshRenderer);
+	//object->AddComponent(new CBoxCollider);
+	//object->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//object->GetTransform()->SetRelativeScale(500.f, 500.f, 500.f);
+	//object->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
+	//object->GetTransform()->SetRelativePosition(-300.f, 0.f, 300.f);
+	//object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+	//object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+	//m_CurLevel->AddGameObject(object, 3, false);
 
 #pragma region INSTANCING
-	for (INT32 i = 0; i < 50; ++i)
-	{
-		CGameObject* obj = new CGameObject;
-		obj->AddComponent(new CTransform);
-		obj->AddComponent(new CMeshRenderer);
-		obj->GetTransform()->SetRelativeScale(Vec3(25.f, 25.f, 25.f));
-		obj->GetTransform()->SetRelativePosition(Vec3(-300.f + i * 10.f, 0.f, 100.f));
-		obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Sphere"));
-		obj->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Hitori"));
-		// Int_0이 1이면 인스턴싱
-		obj->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		m_CurLevel->AddGameObject(obj, 3, false);
-	}
+	//for (INT32 i = 0; i < 50; ++i)
+	//{
+	//	CGameObject* obj = new CGameObject;
+	//	obj->AddComponent(new CTransform);
+	//	obj->AddComponent(new CMeshRenderer);
+	//	obj->GetTransform()->SetRelativeScale(Vec3(25.f, 25.f, 25.f));
+	//	obj->GetTransform()->SetRelativePosition(Vec3(-300.f + i * 10.f, 0.f, 100.f));
+	//	obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Sphere"));
+	//	obj->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Hitori"));
+	//	// Int_0이 1이면 인스턴싱
+	//	obj->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+	//	m_CurLevel->AddGameObject(obj, 3, false);
+	//}
 #pragma endregion
 	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
 	std::vector<CGameObject*> obj = data->Instantiate();
@@ -223,18 +224,26 @@ int CLevelManager::Init()
 	{
 		std::string name = "Dragon";
 		o->SetName(s2ws(name));
-		//o->AddComponent(new CBoxCollider);
-		//o->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred");
-		o->GetMeshRenderer()->GetMaterial(0)->SetGraphicsShader(shader);
+
 		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		rot.x += -90;
+		rot.x += -90;	
 		o->GetTransform()->SetRelativeRotation(rot);
-		//o->AddComponent(new CTestDragon);
+		o->AddComponent(new CTestDragon);
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		o->SetCheckFrustum(false);
-		m_CurLevel->AddGameObject(o, 3, false);
+		o->SetCheckFrustum(true);
+		m_CurLevel->AddGameObject(o, 10, false);
+
+		/*Vec3 trans = o->GetCollider()->center;
+		CGameObject* object = new CGameObject;
+		object->SetName(L"k");
+		object->AddComponent(new CTransform);
+		object->AddComponent(new CMeshRenderer);
+		object->GetTransform()->SetRelativePosition(trans);	
+		object->GetTransform()->SetRelativeScale(Vec3(400.f, 400.f, 400.f));
+		object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Sphere"));
+		object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+		m_CurLevel->AddGameObject(object, 3, false);*/
 	}
 
 	//for(auto& o : obj2)
@@ -261,7 +270,7 @@ int CLevelManager::Init()
 		obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 		CMaterial* material = new CMaterial;	
 		CTexture* texture;
-
+	
 		if (i < 3)
 			texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
 		else if (i < 5)
@@ -269,8 +278,8 @@ int CLevelManager::Init()
 		else
 			texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
 			//texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"UAVTexture");
-
-
+	
+	
 		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
 		material->SetTexture(0, texture);
 		material->SetGraphicsShader(shader);
@@ -282,13 +291,13 @@ int CLevelManager::Init()
 
 #pragma region ParticleSystem
 	{
-		CGameObject* particle = new CGameObject;
-		particle->AddComponent(new CTransform);
-		particle->AddComponent(new CParticleSystem);
-		particle->GetParticleSystem()->SetTexture(L"Nigika");
-		particle->SetCheckFrustum(false);		
-		particle->GetTransform()->SetRelativePosition(Vec3(0.f, 0.f, 100.f));
-		m_CurLevel->AddGameObject(particle, 3, false);
+		//CGameObject* particle = new CGameObject;
+		//particle->AddComponent(new CTransform);
+		//particle->AddComponent(new CParticleSystem);
+		//particle->GetParticleSystem()->SetTexture(L"Nigika");
+		//particle->SetCheckFrustum(false);		
+		//particle->GetTransform()->SetRelativePosition(Vec3(0.f, 0.f, 100.f));
+		//m_CurLevel->AddGameObject(particle, 3, false);
 	}
 #pragma endregion
 
@@ -325,6 +334,15 @@ CGameObject* CLevelManager::Pick(INT32 x, INT32 y)
 	float minDistance = FLT_MAX;
 	CGameObject* picked = nullptr;
 
+	// ViewSpace에서의 Ray 정의
+	Vec4 rayOrigin = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	Vec4 rayDir = Vec4(viewX, viewY, 1.0f, 0.0f);
+
+	// WorldSpace에서의 Ray 정의
+	rayOrigin = XMVector3TransformCoord(rayOrigin, viewMatrixInv);
+	rayDir = XMVector3TransformNormal(rayDir, viewMatrixInv);
+	rayDir.Normalize();
+
 	for (int j = 0; j < MAX_LAYER; ++j)
 	{
 		auto& gameObjects = GetCurrentLevel()->GetLayer(j)->GetObjects();
@@ -333,18 +351,9 @@ CGameObject* CLevelManager::Pick(INT32 x, INT32 y)
 			if (gameObject->GetCollider() == nullptr)
 				continue;
 
-			// ViewSpace에서의 Ray 정의
-			Vec4 rayOrigin = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
-			Vec4 rayDir = Vec4(viewX, viewY, 1.0f, 0.0f);
-
-			// WorldSpace에서의 Ray 정의
-			rayOrigin = XMVector3TransformCoord(rayOrigin, viewMatrixInv);
-			rayDir = XMVector3TransformNormal(rayDir, viewMatrixInv);
-			rayDir.Normalize();
-
 			// WorldSpace에서 연산
 			float distance = 0.f;
-			if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+			if (!gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance))
 				continue;
 
 			if (distance < minDistance)

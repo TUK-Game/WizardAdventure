@@ -25,7 +25,6 @@ int CRootSignature::Init()
 int CRootSignature::CreateGraphicsRootSignature()
 {
 	m_SamplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
-
 	CD3DX12_DESCRIPTOR_RANGE ranges[] =
 	{
 		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, CBV_REGISTER_COUNT - 1, 1), // b1~b4

@@ -23,7 +23,7 @@ CCamera::CCamera()
 	, m_OrthoScaleX(1.f)
 	, m_AspectRatio(1.f)
 	, m_FOV(XM_PI / 2.f)
-	, m_Far(200000.f)
+	, m_Far(10000.f)
 	, m_Priority(-1)
 	, m_LayerCheck(0)
 {
@@ -230,13 +230,15 @@ void CCamera::SortShadowObject()
 			{
 				continue;
 			}
-
+				
 			if (vecObjects[j]->IsStatic())
 				continue;
 
 			m_vecShadow.push_back(vecObjects[j]);
-		}
+		} 
 	}
+	std::wstring name = this->GetName();
+	int a = 3;
 }
 
 void CCamera::PushLightData()

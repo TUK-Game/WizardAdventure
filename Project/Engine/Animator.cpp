@@ -23,7 +23,7 @@ void CAnimator::FinalUpdate()
 {
 	_updateTime += DELTA_TIME;
 
-	const AnimClipInfo& animClip = _animClips->at(_clipIndex);
+	const AnimClipInfo& animClip = m_AnimClips->at(_clipIndex);
 	if (_updateTime >= animClip.duration)
 		_updateTime = 0.f;
 
@@ -36,12 +36,12 @@ void CAnimator::FinalUpdate()
 
 void CAnimator::SetAnimClip(const std::vector<AnimClipInfo>* animClips)
 {
-	_animClips = animClips;
+	m_AnimClips = animClips;
 }
 
 void CAnimator::PushData()
 {
-	UINT32 boneCount = static_cast<UINT32>(_bones->size());
+	UINT32 boneCount = static_cast<UINT32>(m_Bones->size());
 	if (_boneFinalMatrix->GetElementCount() < boneCount)
 		_boneFinalMatrix->Init(sizeof(Matrix), boneCount);
 
@@ -51,7 +51,7 @@ void CAnimator::PushData()
 	mesh->GetBoneOffsetBuffer()->PushComputeSRVData(SRV_REGISTER::t9);
 
 	_boneFinalMatrix->PushComputeUAVData(UAV_REGISTER::u0);
-
+	
 	_computeMaterial->SetInt(0, boneCount);
 	_computeMaterial->SetInt(1, _frame);
 	_computeMaterial->SetInt(2, _nextFrame);
@@ -66,7 +66,7 @@ void CAnimator::PushData()
 
 void CAnimator::Play(UINT32 idx)
 {
-	assert(idx < _animClips->size());
+	assert(idx < m_AnimClips->size());
 	_clipIndex = idx;
 	_updateTime = 0.f;
 }

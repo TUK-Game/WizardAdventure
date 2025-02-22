@@ -62,6 +62,8 @@ using namespace Microsoft::WRL;
 #include "Ref.h"
 #include "SharedPtr.h"
 
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+
 using Vec2		= DirectX::SimpleMath::Vector2;
 using Vec3		= DirectX::SimpleMath::Vector3;
 using Vec4		= DirectX::SimpleMath::Vector4;

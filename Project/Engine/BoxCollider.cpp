@@ -19,7 +19,7 @@ CBoxCollider::~CBoxCollider()
 
 bool CBoxCollider::Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance)
 {
-	return m_BoundingBox.Intersects(rayOrigin, rayDir, OUT distance);
+	return m_BoundingBox.Intersects(rayOrigin, rayDir, OUT distance); 
 }
 
 bool CBoxCollider::IsFrustum(CFrustum frustum)
@@ -43,8 +43,18 @@ bool CBoxCollider::Collision(CBaseCollider* dest)
 	return false;
 }
 
-void CBoxCollider::FinalUpdate()
+void CBoxCollider::SetMaxMinPos(Vec4 centerPos, Vec3 maxPos, Vec3 minPos)
 {
+	center = Vec3(centerPos.x, centerPos.y, -centerPos.z);
+	m_BoundingBox.Center = Vec3(centerPos.x, centerPos.y, -centerPos.z);
+	m_BoundingBox.Extents = (maxPos - minPos) / 2;
+}
+
+void CBoxCollider::FinalUpdate()	
+{
+	if (GetProfile()->channel == ECollision_Channel::Wall)
+		return;
+
 	m_BoundingBox.Center = GetOwner()->GetTransform()->GetWorldPosition();
 
 	Vec3 scale = GetOwner()->GetMeshRenderer()->GetMesh()->GetMeshSize() * (GetOwner()->GetTransform()->GetRelativeScale());

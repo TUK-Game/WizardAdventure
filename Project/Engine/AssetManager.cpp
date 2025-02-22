@@ -223,7 +223,8 @@ int CAssetManager::LoadMaterial()
 
 int CAssetManager::LoadMeshData()
 {
-	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/walls.jhd");
+	CMeshData* data1 = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/wizard.jhd");
+	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/level_hall.jhd", L"map");
 	AddAsset(L"Dragon", data);
 
 	/*data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/wolf.fbx");
@@ -340,7 +341,7 @@ int CAssetManager::LoadShader(CShader* shader, std::wstring& shaderName, ShaderI
 	return S_OK;
 }
 
-CMeshData* CAssetManager::LoadFBX(const std::wstring& path)
+CMeshData* CAssetManager::LoadJHD(const std::wstring& path, const std::wstring& texturePath)
 {
 	std::wstring key = path;
 
@@ -348,22 +349,7 @@ CMeshData* CAssetManager::LoadFBX(const std::wstring& path)
 	if (meshData)
 		return meshData;
 
-	meshData = CMeshData::LoadFromFBX(path);
-	meshData->SetName(key);
-	AddAsset(key, meshData);
-
-	return meshData;
-}
-
-CMeshData* CAssetManager::LoadJHD(const std::wstring& path)
-{
-	std::wstring key = path;
-
-	CMeshData* meshData = FindAsset<CMeshData>(key);
-	if (meshData)
-		return meshData;
-
-	meshData = CMeshData::LoadFromJHD(path);
+	meshData = CMeshData::LoadFromJHD(path, texturePath);
 	meshData->SetName(key);
 	AddAsset(key, meshData);
 

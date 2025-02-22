@@ -275,9 +275,6 @@
     <ClInclude Include="LevelCollision.h">
       <Filter>02. Level</Filter>
     </ClInclude>
-    <ClInclude Include="FBXLoader.h">
-      <Filter>05. Asset</Filter>
-    </ClInclude>
     <ClInclude Include="MeshData.h">
       <Filter>05. Asset\01. Mesh</Filter>
     </ClInclude>
@@ -456,9 +453,6 @@
     </ClCompile>
     <ClCompile Include="LevelCollision.cpp">
       <Filter>02. Level</Filter>
-    </ClCompile>
-    <ClCompile Include="FBXLoader.cpp">
-      <Filter>05. Asset</Filter>
     </ClCompile>
     <ClCompile Include="MeshData.cpp">
       <Filter>05. Asset\01. Mesh</Filter>

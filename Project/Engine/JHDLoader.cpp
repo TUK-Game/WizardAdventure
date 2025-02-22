@@ -6,9 +6,12 @@
 #include "Texture.h"
 #include "AssetManager.h"
 
-void CJHDLoader::LoadFile(const char* filename)
+void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilename)
 {
-	_resourceDirectory = std::filesystem::path(filename).parent_path().wstring() + L"\\" + std::filesystem::path(filename).filename().stem().wstring() + L".fbm";
+	if (textureFilename.empty())
+		m_ResourceDirectory = std::filesystem::path(filename).parent_path().wstring() + L"\\" + std::filesystem::path(filename).filename().stem().wstring() + L".fbm";
+	else
+		m_ResourceDirectory = std::filesystem::path(filename).parent_path().wstring() + L"\\" + textureFilename + L".fbm";
 
 	std::ifstream file(filename, std::ios::binary);
 	if (!file) {
@@ -121,24 +124,45 @@ void CJHDLoader::LoadFile(const char* filename)
 				meshInfo->vertices[i].UV = Vec2(num[0], num[1]);
 			}
 		}
+		else if (!strcmp(pstrToken, "Weights:\n"))
+		{
+			for (int i = 0; i < meshInfo->vertices.size(); ++i)
+			{
+				float num[4];
+				file.read(reinterpret_cast<char*>(&num), sizeof(num));
+				if (bCopy)
+					continue;
+				meshInfo->vertices[i].weights = Vec4(num[0], num[1], num[2], num[3]);
+			}
+		}
+		else if (!strcmp(pstrToken, "AnimIndices:\n"))
+		{
+			for (int i = 0; i < meshInfo->vertices.size(); ++i)
+			{
+				float num[4];
+				file.read(reinterpret_cast<char*>(&num), sizeof(num));
+				if (bCopy)
+					continue;
+				meshInfo->vertices[i].indices = Vec4(num[0], num[1], num[2], num[3]);
+			}
+		}
 		else if (!strcmp(pstrToken, "Transform:\n"))
 		{
 			FbxAMatrix num;
 			file.read(reinterpret_cast<char*>(&num), sizeof(num));
 			meshInfo->matrix = num;
-			meshInfo->scale = Vector3(num.GetS().mData[0], num.GetS().mData[1], num.GetS().mData[2]);
 		}
-		else if (!strcmp(pstrToken, "Translate:\n"))
+		else if (!strcmp(pstrToken, "BoundingBox:\n"))
 		{
-			Vec4 num;
+			Vec3 num;
+			Vec3 num2;
+			Vec4 num3;
+			file.read(reinterpret_cast<char*>(&num3), sizeof(num3));
 			file.read(reinterpret_cast<char*>(&num), sizeof(num));
-			meshInfo->translate = num;
-		}
-		else if (!strcmp(pstrToken, "Rotation:\n"))
-		{
-			Vec4 num;
-			file.read(reinterpret_cast<char*>(&num), sizeof(num));
-			meshInfo->rotation = num;
+			file.read(reinterpret_cast<char*>(&num2), sizeof(num2));
+			meshInfo->centerPos = num3;
+			meshInfo->BoundingBoxMax = num;
+			meshInfo->BoundingBoxMin = num2;
 		}
 		else if (!strcmp(pstrToken, "Index Count: "))
 		{
@@ -154,6 +178,70 @@ void CJHDLoader::LoadFile(const char* filename)
 				file.read(reinterpret_cast<char*>(&colCount), sizeof(uint32_t)); // 열 크기 읽기
 				meshInfo->indices[j].resize(colCount);
 				file.read(reinterpret_cast<char*>(meshInfo->indices[j].data()), colCount * sizeof(UINT32)); // 데이터 읽기
+			}
+		}
+		else if (!strcmp(pstrToken, "BoneInfo:\n"))
+		{
+			size_t size;
+			file.read(reinterpret_cast<char*>(&size), sizeof(size_t));
+			m_Bones.resize(size);
+			for (int j = 0; j < size; ++j)
+			{
+				INT32 iNum;
+				double dNum;
+				FbxAMatrix matrix;
+				char mName[100] = { '\0' };
+				file.read(reinterpret_cast<char*>(&length), sizeof(length));
+				file.read(mName, length);
+				file.read(reinterpret_cast<char*>(&iNum), sizeof(INT32));
+				file.read(reinterpret_cast<char*>(&matrix), sizeof(FbxAMatrix));
+
+				m_Bones[j] = std::make_shared<FbxBoneInfo>();
+				m_Bones[j]->boneName = s2ws(mName);
+				m_Bones[j]->parentIndex = iNum;
+				m_Bones[j]->matOffset = matrix;
+			}
+		}
+		else if (!strcmp(pstrToken, "AnimClipInfo:\n"))
+		{
+			size_t size;
+			file.read(reinterpret_cast<char*>(&size), sizeof(size_t));
+			m_AnimClips.resize(size);
+			for (int j = 0; j < size; ++j)
+			{	
+				m_AnimClips[j] = std::make_shared<FbxAnimClipInfo>();
+
+				size_t outSize, innerSize;
+				char mName[100] = { '\0' };
+				long long time;
+				FbxTime::EMode mode;
+				file.read(reinterpret_cast<char*>(&length), sizeof(length));
+				file.read(mName, length);
+				file.read(reinterpret_cast<char*>(&time), sizeof(long long));
+				m_AnimClips[j]->startTime = time;
+
+				file.read(reinterpret_cast<char*>(&time), sizeof(long long));
+				m_AnimClips[j]->endTime = time;
+
+				file.read(reinterpret_cast<char*>(&mode), sizeof(mode));
+				file.read(reinterpret_cast<char*>(&outSize), sizeof(size_t));
+
+				m_AnimClips[j]->name = s2ws(mName);
+				m_AnimClips[j]->mode = mode;
+				m_AnimClips[j]->keyFrames.resize(outSize);
+				for (int k = 0; k < outSize; ++k)
+				{
+					file.read(reinterpret_cast<char*>(&innerSize), sizeof(size_t));
+					m_AnimClips[j]->keyFrames[k].resize(innerSize);
+					for (int m = 0; m < innerSize; ++m)
+					{
+						FbxKeyFrameInfo in;
+						file.read(reinterpret_cast<char*>(&in.time), sizeof(double));
+						file.read(reinterpret_cast<char*>(&in.matTransform), sizeof(FbxAMatrix));
+						m_AnimClips[j]->keyFrames[k][m].matTransform = in.matTransform;
+						m_AnimClips[j]->keyFrames[k][m].time = in.time;
+					}
+				}
 			}
 		}
 	}
@@ -226,7 +314,7 @@ void CJHDLoader::CreateTextures()
 			{
 				std::wstring relativePath = m_Meshes[i].materials[j].diffuseTexName.c_str();
 				std::wstring filename = std::filesystem::path(relativePath).filename();
-				std::wstring fullPath = _resourceDirectory + L"\\" + filename;
+				std::wstring fullPath = m_ResourceDirectory + L"\\" + filename;
 				if (filename.empty() == false)
 				{
 					if (!CAssetManager::GetInst()->FindAsset<CTexture>(filename))
@@ -242,7 +330,7 @@ void CJHDLoader::CreateTextures()
 			{
 				std::wstring relativePath = m_Meshes[i].materials[j].normalTexName.c_str();
 				std::wstring filename = std::filesystem::path(relativePath).filename();
-				std::wstring fullPath = _resourceDirectory + L"\\" + filename;
+				std::wstring fullPath = m_ResourceDirectory + L"\\" + filename;
 				if (filename.empty() == false)
 				{
 					if (!CAssetManager::GetInst()->FindAsset<CTexture>(filename))
@@ -258,7 +346,7 @@ void CJHDLoader::CreateTextures()
 			{
 				std::wstring relativePath = m_Meshes[i].materials[j].specularTexName.c_str();
 				std::wstring filename = std::filesystem::path(relativePath).filename();
-				std::wstring fullPath = _resourceDirectory + L"\\" + filename;
+				std::wstring fullPath = m_ResourceDirectory + L"\\" + filename;
 				if (filename.empty() == false)
 				{
 					if (!CAssetManager::GetInst()->FindAsset<CTexture>(filename))

@@ -22,6 +22,7 @@ CCollisionManager::~CCollisionManager()
 bool CCollisionManager::Init()
 {
 	CreateProfile("Default", ECollision_Channel::Default, true, ECollision_Interaction::Ignore);
+	CreateProfile("Wall", ECollision_Channel::Wall, true, ECollision_Interaction::Ignore);
 	CreateProfile("Player", ECollision_Channel::Player, true);
 
 	SetCollisionInteraction("Default", ECollision_Channel::Player, ECollision_Interaction::Collision);
