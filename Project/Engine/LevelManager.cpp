@@ -41,6 +41,7 @@ int CLevelManager::Init()
 	m_CurLevel->GetLayer(2)->SetName(L"Other");
 	m_CurLevel->GetLayer(3)->SetName(L"Others");
 	m_CurLevel->GetLayer(4)->SetName(L"UI");
+	m_CurLevel->GetLayer(10)->SetName(L"Map");
 
 #pragma region ComputeShader
 	{
@@ -69,7 +70,6 @@ int CLevelManager::Init()
 	camera->GetCamera()->SetProjType(EProjection_Type::Perspective);
 	camera->GetCamera()->SetPriority(0); // 0 : 메인 카메라로 설정	
 	camera->GetCamera()->CheckLayerAll();
-	camera->GetCamera()->CheckLayer(31);
 	camera->GetCamera()->CheckLayer(4);
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
 	m_CurLevel->AddGameObject(camera, 0, false);
@@ -230,10 +230,9 @@ int CLevelManager::Init()
 		rot.x += -90;	
 		o->GetTransform()->SetRelativeRotation(rot);
 		o->AddComponent(new CTestDragon);
-
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		o->SetCheckFrustum(false);
-		m_CurLevel->AddGameObject(o, 3, false);
+		o->SetCheckFrustum(true);
+		m_CurLevel->AddGameObject(o, 10, false);
 
 		/*Vec3 trans = o->GetCollider()->center;
 		CGameObject* object = new CGameObject;

@@ -80,9 +80,9 @@ std::vector<CGameObject*> CMeshData::Instantiate()
 		gameObject->AddComponent(new CMeshRenderer);
 		info.mesh->SetMeshSize(Vec3(info.boundingBoxMax - info.boundingBoxMin));
 		gameObject->GetMeshRenderer()->SetMesh(info.mesh);
-		/*gameObject->AddComponent(new CBoxCollider);
+		gameObject->AddComponent(new CBoxCollider);
 		gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Wall"));
-		gameObject->GetCollider()->SetMaxMinPos(info.centerPos, info.boundingBoxMax, info.boundingBoxMin);*/
+		gameObject->GetCollider()->SetMaxMinPos(info.centerPos, info.boundingBoxMax, info.boundingBoxMin);
 
 		//gameObject->GetTransform()->SetWorldMatrix(info.matrix);
 		//gameObject->GetTransform()->SetRelativeRotation(info.rotation.x, info.rotation.y, info.rotation.z);

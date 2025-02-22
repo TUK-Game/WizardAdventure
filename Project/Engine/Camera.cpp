@@ -230,13 +230,15 @@ void CCamera::SortShadowObject()
 			{
 				continue;
 			}
-
+				
 			if (vecObjects[j]->IsStatic())
 				continue;
 
 			m_vecShadow.push_back(vecObjects[j]);
-		}
+		} 
 	}
+	std::wstring name = this->GetName();
+	int a = 3;
 }
 
 void CCamera::PushLightData()
