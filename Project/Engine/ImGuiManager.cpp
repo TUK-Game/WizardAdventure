@@ -3,6 +3,13 @@
 #include "Engine.h"
 #include "Device.h"
 #include "CommandQueue.h"
+#include "GameObject.h"
+#include "Transform.h"
+#include "MeshRenderer.h"
+#include "LevelManager.h"
+#include "Level.h"
+#include "Layer.h"
+#include "AssetManager.h"
 
 CImGuiManager::CImGuiManager()
 {
@@ -39,7 +46,10 @@ void CImGuiManager::ReadyWindow()
 	ImGui_ImplWin32_NewFrame();
 	ImGui_ImplDX12_NewFrame();
 	ImGui::NewFrame();
-	//ImGui::ShowDemoWindow();
+	ImGui::ShowDemoWindow();
+
+	DrawLevelWindow();
+	DrawInspectorWindow();
 
 	//static float f = 0.0f;
 	//static int counter = 0;
@@ -70,4 +80,153 @@ void CImGuiManager::CleanUp()
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+	if (m_SelectedObject)
+	{
+		delete m_SelectedObject;
+		m_SelectedObject = nullptr;
+	}
+}
+
+
+void CImGuiManager::DrawLevelWindow()
+{
+	ImGui::SetNextWindowSize(ImVec2(300, 400));
+	ImGui::Begin("Level Objects");
+
+	if (ImGui::Button("Add Object"))
+	{
+		static int objCounter = 0;
+		CGameObject* newObj = new CGameObject();
+		newObj->SetName(s2ws("Object " + std::to_string(objCounter++)));
+		newObj->AddComponent(new CTransform());
+		newObj->AddComponent(new CMeshRenderer());
+		newObj->GetTransform()->SetRelativeScale(500.f, 500.f, 500.f);
+		newObj->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
+		newObj->GetTransform()->SetRelativePosition(100.f, 100.f, 100.f);
+		newObj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+		newObj->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(newObj, 3, false);
+
+	}
+	
+
+	int index = 0;
+	for (int j = 0; j < MAX_LAYER; ++j)
+	{
+		auto& gameObjects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(j)->GetObjects();
+
+		for (auto& gameObject : gameObjects)
+		{
+			std::string objName = ws2s(gameObject->GetName()); // Wide String -> String 변환
+			objName = Trim(objName); // 공백 제거
+
+			if (objName.size() == 1)
+			{
+				objName.clear(); // 강제로 문자열을 비워서 ID 충돌 방지
+			}
+
+			if (objName.empty()) // 이름이 비어 있으면 기본 이름 설정
+			{
+				objName = "Unnamed Object##" + std::to_string(index);
+			}
+			else
+			{
+				objName += "##" + std::to_string(index); // 기존 이름에도 고유 ID 추가 (ID 충돌 방지)
+			}
+
+			if (ImGui::Selectable(objName.c_str(), m_SelectedObject == gameObject))
+			{
+				m_SelectedObject = gameObject;
+			}
+			index++; // 객체마다 고유 ID 부여
+		}
+	}
+
+	if (m_SelectedObject && ImGui::Button("Delete Object"))
+	{
+		//CEngine::GetInst()->GetCurrentLevel()->RemoveGameObject(selectedObject);
+		//selectedObject = nullptr;
+	}
+
+	ImGui::End();
+}
+
+void CImGuiManager::DrawInspectorWindow()
+{
+	if (!m_SelectedObject)
+		return;
+
+	ImGui::Begin("Inspector");
+	std::string objName = ws2s(m_SelectedObject->GetName());
+	ImGui::Text("Editing: %s", objName.c_str());
+
+	bool isStatic = m_SelectedObject->IsStatic();
+	if (ImGui::Checkbox("Is Static", &isStatic))
+	{
+		m_SelectedObject->SetStatic(isStatic);
+	}
+
+	Vec3 position = m_SelectedObject->GetTransform()->GetRelativePosition();
+	Vec3 rotation = m_SelectedObject->GetTransform()->GetRelativeRotation();
+	Vec3 scale = m_SelectedObject->GetTransform()->GetRelativeScale();
+
+	if (ImGui::DragFloat3("Position", &position.x, 0.1f))
+	{
+		m_SelectedObject->GetTransform()->SetRelativePosition(position);
+	}
+
+	if (ImGui::DragFloat3("Rotation", &rotation.x, 1.0f))
+	{
+		m_SelectedObject->GetTransform()->SetRelativeRotation(rotation);
+	}
+
+	if (ImGui::DragFloat3("Scale", &scale.x, 0.1f))
+	{
+		m_SelectedObject->GetTransform()->SetRelativeScale(scale);
+	}
+
+
+	 // Mesh 
+	std::vector<std::wstring> meshList = CAssetManager::GetInst()->GetAllAssetNames<CMesh>();
+	static int selectedMeshIndex = 0;
+
+    if (ImGui::BeginCombo("Mesh", ws2s(meshList[selectedMeshIndex]).c_str()))
+    {
+        for (int i = 0; i < meshList.size(); ++i)
+        {
+            bool isSelected = (selectedMeshIndex == i);
+            if (ImGui::Selectable(ws2s(meshList[i]).c_str(), isSelected))
+            {
+                selectedMeshIndex = i;
+                m_SelectedObject->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(meshList[i]));
+            }
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
+
+    // Material 
+	std::vector<std::wstring> materialList = CAssetManager::GetInst()->GetAllAssetNames<CMaterial>();
+	static int selectedMaterialIndex = 0;
+
+    if (ImGui::BeginCombo("Material", ws2s(materialList[selectedMaterialIndex]).c_str()))
+    {
+        for (int i = 0; i < materialList.size(); ++i)
+        {
+            bool isSelected = (selectedMaterialIndex == i);
+            if (ImGui::Selectable(ws2s(materialList[i]).c_str(), isSelected))
+            {
+                selectedMaterialIndex = i;
+                m_SelectedObject->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(materialList[i]));
+            }
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
+
+
+
+	ImGui::End();
 }

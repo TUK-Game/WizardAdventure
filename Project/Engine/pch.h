@@ -15,5 +15,6 @@
 std::wstring s2ws(const std::string& s);
 std::string ws2s(const std::wstring& s);
 Matrix GetMatrix(const FbxAMatrix& matrix);
+std::string Trim(const std::string& str);
 
 #endif //PCH_H

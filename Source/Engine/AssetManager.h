@@ -16,6 +16,9 @@ public:
 	template<typename T>
 	EAsset_Type GetAssetType();
 
+	template<typename T>
+	std::vector<std::wstring> GetAllAssetNames();
+
 public:
 	int Init();
 	void Update();
@@ -99,4 +102,20 @@ CSharedPtr<T> CAssetManager::FindAsset(const std::wstring& key)
 		return nullptr;
 
 	return (T*)iter->second.Get();
+}
+
+template<typename T>
+std::vector<std::wstring> CAssetManager::GetAllAssetNames()
+{
+	std::vector<std::wstring> assetNames;
+
+	EAsset_Type type = GetAssetType<T>();
+	auto& assetMap = m_mapAsset[(int)type];
+
+	for (const auto& pair : assetMap)
+	{
+		assetNames.push_back(pair.first); 
+	}
+
+	return assetNames;
 }
