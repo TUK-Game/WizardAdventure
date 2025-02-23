@@ -10,9 +10,9 @@
 
 CAnimator::CAnimator() : CComponent(EComponent_Type::Animator)
 {
-	_computeMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"ComputeAnimation");
+	m_ComputeMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"ComputeAnimation");
 
-	_boneFinalMatrix = std::make_shared<CStructuredBuffer>();
+	m_BoneFinalMatrix = std::make_shared<CStructuredBuffer>();
 }
 
 CAnimator::~CAnimator()
@@ -21,17 +21,17 @@ CAnimator::~CAnimator()
 
 void CAnimator::FinalUpdate()
 {
-	_updateTime += DELTA_TIME;
+	m_UpdateTime += DELTA_TIME;
 
-	const AnimClipInfo& animClip = m_AnimClips->at(_clipIndex);
-	if (_updateTime >= animClip.duration)
-		_updateTime = 0.f;
+	const AnimClipInfo& animClip = m_AnimClips->at(m_ClipIndex);
+	if (m_UpdateTime >= animClip.duration)
+		m_UpdateTime = 0.f;
 
 	const INT32 ratio = static_cast<INT32>(animClip.frameCount / animClip.duration);
-	_frame = static_cast<INT32>(_updateTime * ratio);
-	_frame = min(_frame, animClip.frameCount - 1);
-	_nextFrame = min(_frame + 1, animClip.frameCount - 1);
-	_frameRatio = static_cast<float>(_frame - _frame);
+	m_Frame = static_cast<INT32>(m_UpdateTime * ratio);
+	m_Frame = min(m_Frame, animClip.frameCount - 1);
+	m_NextFrame = min(m_Frame + 1, animClip.frameCount - 1);
+	m_FrameRatio = static_cast<float>(m_Frame - m_Frame);
 }
 
 void CAnimator::SetAnimClip(const std::vector<AnimClipInfo>* animClips)
@@ -42,31 +42,31 @@ void CAnimator::SetAnimClip(const std::vector<AnimClipInfo>* animClips)
 void CAnimator::PushData()
 {
 	UINT32 boneCount = static_cast<UINT32>(m_Bones->size());
-	if (_boneFinalMatrix->GetElementCount() < boneCount)
-		_boneFinalMatrix->Init(sizeof(Matrix), boneCount);
+	if (m_BoneFinalMatrix->GetElementCount() < boneCount)
+		m_BoneFinalMatrix->Init(sizeof(Matrix), boneCount);
 
 	// Compute Shader
 	CMesh* mesh = GetOwner()->GetMeshRenderer()->GetMesh();
-	mesh->GetBoneFrameDataBuffer(_clipIndex)->PushComputeSRVData(SRV_REGISTER::t8);
+	mesh->GetBoneFrameDataBuffer(m_ClipIndex)->PushComputeSRVData(SRV_REGISTER::t8);
 	mesh->GetBoneOffsetBuffer()->PushComputeSRVData(SRV_REGISTER::t9);
 
-	_boneFinalMatrix->PushComputeUAVData(UAV_REGISTER::u0);
+	m_BoneFinalMatrix->PushComputeUAVData(UAV_REGISTER::u0);
 	
-	_computeMaterial->SetInt(0, boneCount);
-	_computeMaterial->SetInt(1, _frame);
-	_computeMaterial->SetInt(2, _nextFrame);
-	_computeMaterial->SetFloat(0, _frameRatio);
+	m_ComputeMaterial->SetInt(0, boneCount);
+	m_ComputeMaterial->SetInt(1, m_Frame);
+	m_ComputeMaterial->SetInt(2, m_NextFrame);
+	m_ComputeMaterial->SetFloat(0, m_FrameRatio);
 
 	UINT32 groupCount = (boneCount / 256) + 1;
-	_computeMaterial->Dispatch(groupCount, 1, 1);
+	m_ComputeMaterial->Dispatch(groupCount, 1, 1);
 
 	// Graphics Shader
-	_boneFinalMatrix->PushGraphicsData(SRV_REGISTER::t7);
+	m_BoneFinalMatrix->PushGraphicsData(SRV_REGISTER::t7);
 }
 
 void CAnimator::Play(UINT32 idx)
 {
 	assert(idx < m_AnimClips->size());
-	_clipIndex = idx;
-	_updateTime = 0.f;
+	m_ClipIndex = idx;
+	m_UpdateTime = 0.f;
 }

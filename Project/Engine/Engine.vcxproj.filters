@@ -332,6 +332,9 @@
     <ClInclude Include="JHDLoader.h">
       <Filter>05. Asset</Filter>
     </ClInclude>
+    <ClInclude Include="TestPlayer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -507,6 +510,9 @@
     </ClCompile>
     <ClCompile Include="JHDLoader.cpp">
       <Filter>05. Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="TestPlayer.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

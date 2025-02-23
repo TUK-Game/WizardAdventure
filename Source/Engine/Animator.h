@@ -17,8 +17,9 @@ public:
 	void SetAnimClip(const std::vector<AnimClipInfo>* animClips);
 	void PushData();
 
+	const std::vector<AnimClipInfo>* GetAnimClips() const { return m_AnimClips; }
 	INT32 GetAnimCount() { return static_cast<UINT32>(m_AnimClips->size()); }
-	INT32 GetCurrentClipIndex() { return _clipIndex; }
+	INT32 GetCurrentClipIndex() { return m_ClipIndex; }
 	void Play(UINT32 idx);
 
 public:
@@ -31,13 +32,13 @@ private:
 	const std::vector<BoneInfo>* m_Bones;
 	const std::vector<AnimClipInfo>* m_AnimClips;
 
-	float							_updateTime = 0.f;
-	INT32							_clipIndex = 0;
-	INT32							_frame = 0;
-	INT32							_nextFrame = 0;
-	float							_frameRatio = 0;
+	float							m_UpdateTime = 0.f;
+	INT32							m_ClipIndex = 0;
+	INT32							m_Frame = 0;
+	INT32							m_NextFrame = 0;
+	float							m_FrameRatio = 0;
 
-	CMaterial*			_computeMaterial;
-	std::shared_ptr<CStructuredBuffer>	_boneFinalMatrix;  // 특정 프레임의 최종 행렬
-	bool							_boneFinalUpdated = false;
+	CMaterial*			m_ComputeMaterial;
+	std::shared_ptr<CStructuredBuffer>	m_BoneFinalMatrix;  // 특정 프레임의 최종 행렬
+	bool							m_BoneFinalUpdated = false;
 };

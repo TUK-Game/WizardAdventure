@@ -21,6 +21,8 @@
 #include "TestDragon.h"
 #include <iostream>
 #include "Animator.h"
+#include "TestPlayer.h"
+
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)
 {
@@ -227,9 +229,9 @@ int CLevelManager::Init()
 
 		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		rot.x += -90;	
+		//rot.x += -90;	
 		o->GetTransform()->SetRelativeRotation(rot);
-		o->AddComponent(new CTestDragon);
+		o->AddComponent(new CTestPlayer);
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(true);
 		m_CurLevel->AddGameObject(o, 10, false);
