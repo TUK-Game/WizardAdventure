@@ -48,6 +48,7 @@ void CBoxCollider::SetMaxMinPos(Vec4 centerPos, Vec3 maxPos, Vec3 minPos)
 	center = Vec3(centerPos.x, centerPos.y, -centerPos.z);
 	m_BoundingBox.Center = Vec3(centerPos.x, centerPos.y, -centerPos.z);
 	m_BoundingBox.Extents = (maxPos - minPos) / 2;
+	size = (maxPos - minPos) / 2;
 }
 
 void CBoxCollider::FinalUpdate()	

@@ -35,6 +35,7 @@ public:
 	void CallCollisionBegin(CBaseCollider* dest);
 	void CallCollisionEnd(CBaseCollider* dest);
 	Vec3 center;
+	Vec3 size;
 
 protected:
 	ECollider_Type m_ColliderType = {};
