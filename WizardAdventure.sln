@@ -21,6 +21,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor", "Project\Editor\Ed
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Project\Engine\Engine.vcxproj", "{A7A56375-7AE0-4FE8-A20F-2EE7702E55A4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FBXConverter", "FBXConverter", "{C8D5274F-AC00-46C7-1F8D-E88E81087A52}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FbxConverter", "Project\FbxConverter\FbxConverter.vcxproj", "{00DA5217-E508-421B-A3D8-4EB89AC481A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -53,6 +57,14 @@ Global
 		{A7A56375-7AE0-4FE8-A20F-2EE7702E55A4}.Release|x64.Build.0 = Release|x64
 		{A7A56375-7AE0-4FE8-A20F-2EE7702E55A4}.Release|x86.ActiveCfg = Release|Win32
 		{A7A56375-7AE0-4FE8-A20F-2EE7702E55A4}.Release|x86.Build.0 = Release|Win32
+		{00DA5217-E508-421B-A3D8-4EB89AC481A3}.Debug|x64.ActiveCfg = Debug|x64
+		{00DA5217-E508-421B-A3D8-4EB89AC481A3}.Debug|x64.Build.0 = Debug|x64
+		{00DA5217-E508-421B-A3D8-4EB89AC481A3}.Debug|x86.ActiveCfg = Debug|Win32
+		{00DA5217-E508-421B-A3D8-4EB89AC481A3}.Debug|x86.Build.0 = Debug|Win32
+		{00DA5217-E508-421B-A3D8-4EB89AC481A3}.Release|x64.ActiveCfg = Release|x64
+		{00DA5217-E508-421B-A3D8-4EB89AC481A3}.Release|x64.Build.0 = Release|x64
+		{00DA5217-E508-421B-A3D8-4EB89AC481A3}.Release|x86.ActiveCfg = Release|Win32
+		{00DA5217-E508-421B-A3D8-4EB89AC481A3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +73,7 @@ Global
 		{D80BB777-EF2B-4809-958C-E6709F3D9D93} = {3F764EAD-8117-4C2C-A119-5CC7F515B81D}
 		{42B98D62-AC34-468D-B758-62B6C400053B} = {7B294A38-B460-4247-AAB1-AA20DF66B728}
 		{A7A56375-7AE0-4FE8-A20F-2EE7702E55A4} = {0AD500FA-7545-4C68-9F55-43C551BCE23E}
+		{00DA5217-E508-421B-A3D8-4EB89AC481A3} = {C8D5274F-AC00-46C7-1F8D-E88E81087A52}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {008B50A7-E7B6-4092-A952-4D66F713398B}
