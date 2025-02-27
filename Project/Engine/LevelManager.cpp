@@ -219,7 +219,7 @@ int CLevelManager::Init()
 	//	m_CurLevel->AddGameObject(obj, 3, false);
 	//}
 #pragma endregion
-	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
+	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"door");
 	std::vector<CGameObject*> obj = data->Instantiate();
 	
 	for(auto& o : obj)
@@ -231,9 +231,11 @@ int CLevelManager::Init()
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
 		//rot.x += -90;	
 		o->GetTransform()->SetRelativeRotation(rot);
+		//o->GetTransform()->SetRelativePosition(100, 0, 0);
+		o->GetTransform()->SetRelativeScale(0.1, 0.1, 0.1);
 		o->AddComponent(new CTestPlayer);
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		o->SetCheckFrustum(true);
+		o->SetCheckFrustum(false);
 		m_CurLevel->AddGameObject(o, 10, false);
 
 		/*Vec3 trans = o->GetCollider()->center;
