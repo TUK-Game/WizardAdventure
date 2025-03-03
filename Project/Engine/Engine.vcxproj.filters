@@ -153,6 +153,9 @@
     <Filter Include="04. Component\09. UI">
       <UniqueIdentifier>{37c7b44f-c376-4232-aaae-59c8d36919b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="IMGUIZMO">
+      <UniqueIdentifier>{83776f98-764c-47c9-982b-6c7a488c5d8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -386,6 +389,24 @@
     <ClInclude Include="UIButton.h">
       <Filter>04. Component\09. UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGuizmo\ImGuizmo.h">
+      <Filter>IMGUIZMO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGuizmo\GraphEditor.h">
+      <Filter>IMGUIZMO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGuizmo\ImCurveEdit.h">
+      <Filter>IMGUIZMO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGuizmo\ImGradient.h">
+      <Filter>IMGUIZMO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGuizmo\ImSequencer.h">
+      <Filter>IMGUIZMO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGuizmo\ImZoomSlider.h">
+      <Filter>IMGUIZMO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -576,6 +597,21 @@
     </ClCompile>
     <ClCompile Include="UIButton.cpp">
       <Filter>04. Component\09. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGuizmo\ImGuizmo.cpp">
+      <Filter>IMGUIZMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGuizmo\GraphEditor.cpp">
+      <Filter>IMGUIZMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGuizmo\ImCurveEdit.cpp">
+      <Filter>IMGUIZMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGuizmo\ImGradient.cpp">
+      <Filter>IMGUIZMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGuizmo\ImSequencer.cpp">
+      <Filter>IMGUIZMO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

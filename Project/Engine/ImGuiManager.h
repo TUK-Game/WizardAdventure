@@ -14,6 +14,7 @@ public:
 
 	void DrawLevelWindow();
 	void DrawInspectorWindow();
+	void DrawGizmo();
 
 private:
 	class CGameObject* m_SelectedObject;  

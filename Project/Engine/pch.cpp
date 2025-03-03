@@ -44,3 +44,15 @@ std::string Trim(const std::string& str)
 	result.erase(std::find_if(result.rbegin(), result.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), result.end());
 	return result;
 }
+
+float* MatrixToFloatPtr(DirectX::SimpleMath::Matrix& matrix)
+{
+	static float glmCompatibleMatrix[16]; 
+
+	glmCompatibleMatrix[0] = matrix._11; glmCompatibleMatrix[4] = matrix._12; glmCompatibleMatrix[8] = matrix._13; glmCompatibleMatrix[12] = matrix._14;
+	glmCompatibleMatrix[1] = matrix._21; glmCompatibleMatrix[5] = matrix._22; glmCompatibleMatrix[9] = matrix._23; glmCompatibleMatrix[13] = matrix._24;
+	glmCompatibleMatrix[2] = matrix._31; glmCompatibleMatrix[6] = matrix._32; glmCompatibleMatrix[10] = matrix._33; glmCompatibleMatrix[14] = matrix._34;
+	glmCompatibleMatrix[3] = matrix._41; glmCompatibleMatrix[7] = matrix._42; glmCompatibleMatrix[11] = matrix._43; glmCompatibleMatrix[15] = matrix._44;
+
+	return glmCompatibleMatrix;  
+}

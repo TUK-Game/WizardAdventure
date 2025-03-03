@@ -202,10 +202,10 @@ int CLevelManager::Init()
 	object->SetName(L"Cube");
 	object->AddComponent(new CTransform);
 	object->AddComponent(new CMeshRenderer);
-	object->AddComponent(new CBoxCollider);
+	//object->AddComponent(new CBoxCollider);
 	object->AddComponent(new CRigidBody);
 	object->GetRigidBody()->SetGravity(true);
-	object->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//object->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
 	object->GetTransform()->SetRelativeScale(500.f, 500.f, 500.f);
 	object->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
 	object->GetTransform()->SetRelativePosition(-300.f, 600.f, 300.f);
@@ -229,23 +229,23 @@ int CLevelManager::Init()
 		m_CurLevel->AddGameObject(obj, 3, false);
 	}
 #pragma endregion
-	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
-	std::vector<CGameObject*> obj = data->Instantiate();
-	
-	for(auto& o : obj)
-	{
-		std::string name = "Dragon";
-		o->SetName(s2ws(name));
-		//o->AddComponent(new CBoxCollider);
-		//o->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred");
-		o->GetMeshRenderer()->GetMaterial(0)->SetGraphicsShader(shader);
-		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
-		//o->AddComponent(new CTestDragon);
-		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		o->SetCheckFrustum(false);
-		m_CurLevel->AddGameObject(o, 3, false);
-	}
+	//CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Dragon");
+	//std::vector<CGameObject*> obj = data->Instantiate();
+	//
+	//for(auto& o : obj)
+	//{
+	//	std::string name = "Dragon";
+	//	o->SetName(s2ws(name));
+	//	//o->AddComponent(new CBoxCollider);
+	//	//o->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
+	//	CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Deferred");
+	//	o->GetMeshRenderer()->GetMaterial(0)->SetGraphicsShader(shader);
+	//	//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	//o->AddComponent(new CTestDragon);
+	//	//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+	//	o->SetCheckFrustum(false);
+	//	m_CurLevel->AddGameObject(o, 3, false);
+	//}
 
 	//for(auto& o : obj2)
 	//{

@@ -45,6 +45,10 @@ public:
     void SetParentTransform(CTransform* transform);
     void SetParent(CGameObject* parent) { m_Parent = parent; } 
     void SetLayerIndex(int index) { m_LayerIndex = index; }
+    void SetTag(const std::wstring& tag) { m_Tag = tag; }
+
+    int GetLayerIndex() { return m_LayerIndex; }
+    std::wstring GetTag() const { return m_Tag; }
 
     void AddComponent(CComponent* component);
     void AddChild(CGameObject* obj);
@@ -71,5 +75,7 @@ private:
     int m_LayerIndex; // 소속 레이어 번호
     bool m_CheckFrustum = true; // 프러스텀 여부
     bool m_Static = false; // 정적/동적 오브젝트 여부 
+    std::wstring m_Tag = L"Default"; // 기본 태그 (Default)
+
 };
 

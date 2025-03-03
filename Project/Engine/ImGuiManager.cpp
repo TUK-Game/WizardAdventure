@@ -10,6 +10,10 @@
 #include "Level.h"
 #include "Layer.h"
 #include "AssetManager.h"
+#include "Camera.h"
+#include "RenderManager.h"
+#include "../../3rdParty/ImGuizmo/ImGuizmo.h"
+#include "../../3rdParty/ImGui/imgui_internal.h"
 
 CImGuiManager::CImGuiManager()
 {
@@ -93,6 +97,8 @@ void CImGuiManager::DrawLevelWindow()
 	ImGui::SetNextWindowSize(ImVec2(300, 400));
 	ImGui::Begin("Level Objects");
 
+	static int selectedLayer = -1;  
+	
 	if (ImGui::Button("Add Object"))
 	{
 		static int objCounter = 0;
@@ -156,16 +162,52 @@ void CImGuiManager::DrawInspectorWindow()
 	if (!m_SelectedObject)
 		return;
 
+	ImGui::SetNextWindowSize(ImVec2(300, 400));
 	ImGui::Begin("Inspector");
 	std::string objName = ws2s(m_SelectedObject->GetName());
 	ImGui::Text("Editing: %s", objName.c_str());
 
+	// Gizmo 활성화 버튼 추가
+	static bool gizmoEnabled = true;
+	ImGui::Checkbox("Enable Gizmo", &gizmoEnabled);
+
+	// Tag
+	static std::vector<std::wstring> tagList = { L"Default", L"Player", L"Enemy", L"NPC", L"Item" };
+	std::wstring currentTag = m_SelectedObject->GetTag();
+	int selectedTagIndex = std::find(tagList.begin(), tagList.end(), currentTag) - tagList.begin();
+
+	if (ImGui::BeginCombo("Tag", ws2s(tagList[selectedTagIndex]).c_str()))
+	{
+		for (int i = 0; i < tagList.size(); ++i)
+		{
+			bool isSelected = (selectedTagIndex == i);
+			if (ImGui::Selectable(ws2s(tagList[i]).c_str(), isSelected))
+			{
+				m_SelectedObject->SetTag(tagList[i]);
+			}
+			if (isSelected)
+				ImGui::SetItemDefaultFocus();
+		}
+		ImGui::EndCombo();
+	}
+
+	// Layer
+	int currentLayer = m_SelectedObject->GetLayerIndex();
+	if (ImGui::InputInt("Layer", &currentLayer))
+	{
+		currentLayer = std::clamp(currentLayer, 0, MAX_LAYER - 1);
+		m_SelectedObject->SetLayerIndex(currentLayer);
+	}
+
+	// Static
 	bool isStatic = m_SelectedObject->IsStatic();
 	if (ImGui::Checkbox("Is Static", &isStatic))
 	{
 		m_SelectedObject->SetStatic(isStatic);
 	}
 
+
+	// SRT
 	Vec3 position = m_SelectedObject->GetTransform()->GetRelativePosition();
 	Vec3 rotation = m_SelectedObject->GetTransform()->GetRelativeRotation();
 	Vec3 scale = m_SelectedObject->GetTransform()->GetRelativeScale();
@@ -226,7 +268,196 @@ void CImGuiManager::DrawInspectorWindow()
         ImGui::EndCombo();
     }
 
+	if (ImGuizmo::IsUsing())
+	{
+		ImGui::Text("Using gizmo");
+	}
+	else
+	{
+		ImGui::Text(ImGuizmo::IsOver() ? "Over gizmo" : "");
+		ImGui::SameLine();
+		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::TRANSLATE) ? "Over translate gizmo" : "");
+		ImGui::SameLine();
+		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::ROTATE) ? "Over rotate gizmo" : "");
+		ImGui::SameLine();
+		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::SCALE) ? "Over scale gizmo" : "");
+	}
 
 
 	ImGui::End();
+
+	// Gizmo 활성화 상태라면 DrawGizmo 호출
+	if (gizmoEnabled)
+	{
+		DrawGizmo();
+	}
+
+}
+
+//void CImGuiManager::DrawGizmo()
+//{
+//	if (!m_SelectedObject)
+//		return;
+//	ImGui::Begin("Gizmo Transform");
+//
+//	ImGuizmo::BeginFrame();
+//	ImGuizmo::Enable(true);
+//	ImGuizmo::SetGizmoSizeClipSpace(0.15f);  
+//	ImVec2 pos = ImGui::GetWindowPos();
+//	ImVec2 size = ImGui::GetWindowSize();
+//	ImGuizmo::SetRect(pos.x, pos.y, size.x, size.y);
+//
+//
+//	// 현재 카메라의 View/Projection 행렬 가져오기
+//	CCamera* camera = CRenderManager::GetInst()->GetMainCamera();
+//	Matrix viewMatrix = camera->GetViewMat();
+//	Matrix projectionMatrix = camera->GetProjMat();
+//
+//	//  오브젝트의 Transform 행렬 가져오기
+//	Matrix transform = m_SelectedObject->GetTransform()->GetWorldMatrix();
+//
+//	//  Gizmo 조작 (이동, 회전, 크기 변경)
+//	if (ImGuizmo::Manipulate(*viewMatrix.m, *projectionMatrix.m,
+//		ImGuizmo::TRANSLATE, ImGuizmo::WORLD, *transform.m))
+//	{
+//		//  변환된 Transform 값을 가져와 GameObject에 적용
+//		DirectX::SimpleMath::Vector3 newPosition, newRotation, newScale;
+//		ImGuizmo::DecomposeMatrixToComponents(MatrixToFloatPtr(transform),
+//			&newPosition.x, &newRotation.x, &newScale.x);
+//
+//		//  변환된 값을 다시 적용
+//		m_SelectedObject->GetTransform()->SetRelativePosition(newPosition);
+//		m_SelectedObject->GetTransform()->SetRelativeRotation(newRotation);
+//		m_SelectedObject->GetTransform()->SetRelativeScale(newScale);
+//
+//		m_SelectedObject->GetTransform()->SetWorldMatrix(transform);
+//	}
+//
+//	ImGui::End();  //  ImGui 창 닫기
+//}
+
+//void CImGuiManager::DrawGizmo()
+//{
+//	if (!m_SelectedObject)
+//		return;
+//	static ImGuiWindowFlags gizmoWindowFlags = 0;
+//
+//
+//
+//	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 1.0f, 1.0f, 0.3f)); // 밝은 배경색
+//	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f)); // 검은 글씨
+//	ImGui::Begin("Gizmo", 0, gizmoWindowFlags);
+//	ImGuizmo::SetDrawlist();
+//
+//	ImGuizmo::BeginFrame();
+//	ImGuizmo::Enable(true);
+//	ImGuizmo::SetGizmoSizeClipSpace(0.15f);
+//
+//	ImVec2 pos = ImGui::GetWindowPos();
+//	ImVec2 size = ImGui::GetWindowSize();
+//	ImGuizmo::SetRect(pos.x, pos.y, size.x, size.y);
+//
+//	// 카메라의 View/Projection 행렬 가져오기
+//	CCamera* camera = CRenderManager::GetInst()->GetMainCamera();
+//	Matrix viewMatrix = camera->GetViewMat();
+//	Matrix projectionMatrix = camera->GetProjMat();
+//
+//
+//	//  오브젝트의 Transform 행렬 가져오기
+//	Matrix transform = m_SelectedObject->GetTransform()->GetWorldMatrix();
+//
+//	// 마우스가 ImGui UI 위에 있을 때만 Manipulate 실행
+//	if (ImGuizmo::Manipulate(*viewMatrix.m, *projectionMatrix.m,
+//		ImGuizmo::TRANSLATE, ImGuizmo::WORLD, *transform.m))
+//	{
+//		DirectX::SimpleMath::Vector3 newPosition, newRotation, newScale;
+//		ImGuizmo::DecomposeMatrixToComponents(MatrixToFloatPtr(transform),
+//			&newPosition.x, &newRotation.x, &newScale.x);
+//
+//		m_SelectedObject->GetTransform()->SetRelativePosition(newPosition);
+//		m_SelectedObject->GetTransform()->SetRelativeRotation(newRotation);
+//		m_SelectedObject->GetTransform()->SetRelativeScale(newScale);
+//
+//		m_SelectedObject->GetTransform()->SetWorldMatrix(transform);
+//	}
+//
+//	ImGui::End();
+//	ImGui::PopStyleColor(2);
+//}
+
+
+void CImGuiManager::DrawGizmo()
+{
+	if (!m_SelectedObject)
+		return;
+
+	
+
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui::Begin("Gizmo Debug Info", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+
+	if (ImGuizmo::IsUsing())
+	{
+		ImGui::Text("Using Gizmo: Yes");
+	}
+	else
+	{
+		ImGui::Text("Using Gizmo: No");
+	}
+
+	if (ImGuizmo::IsOver())
+	{
+		ImGui::Text("Over Gizmo: Yes");
+	}
+	else
+	{
+		ImGui::Text("Over Gizmo: No");
+	}
+
+	ImGui::Text("Translate: %s", ImGuizmo::IsOver(ImGuizmo::TRANSLATE) ? "Yes" : "No");
+	ImGui::Text("Rotate: %s", ImGuizmo::IsOver(ImGuizmo::ROTATE) ? "Yes" : "No");
+	ImGui::Text("Scale: %s", ImGuizmo::IsOver(ImGuizmo::SCALE) ? "Yes" : "No");
+
+	ImGui::Text("Mouse Down: %s", io.MouseDown[0] ? "Yes" : "No");
+
+	ImGui::End();
+	float viewManipulateRight = io.DisplaySize.x;
+	float viewManipulateTop = 0;
+	static ImGuiWindowFlags gizmoWindowFlags = 0;
+	ImGui::SetNextWindowSize(ImVec2(800, 400), ImGuiCond_Appearing);
+	ImGui::SetNextWindowPos(ImVec2(400, 20), ImGuiCond_Appearing);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, (ImVec4)ImColor(0.35f, 0.3f, 0.3f));
+	ImGui::Begin("Gizmo", 0, gizmoWindowFlags);
+	ImGuizmo::SetDrawlist();
+	float windowWidth = (float)ImGui::GetWindowWidth();
+	float windowHeight = (float)ImGui::GetWindowHeight();
+	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+	viewManipulateRight = ImGui::GetWindowPos().x + windowWidth;
+	viewManipulateTop = ImGui::GetWindowPos().y;
+	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	gizmoWindowFlags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
+	//ImGuizmo::DrawCubes(cameraView, cameraProjection, &objectMatrix[0][0], gizmoCount);
+	//ImGuizmo::ViewManipulate(cameraView, camDistance, ImVec2(viewManipulateRight - 128, viewManipulateTop), ImVec2(128, 128), 0x10101010);
+	
+	// 카메라의 View/Projection 행렬 가져오기
+	CCamera* camera = CRenderManager::GetInst()->GetMainCamera();
+	Matrix viewMatrix = camera->GetViewMat();
+	Matrix projectionMatrix = camera->GetProjMat();
+
+	//  오브젝트의 Transform 행렬 가져오기
+	Matrix transform = m_SelectedObject->GetTransform()->GetWorldMatrix();
+
+	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+	ImGuizmo::Manipulate(*viewMatrix.m, *projectionMatrix.m, ImGuizmo::TRANSLATE, ImGuizmo::WORLD, *transform.m);
+
+	static bool useSnap(false);
+	static float snap[3] = { 1.f, 1.f, 1.f };
+	bool manipulated = ImGuizmo::Manipulate(*viewMatrix.m, *projectionMatrix.m, ImGuizmo::TRANSLATE, ImGuizmo::WORLD, *transform.m, NULL, useSnap ? &snap[0] : NULL);
+
+
+	ImGui::Text("Manipulate called: %s", manipulated ? "Yes" : "No");
+
+
+	ImGui::End();
+	ImGui::PopStyleColor(1);
 }
