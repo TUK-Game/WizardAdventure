@@ -228,7 +228,6 @@ void CImGuiManager::DrawInspectorWindow()
 		m_SelectedObject->GetTransform()->SetRelativeScale(scale);
 	}
 
-
 	 // Mesh 
 	std::vector<std::wstring> meshList = CAssetManager::GetInst()->GetAllAssetNames<CMesh>();
 	static int selectedMeshIndex = 0;
@@ -336,12 +335,47 @@ void CImGuiManager::DrawGizmo()
 	Matrix projectionMatrix = camera->GetProjMat();
 	Matrix transform = m_SelectedObject->GetTransform()->GetWorldMatrix();
 
-	// Gizmo Manipulate 실행
-	static bool useSnap = false;
-	static float snap[3] = { 0.1f, 0.1f, 0.1f };
+	// Gizmo 모드 선택 (이동, 회전, 크기 조절)
+	static ImGuizmo::OPERATION gizmoOperation = ImGuizmo::TRANSLATE;
 
+	if (ImGui::RadioButton("Translate", gizmoOperation == ImGuizmo::TRANSLATE)) { gizmoOperation = ImGuizmo::TRANSLATE; }
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Rotate", gizmoOperation == ImGuizmo::ROTATE)) { gizmoOperation = ImGuizmo::ROTATE; }
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Scale", gizmoOperation == ImGuizmo::SCALE)) { gizmoOperation = ImGuizmo::SCALE; }
+
+	static bool useSnap = false;
+	ImGui::Checkbox("Snap", &useSnap);
+
+	static float snapTranslate[3] = { 0.1f, 0.1f, 0.1f };  // 이동 Snap (m 단위)
+	static float snapRotate = 5.0f;  // 회전 Snap (각도)
+	static float snapScale[3] = { 0.1f, 0.1f, 0.1f };  // 크기 Snap
+
+	if (useSnap)
+	{
+		if (gizmoOperation == ImGuizmo::TRANSLATE)
+			ImGui::InputFloat3("Translate Snap", snapTranslate);
+		else if (gizmoOperation == ImGuizmo::ROTATE)
+			ImGui::InputFloat("Rotate Snap (Degrees)", &snapRotate);
+		else if (gizmoOperation == ImGuizmo::SCALE)
+			ImGui::InputFloat3("Scale Snap", snapScale);
+	}
+
+	// Snap 값 설정
+	float* snapValue = nullptr;
+	if (useSnap)
+	{
+		if (gizmoOperation == ImGuizmo::TRANSLATE)
+			snapValue = snapTranslate;
+		else if (gizmoOperation == ImGuizmo::ROTATE)
+			snapValue = &snapRotate;
+		else if (gizmoOperation == ImGuizmo::SCALE)
+			snapValue = snapScale;
+	}
+
+	// Gizmo Manipulate 실행
 	if (ImGuizmo::Manipulate(*viewMatrix.m, *projectionMatrix.m,
-		ImGuizmo::TRANSLATE, ImGuizmo::WORLD, *transform.m, NULL, useSnap ? &snap[0] : NULL))
+		gizmoOperation, ImGuizmo::WORLD, *transform.m, NULL, snapValue))
 	{
 		// 변환된 Transform 값을 가져와 GameObject에 적용
 		DirectX::SimpleMath::Vector3 newPosition, newRotation, newScale;
@@ -350,6 +384,12 @@ void CImGuiManager::DrawGizmo()
 
 		// 변환된 값을 다시 적용
 		m_SelectedObject->GetTransform()->SetRelativePosition(newPosition);
+
+		// 회전값이 너무 크지 않도록 보정 (360도 제한)
+		newRotation.x = fmod(newRotation.x, 360.0f);
+		newRotation.y = fmod(newRotation.y, 360.0f);
+		newRotation.z = fmod(newRotation.z, 360.0f);
+
 		m_SelectedObject->GetTransform()->SetRelativeRotation(newRotation);
 		m_SelectedObject->GetTransform()->SetRelativeScale(newScale);
 
@@ -359,3 +399,4 @@ void CImGuiManager::DrawGizmo()
 	ImGui::End();
 	ImGui::PopStyleColor(1);
 }
+
