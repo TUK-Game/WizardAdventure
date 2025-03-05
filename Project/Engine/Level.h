@@ -14,6 +14,7 @@ public:
 public:
 	CLayer* GetLayer(int index) const { return m_Layer[index]; }
 	class CLevelCollision* GetLevelCollision() { return m_collision; }
+
 	void Deregister();
 
 public:

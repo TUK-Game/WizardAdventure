@@ -7,6 +7,7 @@ class CMeshRenderer;
 class CCamera;
 class CLight;
 class CAnimator;
+class CRigidBody;
 
 
 class CComponent :
@@ -28,6 +29,7 @@ protected:
 	CCamera* GetCamera()				{ return m_Owner->GetCamera(); }
 	CAnimator* GetAnimator()			{ return m_Owner->GetAnimator(); }
 	CLight* GetLight()					{ return m_Owner->GetLight(); }
+	CRigidBody* GetRigidBody()			{ return m_Owner->GetRigidBody(); }
 
 public:
 	virtual void Begin() {};

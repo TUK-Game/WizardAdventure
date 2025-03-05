@@ -8,6 +8,7 @@
 #include "MeshData.h"
 #include "Engine.h"
 #include "ParticleSystem.h"
+#include "SoundManager.h"
 
 CAssetManager::CAssetManager()
 {
@@ -15,6 +16,10 @@ CAssetManager::CAssetManager()
 
 CAssetManager::~CAssetManager()
 {
+	if (m_soundManager) {
+		delete m_soundManager;
+		m_soundManager = nullptr;
+	}
 }
 
 int CAssetManager::Init()
@@ -39,7 +44,17 @@ int CAssetManager::Init()
 
 	if (FAILED(LoadParticle()))
 		return E_FAIL;
+
+	m_soundManager = new CSoundManager;
+	if (!m_soundManager->Init())
+		return E_FAIL;
+
 	return S_OK;
+}
+
+void CAssetManager::Update()
+{
+	m_soundManager->Update();
 }
 
 void CAssetManager::AddAsset(const std::wstring& key, CSharedPtr<CAsset> asset)
@@ -613,4 +628,60 @@ CTexture* CAssetManager::CreateTextureFromResource(const std::wstring& name, Com
 	AddAsset(name, texture);
 
 	return texture;
+}
+
+
+bool CAssetManager::CreateSoundChannel(const std::string& name)
+{
+	return m_soundManager->CreateSoundChannel(name);
+}
+
+bool CAssetManager::LoadSound(const std::string& groupName, const std::string& name, bool loop, const char* fileName, const std::wstring& pathName)
+{
+	return m_soundManager->LoadSound(groupName, name, loop, fileName, pathName);
+}
+
+bool CAssetManager::SetVolume(int volume)
+{
+	return m_soundManager->SetVolume(volume);
+}
+
+bool CAssetManager::SetVolume(const std::string& groupName, int volume)
+{
+	return m_soundManager->SetVolume(groupName, volume);
+}
+
+bool CAssetManager::SoundPlay(const std::string& name)
+{
+	return m_soundManager->SoundPlay(name);
+}
+
+bool CAssetManager::SoundStop(const std::string& name)
+{
+	return m_soundManager->SoundStop(name);
+}
+
+bool CAssetManager::SoundPause(const std::string& name)
+{
+	return m_soundManager->SoundPause(name);
+}
+
+bool CAssetManager::SoundResume(const std::string& name)
+{
+	return m_soundManager->SoundResume(name);
+}
+
+FMOD::ChannelGroup* CAssetManager::FindChannelGroup(const std::string& name)
+{
+	return m_soundManager->FindChannelGroup(name);
+}
+
+CSound* CAssetManager::FindSound(const std::string& name)
+{
+	return m_soundManager->FindSound(name);
+}
+
+void CAssetManager::ReleaseSound(const std::string& name)
+{
+	return m_soundManager->ReleaseSound(name);
 }

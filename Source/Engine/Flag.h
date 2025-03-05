@@ -45,6 +45,9 @@ enum class EComponent_Type
 	Collider,
 	Light,
 	Animator,
+	Rigidbody,
+	UI,
+	UIButton,
 	
 	// Rendering Component
 	MeshRenderer,

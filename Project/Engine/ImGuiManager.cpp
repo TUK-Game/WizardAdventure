@@ -3,6 +3,17 @@
 #include "Engine.h"
 #include "Device.h"
 #include "CommandQueue.h"
+#include "GameObject.h"
+#include "Transform.h"
+#include "MeshRenderer.h"
+#include "LevelManager.h"
+#include "Level.h"
+#include "Layer.h"
+#include "AssetManager.h"
+#include "Camera.h"
+#include "RenderManager.h"
+#include "../../3rdParty/ImGuizmo/ImGuizmo.h"
+#include "../../3rdParty/ImGui/imgui_internal.h"
 
 CImGuiManager::CImGuiManager()
 {
@@ -39,7 +50,10 @@ void CImGuiManager::ReadyWindow()
 	ImGui_ImplWin32_NewFrame();
 	ImGui_ImplDX12_NewFrame();
 	ImGui::NewFrame();
-	//ImGui::ShowDemoWindow();
+	ImGui::ShowDemoWindow();
+
+	DrawLevelWindow();
+	DrawInspectorWindow();
 
 	//static float f = 0.0f;
 	//static int counter = 0;
@@ -70,4 +84,319 @@ void CImGuiManager::CleanUp()
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+	if (m_SelectedObject)
+	{
+		int refCount = m_SelectedObject->GetRefCount();
+		if (refCount > 0)
+			m_SelectedObject->ReleaseRef();
+	}
 }
+
+
+void CImGuiManager::DrawLevelWindow()
+{
+	ImGui::SetNextWindowSize(ImVec2(300, 400));
+	ImGui::Begin("Level Objects");
+
+	static int selectedLayer = -1;  
+	
+	if (ImGui::Button("Add Object"))
+	{
+		static int objCounter = 0;
+		CGameObject* newObj = new CGameObject();
+		newObj->SetName(s2ws("Object " + std::to_string(objCounter++)));
+		newObj->AddComponent(new CTransform());
+		newObj->AddComponent(new CMeshRenderer());
+		newObj->GetTransform()->SetRelativeScale(500.f, 500.f, 500.f);
+		newObj->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
+		newObj->GetTransform()->SetRelativePosition(100.f, 100.f, 100.f);
+		newObj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+		newObj->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(newObj, 3, false);
+
+	}
+	
+
+	int index = 0;
+	for (int j = 0; j < MAX_LAYER; ++j)
+	{
+		auto& gameObjects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(j)->GetObjects();
+
+		for (auto& gameObject : gameObjects)
+		{
+			std::string objName = ws2s(gameObject->GetName()); // Wide String -> String 변환
+			objName = Trim(objName); // 공백 제거
+
+			if (objName.size() == 1)
+			{
+				objName.clear(); // 강제로 문자열을 비워서 ID 충돌 방지
+			}
+
+			if (objName.empty()) // 이름이 비어 있으면 기본 이름 설정
+			{
+				objName = "Unnamed Object##" + std::to_string(index);
+			}
+			else
+			{
+				objName += "##" + std::to_string(index); // 기존 이름에도 고유 ID 추가 (ID 충돌 방지)
+			}
+
+			if (ImGui::Selectable(objName.c_str(), m_SelectedObject == gameObject))
+			{
+				m_SelectedObject = gameObject;
+			}
+			index++; // 객체마다 고유 ID 부여
+		}
+	}
+
+	if (m_SelectedObject && ImGui::Button("Delete Object"))
+	{
+		//CEngine::GetInst()->GetCurrentLevel()->RemoveGameObject(selectedObject);
+		//selectedObject = nullptr;
+	}
+
+	ImGui::End();
+}
+
+void CImGuiManager::DrawInspectorWindow()
+{
+	if (!m_SelectedObject)
+		return;
+
+	ImGui::SetNextWindowSize(ImVec2(300, 400));
+	ImGui::Begin("Inspector");
+	std::string objName = ws2s(m_SelectedObject->GetName());
+	ImGui::Text("Editing: %s", objName.c_str());
+
+	// Gizmo 활성화 버튼 추가
+	static bool gizmoEnabled = true;
+	ImGui::Checkbox("Enable Gizmo", &gizmoEnabled);
+
+	// Tag
+	static std::vector<std::wstring> tagList = { L"Default", L"Player", L"Enemy", L"NPC", L"Item" };
+	std::wstring currentTag = m_SelectedObject->GetTag();
+	int selectedTagIndex = std::find(tagList.begin(), tagList.end(), currentTag) - tagList.begin();
+
+	if (ImGui::BeginCombo("Tag", ws2s(tagList[selectedTagIndex]).c_str()))
+	{
+		for (int i = 0; i < tagList.size(); ++i)
+		{
+			bool isSelected = (selectedTagIndex == i);
+			if (ImGui::Selectable(ws2s(tagList[i]).c_str(), isSelected))
+			{
+				m_SelectedObject->SetTag(tagList[i]);
+			}
+			if (isSelected)
+				ImGui::SetItemDefaultFocus();
+		}
+		ImGui::EndCombo();
+	}
+
+	// Layer
+	int currentLayer = m_SelectedObject->GetLayerIndex();
+	if (ImGui::InputInt("Layer", &currentLayer))
+	{
+		currentLayer = std::clamp(currentLayer, 0, MAX_LAYER - 1);
+		m_SelectedObject->SetLayerIndex(currentLayer);
+	}
+
+	// Static
+	bool isStatic = m_SelectedObject->IsStatic();
+	if (ImGui::Checkbox("Is Static", &isStatic))
+	{
+		m_SelectedObject->SetStatic(isStatic);
+	}
+
+
+	// SRT
+	Vec3 position = m_SelectedObject->GetTransform()->GetRelativePosition();
+	Vec3 rotation = m_SelectedObject->GetTransform()->GetRelativeRotation();
+	Vec3 scale = m_SelectedObject->GetTransform()->GetRelativeScale();
+
+	if (ImGui::DragFloat3("Position", &position.x, 0.1f))
+	{
+		m_SelectedObject->GetTransform()->SetRelativePosition(position);
+	}
+
+	if (ImGui::DragFloat3("Rotation", &rotation.x, 1.0f))
+	{
+		m_SelectedObject->GetTransform()->SetRelativeRotation(rotation);
+	}
+
+	if (ImGui::DragFloat3("Scale", &scale.x, 0.1f))
+	{
+		m_SelectedObject->GetTransform()->SetRelativeScale(scale);
+	}
+
+	 // Mesh 
+	std::vector<std::wstring> meshList = CAssetManager::GetInst()->GetAllAssetNames<CMesh>();
+	static int selectedMeshIndex = 0;
+
+    if (ImGui::BeginCombo("Mesh", ws2s(meshList[selectedMeshIndex]).c_str()))
+    {
+        for (int i = 0; i < meshList.size(); ++i)
+        {
+            bool isSelected = (selectedMeshIndex == i);
+            if (ImGui::Selectable(ws2s(meshList[i]).c_str(), isSelected))
+            {
+                selectedMeshIndex = i;
+                m_SelectedObject->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(meshList[i]));
+            }
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
+
+    // Material 
+	std::vector<std::wstring> materialList = CAssetManager::GetInst()->GetAllAssetNames<CMaterial>();
+	static int selectedMaterialIndex = 0;
+
+    if (ImGui::BeginCombo("Material", ws2s(materialList[selectedMaterialIndex]).c_str()))
+    {
+        for (int i = 0; i < materialList.size(); ++i)
+        {
+            bool isSelected = (selectedMaterialIndex == i);
+            if (ImGui::Selectable(ws2s(materialList[i]).c_str(), isSelected))
+            {
+                selectedMaterialIndex = i;
+                m_SelectedObject->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(materialList[i]));
+            }
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
+
+	if (ImGuizmo::IsUsing())
+	{
+		ImGui::Text("Using gizmo");
+	}
+	else
+	{
+		ImGui::Text(ImGuizmo::IsOver() ? "Over gizmo" : "");
+		ImGui::SameLine();
+		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::TRANSLATE) ? "Over translate gizmo" : "");
+		ImGui::SameLine();
+		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::ROTATE) ? "Over rotate gizmo" : "");
+		ImGui::SameLine();
+		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::SCALE) ? "Over scale gizmo" : "");
+	}
+
+
+	ImGui::End();
+
+	// Gizmo 활성화 상태라면 DrawGizmo 호출
+	if (gizmoEnabled)
+	{
+		DrawGizmo();
+	}
+
+}
+
+void CImGuiManager::DrawGizmo()
+{
+	if (!m_SelectedObject)
+		return;
+
+	ImGuiIO& io = ImGui::GetIO();
+
+	// Gizmo가 활성화되면 ImGui의 마우스 입력을 차단
+	bool gizmoActive = ImGuizmo::IsOver() || ImGuizmo::IsUsing();
+	if (gizmoActive)
+	{
+		io.WantCaptureMouse = false;
+	}
+
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, (ImVec4)ImColor(0.35f, 0.3f, 0.3f));
+
+	ImVec2 fixedSize = ImVec2(500.0f, 400.0f);
+	ImGui::SetNextWindowSize(fixedSize, ImGuiCond_Always);
+
+	// 창 이동 방지 및 크기 변경 방지
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoResize;
+
+	if (gizmoActive)
+	{
+		window_flags |= ImGuiWindowFlags_NoMove;
+	}
+
+	ImGui::Begin("Gizmo", nullptr, window_flags);
+	ImGuizmo::SetDrawlist();
+
+	float windowWidth = ImGui::GetWindowWidth();
+	float windowHeight = ImGui::GetWindowHeight();
+	ImVec2 winPos = ImGui::GetWindowPos();
+	ImGuizmo::SetRect(winPos.x, winPos.y, windowWidth, windowHeight);
+
+	// 카메라 및 오브젝트 행렬 가져오기
+	CCamera* camera = CRenderManager::GetInst()->GetMainCamera();
+	Matrix viewMatrix = camera->GetViewMat();
+	Matrix projectionMatrix = camera->GetProjMat();
+	Matrix transform = m_SelectedObject->GetTransform()->GetWorldMatrix();
+
+	// Gizmo 모드 선택 (이동, 회전, 크기 조절)
+	static ImGuizmo::OPERATION gizmoOperation = ImGuizmo::TRANSLATE;
+
+	if (ImGui::RadioButton("Translate", gizmoOperation == ImGuizmo::TRANSLATE)) { gizmoOperation = ImGuizmo::TRANSLATE; }
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Rotate", gizmoOperation == ImGuizmo::ROTATE)) { gizmoOperation = ImGuizmo::ROTATE; }
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Scale", gizmoOperation == ImGuizmo::SCALE)) { gizmoOperation = ImGuizmo::SCALE; }
+
+	static bool useSnap = false;
+	ImGui::Checkbox("Snap", &useSnap);
+
+	static float snapTranslate[3] = { 0.1f, 0.1f, 0.1f };  // 이동 Snap (m 단위)
+	static float snapRotate = 5.0f;  // 회전 Snap (각도)
+	static float snapScale[3] = { 0.1f, 0.1f, 0.1f };  // 크기 Snap
+
+	if (useSnap)
+	{
+		if (gizmoOperation == ImGuizmo::TRANSLATE)
+			ImGui::InputFloat3("Translate Snap", snapTranslate);
+		else if (gizmoOperation == ImGuizmo::ROTATE)
+			ImGui::InputFloat("Rotate Snap (Degrees)", &snapRotate);
+		else if (gizmoOperation == ImGuizmo::SCALE)
+			ImGui::InputFloat3("Scale Snap", snapScale);
+	}
+
+	// Snap 값 설정
+	float* snapValue = nullptr;
+	if (useSnap)
+	{
+		if (gizmoOperation == ImGuizmo::TRANSLATE)
+			snapValue = snapTranslate;
+		else if (gizmoOperation == ImGuizmo::ROTATE)
+			snapValue = &snapRotate;
+		else if (gizmoOperation == ImGuizmo::SCALE)
+			snapValue = snapScale;
+	}
+
+	// Gizmo Manipulate 실행
+	if (ImGuizmo::Manipulate(*viewMatrix.m, *projectionMatrix.m,
+		gizmoOperation, ImGuizmo::WORLD, *transform.m, NULL, snapValue))
+	{
+		// 변환된 Transform 값을 가져와 GameObject에 적용
+		DirectX::SimpleMath::Vector3 newPosition, newRotation, newScale;
+		ImGuizmo::DecomposeMatrixToComponents(MatrixToFloatPtr(transform),
+			&newPosition.x, &newRotation.x, &newScale.x);
+
+		// 변환된 값을 다시 적용
+		m_SelectedObject->GetTransform()->SetRelativePosition(newPosition);
+
+		// 회전값이 너무 크지 않도록 보정 (360도 제한)
+		newRotation.x = fmod(newRotation.x, 360.0f);
+		newRotation.y = fmod(newRotation.y, 360.0f);
+		newRotation.z = fmod(newRotation.z, 360.0f);
+
+		m_SelectedObject->GetTransform()->SetRelativeRotation(newRotation);
+		m_SelectedObject->GetTransform()->SetRelativeScale(newScale);
+
+		m_SelectedObject->GetTransform()->SetWorldMatrix(transform);
+	}
+
+	ImGui::End();
+	ImGui::PopStyleColor(1);
+}
+

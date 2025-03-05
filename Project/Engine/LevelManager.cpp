@@ -18,7 +18,10 @@
 #include "Device.h"
 #include "ComputeShader.h"
 #include "ParticleSystem.h"
+#include "RigidBody.h"
 #include "TestDragon.h"
+#include "UI.h"
+#include "UIButton.h"
 #include <iostream>
 #include "Animator.h"
 #include "TestPlayer.h"
@@ -44,6 +47,13 @@ int CLevelManager::Init()
 	m_CurLevel->GetLayer(3)->SetName(L"Others");
 	m_CurLevel->GetLayer(4)->SetName(L"UI");
 	m_CurLevel->GetLayer(10)->SetName(L"Map");
+
+	CAssetManager::GetInst()->LoadSound("BGM", "Play", false, "play.mp3");
+	CAssetManager::GetInst()->SetVolume("BGM", 30);
+	CAssetManager::GetInst()->SoundPlay("Play");
+
+	CAssetManager::GetInst()->LoadSound("UI", "Click", false, "click.mp3");
+	CAssetManager::GetInst()->SetVolume("UI", 30);
 
 #pragma region ComputeShader
 	{
@@ -273,8 +283,11 @@ int CLevelManager::Init()
 		CGameObject* obj = new CGameObject;
 		obj->AddComponent(new CTransform);
 		obj->AddComponent(new CMeshRenderer);
-		obj->GetTransform()->SetRelativeScale(Vec3(160.f, 160.f, 160.f));
-		obj->GetTransform()->SetRelativePosition(Vec3(-500.f + (i * 200), 250.f, 500.f));
+		obj->AddComponent(new CUIButton);
+		//obj->GetTransform()->SetRelativeScale(Vec3(160.f, 160.f, 160.f));
+		//obj->GetTransform()->SetRelativePosition(Vec3(-500.f + (i * 200), 250.f, 500.f));
+		obj->GetTransform()->SetRelativeScale(Vec3(.2f, .35f, .2f));
+		obj->GetTransform()->SetRelativePosition(Vec3(-0.8f + i * 0.33f, 0.5f, 1.0f));
 		obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 		CMaterial* material = new CMaterial;	
 		CTexture* texture;

@@ -138,6 +138,24 @@
     <Filter Include="01. Manager\12. ImGui">
       <UniqueIdentifier>{1d66cf96-8c2a-4390-b8d8-4866c1b54154}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Asset\05. Sound">
+      <UniqueIdentifier>{8a036813-c3f8-45a5-8a10-6cc11a75929f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Asset\05. Sound\01. FMOD">
+      <UniqueIdentifier>{81b7a1a1-0251-4fe3-8378-f5e4797ea76a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\13. Sound">
+      <UniqueIdentifier>{d4e67145-560a-4b39-be32-21ec5558a89a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\08. RigidBody">
+      <UniqueIdentifier>{7d39d63e-e598-4f6b-9cea-fa579c72dd27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\09. UI">
+      <UniqueIdentifier>{37c7b44f-c376-4232-aaae-59c8d36919b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IMGUIZMO">
+      <UniqueIdentifier>{83776f98-764c-47c9-982b-6c7a488c5d8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -335,6 +353,63 @@
     <ClInclude Include="TestPlayer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>05. Asset\05. Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>01. Manager\13. Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.hpp">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_codec.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_common.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp_effects.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_errors.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_output.h">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>04. Component\08. RigidBody</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>04. Component\09. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>04. Component\09. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGuizmo\ImGuizmo.h">
+      <Filter>IMGUIZMO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGuizmo\GraphEditor.h">
+      <Filter>IMGUIZMO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGuizmo\ImCurveEdit.h">
+      <Filter>IMGUIZMO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGuizmo\ImGradient.h">
+      <Filter>IMGUIZMO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGuizmo\ImSequencer.h">
+      <Filter>IMGUIZMO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\ImGuizmo\ImZoomSlider.h">
+      <Filter>IMGUIZMO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -514,6 +589,36 @@
     <ClCompile Include="TestPlayer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>05. Asset\05. Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>01. Manager\13. Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>04. Component\08. RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>04. Component\09. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>04. Component\09. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGuizmo\ImGuizmo.cpp">
+      <Filter>IMGUIZMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGuizmo\GraphEditor.cpp">
+      <Filter>IMGUIZMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGuizmo\ImCurveEdit.cpp">
+      <Filter>IMGUIZMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGuizmo\ImGradient.cpp">
+      <Filter>IMGUIZMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\ImGuizmo\ImSequencer.cpp">
+      <Filter>IMGUIZMO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -521,6 +626,15 @@
     </None>
     <None Include="default.hlsli">
       <Filter>HLSL</Filter>
+    </None>
+    <None Include="fmod.cs">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </None>
+    <None Include="fmod_dsp.cs">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
+    </None>
+    <None Include="fmod_errors.cs">
+      <Filter>05. Asset\05. Sound\01. FMOD</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
