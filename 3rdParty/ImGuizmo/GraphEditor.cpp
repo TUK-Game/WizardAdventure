@@ -1,5 +1,5 @@
 // https://github.com/CedricGuillemet/ImGuizmo
-// v1.91.3 WIP
+// v 1.83
 //
 // The MIT License(MIT)
 //
@@ -24,8 +24,8 @@
 // SOFTWARE.
 //
 
-#define IMGUI_DEFINE_MATH_OPERATORS
 #include "../ImGui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "../ImGui/imgui_internal.h"
 #include <math.h>
 #include <vector>
@@ -186,8 +186,6 @@ static void DisplayLinks(Delegate& delegate,
         if (options.mDisplayLinksAsCurves)
         {
             // curves
-             drawList->AddBezierCubic(p1, p1 + ImVec2(50, 0) * factor, p2 + ImVec2(-50, 0) * factor, p2, 0xFF000000, options.mLineThickness * 1.5f * factor);
-             drawList->AddBezierCubic(p1, p1 + ImVec2(50, 0) * factor, p2 + ImVec2(-50, 0) * factor, p2, col, options.mLineThickness * 1.5f * factor);
              /*
             ImVec2 p10 = p1 + ImVec2(20.f * factor, 0.f);
             ImVec2 p20 = p2 - ImVec2(20.f * factor, 0.f);
@@ -311,7 +309,7 @@ static void HandleQuadSelection(Delegate& delegate, ImDrawList* drawList, const 
 
             nodeOperation = NO_None;
             ImRect selectionRect(bmin, bmax);
-            for (unsigned int nodeIndex = 0; nodeIndex < nodeCount; nodeIndex++)
+            for (int nodeIndex = 0; nodeIndex < nodeCount; nodeIndex++)
             {
                 const auto node = delegate.GetNode(nodeIndex);
                 ImVec2 nodeRectangleMin = offset + node.mRect.Min * factor;
@@ -469,7 +467,7 @@ static bool HandleConnections(ImDrawList* drawList,
 
                     if (!alreadyExisting)
                     {
-                        for (unsigned int linkIndex = 0; linkIndex < linkCount; linkIndex++)
+                        for (int linkIndex = 0; linkIndex < linkCount; linkIndex++)
                         {
                             const auto link = delegate.GetLink(linkIndex);
                             if (link.mOutputNodeIndex == nl.mOutputNodeIndex && link.mOutputSlotIndex == nl.mOutputSlotIndex)
@@ -497,7 +495,7 @@ static bool HandleConnections(ImDrawList* drawList,
                 if (editingInput)
                 {
                     // remove existing link
-                    for (unsigned int linkIndex = 0; linkIndex < linkCount; linkIndex++)
+                    for (int linkIndex = 0; linkIndex < linkCount; linkIndex++)
                     {
                         const auto link = delegate.GetLink(linkIndex);
                         if (link.mOutputNodeIndex == nodeIndex && link.mOutputSlotIndex == closestConn)
@@ -543,7 +541,6 @@ static bool DrawNode(ImDrawList* drawList,
 {
     ImGuiIO& io = ImGui::GetIO();
     const auto node = delegate.GetNode(nodeIndex);
-    IM_ASSERT((node.mRect.GetWidth() != 0.f) && (node.mRect.GetHeight() != 0.f) && "Nodes must have a non-zero rect.");
     const auto nodeTemplate = delegate.GetTemplate(node.mTemplateIndex);
     const ImVec2 nodeRectangleMin = offset + node.mRect.Min * factor;
 
@@ -837,7 +834,7 @@ void Show(Delegate& delegate, const Options& options, ViewState& viewState, bool
     captureOffset = viewState.mPosition * viewState.mFactor;
 
     //ImGui::InvisibleButton("GraphEditorButton", canvasSize);
-    ImGui::BeginChild(71711, canvasSize, ImGuiChildFlags_FrameStyle);
+    ImGui::BeginChildFrame(71711, canvasSize);
 
     ImGui::SetCursorPos(windowPos);
     ImGui::BeginGroup();
@@ -1030,7 +1027,7 @@ void Show(Delegate& delegate, const Options& options, ViewState& viewState, bool
     ImGui::PopStyleColor(1);
     ImGui::PopStyleVar(2);
     ImGui::EndGroup();
-    ImGui::EndChild();
+    ImGui::EndChildFrame();
 
     ImGui::PopStyleVar(3);
     
