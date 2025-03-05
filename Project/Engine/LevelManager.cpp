@@ -186,6 +186,8 @@ int CLevelManager::Init()
 	object3->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 	object3->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Ryo"));
 	object3->AddChild(object4);
+	m_CurLevel->AddGameObject(object3, 3, false);
+
 
 	object2->SetName(L"Cube2");
 	object2->AddComponent(new CTransform);
@@ -203,8 +205,8 @@ int CLevelManager::Init()
 	object->AddComponent(new CTransform);
 	object->AddComponent(new CMeshRenderer);
 	//object->AddComponent(new CBoxCollider);
-	object->AddComponent(new CRigidBody);
-	object->GetRigidBody()->SetGravity(true);
+	//object->AddComponent(new CRigidBody);
+	//object->GetRigidBody()->SetGravity(true);
 	//object->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
 	object->GetTransform()->SetRelativeScale(500.f, 500.f, 500.f);
 	object->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);

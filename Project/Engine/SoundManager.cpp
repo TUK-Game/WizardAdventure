@@ -16,7 +16,7 @@ CSoundManager::~CSoundManager()
     {
         group->release();
     }
-
+  
     if (m_system)
     {
         m_system->release();

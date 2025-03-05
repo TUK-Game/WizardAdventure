@@ -86,8 +86,9 @@ void CImGuiManager::CleanUp()
 	ImGui::DestroyContext();
 	if (m_SelectedObject)
 	{
-		delete m_SelectedObject;
-		m_SelectedObject = nullptr;
+		int refCount = m_SelectedObject->GetRefCount();
+		if (refCount > 0)
+			m_SelectedObject->ReleaseRef();
 	}
 }
 
@@ -293,52 +294,6 @@ void CImGuiManager::DrawInspectorWindow()
 	}
 
 }
-
-//void CImGuiManager::DrawGizmo()
-//{
-//	if (!m_SelectedObject)
-//		return;
-//
-//	ImGui::PushStyleColor(ImGuiCol_WindowBg, (ImVec4)ImColor(0.35f, 0.3f, 0.3f));
-//	ImGui::Begin("Gizmo");
-//	ImGuizmo::SetDrawlist();
-//
-//	float windowWidth = ImGui::GetWindowWidth();
-//	float windowHeight = ImGui::GetWindowHeight();
-//	ImVec2 winPos = ImGui::GetWindowPos();
-//	ImGuizmo::SetRect(winPos.x, winPos.y, windowWidth, windowHeight);
-//
-//	// 카메라 및 오브젝트 행렬 가져오기
-//	CCamera* camera = CRenderManager::GetInst()->GetMainCamera();
-//	Matrix viewMatrix = camera->GetViewMat();
-//	Matrix projectionMatrix = camera->GetProjMat();
-//	Matrix transform = m_SelectedObject->GetTransform()->GetWorldMatrix();
-//
-//	// Gizmo Manipulate 실행
-//	static bool useSnap = false;
-//	static float snap[3] = { 0.1f, 0.1f, 0.1f };
-//
-//		//  Gizmo 조작 (이동, 회전, 크기 변경)
-//	if (ImGuizmo::Manipulate(*viewMatrix.m, *projectionMatrix.m,
-//		ImGuizmo::TRANSLATE, ImGuizmo::WORLD, *transform.m, NULL, useSnap ? &snap[0] : NULL))
-//	{
-//		//  변환된 Transform 값을 가져와 GameObject에 적용
-//		DirectX::SimpleMath::Vector3 newPosition, newRotation, newScale;
-//		ImGuizmo::DecomposeMatrixToComponents(MatrixToFloatPtr(transform),
-//			&newPosition.x, &newRotation.x, &newScale.x);
-//
-//		//  변환된 값을 다시 적용
-//		m_SelectedObject->GetTransform()->SetRelativePosition(newPosition);
-//		m_SelectedObject->GetTransform()->SetRelativeRotation(newRotation);
-//		m_SelectedObject->GetTransform()->SetRelativeScale(newScale);
-//
-//		m_SelectedObject->GetTransform()->SetWorldMatrix(transform);
-//	}
-//
-//	ImGui::End();
-//	ImGui::PopStyleColor(1);
-//}
-
 
 void CImGuiManager::DrawGizmo()
 {
