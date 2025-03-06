@@ -239,7 +239,7 @@ int CLevelManager::Init()
 
 		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		rot.x += -90;	
+		//rot.x += -90;	
 		o->GetTransform()->SetRelativeRotation(rot);
 		//o->GetTransform()->SetRelativePosition(100, 0, 0);
 		//o->GetTransform()->SetRelativeScale(0.1, 0.1, 0.1);
@@ -248,20 +248,20 @@ int CLevelManager::Init()
 		o->SetCheckFrustum(false);
 		m_CurLevel->AddGameObject(o, 10, false);
 
-		Vec3 trans = o->GetCollider()->center;
-		Vec3 size = o->GetCollider()->size;
-		CGameObject* object = new CGameObject;
-		object->SetName(L"k");
-		object->AddComponent(new CTransform);
-		object->AddComponent(new CMeshRenderer);
-		rot = object->GetTransform()->GetRelativeRotation();
-		//rot.x += -90;
-		object->GetTransform()->SetRelativeRotation(rot);
-		object->GetTransform()->SetRelativePosition(trans);	
-		object->GetTransform()->SetRelativeScale(size);
-		object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-		object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
-		m_CurLevel->AddGameObject(object, 3, false);
+		//Vec3 trans = o->GetCollider()->center;
+		//Vec3 size = o->GetCollider()->size;
+		//CGameObject* object = new CGameObject;
+		//object->SetName(L"k");
+		//object->AddComponent(new CTransform);
+		//object->AddComponent(new CMeshRenderer);
+		//rot = object->GetTransform()->GetRelativeRotation();
+		////rot.x += -90;
+		//object->GetTransform()->SetRelativeRotation(rot);
+		//object->GetTransform()->SetRelativePosition(trans);	
+		//object->GetTransform()->SetRelativeScale(size);
+		//object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+		//object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+		//m_CurLevel->AddGameObject(object, 3, false);
 	}
 
 	//for(auto& o : obj2)
