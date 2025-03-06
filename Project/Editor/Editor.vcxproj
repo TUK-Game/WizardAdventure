@@ -73,13 +73,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Bin\$(ProjectName)\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <ExternalIncludePath>$(SolutionDir)Source\;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)Bin\;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(SolutionDir)Source\;$(SolutionDir)3rdParty\FBX\;$(SolutionDir)3rdParty\;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)Bin\;$(SolutionDir)3rdParty\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Bin\$(ProjectName)\</OutDir>
-    <ExternalIncludePath>$(SolutionDir)Source\;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)Bin\;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(SolutionDir)Source\;$(SolutionDir)3rdParty\FBX\;$(SolutionDir)3rdParty\;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)Bin\;$(SolutionDir)3rdParty\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

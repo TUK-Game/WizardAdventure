@@ -36,9 +36,9 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "d3dcompiler")
 
 #ifndef _DEBUG
-#pragma comment(lib, "../bin/Engine/fmodL_vc.lib") 
+#pragma comment(lib, "FMOD/fmodL_vc.lib") 
 #else
-#pragma comment(lib, "../bin/Engine/fmod_vc.lib") 
+#pragma comment(lib, "FMOD/fmod_vc.lib") 
 #endif
 
 #ifndef _DEBUG
