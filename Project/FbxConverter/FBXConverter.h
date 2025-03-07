@@ -192,7 +192,7 @@ private:
 	void WriteEndl(std::string& str, std::ofstream& file);
 
 	void GetControlPoints(FbxMesh* mesh, std::vector < std::vector<float> >& pos, bool IsAnimation, FbxMeshInfo& info);
-	void InsertVertex(std::vector<float>& position, std::vector<float>& normal, std::vector<float>& tangent, std::vector<float>& uv, FbxMeshInfo& info);
+	void InsertVertex(std::vector<float>& position, std::vector<float>& normal, std::vector<float>& tangent, std::vector<float>& uv, FbxMeshInfo& info, std::unordered_map<Vertex, uint16_t>& indexMapping);
 private:
 	std::vector<FbxMeshInfo> m_Meshes;
 	FbxManager* m_Manager = nullptr;

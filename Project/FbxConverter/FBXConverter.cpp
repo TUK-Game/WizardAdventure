@@ -103,6 +103,7 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh, bool IsAnimation)
     GetControlPoints(mesh, pos, IsAnimation, meshInfo);
 
     uint32_t vertexCounter = 0;
+    std::unordered_map<Vertex, uint16_t> indexMapping;
 
     const uint32_t triCount = mesh->GetPolygonCount();
     for (uint32_t i = 0; i < triCount; i++)
@@ -119,7 +120,7 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh, bool IsAnimation)
             std::vector<float> uv;
             uv = GetUV(mesh, controlPointIndex, vertexCounter);
 
-            InsertVertex(position, normal, tangent, uv, meshInfo);
+            InsertVertex(position, normal, tangent, uv, meshInfo, indexMapping);
             vertexCounter++;
         }
 
@@ -870,8 +871,7 @@ void CFBXConverter::GetControlPoints(FbxMesh* mesh, std::vector<std::vector<floa
     }
 }
 
-std::unordered_map<Vertex, uint16_t> indexMapping;
-void CFBXConverter::InsertVertex(std::vector<float>& position, std::vector<float>& normal, std::vector<float>& tangent, std::vector<float>& uv, FbxMeshInfo& info)
+void CFBXConverter::InsertVertex(std::vector<float>& position, std::vector<float>& normal, std::vector<float>& tangent, std::vector<float>& uv, FbxMeshInfo& info, std::unordered_map<Vertex, uint16_t>& indexMapping)
 {
     Vertex vertex = { position, normal, tangent, uv };
     vertex.controlPoint = position[3];

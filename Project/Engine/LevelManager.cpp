@@ -239,13 +239,13 @@ int CLevelManager::Init()
 
 		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		//rot.x += -90;	
+		rot.x += -90;	
 		o->GetTransform()->SetRelativeRotation(rot);
 		//o->GetTransform()->SetRelativePosition(100, 0, 0);
 		//o->GetTransform()->SetRelativeScale(0.1, 0.1, 0.1);
 		//o->AddComponent(new CTestPlayer);
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		o->SetCheckFrustum(false);
+		o->SetCheckFrustum(true);
 		m_CurLevel->AddGameObject(o, 10, false);
 
 		//Vec3 trans = o->GetCollider()->center;
