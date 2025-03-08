@@ -249,24 +249,48 @@ void CImGuiManager::DrawInspectorWindow()
     }
 
     // Material 
-	std::vector<std::wstring> materialList = CAssetManager::GetInst()->GetAllAssetNames<CMaterial>();
-	static int selectedMaterialIndex = 0;
+	// Material 목록 가져오기
+	std::vector<std::wstring> allMaterials = CAssetManager::GetInst()->GetAllAssetNames<CMaterial>();
+	std::vector<std::wstring> filteredMaterialList;
 
-    if (ImGui::BeginCombo("Material", ws2s(materialList[selectedMaterialIndex]).c_str()))
-    {
-        for (int i = 0; i < materialList.size(); ++i)
-        {
-            bool isSelected = (selectedMaterialIndex == i);
-            if (ImGui::Selectable(ws2s(materialList[i]).c_str(), isSelected))
-            {
-                selectedMaterialIndex = i;
-                m_SelectedObject->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(materialList[i]));
-            }
-            if (isSelected)
-                ImGui::SetItemDefaultFocus();
-        }
-        ImGui::EndCombo();
-    }
+	// SHADER_TYPE::DEFERRED 인 Material만 필터링
+	for (const auto& materialName : allMaterials)
+	{
+		auto material = CAssetManager::GetInst()->FindAsset<CMaterial>(materialName);
+		if (material)
+		{
+			auto shader = material->GetGraphicsShader();
+			if (shader && shader->GetShaderType() == SHADER_TYPE::DEFERRED)
+			{
+				filteredMaterialList.push_back(materialName);
+			}
+		}
+	}
+
+	// ImGui에서 필터링된 리스트 사용
+	static int selectedMaterialIndex = 0;
+	if (!filteredMaterialList.empty() && selectedMaterialIndex >= filteredMaterialList.size())
+	{
+		selectedMaterialIndex = 0;  // 인덱스 유효성 보장
+	}
+
+	if (ImGui::BeginCombo("Material", ws2s(filteredMaterialList[selectedMaterialIndex]).c_str()))
+	{
+		for (int i = 0; i < filteredMaterialList.size(); ++i)
+		{
+			bool isSelected = (selectedMaterialIndex == i);
+			if (ImGui::Selectable(ws2s(filteredMaterialList[i]).c_str(), isSelected))
+			{
+				selectedMaterialIndex = i;
+				m_SelectedObject->GetMeshRenderer()->SetMaterial(
+					CAssetManager::GetInst()->FindAsset<CMaterial>(filteredMaterialList[i])
+				);
+			}
+			if (isSelected)
+				ImGui::SetItemDefaultFocus();
+		}
+		ImGui::EndCombo();
+	}
 
 	if (ImGuizmo::IsUsing())
 	{
@@ -378,7 +402,7 @@ void CImGuiManager::DrawGizmo()
 		gizmoOperation, ImGuizmo::WORLD, *transform.m, NULL, snapValue))
 	{
 		// 변환된 Transform 값을 가져와 GameObject에 적용
-		DirectX::SimpleMath::Vector3 newPosition, newRotation, newScale;
+		Vector3 newPosition, newRotation, newScale;
 		ImGuizmo::DecomposeMatrixToComponents(MatrixToFloatPtr(transform),
 			&newPosition.x, &newRotation.x, &newScale.x);
 

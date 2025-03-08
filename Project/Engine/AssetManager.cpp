@@ -148,7 +148,7 @@ int CAssetManager::LoadMaterial()
 	AddAsset(L"Kita", material);
 
 	material = new CMaterial;
-	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Default"));
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Mushroom"));
 	AddAsset(L"Mushroom", material);
 
@@ -242,10 +242,10 @@ int CAssetManager::LoadMeshData()
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/wizard.jhd");
 	//AddAsset(L"Dragon", data);
 
-	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/level_hall.jhd", L"map");
+	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/level_hall.jhd", L"map");
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/Dragon.jhd");
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/wizard.jhd", L"wizard");
-	AddAsset(L"door", data);
+	//AddAsset(L"door", data);
 
 	/*data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/wolf.fbx");
 	AddAsset(L"Wolf", data);*/	
