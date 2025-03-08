@@ -209,8 +209,9 @@ Vec3 CTransform::DecomposeRotationMatrix(const Matrix& rotation)
 void CTransform::SetWorldMatrix(const Matrix& matrix)
 {
 	m_matWorld = matrix;
-	//SetRelativeScale(matrix._11, matrix._22, matrix._33);
+	SetRelativeScale(matrix._11, matrix._22, matrix._33);
 	SetRelativePosition(matrix._41, matrix._42, matrix._43);
+
 	// 4x4 변환 행렬에서 회전 행렬 부분 추출
 	DirectX::SimpleMath::Matrix rotationMatrix = matrix;
 	rotationMatrix._41 = 0.0f; // 제거: 위치 값

@@ -9,6 +9,11 @@
 #include "Script.h"
 #include "ParticleSystem.h"
 #include "Animator.h"
+#include "Light.h"
+#include "RigidBody.h"
+#include "UI.h"
+#include "UIButton.h"
+#include "MeshRenderer.h"
 
 CGameObject::CGameObject()
 	: m_arrComponent{}
@@ -171,6 +176,52 @@ void CGameObject::AddComponent(CComponent* component)
 	}
 
 	component->m_Owner = this;
+}
+
+void CGameObject::AddComponent(EComponent_Type type)
+{
+
+	switch (type)
+	{
+	case EComponent_Type::Transform:
+		AddComponent(new CTransform());
+		break;
+	case EComponent_Type::Camera:
+		//AddComponent(new CCamera());
+		break;
+	case EComponent_Type::Collider:
+		//AddComponent(new CBoxCollider());
+		break;
+	case EComponent_Type::Light:
+		AddComponent(new CLight());
+		break;
+	case EComponent_Type::Animator:
+		//AddComponent(new CAnimator());
+		break;
+	case EComponent_Type::Rigidbody:
+		AddComponent(new CRigidBody());
+		break;
+	case EComponent_Type::UI:
+		AddComponent(new CUI());
+		break;
+	case EComponent_Type::UIButton:
+		AddComponent(new CUIButton());
+		break;
+	case EComponent_Type::MeshRenderer:
+		AddComponent(new CMeshRenderer());
+		break;
+	case EComponent_Type::ParticleSystem:
+		//AddComponent(new CTransform());
+		break;
+	case EComponent_Type::Skybox:
+		//AddComponent(new CTransform());
+		break;
+	case EComponent_Type::Script:
+		//AddComponent(new CTransform());
+		break;
+	default:
+		break;
+	}
 }
 
 void CGameObject::AddChild(CGameObject* obj)

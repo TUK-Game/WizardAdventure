@@ -51,6 +51,8 @@ public:
     std::wstring GetTag() const { return m_Tag; }
 
     void AddComponent(CComponent* component);
+    void AddComponent(EComponent_Type type);
+
     void AddChild(CGameObject* obj);
 public:
     void Begin();
@@ -78,4 +80,3 @@ private:
     std::wstring m_Tag = L"Default"; // 기본 태그 (Default)
 
 };
-

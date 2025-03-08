@@ -12,6 +12,7 @@
 #include "AssetManager.h"
 #include "Camera.h"
 #include "RenderManager.h"
+#include "RigidBody.h"
 #include "../../3rdParty/ImGuizmo/ImGuizmo.h"
 #include "../../3rdParty/ImGui/imgui_internal.h"
 
@@ -165,14 +166,52 @@ void CImGuiManager::DrawInspectorWindow()
 
 	ImGui::SetNextWindowSize(ImVec2(300, 400));
 	ImGui::Begin("Inspector");
+
+	// 오브젝트 정보 표시
 	std::string objName = ws2s(m_SelectedObject->GetName());
 	ImGui::Text("Editing: %s", objName.c_str());
 
-	// Gizmo 활성화 버튼 추가
+	// Gizmo 활성화 버튼
 	static bool gizmoEnabled = true;
 	ImGui::Checkbox("Enable Gizmo", &gizmoEnabled);
 
-	// Tag
+	// 태그 선택
+	DrawTagUI();
+
+	// 레이어 설정
+	int currentLayer = m_SelectedObject->GetLayerIndex();
+	if (ImGui::InputInt("Layer", &currentLayer))
+	{
+		currentLayer = std::clamp(currentLayer, 0, MAX_LAYER - 1);
+		m_SelectedObject->SetLayerIndex(currentLayer);
+	}
+
+	// 정적 여부
+	bool isStatic = m_SelectedObject->IsStatic();
+	if (ImGui::Checkbox("Is Static", &isStatic))
+		m_SelectedObject->SetStatic(isStatic);
+
+	// 컴포넌트 추가 UI
+	DrawComponentAddUI();
+
+	// 트랜스폼 UI
+	DrawTransformUI();
+
+	// Rigidbody UI
+	DrawRigidbodyUI();
+
+	// MeshRenderer UI
+	DrawMeshRendererUI();
+
+	ImGui::End();
+
+	// Gizmo 활성화 시 그리기
+	if (gizmoEnabled)
+		DrawGizmo();
+}
+
+void CImGuiManager::DrawTagUI()
+{
 	static std::vector<std::wstring> tagList = { L"Default", L"Player", L"Enemy", L"NPC", L"Item" };
 	std::wstring currentTag = m_SelectedObject->GetTag();
 	int selectedTagIndex = std::find(tagList.begin(), tagList.end(), currentTag) - tagList.begin();
@@ -183,140 +222,131 @@ void CImGuiManager::DrawInspectorWindow()
 		{
 			bool isSelected = (selectedTagIndex == i);
 			if (ImGui::Selectable(ws2s(tagList[i]).c_str(), isSelected))
-			{
 				m_SelectedObject->SetTag(tagList[i]);
-			}
+
 			if (isSelected)
 				ImGui::SetItemDefaultFocus();
 		}
 		ImGui::EndCombo();
 	}
+}
 
-	// Layer
-	int currentLayer = m_SelectedObject->GetLayerIndex();
-	if (ImGui::InputInt("Layer", &currentLayer))
+void CImGuiManager::DrawComponentAddUI()
+{
+	ImGui::Text("Add Component:");
+
+	struct ComponentButton { const char* name; EComponent_Type type; };
+	std::vector<ComponentButton> buttons = {
+		{"Camera", EComponent_Type::Camera},
+		{"Collider", EComponent_Type::Collider},
+		{"Light", EComponent_Type::Light},
+		{"Animator", EComponent_Type::Animator},
+		{"Rigidbody", EComponent_Type::Rigidbody},
+		{"Particle System", EComponent_Type::ParticleSystem},
+		{"Skybox", EComponent_Type::Skybox},
+		{"Script", EComponent_Type::Script},
+	};
+
+	for (size_t i = 0; i < buttons.size(); ++i)
 	{
-		currentLayer = std::clamp(currentLayer, 0, MAX_LAYER - 1);
-		m_SelectedObject->SetLayerIndex(currentLayer);
+		if (ImGui::Button(buttons[i].name))
+			m_SelectedObject->AddComponent(buttons[i].type);
+
+		if ((i + 1) % 3 != 0) // 3개씩 한 줄
+			ImGui::SameLine();
 	}
+}
 
-	// Static
-	bool isStatic = m_SelectedObject->IsStatic();
-	if (ImGui::Checkbox("Is Static", &isStatic))
-	{
-		m_SelectedObject->SetStatic(isStatic);
-	}
+void CImGuiManager::DrawTransformUI()
+{
+	ImGui::Text("Transform");
 
-
-	// SRT
 	Vec3 position = m_SelectedObject->GetTransform()->GetRelativePosition();
 	Vec3 rotation = m_SelectedObject->GetTransform()->GetRelativeRotation();
 	Vec3 scale = m_SelectedObject->GetTransform()->GetRelativeScale();
 
 	if (ImGui::DragFloat3("Position", &position.x, 0.1f))
-	{
 		m_SelectedObject->GetTransform()->SetRelativePosition(position);
-	}
 
 	if (ImGui::DragFloat3("Rotation", &rotation.x, 1.0f))
-	{
 		m_SelectedObject->GetTransform()->SetRelativeRotation(rotation);
-	}
 
 	if (ImGui::DragFloat3("Scale", &scale.x, 0.1f))
-	{
 		m_SelectedObject->GetTransform()->SetRelativeScale(scale);
-	}
+}
 
-	 // Mesh 
+void CImGuiManager::DrawRigidbodyUI()
+{
+	CRigidBody* rigidbody = (CRigidBody*)m_SelectedObject->GetComponent(EComponent_Type::Rigidbody);
+	if (!rigidbody) return;
+
+	ImGui::Text("RigidBody Settings");
+
+	bool useGravity = rigidbody->GetGravity();
+	if (ImGui::Checkbox("Use Gravity", &useGravity))
+		rigidbody->SetGravity(useGravity);
+
+	bool isKinematic = rigidbody->GetKinematic();
+	if (ImGui::Checkbox("Kinematic", &isKinematic))
+		rigidbody->SetKinematic(isKinematic);
+
+	float mass = rigidbody->GetMass();
+	if (ImGui::DragFloat("Mass", &mass, 0.1f, 0.01f, 100.0f))
+		rigidbody->SetMass(mass);
+
+	float drag = rigidbody->GetDrag();
+	if (ImGui::DragFloat("Drag", &drag, 0.01f, 0.0f, 10.0f))
+		rigidbody->SetDrag(drag);
+
+	float angularDrag = rigidbody->GetAngularDrag();
+	if (ImGui::DragFloat("Angular Drag", &angularDrag, 0.01f, 0.0f, 10.0f))
+		rigidbody->SetAngularDrag(angularDrag);
+
+	Vector3 velocity = rigidbody->GetVelocity();
+	if (ImGui::DragFloat3("Velocity", &velocity.x, 0.1f))
+		rigidbody->SetVelocity(velocity);
+
+	Vector3 angularVelocity = rigidbody->GetAngularVelocity();
+	if (ImGui::DragFloat3("Angular Velocity", &angularVelocity.x, 0.1f))
+		rigidbody->SetAngularVelocity(angularVelocity);
+
+	static Vector3 force = { 0.0f, 0.0f, 0.0f };
+	ImGui::DragFloat3("Force", &force.x, 0.1f);
+	if (ImGui::Button("Apply Force"))
+		rigidbody->ApplyForce(force);
+
+	static Vector3 impulse = { 0.0f, 0.0f, 0.0f };
+	ImGui::DragFloat3("Impulse", &impulse.x, 0.1f);
+	if (ImGui::Button("Apply Impulse"))
+		rigidbody->ApplyImpulse(impulse);
+
+	static Vector3 torque = { 0.0f, 0.0f, 0.0f };
+	ImGui::DragFloat3("Torque", &torque.x, 0.1f);
+	if (ImGui::Button("Apply Torque"))
+		rigidbody->ApplyTorque(torque);
+}
+
+void CImGuiManager::DrawMeshRendererUI()
+{
+	ImGui::Text("MeshRenderer");
+
 	std::vector<std::wstring> meshList = CAssetManager::GetInst()->GetAllAssetNames<CMesh>();
 	static int selectedMeshIndex = 0;
 
-    if (ImGui::BeginCombo("Mesh", ws2s(meshList[selectedMeshIndex]).c_str()))
-    {
-        for (int i = 0; i < meshList.size(); ++i)
-        {
-            bool isSelected = (selectedMeshIndex == i);
-            if (ImGui::Selectable(ws2s(meshList[i]).c_str(), isSelected))
-            {
-                selectedMeshIndex = i;
-                m_SelectedObject->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(meshList[i]));
-            }
-            if (isSelected)
-                ImGui::SetItemDefaultFocus();
-        }
-        ImGui::EndCombo();
-    }
-
-    // Material 
-	// Material 목록 가져오기
-	std::vector<std::wstring> allMaterials = CAssetManager::GetInst()->GetAllAssetNames<CMaterial>();
-	std::vector<std::wstring> filteredMaterialList;
-
-	// SHADER_TYPE::DEFERRED 인 Material만 필터링
-	for (const auto& materialName : allMaterials)
+	if (ImGui::BeginCombo("Mesh", ws2s(meshList[selectedMeshIndex]).c_str()))
 	{
-		auto material = CAssetManager::GetInst()->FindAsset<CMaterial>(materialName);
-		if (material)
+		for (int i = 0; i < meshList.size(); ++i)
 		{
-			auto shader = material->GetGraphicsShader();
-			if (shader && shader->GetShaderType() == SHADER_TYPE::DEFERRED)
+			if (ImGui::Selectable(ws2s(meshList[i]).c_str(), selectedMeshIndex == i))
 			{
-				filteredMaterialList.push_back(materialName);
+				selectedMeshIndex = i;
+				m_SelectedObject->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(meshList[i]));
 			}
-		}
-	}
-
-	// ImGui에서 필터링된 리스트 사용
-	static int selectedMaterialIndex = 0;
-	if (!filteredMaterialList.empty() && selectedMaterialIndex >= filteredMaterialList.size())
-	{
-		selectedMaterialIndex = 0;  // 인덱스 유효성 보장
-	}
-
-	if (ImGui::BeginCombo("Material", ws2s(filteredMaterialList[selectedMaterialIndex]).c_str()))
-	{
-		for (int i = 0; i < filteredMaterialList.size(); ++i)
-		{
-			bool isSelected = (selectedMaterialIndex == i);
-			if (ImGui::Selectable(ws2s(filteredMaterialList[i]).c_str(), isSelected))
-			{
-				selectedMaterialIndex = i;
-				m_SelectedObject->GetMeshRenderer()->SetMaterial(
-					CAssetManager::GetInst()->FindAsset<CMaterial>(filteredMaterialList[i])
-				);
-			}
-			if (isSelected)
-				ImGui::SetItemDefaultFocus();
 		}
 		ImGui::EndCombo();
 	}
-
-	if (ImGuizmo::IsUsing())
-	{
-		ImGui::Text("Using gizmo");
-	}
-	else
-	{
-		ImGui::Text(ImGuizmo::IsOver() ? "Over gizmo" : "");
-		ImGui::SameLine();
-		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::TRANSLATE) ? "Over translate gizmo" : "");
-		ImGui::SameLine();
-		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::ROTATE) ? "Over rotate gizmo" : "");
-		ImGui::SameLine();
-		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::SCALE) ? "Over scale gizmo" : "");
-	}
-
-
-	ImGui::End();
-
-	// Gizmo 활성화 상태라면 DrawGizmo 호출
-	if (gizmoEnabled)
-	{
-		DrawGizmo();
-	}
-
 }
+
 
 void CImGuiManager::DrawGizmo()
 {
@@ -402,21 +432,6 @@ void CImGuiManager::DrawGizmo()
 		gizmoOperation, ImGuizmo::WORLD, *transform.m, NULL, snapValue))
 	{
 		// 변환된 Transform 값을 가져와 GameObject에 적용
-		Vector3 newPosition, newRotation, newScale;
-		ImGuizmo::DecomposeMatrixToComponents(MatrixToFloatPtr(transform),
-			&newPosition.x, &newRotation.x, &newScale.x);
-
-		// 변환된 값을 다시 적용
-		m_SelectedObject->GetTransform()->SetRelativePosition(newPosition);
-
-		// 회전값이 너무 크지 않도록 보정 (360도 제한)
-		newRotation.x = fmod(newRotation.x, 360.0f);
-		newRotation.y = fmod(newRotation.y, 360.0f);
-		newRotation.z = fmod(newRotation.z, 360.0f);
-
-		m_SelectedObject->GetTransform()->SetRelativeRotation(newRotation);
-		m_SelectedObject->GetTransform()->SetRelativeScale(newScale);
-
 		m_SelectedObject->GetTransform()->SetWorldMatrix(transform);
 	}
 
