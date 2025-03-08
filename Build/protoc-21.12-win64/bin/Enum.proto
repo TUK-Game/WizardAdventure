@@ -1,0 +1,10 @@
+syntax = "proto3";
+package Protocol;
+
+enum EGameObjectType
+{
+	GAMEOBJECT_TYPE_NONE = 0;
+	GAMEOBJECT_TYPE_PLAYER = 1;
+	GAMEOBJECT_TYPE_MONSTER = 2;
+	GAMEOBJECT_TYPE_NPC = 3;
+}

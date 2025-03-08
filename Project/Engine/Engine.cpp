@@ -9,9 +9,11 @@
 #include "InputManager.h"
 #include "CollisionManager.h"
 #include "InstancingManager.h"
+#include "NetworkManager.h"
 
 CEngine::CEngine()
-    : m_WindowInfo{}
+    : m_NetworkType(ENetwork_Type::Offline)
+    , m_WindowInfo{}
     , m_Timer(nullptr)
     , m_DeltaTime(0.f)
 {
@@ -78,6 +80,7 @@ int CEngine::Run()
         }
         else
         {
+            CNetworkManager::GetInst()->ExecuteJobs();
             CEngine::GetInst()->Progress();
         }
     }

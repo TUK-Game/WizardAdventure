@@ -5,7 +5,9 @@
 *.exe
 *.cso
 
+Engine_d.lib
+Engine.lib
+
 # Directory
 .vs
 x64
-Bin

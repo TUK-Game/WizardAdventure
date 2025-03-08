@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ClientManager.h"
 #include <Engine/Engine.h>
+#include <Engine/NetworkManager.h>
 //#include <ImGui/imgui_impl_win32.h>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -10,10 +11,10 @@ CClientManager::CClientManager()
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     _CrtSetBreakAlloc(100);
-    if (GetModuleHandle(L"WinPixGpuCapturer.dll") == 0)
-    {
-        LoadLibrary(GetLatestWinPixGpuCapturerPath_Cpp17().c_str());
-    }
+    //if (GetModuleHandle(L"WinPixGpuCapturer.dll") == 0)
+    //{
+    //    LoadLibrary(GetLatestWinPixGpuCapturerPath_Cpp17().c_str());
+    //}
 }
 
 CClientManager::~CClientManager()
@@ -27,6 +28,11 @@ int CClientManager::Init(HINSTANCE instance)
     if (FAILED(InitEngine()))
         return E_FAIL;
 
+    std::cout << "====== 온라인 게임에 참여하세요. ======" << std::endl;
+    std::cout << "NUMPAD 0. 호스트" << std::endl;
+    std::cout << "NUMPAD 1. 클라이언트" << std::endl;
+    std::cout << std::endl;
+
     return S_OK;
 }
 
@@ -39,6 +45,41 @@ LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 {
     switch (message)
     {
+    case WM_KEYDOWN:
+    {
+        switch (wParam)
+        {
+        case VK_NUMPAD0:
+        {
+            if (CEngine::GetInst()->GetNetworkType() == ENetwork_Type::Offline)
+            {
+                CEngine::GetInst()->SetNetworkType(ENetwork_Type::OnlineHost);
+                if (CNetworkManager::GetInst()->Init())
+                {
+                    std::cout << "호스트로 플레이합니다." << std::endl;
+                    std::cout << std::endl;
+                }
+            }
+
+            break;
+        }
+        case VK_NUMPAD1:
+        {
+            if (CEngine::GetInst()->GetNetworkType() == ENetwork_Type::Offline)
+            {
+                CEngine::GetInst()->SetNetworkType(ENetwork_Type::OnlineClient);
+                if (CNetworkManager::GetInst()->Init())
+                {
+                    std::cout << "클라이언트로 플레이합니다." << std::endl;
+                    std::cout << std::endl;
+                }
+            }
+
+            break;
+        }
+        }
+    }
+    break;
     case WM_COMMAND:
     {
         int wmId = LOWORD(wParam);

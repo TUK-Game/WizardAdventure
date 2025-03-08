@@ -21,6 +21,7 @@
 #include <DirectXColors.h>
 #include <DirectXTex/DirectXTex.h>
 #include <DirectXTex/DirectXTex.inl>
+#include <ServerCore/CoreGlobal.h>
 #include <FBX/fbxsdk.h>
 #include "d3dx12.h"
 #include "SimpleMath.h"
@@ -34,6 +35,14 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "dxgi")
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "d3dcompiler")
+
+#ifdef _DEBUG
+#pragma comment(lib, "ServerCore/Debug/ServerCore_d.lib")
+#pragma comment(lib, "Protobuf/Debug/libprotobufd.lib")
+#else
+#pragma comment(lib, "ServerCore/Release/ServerCore.lib")
+#pragma comment(lib, "Protobuf/Release/libprotobufd.lib")
+#endif // _DEBUG
 
 #ifndef _DEBUG
 #pragma comment(lib, "FMOD/fmodL_vc.lib") 

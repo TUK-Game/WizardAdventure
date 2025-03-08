@@ -1,5 +1,12 @@
 #pragma once
 
+enum class ENetwork_Type
+{
+	Offline,
+	OnlineClient,
+	OnlineHost,
+};
+
 enum class CBV_REGISTER : unsigned char
 {
 	b0,
