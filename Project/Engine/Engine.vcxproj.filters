@@ -410,6 +410,9 @@
     <ClInclude Include="..\..\3rdParty\ImGuizmo\ImZoomSlider.h">
       <Filter>IMGUIZMO</Filter>
     </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

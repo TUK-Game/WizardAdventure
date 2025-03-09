@@ -238,11 +238,11 @@ int CAssetManager::LoadMaterial()
 
 int CAssetManager::LoadMeshData()
 {
-	/*CMeshData* data1 = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/wizardModel.jhd", L"wizard");
-	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/wizard.jhd");*/
+	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/wizard.jhd");
+	CMeshData* data1 = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/wizardModel.jhd", L"wizard");
 	//AddAsset(L"Dragon", data);
 
-	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/level_hall.jhd", L"map");
+	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/level_hall.jhd", L"map");
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/Dragon.jhd");
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/FBX/wizard.jhd", L"wizard");
 	AddAsset(L"door", data);

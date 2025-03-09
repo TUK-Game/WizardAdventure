@@ -5,10 +5,10 @@
 #include "MeshRenderer.h"
 #include "Transform.h"
 #include "Camera.h"
+#include "Logger.h"
 
 CInstancingManager::CInstancingManager()
 {
-
 }
 
 CInstancingManager::~CInstancingManager()
@@ -33,6 +33,8 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects)
 
 		// 물체가 하나면 기존처럼 렌더링
 		// 2개 이상이면 인스턴싱
+
+		// 임시적 처리 
 		if (vec.size() == 1)
 		{
 			vec[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
@@ -58,7 +60,7 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects)
 
 				// 인스턴스 아이디 해당하는 버퍼 찾고 생성 및 추가
 				AddParam(instanceId, params);
-			}
+			}	
 
 			std::shared_ptr<CInstancingBuffer>& buffer = m_Buffers[instanceId];
 			vec[0]->GetMeshRenderer()->Render(buffer);
