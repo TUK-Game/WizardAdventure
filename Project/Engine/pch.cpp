@@ -37,7 +37,7 @@ Matrix GetMatrix(const FbxAMatrix& matrix)
 			mat.m[y][x] = static_cast<float>(matrix.Get(y, x));
 		}
 	}
-
+		
 	return mat;
 }
 

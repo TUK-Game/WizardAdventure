@@ -35,17 +35,19 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects)
 		// 2개 이상이면 인스턴싱
 		if (vec.size() == 1)
 		{
+			vec[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
 			vec[0]->GetMeshRenderer()->Render();
 		}
 		else
 		{
 			const UINT64 instanceId = pair.first;
-			if (!vec[0]->GetMeshRenderer()->GetMaterial()->GetInt(0))
-			{
-				for (const auto& obj : vec)
-					obj->GetMeshRenderer()->Render();
-				continue;
-			}
+			vec[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+			//if (!vec[0]->GetMeshRenderer()->GetMaterial()->GetInt(0))
+			//{
+			//	for (const auto& obj : vec)
+			//		obj->GetMeshRenderer()->Render();
+			//	continue;
+			//}
 
 			for (CGameObject* gameObject : vec)
 			{

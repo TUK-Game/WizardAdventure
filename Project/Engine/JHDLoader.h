@@ -30,6 +30,9 @@ struct JHDMeshInfo : public CAsset
 	std::vector<BoneWeight>					boneWeights; // »À °¡ÁßÄ¡
 	bool									hasAnimation;
 	FbxAMatrix matrix;
+	Vec4 translate;
+	Vec4 rotation;
+	Vec4 scale;
 	Vec4 centerPos;
 	Vec3 BoundingBoxMax;
 	Vec3 BoundingBoxMin;

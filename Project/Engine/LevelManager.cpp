@@ -231,24 +231,24 @@ int CLevelManager::Init()
 #pragma endregion
 	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"door");
 	std::vector<CGameObject*> obj = data->Instantiate();
-	
+
 	for(auto& o : obj)
 	{
-		std::string name = "Dragon";
-		o->SetName(s2ws(name));
+		std::wstring name = o->GetName();
+		o->SetName(name);
 
 		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		rot.x += -90;	
+		rot.x += -90;
 		o->GetTransform()->SetRelativeRotation(rot);
 		//o->GetTransform()->SetRelativePosition(100, 0, 0);
 		//o->GetTransform()->SetRelativeScale(0.1, 0.1, 0.1);
 		//o->AddComponent(new CTestPlayer);
-		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		o->SetCheckFrustum(true);
-		m_CurLevel->AddGameObject(o, 10, false);
+		o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+		o->SetCheckFrustum(false);
+		m_CurLevel->AddGameObject(o, 3, false);
 
-		//Vec3 trans = o->GetCollider()->center;
+		//Vec3 trans = o->GetTransform()->GetWorldPosition();
 		//Vec3 size = o->GetCollider()->size;
 		//CGameObject* object = new CGameObject;
 		//object->SetName(L"k");
@@ -261,7 +261,22 @@ int CLevelManager::Init()
 		//object->GetTransform()->SetRelativeScale(size);
 		//object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 		//object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
-		//m_CurLevel->AddGameObject(object, 3, false);
+		//m_CurLevel->AddGameObject(object, 10, false);
+
+		//trans = o->GetCollider()->center;
+		//object = new CGameObject;
+		//object->SetName(L"k");
+		//object->AddComponent(new CTransform);
+		//object->AddComponent(new CMeshRenderer);
+		//rot = object->GetTransform()->GetRelativeRotation();
+		////rot.x += -90;
+		//object->GetTransform()->SetRelativeRotation(rot);
+		//object->GetTransform()->SetRelativePosition(trans);
+		//object->GetTransform()->SetRelativeScale(size);
+		//object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Sphere"));
+		//object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Nigika"));
+		//m_CurLevel->AddGameObject(object, 10, false);
+
 	}
 
 	//for(auto& o : obj2)

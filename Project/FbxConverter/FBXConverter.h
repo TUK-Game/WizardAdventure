@@ -125,6 +125,7 @@ struct FbxMeshInfo
 	FbxAMatrix matrix;
 	float translate[4];
 	float rotation[4];
+	float scale[4];
 };
 
 struct FbxKeyFrameInfo
@@ -186,6 +187,7 @@ private:
 	void RemoveNumber(std::string& name);
 
 	FbxVector4 multT(FbxNode* pNode, FbxVector4 vector);
+	FbxAMatrix GetT(FbxNode* pNode);
 
 	void WriteString(std::string& str, std::ofstream& file);
 	void WriteString(const char* str, std::ofstream& file);

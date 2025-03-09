@@ -68,6 +68,24 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh, bool IsAnimation)
     FbxAMatrix worldTransform = node->EvaluateGlobalTransform();
 
     meshInfo.matrix = worldTransform;
+    FbxVector4 trans = worldTransform.GetT();
+    FbxVector4 Rot = worldTransform.GetR();
+    FbxVector4 scale = worldTransform.GetS();
+
+    meshInfo.translate[0] = trans[0];
+    meshInfo.translate[1] = trans[1];
+    meshInfo.translate[2] = trans[2];
+    meshInfo.translate[3] = trans[3];
+
+    meshInfo.rotation[0] = Rot[0];
+    meshInfo.rotation[1] = Rot[1];
+    meshInfo.rotation[2] = Rot[2];
+    meshInfo.rotation[3] = Rot[3];
+
+    meshInfo.scale[0] = scale[0];
+    meshInfo.scale[1] = scale[1];
+    meshInfo.scale[2] = scale[2];
+    meshInfo.scale[3] = scale[3];
 
     const uint32_t vertexCount = mesh->GetControlPointsCount();
 
@@ -154,6 +172,28 @@ FbxVector4 CFBXConverter::multT(FbxNode* pNode, FbxVector4 vector)
     FbxAMatrix localMatrix = pNode->EvaluateLocalTransform();
     FbxAMatrix matrix = pParentMatrix * localMatrix * geoMatrix;
     return matrix.MultT(vector);
+}
+
+FbxAMatrix CFBXConverter::GetT(FbxNode* pNode)
+{
+    FbxAMatrix geoMatrix;
+    if (pNode->GetNodeAttribute())
+    {
+        const FbxVector4 lT = pNode->GetGeometricTranslation(FbxNode::eSourcePivot);
+        const FbxVector4 lR = pNode->GetGeometricRotation(FbxNode::eSourcePivot);
+        const FbxVector4 lS = pNode->GetGeometricScaling(FbxNode::eSourcePivot);
+        geoMatrix.SetTRS(lT, lR, lS);
+    }
+
+    FbxNode* pParentNode = NULL;
+    FbxAMatrix pParentMatrix;
+    if ((pParentNode = pNode->GetParent()) != NULL)
+    {
+        pParentMatrix = pParentNode->EvaluateGlobalTransform() * pParentMatrix;
+    }
+    FbxAMatrix localMatrix = pNode->EvaluateLocalTransform();
+    FbxAMatrix matrix = pParentMatrix * localMatrix * geoMatrix;
+    return matrix;
 }
 
 void CFBXConverter::Parsing(FbxNode* node, bool IsAnimation)
@@ -730,6 +770,13 @@ void CFBXConverter::SaveBinary(const char* filename, const std::vector<FbxMeshIn
         WriteString("Transform:\n", file);
         file.write(reinterpret_cast<const char*>(&mesh[i].matrix), sizeof(mesh[i].matrix));
 
+        WriteString("Translate:\n", file);
+        file.write(reinterpret_cast<const char*>(&mesh[i].translate), sizeof(mesh[i].translate));
+        WriteString("Rotation:\n", file);
+        file.write(reinterpret_cast<const char*>(&mesh[i].rotation), sizeof(mesh[i].rotation));
+        WriteString("Scale:\n", file);
+        file.write(reinterpret_cast<const char*>(&mesh[i].scale), sizeof(mesh[i].scale));
+
         WriteString("BoundingBox:\n", file);
         file.write(reinterpret_cast<const char*>(&mesh[i].centerPos), sizeof(mesh[i].centerPos));
         file.write(reinterpret_cast<const char*>(&mesh[i].maxPos), sizeof(mesh[i].maxPos));
@@ -857,8 +904,8 @@ void CFBXConverter::GetControlPoints(FbxMesh* mesh, std::vector<std::vector<floa
     {
         pos[i].resize(4);
         FbxVector4 worldPos = controlPoints[i];
-        if(!IsAnimation)
-            worldPos = multT(mesh->GetNode(), controlPoints[i]);
+        //if(!IsAnimation)
+        //    worldPos = multT(mesh->GetNode(), controlPoints[i]);
 
         pos[i][0] = static_cast<float>(worldPos.mData[0]);
         pos[i][1] = static_cast<float>(worldPos.mData[2]);

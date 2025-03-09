@@ -44,6 +44,7 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 			{
 				JHDMeshInfo* info = meshInfo->Clone();
 				CAssetManager::GetInst()->AddAsset(info->name, info->Clone());
+				delete info;
 			}
 			m_Meshes.push_back(JHDMeshInfo());
 			meshInfo = &m_Meshes.back();
@@ -58,11 +59,11 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 			CSharedPtr<JHDMeshInfo> info = CAssetManager::GetInst()->FindAsset<JHDMeshInfo>(meshInfo->name);
 			if (info)
 			{
-				//meshInfo->vertices = info.Get()->vertices;
-				//meshInfo->indices = info.Get()->indices;
-				//meshInfo->materials = info.Get()->materials;
-				//
-				//bCopy = true;
+				meshInfo->vertices = info.Get()->vertices;
+				meshInfo->indices = info.Get()->indices;
+				meshInfo->materials = info.Get()->materials;
+				
+				bCopy = true;
 			}
 		}
 		else if (!strcmp(pstrToken, "Material Count: "))
@@ -152,6 +153,24 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 			file.read(reinterpret_cast<char*>(&num), sizeof(num));
 			meshInfo->matrix = num;
 		}
+		else if (!strcmp(pstrToken, "Translate:\n"))
+		{
+			Vec4 num;
+			file.read(reinterpret_cast<char*>(&num), sizeof(num));
+			meshInfo->translate = num;
+		}
+		else if (!strcmp(pstrToken, "Rotation:\n"))
+		{
+			Vec4 num;
+			file.read(reinterpret_cast<char*>(&num), sizeof(num));
+			meshInfo->rotation = num;
+		}
+		else if (!strcmp(pstrToken, "Scale:\n"))
+		{
+			Vec4 num;
+			file.read(reinterpret_cast<char*>(&num), sizeof(num));
+			meshInfo->scale = num;
+			}
 		else if (!strcmp(pstrToken, "BoundingBox:\n"))
 		{
 			Vec3 num;
