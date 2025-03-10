@@ -13,8 +13,11 @@
 #include "Camera.h"
 #include "RenderManager.h"
 #include "RigidBody.h"
+#include "Light.h"
 #include "../../3rdParty/ImGuizmo/ImGuizmo.h"
 #include "../../3rdParty/ImGui/imgui_internal.h"
+
+static int objCounter = 0;
 
 CImGuiManager::CImGuiManager()
 {
@@ -103,7 +106,6 @@ void CImGuiManager::DrawLevelWindow()
 	
 	if (ImGui::Button("Add Object"))
 	{
-		static int objCounter = 0;
 		CGameObject* newObj = new CGameObject();
 		newObj->SetName(s2ws("Object " + std::to_string(objCounter++)));
 		newObj->AddComponent(new CTransform());
@@ -116,7 +118,7 @@ void CImGuiManager::DrawLevelWindow()
 		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(newObj, 3, false);
 
 	}
-	
+	DrawLightCreateUI();
 
 	int index = 0;
 	for (int j = 0; j < MAX_LAYER; ++j)
@@ -196,6 +198,9 @@ void CImGuiManager::DrawInspectorWindow()
 
 	// 트랜스폼 UI
 	DrawTransformUI();
+
+	// 조명 UI
+	DrawLightUI();
 
 	// Rigidbody UI
 	DrawRigidbodyUI();
@@ -347,6 +352,68 @@ void CImGuiManager::DrawMeshRendererUI()
 	}
 }
 
+void CImGuiManager::DrawLightUI()
+{
+	CLight* light = (CLight*)m_SelectedObject->GetComponent(EComponent_Type::Light);
+	if (!light) return;
+
+	ImGui::Text("Light Settings");
+
+	// Light 타입 변경
+	static const char* lightTypes[] = { "Directional", "Point", "Spot" };
+	LIGHT_TYPE currentType = light->GetLightType();
+	int selectedType = static_cast<int>(currentType);
+
+	if (ImGui::Combo("Light Type", &selectedType, lightTypes, IM_ARRAYSIZE(lightTypes)))
+	{
+		light->SetLightType(static_cast<LIGHT_TYPE>(selectedType));
+	}
+
+	// 색상 설정
+	Vec3 diffuse = light->GetDiffuse();
+	if (ImGui::ColorEdit3("Diffuse", &diffuse.x))
+		light->SetDiffuse(diffuse);
+
+	Vec3 ambient = light->GetAmbient();
+	if (ImGui::ColorEdit3("Ambient", &ambient.x))
+		light->SetAmbient(ambient);
+
+	Vec3 specular = light->GetSpecular();
+	if (ImGui::ColorEdit3("Specular", &specular.x))
+		light->SetSpecular(specular);
+
+	// 방향성 조명 (Directional Light) - 방향 설정
+	if (currentType == LIGHT_TYPE::DIRECTIONAL_LIGHT)
+	{
+		Vec3 direction = Vec3(light->GetLightInfo().direction.x,
+			light->GetLightInfo().direction.y,
+			light->GetLightInfo().direction.z);
+		if (ImGui::DragFloat3("Direction", &direction.x, 0.1f, -1.0f, 1.0f))
+		{
+			light->SetLightDirection(direction);
+		}
+	}
+
+	// 거리 (Point Light, Spot Light)
+	if (currentType == LIGHT_TYPE::POINT_LIGHT || currentType == LIGHT_TYPE::SPOT_LIGHT)
+	{
+		float range = light->GetLightInfo().range;
+		if (ImGui::DragFloat("Range", &range, 0.1f, 0.1f, 100.0f))
+		{
+			light->SetLightRange(range);
+		}
+	}
+
+	// 각도 (Spot Light)
+	if (currentType == LIGHT_TYPE::SPOT_LIGHT)
+	{
+		float angle = light->GetLightInfo().angle;
+		if (ImGui::DragFloat("Spot Angle", &angle, 0.1f, 1.0f, 90.0f))
+		{
+			light->SetLightAngle(angle);
+		}
+	}
+}
 
 void CImGuiManager::DrawGizmo()
 {
@@ -439,3 +506,71 @@ void CImGuiManager::DrawGizmo()
 	ImGui::PopStyleColor(1);
 }
 
+void CImGuiManager::DrawLightCreateUI()
+{
+	ImGui::Text("Create New Light:");
+
+	if (ImGui::Button("Add Directional Light"))
+	{
+		CreateLight(LIGHT_TYPE::DIRECTIONAL_LIGHT);
+	}
+
+	if (ImGui::Button("Add Point Light"))
+	{
+		CreateLight(LIGHT_TYPE::POINT_LIGHT);
+	}
+
+	if (ImGui::Button("Add Spot Light"))
+	{
+		CreateLight(LIGHT_TYPE::SPOT_LIGHT);
+	}
+}
+
+
+void CImGuiManager::CreateLight(LIGHT_TYPE type)
+{
+	CGameObject* light = new CGameObject;
+	light->SetName(L"Light");
+	light->AddComponent(new CTransform);
+	light->AddComponent(new CLight);
+	CLight* lightComponent = (CLight*)light->GetComponent(EComponent_Type::Light);
+
+	lightComponent->SetLightType(type);
+
+	switch (type)
+	{
+	case LIGHT_TYPE::DIRECTIONAL_LIGHT:
+		light->SetName(s2ws("Object " + std::to_string(objCounter++)));
+		light->GetTransform()->SetRelativePosition(0.f, 500.f, 100.f);
+		lightComponent->SetLightDirection(Vec3(0.f, -1.f, 0.5f));
+		lightComponent->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
+		lightComponent->SetAmbient(Vec3(0.1f, 0.1f, 0.0f));
+		lightComponent->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
+		break;
+
+	case LIGHT_TYPE::POINT_LIGHT:
+		light->SetName(s2ws("Object " + std::to_string(objCounter++)));
+		light->GetTransform()->SetRelativePosition(0.f, 10.f, 0.f);
+		lightComponent->SetDiffuse(Vec3(1.0f, 0.5f, 0.5f));
+		lightComponent->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		lightComponent->SetSpecular(Vec3(1.0f, 1.0f, 1.0f));
+		lightComponent->SetLightRange(10.0f);
+		break;
+
+	case LIGHT_TYPE::SPOT_LIGHT:
+		light->SetName(s2ws("Object " + std::to_string(objCounter++)));
+		light->GetTransform()->SetRelativePosition(0.f, 15.f, 0.f);
+		lightComponent->SetDiffuse(Vec3(0.5f, 0.5f, 1.0f));
+		lightComponent->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		lightComponent->SetSpecular(Vec3(1.0f, 1.0f, 1.0f));
+		lightComponent->SetLightRange(15.0f);
+		lightComponent->SetLightAngle(45.0f);
+		break;
+	}
+
+	// **렌더링 매니저에 등록**
+	CRenderManager::GetInst()->RegisterLight(lightComponent);
+
+	// 현재 레벨에 오브젝트 추가
+	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(light, 3, false);
+}

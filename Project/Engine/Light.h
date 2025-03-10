@@ -15,7 +15,10 @@ public:
 public:
 	LIGHT_TYPE GetLightType() { return static_cast<LIGHT_TYPE>(m_Light.lightType); }
 
-	const LightInfo& GetLightInfo() { return m_Light; }
+	LightInfo& GetLightInfo() { return m_Light; }
+	Vec3 GetDiffuse() { return Vec3(m_Light.color.diffuse.x, m_Light.color.diffuse.y, m_Light.color.diffuse.z); }
+	Vec3 GetAmbient() { return Vec3(m_Light.color.ambient.x, m_Light.color.ambient.y, m_Light.color.ambient.z); }
+	Vec3 GetSpecular() { return Vec3(m_Light.color.specular.x, m_Light.color.specular.y, m_Light.color.specular.z); }
 
 	void SetLightDirection(Vec3 direction);
 
