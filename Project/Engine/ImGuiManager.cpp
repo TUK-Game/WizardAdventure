@@ -120,6 +120,8 @@ void CImGuiManager::DrawLevelWindow()
 	}
 	DrawLightCreateUI();
 
+	ImGui::Text("Objects:");
+
 	int index = 0;
 	for (int j = 0; j < MAX_LAYER; ++j)
 	{
@@ -242,14 +244,9 @@ void CImGuiManager::DrawComponentAddUI()
 
 	struct ComponentButton { const char* name; EComponent_Type type; };
 	std::vector<ComponentButton> buttons = {
-		{"Camera", EComponent_Type::Camera},
 		{"Collider", EComponent_Type::Collider},
 		{"Light", EComponent_Type::Light},
-		{"Animator", EComponent_Type::Animator},
 		{"Rigidbody", EComponent_Type::Rigidbody},
-		{"Particle System", EComponent_Type::ParticleSystem},
-		{"Skybox", EComponent_Type::Skybox},
-		{"Script", EComponent_Type::Script},
 	};
 
 	for (size_t i = 0; i < buttons.size(); ++i)
@@ -333,8 +330,9 @@ void CImGuiManager::DrawRigidbodyUI()
 
 void CImGuiManager::DrawMeshRendererUI()
 {
-	ImGui::Text("MeshRenderer");
+	if (!m_SelectedObject->GetComponent(EComponent_Type::MeshRenderer)) return;
 
+	ImGui::Text("MeshRenderer");
 	std::vector<std::wstring> meshList = CAssetManager::GetInst()->GetAllAssetNames<CMesh>();
 	static int selectedMeshIndex = 0;
 
@@ -347,6 +345,44 @@ void CImGuiManager::DrawMeshRendererUI()
 				selectedMeshIndex = i;
 				m_SelectedObject->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(meshList[i]));
 			}
+		}
+		ImGui::EndCombo();
+	}
+
+	std::vector<std::wstring> allMaterials = CAssetManager::GetInst()->GetAllAssetNames<CMaterial>();
+	std::vector<std::wstring> filteredMaterialList;
+
+	for (const auto& materialName : allMaterials)
+	{
+		auto material = CAssetManager::GetInst()->FindAsset<CMaterial>(materialName);
+		if (material)
+		{
+			auto shader = material->GetGraphicsShader();
+			if (shader && shader->GetShaderType() == SHADER_TYPE::DEFERRED)
+			{
+				filteredMaterialList.push_back(materialName);
+			}
+		}
+	}
+
+	static int selectedMaterialIndex = 0;
+	if (!filteredMaterialList.empty() && selectedMaterialIndex >= filteredMaterialList.size())
+	{
+		selectedMaterialIndex = 0;
+	}
+
+	if (ImGui::BeginCombo("Material", ws2s(filteredMaterialList[selectedMaterialIndex]).c_str()))
+	{
+		for (int i = 0; i < filteredMaterialList.size(); ++i)
+		{
+			bool isSelected = (selectedMaterialIndex == i);
+			if (ImGui::Selectable(ws2s(filteredMaterialList[i]).c_str(), isSelected))
+			{
+				selectedMaterialIndex = i;
+				m_SelectedObject->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(filteredMaterialList[i]));
+			}
+
+
 		}
 		ImGui::EndCombo();
 	}
@@ -493,13 +529,16 @@ void CImGuiManager::DrawGizmo()
 		else if (gizmoOperation == ImGuizmo::SCALE)
 			snapValue = snapScale;
 	}
-
+	SimpleMath::Vector3 scale, translation;
+	SimpleMath::Quaternion rotation;
 	// Gizmo Manipulate 실행
 	if (ImGuizmo::Manipulate(*viewMatrix.m, *projectionMatrix.m,
-		gizmoOperation, ImGuizmo::WORLD, *transform.m, NULL, snapValue))
+		gizmoOperation, ImGuizmo::LOCAL, *transform.m, NULL, snapValue))
 	{
-		// 변환된 Transform 값을 가져와 GameObject에 적용
-		m_SelectedObject->GetTransform()->SetWorldMatrix(transform);
+		transform.Decompose(scale, rotation, translation);
+		m_SelectedObject->GetTransform()->SetRelativePosition(translation);
+		m_SelectedObject->GetTransform()->SetRelativeRotation(rotation);
+		m_SelectedObject->GetTransform()->SetRelativeScale(scale);
 	}
 
 	ImGui::End();
@@ -508,7 +547,6 @@ void CImGuiManager::DrawGizmo()
 
 void CImGuiManager::DrawLightCreateUI()
 {
-	ImGui::Text("Create New Light:");
 
 	if (ImGui::Button("Add Directional Light"))
 	{

@@ -19,9 +19,11 @@ void CTransform::FinalUpdate()
 	Matrix matScale = XMMatrixScaling(m_RelativeScale.x, m_RelativeScale.y, m_RelativeScale.z);
 
 	// Rotation
-	Matrix matRotation = XMMatrixRotationX(m_RelativeRotation.x);
-	matRotation *= XMMatrixRotationY(m_RelativeRotation.y);
-	matRotation *= XMMatrixRotationZ(m_RelativeRotation.z);
+	//Matrix matRotation = XMMatrixRotationX(m_RelativeRotation.x);
+	//matRotation *= XMMatrixRotationY(m_RelativeRotation.y);
+	//matRotation *= XMMatrixRotationZ(m_RelativeRotation.z);
+
+	Matrix matRotation = Matrix::CreateFromQuaternion(m_RelativeRotationQuat);
 
 	// Translation
 	Matrix matTrans = XMMatrixTranslation(m_RelativePos.x, m_RelativePos.y, m_RelativePos.z);
@@ -124,11 +126,23 @@ Matrix CTransform::GetWorldRotationMatrix()
 void CTransform::SetRelativeRotation(Vec3 rotation)
 {
 	m_RelativeRotation = (rotation / 180.f) * XM_PI;
+
+	m_RelativeRotationQuat = Quaternion::CreateFromYawPitchRoll(m_RelativeRotation.y, m_RelativeRotation.x, m_RelativeRotation.z);
 }
 
 void CTransform::SetRelativeRotation(float x, float y, float z)
 {
 	m_RelativeRotation = (Vec3(x, y, z) / 180.f) * XM_PI;
+
+	m_RelativeRotationQuat = Quaternion::CreateFromYawPitchRoll(m_RelativeRotation.y, m_RelativeRotation.x, m_RelativeRotation.z);
+}
+
+void CTransform::SetRelativeRotation(Quaternion quat)
+{
+	m_RelativeRotationQuat = quat;
+
+	Vec3 eulerAngles = quat.ToEuler();
+	m_RelativeRotation = eulerAngles;
 }
 
 void CTransform::LookAt(const Vec3& dir)
@@ -244,4 +258,18 @@ void CTransform::SetWorldMatrix(const Matrix& matrix)
 		roll * (180.0f / XM_PI)
 	);
 
+}
+
+
+Matrix CTransform::ExtractRotationMatrix(Matrix& transform)
+{
+	SimpleMath::Vector3 scale;
+	SimpleMath::Quaternion rotation;
+	SimpleMath::Vector3 translation;
+
+	// 행렬 분해 (Scale, Rotation, Translation 분리)
+	transform.Decompose(scale, rotation, translation);
+
+	// 회전 행렬로 변환
+	return SimpleMath::Matrix::CreateFromQuaternion(rotation);
 }
