@@ -1,5 +1,7 @@
 ﻿#include "FBXConverter.h"
 
+#define MAX_BONE 100
+
 CFBXConverter::~CFBXConverter()
 {
 }
@@ -53,7 +55,7 @@ void CFBXConverter::LoadFBX(const char* filename)
     m_Scene->Destroy();
     m_Manager->Destroy();
 }
-
+int meshNum = 0;
 void CFBXConverter::LoadMesh(FbxMesh* mesh)
 {
     m_Meshes.push_back(FbxMeshInfo());
@@ -145,6 +147,7 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh)
     }
     meshInfo.boneWeights.resize(meshInfo.vertices.size());
     LoadAnimationData(mesh, &meshInfo);
+
 }
 
 void CFBXConverter::Parsing(FbxNode* node)
@@ -222,7 +225,8 @@ void CFBXConverter::LoadAnimationInfo()
 
         std::shared_ptr<FbxAnimClipInfo> animClip = std::make_shared<FbxAnimClipInfo>();
         animClip->name = s2ws(animStack->GetName());
-        animClip->keyFrames.resize(m_Bones.size()); // 키프레임은 본의 개수만큼
+        for(int j = 0; j < MAX_BONE; ++j)
+           animClip->keyFrames[j].resize(m_Bones.size()); // 키프레임은 본의 개수만큼
 
         FbxTakeInfo* takeInfo = m_Scene->GetTakeInfo(animStack->GetName());
         animClip->startTime = takeInfo->mLocalTimeSpan.GetStart();
@@ -240,8 +244,8 @@ void CFBXConverter::LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* meshInfo)
         return;
     
     static bool ba = false;
-    if (ba)
-        return;
+    //if (ba)
+    //    return;
     meshInfo->hasAnimation = true;
     ba = true;
     for (INT32 i = 0; i < skinCount; i++)
@@ -276,6 +280,10 @@ void CFBXConverter::LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* meshInfo)
     }
 
     FillBoneWeight(mesh, meshInfo);
+
+    std::vector<std::shared_ptr<FbxBoneInfo>> bones = m_Bones;
+    m_Bone.push_back(bones);
+    meshNum++;
 }
 
 void CFBXConverter::LoadBoneWeight(FbxCluster* cluster, INT32 boneIdx, FbxMeshInfo* meshInfo)
@@ -363,7 +371,7 @@ void CFBXConverter::LoadKeyframe(INT32 animIndex, FbxNode* node, FbxCluster* clu
         keyFrameInfo.time = fbxTime.GetSecondDouble();
         keyFrameInfo.matTransform = matTransform;
 
-        m_AnimClips[animIndex]->keyFrames[boneIdx].push_back(keyFrameInfo);
+        m_AnimClips[animIndex]->keyFrames[meshNum][boneIdx].push_back(keyFrameInfo);
     }
 }
 
@@ -828,9 +836,9 @@ void CFBXConverter::SaveBinary(const char* filename, const std::vector<FbxMeshIn
 
         // 요주
         WriteString("BoneInfo:\n", file);
-        size_t size = m_Bones.size();
+        size_t size = m_Bone[i].size();
         file.write(reinterpret_cast<const char*>(&size), sizeof(size_t));
-        for (const auto& bone : m_Bones)
+        for (const auto& bone : m_Bone[i])
         {
             std::string temp = ws2s(bone->boneName);
             WriteString(temp, file);
@@ -840,41 +848,45 @@ void CFBXConverter::SaveBinary(const char* filename, const std::vector<FbxMeshIn
         }
 
         // 요주
-        WriteString("AnimClipInfo:\n", file);
-        size = m_AnimClips.size();
-        file.write(reinterpret_cast<const char*>(&size), sizeof(size_t));
-        for (const auto& clipInfo : m_AnimClips)
+        WriteString("NEXT", file);
+    }
+
+    WriteString("AnimClipInfo:\n", file);
+    size_t size = m_AnimClips.size();
+    file.write(reinterpret_cast<const char*>(&size), sizeof(size_t));
+    for (const auto& clipInfo : m_AnimClips)
+    {
+        std::string temp = ws2s(clipInfo->name);
+        WriteString(temp, file);
+        long long timeValue = clipInfo->startTime.Get();
+        file.write(reinterpret_cast<const char*>(&timeValue), sizeof(long long));
+        timeValue = clipInfo->endTime.Get();
+        file.write(reinterpret_cast<const char*>(&timeValue), sizeof(long long));
+        file.write(reinterpret_cast<const char*>(&clipInfo->mode), sizeof(clipInfo->mode));
+        file.write(reinterpret_cast<const char*>(&meshNum), sizeof(meshNum));
+        for (int i = 0; i < meshNum; ++i)
         {
-            std::string temp = ws2s(clipInfo->name);
-            WriteString(temp, file);
-            long long timeValue = clipInfo->startTime.Get();
-            file.write(reinterpret_cast<const char*>(&timeValue), sizeof(long long));
-            timeValue = clipInfo->endTime.Get();
-            file.write(reinterpret_cast<const char*>(&timeValue), sizeof(long long));
-            file.write(reinterpret_cast<const char*>(&clipInfo->mode), sizeof(clipInfo->mode));
             // 1. 외부 벡터의 크기 저장
-            size_t outerSize = clipInfo->keyFrames.size();
+            size_t outerSize = clipInfo->keyFrames[i].size();
             file.write(reinterpret_cast<const char*>(&outerSize), sizeof(outerSize));
 
             // 2. 내부 벡터 크기 및 내용 저장
-            for (const auto& innerVec : clipInfo->keyFrames) 
+            for (const auto& innerVec : clipInfo->keyFrames[i])
             {
                 // 2.1 내부 벡터의 크기 저장
                 size_t innerSize = innerVec.size();
                 file.write(reinterpret_cast<const char*>(&innerSize), sizeof(innerSize));
 
                 // 2.2 내부 벡터의 각 FbxKeyFrameInfo 객체 저장
-                for (const auto& keyFrame : innerVec) 
+                for (const auto& keyFrame : innerVec)
                 {
                     file.write(reinterpret_cast<const char*>(&keyFrame.time), sizeof(keyFrame.time));
                     file.write(reinterpret_cast<const char*>(&keyFrame.matTransform), sizeof(keyFrame.matTransform));
                 }
             }
-
         }
-
-        WriteString("NEXT", file);
     }
+
     WriteString("END", file);
     file.close(); 
 }

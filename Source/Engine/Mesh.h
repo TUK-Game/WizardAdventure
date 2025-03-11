@@ -31,7 +31,7 @@ struct AnimClipInfo
 	std::wstring			animName;
 	INT32			frameCount;
 	double			duration;
-	std::vector<std::vector<KeyFrameInfo>>	keyFrames;
+	std::vector<std::vector<std::vector<KeyFrameInfo>>>	keyFrames;
 };
 
 class CStructuredBuffer;

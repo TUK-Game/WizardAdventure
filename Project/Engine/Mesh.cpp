@@ -168,21 +168,22 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader, int index)
 		info.frameCount = endFrame - startFrame;
 
 		info.keyFrames.resize(ac->keyFrames.size());
+		info.keyFrames[index].resize(ac->keyFrames[index].size());
 
-		const INT32 boneCount = static_cast<INT32>(ac->keyFrames.size());
+		const INT32 boneCount = static_cast<INT32>(ac->keyFrames[index].size());
 		for (INT32 b = 0; b < boneCount; b++)
 		{
-			auto& vec = ac->keyFrames[b];
+			auto& vec = ac->keyFrames[index][b];
 
 			const INT32 size = static_cast<INT32>(vec.size());
 			frameCount = max(frameCount, static_cast<UINT32>(size));
-			info.keyFrames[b].resize(size);
+			info.keyFrames[index][b].resize(size);
 
 			for (INT32 f = 0; f < size; f++)
 			{
 				FbxKeyFrameInfo& kf = vec[f];
 				// FBX에서 파싱한 정보들로 채워준다
-				KeyFrameInfo& kfInfo = info.keyFrames[b][f];
+				KeyFrameInfo& kfInfo = info.keyFrames[index][b][f];
 				kfInfo.time = kf.time;
 				kfInfo.frame = static_cast<INT32>(size);
 				kfInfo.scale.x = static_cast<float>(kf.matTransform.GetS().mData[0]);
@@ -203,8 +204,8 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader, int index)
 #pragma endregion
 
 #pragma region Bones
-	std::vector<std::shared_ptr<FbxBoneInfo>>& bones = loader.GetBones();
-	for (std::shared_ptr<FbxBoneInfo>& bone : bones)
+	std::vector<std::vector<std::shared_ptr<FbxBoneInfo>>>& bones = loader.GetBones();
+	for (std::shared_ptr<FbxBoneInfo>& bone : bones[index])
 	{
 		BoneInfo boneInfo = {};
 		boneInfo.parentIdx = bone->parentIndex;
@@ -238,16 +239,16 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader, int index)
 
 			for (INT32 b = 0; b < boneCount; b++)
 			{
-				INT32 keyFrameCount = static_cast<INT32>(animClip.keyFrames[b].size());
+				INT32 keyFrameCount = static_cast<INT32>(animClip.keyFrames[index][b].size());
 				
 				for (INT32 f = 0; f < keyFrameCount; f++)
 				{
 					INT32 idx = static_cast<INT32>(boneCount * f + b);
 					frameParams[idx] = AnimFrameParams
 					{
-						Vec4(animClip.keyFrames[b][f].scale),
-						animClip.keyFrames[b][f].rotation,
-						Vec4(animClip.keyFrames[b][f].translate)
+						Vec4(animClip.keyFrames[index][b][f].scale),
+						animClip.keyFrames[index][b][f].rotation,
+						Vec4(animClip.keyFrames[index][b][f].translate)
 					};
 				}
 

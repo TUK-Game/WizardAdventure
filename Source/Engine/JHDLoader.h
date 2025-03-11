@@ -60,7 +60,7 @@ struct FbxAnimClipInfo
 	FbxTime					startTime;
 	FbxTime					endTime;
 	FbxTime::EMode			mode;
-	std::vector<std::vector<FbxKeyFrameInfo>>	keyFrames;
+	std::vector<std::vector<std::vector<FbxKeyFrameInfo>>>	keyFrames;
 };
 
 class CJHDLoader
@@ -68,7 +68,7 @@ class CJHDLoader
 public:
 	INT32 GetMeshCount() { return static_cast<INT32>(m_Meshes.size()); }
 	const JHDMeshInfo& GetMesh(INT32 idx) { return m_Meshes[idx]; }
-	std::vector<std::shared_ptr<FbxBoneInfo>>& GetBones() { return m_Bones; }
+	std::vector<std::vector<std::shared_ptr<FbxBoneInfo>>>& GetBones() { return m_Bones; }
 	std::vector<std::shared_ptr<FbxAnimClipInfo>>& GetAnimClip() { return m_AnimClips; }
 public:
 	void LoadFile(const char* filename, const std::wstring& textureFilename = L"");
@@ -79,7 +79,7 @@ public:
 
 private:
 	std::vector<JHDMeshInfo>						m_Meshes;
-	std::vector<std::shared_ptr<FbxBoneInfo>>		m_Bones;
+	std::vector<std::vector<std::shared_ptr<FbxBoneInfo>>>		m_Bones;
 	std::vector<std::shared_ptr<FbxAnimClipInfo>>	m_AnimClips;
 	std::wstring m_ResourceDirectory;
 };

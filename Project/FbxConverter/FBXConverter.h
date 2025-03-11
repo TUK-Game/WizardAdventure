@@ -2,6 +2,7 @@
 
 #include "FBX/fbxsdk.h"
 #include "Global.h"
+#include <array>
 
 struct FbxMaterialInfo
 {
@@ -151,7 +152,7 @@ struct FbxAnimClipInfo
 	FbxTime					startTime;
 	FbxTime					endTime;
 	FbxTime::EMode			mode;
-	std::vector<std::vector<FbxKeyFrameInfo>>	keyFrames;
+	std::array<std::vector<std::vector<FbxKeyFrameInfo>>, 100>	keyFrames;
 };
 
 class CFBXConverter
@@ -204,6 +205,7 @@ private:
 	FbxImporter* m_Importer = nullptr;
 
 	std::vector<std::shared_ptr<FbxBoneInfo>>		m_Bones;
+	std::vector<std::vector<std::shared_ptr<FbxBoneInfo>>>		m_Bone;
 	std::vector<std::shared_ptr<FbxAnimClipInfo>>	m_AnimClips;
 	FbxArray<FbxString*>							m_AnimNames;
 	int count = 0;
