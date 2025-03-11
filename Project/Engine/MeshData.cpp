@@ -33,7 +33,7 @@ CMeshData* CMeshData::LoadFromJHD(const std::wstring& path, const std::wstring& 
 		CMesh* mesh = CAssetManager::GetInst()->FindAsset<CMesh>(loader.GetMesh(i).name);
 		if (mesh == NULL)
 		{
-			mesh = CMesh::CreateFromJHD(&loader.GetMesh(i), loader);
+			mesh = CMesh::CreateFromJHD(&loader.GetMesh(i), loader, i);
 			CAssetManager::GetInst()->AddAsset(mesh->GetName(), mesh);
 		}
 
@@ -78,7 +78,7 @@ std::vector<CGameObject*> CMeshData::Instantiate()
 
 	for (MeshRenderInfo& info : _meshRenders)
 	{	
-		CGameObject* gameObject = new CGameObject;
+		CGameObject* gameObject = new CGameObject;	
 		gameObject->AddComponent(new CTransform);
 		gameObject->AddComponent(new CMeshRenderer);
 		info.mesh->SetMeshSize(Vec3(info.boundingBoxMax - info.boundingBoxMin));

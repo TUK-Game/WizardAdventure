@@ -48,7 +48,7 @@ void CMesh::Render(std::shared_ptr<CInstancingBuffer>& buffer, UINT32 idx)
 	GRAPHICS_CMD_LIST->DrawIndexedInstanced(m_VecIndexInfo[idx].count, buffer->GetCount(), 0, 0, 0);
 }
 
-CMesh* CMesh::CreateFromJHD(const JHDMeshInfo* meshInfo, CJHDLoader& loader)
+CMesh* CMesh::CreateFromJHD(const JHDMeshInfo* meshInfo, CJHDLoader& loader, int idx)
 {
 	CMesh* mesh = new CMesh;
 	mesh->CreateVertexBuffer(meshInfo->vertices);
@@ -70,7 +70,7 @@ CMesh* CMesh::CreateFromJHD(const JHDMeshInfo* meshInfo, CJHDLoader& loader)
 	}
 
 	if (meshInfo->hasAnimation)
-		mesh->CreateBonesAndAnimations(loader);
+		mesh->CreateBonesAndAnimations(loader, idx);
 
 
 	return mesh;
@@ -151,7 +151,7 @@ int CMesh::CreateIndexBuffer(const std::vector<UINT>& buffer)
 	return S_OK;
 }
 
-void CMesh::CreateBonesAndAnimations(CJHDLoader& loader)
+void CMesh::CreateBonesAndAnimations(CJHDLoader& loader, int index)
 {
 #pragma region AnimClip
 	UINT32 frameCount = 0;
@@ -238,18 +238,19 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader)
 
 			for (INT32 b = 0; b < boneCount; b++)
 			{
-				const INT32 keyFrameCount = static_cast<INT32>(animClip.keyFrames[b].size());
+				INT32 keyFrameCount = static_cast<INT32>(animClip.keyFrames[b].size());
+				
 				for (INT32 f = 0; f < keyFrameCount; f++)
 				{
 					INT32 idx = static_cast<INT32>(boneCount * f + b);
-
 					frameParams[idx] = AnimFrameParams
 					{
 						Vec4(animClip.keyFrames[b][f].scale),
-						animClip.keyFrames[b][f].rotation, // Quaternion
+						animClip.keyFrames[b][f].rotation,
 						Vec4(animClip.keyFrames[b][f].translate)
 					};
 				}
+
 			}
 
 			// StructuredBuffer ¼¼ÆÃ

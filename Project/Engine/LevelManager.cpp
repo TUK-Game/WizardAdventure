@@ -48,7 +48,7 @@ int CLevelManager::Init()
 	m_CurLevel->GetLayer(4)->SetName(L"UI");
 	m_CurLevel->GetLayer(10)->SetName(L"Map");
 
-	CAssetManager::GetInst()->LoadSound("BGM", "Play", false, "play.mp3");
+	CAssetManager::GetInst()->LoadSound("BGM", "Play", false, "e.mp3");
 	CAssetManager::GetInst()->SetVolume("BGM", 30);
 	CAssetManager::GetInst()->SoundPlay("Play");
 
@@ -239,14 +239,14 @@ int CLevelManager::Init()
 
 		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		//rot.x += -90;
+		rot.x += -90;
 		o->GetTransform()->SetRelativeRotation(rot);
 		//o->GetTransform()->SetRelativePosition(100, 0, 0);
-		//o->GetTransform()->SetRelativeScale(0.1, 0.1, 0.1);
+		o->GetTransform()->SetRelativeScale(1, 1, 1);
 		o->AddComponent(new CTestPlayer);
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(true);
-		m_CurLevel->AddGameObject(o, 3, false);
+		m_CurLevel->AddGameObject(o, 10, false);
 
 		//Vec3 trans = o->GetTransform()->GetWorldPosition();
 		//Vec3 size = o->GetCollider()->size;

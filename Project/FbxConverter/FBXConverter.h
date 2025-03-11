@@ -21,11 +21,12 @@ public:
 	float	uv[2]{};
 	float	normal[3]{};
 	float	tangent[3]{};
+	float	biNormal[3]{};
 	float	weights[4]{};
 	float	indices[4]{};
 	INT32   controlPoint;
 	Vertex() = default;
-	Vertex(std::vector<float>& _position, std::vector<float>& _normal, std::vector<float>& _tangent, std::vector<float>& _uv)
+	Vertex(std::vector<float>& _position, std::vector<float>& _normal, std::vector<float>& _tangent, std::vector<float>& _biNormal, std::vector<float>& _uv)
 	{
 		position[0] = _position[0];
 		position[1] = _position[1];
@@ -33,6 +34,9 @@ public:
 		normal[0] = _normal[0];
 		normal[1] = _normal[1];
 		normal[2] = _normal[2];
+		biNormal[0] = _biNormal[0];
+		biNormal[1] = _biNormal[1];
+		biNormal[2] = _biNormal[2];
 		tangent[0] = _tangent[0];
 		tangent[1] = _tangent[1];
 		tangent[2] = _tangent[2];
@@ -156,12 +160,12 @@ public:
 	~CFBXConverter();
 
 public:
-	void LoadFBX(const char* filename, bool IsAnimation);
+	void LoadFBX(const char* filename);
 
 private:
-	void LoadMesh(FbxMesh* mesh, bool IsAnimation);
+	void LoadMesh(FbxMesh* mesh);
 
-	void Parsing(FbxNode* node, bool IsAnimation);
+	void Parsing(FbxNode* node);
 	void LoadMaterial(FbxSurfaceMaterial* surfaceMaterial);
 
 	void LoadBones(FbxNode* node) { LoadBones(node, 0, -1); }
@@ -174,6 +178,7 @@ private:
 
 	std::vector<float> GetTangent(FbxMesh* mesh, uint32_t controlPointIndex, uint32_t vertexCounter);
 	std::vector<float> GetNormal(FbxMesh* mesh, uint32_t controlPointIndex, uint32_t vertexCounter);
+	std::vector<float> GetBiNormal(FbxMesh* mesh, uint32_t controlPointIndex, uint32_t vertexCounter);
 	std::vector<float> GetUV(FbxMesh* mesh, uint32_t controlPointIndex, uint32_t vertexCounter);
 	float* GetMaterialData(FbxSurfaceMaterial* surface, const char* materialName, const char* factorName);
 	std::wstring GetTextureRelativeName(FbxSurfaceMaterial* surface, const char* materialProperty);
@@ -186,15 +191,12 @@ private:
 
 	void RemoveNumber(std::string& name);
 
-	FbxVector4 multT(FbxNode* pNode, FbxVector4 vector);
-	FbxAMatrix GetT(FbxNode* pNode);
-
 	void WriteString(std::string& str, std::ofstream& file);
 	void WriteString(const char* str, std::ofstream& file);
 	void WriteEndl(std::string& str, std::ofstream& file);
 
-	void GetControlPoints(FbxMesh* mesh, std::vector < std::vector<float> >& pos, bool IsAnimation, FbxMeshInfo& info);
-	void InsertVertex(std::vector<float>& position, std::vector<float>& normal, std::vector<float>& tangent, std::vector<float>& uv, FbxMeshInfo& info, std::unordered_map<Vertex, uint16_t>& indexMapping);
+	void GetControlPoints(FbxMesh* mesh, std::vector < std::vector<float> >& pos, FbxMeshInfo& info);
+	void InsertVertex(std::vector<float>& position, std::vector<float>& normal, std::vector<float>& tangent, std::vector<float>& biNormal, std::vector<float>& uv, FbxMeshInfo& info, std::unordered_map<Vertex, uint16_t>& indexMapping);
 private:
 	std::vector<FbxMeshInfo> m_Meshes;
 	FbxManager* m_Manager = nullptr;

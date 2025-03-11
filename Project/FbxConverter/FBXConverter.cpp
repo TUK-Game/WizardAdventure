@@ -4,7 +4,7 @@ CFBXConverter::~CFBXConverter()
 {
 }
 
-void CFBXConverter::LoadFBX(const char* filename, bool IsAnimation)
+void CFBXConverter::LoadFBX(const char* filename)
 {
 	m_Manager = FbxManager::Create();
 
@@ -44,7 +44,7 @@ void CFBXConverter::LoadFBX(const char* filename, bool IsAnimation)
     LoadAnimationInfo();
 
     // 5. Mesh 데이터 추출
-    Parsing(m_Scene->GetRootNode(), IsAnimation);
+    Parsing(m_Scene->GetRootNode());
 
     fName = filename;
     fName += ".jhd";
@@ -54,7 +54,7 @@ void CFBXConverter::LoadFBX(const char* filename, bool IsAnimation)
     m_Manager->Destroy();
 }
 
-void CFBXConverter::LoadMesh(FbxMesh* mesh, bool IsAnimation)
+void CFBXConverter::LoadMesh(FbxMesh* mesh)
 {
     m_Meshes.push_back(FbxMeshInfo());
     FbxMeshInfo& meshInfo = m_Meshes.back();
@@ -118,7 +118,7 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh, bool IsAnimation)
     assert(polygonSize == 3);
 
     std::vector<std::vector<float>> pos;
-    GetControlPoints(mesh, pos, IsAnimation, meshInfo);
+    GetControlPoints(mesh, pos, meshInfo);
 
     uint32_t vertexCounter = 0;
     std::unordered_map<Vertex, uint16_t> indexMapping;
@@ -135,68 +135,19 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh, bool IsAnimation)
             std::vector<float> position = pos[controlPointIndex];
             std::vector<float> normal = GetNormal(mesh, controlPointIndex, vertexCounter);
             std::vector<float> tangent = GetTangent(mesh, controlPointIndex, vertexCounter);
+            std::vector<float> biNormal = GetBiNormal(mesh, controlPointIndex, vertexCounter);
             std::vector<float> uv;
             uv = GetUV(mesh, controlPointIndex, vertexCounter);
 
-            InsertVertex(position, normal, tangent, uv, meshInfo, indexMapping);
+            InsertVertex(position, normal, tangent, biNormal, uv, meshInfo, indexMapping);
             vertexCounter++;
         }
-
-        //const uint32_t subsetIdx = geometryElementMaterial->GetIndexArray().GetAt(i);
-        //meshInfo.indices[subsetIdx].push_back(arrIdx[0]);
-        //meshInfo.indices[subsetIdx].push_back(arrIdx[2]);
-        //meshInfo.indices[subsetIdx].push_back(arrIdx[1]); // FBX는 기본적으로 반시계 방향이므로 스왑
     }
     meshInfo.boneWeights.resize(meshInfo.vertices.size());
     LoadAnimationData(mesh, &meshInfo);
 }
 
-
-FbxVector4 CFBXConverter::multT(FbxNode* pNode, FbxVector4 vector)
-{
-    FbxAMatrix geoMatrix;
-    if (pNode->GetNodeAttribute())
-    {
-        const FbxVector4 lT = pNode->GetGeometricTranslation(FbxNode::eSourcePivot);
-        const FbxVector4 lR = pNode->GetGeometricRotation(FbxNode::eSourcePivot);
-        const FbxVector4 lS = pNode->GetGeometricScaling(FbxNode::eSourcePivot);
-        geoMatrix.SetTRS(lT, lR, lS);
-    }
-
-    FbxNode* pParentNode = NULL;
-    FbxAMatrix pParentMatrix;
-    if((pParentNode = pNode->GetParent()) != NULL)
-    {
-        pParentMatrix = pParentNode->EvaluateGlobalTransform() * pParentMatrix;
-    }
-    FbxAMatrix localMatrix = pNode->EvaluateLocalTransform();
-    FbxAMatrix matrix = pParentMatrix * localMatrix * geoMatrix;
-    return matrix.MultT(vector);
-}
-
-FbxAMatrix CFBXConverter::GetT(FbxNode* pNode)
-{
-    FbxAMatrix geoMatrix;
-    if (pNode->GetNodeAttribute())
-    {
-        const FbxVector4 lT = pNode->GetGeometricTranslation(FbxNode::eSourcePivot);
-        const FbxVector4 lR = pNode->GetGeometricRotation(FbxNode::eSourcePivot);
-        const FbxVector4 lS = pNode->GetGeometricScaling(FbxNode::eSourcePivot);
-        geoMatrix.SetTRS(lT, lR, lS);
-    }
-
-    FbxNode* pParentNode = NULL;
-    FbxAMatrix pParentMatrix;
-    if ((pParentNode = pNode->GetParent()) != NULL)
-    {
-        pParentMatrix = pParentNode->EvaluateGlobalTransform() * pParentMatrix;
-    }
-    FbxAMatrix localMatrix = pNode->EvaluateLocalTransform();
-    FbxAMatrix matrix = pParentMatrix * localMatrix * geoMatrix;
-    return matrix;
-}
-
-void CFBXConverter::Parsing(FbxNode* node, bool IsAnimation)
+void CFBXConverter::Parsing(FbxNode* node)
 {
     FbxNodeAttribute* attribute = node->GetNodeAttribute();
 
@@ -205,7 +156,7 @@ void CFBXConverter::Parsing(FbxNode* node, bool IsAnimation)
         switch (attribute->GetAttributeType())
         {
         case FbxNodeAttribute::eMesh:
-            LoadMesh(node->GetMesh(), IsAnimation);
+            LoadMesh(node->GetMesh());
             break;
         }
     }
@@ -221,7 +172,7 @@ void CFBXConverter::Parsing(FbxNode* node, bool IsAnimation)
     // Tree 구조 재귀 호출
     const INT32 childCount = node->GetChildCount();
     for (INT32 i = 0; i < childCount; ++i)
-        Parsing(node->GetChild(i), IsAnimation);
+        Parsing(node->GetChild(i));
 }
 
 void CFBXConverter::LoadMaterial(FbxSurfaceMaterial* surfaceMaterial)
@@ -287,9 +238,12 @@ void CFBXConverter::LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* meshInfo)
     const INT32 skinCount = mesh->GetDeformerCount(FbxDeformer::eSkin);
     if (skinCount <= 0 || m_AnimClips.empty())
         return;
-
+    
+    static bool ba = false;
+    if (ba)
+        return;
     meshInfo->hasAnimation = true;
-
+    ba = true;
     for (INT32 i = 0; i < skinCount; i++)
     {
         FbxSkin* fbxSkin = static_cast<FbxSkin*>(mesh->GetDeformer(i, FbxDeformer::eSkin));
@@ -468,6 +422,69 @@ std::vector<float> CFBXConverter::GetNormal(FbxMesh* mesh, uint32_t controlPoint
     return result;
 }
 
+std::vector<float> CFBXConverter::GetBiNormal(FbxMesh* mesh, uint32_t controlPointIndex, uint32_t vertexCounter)
+{
+    std::vector<float> result;
+    result.resize(3);
+
+    if (mesh->GetElementBinormalCount() < 1)
+    {
+        result[0] = 1.f;
+        result[1] = 0.f;
+        result[2] = 0.f;
+        return result;
+    }
+
+    const FbxGeometryElementBinormal* vertexBiNormal = mesh->GetElementBinormal(0); // 노말 획득
+
+    switch (vertexBiNormal->GetMappingMode()) // 매핑 모드
+    {
+    case FbxGeometryElement::eByControlPoint:
+    {
+        switch (vertexBiNormal->GetReferenceMode())
+        {
+        case FbxGeometryElement::eDirect:
+        {
+            result[0] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(controlPointIndex).mData[0]);
+            result[1] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(controlPointIndex).mData[2]);
+            result[2] = -static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(controlPointIndex).mData[1]);
+        }
+        break;
+        case FbxGeometryElement::eIndexToDirect:
+        {
+            int index = vertexBiNormal->GetIndexArray().GetAt(controlPointIndex); // 인덱스를 얻어온다.
+            result[0] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(index).mData[0]);
+            result[1] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(index).mData[2]);
+            result[2] = -static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(index).mData[1]);
+        }
+        break;
+        }
+    }
+    case FbxGeometryElement::eByPolygonVertex:
+    {
+        switch (vertexBiNormal->GetReferenceMode())
+        {
+        case FbxGeometryElement::eDirect:
+        {
+            result[0] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(vertexCounter).mData[0]);
+            result[1] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(vertexCounter).mData[2]);
+            result[2] = -static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(vertexCounter).mData[1]);
+        }
+        break;
+        case FbxGeometryElement::eIndexToDirect:
+        {
+            int index = vertexBiNormal->GetIndexArray().GetAt(vertexCounter); // 인덱스를 얻어온다.
+            result[0] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(index).mData[0]);
+            result[1] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(index).mData[2]);
+            result[2] = -static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(index).mData[1]);
+        }
+        break;
+        }
+    }
+    }
+    return result;
+}
+
 std::vector<float> CFBXConverter::GetTangent(FbxMesh* mesh, uint32_t controlPointIndex, uint32_t vertexCounter)
 {
     std::vector<float> result;
@@ -475,7 +492,6 @@ std::vector<float> CFBXConverter::GetTangent(FbxMesh* mesh, uint32_t controlPoin
 
     if (mesh->GetElementTangentCount() < 1)
     {
-        std::cout << "No Tangent" << std::endl;
         result[0] = 1.f;
         result[1] = 0.f;
         result[2] = 0.f;
@@ -865,8 +881,8 @@ void CFBXConverter::SaveBinary(const char* filename, const std::vector<FbxMeshIn
 
 void CFBXConverter::RemoveNumber(std::string& name)
 {
-    std::regex pattern("(_\\d+)$");
-    name = std::regex_replace(name, pattern, "");
+    //std::regex pattern("(_\\d+)$");
+    //name = std::regex_replace(name, pattern, "");
 
     size_t pos = name.find(" (");
     if (pos != std::string::npos) {
@@ -895,7 +911,7 @@ void CFBXConverter::WriteEndl(std::string& str, std::ofstream& file)
     str.push_back('\n');
 }
 
-void CFBXConverter::GetControlPoints(FbxMesh* mesh, std::vector<std::vector<float>>& pos, bool IsAnimation, FbxMeshInfo& info)
+void CFBXConverter::GetControlPoints(FbxMesh* mesh, std::vector<std::vector<float>>& pos, FbxMeshInfo& info)
 {
     unsigned int count = mesh->GetControlPointsCount();
     FbxVector4* controlPoints = mesh->GetControlPoints();
@@ -904,23 +920,17 @@ void CFBXConverter::GetControlPoints(FbxMesh* mesh, std::vector<std::vector<floa
     {
         pos[i].resize(4);
         FbxVector4 worldPos = controlPoints[i];
-        //if(!IsAnimation)
-        //    worldPos = multT(mesh->GetNode(), controlPoints[i]);
 
         pos[i][0] = static_cast<float>(worldPos.mData[0]);
         pos[i][1] = static_cast<float>(worldPos.mData[2]);
         pos[i][2] = static_cast<float>(worldPos.mData[1]);
         pos[i][3] = i;
-
-       //info.centerPos[0] = static_cast<float>(pos[i][0]);
-       //info.centerPos[1] = static_cast<float>(pos[i][2]);
-       //info.centerPos[2] = static_cast<float>(pos[i][1]);
     }
 }
 
-void CFBXConverter::InsertVertex(std::vector<float>& position, std::vector<float>& normal, std::vector<float>& tangent, std::vector<float>& uv, FbxMeshInfo& info, std::unordered_map<Vertex, uint16_t>& indexMapping)
+void CFBXConverter::InsertVertex(std::vector<float>& position, std::vector<float>& normal, std::vector<float>& tangent, std::vector<float>& biNormal, std::vector<float>& uv, FbxMeshInfo& info, std::unordered_map<Vertex, uint16_t>& indexMapping)
 {
-    Vertex vertex = { position, normal, tangent, uv };
+    Vertex vertex = { position, normal, tangent, biNormal, uv };
     vertex.controlPoint = position[3];
     auto lookup = indexMapping.find(vertex);
     uint16_t index;
