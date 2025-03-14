@@ -44,26 +44,26 @@ void CTestPlayer::Update()
 	}
 	else if (KEY_PUSH(EKey::Ctrl))
 	{
-		if (m_Prev == 4)
+		if (m_Prev == 1)
 			return;
-		m_Prev = 4;
-		GetAnimator()->Play(4);
+		m_Prev = 1;
+		GetAnimator()->Play(1);
 	}
 
 	GetTransform()->SetRelativePosition(Pos);
 
 	if (KEY_PUSH(EKey::Up) || KEY_PUSH(EKey::Left) || KEY_PUSH(EKey::Right) || KEY_PUSH(EKey::Down))
 	{
-		if (m_Prev == 5)
+		if (m_Prev == 2)
 			return;
-		m_Prev = 5;
-		GetAnimator()->Play(5);
+		m_Prev = 2;
+		GetAnimator()->Play(2);
 	}
 
 	if (KEY_UP(EKey::Up) || KEY_UP(EKey::Left) || KEY_UP(EKey::Right) || KEY_UP(EKey::Down))
 	{
-		m_Prev = 3;
-		GetAnimator()->Play(3);
+		m_Prev = 2;
+		GetAnimator()->Play(2);
 	}
 
 }

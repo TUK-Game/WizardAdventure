@@ -202,6 +202,7 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 		}
 		else if (!strcmp(pstrToken, "BoneInfo:\n"))
 		{
+			meshInfo->hasAnimation = true;
 			size_t size;
 			file.read(reinterpret_cast<char*>(&size), sizeof(size_t));
 			std::vector<std::shared_ptr<FbxBoneInfo>> boneInfo;

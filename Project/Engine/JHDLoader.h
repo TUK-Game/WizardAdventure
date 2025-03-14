@@ -28,7 +28,7 @@ struct JHDMeshInfo : public CAsset
 	std::vector<std::vector<UINT32>>		indices;
 	std::vector<JHDMaterialInfo>			materials;
 	std::vector<BoneWeight>					boneWeights; // »À °¡ÁßÄ¡
-	bool									hasAnimation;
+	bool									hasAnimation = false;
 	FbxAMatrix matrix;
 	Vec4 translate;
 	Vec4 rotation;

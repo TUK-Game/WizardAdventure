@@ -255,7 +255,7 @@ void CFBXConverter::LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* meshInfo)
         if (fbxSkin)
         {
             FbxSkin::EType type = fbxSkin->GetSkinningType();
-            if (FbxSkin::eRigid == type || FbxSkin::eLinear)
+            if (FbxSkin::eRigid == type || FbxSkin::eLinear == type)
             {
                 const INT32 clusterCount = fbxSkin->GetClusterCount();
                 for (INT32 j = 0; j < clusterCount; j++)
@@ -893,8 +893,8 @@ void CFBXConverter::SaveBinary(const char* filename, const std::vector<FbxMeshIn
 
 void CFBXConverter::RemoveNumber(std::string& name)
 {
-    //std::regex pattern("(_\\d+)$");
-    //name = std::regex_replace(name, pattern, "");
+    std::regex pattern("(_\\d+)$");
+    name = std::regex_replace(name, pattern, "");
 
     size_t pos = name.find(" (");
     if (pos != std::string::npos) {

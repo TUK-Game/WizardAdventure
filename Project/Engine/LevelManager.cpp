@@ -234,7 +234,7 @@ int CLevelManager::Init()
 
 	for(auto& o : obj)
 	{
-		std::wstring name = o->GetName();
+		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
 		o->SetName(name);
 
 		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
@@ -242,9 +242,9 @@ int CLevelManager::Init()
 		rot.x += -90;
 		o->GetTransform()->SetRelativeRotation(rot);
 		//o->GetTransform()->SetRelativePosition(100, 0, 0);
-		o->GetTransform()->SetRelativeScale(1, 1, 1);
+		//o->GetTransform()->SetRelativeScale(1, 1, 1);
 		o->AddComponent(new CTestPlayer);
-		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+		o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(true);
 		m_CurLevel->AddGameObject(o, 10, false);
 
@@ -254,7 +254,7 @@ int CLevelManager::Init()
 		//object->SetName(L"k");
 		//object->AddComponent(new CTransform);
 		//object->AddComponent(new CMeshRenderer);
-		//rot = object->GetTransform()->GetRelativeRotation();
+		//rot = object->GetTransform()->GetRelativeRotation();	
 		////rot.x += -90;
 		//object->GetTransform()->SetRelativeRotation(rot);
 		//object->GetTransform()->SetRelativePosition(trans);	
