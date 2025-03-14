@@ -30,8 +30,8 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 		file.read(reinterpret_cast<char*>(&length), sizeof(length));
 		file.read(pstrToken, length);
 
-		if (strlen(pstrToken) != 0)
-			std::cout << pstrToken << "\n";
+		//if (strlen(pstrToken) != 0)
+		//	std::cout << pstrToken << "\n";
 
 
 		if (!strcmp(pstrToken, "END"))

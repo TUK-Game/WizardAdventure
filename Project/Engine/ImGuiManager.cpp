@@ -76,6 +76,10 @@ void CImGuiManager::ReadyWindow()
 void CImGuiManager::Render()
 {
 	ImGui::Render();
+
+	ID3D12DescriptorHeap* descriptorHeaps[] = { CDevice::GetInst()->GetImGuiDescHeap()->GetDescriptorHeap().Get() };
+	GRAPHICS_CMD_LIST->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), GRAPHICS_CMD_LIST.Get());
 }
 
