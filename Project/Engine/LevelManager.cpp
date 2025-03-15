@@ -244,7 +244,7 @@ int CLevelManager::Init()
 		//o->GetTransform()->SetRelativePosition(100, 0, 0);
 		//o->GetTransform()->SetRelativeScale(1, 1, 1);
 		o->AddComponent(new CTestPlayer);
-		o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(true);
 		m_CurLevel->AddGameObject(o, 10, false);
 
