@@ -13,7 +13,7 @@ struct MeshRenderInfo
 	Matrix				matrix;
 	Vec4 translation;
 	Vec4 rotation;
-	Vec3 scale;
+	Vec4 scale;
 	Vec3 boundingBoxMax;
 	Vec3 boundingBoxMin;
 	Vec4 centerPos;

@@ -221,6 +221,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="LevelCollision.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshData.h" />

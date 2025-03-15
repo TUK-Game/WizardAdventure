@@ -19,7 +19,7 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 		return;
 	}
 	uint32_t length;
-
+	int div = 0;
 	m_Meshes.push_back(JHDMeshInfo());
 	JHDMeshInfo* meshInfo = &m_Meshes.back();
 	int num;
@@ -30,8 +30,8 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 		file.read(reinterpret_cast<char*>(&length), sizeof(length));
 		file.read(pstrToken, length);
 
-		if (strlen(pstrToken) != 0)
-			std::cout << pstrToken << "\n";
+		//if (strlen(pstrToken) != 0)
+		//	std::cout << pstrToken << "\n";
 
 
 		if (!strcmp(pstrToken, "END"))
@@ -40,10 +40,12 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 		}
 		else if (!strcmp(pstrToken, "NEXT"))
 		{
+			div++;
 			if (!bCopy)
 			{
-				JHDMeshInfo* info = meshInfo->Clone();
+			/*	JHDMeshInfo* info = meshInfo->Clone();
 				CAssetManager::GetInst()->AddAsset(info->name, info->Clone());
+				delete info;*/
 			}
 			m_Meshes.push_back(JHDMeshInfo());
 			meshInfo = &m_Meshes.back();
@@ -55,14 +57,14 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 			file.read(reinterpret_cast<char*>(&length), sizeof(length));
 			file.read(mName, length);
 			meshInfo->name = s2ws(mName);
-			CSharedPtr<JHDMeshInfo> info = CAssetManager::GetInst()->FindAsset<JHDMeshInfo>(meshInfo->name);
-			if (info)
+			//CSharedPtr<JHDMeshInfo> info = CAssetManager::GetInst()->FindAsset<JHDMeshInfo>(meshInfo->name);
+			//if (info)
 			{
-				//meshInfo->vertices = info.Get()->vertices;
-				//meshInfo->indices = info.Get()->indices;
-				//meshInfo->materials = info.Get()->materials;
-				//
-				//bCopy = true;
+				/*meshInfo->vertices = info.Get()->vertices;
+				meshInfo->indices = info.Get()->indices;
+				meshInfo->materials = info.Get()->materials;
+				
+				bCopy = true;*/
 			}
 		}
 		else if (!strcmp(pstrToken, "Material Count: "))
@@ -152,6 +154,24 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 			file.read(reinterpret_cast<char*>(&num), sizeof(num));
 			meshInfo->matrix = num;
 		}
+		else if (!strcmp(pstrToken, "Translate:\n"))
+		{
+			Vec4 num;
+			file.read(reinterpret_cast<char*>(&num), sizeof(num));
+			meshInfo->translate = num;
+		}
+		else if (!strcmp(pstrToken, "Rotation:\n"))
+		{
+			Vec4 num;
+			file.read(reinterpret_cast<char*>(&num), sizeof(num));
+			meshInfo->rotation = num;
+		}
+		else if (!strcmp(pstrToken, "Scale:\n"))
+		{
+			Vec4 num;
+			file.read(reinterpret_cast<char*>(&num), sizeof(num));
+			meshInfo->scale = num;
+			}
 		else if (!strcmp(pstrToken, "BoundingBox:\n"))
 		{
 			Vec3 num;
@@ -182,9 +202,11 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 		}
 		else if (!strcmp(pstrToken, "BoneInfo:\n"))
 		{
+			meshInfo->hasAnimation = true;
 			size_t size;
 			file.read(reinterpret_cast<char*>(&size), sizeof(size_t));
-			m_Bones.resize(size);
+			std::vector<std::shared_ptr<FbxBoneInfo>> boneInfo;
+			boneInfo.resize(size);
 			for (int j = 0; j < size; ++j)
 			{
 				INT32 iNum;
@@ -196,11 +218,12 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 				file.read(reinterpret_cast<char*>(&iNum), sizeof(INT32));
 				file.read(reinterpret_cast<char*>(&matrix), sizeof(FbxAMatrix));
 
-				m_Bones[j] = std::make_shared<FbxBoneInfo>();
-				m_Bones[j]->boneName = s2ws(mName);
-				m_Bones[j]->parentIndex = iNum;
-				m_Bones[j]->matOffset = matrix;
+				boneInfo[j] = std::make_shared<FbxBoneInfo>();
+				boneInfo[j]->boneName = s2ws(mName);
+				boneInfo[j]->parentIndex = iNum;
+				boneInfo[j]->matOffset = matrix;
 			}
+			m_Bones.push_back(boneInfo);
 		}
 		else if (!strcmp(pstrToken, "AnimClipInfo:\n"))
 		{
@@ -208,13 +231,14 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 			file.read(reinterpret_cast<char*>(&size), sizeof(size_t));
 			m_AnimClips.resize(size);
 			for (int j = 0; j < size; ++j)
-			{	
+			{
 				m_AnimClips[j] = std::make_shared<FbxAnimClipInfo>();
 
 				size_t outSize, innerSize;
 				char mName[100] = { '\0' };
 				long long time;
 				FbxTime::EMode mode;
+				int meshNum;
 				file.read(reinterpret_cast<char*>(&length), sizeof(length));
 				file.read(mName, length);
 				file.read(reinterpret_cast<char*>(&time), sizeof(long long));
@@ -224,22 +248,27 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 				m_AnimClips[j]->endTime = time;
 
 				file.read(reinterpret_cast<char*>(&mode), sizeof(mode));
-				file.read(reinterpret_cast<char*>(&outSize), sizeof(size_t));
+				file.read(reinterpret_cast<char*>(&meshNum), sizeof(meshNum));
 
 				m_AnimClips[j]->name = s2ws(mName);
 				m_AnimClips[j]->mode = mode;
-				m_AnimClips[j]->keyFrames.resize(outSize);
-				for (int k = 0; k < outSize; ++k)
+				m_AnimClips[j]->keyFrames.resize(meshNum);
+				for (int t = 0; t < meshNum; ++t)
 				{
-					file.read(reinterpret_cast<char*>(&innerSize), sizeof(size_t));
-					m_AnimClips[j]->keyFrames[k].resize(innerSize);
-					for (int m = 0; m < innerSize; ++m)
+					file.read(reinterpret_cast<char*>(&outSize), sizeof(size_t));
+					m_AnimClips[j]->keyFrames[t].resize(outSize);
+					for (int k = 0; k < outSize; ++k)
 					{
-						FbxKeyFrameInfo in;
-						file.read(reinterpret_cast<char*>(&in.time), sizeof(double));
-						file.read(reinterpret_cast<char*>(&in.matTransform), sizeof(FbxAMatrix));
-						m_AnimClips[j]->keyFrames[k][m].matTransform = in.matTransform;
-						m_AnimClips[j]->keyFrames[k][m].time = in.time;
+						file.read(reinterpret_cast<char*>(&innerSize), sizeof(size_t));
+						m_AnimClips[j]->keyFrames[t][k].resize(innerSize);
+						for (int m = 0; m < innerSize; ++m)
+						{
+							FbxKeyFrameInfo in;
+							file.read(reinterpret_cast<char*>(&in.time), sizeof(double));
+							file.read(reinterpret_cast<char*>(&in.matTransform), sizeof(FbxAMatrix));
+							m_AnimClips[j]->keyFrames[t][k][m].matTransform = in.matTransform;
+							m_AnimClips[j]->keyFrames[t][k][m].time = in.time;
+						}
 					}
 				}
 			}

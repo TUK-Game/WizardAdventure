@@ -4,6 +4,7 @@
 *.idb
 *.exe
 *.cso
+*.fbx
 
 Engine_d.lib
 Engine.lib
@@ -11,3 +12,4 @@ Engine.lib
 # Directory
 .vs
 x64
+Bin

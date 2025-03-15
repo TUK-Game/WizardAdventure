@@ -206,10 +206,24 @@ Vec3 CTransform::DecomposeRotationMatrix(const Matrix& rotation)
 }
 
 
-void CTransform::SetWorldMatrix(const Matrix& matrix)
+void CTransform::SetWorldMatrix(Matrix& matrix)
 {
+	Matrix flipZ = Matrix(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, -1, 0, // Z축을 반전 (-1)
+		0, 0, 0, 1
+	);
+
+	matrix *= flipZ;
 	m_matWorld = matrix;
-	//SetRelativeScale(matrix._11, matrix._22, matrix._33);
+
+	float scaleX = sqrtf(matrix._11 * matrix._11 + matrix._12 * matrix._12 + matrix._13 * matrix._13);
+	float scaleY = sqrtf(matrix._21 * matrix._21 + matrix._22 * matrix._22 + matrix._23 * matrix._23);
+	float scaleZ = sqrtf(matrix._31 * matrix._31 + matrix._32 * matrix._32 + matrix._33 * matrix._33);
+
+	SetRelativeScale(scaleX, scaleY, scaleZ);  // 스케일 적용
+
 	SetRelativePosition(matrix._41, matrix._42, matrix._43);
 	// 4x4 변환 행렬에서 회전 행렬 부분 추출
 	DirectX::SimpleMath::Matrix rotationMatrix = matrix;
@@ -217,11 +231,24 @@ void CTransform::SetWorldMatrix(const Matrix& matrix)
 	rotationMatrix._42 = 0.0f;
 	rotationMatrix._43 = 0.0f;
 
+	if (scaleX > 0.0001f) 
+	{
+		rotationMatrix._11 /= scaleX; rotationMatrix._12 /= scaleX; rotationMatrix._13 /= scaleX;
+	}
+	if (scaleY > 0.0001f) 
+	{
+		rotationMatrix._21 /= scaleY; rotationMatrix._22 /= scaleY; rotationMatrix._23 /= scaleY;
+	}
+	if (scaleZ > 0.0001f) 
+	{
+		rotationMatrix._31 /= scaleZ; rotationMatrix._32 /= scaleZ; rotationMatrix._33 /= scaleZ;
+	}
+
 	// 행렬에서 회전값(Euler angles) 추출
 	float pitch, yaw, roll;
 
 	// Pitch (X축 회전)
-	pitch = asinf(-rotationMatrix._32);
+	pitch = asinf(rotationMatrix._32);
 
 	// Yaw (Y축 회전)
 	if (cosf(pitch) > 0.0001f)
@@ -232,15 +259,15 @@ void CTransform::SetWorldMatrix(const Matrix& matrix)
 	else
 	{
 		// Gimbal lock 상태일 경우
-		yaw = atan2f(-rotationMatrix._13, rotationMatrix._11);
+		yaw = atan2f(rotationMatrix._13, rotationMatrix._11);
 		roll = 0.0f;
 	}
 
 	// 라디안을 degree로 변환 후 업데이트
 	m_RelativeRotation = DirectX::SimpleMath::Vector3(
-		pitch * (180.0f / XM_PI),
-		yaw * (180.0f / XM_PI),
-		roll * (180.0f / XM_PI)
+		pitch,
+		yaw, 
+		roll  
 	);
 
 }

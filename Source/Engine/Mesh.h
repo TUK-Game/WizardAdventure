@@ -31,7 +31,7 @@ struct AnimClipInfo
 	std::wstring			animName;
 	INT32			frameCount;
 	double			duration;
-	std::vector<std::vector<KeyFrameInfo>>	keyFrames;
+	std::vector<std::vector<std::vector<KeyFrameInfo>>>	keyFrames;
 };
 
 class CStructuredBuffer;
@@ -49,11 +49,11 @@ public:
 	void Render(UINT32 instanceCount = 1, UINT32 idx = 0);
 	void Render(std::shared_ptr<class CInstancingBuffer>& buffer, UINT32 idx = 0);
 
-	static CMesh* CreateFromJHD(const struct JHDMeshInfo* meshInfo, class CJHDLoader& loader);
+	static CMesh* CreateFromJHD(const struct JHDMeshInfo* meshInfo, class CJHDLoader& loader, int idx);
 private:
 	int CreateVertexBuffer(const std::vector<Vertex>& vecVertex);
 	int CreateIndexBuffer(const std::vector<UINT>& buffer);
-	void CreateBonesAndAnimations(class CJHDLoader& loader);
+	void CreateBonesAndAnimations(class CJHDLoader& loader, int idx);
 
 public:
 	UINT32 GetSubsetCount() { return static_cast<UINT32>(m_VecIndexInfo.size()); }
@@ -73,6 +73,8 @@ public:
 
 private:
 	ComPtr<ID3D12Resource>		m_VertexBuffer;
+	ComPtr<ID3D12Resource>		m_VertexUploadBuffer;
+	ComPtr<ID3D12Resource>		m_IndexUploadBuffer;
 	D3D12_VERTEX_BUFFER_VIEW	m_VertexBufferView;
 	UINT						m_VertexCount;
 

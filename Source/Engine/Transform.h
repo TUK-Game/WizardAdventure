@@ -29,7 +29,7 @@ public:
     void SetRelativeScale(float x, float y, float z)    { m_RelativeScale = Vec3(x, y, z); }
     void SetRelativeRotation(Vec3 rotation);
     void SetRelativeRotation(float x, float y, float z);
-    void SetWorldMatrix(const Matrix& matrix);
+    void SetWorldMatrix(Matrix& matrix);
     void SetParentTransform(CTransform* parent) { m_ParentTransform = parent; }
 
     void LookAt(const Vec3& dir);

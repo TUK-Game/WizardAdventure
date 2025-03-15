@@ -1,10 +1,12 @@
 ﻿#include "FBXConverter.h"
 
+#define MAX_BONE 100
+
 CFBXConverter::~CFBXConverter()
 {
 }
 
-void CFBXConverter::LoadFBX(const char* filename, bool IsAnimation)
+void CFBXConverter::LoadFBX(const char* filename)
 {
 	m_Manager = FbxManager::Create();
 
@@ -44,7 +46,7 @@ void CFBXConverter::LoadFBX(const char* filename, bool IsAnimation)
     LoadAnimationInfo();
 
     // 5. Mesh 데이터 추출
-    Parsing(m_Scene->GetRootNode(), IsAnimation);
+    Parsing(m_Scene->GetRootNode());
 
     fName = filename;
     fName += ".jhd";
@@ -53,8 +55,8 @@ void CFBXConverter::LoadFBX(const char* filename, bool IsAnimation)
     m_Scene->Destroy();
     m_Manager->Destroy();
 }
-
-void CFBXConverter::LoadMesh(FbxMesh* mesh, bool IsAnimation)
+int meshNum = 0;
+void CFBXConverter::LoadMesh(FbxMesh* mesh)
 {
     m_Meshes.push_back(FbxMeshInfo());
     FbxMeshInfo& meshInfo = m_Meshes.back();
@@ -68,6 +70,24 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh, bool IsAnimation)
     FbxAMatrix worldTransform = node->EvaluateGlobalTransform();
 
     meshInfo.matrix = worldTransform;
+    FbxVector4 trans = worldTransform.GetT();
+    FbxVector4 Rot = worldTransform.GetR();
+    FbxVector4 scale = worldTransform.GetS();
+
+    meshInfo.translate[0] = trans[0];
+    meshInfo.translate[1] = trans[1];
+    meshInfo.translate[2] = trans[2];
+    meshInfo.translate[3] = trans[3];
+
+    meshInfo.rotation[0] = Rot[0];
+    meshInfo.rotation[1] = Rot[1];
+    meshInfo.rotation[2] = Rot[2];
+    meshInfo.rotation[3] = Rot[3];
+
+    meshInfo.scale[0] = scale[0];
+    meshInfo.scale[1] = scale[1];
+    meshInfo.scale[2] = scale[2];
+    meshInfo.scale[3] = scale[3];
 
     const uint32_t vertexCount = mesh->GetControlPointsCount();
 
@@ -100,9 +120,10 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh, bool IsAnimation)
     assert(polygonSize == 3);
 
     std::vector<std::vector<float>> pos;
-    GetControlPoints(mesh, pos, IsAnimation, meshInfo);
+    GetControlPoints(mesh, pos, meshInfo);
 
     uint32_t vertexCounter = 0;
+    std::unordered_map<Vertex, uint16_t> indexMapping;
 
     const uint32_t triCount = mesh->GetPolygonCount();
     for (uint32_t i = 0; i < triCount; i++)
@@ -116,46 +137,20 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh, bool IsAnimation)
             std::vector<float> position = pos[controlPointIndex];
             std::vector<float> normal = GetNormal(mesh, controlPointIndex, vertexCounter);
             std::vector<float> tangent = GetTangent(mesh, controlPointIndex, vertexCounter);
+            std::vector<float> biNormal = GetBiNormal(mesh, controlPointIndex, vertexCounter);
             std::vector<float> uv;
             uv = GetUV(mesh, controlPointIndex, vertexCounter);
 
-            InsertVertex(position, normal, tangent, uv, meshInfo);
+            InsertVertex(position, normal, tangent, biNormal, uv, meshInfo, indexMapping);
             vertexCounter++;
         }
-
-        //const uint32_t subsetIdx = geometryElementMaterial->GetIndexArray().GetAt(i);
-        //meshInfo.indices[subsetIdx].push_back(arrIdx[0]);
-        //meshInfo.indices[subsetIdx].push_back(arrIdx[2]);
-        //meshInfo.indices[subsetIdx].push_back(arrIdx[1]); // FBX는 기본적으로 반시계 방향이므로 스왑
     }
     meshInfo.boneWeights.resize(meshInfo.vertices.size());
     LoadAnimationData(mesh, &meshInfo);
+
 }
 
-
-FbxVector4 CFBXConverter::multT(FbxNode* pNode, FbxVector4 vector)
-{
-    FbxAMatrix geoMatrix;
-    if (pNode->GetNodeAttribute())
-    {
-        const FbxVector4 lT = pNode->GetGeometricTranslation(FbxNode::eSourcePivot);
-        const FbxVector4 lR = pNode->GetGeometricRotation(FbxNode::eSourcePivot);
-        const FbxVector4 lS = pNode->GetGeometricScaling(FbxNode::eSourcePivot);
-        geoMatrix.SetTRS(lT, lR, lS);
-    }
-
-    FbxNode* pParentNode = NULL;
-    FbxAMatrix pParentMatrix;
-    if((pParentNode = pNode->GetParent()) != NULL)
-    {
-        pParentMatrix = pParentNode->EvaluateGlobalTransform() * pParentMatrix;
-    }
-    FbxAMatrix localMatrix = pNode->EvaluateLocalTransform();
-    FbxAMatrix matrix = pParentMatrix * localMatrix * geoMatrix;
-    return matrix.MultT(vector);
-}
-
-void CFBXConverter::Parsing(FbxNode* node, bool IsAnimation)
+void CFBXConverter::Parsing(FbxNode* node)
 {
     FbxNodeAttribute* attribute = node->GetNodeAttribute();
 
@@ -164,7 +159,7 @@ void CFBXConverter::Parsing(FbxNode* node, bool IsAnimation)
         switch (attribute->GetAttributeType())
         {
         case FbxNodeAttribute::eMesh:
-            LoadMesh(node->GetMesh(), IsAnimation);
+            LoadMesh(node->GetMesh());
             break;
         }
     }
@@ -180,7 +175,7 @@ void CFBXConverter::Parsing(FbxNode* node, bool IsAnimation)
     // Tree 구조 재귀 호출
     const INT32 childCount = node->GetChildCount();
     for (INT32 i = 0; i < childCount; ++i)
-        Parsing(node->GetChild(i), IsAnimation);
+        Parsing(node->GetChild(i));
 }
 
 void CFBXConverter::LoadMaterial(FbxSurfaceMaterial* surfaceMaterial)
@@ -230,7 +225,8 @@ void CFBXConverter::LoadAnimationInfo()
 
         std::shared_ptr<FbxAnimClipInfo> animClip = std::make_shared<FbxAnimClipInfo>();
         animClip->name = s2ws(animStack->GetName());
-        animClip->keyFrames.resize(m_Bones.size()); // 키프레임은 본의 개수만큼
+        for(int j = 0; j < MAX_BONE; ++j)
+           animClip->keyFrames[j].resize(m_Bones.size()); // 키프레임은 본의 개수만큼
 
         FbxTakeInfo* takeInfo = m_Scene->GetTakeInfo(animStack->GetName());
         animClip->startTime = takeInfo->mLocalTimeSpan.GetStart();
@@ -246,9 +242,12 @@ void CFBXConverter::LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* meshInfo)
     const INT32 skinCount = mesh->GetDeformerCount(FbxDeformer::eSkin);
     if (skinCount <= 0 || m_AnimClips.empty())
         return;
-
+    
+    static bool ba = false;
+    //if (ba)
+    //    return;
     meshInfo->hasAnimation = true;
-
+    ba = true;
     for (INT32 i = 0; i < skinCount; i++)
     {
         FbxSkin* fbxSkin = static_cast<FbxSkin*>(mesh->GetDeformer(i, FbxDeformer::eSkin));
@@ -256,7 +255,7 @@ void CFBXConverter::LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* meshInfo)
         if (fbxSkin)
         {
             FbxSkin::EType type = fbxSkin->GetSkinningType();
-            if (FbxSkin::eRigid == type || FbxSkin::eLinear)
+            if (FbxSkin::eRigid == type || FbxSkin::eLinear == type)
             {
                 const INT32 clusterCount = fbxSkin->GetClusterCount();
                 for (INT32 j = 0; j < clusterCount; j++)
@@ -281,6 +280,10 @@ void CFBXConverter::LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* meshInfo)
     }
 
     FillBoneWeight(mesh, meshInfo);
+
+    std::vector<std::shared_ptr<FbxBoneInfo>> bones = m_Bones;
+    m_Bone.push_back(bones);
+    meshNum++;
 }
 
 void CFBXConverter::LoadBoneWeight(FbxCluster* cluster, INT32 boneIdx, FbxMeshInfo* meshInfo)
@@ -368,7 +371,7 @@ void CFBXConverter::LoadKeyframe(INT32 animIndex, FbxNode* node, FbxCluster* clu
         keyFrameInfo.time = fbxTime.GetSecondDouble();
         keyFrameInfo.matTransform = matTransform;
 
-        m_AnimClips[animIndex]->keyFrames[boneIdx].push_back(keyFrameInfo);
+        m_AnimClips[animIndex]->keyFrames[meshNum][boneIdx].push_back(keyFrameInfo);
     }
 }
 
@@ -427,6 +430,69 @@ std::vector<float> CFBXConverter::GetNormal(FbxMesh* mesh, uint32_t controlPoint
     return result;
 }
 
+std::vector<float> CFBXConverter::GetBiNormal(FbxMesh* mesh, uint32_t controlPointIndex, uint32_t vertexCounter)
+{
+    std::vector<float> result;
+    result.resize(3);
+
+    if (mesh->GetElementBinormalCount() < 1)
+    {
+        result[0] = 1.f;
+        result[1] = 0.f;
+        result[2] = 0.f;
+        return result;
+    }
+
+    const FbxGeometryElementBinormal* vertexBiNormal = mesh->GetElementBinormal(0); // 노말 획득
+
+    switch (vertexBiNormal->GetMappingMode()) // 매핑 모드
+    {
+    case FbxGeometryElement::eByControlPoint:
+    {
+        switch (vertexBiNormal->GetReferenceMode())
+        {
+        case FbxGeometryElement::eDirect:
+        {
+            result[0] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(controlPointIndex).mData[0]);
+            result[1] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(controlPointIndex).mData[2]);
+            result[2] = -static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(controlPointIndex).mData[1]);
+        }
+        break;
+        case FbxGeometryElement::eIndexToDirect:
+        {
+            int index = vertexBiNormal->GetIndexArray().GetAt(controlPointIndex); // 인덱스를 얻어온다.
+            result[0] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(index).mData[0]);
+            result[1] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(index).mData[2]);
+            result[2] = -static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(index).mData[1]);
+        }
+        break;
+        }
+    }
+    case FbxGeometryElement::eByPolygonVertex:
+    {
+        switch (vertexBiNormal->GetReferenceMode())
+        {
+        case FbxGeometryElement::eDirect:
+        {
+            result[0] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(vertexCounter).mData[0]);
+            result[1] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(vertexCounter).mData[2]);
+            result[2] = -static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(vertexCounter).mData[1]);
+        }
+        break;
+        case FbxGeometryElement::eIndexToDirect:
+        {
+            int index = vertexBiNormal->GetIndexArray().GetAt(vertexCounter); // 인덱스를 얻어온다.
+            result[0] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(index).mData[0]);
+            result[1] = static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(index).mData[2]);
+            result[2] = -static_cast<float>(vertexBiNormal->GetDirectArray().GetAt(index).mData[1]);
+        }
+        break;
+        }
+    }
+    }
+    return result;
+}
+
 std::vector<float> CFBXConverter::GetTangent(FbxMesh* mesh, uint32_t controlPointIndex, uint32_t vertexCounter)
 {
     std::vector<float> result;
@@ -434,7 +500,6 @@ std::vector<float> CFBXConverter::GetTangent(FbxMesh* mesh, uint32_t controlPoin
 
     if (mesh->GetElementTangentCount() < 1)
     {
-        std::cout << "No Tangent" << std::endl;
         result[0] = 1.f;
         result[1] = 0.f;
         result[2] = 0.f;
@@ -729,6 +794,13 @@ void CFBXConverter::SaveBinary(const char* filename, const std::vector<FbxMeshIn
         WriteString("Transform:\n", file);
         file.write(reinterpret_cast<const char*>(&mesh[i].matrix), sizeof(mesh[i].matrix));
 
+        WriteString("Translate:\n", file);
+        file.write(reinterpret_cast<const char*>(&mesh[i].translate), sizeof(mesh[i].translate));
+        WriteString("Rotation:\n", file);
+        file.write(reinterpret_cast<const char*>(&mesh[i].rotation), sizeof(mesh[i].rotation));
+        WriteString("Scale:\n", file);
+        file.write(reinterpret_cast<const char*>(&mesh[i].scale), sizeof(mesh[i].scale));
+
         WriteString("BoundingBox:\n", file);
         file.write(reinterpret_cast<const char*>(&mesh[i].centerPos), sizeof(mesh[i].centerPos));
         file.write(reinterpret_cast<const char*>(&mesh[i].maxPos), sizeof(mesh[i].maxPos));
@@ -764,9 +836,9 @@ void CFBXConverter::SaveBinary(const char* filename, const std::vector<FbxMeshIn
 
         // 요주
         WriteString("BoneInfo:\n", file);
-        size_t size = m_Bones.size();
+        size_t size = m_Bone[i].size();
         file.write(reinterpret_cast<const char*>(&size), sizeof(size_t));
-        for (const auto& bone : m_Bones)
+        for (const auto& bone : m_Bone[i])
         {
             std::string temp = ws2s(bone->boneName);
             WriteString(temp, file);
@@ -776,41 +848,45 @@ void CFBXConverter::SaveBinary(const char* filename, const std::vector<FbxMeshIn
         }
 
         // 요주
-        WriteString("AnimClipInfo:\n", file);
-        size = m_AnimClips.size();
-        file.write(reinterpret_cast<const char*>(&size), sizeof(size_t));
-        for (const auto& clipInfo : m_AnimClips)
+        WriteString("NEXT", file);
+    }
+
+    WriteString("AnimClipInfo:\n", file);
+    size_t size = m_AnimClips.size();
+    file.write(reinterpret_cast<const char*>(&size), sizeof(size_t));
+    for (const auto& clipInfo : m_AnimClips)
+    {
+        std::string temp = ws2s(clipInfo->name);
+        WriteString(temp, file);
+        long long timeValue = clipInfo->startTime.Get();
+        file.write(reinterpret_cast<const char*>(&timeValue), sizeof(long long));
+        timeValue = clipInfo->endTime.Get();
+        file.write(reinterpret_cast<const char*>(&timeValue), sizeof(long long));
+        file.write(reinterpret_cast<const char*>(&clipInfo->mode), sizeof(clipInfo->mode));
+        file.write(reinterpret_cast<const char*>(&meshNum), sizeof(meshNum));
+        for (int i = 0; i < meshNum; ++i)
         {
-            std::string temp = ws2s(clipInfo->name);
-            WriteString(temp, file);
-            long long timeValue = clipInfo->startTime.Get();
-            file.write(reinterpret_cast<const char*>(&timeValue), sizeof(long long));
-            timeValue = clipInfo->endTime.Get();
-            file.write(reinterpret_cast<const char*>(&timeValue), sizeof(long long));
-            file.write(reinterpret_cast<const char*>(&clipInfo->mode), sizeof(clipInfo->mode));
             // 1. 외부 벡터의 크기 저장
-            size_t outerSize = clipInfo->keyFrames.size();
+            size_t outerSize = clipInfo->keyFrames[i].size();
             file.write(reinterpret_cast<const char*>(&outerSize), sizeof(outerSize));
 
             // 2. 내부 벡터 크기 및 내용 저장
-            for (const auto& innerVec : clipInfo->keyFrames) 
+            for (const auto& innerVec : clipInfo->keyFrames[i])
             {
                 // 2.1 내부 벡터의 크기 저장
                 size_t innerSize = innerVec.size();
                 file.write(reinterpret_cast<const char*>(&innerSize), sizeof(innerSize));
 
                 // 2.2 내부 벡터의 각 FbxKeyFrameInfo 객체 저장
-                for (const auto& keyFrame : innerVec) 
+                for (const auto& keyFrame : innerVec)
                 {
                     file.write(reinterpret_cast<const char*>(&keyFrame.time), sizeof(keyFrame.time));
                     file.write(reinterpret_cast<const char*>(&keyFrame.matTransform), sizeof(keyFrame.matTransform));
                 }
             }
-
         }
-
-        WriteString("NEXT", file);
     }
+
     WriteString("END", file);
     file.close(); 
 }
@@ -847,7 +923,7 @@ void CFBXConverter::WriteEndl(std::string& str, std::ofstream& file)
     str.push_back('\n');
 }
 
-void CFBXConverter::GetControlPoints(FbxMesh* mesh, std::vector<std::vector<float>>& pos, bool IsAnimation, FbxMeshInfo& info)
+void CFBXConverter::GetControlPoints(FbxMesh* mesh, std::vector<std::vector<float>>& pos, FbxMeshInfo& info)
 {
     unsigned int count = mesh->GetControlPointsCount();
     FbxVector4* controlPoints = mesh->GetControlPoints();
@@ -856,24 +932,17 @@ void CFBXConverter::GetControlPoints(FbxMesh* mesh, std::vector<std::vector<floa
     {
         pos[i].resize(4);
         FbxVector4 worldPos = controlPoints[i];
-        if(!IsAnimation)
-            worldPos = multT(mesh->GetNode(), controlPoints[i]);
 
         pos[i][0] = static_cast<float>(worldPos.mData[0]);
         pos[i][1] = static_cast<float>(worldPos.mData[2]);
         pos[i][2] = static_cast<float>(worldPos.mData[1]);
         pos[i][3] = i;
-
-       //info.centerPos[0] = static_cast<float>(pos[i][0]);
-       //info.centerPos[1] = static_cast<float>(pos[i][2]);
-       //info.centerPos[2] = static_cast<float>(pos[i][1]);
     }
 }
 
-std::unordered_map<Vertex, uint16_t> indexMapping;
-void CFBXConverter::InsertVertex(std::vector<float>& position, std::vector<float>& normal, std::vector<float>& tangent, std::vector<float>& uv, FbxMeshInfo& info)
+void CFBXConverter::InsertVertex(std::vector<float>& position, std::vector<float>& normal, std::vector<float>& tangent, std::vector<float>& biNormal, std::vector<float>& uv, FbxMeshInfo& info, std::unordered_map<Vertex, uint16_t>& indexMapping)
 {
-    Vertex vertex = { position, normal, tangent, uv };
+    Vertex vertex = { position, normal, tangent, biNormal, uv };
     vertex.controlPoint = position[3];
     auto lookup = indexMapping.find(vertex);
     uint16_t index;
