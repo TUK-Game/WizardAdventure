@@ -4,6 +4,8 @@
 *.idb
 *.exe
 *.cso
+*.fbx
+*.fbm
 
 # Directory
 .vs
