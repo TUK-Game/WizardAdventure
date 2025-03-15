@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Mesh.h"
 #include "Device.h"
 #include "JHDLoader.h"
@@ -59,7 +59,7 @@ CMesh* CMesh::CreateFromJHD(const JHDMeshInfo* meshInfo, CJHDLoader& loader, int
 	{
 		if (buffer.empty())
 		{
-			// FBX ÆÄÀÏÀÌ ÀÌ»óÇÏ´Ù. IndexBuffer°¡ ¾øÀ¸¸é ¿¡·¯ ³ª´Ï±î ÀÓ½Ã Ã³¸®
+			// FBX íŒŒì¼ì´ ì´ìƒí•˜ë‹¤. IndexBufferê°€ ì—†ìœ¼ë©´ ì—ëŸ¬ ë‚˜ë‹ˆê¹Œ ì„ì‹œ ì²˜ë¦¬
 			std::vector<UINT32> defaultBuffer{ 0 };
 			mesh->CreateIndexBuffer(defaultBuffer);
 		}
@@ -81,31 +81,53 @@ int CMesh::CreateVertexBuffer(const std::vector<Vertex>& vecVertex)
 	m_VertexCount = static_cast<UINT>(vecVertex.size());
 	UINT bufferSize = m_VertexCount * sizeof(Vertex);
 
-	D3D12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
+	D3D12_HEAP_PROPERTIES defaultHeapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+	D3D12_RESOURCE_DESC bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
 
 	if (FAILED(DEVICE->CreateCommittedResource(
-		&heapProperty,
+		&defaultHeapProps,
 		D3D12_HEAP_FLAG_NONE,
-		&desc,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
+		&bufferDesc,
+		D3D12_RESOURCE_STATE_COMMON, 
 		nullptr,
 		IID_PPV_ARGS(&m_VertexBuffer))))
 	{
 		return E_FAIL;
 	}
 
-	// Copy the triangle data to the vertex buffer.
-	void* vertexDataBuffer = nullptr;
-	CD3DX12_RANGE readRange(0, 0); // We do not intend to read from this resource on the CPU.
-	m_VertexBuffer->Map(0, &readRange, &vertexDataBuffer);
-	::memcpy(vertexDataBuffer, &vecVertex[0], bufferSize);
-	m_VertexBuffer->Unmap(0, nullptr);
+	D3D12_HEAP_PROPERTIES uploadHeapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 
-	// Initialize the vertex buffer view.
+	if (FAILED(DEVICE->CreateCommittedResource(
+		&uploadHeapProps,
+		D3D12_HEAP_FLAG_NONE,
+		&bufferDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ, 
+		nullptr,
+		IID_PPV_ARGS(&m_VertexUploadBuffer))))
+	{
+		return E_FAIL;
+	}
+
+	void* vertexDataBuffer = nullptr;
+	CD3DX12_RANGE readRange(0, 0); 
+	m_VertexUploadBuffer->Map(0, &readRange, &vertexDataBuffer);
+	::memcpy(vertexDataBuffer, vecVertex.data(), bufferSize);
+	m_VertexUploadBuffer->Unmap(0, nullptr);
+
+	auto commandList = CDevice::GetInst()->GetCmdQueue()->GetGraphicsCmdList(); 
+
+	commandList.Get()->CopyResource(m_VertexBuffer.Get(), m_VertexUploadBuffer.Get());
+
+	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+		m_VertexBuffer.Get(),
+		D3D12_RESOURCE_STATE_COPY_DEST,
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+
+	commandList->ResourceBarrier(1, &barrier);
+
 	m_VertexBufferView.BufferLocation = m_VertexBuffer->GetGPUVirtualAddress();
-	m_VertexBufferView.StrideInBytes = sizeof(Vertex); // Á¤Á¡ 1°³ Å©±â
-	m_VertexBufferView.SizeInBytes = bufferSize; // ¹öÆÛÀÇ Å©±â	
+	m_VertexBufferView.StrideInBytes = sizeof(Vertex);
+ 	m_VertexBufferView.SizeInBytes = bufferSize;
 
 	return S_OK;
 }
@@ -115,7 +137,7 @@ int CMesh::CreateIndexBuffer(const std::vector<UINT>& buffer)
 	UINT32 indexCount = static_cast<UINT32>(buffer.size());
 	UINT32 bufferSize = indexCount * sizeof(UINT32);
 
-	D3D12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	D3D12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
 
 	ComPtr<ID3D12Resource> indexBuffer;
@@ -123,15 +145,38 @@ int CMesh::CreateIndexBuffer(const std::vector<UINT>& buffer)
 		&heapProperty,
 		D3D12_HEAP_FLAG_NONE,
 		&desc,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
+		D3D12_RESOURCE_STATE_COMMON,
 		nullptr,
 		IID_PPV_ARGS(&indexBuffer));
 
+	D3D12_HEAP_PROPERTIES uploadHeapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	if (FAILED(DEVICE->CreateCommittedResource(
+		&uploadHeapProps,
+		D3D12_HEAP_FLAG_NONE,
+		&desc,
+		D3D12_RESOURCE_STATE_GENERIC_READ, 
+		nullptr,
+		IID_PPV_ARGS(&m_IndexUploadBuffer))))
+	{
+		return E_FAIL;
+	}
+
 	void* indexDataBuffer = nullptr;
 	CD3DX12_RANGE readRange(0, 0);
-	indexBuffer->Map(0, &readRange, &indexDataBuffer);
+	m_IndexUploadBuffer->Map(0, &readRange, &indexDataBuffer);
 	::memcpy(indexDataBuffer, &buffer[0], bufferSize);
-	indexBuffer->Unmap(0, nullptr);
+	m_IndexUploadBuffer->Unmap(0, nullptr);
+
+	auto commandList = CDevice::GetInst()->GetCmdQueue()->GetGraphicsCmdList(); 
+
+	commandList.Get()->CopyResource(indexBuffer.Get(), m_IndexUploadBuffer.Get());
+
+	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+		indexBuffer.Get(),
+		D3D12_RESOURCE_STATE_COPY_DEST,
+		D3D12_RESOURCE_STATE_INDEX_BUFFER);
+
+	commandList->ResourceBarrier(1, &barrier);
 
 	D3D12_INDEX_BUFFER_VIEW	indexBufferView;
 	indexBufferView.BufferLocation = indexBuffer->GetGPUVirtualAddress();
@@ -182,7 +227,7 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader, int index)
 			for (INT32 f = 0; f < size; f++)
 			{
 				FbxKeyFrameInfo& kf = vec[f];
-				// FBX¿¡¼­ ÆÄ½ÌÇÑ Á¤º¸µé·Î Ã¤¿öÁØ´Ù
+				// FBXì—ì„œ íŒŒì‹±í•œ ì •ë³´ë“¤ë¡œ ì±„ì›Œì¤€ë‹¤
 				KeyFrameInfo& kfInfo = info.keyFrames[index][b][f];
 				kfInfo.time = kf.time;
 				kfInfo.frame = static_cast<INT32>(size);
@@ -218,13 +263,13 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader, int index)
 #pragma region SkinData
 	if (IsAnimMesh())
 	{
-		// BoneOffet Çà·Ä
+		// BoneOffet í–‰ë ¬
 		const INT32 boneCount = static_cast<INT32>(m_Bones.size());
 		std::vector<Matrix> offsetVec(boneCount);
 		for (size_t b = 0; b < boneCount; b++)
 			offsetVec[b] = m_Bones[b].matOffset;
 
-		// OffsetMatrix StructuredBuffer ¼¼ÆÃ
+		// OffsetMatrix StructuredBuffer ì„¸íŒ…
 		m_OffsetBuffer = std::make_shared<CStructuredBuffer>();
 		m_OffsetBuffer->Init(sizeof(Matrix), static_cast<UINT32>(offsetVec.size()), offsetVec.data());
 
@@ -233,7 +278,7 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader, int index)
 		{
 			AnimClipInfo& animClip = m_AnimClips[i];
 
-			// ¾Ö´Ï¸ŞÀÌ¼Ç ÇÁ·¹ÀÓ Á¤º¸
+			// ì• ë‹ˆë©”ì´ì…˜ í”„ë ˆì„ ì •ë³´
 			std::vector<AnimFrameParams> frameParams;
 			frameParams.resize(m_Bones.size() * animClip.frameCount);
 
@@ -254,7 +299,7 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader, int index)
 
 			}
 
-			// StructuredBuffer ¼¼ÆÃ
+			// StructuredBuffer ì„¸íŒ…
 			m_FrameBuffer.push_back(std::make_shared<CStructuredBuffer>());
 			m_FrameBuffer.back()->Init(sizeof(AnimFrameParams), static_cast<UINT32>(frameParams.size()), frameParams.data());
 		}

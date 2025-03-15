@@ -73,6 +73,8 @@ public:
 
 private:
 	ComPtr<ID3D12Resource>		m_VertexBuffer;
+	ComPtr<ID3D12Resource>		m_VertexUploadBuffer;
+	ComPtr<ID3D12Resource>		m_IndexUploadBuffer;
 	D3D12_VERTEX_BUFFER_VIEW	m_VertexBufferView;
 	UINT						m_VertexCount;
 

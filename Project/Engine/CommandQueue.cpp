@@ -35,7 +35,7 @@ int CGraphicsCommandQueue::Init(ComPtr<ID3D12Device> device, std::shared_ptr<CSw
 	if (FAILED(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_CmdAlloc.Get(), nullptr, IID_PPV_ARGS(&m_CmdList))))
 		return E_FAIL;
 
-	m_CmdList->Close();
+	//m_CmdList->Close();
 
 	if (FAILED(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_ResCmdAlloc))))
 		return E_FAIL;

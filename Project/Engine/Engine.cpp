@@ -47,6 +47,9 @@ int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wc
 
     if (FAILED(CAssetManager::GetInst()->Init()))
         return E_FAIL;
+    CDevice::GetInst()->GetCmdQueue()->GetGraphicsCmdList()->Close();
+    ID3D12CommandList* cmdListArr[] = { CDevice::GetInst()->GetCmdQueue()->GetGraphicsCmdList().Get() };
+    CDevice::GetInst()->GetCmdQueue()->GetCmdQueue()->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
 
     if (FAILED(CInputManager::GetInst()->Init()))
         return E_FAIL;
@@ -56,6 +59,7 @@ int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wc
 
     if (FAILED(CLevelManager::GetInst()->Init()))
         return E_FAIL;
+
 
     return S_OK;
 }
