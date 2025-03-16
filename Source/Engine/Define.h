@@ -36,6 +36,7 @@ private:\
 #define HLSL_PATH		L"HLSLPath"
 #define TEXTURE_PATH	L"TexturePath"
 #define SOUND_PATH		L"SoundPath"
+#define MAP_PATH		L"MapPath"
 
 
 /*----------

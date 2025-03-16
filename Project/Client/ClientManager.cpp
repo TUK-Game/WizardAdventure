@@ -3,6 +3,8 @@
 #include "Level_1.h"
 #include <Engine/Engine.h>
 #include <Engine/NetworkManager.h>
+#include <Engine/SaveLoadManager.h>
+
 //#include <ImGui/imgui_impl_win32.h>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -78,6 +80,16 @@ LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 }
             }
 
+            break;
+        }
+        case VK_NUMPAD8:
+        {
+            CSaveLoadManager::GetInst()->Save();
+            break;
+        }
+        case VK_NUMPAD9:
+        {
+            CSaveLoadManager::GetInst()->Load(L"Level_1");
             break;
         }
         }

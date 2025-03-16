@@ -11,9 +11,8 @@
 #include <Engine/TestPlayer.h>
 #include <Engine/LevelManager.h>
 #include <Engine/Layer.h>
-
-#include <Engine/Device.h>
 #include <Engine/MeshData.h>
+#include <Engine/UIButton.h>
 
 CLevel_1::CLevel_1()
 {
@@ -26,11 +25,14 @@ CLevel_1::~CLevel_1()
 
 void CLevel_1::Init()
 {
+	this->SetName(L"Level_1");
+
 	this->GetLayer(0)->SetName(L"Camera");
 	this->GetLayer(1)->SetName(L"BackGround");
 	this->GetLayer(2)->SetName(L"Other");
 	this->GetLayer(3)->SetName(L"Others");
 	this->GetLayer(4)->SetName(L"UI");
+	this->GetLayer(5)->SetName(L"Light");
 	this->GetLayer(10)->SetName(L"Map");
 
 	CAssetManager::GetInst()->LoadSound("BGM", "Play", false, "e.mp3");
@@ -96,11 +98,11 @@ void CLevel_1::Init()
 		this->AddGameObject(light, 3, false);
 	}
 
-
-
-	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"door");
+	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
 	std::vector<CGameObject*> obj = data->Instantiate();
-
+	CGameObject* player = new CGameObject;
+	player->SetName(L"Mage");
+	player->AddComponent(new CTransform);
 	for (auto& o : obj)
 	{
 		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
@@ -115,8 +117,9 @@ void CLevel_1::Init()
 		o->AddComponent(new CTestPlayer);
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(true);
-		this->AddGameObject(o, 10, false);
+		player->AddChild(o);
 	}
+	this->AddGameObject(player, 10, false);
 }
 
 void CLevel_1::Begin()

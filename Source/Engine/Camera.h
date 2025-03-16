@@ -20,6 +20,8 @@ public:
     float GetFOV() const                    { return (m_FOV / XM_PI) * 180.f; }
     Matrix GetProjMat() const               { return m_matProjection; }
     Matrix GetViewMat() const               { return m_matView; }
+    int GetPriority() const                 { return m_Priority; }
+    UINT GetLayerCheck()                    { return m_LayerCheck; }
 
     void SetProjType(EProjection_Type type) { m_ProjectionType = type; }
     void SetOrthoScaleX(float sale)         { m_OrthoScaleX = sale; }
