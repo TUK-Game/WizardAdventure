@@ -1,7 +1,10 @@
 #include "pch.h"
 #include "ClientManager.h"
+#include "Level_1.h"
 #include <Engine/Engine.h>
 #include <Engine/NetworkManager.h>
+#include <Engine/SaveLoadManager.h>
+
 //#include <ImGui/imgui_impl_win32.h>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -25,6 +28,7 @@ int CClientManager::Init(HINSTANCE instance)
 {
     m_hInstance = instance;
 
+    CLevel_1* level = new CLevel_1;
     if (FAILED(InitEngine()))
         return E_FAIL;
 
@@ -32,6 +36,7 @@ int CClientManager::Init(HINSTANCE instance)
     std::cout << "NUMPAD 0. 호스트" << std::endl;
     std::cout << "NUMPAD 1. 클라이언트" << std::endl;
     std::cout << std::endl;
+
 
     return S_OK;
 }
@@ -75,6 +80,16 @@ LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 }
             }
 
+            break;
+        }
+        case VK_NUMPAD8:
+        {
+            CSaveLoadManager::GetInst()->Save();
+            break;
+        }
+        case VK_NUMPAD9:
+        {
+            CSaveLoadManager::GetInst()->Load(L"Level_1");
             break;
         }
         }

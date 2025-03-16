@@ -23,6 +23,10 @@ CLevel::~CLevel()
 	m_collision = nullptr;
 }
 
+void CLevel::Init()
+{
+}
+
 void CLevel::Begin()
 {
 	for (auto& layer : m_Layer)

@@ -239,6 +239,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="RenderTargetGroup.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="RootSignature.h" />
+    <ClInclude Include="SaveLoadManager.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="ServerPacketHandler.h" />
     <ClInclude Include="ServerSession.h" />
@@ -368,6 +369,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="RenderTargetGroup.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="RootSignature.cpp" />
+    <ClCompile Include="SaveLoadManager.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ServerPacketHandler.cpp" />
     <ClCompile Include="ServerSession.cpp" />

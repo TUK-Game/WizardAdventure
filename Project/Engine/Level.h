@@ -9,7 +9,7 @@ class CLevel :
 {
 public:
 	CLevel();
-	~CLevel();
+	virtual ~CLevel();
 
 public:
 	CLayer* GetLayer(int index) const { return m_Layer[index]; }
@@ -18,10 +18,11 @@ public:
 	void Deregister();
 
 public:
-	void Begin();
-	void Update();
-	void FinalUpdate();
-	void End();
+	virtual void Init();
+	virtual void Begin();
+	virtual void Update();
+	virtual void FinalUpdate();
+	virtual void End();
 
 public:
 	void AddGameObject(CGameObject* object, int layerIndex, bool bChildMove);

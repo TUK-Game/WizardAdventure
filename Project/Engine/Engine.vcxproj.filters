@@ -171,6 +171,9 @@
     <Filter Include="00. Network\03. Protocol\Proto">
       <UniqueIdentifier>{f08cc243-f361-4e72-848a-0b3029957ecd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Manager\14. Save/Load">
+      <UniqueIdentifier>{76618a6c-f4d4-4604-8e9e-624c97bc5979}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -458,6 +461,9 @@
     <ClInclude Include="Logger.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="SaveLoadManager.h">
+      <Filter>01. Manager\14. Save/Load</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -693,6 +699,9 @@
     </ClCompile>
     <ClCompile Include="ClientSessionManager.cpp">
       <Filter>00. Network\01. Session</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveLoadManager.cpp">
+      <Filter>01. Manager\14. Save/Load</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
