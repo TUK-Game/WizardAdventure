@@ -220,7 +220,7 @@ Vec3 CTransform::DecomposeRotationMatrix(const Matrix& rotation)
 }
 
 
-void CTransform::SetWorldMatrix(Matrix& matrix)
+void CTransform::SetWorldMatrix(const Matrix& matrix)
 {
 	m_matWorld = matrix;
 	SetRelativeScale(matrix._11, matrix._22, matrix._33);
