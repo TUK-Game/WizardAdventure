@@ -25,6 +25,7 @@ public:
 
 public:
 	void AddGameObject(CGameObject* object, int layerIndex, bool bChildMove);
+	void RemoveGameObject(CGameObject* object);
 
 public:
 	virtual CLevel* Clone() override	{ return new CLevel(*this); }

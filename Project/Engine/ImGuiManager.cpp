@@ -157,7 +157,8 @@ void CImGuiManager::DrawLevelWindow()
 	if (m_SelectedObject && ImGui::Button("Delete Object"))
 	{
 		
-		
+		CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObject(m_SelectedObject);
+		m_SelectedObject = nullptr;
 	}
 
 	ImGui::End();
@@ -244,9 +245,9 @@ void CImGuiManager::DrawComponentAddUI()
 
 	struct ComponentButton { const char* name; EComponent_Type type; };
 	std::vector<ComponentButton> buttons = {
-		{"Collider", EComponent_Type::Collider},
-		{"Light", EComponent_Type::Light},
-		{"Rigidbody", EComponent_Type::Rigidbody},
+		//{"Collider", EComponent_Type::Collider},
+		//{"Light", EComponent_Type::Light},
+		{"Rigidbody", EComponent_Type::Rigidbody}
 	};
 
 	for (size_t i = 0; i < buttons.size(); ++i)
@@ -254,8 +255,8 @@ void CImGuiManager::DrawComponentAddUI()
 		if (ImGui::Button(buttons[i].name))
 			m_SelectedObject->AddComponent(buttons[i].type);
 
-		if ((i + 1) % 3 != 0) // 3개씩 한 줄
-			ImGui::SameLine();
+		//if ((i + 1) % 3 != 0) // 3개씩 한 줄
+		//	ImGui::SameLine();
 	}
 }
 
