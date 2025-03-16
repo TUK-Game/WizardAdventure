@@ -15,6 +15,7 @@ public:
 
 	void DrawLevelWindow();
 	void DrawInspectorWindow();
+	void DrawNameUI();
 	void DrawGizmo();
 	void DrawTagUI();
 	void DrawComponentAddUI();

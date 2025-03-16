@@ -172,9 +172,8 @@ void CImGuiManager::DrawInspectorWindow()
 	ImGui::SetNextWindowSize(ImVec2(300, 400));
 	ImGui::Begin("Inspector");
 
-	// 오브젝트 정보 표시
-	std::string objName = ws2s(m_SelectedObject->GetName());
-	ImGui::Text("Editing: %s", objName.c_str());
+	// 이름 변경 UI
+	DrawNameUI();
 
 	// Gizmo 활성화 버튼
 	static bool gizmoEnabled = true;
@@ -237,6 +236,23 @@ void CImGuiManager::DrawTagUI()
 		}
 		ImGui::EndCombo();
 	}
+}
+
+void CImGuiManager::DrawNameUI()
+{
+	// 오브젝트 이름 수정 기능 추가
+	static char objNameBuffer[256]; // 이름을 저장할 버퍼 (최대 255자)
+	std::string currentObjName = ws2s(m_SelectedObject->GetName());
+	strncpy_s(objNameBuffer, currentObjName.c_str(), sizeof(objNameBuffer) - 1);
+	objNameBuffer[sizeof(objNameBuffer) - 1] = '\0'; // 문자열 종료 보장
+
+	ImGui::Text("Editing:");
+	if (ImGui::InputText("##ObjectName", objNameBuffer, sizeof(objNameBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		// 사용자가 엔터를 눌렀을 때 이름 변경 적용
+		m_SelectedObject->SetName(s2ws(std::string(objNameBuffer)));
+	}
+
 }
 
 void CImGuiManager::DrawComponentAddUI()
