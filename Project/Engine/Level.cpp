@@ -64,8 +64,13 @@ void CLevel::AddGameObject(CGameObject* object, int layerIndex, bool bChildMove)
 
 void CLevel::RemoveGameObject(CGameObject* object)
 {
+	if (!object) return;
+
 	int layerNum = object->GetLayerIndex();
-	m_Layer[layerNum]->RemoveGameObject(object);
+	if (m_Layer[layerNum])
+	{
+		m_Layer[layerNum]->RemoveGameObject(object);
+	}
 }
 
 void CLevel::End()

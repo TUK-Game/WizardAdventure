@@ -54,6 +54,11 @@ public:
     void AddComponent(EComponent_Type type);
 
     void AddChild(CGameObject* obj);
+    void RemoveChild(CGameObject* obj);
+    void RemoveFromParent();
+
+    virtual void Destroy();
+    
 public:
     void Begin();
     void Update();

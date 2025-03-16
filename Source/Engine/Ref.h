@@ -32,7 +32,7 @@ public:
 	void AddRef();
 	int ReleaseRef();
 
-	void Destroy();
+	virtual void Destroy();
 
 	// 자기자신의 복제객체를 반환해주는 함수
 	virtual CRef* Clone() = 0;

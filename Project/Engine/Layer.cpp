@@ -45,15 +45,18 @@ void CLayer::AddGameObject(CGameObject* parent, bool bChildMove)
 
 void CLayer::RemoveGameObject(CGameObject* object)
 {
+	if (!object) return;
+
+	// 객체 삭제 전 부모-자식 관계 정리
+	object->Destroy(); // 모든 자식 삭제 + 부모 관계 해제
+
 	// 모든 오브젝트 벡터에서 제거
 	m_vecObjects.erase(std::remove(m_vecObjects.begin(), m_vecObjects.end(), object), m_vecObjects.end());
 
 	// 최상위 부모 오브젝트 벡터에서도 제거
 	m_vecParentObjects.erase(std::remove(m_vecParentObjects.begin(), m_vecParentObjects.end(), object), m_vecParentObjects.end());
 
-
-	// object 자체를 삭제 (메모리 해제)
-	if(object)
+	if (object)
 		delete object;
 }
 

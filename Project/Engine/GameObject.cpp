@@ -229,3 +229,33 @@ void CGameObject::AddChild(CGameObject* obj)
 	m_vecChild.push_back(obj);
 	obj->SetParent(this);
 }
+
+void CGameObject::RemoveChild(CGameObject* child)
+{
+	m_vecChild.erase(std::remove(m_vecChild.begin(), m_vecChild.end(), child), m_vecChild.end());
+}
+
+void CGameObject::RemoveFromParent()
+{
+	if (m_Parent)
+	{
+		m_Parent->RemoveChild(this);
+		m_Parent = nullptr;
+	}
+}
+
+void CGameObject::Destroy()
+{
+	// 모든 자식 오브젝트 삭제
+	for (CGameObject* child : m_vecChild)
+	{
+		child->Destroy();
+		//delete child;
+	}
+	m_vecChild.clear();
+
+	// 부모와의 연결 해제
+	RemoveFromParent();
+
+	CRef::Destroy();
+}
