@@ -50,48 +50,41 @@ void CRigidBody::Update()
 {
     if (m_bKinematic) return;
 
-    //m_Acceleration = { 0, 0, 0 };
-
+    // 중력 적용 (항상 가해지는 힘)
     if (m_bUseGravity)
     {
-        ApplyForce({ 0, -9.81f * m_Mass, 0 });   
+        ApplyForce({ 0, -981.f * m_Mass, 0 }); 
     }
 
-    // 속도 업데이트 
-    m_Velocity.x += m_Acceleration.x * DELTA_TIME;  
-    m_Velocity.y += m_Acceleration.y * DELTA_TIME;
-    m_Velocity.z += m_Acceleration.z * DELTA_TIME;
+    // Newton's Second Law: F = m * a -> a = F / m
+    Vector3 totalAcceleration = m_Acceleration / m_Mass;
 
-    // 마찰력 적용 (속도를 점점 줄이기)
-    m_Velocity.x *= (1.0f - m_Drag);
-    m_Velocity.y *= (1.0f - m_Drag);
-    m_Velocity.z *= (1.0f - m_Drag);
+    // 속도 업데이트 (Verlet Integration 방식)
+    m_Velocity += totalAcceleration * DELTA_TIME;
 
-    m_AngularVelocity.x *= (1.0f - m_AngularDrag);
-    m_AngularVelocity.y *= (1.0f - m_AngularDrag);
-    m_AngularVelocity.z *= (1.0f - m_AngularDrag);
+    // 마찰 적용 (속도를 점진적으로 감소)
+    m_Velocity *= (1.0f - m_Drag);
+    m_AngularVelocity *= (1.0f - m_AngularDrag);
 
-    // Transform 위치 갱신
+    // Transform 위치 갱신 (선형 운동)
     if (GetOwner())
     {
         CTransform* transform = GetTransform();
         if (transform)
         {
             transform->SetRelativePosition(
-                transform->GetRelativePosition().x + m_Velocity.x * DELTA_TIME,
-                transform->GetRelativePosition().y + m_Velocity.y * DELTA_TIME,
-                transform->GetRelativePosition().z + m_Velocity.z * DELTA_TIME
+                transform->GetRelativePosition() + m_Velocity * DELTA_TIME
             );
 
             // 회전 적용
             transform->SetRelativeRotation(
-                transform->GetRelativeRotation().x + m_AngularVelocity.x * DELTA_TIME,
-                transform->GetRelativeRotation().y + m_AngularVelocity.y * DELTA_TIME,
-                transform->GetRelativeRotation().z + m_AngularVelocity.z * DELTA_TIME
+                transform->GetRelativeRotation() + m_AngularVelocity * DELTA_TIME
             );
         }
     }
 
+    // 다음 프레임을 위한 가속도 초기화 (외부에서 새로운 힘을 적용해야 함)
+    m_Acceleration = { 0, 0, 0 };
 }
 
 void CRigidBody::FinalUpdate()

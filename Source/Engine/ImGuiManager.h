@@ -11,10 +11,19 @@ public:
 	void Render();
 
 	void CleanUp();
+	void CreateLight(LIGHT_TYPE type);
 
 	void DrawLevelWindow();
 	void DrawInspectorWindow();
+	void DrawNameUI();
 	void DrawGizmo();
+	void DrawTagUI();
+	void DrawComponentAddUI();
+	void DrawTransformUI();
+	void DrawRigidbodyUI();
+	void DrawMeshRendererUI();
+	void DrawLightCreateUI();
+	void DrawLightUI();
 
 private:
 	class CGameObject* m_SelectedObject;  

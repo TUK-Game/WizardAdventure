@@ -18,10 +18,16 @@ public:
     void SetGravity(bool enable) { m_bUseGravity = enable; }
     void SetKinematic(bool enable) { m_bKinematic = enable; }
     void SetMass(float mass) { m_Mass = mass; }
+    void SetDrag(float drag) { m_Drag = drag; }
+    void SetAngularDrag(float angularDrag) { m_AngularDrag = angularDrag; }
 
-
+    bool GetGravity() { return m_bUseGravity; }
+    bool GetKinematic() { return m_bKinematic; }
     Vector3 GetVelocity() const { return m_Velocity; }
     Vector3 GetAngularVelocity() const { return m_AngularVelocity; }
+    float GetMass() { return m_Mass; }
+    float GetDrag() { return m_Drag; }
+    float GetAngularDrag() { return m_AngularDrag; }
 
 
 public:

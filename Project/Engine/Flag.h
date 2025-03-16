@@ -60,9 +60,7 @@ enum class EComponent_Type
 	MeshRenderer,
 	ParticleSystem,
 	Skybox,
-
 	END,
-
 	Script
 };
 

@@ -7,6 +7,7 @@ class CCamera :
 	public CComponent
 {
 	friend class CRenderManager;
+    friend class CImGuiManager;
 
 public:
 	CCamera();
@@ -21,6 +22,7 @@ public:
     Matrix GetProjMat() const               { return m_matProjection; }
     Matrix GetViewMat() const               { return m_matView; }
 
+    void SetCustomMatView(const Matrix& matView);
     void SetProjType(EProjection_Type type) { m_ProjectionType = type; }
     void SetOrthoScaleX(float sale)         { m_OrthoScaleX = sale; }
     void SetAspectRatio(float ratio)        { m_AspectRatio = ratio; }
@@ -62,8 +64,9 @@ private:
     float               m_Width = 0.f;
     float               m_Height = 0.f;
 
+    bool                m_bUseCustomMatView = false;
 
-
+    Matrix              m_CustomMatView;
     Matrix              m_matView;
     Matrix              m_matProjection;
 

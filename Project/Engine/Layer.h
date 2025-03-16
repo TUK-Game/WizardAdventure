@@ -19,6 +19,7 @@ public:
 
 	void RegisterGameObject(CGameObject* object)	{ m_vecObjects.push_back(object); }
 	void AddGameObject(CGameObject* parent, bool bChildMove);
+	void RemoveGameObject(CGameObject* object);
 
 public:
 	void Begin();

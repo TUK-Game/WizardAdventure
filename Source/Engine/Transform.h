@@ -29,13 +29,15 @@ public:
     void SetRelativeScale(float x, float y, float z)    { m_RelativeScale = Vec3(x, y, z); }
     void SetRelativeRotation(Vec3 rotation);
     void SetRelativeRotation(float x, float y, float z);
-    void SetWorldMatrix(Matrix& matrix);
+    void SetRelativeRotation(Quaternion quat); 
+    void SetWorldMatrix(const Matrix& matrix);
     void SetParentTransform(CTransform* parent) { m_ParentTransform = parent; }
 
     void LookAt(const Vec3& dir);
 
     static bool CloseEnough(const float& a, const float& b, const float& epsilon = std::numeric_limits<float>::epsilon());
     static Vec3 DecomposeRotationMatrix(const Matrix& rotation);
+    static Matrix ExtractRotationMatrix(Matrix& transform);
 
 public:
     virtual void FinalUpdate() override;
@@ -52,6 +54,7 @@ private:
     Vec3    m_RelativePos;  
     Vec3    m_RelativeScale = Vec3(1.0f, 1.0f, 1.0f); 
     Vec3    m_RelativeRotation;  
+    Quaternion m_RelativeRotationQuat; 
 
     // 오브젝트의 방향정보
     Vec3    m_RelativeDir[(int)EDir::END];

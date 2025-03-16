@@ -12,8 +12,12 @@
 #include "AssetManager.h"
 #include "Camera.h"
 #include "RenderManager.h"
+#include "RigidBody.h"
+#include "Light.h"
 #include "../../3rdParty/ImGuizmo/ImGuizmo.h"
 #include "../../3rdParty/ImGui/imgui_internal.h"
+
+static int objCounter = 0;
 
 CImGuiManager::CImGuiManager()
 {
@@ -106,7 +110,6 @@ void CImGuiManager::DrawLevelWindow()
 	
 	if (ImGui::Button("Add Object"))
 	{
-		static int objCounter = 0;
 		CGameObject* newObj = new CGameObject();
 		newObj->SetName(s2ws("Object " + std::to_string(objCounter++)));
 		newObj->AddComponent(new CTransform());
@@ -119,7 +122,9 @@ void CImGuiManager::DrawLevelWindow()
 		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(newObj, 3, false);
 
 	}
-	
+	DrawLightCreateUI();
+
+	ImGui::Text("Objects:");
 
 	int index = 0;
 	for (int j = 0; j < MAX_LAYER; ++j)
@@ -155,8 +160,9 @@ void CImGuiManager::DrawLevelWindow()
 
 	if (m_SelectedObject && ImGui::Button("Delete Object"))
 	{
-		//CEngine::GetInst()->GetCurrentLevel()->RemoveGameObject(selectedObject);
-		//selectedObject = nullptr;
+		
+		CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObject(m_SelectedObject);
+		m_SelectedObject = nullptr;
 	}
 
 	ImGui::End();
@@ -169,14 +175,54 @@ void CImGuiManager::DrawInspectorWindow()
 
 	ImGui::SetNextWindowSize(ImVec2(300, 400));
 	ImGui::Begin("Inspector");
-	std::string objName = ws2s(m_SelectedObject->GetName());
-	ImGui::Text("Editing: %s", objName.c_str());
 
-	// Gizmo 활성화 버튼 추가
+	// 이름 변경 UI
+	DrawNameUI();
+
+	// Gizmo 활성화 버튼
 	static bool gizmoEnabled = true;
 	ImGui::Checkbox("Enable Gizmo", &gizmoEnabled);
 
-	// Tag
+	// 태그 선택
+	DrawTagUI();
+
+	// 레이어 설정
+	int currentLayer = m_SelectedObject->GetLayerIndex();
+	if (ImGui::InputInt("Layer", &currentLayer))
+	{
+		currentLayer = std::clamp(currentLayer, 0, MAX_LAYER - 1);
+		m_SelectedObject->SetLayerIndex(currentLayer);
+	}
+
+	// 정적 여부
+	bool isStatic = m_SelectedObject->IsStatic();
+	if (ImGui::Checkbox("Is Static", &isStatic))
+		m_SelectedObject->SetStatic(isStatic);
+
+	// 컴포넌트 추가 UI
+	DrawComponentAddUI();
+
+	// 트랜스폼 UI
+	DrawTransformUI();
+
+	// 조명 UI
+	DrawLightUI();
+
+	// Rigidbody UI
+	DrawRigidbodyUI();
+
+	// MeshRenderer UI
+	DrawMeshRendererUI();
+
+	ImGui::End();
+
+	// Gizmo 활성화 시 그리기
+	if (gizmoEnabled)
+		DrawGizmo();
+}
+
+void CImGuiManager::DrawTagUI()
+{
 	static std::vector<std::wstring> tagList = { L"Default", L"Player", L"Enemy", L"NPC", L"Item" };
 	std::wstring currentTag = m_SelectedObject->GetTag();
 	int selectedTagIndex = std::find(tagList.begin(), tagList.end(), currentTag) - tagList.begin();
@@ -187,115 +233,243 @@ void CImGuiManager::DrawInspectorWindow()
 		{
 			bool isSelected = (selectedTagIndex == i);
 			if (ImGui::Selectable(ws2s(tagList[i]).c_str(), isSelected))
-			{
 				m_SelectedObject->SetTag(tagList[i]);
-			}
+
 			if (isSelected)
 				ImGui::SetItemDefaultFocus();
 		}
 		ImGui::EndCombo();
 	}
+}
 
-	// Layer
-	int currentLayer = m_SelectedObject->GetLayerIndex();
-	if (ImGui::InputInt("Layer", &currentLayer))
+void CImGuiManager::DrawNameUI()
+{
+	// 오브젝트 이름 수정 기능 추가
+	static char objNameBuffer[256]; // 이름을 저장할 버퍼 (최대 255자)
+	std::string currentObjName = ws2s(m_SelectedObject->GetName());
+	strncpy_s(objNameBuffer, currentObjName.c_str(), sizeof(objNameBuffer) - 1);
+	objNameBuffer[sizeof(objNameBuffer) - 1] = '\0'; // 문자열 종료 보장
+
+	ImGui::Text("Editing:");
+	if (ImGui::InputText("##ObjectName", objNameBuffer, sizeof(objNameBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
 	{
-		currentLayer = std::clamp(currentLayer, 0, MAX_LAYER - 1);
-		m_SelectedObject->SetLayerIndex(currentLayer);
+		// 사용자가 엔터를 눌렀을 때 이름 변경 적용
+		m_SelectedObject->SetName(s2ws(std::string(objNameBuffer)));
 	}
 
-	// Static
-	bool isStatic = m_SelectedObject->IsStatic();
-	if (ImGui::Checkbox("Is Static", &isStatic))
+}
+
+void CImGuiManager::DrawComponentAddUI()
+{
+	ImGui::Text("Add Component:");
+
+	struct ComponentButton { const char* name; EComponent_Type type; };
+	std::vector<ComponentButton> buttons = {
+		//{"Collider", EComponent_Type::Collider},
+		//{"Light", EComponent_Type::Light},
+		{"Rigidbody", EComponent_Type::Rigidbody}
+	};
+
+	for (size_t i = 0; i < buttons.size(); ++i)
 	{
-		m_SelectedObject->SetStatic(isStatic);
+		if (ImGui::Button(buttons[i].name))
+			m_SelectedObject->AddComponent(buttons[i].type);
+
+		//if ((i + 1) % 3 != 0) // 3개씩 한 줄
+		//	ImGui::SameLine();
 	}
+}
 
+void CImGuiManager::DrawTransformUI()
+{
+	ImGui::Text("Transform");
 
-	// SRT
 	Vec3 position = m_SelectedObject->GetTransform()->GetRelativePosition();
 	Vec3 rotation = m_SelectedObject->GetTransform()->GetRelativeRotation();
 	Vec3 scale = m_SelectedObject->GetTransform()->GetRelativeScale();
 
 	if (ImGui::DragFloat3("Position", &position.x, 0.1f))
-	{
 		m_SelectedObject->GetTransform()->SetRelativePosition(position);
-	}
 
 	if (ImGui::DragFloat3("Rotation", &rotation.x, 1.0f))
-	{
 		m_SelectedObject->GetTransform()->SetRelativeRotation(rotation);
-	}
 
 	if (ImGui::DragFloat3("Scale", &scale.x, 0.1f))
-	{
 		m_SelectedObject->GetTransform()->SetRelativeScale(scale);
-	}
+}
 
-	 // Mesh 
+void CImGuiManager::DrawRigidbodyUI()
+{
+	CRigidBody* rigidbody = (CRigidBody*)m_SelectedObject->GetComponent(EComponent_Type::Rigidbody);
+	if (!rigidbody) return;
+
+	ImGui::Text("RigidBody Settings");
+
+	bool useGravity = rigidbody->GetGravity();
+	if (ImGui::Checkbox("Use Gravity", &useGravity))
+		rigidbody->SetGravity(useGravity);
+
+	bool isKinematic = rigidbody->GetKinematic();
+	if (ImGui::Checkbox("Kinematic", &isKinematic))
+		rigidbody->SetKinematic(isKinematic);
+
+	float mass = rigidbody->GetMass();
+	if (ImGui::DragFloat("Mass", &mass, 0.1f, 0.01f, 100.0f))
+		rigidbody->SetMass(mass);
+
+	float drag = rigidbody->GetDrag();
+	if (ImGui::DragFloat("Drag", &drag, 0.01f, 0.0f, 10.0f))
+		rigidbody->SetDrag(drag);
+
+	float angularDrag = rigidbody->GetAngularDrag();
+	if (ImGui::DragFloat("Angular Drag", &angularDrag, 0.01f, 0.0f, 10.0f))
+		rigidbody->SetAngularDrag(angularDrag);
+
+	Vector3 velocity = rigidbody->GetVelocity();
+	if (ImGui::DragFloat3("Velocity", &velocity.x, 0.1f))
+		rigidbody->SetVelocity(velocity);
+
+	Vector3 angularVelocity = rigidbody->GetAngularVelocity();
+	if (ImGui::DragFloat3("Angular Velocity", &angularVelocity.x, 0.1f))
+		rigidbody->SetAngularVelocity(angularVelocity);
+
+	static Vector3 force = { 0.0f, 0.0f, 0.0f };
+	ImGui::DragFloat3("Force", &force.x, 0.1f);
+	if (ImGui::Button("Apply Force"))
+		rigidbody->ApplyForce(force);
+
+	static Vector3 impulse = { 0.0f, 0.0f, 0.0f };
+	ImGui::DragFloat3("Impulse", &impulse.x, 0.1f);
+	if (ImGui::Button("Apply Impulse"))
+		rigidbody->ApplyImpulse(impulse);
+
+	static Vector3 torque = { 0.0f, 0.0f, 0.0f };
+	ImGui::DragFloat3("Torque", &torque.x, 0.1f);
+	if (ImGui::Button("Apply Torque"))
+		rigidbody->ApplyTorque(torque);
+}
+
+void CImGuiManager::DrawMeshRendererUI()
+{
+	if (!m_SelectedObject->GetComponent(EComponent_Type::MeshRenderer)) return;
+
+	ImGui::Text("MeshRenderer");
 	std::vector<std::wstring> meshList = CAssetManager::GetInst()->GetAllAssetNames<CMesh>();
 	static int selectedMeshIndex = 0;
 
-    if (ImGui::BeginCombo("Mesh", ws2s(meshList[selectedMeshIndex]).c_str()))
-    {
-        for (int i = 0; i < meshList.size(); ++i)
-        {
-            bool isSelected = (selectedMeshIndex == i);
-            if (ImGui::Selectable(ws2s(meshList[i]).c_str(), isSelected))
-            {
-                selectedMeshIndex = i;
-                m_SelectedObject->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(meshList[i]));
-            }
-            if (isSelected)
-                ImGui::SetItemDefaultFocus();
-        }
-        ImGui::EndCombo();
-    }
+	if (ImGui::BeginCombo("Mesh", ws2s(meshList[selectedMeshIndex]).c_str()))
+	{
+		for (int i = 0; i < meshList.size(); ++i)
+		{
+			if (ImGui::Selectable(ws2s(meshList[i]).c_str(), selectedMeshIndex == i))
+			{
+				selectedMeshIndex = i;
+				m_SelectedObject->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(meshList[i]));
+			}
+		}
+		ImGui::EndCombo();
+	}
 
-    // Material 
-	std::vector<std::wstring> materialList = CAssetManager::GetInst()->GetAllAssetNames<CMaterial>();
+	std::vector<std::wstring> allMaterials = CAssetManager::GetInst()->GetAllAssetNames<CMaterial>();
+	std::vector<std::wstring> filteredMaterialList;
+
+	for (const auto& materialName : allMaterials)
+	{
+		auto material = CAssetManager::GetInst()->FindAsset<CMaterial>(materialName);
+		if (material)
+		{
+			auto shader = material->GetGraphicsShader();
+			if (shader && shader->GetShaderType() == SHADER_TYPE::DEFERRED)
+			{
+				filteredMaterialList.push_back(materialName);
+			}
+		}
+	}
+
 	static int selectedMaterialIndex = 0;
-
-    if (ImGui::BeginCombo("Material", ws2s(materialList[selectedMaterialIndex]).c_str()))
-    {
-        for (int i = 0; i < materialList.size(); ++i)
-        {
-            bool isSelected = (selectedMaterialIndex == i);
-            if (ImGui::Selectable(ws2s(materialList[i]).c_str(), isSelected))
-            {
-                selectedMaterialIndex = i;
-                m_SelectedObject->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(materialList[i]));
-            }
-            if (isSelected)
-                ImGui::SetItemDefaultFocus();
-        }
-        ImGui::EndCombo();
-    }
-
-	if (ImGuizmo::IsUsing())
+	if (!filteredMaterialList.empty() && selectedMaterialIndex >= filteredMaterialList.size())
 	{
-		ImGui::Text("Using gizmo");
-	}
-	else
-	{
-		ImGui::Text(ImGuizmo::IsOver() ? "Over gizmo" : "");
-		ImGui::SameLine();
-		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::TRANSLATE) ? "Over translate gizmo" : "");
-		ImGui::SameLine();
-		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::ROTATE) ? "Over rotate gizmo" : "");
-		ImGui::SameLine();
-		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::SCALE) ? "Over scale gizmo" : "");
+		selectedMaterialIndex = 0;
 	}
 
-
-	ImGui::End();
-
-	// Gizmo 활성화 상태라면 DrawGizmo 호출
-	if (gizmoEnabled)
+	if (ImGui::BeginCombo("Material", ws2s(filteredMaterialList[selectedMaterialIndex]).c_str()))
 	{
-		DrawGizmo();
+		for (int i = 0; i < filteredMaterialList.size(); ++i)
+		{
+			bool isSelected = (selectedMaterialIndex == i);
+			if (ImGui::Selectable(ws2s(filteredMaterialList[i]).c_str(), isSelected))
+			{
+				selectedMaterialIndex = i;
+				m_SelectedObject->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(filteredMaterialList[i]));
+			}
+
+
+		}
+		ImGui::EndCombo();
+	}
+}
+
+void CImGuiManager::DrawLightUI()
+{
+	CLight* light = (CLight*)m_SelectedObject->GetComponent(EComponent_Type::Light);
+	if (!light) return;
+
+	ImGui::Text("Light Settings");
+
+	// Light 타입 변경
+	static const char* lightTypes[] = { "Directional", "Point", "Spot" };
+	LIGHT_TYPE currentType = light->GetLightType();
+	int selectedType = static_cast<int>(currentType);
+
+	if (ImGui::Combo("Light Type", &selectedType, lightTypes, IM_ARRAYSIZE(lightTypes)))
+	{
+		light->SetLightType(static_cast<LIGHT_TYPE>(selectedType));
 	}
 
+	// 색상 설정
+	Vec3 diffuse = light->GetDiffuse();
+	if (ImGui::ColorEdit3("Diffuse", &diffuse.x))
+		light->SetDiffuse(diffuse);
+
+	Vec3 ambient = light->GetAmbient();
+	if (ImGui::ColorEdit3("Ambient", &ambient.x))
+		light->SetAmbient(ambient);
+
+	Vec3 specular = light->GetSpecular();
+	if (ImGui::ColorEdit3("Specular", &specular.x))
+		light->SetSpecular(specular);
+
+	// 방향성 조명 (Directional Light) - 방향 설정
+	if (currentType == LIGHT_TYPE::DIRECTIONAL_LIGHT)
+	{
+		Vec3 direction = Vec3(light->GetLightInfo().direction.x,
+			light->GetLightInfo().direction.y,
+			light->GetLightInfo().direction.z);
+		if (ImGui::DragFloat3("Direction", &direction.x, 0.1f, -1.0f, 1.0f))
+		{
+			light->SetLightDirection(direction);
+		}
+	}
+
+	// 거리 (Point Light, Spot Light)
+	if (currentType == LIGHT_TYPE::POINT_LIGHT || currentType == LIGHT_TYPE::SPOT_LIGHT)
+	{
+		float range = light->GetLightInfo().range;
+		if (ImGui::DragFloat("Range", &range, 0.1f, 0.1f, 100.0f))
+		{
+			light->SetLightRange(range);
+		}
+	}
+
+	// 각도 (Spot Light)
+	if (currentType == LIGHT_TYPE::SPOT_LIGHT)
+	{
+		float angle = light->GetLightInfo().angle;
+		if (ImGui::DragFloat("Spot Angle", &angle, 0.1f, 1.0f, 90.0f))
+		{
+			light->SetLightAngle(angle);
+		}
+	}
 }
 
 void CImGuiManager::DrawGizmo()
@@ -305,12 +479,6 @@ void CImGuiManager::DrawGizmo()
 
 	ImGuiIO& io = ImGui::GetIO();
 
-	// Gizmo가 활성화되면 ImGui의 마우스 입력을 차단
-	bool gizmoActive = ImGuizmo::IsOver() || ImGuizmo::IsUsing();
-	if (gizmoActive)
-	{
-		io.WantCaptureMouse = false;
-	}
 
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, (ImVec4)ImColor(0.35f, 0.3f, 0.3f));
 
@@ -318,12 +486,8 @@ void CImGuiManager::DrawGizmo()
 	ImGui::SetNextWindowSize(fixedSize, ImGuiCond_Always);
 
 	// 창 이동 방지 및 크기 변경 방지
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoResize;
+	static ImGuiWindowFlags window_flags = 0;
 
-	if (gizmoActive)
-	{
-		window_flags |= ImGuiWindowFlags_NoMove;
-	}
 
 	ImGui::Begin("Gizmo", nullptr, window_flags);
 	ImGuizmo::SetDrawlist();
@@ -332,12 +496,43 @@ void CImGuiManager::DrawGizmo()
 	float windowHeight = ImGui::GetWindowHeight();
 	ImVec2 winPos = ImGui::GetWindowPos();
 	ImGuizmo::SetRect(winPos.x, winPos.y, windowWidth, windowHeight);
+	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	window_flags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
 
 	// 카메라 및 오브젝트 행렬 가져오기
 	CCamera* camera = CRenderManager::GetInst()->GetMainCamera();
 	Matrix viewMatrix = camera->GetViewMat();
 	Matrix projectionMatrix = camera->GetProjMat();
 	Matrix transform = m_SelectedObject->GetTransform()->GetWorldMatrix();
+	static bool isManipulating = false;
+
+	// 큐브 그리기
+	ImGuizmo::DrawCubes(*viewMatrix.m, *projectionMatrix.m, *transform.m, 1);
+
+	// ViewManipulate 위젯의 위치 및 크기 정의
+	float viewManipulateRight = ImGui::GetWindowPos().x + windowWidth;
+	float viewManipulateTop = ImGui::GetWindowPos().y;
+	ImVec2 viewManipulatePos = ImVec2(viewManipulateRight - 128, viewManipulateTop);
+	ImVec2 viewManipulateSize = ImVec2(128, 128);
+
+	viewMatrix = viewMatrix.Invert();
+	ImGuizmo::ViewManipulate(*viewMatrix.m, 7.f, viewManipulatePos, viewManipulateSize, 0x10101010);
+	viewMatrix = viewMatrix.Invert();
+
+	// 마우스를 클릭하면 조작 상태 활성화
+	if (ImGui::IsMouseHoveringRect(viewManipulatePos, ImVec2(viewManipulatePos.x + 128, viewManipulatePos.y + 128))
+		&& ImGui::IsMouseDown(0)) {
+		isManipulating = true;
+	}
+
+	
+	if (isManipulating) camera->SetCustomMatView(viewMatrix);
+
+	if (ImGui::IsMouseReleased(0)) {
+		isManipulating = false;
+	}
+
+
 
 	// Gizmo 모드 선택 (이동, 회전, 크기 조절)
 	static ImGuizmo::OPERATION gizmoOperation = ImGuizmo::TRANSLATE;
@@ -376,31 +571,90 @@ void CImGuiManager::DrawGizmo()
 		else if (gizmoOperation == ImGuizmo::SCALE)
 			snapValue = snapScale;
 	}
+	SimpleMath::Vector3 scale, translation;
+	SimpleMath::Quaternion rotation;
 
 	// Gizmo Manipulate 실행
 	if (ImGuizmo::Manipulate(*viewMatrix.m, *projectionMatrix.m,
-		gizmoOperation, ImGuizmo::WORLD, *transform.m, NULL, snapValue))
+		gizmoOperation, ImGuizmo::LOCAL, *transform.m, NULL, snapValue))
 	{
-		// 변환된 Transform 값을 가져와 GameObject에 적용
-		DirectX::SimpleMath::Vector3 newPosition, newRotation, newScale;
-		ImGuizmo::DecomposeMatrixToComponents(MatrixToFloatPtr(transform),
-			&newPosition.x, &newRotation.x, &newScale.x);
-
-		// 변환된 값을 다시 적용
-		m_SelectedObject->GetTransform()->SetRelativePosition(newPosition);
-
-		// 회전값이 너무 크지 않도록 보정 (360도 제한)
-		newRotation.x = fmod(newRotation.x, 360.0f);
-		newRotation.y = fmod(newRotation.y, 360.0f);
-		newRotation.z = fmod(newRotation.z, 360.0f);
-
-		m_SelectedObject->GetTransform()->SetRelativeRotation(newRotation);
-		m_SelectedObject->GetTransform()->SetRelativeScale(newScale);
-
-		m_SelectedObject->GetTransform()->SetWorldMatrix(transform);
+		transform.Decompose(scale, rotation, translation);
+		m_SelectedObject->GetTransform()->SetRelativePosition(translation);
+		m_SelectedObject->GetTransform()->SetRelativeRotation(rotation);
+		m_SelectedObject->GetTransform()->SetRelativeScale(scale);
 	}
+
+
+
 
 	ImGui::End();
 	ImGui::PopStyleColor(1);
 }
 
+void CImGuiManager::DrawLightCreateUI()
+{
+
+	if (ImGui::Button("Add Directional Light"))
+	{
+		CreateLight(LIGHT_TYPE::DIRECTIONAL_LIGHT);
+	}
+
+	if (ImGui::Button("Add Point Light"))
+	{
+		CreateLight(LIGHT_TYPE::POINT_LIGHT);
+	}
+
+	if (ImGui::Button("Add Spot Light"))
+	{
+		CreateLight(LIGHT_TYPE::SPOT_LIGHT);
+	}
+}
+
+
+void CImGuiManager::CreateLight(LIGHT_TYPE type)
+{
+	CGameObject* light = new CGameObject;
+	light->SetName(L"Light");
+	light->AddComponent(new CTransform);
+	light->AddComponent(new CLight);
+	CLight* lightComponent = (CLight*)light->GetComponent(EComponent_Type::Light);
+
+	lightComponent->SetLightType(type);
+
+	switch (type)
+	{
+	case LIGHT_TYPE::DIRECTIONAL_LIGHT:
+		light->SetName(s2ws("Object " + std::to_string(objCounter++)));
+		light->GetTransform()->SetRelativePosition(0.f, 500.f, 100.f);
+		lightComponent->SetLightDirection(Vec3(0.f, -1.f, 0.5f));
+		lightComponent->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
+		lightComponent->SetAmbient(Vec3(0.1f, 0.1f, 0.0f));
+		lightComponent->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
+		break;
+
+	case LIGHT_TYPE::POINT_LIGHT:
+		light->SetName(s2ws("Object " + std::to_string(objCounter++)));
+		light->GetTransform()->SetRelativePosition(0.f, 10.f, 0.f);
+		lightComponent->SetDiffuse(Vec3(1.0f, 0.5f, 0.5f));
+		lightComponent->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		lightComponent->SetSpecular(Vec3(1.0f, 1.0f, 1.0f));
+		lightComponent->SetLightRange(10.0f);
+		break;
+
+	case LIGHT_TYPE::SPOT_LIGHT:
+		light->SetName(s2ws("Object " + std::to_string(objCounter++)));
+		light->GetTransform()->SetRelativePosition(0.f, 15.f, 0.f);
+		lightComponent->SetDiffuse(Vec3(0.5f, 0.5f, 1.0f));
+		lightComponent->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		lightComponent->SetSpecular(Vec3(1.0f, 1.0f, 1.0f));
+		lightComponent->SetLightRange(15.0f);
+		lightComponent->SetLightAngle(45.0f);
+		break;
+	}
+
+	// **렌더링 매니저에 등록**
+	CRenderManager::GetInst()->RegisterLight(lightComponent);
+
+	// 현재 레벨에 오브젝트 추가
+	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(light, 3, false);
+}

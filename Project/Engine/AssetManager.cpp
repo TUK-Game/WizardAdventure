@@ -148,7 +148,7 @@ int CAssetManager::LoadMaterial()
 	AddAsset(L"Kita", material);
 
 	material = new CMaterial;
-	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Default"));
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Mushroom"));
 	AddAsset(L"Mushroom", material);
 
