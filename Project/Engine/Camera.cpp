@@ -13,6 +13,7 @@
 #include "Device.h"
 #include "ParticleSystem.h"
 #include "InstancingManager.h"
+#include <iostream>
 
 Matrix CCamera::s_matView;
 Matrix CCamera::s_matProjection;
@@ -40,19 +41,28 @@ CCamera::~CCamera()
 
 void CCamera::FinalUpdate()
 {
-	Vec3 vCamPos = GetTransform()->GetRelativePosition();
-	Matrix matTrans = XMMatrixTranslation(-vCamPos.x, -vCamPos.y, -vCamPos.z);
+	if (m_bUseCustomMatView)  // 수동으로 조작된 경우
+	{
+		m_matView = m_CustomMatView;  // 저장된 사용자 뷰 행렬 적용
+		m_bUseCustomMatView = false;
+	}
+	else
+	{
+		Vec3 vCamPos = GetTransform()->GetRelativePosition();
+		Matrix matTrans = XMMatrixTranslation(-vCamPos.x, -vCamPos.y, -vCamPos.z);
 
-	Vec3 vR = GetTransform()->GetWorldDir(EDir::Right);
-	Vec3 vU = GetTransform()->GetWorldDir(EDir::Up);
-	Vec3 vF = GetTransform()->GetWorldDir(EDir::Front);
+		Vec3 vR = GetTransform()->GetWorldDir(EDir::Right);
+		Vec3 vU = GetTransform()->GetWorldDir(EDir::Up);
+		Vec3 vF = GetTransform()->GetWorldDir(EDir::Front);
 
-	Matrix matRot = XMMatrixIdentity();
-	matRot._11 = vR.x;	matRot._12 = vU.x;	matRot._13 = vF.x;
-	matRot._21 = vR.y;	matRot._22 = vU.y;	matRot._23 = vF.y;
-	matRot._31 = vR.z;	matRot._32 = vU.z;	matRot._33 = vF.z;
+		Matrix matRot = XMMatrixIdentity();
+		matRot._11 = vR.x;	matRot._12 = vU.x;	matRot._13 = vF.x;
+		matRot._21 = vR.y;	matRot._22 = vU.y;	matRot._23 = vF.y;
+		matRot._31 = vR.z;	matRot._32 = vU.z;	matRot._33 = vF.z;
 
-	m_matView = matTrans * matRot;
+		m_matView = matTrans * matRot; 
+	}
+
 
 
 	if (m_ProjectionType == EProjection_Type::Orthographic)
@@ -256,4 +266,33 @@ void CCamera::PushLightData()
 	}
 
 	CONST_BUFFER(EConstantBuffer_Type::Global)->SetGlobalData(&lightParams, sizeof(lightParams));
+}
+
+
+void CCamera::SetCustomMatView(const Matrix& matView)
+{
+
+	m_CustomMatView = matView;
+
+	Matrix InvertMatView = matView.Invert();
+	GetTransform()->SetRelativePosition(InvertMatView._41, InvertMatView._42, InvertMatView._43);
+
+	// 카메라의 회전 방향 설정 (월드 방향 벡터 추출)
+	Vec3 right(matView._11, matView._12, matView._13);
+	Vec3 up(matView._21, matView._22, matView._23);
+	Vec3 forward(matView._31, matView._32, matView._33);
+
+	// 회전 행렬 생성
+	Matrix rotationMatrix = XMMatrixIdentity();
+	rotationMatrix._11 = right.x;  rotationMatrix._12 = up.x;  rotationMatrix._13 = forward.x;
+	rotationMatrix._21 = right.y;  rotationMatrix._22 = up.y;  rotationMatrix._23 = forward.y;
+	rotationMatrix._31 = right.z;  rotationMatrix._32 = up.z;  rotationMatrix._33 = forward.z;
+
+	// 회전 행렬을 쿼터니언으로 변환 후 카메라 회전값 적용
+	Quaternion quatRotation = XMQuaternionRotationMatrix(rotationMatrix);
+	GetTransform()->SetRelativeRotation(quatRotation);
+
+	Vec3 pos = GetTransform()->GetRelativePosition();
+	std::cout << "camera pos: " << pos.x << " " << pos.y << " " << pos.z << std::endl;
+	m_bUseCustomMatView = true;  // 커스텀 뷰 행렬 사용
 }

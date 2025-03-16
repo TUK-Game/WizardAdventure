@@ -156,8 +156,8 @@ void CImGuiManager::DrawLevelWindow()
 
 	if (m_SelectedObject && ImGui::Button("Delete Object"))
 	{
-		//CEngine::GetInst()->GetCurrentLevel()->RemoveGameObject(selectedObject);
-		//selectedObject = nullptr;
+		
+		
 	}
 
 	ImGui::End();
@@ -458,12 +458,6 @@ void CImGuiManager::DrawGizmo()
 
 	ImGuiIO& io = ImGui::GetIO();
 
-	// Gizmo가 활성화되면 ImGui의 마우스 입력을 차단
-	bool gizmoActive = ImGuizmo::IsOver() || ImGuizmo::IsUsing();
-	if (gizmoActive)
-	{
-		io.WantCaptureMouse = false;
-	}
 
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, (ImVec4)ImColor(0.35f, 0.3f, 0.3f));
 
@@ -471,12 +465,8 @@ void CImGuiManager::DrawGizmo()
 	ImGui::SetNextWindowSize(fixedSize, ImGuiCond_Always);
 
 	// 창 이동 방지 및 크기 변경 방지
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoResize;
+	static ImGuiWindowFlags window_flags = 0;
 
-	if (gizmoActive)
-	{
-		window_flags |= ImGuiWindowFlags_NoMove;
-	}
 
 	ImGui::Begin("Gizmo", nullptr, window_flags);
 	ImGuizmo::SetDrawlist();
@@ -485,12 +475,43 @@ void CImGuiManager::DrawGizmo()
 	float windowHeight = ImGui::GetWindowHeight();
 	ImVec2 winPos = ImGui::GetWindowPos();
 	ImGuizmo::SetRect(winPos.x, winPos.y, windowWidth, windowHeight);
+	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	window_flags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
 
 	// 카메라 및 오브젝트 행렬 가져오기
 	CCamera* camera = CRenderManager::GetInst()->GetMainCamera();
 	Matrix viewMatrix = camera->GetViewMat();
 	Matrix projectionMatrix = camera->GetProjMat();
 	Matrix transform = m_SelectedObject->GetTransform()->GetWorldMatrix();
+	static bool isManipulating = false;
+
+	// 큐브 그리기
+	ImGuizmo::DrawCubes(*viewMatrix.m, *projectionMatrix.m, *transform.m, 1);
+
+	// ViewManipulate 위젯의 위치 및 크기 정의
+	float viewManipulateRight = ImGui::GetWindowPos().x + windowWidth;
+	float viewManipulateTop = ImGui::GetWindowPos().y;
+	ImVec2 viewManipulatePos = ImVec2(viewManipulateRight - 128, viewManipulateTop);
+	ImVec2 viewManipulateSize = ImVec2(128, 128);
+
+	viewMatrix = viewMatrix.Invert();
+	ImGuizmo::ViewManipulate(*viewMatrix.m, 7.f, viewManipulatePos, viewManipulateSize, 0x10101010);
+	viewMatrix = viewMatrix.Invert();
+
+	// 마우스를 클릭하면 조작 상태 활성화
+	if (ImGui::IsMouseHoveringRect(viewManipulatePos, ImVec2(viewManipulatePos.x + 128, viewManipulatePos.y + 128))
+		&& ImGui::IsMouseDown(0)) {
+		isManipulating = true;
+	}
+
+	
+	if (isManipulating) camera->SetCustomMatView(viewMatrix);
+
+	if (ImGui::IsMouseReleased(0)) {
+		isManipulating = false;
+	}
+
+
 
 	// Gizmo 모드 선택 (이동, 회전, 크기 조절)
 	static ImGuizmo::OPERATION gizmoOperation = ImGuizmo::TRANSLATE;
@@ -531,6 +552,7 @@ void CImGuiManager::DrawGizmo()
 	}
 	SimpleMath::Vector3 scale, translation;
 	SimpleMath::Quaternion rotation;
+
 	// Gizmo Manipulate 실행
 	if (ImGuizmo::Manipulate(*viewMatrix.m, *projectionMatrix.m,
 		gizmoOperation, ImGuizmo::LOCAL, *transform.m, NULL, snapValue))
@@ -540,6 +562,9 @@ void CImGuiManager::DrawGizmo()
 		m_SelectedObject->GetTransform()->SetRelativeRotation(rotation);
 		m_SelectedObject->GetTransform()->SetRelativeScale(scale);
 	}
+
+
+
 
 	ImGui::End();
 	ImGui::PopStyleColor(1);
