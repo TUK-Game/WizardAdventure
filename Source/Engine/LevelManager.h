@@ -10,6 +10,7 @@ class CLevelManager
 
 public:
 	CLevel* GetCurrentLevel()	{ return m_CurLevel; }
+	void SetLevel(CLevel* level) { m_CurLevel = level; }
 
 public:
 	int Init();

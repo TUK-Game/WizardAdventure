@@ -148,12 +148,14 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="Level_1.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientManager.cpp" />
+    <ClCompile Include="Level_1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
