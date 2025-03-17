@@ -14,6 +14,7 @@
 #include "UI.h"
 #include "UIButton.h"
 #include "MeshRenderer.h"
+#include "SubLevel.h"
 
 CGameObject::CGameObject()
 	: m_arrComponent{}
@@ -116,9 +117,14 @@ void CGameObject::FinalUpdate()
 	}
 
 	// Layer 에 GameObject 등록
-	CLevel* curLevel = CLevelManager::GetInst()->GetCurrentLevel();
-	CLayer* layer = curLevel->GetLayer(m_LayerIndex);
-	layer->RegisterGameObject(this);
+	//CLevel* curLevel = CLevelManager::GetInst()->GetCurrentLevel();
+	//CLayer* layer = curLevel->GetLayer(m_LayerIndex);
+	//if (m_LayerIndex == 3 || m_LayerIndex == 10)
+	//{
+	//	curLevel->m_SubLevel->RegisterGameObject(this, m_LayerIndex);
+	//}
+	//else
+	//	layer->RegisterGameObject(this);
 
 	for (size_t i = 0; i < m_vecChild.size(); ++i)
 	{

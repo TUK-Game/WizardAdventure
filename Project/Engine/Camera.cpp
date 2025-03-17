@@ -14,6 +14,7 @@
 #include "ParticleSystem.h"
 #include "InstancingManager.h"
 #include <iostream>
+#include "SubLevel.h"
 
 Matrix CCamera::s_matView;
 Matrix CCamera::s_matProjection;
@@ -161,14 +162,25 @@ void CCamera::SortObject()
 		if (!(m_LayerCheck & (1 << i)))
 			continue;
 
+		std::vector<CGameObject*> objects;
+		if (i == 3 || i == 10)
+		{
+			std::shared_ptr<CSubLevel> level = pCurLevel->m_SubLevel;
+			if (level)
+			{
+				if (m_Frustum.IsInFrustum(pCurLevel->m_SubLevel->GetBoundingBox()))
+				{
+					level->PickGameObject(m_Frustum, objects);
+				}
+			}
+		}
+
 		// ���̾ ���� ������Ʈ�� �����´�.
 		CLayer* pLayer = pCurLevel->GetLayer(i);
 		const std::vector<CGameObject*>& vecObjects = pLayer->GetObjects();
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
-			// ���̾� �ȿ��ִ� ��ü�� �߿��� ������ ����� ���� ��ü�� �Ÿ���.
-			// TODO: Material ������ ����ó�� �߰�
 			if ((vecObjects[j]->GetRenderComponent() == nullptr
 				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
 				&& vecObjects[j]->GetParticleSystem() == nullptr)
@@ -199,6 +211,42 @@ void CCamera::SortObject()
 			else
 			{
 				m_vecParticle.push_back(vecObjects[j]);
+			}
+			//m_vecObjects.push_back(vecObjects[j]);
+
+			// TODO: Material ������ Ÿ�Կ� ���� �з� �ۼ�
+		}	for (size_t j = 0; j < objects.size(); ++j)
+		{
+			if ((objects[j]->GetRenderComponent() == nullptr
+				|| objects[j]->GetRenderComponent()->GetMesh() == nullptr)
+				&& objects[j]->GetParticleSystem() == nullptr)
+				continue;
+
+			// �������� �ø�
+			if (objects[j]->GetCheckFrustum() && objects[j]->GetCollider())
+			{
+				if (!objects[j]->GetCollider()->IsFrustum(m_Frustum))
+				{
+					continue;
+				}
+			}
+
+			if (objects[j]->GetMeshRenderer())
+			{
+				SHADER_TYPE shaderType = objects[j]->GetMeshRenderer()->GetMaterial()->GetGraphicsShader()->GetShaderType();
+				switch (shaderType)
+				{
+				case SHADER_TYPE::DEFERRED:
+					m_vecDeferred.push_back(objects[j]);
+					break;
+				case SHADER_TYPE::FORWARD:
+					m_vecForward.push_back(objects[j]);
+					break;
+				}
+			}
+			else
+			{
+				m_vecParticle.push_back(objects[j]);
 			}
 			//m_vecObjects.push_back(vecObjects[j]);
 

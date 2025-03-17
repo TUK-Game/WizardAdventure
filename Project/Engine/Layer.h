@@ -9,13 +9,15 @@ class CLayer :
 	public CRef
 {
 	friend class CLevel;
+	friend class CSubLevel;
 
 public:
 	CLayer();
 	~CLayer();
 
 public:
-	const std::vector<CGameObject*>& GetObjects() const	{ return m_vecObjects; }
+	const std::vector<CGameObject*>& GetObjects() const { return m_vecObjects; }
+	const std::vector<CGameObject*>& GetParentObjects() const	{ return m_vecParentObjects; }
 
 	void RegisterGameObject(CGameObject* object)	{ m_vecObjects.push_back(object); }
 	void AddGameObject(CGameObject* parent, bool bChildMove);

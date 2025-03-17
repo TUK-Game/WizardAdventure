@@ -19,11 +19,11 @@ void CTransform::FinalUpdate()
 	Matrix matScale = XMMatrixScaling(m_RelativeScale.x, m_RelativeScale.y, m_RelativeScale.z);
 
 	// Rotation
-	//Matrix matRotation = XMMatrixRotationX(m_RelativeRotation.x);
-	//matRotation *= XMMatrixRotationY(m_RelativeRotation.y);
-	//matRotation *= XMMatrixRotationZ(m_RelativeRotation.z);
+	Matrix matRotation = XMMatrixRotationX(m_RelativeRotation.x);
+	matRotation *= XMMatrixRotationY(m_RelativeRotation.y);
+	matRotation *= XMMatrixRotationZ(m_RelativeRotation.z);
 
-	Matrix matRotation = Matrix::CreateFromQuaternion(m_RelativeRotationQuat);
+	//Matrix matRotation = Matrix::CreateFromQuaternion(m_RelativeRotationQuat);
 
 	// Translation
 	Matrix matTrans = XMMatrixTranslation(m_RelativePos.x, m_RelativePos.y, m_RelativePos.z);

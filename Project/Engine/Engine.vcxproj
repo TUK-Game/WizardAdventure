@@ -251,6 +251,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Struct.pb.h" />
     <ClInclude Include="StructuredBuffer.h" />
+    <ClInclude Include="SubLevel.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="TableDescriptorHeap.h" />
     <ClInclude Include="TestDragon.h" />
@@ -382,6 +383,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="StructuredBuffer.cpp" />
+    <ClCompile Include="SubLevel.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="TableDescriptorHeap.cpp" />
     <ClCompile Include="TestDragon.cpp" />

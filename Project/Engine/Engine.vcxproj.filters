@@ -464,6 +464,9 @@
     <ClInclude Include="SaveLoadManager.h">
       <Filter>01. Manager\14. Save/Load</Filter>
     </ClInclude>
+    <ClInclude Include="SubLevel.h">
+      <Filter>02. Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -702,6 +705,9 @@
     </ClCompile>
     <ClCompile Include="SaveLoadManager.cpp">
       <Filter>01. Manager\14. Save/Load</Filter>
+    </ClCompile>
+    <ClCompile Include="SubLevel.cpp">
+      <Filter>02. Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

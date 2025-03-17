@@ -13,6 +13,8 @@
 #include <Engine/Layer.h>
 #include <Engine/MeshData.h>
 #include <Engine/UIButton.h>
+#include <Engine/SubLevel.h>
+#include <Engine/BoxCollider.h>
 
 CLevel_1::CLevel_1()
 {
@@ -25,6 +27,10 @@ CLevel_1::~CLevel_1()
 
 void CLevel_1::Init()
 {
+	m_SubLevel = std::make_shared<CSubLevel>();
+	m_SubLevel->SetBoundingBox(Vec3(0.f, 0.f, 0.f), Vec3(7000, 3000, 9000));
+	m_SubLevel->SplitSubScene(4);
+
 	this->SetName(L"Level_1");
 
 	this->GetLayer(0)->SetName(L"Camera");
@@ -78,7 +84,7 @@ void CLevel_1::Init()
 	skybox->AddComponent(new CMeshRenderer);
 	skybox->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 	skybox->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Skybox"));
-	this->AddGameObject(skybox, 1, false);
+	this->AddGameObject(skybox, 4, false);
 
 
 	// directional light
@@ -95,14 +101,15 @@ void CLevel_1::Init()
 		light->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
-		this->AddGameObject(light, 3, false);
+		this->AddGameObject(light, 4, false);
 	}
 
 	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
 	std::vector<CGameObject*> obj = data->Instantiate();
-	CGameObject* player = new CGameObject;
-	player->SetName(L"Mage");
-	player->AddComponent(new CTransform);
+	//CGameObject* player = new CGameObject;
+	//player->SetName(L"Mage");
+	//player->AddComponent(new CTransform);
+	//player->AddComponent(new CBoxCollider);
 	for (auto& o : obj)
 	{
 		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
@@ -117,64 +124,9 @@ void CLevel_1::Init()
 		o->AddComponent(new CTestPlayer);
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(true);
-		player->AddChild(o);
+		this->AddGameObject(o, 10, false);
 	}
-	this->AddGameObject(player, 10, false);
-
-	CGameObject* object = new CGameObject;
-	CGameObject* object2 = new CGameObject;
-	CGameObject* object3 = new CGameObject;
-	CGameObject* object4 = new CGameObject;
-
-	object4->SetName(L"Cube4");
-	object4->AddComponent(new CTransform);
-	object4->AddComponent(new CMeshRenderer);
-	//object4->AddComponent(new CBoxCollider);
-
-	//object4->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object4->GetTransform()->SetRelativeScale(10.f, 10.f, 10.f);
-	object4->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object4->GetTransform()->SetRelativePosition(0.f, 100.f, 0.f);
-	object4->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object4->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Rock"));
-
-	object3->SetName(L"Cube3");
-	object3->AddComponent(new CTransform);
-	object3->AddComponent(new CMeshRenderer);
-	//object3->AddComponent(new CBoxCollider);
-	//object3->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object3->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
-	object3->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object3->GetTransform()->SetRelativePosition(500.f, 0.f, 0.f);
-	object3->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object3->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Ryo"));
-	object3->AddChild(object4);
-	this->AddGameObject(object3, 3, false);
-
-
-	object2->SetName(L"Cube2");
-	object2->AddComponent(new CTransform);
-	object2->AddComponent(new CMeshRenderer);
-	//object2->AddComponent(new CBoxCollider);
-	//object2->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object2->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
-	object2->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object2->GetTransform()->SetRelativePosition(-700.f, 0.f, 300.f);
-	object2->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object2->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Nigika"));
-	this->AddGameObject(object2, 3, false);
-
-	object->SetName(L"Cube");
-	object->AddComponent(new CTransform);
-	object->AddComponent(new CMeshRenderer);
-	//object->AddComponent(new CBoxCollider);
-	//object->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object->GetTransform()->SetRelativeScale(500.f, 500.f, 500.f);
-	object->GetTransform()->SetRelativeRotation(0.f, 90.f, 90.f);
-	object->GetTransform()->SetRelativePosition(-300.f, 0.f, 300.f);
-	object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
-	this->AddGameObject(object, 3, false);
+	//this->AddGameObject(player, 10, false);
 }
 
 void CLevel_1::Begin()

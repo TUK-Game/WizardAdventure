@@ -48,7 +48,7 @@ void CLevelManager::Progress()
 {
 	m_CurLevel->Update();
 
-	m_CurLevel->Deregister();
+	//m_CurLevel->Deregister();
 
 	m_CurLevel->FinalUpdate();
 }
