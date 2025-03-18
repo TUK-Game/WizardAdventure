@@ -31,7 +31,7 @@ public:
 public:
 	virtual CLevel* Clone() override	{ return new CLevel(*this); }
 
-private:
+protected:
 	std::array<CLayer*, MAX_LAYER>	m_Layer;
 	class CLevelCollision* m_collision;
 

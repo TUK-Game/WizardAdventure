@@ -83,7 +83,7 @@ CGameObject* CLevelManager::Pick(INT32 x, INT32 y)
 
 	for (int j = 0; j < MAX_LAYER; ++j)
 	{
-		auto& gameObjects = GetCurrentLevel()->GetLayer(j)->GetObjects();
+		auto& gameObjects = GetCurrentLevel()->GetLayer(j)->GetParentObjects();
 		for (auto& gameObject : gameObjects)
 		{
 			if (gameObject->GetCollider() == nullptr)

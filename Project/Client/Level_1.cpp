@@ -27,6 +27,8 @@ CLevel_1::~CLevel_1()
 
 void CLevel_1::Init()
 {
+	CLevel::Init();
+
 	m_SubLevel = std::make_shared<CSubLevel>();
 	m_SubLevel->SetBoundingBox(Vec3(0.f, 0.f, 0.f), Vec3(7000, 3000, 9000));
 	m_SubLevel->SplitSubScene(4);
@@ -84,7 +86,7 @@ void CLevel_1::Init()
 	skybox->AddComponent(new CMeshRenderer);
 	skybox->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 	skybox->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Skybox"));
-	this->AddGameObject(skybox, 4, false);
+	this->AddGameObject(skybox, 1, false);
 
 
 	// directional light
@@ -121,8 +123,8 @@ void CLevel_1::Init()
 		o->GetTransform()->SetRelativeRotation(rot);
 		//o->GetTransform()->SetRelativePosition(100, 0, 0);
 		//o->GetTransform()->SetRelativeScale(1, 1, 1);
-		o->AddComponent(new CTestPlayer);
-		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+		//o->AddComponent(new CTestPlayer);
+		o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(true);
 		this->AddGameObject(o, 10, false);
 	}

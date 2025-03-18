@@ -129,7 +129,7 @@ void CImGuiManager::DrawLevelWindow()
 	int index = 0;
 	for (int j = 0; j < MAX_LAYER; ++j)
 	{
-		auto& gameObjects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(j)->GetObjects();
+		auto& gameObjects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(j)->GetParentObjects();
 
 		for (auto& gameObject : gameObjects)
 		{

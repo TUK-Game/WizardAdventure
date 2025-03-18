@@ -212,6 +212,10 @@ void CSubLevel::SplitSubScene(int splitLevels)
 	}
 	else
 	{
-
+		for (int i = 0; i < MAX_LAYER; ++i)
+		{
+			m_Layer[i] = new CLayer;
+			m_Layer[i]->m_LayerIndex = i;
+		}
 	}
 }

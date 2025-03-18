@@ -162,7 +162,7 @@ void CCamera::SortObject()
 		if (!(m_LayerCheck & (1 << i)))
 			continue;
 
-		std::vector<CGameObject*> objects;
+		std::vector<CGameObject*> vecObjects;
 		if (i == 3 || i == 10)
 		{
 			std::shared_ptr<CSubLevel> level = pCurLevel->m_SubLevel;
@@ -170,14 +170,14 @@ void CCamera::SortObject()
 			{
 				if (m_Frustum.IsInFrustum(pCurLevel->m_SubLevel->GetBoundingBox()))
 				{
-					level->PickGameObject(m_Frustum, objects);
+					level->PickGameObject(m_Frustum, vecObjects);
 				}
 			}
 		}
-
-		// ���̾ ���� ������Ʈ�� �����´�.
-		CLayer* pLayer = pCurLevel->GetLayer(i);
-		const std::vector<CGameObject*>& vecObjects = pLayer->GetObjects();
+		else
+		{
+			vecObjects = pCurLevel->GetLayer(i)->GetParentObjects();
+		}
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
@@ -215,43 +215,7 @@ void CCamera::SortObject()
 			//m_vecObjects.push_back(vecObjects[j]);
 
 			// TODO: Material ������ Ÿ�Կ� ���� �з� �ۼ�
-		}	for (size_t j = 0; j < objects.size(); ++j)
-		{
-			if ((objects[j]->GetRenderComponent() == nullptr
-				|| objects[j]->GetRenderComponent()->GetMesh() == nullptr)
-				&& objects[j]->GetParticleSystem() == nullptr)
-				continue;
-
-			// �������� �ø�
-			if (objects[j]->GetCheckFrustum() && objects[j]->GetCollider())
-			{
-				if (!objects[j]->GetCollider()->IsFrustum(m_Frustum))
-				{
-					continue;
-				}
-			}
-
-			if (objects[j]->GetMeshRenderer())
-			{
-				SHADER_TYPE shaderType = objects[j]->GetMeshRenderer()->GetMaterial()->GetGraphicsShader()->GetShaderType();
-				switch (shaderType)
-				{
-				case SHADER_TYPE::DEFERRED:
-					m_vecDeferred.push_back(objects[j]);
-					break;
-				case SHADER_TYPE::FORWARD:
-					m_vecForward.push_back(objects[j]);
-					break;
-				}
-			}
-			else
-			{
-				m_vecParticle.push_back(objects[j]);
-			}
-			//m_vecObjects.push_back(vecObjects[j]);
-
-			// TODO: Material ������ Ÿ�Կ� ���� �з� �ۼ�
-		}
+		}	
 	}
 }
 
