@@ -25,6 +25,7 @@
 #include <iostream>
 #include "Animator.h"
 #include "TestPlayer.h"
+#include "SubLevel.h"
 
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)
@@ -83,7 +84,12 @@ CGameObject* CLevelManager::Pick(INT32 x, INT32 y)
 
 	for (int j = 0; j < MAX_LAYER; ++j)
 	{
-		auto& gameObjects = GetCurrentLevel()->GetLayer(j)->GetParentObjects();
+		std::vector<CGameObject*> gameObjects;
+		if (j == 3 || j == 10)
+			m_CurLevel->m_SubLevel->PickGameObject(gameObjects, j);
+		else
+			gameObjects = GetCurrentLevel()->GetLayer(j)->GetParentObjects();
+
 		for (auto& gameObject : gameObjects)
 		{
 			if (gameObject->GetCollider() == nullptr)

@@ -32,7 +32,6 @@ struct VS_OUT
 VS_OUT VS_Main(VS_IN input)
 {
     VS_OUT output = (VS_OUT) 0;
-
     if (int_0 == 1)
     {
         if (int_1 == 1)
