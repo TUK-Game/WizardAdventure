@@ -167,25 +167,38 @@ void CSubLevel::RegisterGameObject(CGameObject* object, int layer)
 	}
 }
 
-void CSubLevel::PickGameObject(CFrustum& frustum, std::vector<CGameObject*>& objects)
+void CSubLevel::PickGameObject(CFrustum& frustum, std::vector<CGameObject*>& objects, int layerIndex)
 {
 	if (!frustum.IsInFrustum(m_BoundingBox))
 		return;
 
 	if (m_SubLevels.empty())
 	{
-		for (int idx : layerIndex)
+		for (const auto& object : GetLayer(layerIndex)->GetParentObjects())
 		{
-			for (const auto& object : GetLayer(idx)->GetParentObjects())
-			{
-				objects.push_back(object);
-			}
+			objects.push_back(object);
 		}
 	}
 	else
 	{
 		for (const auto& level : m_SubLevels)
-			level->PickGameObject(frustum, objects);
+			level->PickGameObject(frustum, objects, layerIndex);
+	}
+}
+
+void CSubLevel::PickGameObject(std::vector<CGameObject*>& objects, int layerIndex)
+{
+	if (m_SubLevels.empty())
+	{
+		for (const auto& object : GetLayer(layerIndex)->GetParentObjects())
+		{
+			objects.push_back(object);
+		}
+	}
+	else
+	{
+		for (const auto& level : m_SubLevels)
+			level->PickGameObject(objects, layerIndex);
 	}
 }
 

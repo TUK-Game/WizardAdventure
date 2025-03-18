@@ -155,7 +155,6 @@ void CCamera::SortObject()
 	m_vecParticle.clear();
 
 	CLevel* pCurLevel = CLevelManager::GetInst()->GetCurrentLevel();
-
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
 		// ī�޶� ���������� �ʴ� ���̾�� �����Ѵ�.
@@ -170,7 +169,7 @@ void CCamera::SortObject()
 			{
 				if (m_Frustum.IsInFrustum(pCurLevel->m_SubLevel->GetBoundingBox()))
 				{
-					level->PickGameObject(m_Frustum, vecObjects);
+					level->PickGameObject(m_Frustum, vecObjects, i);
 				}
 			}
 		}
@@ -231,7 +230,7 @@ void CCamera::SortShadowObject()
 			continue;
 
 		CLayer* pLayer = pCurLevel->GetLayer(i);
-		const std::vector<CGameObject*>& vecObjects = pLayer->GetObjects();
+		const std::vector<CGameObject*>& vecObjects = pLayer->GetParentObjects();
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{

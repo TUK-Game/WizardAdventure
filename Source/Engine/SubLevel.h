@@ -27,7 +27,8 @@ public:
 	void RemoveGameObject(CGameObject* object);
 	void RegisterGameObject(CGameObject* object, int);
 
-	void PickGameObject(CFrustum& frustum, std::vector<CGameObject*>& objects);
+	void PickGameObject(CFrustum& frustum, std::vector<CGameObject*>& objects, int layerIndex);
+	void PickGameObject(std::vector<CGameObject*>& objects, int layerIndex);
 
 	void SplitSubScene(int splitLevels);
 public:
