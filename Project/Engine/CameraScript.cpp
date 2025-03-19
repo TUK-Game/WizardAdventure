@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "Engine.h"
 #include "LevelManager.h"
+#include "ImGuiManager.h"
 
 CCameraScript::CCameraScript()
 	: m_Speed(1000.f)
@@ -62,7 +63,8 @@ void CCameraScript::Move()
 		CGameObject* obj = CLevelManager::GetInst()->Pick(pos.x, pos.y);
 		if (obj)
 		{
-			obj->SetActive(false);
+			CImGuiManager::GetInst()->SetSelectedObject(obj);
+			//obj->SetActive(false);
 		}
 	}
 

@@ -296,6 +296,31 @@ void CImGuiManager::DrawTransformUI()
 
 	if (ImGui::DragFloat3("Scale", &scale.x, 0.1f))
 		m_SelectedObject->GetTransform()->SetRelativeScale(scale);
+
+	//// 기존 방식으로 만든 회전 행렬 (Euler 각 사용)
+	//Matrix matRotationEuler = XMMatrixRotationX(rotation.x);
+	//matRotationEuler *= XMMatrixRotationY(rotation.y);
+	//matRotationEuler *= XMMatrixRotationZ(rotation.z);
+
+	//Matrix matRotationQuat = XMMatrixRotationQuaternion(m_SelectedObject->GetTransform()->GetRelativeRotationQuaternion());
+	//// 행렬 데이터를 가져오기
+	//XMFLOAT4X4 matEuler, matQuat;
+	//XMStoreFloat4x4(&matEuler, matRotationEuler);
+	//XMStoreFloat4x4(&matQuat, matRotationQuat);
+
+	//// Euler 방식의 회전 행렬 출력
+	//ImGui::Text("Rotation Matrix (Euler)");
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	ImGui::Text("%f %f %f %f", matEuler.m[i][0], matEuler.m[i][1], matEuler.m[i][2], matEuler.m[i][3]);
+	//}
+
+	//// 쿼터니언 방식의 회전 행렬 출력
+	//ImGui::Text("Rotation Matrix (Quaternion)");
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	ImGui::Text("%f %f %f %f", matQuat.m[i][0], matQuat.m[i][1], matQuat.m[i][2], matQuat.m[i][3]);
+	//}
 }
 
 void CImGuiManager::DrawRigidbodyUI()

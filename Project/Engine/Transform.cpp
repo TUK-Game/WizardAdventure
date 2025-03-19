@@ -23,7 +23,9 @@ void CTransform::FinalUpdate()
 	//matRotation *= XMMatrixRotationY(m_RelativeRotation.y);
 	//matRotation *= XMMatrixRotationZ(m_RelativeRotation.z);
 
-	Matrix matRotation = Matrix::CreateFromQuaternion(m_RelativeRotationQuat);
+
+	// 쿼터니언을 회전 행렬로 변환
+	Matrix matRotation = XMMatrixRotationQuaternion(m_RelativeRotationQuat);
 
 	// Translation
 	Matrix matTrans = XMMatrixTranslation(m_RelativePos.x, m_RelativePos.y, m_RelativePos.z);
@@ -127,20 +129,31 @@ void CTransform::SetRelativeRotation(Vec3 rotation)
 {
 	m_RelativeRotation = (rotation / 180.f) * XM_PI;
 
-	m_RelativeRotationQuat = Quaternion::CreateFromYawPitchRoll(m_RelativeRotation.y, m_RelativeRotation.x, m_RelativeRotation.z);
+	// 개별 축 회전 쿼터니언 생성 (X → Y → Z 순서 유지)
+	XMVECTOR quatX = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), m_RelativeRotation.x);
+	XMVECTOR quatY = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), m_RelativeRotation.y);
+	XMVECTOR quatZ = XMQuaternionRotationAxis(XMVectorSet(0, 0, 1, 0), m_RelativeRotation.z);
+
+	// X → Y → Z 순서로 회전 적용
+	m_RelativeRotationQuat = XMQuaternionMultiply(XMQuaternionMultiply(quatX, quatY), quatZ);
 }
 
 void CTransform::SetRelativeRotation(float x, float y, float z)
 {
 	m_RelativeRotation = (Vec3(x, y, z) / 180.f) * XM_PI;
 
-	m_RelativeRotationQuat = Quaternion::CreateFromYawPitchRoll(m_RelativeRotation.y, m_RelativeRotation.x, m_RelativeRotation.z);
+	// 개별 축 회전 쿼터니언 생성 (X → Y → Z 순서 유지)
+	XMVECTOR quatX = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), m_RelativeRotation.x);
+	XMVECTOR quatY = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), m_RelativeRotation.y);
+	XMVECTOR quatZ = XMQuaternionRotationAxis(XMVectorSet(0, 0, 1, 0), m_RelativeRotation.z);
+
+	// X → Y → Z 순서로 회전 적용
+	m_RelativeRotationQuat = XMQuaternionMultiply(XMQuaternionMultiply(quatX, quatY), quatZ);
 }
 
 void CTransform::SetRelativeRotation(Quaternion quat)
 {
 	m_RelativeRotationQuat = quat;
-
 	Vec3 eulerAngles = quat.ToEuler();
 	m_RelativeRotation = eulerAngles;
 }

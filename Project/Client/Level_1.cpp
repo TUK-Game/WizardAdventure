@@ -87,8 +87,8 @@ void CLevel_1::Init()
 		light->SetName(L"DirectionalLight");
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
-		light->GetTransform()->SetRelativePosition(0.f, 500.f, 100.f);
-		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.5f));
+		light->GetTransform()->SetRelativePosition(0.f, 5000.f, 100.f);
+		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
 		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.0f));
@@ -103,6 +103,7 @@ void CLevel_1::Init()
 	CGameObject* player = new CGameObject;
 	player->SetName(L"Mage");
 	player->AddComponent(new CTransform);
+	player->GetTransform()->SetRelativeRotation(0.f, 1.0f, 0.f);
 	for (auto& o : obj)
 	{
 		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
@@ -133,7 +134,7 @@ void CLevel_1::Init()
 
 	//object4->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
 	object4->GetTransform()->SetRelativeScale(10.f, 10.f, 10.f);
-	object4->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
+	object4->GetTransform()->SetRelativeRotation(0.f, 45.f, 0.f);
 	object4->GetTransform()->SetRelativePosition(0.f, 100.f, 0.f);
 	object4->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 	object4->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Rock"));
@@ -144,7 +145,7 @@ void CLevel_1::Init()
 	//object3->AddComponent(new CBoxCollider);
 	//object3->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
 	object3->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
-	object3->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
+	object3->GetTransform()->SetRelativeRotation(0.f, 45.f, 0.f);
 	object3->GetTransform()->SetRelativePosition(500.f, 0.f, 0.f);
 	object3->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 	object3->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Ryo"));

@@ -17,6 +17,7 @@ public:
     Vec3 GetWorldPosition();
     Vec3 GetWorldScale();
     Vec3 GetWorldRotation();
+    Quaternion GetRelativeRotationQuaternion() { return m_RelativeRotationQuat; }
     Matrix GetWorldRotationMatrix();
     Vec3 GetWorldDir(EDir dirType)      { return m_WorldDir[(UINT)dirType]; }
     Matrix GetWorldMatrix()             { return m_matWorld; }

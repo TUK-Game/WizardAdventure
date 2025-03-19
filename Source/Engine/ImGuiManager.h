@@ -1,5 +1,7 @@
 #pragma once
 
+class CGameObject;
+
 class CImGuiManager :
 	public CSingleton<CImGuiManager>
 {
@@ -9,6 +11,7 @@ public:
 	void Init();
 	void ReadyWindow();
 	void Render();
+	void SetSelectedObject(CGameObject* obj) { m_SelectedObject = obj; }
 
 	void CleanUp();
 	void CreateLight(LIGHT_TYPE type);
