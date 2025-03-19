@@ -174,6 +174,15 @@
     <Filter Include="01. Manager\14. Save/Load">
       <UniqueIdentifier>{76618a6c-f4d4-4604-8e9e-624c97bc5979}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. State">
+      <UniqueIdentifier>{36fdb397-7cde-4673-8890-e8717de16978}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. State\PlayerState">
+      <UniqueIdentifier>{e79832f5-0e6e-451a-b391-3b6d7ab69c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\15. State">
+      <UniqueIdentifier>{745aad43-46a0-477a-8921-3d27a040a697}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -464,6 +473,21 @@
     <ClInclude Include="SaveLoadManager.h">
       <Filter>01. Manager\14. Save/Load</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>03. GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>06. State</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerIdleState.h">
+      <Filter>06. State\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="StateManager.h">
+      <Filter>01. Manager\15. State</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerScript.h">
+      <Filter>Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -702,6 +726,18 @@
     </ClCompile>
     <ClCompile Include="SaveLoadManager.cpp">
       <Filter>01. Manager\14. Save/Load</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>03. GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerIdleState.cpp">
+      <Filter>06. State\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="StateManager.cpp">
+      <Filter>01. Manager\15. State</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerScript.cpp">
+      <Filter>Script</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

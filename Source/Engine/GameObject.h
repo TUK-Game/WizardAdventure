@@ -60,10 +60,10 @@ public:
     virtual void Destroy();
     
 public:
-    void Begin();
-    void Update();
-    void FinalUpdate();
-    void Render();
+    virtual void Begin();
+    virtual void Update();
+    virtual void FinalUpdate();
+    virtual void Render();
 
 public:
     virtual CGameObject* Clone() override { return new CGameObject(*this); }

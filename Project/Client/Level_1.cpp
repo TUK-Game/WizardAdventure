@@ -13,6 +13,8 @@
 #include <Engine/Layer.h>
 #include <Engine/MeshData.h>
 #include <Engine/UIButton.h>
+#include <Engine/Player.h>
+#include <Engine/PlayerScript.h>
 
 CLevel_1::CLevel_1()
 {
@@ -98,11 +100,12 @@ void CLevel_1::Init()
 		this->AddGameObject(light, 3, false);
 	}
 
-	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
+	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"MageRun");
 	std::vector<CGameObject*> obj = data->Instantiate();
 	CGameObject* player = new CGameObject;
 	player->SetName(L"Mage");
 	player->AddComponent(new CTransform);
+	player->AddComponent(new CPlayerScript);
 	for (auto& o : obj)
 	{
 		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
@@ -114,7 +117,7 @@ void CLevel_1::Init()
 		o->GetTransform()->SetRelativeRotation(rot);
 		//o->GetTransform()->SetRelativePosition(100, 0, 0);
 		//o->GetTransform()->SetRelativeScale(1, 1, 1);
-		o->AddComponent(new CTestPlayer);
+		//o->AddComponent(new CTestPlayer);
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(true);
 		player->AddChild(o);
