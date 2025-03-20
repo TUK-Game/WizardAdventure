@@ -111,6 +111,7 @@ enum class EState_Type
 {
 	Idle,
 	Run,
+	Dash,
 	Attack,
 	Hit,
 	Death,

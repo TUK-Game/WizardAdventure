@@ -12,14 +12,12 @@ public:
     virtual void FinalUpdate();
     virtual void Render();
 
-
-    void Move(Vec3 moveDir);
-    //void Jump();
+    void Move(Vec3 moveDir, bool shouldRotate = true);
     void Attack();
 
-    // 상태 관련
-    //PlayerState* GetCurrentState() { return m_CurrentState; }
+    void CreateStateManager();
 
+    Vec3 GetCurrentMoveDir() { return m_currentMoveDir; }
 private:
     Vec3 m_currentMoveDir;
 };

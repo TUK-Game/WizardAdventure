@@ -7,7 +7,9 @@
 
 void CPlayerRunState::Enter(CGameObject* entity)
 {
+#ifdef _DEBUG;
 	std::cout << "Entering Run State" << std::endl;
+#endif
     std::vector<CGameObject*> objs = entity->GetChild();
     for (const auto o : objs) {
         o->GetAnimator()->Play(L"RUNNING");
@@ -38,5 +40,7 @@ void CPlayerRunState::Update(CGameObject* entity, float deltaTime)
 
 void CPlayerRunState::Exit(CGameObject* entity)
 {
+#ifdef _DEBUG;
     std::cout << "Exiting Run State" << std::endl;
+#endif
 }
