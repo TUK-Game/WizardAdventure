@@ -13,10 +13,7 @@ public:
     virtual void Render();
 
 
-    //void ChangeState(PlayerState* newState);
-
-    // 기본 동작
-    //void Move(float deltaTime);
+    void Move(Vec3 moveDir);
     //void Jump();
     void Attack();
 
@@ -24,7 +21,6 @@ public:
     //PlayerState* GetCurrentState() { return m_CurrentState; }
 
 private:
-    float m_Speed;
-    float m_JumpForce;
+    Vec3 m_currentMoveDir;
 };
 
