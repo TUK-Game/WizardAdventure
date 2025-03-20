@@ -106,3 +106,13 @@ enum class ECollision_Interaction
 	Ignore,
 	Collision
 };
+
+enum class EState_Type
+{
+	Idle,
+	Run,
+	Attack,
+	Hit,
+	Death,
+	END
+};

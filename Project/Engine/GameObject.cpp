@@ -20,6 +20,7 @@ CGameObject::CGameObject()
 	, m_RenderComponent(nullptr)
 	, m_Parent(nullptr)
 	, m_LayerIndex(-1)
+	, m_StateManager(nullptr)
 {
 }
 
@@ -39,6 +40,9 @@ CGameObject::~CGameObject()
 
 	for (auto& child : m_vecChild)
 		delete child;
+
+	if (m_StateManager)
+		delete m_StateManager;
 
 	// 부모가 있을 경우 부모의 child에서 자신을 제거
 	/*if (m_Parent)

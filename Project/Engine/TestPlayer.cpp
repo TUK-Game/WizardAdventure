@@ -52,18 +52,18 @@ void CTestPlayer::Update()
 
 	GetTransform()->SetRelativePosition(Pos);
 
-	if (KEY_PUSH(EKey::Up) || KEY_PUSH(EKey::Left) || KEY_PUSH(EKey::Right) || KEY_PUSH(EKey::Down))
-	{
-		if (m_Prev == 2)
-			return;
-		m_Prev = 2;
-		GetAnimator()->Play(2);
-	}
+	//if (KEY_PUSH(EKey::Up) || KEY_PUSH(EKey::Left) || KEY_PUSH(EKey::Right) || KEY_PUSH(EKey::Down))
+	//{
+	//	if (m_Prev == 2)
+	//		return;
+	//	m_Prev = 2;
+	//	GetAnimator()->Play(2);
+	//}
 
-	if (KEY_UP(EKey::Up) || KEY_UP(EKey::Left) || KEY_UP(EKey::Right) || KEY_UP(EKey::Down))
-	{
-		m_Prev = 2;
-		GetAnimator()->Play(2);
-	}
+	//if (KEY_UP(EKey::Up) || KEY_UP(EKey::Left) || KEY_UP(EKey::Right) || KEY_UP(EKey::Down))
+	//{
+	//	m_Prev = 2;
+	//	GetAnimator()->Play(2);
+	//}
 
 }

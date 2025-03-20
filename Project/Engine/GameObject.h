@@ -12,6 +12,7 @@ class CParticleSystem;
 class CAnimator;
 class CRigidBody;
 class CUI;
+class CStateManager;
 
 class CGameObject :
     public CRef
@@ -36,6 +37,7 @@ public:
     CAnimator* GetAnimator()                            { return (CAnimator*)GetComponent(EComponent_Type::Animator); }
     CRigidBody* GetRigidBody()                          { return (CRigidBody*)GetComponent(EComponent_Type::Rigidbody); }
     CUI* GetUI()                                        { return (CUI*)GetComponent(EComponent_Type::UI); }
+    CStateManager* GetStateManager()                    { return m_StateManager; }
 
     bool GetCheckFrustum() { return m_CheckFrustum; }
     void SetStatic(bool flag) { m_Static = flag; }
@@ -60,10 +62,10 @@ public:
     virtual void Destroy();
     
 public:
-    void Begin();
-    void Update();
-    void FinalUpdate();
-    void Render();
+    virtual void Begin();
+    virtual void Update();
+    virtual void FinalUpdate();
+    virtual void Render();
 
 public:
     virtual CGameObject* Clone() override { return new CGameObject(*this); }
@@ -84,4 +86,6 @@ private:
     bool m_Static = false; // 정적/동적 오브젝트 여부 
     std::wstring m_Tag = L"Default"; // 기본 태그 (Default)
 
+protected:
+    CStateManager* m_StateManager;
 };
