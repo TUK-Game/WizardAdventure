@@ -36,6 +36,7 @@ void CAnimator::FinalUpdate()
 
 void CAnimator::SetAnimClip(const std::vector<AnimClipInfo>* animClips)
 {
+	std::cout << "My name is " << ws2s(GetOwner()->GetMeshRenderer()->GetMesh()->GetName()) << ", I have " << animClips->size() << "Animation" << '\n';
 	for (int i = 0; i < animClips->size(); ++i)
 	{
 		std::wstring name = animClips->at(i).animName;

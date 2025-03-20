@@ -15,6 +15,7 @@ public:
 
 public:
     EProjection_Type GetProjType() const    { return m_ProjectionType; }
+    ECamera_Type GetCameraType() const { return m_CameraType; }
     float GetOrthoScaleX() const            { return m_OrthoScaleX; }
     float GetAspectRatio() const            { return m_AspectRatio; }
     float GetFar() const                    { return m_Far; }
@@ -23,9 +24,11 @@ public:
     Matrix GetViewMat() const               { return m_matView; }
     int GetPriority() const                 { return m_Priority; }
     UINT GetLayerCheck()                    { return m_LayerCheck; }
+    CGameObject* GetTarget()                { return m_Target; }
 
     void SetCustomMatView(const Matrix& matView);
     void SetProjType(EProjection_Type type) { m_ProjectionType = type; }
+    void SetCameraType(ECamera_Type type)     { m_CameraType = type; }
     void SetOrthoScaleX(float sale)         { m_OrthoScaleX = sale; }
     void SetAspectRatio(float ratio)        { m_AspectRatio = ratio; }
     void SetFOV(float fov)                  { m_FOV = (fov / 180.f) * XM_PI; }
@@ -35,6 +38,7 @@ public:
     void SetHeight(float height)            { m_Height = height; }
     void SetScale(float scale)              { m_Scale = scale; }
     void SetNear(float value)               { m_Near = value; }
+    void SetTarget(CGameObject* target)     { m_Target = target; }
 
     void CheckLayer(UINT layerIndex)        { m_LayerCheck ^= (1 << layerIndex); }
     void CheckLayerAll()                    { m_LayerCheck = 0xffffffff; }
@@ -57,6 +61,7 @@ public:
 
 private:
     EProjection_Type    m_ProjectionType;
+    ECamera_Type        m_CameraType = ECamera_Type::Free;
     float               m_OrthoScaleX;  // 직교투영 가로길이
     float               m_AspectRatio;  // 종횡비
     float               m_Near = 1.f;
@@ -84,6 +89,7 @@ private:
     std::vector<CGameObject*>	m_vecParticle;
     std::vector<CGameObject*>   m_vecShadow;
     
+    class CGameObject* m_Target;
 
 public:
     static Matrix s_matView;

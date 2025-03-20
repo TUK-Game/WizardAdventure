@@ -83,6 +83,12 @@ enum class EProjection_Type
 	Orthographic,
 };
 
+enum class ECamera_Type
+{
+	Free,
+	Fixed,
+};
+
 // πÊ«‚
 enum class EDir
 {

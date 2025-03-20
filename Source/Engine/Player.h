@@ -22,5 +22,6 @@ public:
 
 private:
     Vec3 m_currentMoveDir;
+    float m_Speed = 300.f;
 };
 

@@ -5,7 +5,9 @@
 #include "Engine.h"
 #include "LevelManager.h"
 #include "ImGuiManager.h"
-
+#include "Camera.h"
+#include "GameObject.h"
+#include "Logger.h"
 CCameraScript::CCameraScript()
 	: m_Speed(1000.f)
 {
@@ -15,16 +17,44 @@ CCameraScript::~CCameraScript()
 {
 }
 
+void CCameraScript::Begin()
+{
+	m_TargetTransform = GetOwner()->GetCamera()->GetTarget()->GetTransform();
+	m_Offset = Vec3(420, 1028, -600);
+}
+
 void CCameraScript::Update()
 {
 	// 카메라 컴포넌트가 없다면 종료
 	if (!GetCamera())
 		return;
 
-	Move();
+
+	if (KEY_PUSH(EKey::Esc))
+	{
+		PostQuitMessage(0);
+	}
+
+	if (KEY_PUSH(EKey::Num1))
+	{
+		GetOwner()->GetCamera()->SetCameraType(ECamera_Type::Free);
+		GetOwner()->GetCamera()->SetFOV(90.f);
+	}
+	if (KEY_PUSH(EKey::Num2))
+	{
+		GetOwner()->GetCamera()->SetCameraType(ECamera_Type::Fixed);
+		GetOwner()->GetCamera()->SetFOV(60.f);
+		GetTransform()->SetRelativeRotation(49.f, -34.f, 0.f);
+	}
+
+
+	if (GetOwner()->GetCamera()->GetCameraType() == ECamera_Type::Fixed)
+		FixedMove();
+	else
+		FreeMove();
 }
 
-void CCameraScript::Move()
+void CCameraScript::FreeMove()
 {
 	Vec3 pos = GetTransform()->GetRelativePosition();
 
@@ -67,10 +97,10 @@ void CCameraScript::Move()
 			//obj->SetActive(false);
 		}
 	}
-
-	if (KEY_PUSH(EKey::Esc))
-	{
-		PostQuitMessage(0);
-	}
 }
-	
+
+void CCameraScript::FixedMove()
+{
+	Vec3 pos = m_TargetTransform->GetRelativePosition();
+	GetTransform()->SetRelativePosition(pos + m_Offset);
+}

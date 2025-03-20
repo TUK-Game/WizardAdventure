@@ -1,10 +1,11 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Player.h"
 #include "StateManager.h"
 #include "PlayerIdleState.h"
 #include "PlayerRunState.h"
 #include "Transform.h"
 #include <iostream>
+#include <Engine/Engine.h>
 
 CPlayer::CPlayer()
 {
@@ -51,8 +52,8 @@ void CPlayer::Move(Vec3 moveDir)
     {
         moveDir.Normalize(); 
         m_currentMoveDir = moveDir;
-        transform->SetRelativePosition(transform->GetRelativePosition() + moveDir);
-        float angle = atan2(moveDir.x, moveDir.z) * (180.0f / XM_PI); // ¶óµð¾È ¡æ µµ ´ÜÀ§ º¯È¯
+        transform->SetRelativePosition(transform->GetRelativePosition() + (moveDir * m_Speed * DELTA_TIME));
+        float angle = atan2(moveDir.x, moveDir.z) * (180.0f / XM_PI); // ë¼ë””ì•ˆ â†’ ë„ ë‹¨ìœ„ ë³€í™˜
         transform->SetRelativeRotation(0.f, angle + 180.f, 0.f);
     }
 }

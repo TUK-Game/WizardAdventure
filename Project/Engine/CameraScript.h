@@ -10,15 +10,21 @@ public:
     ~CCameraScript();
 
 public:
+    virtual void Begin() override;
     virtual void Update() override;
 
 private:
-    void Move();
+    void FreeMove();
+    void FixedMove();
 
 public:
+
     virtual CCameraScript* Clone() override { return new CCameraScript(*this); }
 
 private:
-    float   m_Speed;
+    float                 m_Speed;
+            
+    class CTransform*     m_TargetTransform;
+    Vec3                  m_Offset;
 };
 

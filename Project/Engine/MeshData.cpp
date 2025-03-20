@@ -72,7 +72,7 @@ void CMeshData::Save(const std::wstring& _strFilePath)
 	// TODO
 }
 
-std::vector<CGameObject*> CMeshData::Instantiate()
+std::vector<CGameObject*> CMeshData::Instantiate(ECollision_Channel channel)
 {
 	std::vector<CGameObject*> v;
 
@@ -84,9 +84,11 @@ std::vector<CGameObject*> CMeshData::Instantiate()
 		info.mesh->SetMeshSize(Vec3(info.boundingBoxMax - info.boundingBoxMin));
 		gameObject->GetMeshRenderer()->SetMesh(info.mesh);
 		gameObject->AddComponent(new CBoxCollider);
-		gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Wall"));
+		if(channel == ECollision_Channel::Wall)
+			gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Wall"));
+		else if(channel == ECollision_Channel::Player)
+			gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
 
-		//gameObject->GetTransform()->SetWorldMatrix(info.matrix);
 		gameObject->GetTransform()->SetRelativeRotation(-info.rotation.x, -info.rotation.y, info.rotation.z);	
 		gameObject->GetTransform()->SetRelativePosition(info.translation.x, info.translation.y, -info.translation.z);
 		gameObject->GetTransform()->SetRelativeScale(info.scale.x, info.scale.y, info.scale.z);

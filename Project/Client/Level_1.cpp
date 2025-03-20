@@ -46,18 +46,7 @@ void CLevel_1::Init()
 
 #pragma endregion
 
-	// 카메라 역할 오브젝트 생성
-	CGameObject* camera = new CGameObject;
-	camera->SetName(L"MainCamera");
-	camera->AddComponent(new CTransform);
-	camera->AddComponent(new CCamera);
-	camera->AddComponent(new CCameraScript);
-	camera->GetCamera()->SetProjType(EProjection_Type::Perspective);
-	camera->GetCamera()->SetPriority(0); // 0 : 메인 카메라로 설정	
-	camera->GetCamera()->CheckLayerAll();
-	camera->GetCamera()->CheckLayer(4);
-	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
-	this->AddGameObject(camera, 0, false);
+
 
 #pragma region UI_Camera
 	{
@@ -101,12 +90,32 @@ void CLevel_1::Init()
 	}
 
 	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
-	std::vector<CGameObject*> obj = data->Instantiate();
+	std::vector<CGameObject*> obj = data->Instantiate(ECollision_Channel::Player);
 	CPlayer* player = new CPlayer;
 	player->SetName(L"Mage");
 	player->AddComponent(new CTransform);
+	player->GetTransform()->SetRelativePosition(11240, 20, 1127);
 	player->AddComponent(new CPlayerScript);
 	for (auto& o : obj)
+	{
+		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
+		o->SetName(name);
+
+		o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
+		Vec3 rot = o->GetTransform()->GetRelativeRotation();
+		rot.x += -90;
+		o->GetTransform()->SetRelativeRotation(rot);
+		//o->GetTransform()->SetRelativePosition(2500.f, 577.f, -105.f);
+		//o->AddComponent(new CTestPlayer);
+		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+		o->SetCheckFrustum(true);
+		player->AddChild(o);
+	}
+	this->AddGameObject(player, 3, false);
+
+	CMeshData* data1 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"level_1");
+	std::vector<CGameObject*> obj1 = data1->Instantiate(ECollision_Channel::Wall);
+	for (auto& o : obj1)
 	{
 		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
 		o->SetName(name);
@@ -120,64 +129,21 @@ void CLevel_1::Init()
 		//o->AddComponent(new CTestPlayer);
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(true);
-		player->AddChild(o);
+		this->AddGameObject(o, 10, false);
 	}
-	this->AddGameObject(player, 10, false);
 
-	CGameObject* object = new CGameObject;
-	CGameObject* object2 = new CGameObject;
-	CGameObject* object3 = new CGameObject;
-	CGameObject* object4 = new CGameObject;
-
-	object4->SetName(L"Cube4");
-	object4->AddComponent(new CTransform);
-	object4->AddComponent(new CMeshRenderer);
-	//object4->AddComponent(new CBoxCollider);
-
-	//object4->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object4->GetTransform()->SetRelativeScale(10.f, 10.f, 10.f);
-	object4->GetTransform()->SetRelativeRotation(0.f, 45.f, 0.f);
-	object4->GetTransform()->SetRelativePosition(0.f, 100.f, 0.f);
-	object4->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object4->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Rock"));
-
-	object3->SetName(L"Cube3");
-	object3->AddComponent(new CTransform);
-	object3->AddComponent(new CMeshRenderer);
-	//object3->AddComponent(new CBoxCollider);
-	//object3->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object3->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
-	object3->GetTransform()->SetRelativeRotation(0.f, 45.f, 0.f);
-	object3->GetTransform()->SetRelativePosition(500.f, 0.f, 0.f);
-	object3->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object3->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Ryo"));
-	object3->AddChild(object4);
-	this->AddGameObject(object3, 3, false);
-
-
-	object2->SetName(L"Cube2");
-	object2->AddComponent(new CTransform);
-	object2->AddComponent(new CMeshRenderer);
-	//object2->AddComponent(new CBoxCollider);
-	//object2->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object2->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
-	object2->GetTransform()->SetRelativeRotation(0.f, 0.f, 0.f);
-	object2->GetTransform()->SetRelativePosition(-700.f, 0.f, 300.f);
-	object2->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object2->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Nigika"));
-	this->AddGameObject(object2, 3, false);
-
-	object->SetName(L"Cube");
-	object->AddComponent(new CTransform);
-	object->AddComponent(new CMeshRenderer);
-	//object->AddComponent(new CBoxCollider);
-	//object->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Default"));
-	object->GetTransform()->SetRelativeScale(500.f, 500.f, 500.f);
-	object->GetTransform()->SetRelativeRotation(0.f, 90.f, 90.f);
-	object->GetTransform()->SetRelativePosition(-300.f, 0.f, 300.f);
-	object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
-	this->AddGameObject(object, 3, false);
+	CGameObject* camera = new CGameObject;
+	camera->SetName(L"MainCamera");
+	camera->AddComponent(new CTransform);
+	camera->AddComponent(new CCamera);
+	camera->GetCamera()->SetTarget(player);
+	camera->AddComponent(new CCameraScript);
+	camera->GetCamera()->SetProjType(EProjection_Type::Perspective);
+	camera->GetCamera()->SetPriority(0); // 0 : main camera
+	camera->GetCamera()->CheckLayerAll();
+	camera->GetCamera()->CheckLayer(4);
+	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
+	this->AddGameObject(camera, 0, false);
 }
 
 void CLevel_1::Begin()
