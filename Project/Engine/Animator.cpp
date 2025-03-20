@@ -23,7 +23,7 @@ void CAnimator::FinalUpdate()
 {
 	m_UpdateTime += DELTA_TIME;
 
-	const AnimClipInfo& animClip = m_AnimClips->at(m_ClipIndex);
+	const AnimClipInfo& animClip = m_AnimClipsMap[m_PlayAnimName];
 	if (m_UpdateTime >= animClip.duration)
 		m_UpdateTime = 0.f;
 
@@ -36,7 +36,16 @@ void CAnimator::FinalUpdate()
 
 void CAnimator::SetAnimClip(const std::vector<AnimClipInfo>* animClips)
 {
-	m_AnimClips = animClips;
+	for (int i = 0; i < animClips->size(); ++i)
+	{
+		std::wstring name = animClips->at(i).animName;
+		RemoveNamespace(name);
+		m_AnimClipsMap[name] = animClips->at(i);
+		m_Ws2Idx[name] = i;
+
+		std::cout << "Animation Name" << i << ": " << ws2s(name) << '\n';
+	}
+	std::cout << '\n';
 }
 
 void CAnimator::PushData()
@@ -64,9 +73,18 @@ void CAnimator::PushData()
 	m_BoneFinalMatrix->PushGraphicsData(SRV_REGISTER::t7);
 }
 
-void CAnimator::Play(UINT32 idx)
+void CAnimator::Play(std::wstring animName)
 {
-	assert(idx < m_AnimClips->size());
-	m_ClipIndex = idx;
+	m_ClipIndex = m_Ws2Idx[animName];
+	assert(m_ClipIndex < m_AnimClipsMap.size());
+	m_PlayAnimName = animName;
 	m_UpdateTime = 0.f;
+}
+
+void CAnimator::RemoveNamespace(std::wstring& name)
+{
+	size_t pos = name.find(L"|");
+	if (pos != std::string::npos) {
+		name = name.substr(pos + 1);
+	}
 }

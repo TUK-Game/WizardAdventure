@@ -11,7 +11,6 @@ CPlayer::CPlayer()
     m_StateManager = new CStateManager();
     m_StateManager->AddState(new CPlayerIdleState);
     m_StateManager->AddState(new CPlayerRunState);
-    m_StateManager->ChangeState(this, EState_Type::Idle);
     m_StateManager->SetTransition(EState_Type::Idle, "Move", EState_Type::Run);
     m_StateManager->SetTransition(EState_Type::Run, "Stop", EState_Type::Idle);
 }
@@ -23,6 +22,7 @@ CPlayer::~CPlayer()
 void CPlayer::Begin()
 {
     CGameObject::Begin();
+    m_StateManager->ChangeState(this, EState_Type::Idle);
 }
 
 void CPlayer::Update()
