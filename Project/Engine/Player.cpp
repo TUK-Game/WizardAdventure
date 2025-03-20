@@ -4,17 +4,24 @@
 #include "PlayerIdleState.h"
 #include "PlayerRunState.h"
 #include "PlayerDashState.h"
+#include "PlayerAttackQState.h"
+#include "PlayerAttackWState.h"
+#include "PlayerAttackEState.h"
 #include "Transform.h"
 #include "Engine.h"
+#include "SkillManager.h"
 #include <iostream>
 
-CPlayer::CPlayer()
+CPlayer::CPlayer(EPlayerAttribute attribute)
+    : m_Attribute(attribute), m_SkillManager(new CSkillManager(attribute))
 {
     CreateStateManager();
 }
 
 CPlayer::~CPlayer()
 {
+    if (m_SkillManager)
+        delete m_SkillManager;
 }
 
 void CPlayer::Begin()
@@ -47,14 +54,28 @@ void CPlayer::CreateStateManager()
     m_StateManager->AddState(new CPlayerIdleState);
     m_StateManager->AddState(new CPlayerRunState);
     m_StateManager->AddState(new CPlayerDashState);
+    m_StateManager->AddState(new CPlayerAttackQState);
+    m_StateManager->AddState(new CPlayerAttackWState);
+    m_StateManager->AddState(new CPlayerAttackEState);
 
     m_StateManager->SetTransition(EState_Type::Idle, "Move", EState_Type::Run);
     m_StateManager->SetTransition(EState_Type::Idle, "Dash", EState_Type::Dash);
+    m_StateManager->SetTransition(EState_Type::Idle, "Attack_Q", EState_Type::Attack_Q);
+    m_StateManager->SetTransition(EState_Type::Idle, "Attack_W", EState_Type::Attack_W);
+    m_StateManager->SetTransition(EState_Type::Idle, "Attack_E", EState_Type::Attack_E);
+
 
     m_StateManager->SetTransition(EState_Type::Run, "Stop", EState_Type::Idle);
     m_StateManager->SetTransition(EState_Type::Run, "Dash", EState_Type::Dash);
+    m_StateManager->SetTransition(EState_Type::Run, "Attack_Q", EState_Type::Attack_Q);
+    m_StateManager->SetTransition(EState_Type::Run, "Attack_W", EState_Type::Attack_W);
+    m_StateManager->SetTransition(EState_Type::Run, "Attack_E", EState_Type::Attack_E);
 
     m_StateManager->SetTransition(EState_Type::Dash, "EndDash", EState_Type::Run);
+
+    m_StateManager->SetTransition(EState_Type::Attack_Q, "EndAttack", EState_Type::Idle);
+    m_StateManager->SetTransition(EState_Type::Attack_W, "EndAttack", EState_Type::Idle);
+    m_StateManager->SetTransition(EState_Type::Attack_E, "EndAttack", EState_Type::Idle);
 }
 
 void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
@@ -75,7 +96,7 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
     }
 }
 
-void CPlayer::Attack()
+void CPlayer::Attack(int skillIndex)
 {
-    std::cout << "Player is attacking!" << std::endl;
+    m_SkillManager->UseSkill(skillIndex);
 }

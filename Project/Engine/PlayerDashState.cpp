@@ -12,7 +12,7 @@ void CPlayerDashState::Enter(CGameObject* entity)
 #endif
     std::vector<CGameObject*> objs = entity->GetChild();
     for (const auto o : objs) {
-        o->GetAnimator()->Play(L"RUNNING");
+        o->GetAnimator()->Play(L"DASH");
     }
     m_ElapsedTime = 0.f;
 }

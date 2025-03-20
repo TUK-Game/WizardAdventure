@@ -16,6 +16,7 @@ public:
 	void SetBones(const std::vector<BoneInfo>* bones) { m_Bones = bones; }
 	void SetAnimClip(const std::vector<AnimClipInfo>* animClips);
 	void PushData();
+	float GetDuration() { return m_Duration; }
 
 	INT32 GetCurrentClipIndex() { return m_ClipIndex; }
 	void Play(std::wstring animName);
@@ -38,6 +39,7 @@ private:
 	INT32							m_NextFrame = 0;
 	float							m_FrameRatio = 0;
 	std::wstring					m_PlayAnimName = L"";
+	float							m_Duration = 0;
 
 	CMaterial*			m_ComputeMaterial;
 	std::shared_ptr<CStructuredBuffer>	m_BoneFinalMatrix;  // 특정 프레임의 최종 행렬

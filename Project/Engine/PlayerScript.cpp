@@ -17,9 +17,20 @@ void CPlayerScript::Update()
     {
         stateManager->HandleEvent(player, "Move");
     }
-
     if (KEY_DOWN(EKey::Space))
     {
         stateManager->HandleEvent(player, "Dash");
+    }
+    if (KEY_DOWN(EKey::Q))
+    {
+        stateManager->HandleEvent(player, "Attack_Q");
+    }
+    if (KEY_DOWN(EKey::W))
+    {
+        stateManager->HandleEvent(player, "Attack_W");
+    }
+    if (KEY_DOWN(EKey::E))
+    {
+        stateManager->HandleEvent(player, "Attack_E");
     }
 }

@@ -42,7 +42,7 @@ void CAnimator::SetAnimClip(const std::vector<AnimClipInfo>* animClips)
 		RemoveNamespace(name);
 		m_AnimClipsMap[name] = animClips->at(i);
 		m_Ws2Idx[name] = i;
-
+		
 		std::cout << "Animation Name" << i << ": " << ws2s(name) << '\n';
 	}
 	std::cout << '\n';
@@ -78,6 +78,7 @@ void CAnimator::Play(std::wstring animName)
 	m_ClipIndex = m_Ws2Idx[animName];
 	assert(m_ClipIndex < m_AnimClipsMap.size());
 	m_PlayAnimName = animName;
+	m_Duration = m_AnimClipsMap[m_PlayAnimName].duration;
 	m_UpdateTime = 0.f;
 }
 

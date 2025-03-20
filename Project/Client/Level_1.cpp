@@ -15,6 +15,7 @@
 #include <Engine/UIButton.h>
 #include <Engine/Player.h>
 #include <Engine/PlayerScript.h>
+#include <Engine/Flag.h>
 
 CLevel_1::CLevel_1()
 {
@@ -102,7 +103,7 @@ void CLevel_1::Init()
 
 	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
 	std::vector<CGameObject*> obj = data->Instantiate();
-	CPlayer* player = new CPlayer;
+	CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
 	player->SetName(L"Mage");
 	player->AddComponent(new CTransform);
 	player->AddComponent(new CPlayerScript);

@@ -10,7 +10,7 @@ class CPlayerDashState :
     EState_Type GetStateType() const override { return EState_Type::Dash; }
     
 private:
-    float m_DashSpeed = 1000.f;
+    float m_DashSpeed = 2000.f;
     float m_DashDuration = 0.2f;
     float m_ElapsedTime = 0.f;
 };

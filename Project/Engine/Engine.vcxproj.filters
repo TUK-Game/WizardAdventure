@@ -183,6 +183,15 @@
     <Filter Include="01. Manager\15. State">
       <UniqueIdentifier>{745aad43-46a0-477a-8921-3d27a040a697}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. State\PlayerState\Move">
+      <UniqueIdentifier>{8163dffe-92a5-458e-8e7c-3f8a7ba70be3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. State\PlayerState\Attack">
+      <UniqueIdentifier>{21aca640-62bd-47c6-b3c0-18ddd8b432c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\16. Skill">
+      <UniqueIdentifier>{c0669c37-668a-41ae-a9fe-84913a9e43d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -473,20 +482,32 @@
     <ClInclude Include="State.h">
       <Filter>06. State</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerIdleState.h">
-      <Filter>06. State\PlayerState</Filter>
-    </ClInclude>
     <ClInclude Include="StateManager.h">
       <Filter>01. Manager\15. State</Filter>
     </ClInclude>
     <ClInclude Include="PlayerScript.h">
       <Filter>Script</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerRunState.h">
-      <Filter>06. State\PlayerState</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerDashState.h">
-      <Filter>06. State\PlayerState</Filter>
+      <Filter>06. State\PlayerState\Move</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerIdleState.h">
+      <Filter>06. State\PlayerState\Move</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerRunState.h">
+      <Filter>06. State\PlayerState\Move</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillManager.h">
+      <Filter>01. Manager\16. Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAttackQState.h">
+      <Filter>06. State\PlayerState\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAttackEState.h">
+      <Filter>06. State\PlayerState\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAttackWState.h">
+      <Filter>06. State\PlayerState\Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -724,20 +745,32 @@
     <ClCompile Include="Player.cpp">
       <Filter>03. GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerIdleState.cpp">
-      <Filter>06. State\PlayerState</Filter>
-    </ClCompile>
     <ClCompile Include="StateManager.cpp">
       <Filter>01. Manager\15. State</Filter>
     </ClCompile>
     <ClCompile Include="PlayerScript.cpp">
       <Filter>Script</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerRunState.cpp">
-      <Filter>06. State\PlayerState</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerDashState.cpp">
-      <Filter>06. State\PlayerState</Filter>
+      <Filter>06. State\PlayerState\Move</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerIdleState.cpp">
+      <Filter>06. State\PlayerState\Move</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerRunState.cpp">
+      <Filter>06. State\PlayerState\Move</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillManager.cpp">
+      <Filter>01. Manager\16. Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAttackQState.cpp">
+      <Filter>06. State\PlayerState\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAttackEState.cpp">
+      <Filter>06. State\PlayerState\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAttackWState.cpp">
+      <Filter>06. State\PlayerState\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

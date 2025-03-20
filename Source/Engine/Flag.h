@@ -112,8 +112,17 @@ enum class EState_Type
 	Idle,
 	Run,
 	Dash,
-	Attack,
+	Attack_Q,
+	Attack_W,
+	Attack_E,
 	Hit,
 	Death,
 	END
+};
+
+enum class EPlayerAttribute
+{
+	Fire,  
+	Water,  
+	Electric 
 };
