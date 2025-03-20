@@ -234,6 +234,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerIdleState.h" />
+    <ClInclude Include="PlayerRunState.h" />
     <ClInclude Include="PlayerScript.h" />
     <ClInclude Include="Protocol.pb.h" />
     <ClInclude Include="Ref.h" />
@@ -366,6 +367,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerIdleState.cpp" />
+    <ClCompile Include="PlayerRunState.cpp" />
     <ClCompile Include="PlayerScript.cpp" />
     <ClCompile Include="Protocol.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

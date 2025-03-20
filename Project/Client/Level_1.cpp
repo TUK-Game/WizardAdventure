@@ -100,9 +100,9 @@ void CLevel_1::Init()
 		this->AddGameObject(light, 3, false);
 	}
 
-	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"MageRun");
+	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
 	std::vector<CGameObject*> obj = data->Instantiate();
-	CGameObject* player = new CGameObject;
+	CPlayer* player = new CPlayer;
 	player->SetName(L"Mage");
 	player->AddComponent(new CTransform);
 	player->AddComponent(new CPlayerScript);

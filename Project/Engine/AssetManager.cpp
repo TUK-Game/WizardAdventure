@@ -238,11 +238,8 @@ int CAssetManager::LoadMaterial()
 
 int CAssetManager::LoadMeshData()
 {
-	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/mage.jhd", L"Mage");
+	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/MageRun.jhd", L"Mage");
 	AddAsset(L"Mage", data);
-
-	data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/MageRun.jhd", L"MageRun");
-	AddAsset(L"MageRun", data);
 
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/level_1.jhd", L"map");
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Mage.jhd");

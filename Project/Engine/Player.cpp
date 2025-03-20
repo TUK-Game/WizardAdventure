@@ -13,8 +13,6 @@ CPlayer::CPlayer()
 
 CPlayer::~CPlayer()
 {
-    if (m_StateManager)
-        delete m_StateManager;
 }
 
 void CPlayer::Begin()

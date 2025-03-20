@@ -8,7 +8,7 @@ class CCamera;
 class CLight;
 class CAnimator;
 class CRigidBody;
-
+class CStateManager;
 
 class CComponent :
 	public CRef
@@ -30,6 +30,7 @@ protected:
 	CAnimator* GetAnimator()			{ return m_Owner->GetAnimator(); }
 	CLight* GetLight()					{ return m_Owner->GetLight(); }
 	CRigidBody* GetRigidBody()			{ return m_Owner->GetRigidBody(); }
+	CStateManager* GetStateManager()	{ return m_Owner->GetStateManager(); }
 
 public:
 	virtual void Begin() {};

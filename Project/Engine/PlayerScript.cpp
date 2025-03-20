@@ -7,13 +7,12 @@
 
 void CPlayerScript::Update()
 {
-    //CPlayer* player = dynamic_cast<CPlayer*>(GetOwner());
-    //if (!player) return;
-
-    //CStateManager* stateManager = player->GetStateMachine();
-    //if (!stateManager) return;
+    CPlayer* player = (CPlayer*)GetOwner();
+    CStateManager* stateManager = player->GetStateManager();
+    if (!stateManager) return;
 
     if (KEY_PUSH(EKey::Up))
         std::cout << "KeyUp" << std::endl;
-        //stateManager->ChangeState(player, EState_Type::Run);
+        stateManager->ChangeState(player, EState_Type::Run);
+
 }

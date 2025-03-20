@@ -488,6 +488,9 @@
     <ClInclude Include="PlayerScript.h">
       <Filter>Script</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerRunState.h">
+      <Filter>06. State\PlayerState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -738,6 +741,9 @@
     </ClCompile>
     <ClCompile Include="PlayerScript.cpp">
       <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerRunState.cpp">
+      <Filter>06. State\PlayerState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
