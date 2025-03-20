@@ -19,12 +19,10 @@
 #include "ComputeShader.h"
 #include "ParticleSystem.h"
 #include "RigidBody.h"
-#include "TestDragon.h"
 #include "UI.h"
 #include "UIButton.h"
 #include <iostream>
 #include "Animator.h"
-#include "TestPlayer.h"
 
 CLevelManager::CLevelManager()
 	: m_CurLevel(nullptr)

@@ -344,9 +344,6 @@
     <ClInclude Include="InstancingManager.h">
       <Filter>01. Manager\11. Inctancing</Filter>
     </ClInclude>
-    <ClInclude Include="TestDragon.h">
-      <Filter>Script</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3rdParty\ImGui\imgui_impl_dx12.h">
       <Filter>IMGUI</Filter>
     </ClInclude>
@@ -376,9 +373,6 @@
     </ClInclude>
     <ClInclude Include="JHDLoader.h">
       <Filter>05. Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="TestPlayer.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>05. Asset\05. Sound</Filter>
@@ -637,9 +631,6 @@
     <ClCompile Include="InstancingManager.cpp">
       <Filter>01. Manager\11. Inctancing</Filter>
     </ClCompile>
-    <ClCompile Include="TestDragon.cpp">
-      <Filter>Script</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3rdParty\ImGui\imgui_impl_dx12.cpp">
       <Filter>IMGUI</Filter>
     </ClCompile>
@@ -666,9 +657,6 @@
     </ClCompile>
     <ClCompile Include="JHDLoader.cpp">
       <Filter>05. Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="TestPlayer.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>05. Asset\05. Sound</Filter>
