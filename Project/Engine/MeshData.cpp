@@ -83,13 +83,14 @@ std::vector<CGameObject*> CMeshData::Instantiate(ECollision_Channel channel)
 		gameObject->GetTransform()->SetRelativePosition(info.translation.x, info.translation.y, -info.translation.z);
 		gameObject->GetTransform()->SetRelativeRotation(-info.rotation.x -90.f, -info.rotation.y, info.rotation.z);
 		gameObject->GetTransform()->SetRelativeScale(info.scale.x, info.scale.y, info.scale.z);
+		gameObject->GetTransform()->FinalUpdate();
 
 		gameObject->AddComponent(new CMeshRenderer);
 		info.mesh->SetMeshSize(Vec3(info.boundingBoxMax - info.boundingBoxMin));
 		gameObject->GetMeshRenderer()->SetMesh(info.mesh);
 
 		float posy = gameObject->GetTransform()->GetWorldPosition().y;
-		if (gameObject->GetTransform()->GetWorldPosition().y >= -20.f)
+		//if (gameObject->GetTransform()->GetWorldPosition().y >= -20.f)
 		{
 			if (channel == ECollision_Channel::Wall)
 			{

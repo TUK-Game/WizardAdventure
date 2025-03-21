@@ -189,6 +189,10 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Particle"));
 	AddAsset(L"Particle", material);
 
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"DebugCollision"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Kita"));
+	AddAsset(L"DC", material);
 	// LIGHT
 	{
 		material = new CMaterial;
@@ -263,6 +267,11 @@ int CAssetManager::LoadGraphicShader()
 	std::wstring name = L"Forward.hlsl";
 	LoadShader(shader, name);
 	AddAsset(L"Forward", shader);
+
+	shader = new CGraphicShader;
+	name = L"Deferred.hlsl";
+	LoadShader(shader, name, {SHADER_TYPE::DEFERRED, RASTERIZER_TYPE::WIREFRAME });
+	AddAsset(L"DebugCollision", shader);
 
 	shader = new CGraphicShader;
 	name = L"Skybox.hlsl";

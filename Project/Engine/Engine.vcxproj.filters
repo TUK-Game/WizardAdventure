@@ -485,6 +485,9 @@
     <ClInclude Include="PlayerRunState.h">
       <Filter>06. State\PlayerState</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionObject.h">
+      <Filter>03. GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -732,6 +735,9 @@
     </ClCompile>
     <ClCompile Include="PlayerRunState.cpp">
       <Filter>06. State\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionObject.cpp">
+      <Filter>03. GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

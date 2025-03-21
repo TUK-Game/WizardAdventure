@@ -17,6 +17,7 @@
 #include <Engine/PlayerScript.h>
 #include <Engine/BoxCollider.h>
 #include <Engine/CollisionManager.h>
+#include <Engine/CollisionObject.h>
 
 CLevel_1::CLevel_1()
 {
@@ -102,16 +103,12 @@ void CLevel_1::Init()
 	player->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0,0,0), Vec3(0, 100, 0));
 	player->AddComponent(new CPlayerScript);
 
-	CGameObject* ob = new CGameObject;
-	ob->SetName(L"Mage1");
-	ob->AddComponent(new CTransform);
-	ob->AddComponent(new CMeshRenderer);
-	ob->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-	ob->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
-	ob->GetTransform()->SetRelativePosition(0, 100, 0);
-	ob->GetTransform()->SetRelativeScale(100, 200, 24);
-	//ob->GetTransform()->SetRelativePosition(50.f, 65.f, 12.f);
-	player->AddChild(ob);
+#ifdef COLLISION_MESH_DRAW
+	CCollisionObject* co = new CCollisionObject();
+	co->InitToChild(player, Vec3(0, 100, 0), Vec3(100, 200, 24));
+	player->AddChild(co);
+#endif
+
 	for (auto& o : obj)
 	{
 		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
@@ -145,16 +142,13 @@ void CLevel_1::Init()
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(true);
 		this->AddGameObject(o, 10, false);
-		CGameObject* ob = new CGameObject;
-		ob->SetName(L"Mage1" + m);
-		ob->AddComponent(new CTransform);
-		ob->AddComponent(new CMeshRenderer);
-		ob->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-		ob->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
-		ob->GetTransform()->SetRelativeScale(o->GetMeshRenderer()->GetMesh()->GetMeshSize());
-		ob->GetTransform()->SetRelativePosition(o->GetTransform()->GetRelativePosition());
-		//ob->GetTransform()->SetRelativeRotation(o->GetTransform()->GetRelativeRotation());
-		this->AddGameObject(ob, 10, false);
+
+#ifdef COLLISION_MESH_DRAW
+		CCollisionObject* co = new CCollisionObject();
+		co->Init(o);
+		this->AddGameObject(co, 10, false);
+#endif
+
 	}
 
 	CGameObject* camera = new CGameObject;
