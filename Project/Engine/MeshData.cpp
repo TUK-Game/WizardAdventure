@@ -77,23 +77,29 @@ std::vector<CGameObject*> CMeshData::Instantiate(ECollision_Channel channel)
 	std::vector<CGameObject*> v;
 
 	for (MeshRenderInfo& info : _meshRenders)
-	{	
-		CGameObject* gameObject = new CGameObject;	
+	{
+		CGameObject* gameObject = new CGameObject;
 		gameObject->AddComponent(new CTransform);
+		gameObject->GetTransform()->SetRelativePosition(info.translation.x, info.translation.y, -info.translation.z);
+		gameObject->GetTransform()->SetRelativeRotation(-info.rotation.x -90.f, -info.rotation.y, info.rotation.z);
+		gameObject->GetTransform()->SetRelativeScale(info.scale.x, info.scale.y, info.scale.z);
+
 		gameObject->AddComponent(new CMeshRenderer);
 		info.mesh->SetMeshSize(Vec3(info.boundingBoxMax - info.boundingBoxMin));
 		gameObject->GetMeshRenderer()->SetMesh(info.mesh);
-		gameObject->AddComponent(new CBoxCollider);
-		if(channel == ECollision_Channel::Wall)
-			gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Wall"));
-		else if(channel == ECollision_Channel::Player)
-			gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
 
-		gameObject->GetTransform()->SetRelativeRotation(-info.rotation.x, -info.rotation.y, info.rotation.z);	
-		gameObject->GetTransform()->SetRelativePosition(info.translation.x, info.translation.y, -info.translation.z);
-		gameObject->GetTransform()->SetRelativeScale(info.scale.x, info.scale.y, info.scale.z);
-		
-		gameObject->GetCollider()->SetMaxMinPos(info.centerPos, info.boundingBoxMax, info.boundingBoxMin);
+		float posy = gameObject->GetTransform()->GetWorldPosition().y;
+		if (gameObject->GetTransform()->GetWorldPosition().y >= -20.f)
+		{
+			if (channel == ECollision_Channel::Wall)
+			{
+				gameObject->AddComponent(new CBoxCollider);
+				gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Wall"));
+				//else if (channel == ECollision_Channel::Player)
+				//	gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
+				gameObject->GetCollider()->SetMaxMinPos(info.centerPos, info.boundingBoxMax, info.boundingBoxMin);
+			}
+		}
 
 		for (UINT32 i = 0; i < info.materials.size(); i++)
 			gameObject->GetMeshRenderer()->SetMaterial(info.materials[i], i);

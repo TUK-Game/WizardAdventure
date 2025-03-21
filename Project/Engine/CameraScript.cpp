@@ -95,6 +95,7 @@ void CCameraScript::FreeMove()
 		{
 			CImGuiManager::GetInst()->SetSelectedObject(obj);
 			//obj->SetActive(false);
+			std::cout << "My name is " << ws2s(obj->GetName()) << '\n';
 		}
 	}
 }

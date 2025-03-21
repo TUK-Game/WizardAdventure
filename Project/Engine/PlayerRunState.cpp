@@ -10,7 +10,8 @@ void CPlayerRunState::Enter(CGameObject* entity)
 	std::cout << "Entering Run State" << std::endl;
     std::vector<CGameObject*> objs = entity->GetChild();
     for (const auto o : objs) {
-        o->GetAnimator()->Play(L"RUNNING");
+        if(o->GetAnimator())
+            o->GetAnimator()->Play(L"RUNNING");
     }
 }
 

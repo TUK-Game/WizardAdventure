@@ -15,6 +15,8 @@
 #include <Engine/UIButton.h>
 #include <Engine/Player.h>
 #include <Engine/PlayerScript.h>
+#include <Engine/BoxCollider.h>
+#include <Engine/CollisionManager.h>
 
 CLevel_1::CLevel_1()
 {
@@ -94,8 +96,22 @@ void CLevel_1::Init()
 	CPlayer* player = new CPlayer;
 	player->SetName(L"Mage");
 	player->AddComponent(new CTransform);
+	player->AddComponent(new CBoxCollider);
+	player->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
 	player->GetTransform()->SetRelativePosition(11240, 20, 1127);
+	player->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0,0,0), Vec3(0, 100, 0));
 	player->AddComponent(new CPlayerScript);
+
+	CGameObject* ob = new CGameObject;
+	ob->SetName(L"Mage1");
+	ob->AddComponent(new CTransform);
+	ob->AddComponent(new CMeshRenderer);
+	ob->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+	ob->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+	ob->GetTransform()->SetRelativePosition(0, 100, 0);
+	ob->GetTransform()->SetRelativeScale(100, 200, 24);
+	//ob->GetTransform()->SetRelativePosition(50.f, 65.f, 12.f);
+	player->AddChild(ob);
 	for (auto& o : obj)
 	{
 		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
@@ -103,7 +119,6 @@ void CLevel_1::Init()
 
 		o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		rot.x += -90;
 		o->GetTransform()->SetRelativeRotation(rot);
 		//o->GetTransform()->SetRelativePosition(2500.f, 577.f, -105.f);
 		//o->AddComponent(new CTestPlayer);
@@ -115,14 +130,14 @@ void CLevel_1::Init()
 
 	CMeshData* data1 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"level_1");
 	std::vector<CGameObject*> obj1 = data1->Instantiate(ECollision_Channel::Wall);
+	int m = 0;
 	for (auto& o : obj1)
 	{
-		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
+		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName() + std::to_wstring(m++);
 		o->SetName(name);
 
 		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		rot.x += -90;
 		o->GetTransform()->SetRelativeRotation(rot);
 		//o->GetTransform()->SetRelativePosition(100, 0, 0);
 		//o->GetTransform()->SetRelativeScale(1, 1, 1);
@@ -130,6 +145,16 @@ void CLevel_1::Init()
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(true);
 		this->AddGameObject(o, 10, false);
+		CGameObject* ob = new CGameObject;
+		ob->SetName(L"Mage1" + m);
+		ob->AddComponent(new CTransform);
+		ob->AddComponent(new CMeshRenderer);
+		ob->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+		ob->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+		ob->GetTransform()->SetRelativeScale(o->GetMeshRenderer()->GetMesh()->GetMeshSize());
+		ob->GetTransform()->SetRelativePosition(o->GetTransform()->GetRelativePosition());
+		//ob->GetTransform()->SetRelativeRotation(o->GetTransform()->GetRelativeRotation());
+		this->AddGameObject(ob, 10, false);
 	}
 
 	CGameObject* camera = new CGameObject;

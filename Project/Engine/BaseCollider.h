@@ -18,12 +18,14 @@ public:
 	ECollider_Type GetColliderType() { return m_ColliderType; }
 	const CollisionProfile* GetProfile() const { return m_profile; }
 	
+	void SetOffset(Vec3 offset) { m_Offset = offset; }
 	void SetProfile(CollisionProfile* profile) { m_profile = profile; }
 	void CreateCollisionProfile(std::string name, ECollision_Channel channel);
 
 public:
 	virtual bool Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance) = 0;
-	virtual void SetMaxMinPos(Vec4 centerPos, Vec3 maxPos, Vec3 minPos) {}
+	virtual void SetMaxMinPos(Vec4 centerPos, Vec3 maxPos, Vec3 minPos, Vec3 offset = Vec3(0.f, 0.f, 0.f)) {}
+	virtual void SetMaxMinPos(Vec3 centerPos, Vec3 maxPos, Vec3 minPos, Vec3 offset = Vec3(0.f, 0.f, 0.f)) {}
 	virtual bool IsFrustum(class CFrustum frustum) = 0;
 	virtual bool Collision(CBaseCollider* dest) { return false; }
 
@@ -42,5 +44,7 @@ protected:
 
 	CollisionProfile* m_profile;
 	std::list<CBaseCollider*> m_collisionList;
+
+	Vec3 m_Offset;
 };
 

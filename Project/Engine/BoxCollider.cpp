@@ -25,8 +25,15 @@ bool CBoxCollider::Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance)
 bool CBoxCollider::IsFrustum(CFrustum frustum)
 {
 	if (!frustum.IsInFrustum(m_BoundingBox))
+	{
+		m_IsFrustum = true;
 		return false;
-	return true;
+	}
+	else
+	{
+		m_IsFrustum = false;
+		return true;
+	}
 }
 
 bool CBoxCollider::Collision(CBaseCollider* dest)
@@ -43,7 +50,7 @@ bool CBoxCollider::Collision(CBaseCollider* dest)
 	return false;
 }
 
-void CBoxCollider::SetMaxMinPos(Vec4 centerPos, Vec3 maxPos, Vec3 minPos)
+void CBoxCollider::SetMaxMinPos(Vec4 centerPos, Vec3 maxPos, Vec3 minPos, Vec3 offset)
 {
 	Vec3 pos = GetTransform()->GetRelativePosition();
 	center = Vec3(pos.x, pos.y, pos.z);
@@ -52,15 +59,29 @@ void CBoxCollider::SetMaxMinPos(Vec4 centerPos, Vec3 maxPos, Vec3 minPos)
 	size = (maxPos - minPos) / 2;
 }
 
+void CBoxCollider::SetMaxMinPos(Vec3 centerPos, Vec3 maxPos, Vec3 minPos, Vec3 offset)
+{
+	center = Vec3(centerPos.x, centerPos.y, centerPos.z);
+	m_BoundingBox.Center = Vec3(centerPos.x, centerPos.y, centerPos.z);
+	m_BoundingBox.Extents = (maxPos - minPos) / 2;
+	m_Offset = offset;
+	size = (maxPos - minPos) / 2;
+
+}
+
 void CBoxCollider::FinalUpdate()	
 {
 	if (GetProfile()->channel == ECollision_Channel::Wall)
+	{
+		if(!m_IsFrustum)
+			CLevelManager::GetInst()->GetCurrentLevel()->GetLevelCollision()->AddCollider(this);
 		return;
+	}
 
-	m_BoundingBox.Center = GetOwner()->GetTransform()->GetWorldPosition();
+	m_BoundingBox.Center = GetOwner()->GetTransform()->GetWorldPosition() + m_Offset;
 
-	Vec3 scale = GetOwner()->GetMeshRenderer()->GetMesh()->GetMeshSize() * (GetOwner()->GetTransform()->GetRelativeScale());
-	m_BoundingBox.Extents = XMFLOAT3(scale.x, scale.y, scale.z);
+	//Vec3 scale = GetOwner()->GetMeshRenderer()->GetMesh()->GetMeshSize() * (GetOwner()->GetTransform()->GetRelativeScale());
+	//m_BoundingBox.Extents = XMFLOAT3(scale.x, scale.y, scale.z);
 
 	CLevelManager::GetInst()->GetCurrentLevel()->GetLevelCollision()->AddCollider(this);
 }

@@ -62,3 +62,8 @@ void CPlayer::Attack()
 {
     std::cout << "Player is attacking!" << std::endl;
 }
+
+void CPlayer::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
+{
+    std::cout << "아야" << std::endl;
+}

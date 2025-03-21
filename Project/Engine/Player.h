@@ -20,8 +20,11 @@ public:
     // 상태 관련
     //PlayerState* GetCurrentState() { return m_CurrentState; }
 
+public:
+    virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
+
 private:
     Vec3 m_currentMoveDir;
-    float m_Speed = 300.f;
+    float m_Speed = 1000.f;
 };
 
