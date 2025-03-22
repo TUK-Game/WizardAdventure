@@ -24,10 +24,12 @@ void CRenderManager::Render()
 	PushLightData();
 
 	RenderShadow();
-	
+
 	RenderDeferred();
 	
 	RenderLights();
+
+	//RenderMap();
 
 	RenderFinal();
 
@@ -60,6 +62,9 @@ void CRenderManager::ClearRTV()
 
 	// Light
 	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->ClearRenderTargetView();
+
+	// Map
+	//CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::MAP)->ClearRenderTargetView();
 }
 
 void CRenderManager::RenderShadow()
@@ -77,6 +82,17 @@ void CRenderManager::RenderShadow()
 	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->WaitTargetToResource();
 }
 
+void CRenderManager::RenderMap()
+{
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::MAP)->OMSetRenderTargets();
+
+	CCamera* mapCamera = m_vecCamera[2];
+	mapCamera->SortObject();
+	mapCamera->Render();
+
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::MAP)->WaitTargetToResource();
+}
+
 void CRenderManager::RenderDeferred()
 {
 	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->OMSetRenderTargets();
@@ -85,7 +101,6 @@ void CRenderManager::RenderDeferred()
 	mainCamera->SortObject();
 	mainCamera->RenderDeferred();
 	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->WaitTargetToResource();
-
 }
 
 void CRenderManager::RenderLights()
@@ -120,7 +135,7 @@ void CRenderManager::RenderForward()
 
 	for (auto& camera : m_vecCamera)
 	{
-		if (camera == mainCamera)
+		if (camera == mainCamera /*|| m_vecCamera[2] == camera*/)
 			continue;
 
 		camera->SortObject();

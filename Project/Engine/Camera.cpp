@@ -86,26 +86,7 @@ void CCamera::Render()
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-	SortObject();
-
-	PushLightData();
-
-	// Deferred
-	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->OMSetRenderTargets();
-	for (auto& object : m_vecDeferred)
-	{
-		object->Render();
-	}
-
-	// Light OMSet
-
-	// Swapchain
-	INT8 backIndex = CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex();
-	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->OMSetRenderTargets(1, backIndex);
-	for (auto& object : m_vecForward)
-	{
-		object->Render();
-	}
+	CInstancingManager::GetInst()->Render(m_vecDeferred);
 }
 
 
@@ -115,6 +96,7 @@ void CCamera::RenderDeferred()
 	s_matProjection = m_matProjection;
 
 	CInstancingManager::GetInst()->Render(m_vecDeferred);
+	CInstancingManager::GetInst()->ClearBuffer();
 }
 
 void CCamera::RenderForward()

@@ -171,4 +171,17 @@ void CDevice::CreateRenderTargetGroups()
 		m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::LIGHTING)] = std::make_shared<CRenderTargetGroup>();
 		m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::LIGHTING)]->Create(RENDER_TARGET_GROUP_TYPE::LIGHTING, rtVec, dsTexture);
 	}
+
+	// Map Group
+	//{
+	//	std::vector<RenderTarget> rtVec(RENDER_TARGET_MAP_GROUP_MEMBER_COUNT);
+
+	//	rtVec[0].target = CAssetManager::GetInst()->CreateTexture(L"MiniMapTarget",
+	//		DXGI_FORMAT_R8G8B8A8_UNORM, CEngine::GetInst()->GetWindowInfo().Width, CEngine::GetInst()->GetWindowInfo().Height,
+	//		CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+	//		D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+
+	//	m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::MAP)] = std::make_shared<CRenderTargetGroup>();
+	//	m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::MAP)]->Create(RENDER_TARGET_GROUP_TYPE::MAP, rtVec, dsTexture);
+	//}
 }

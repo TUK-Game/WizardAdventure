@@ -242,7 +242,7 @@ int CAssetManager::LoadMaterial()
 
 int CAssetManager::LoadMeshData()
 {
-	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Mage.jhd");
+	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Crab.jhd");
 	AddAsset(L"Mage", data);
 
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Mage.jhd");
@@ -282,6 +282,11 @@ int CAssetManager::LoadGraphicShader()
 	name = L"Deferred.hlsl";
 	LoadShader(shader, name, { SHADER_TYPE::DEFERRED });
 	AddAsset(L"Deferred", shader);
+
+	shader = new CGraphicShader;
+	name = L"Deferred.hlsl";
+	LoadShader(shader, name, { SHADER_TYPE::DEFERRED, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::DEFAULT }, "VS_Main", "PS_Main");
+	AddAsset(L"DeferredMap", shader);
 
 	shader = new CGraphicShader;
 	name = L"particle.hlsl";
