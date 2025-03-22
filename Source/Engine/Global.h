@@ -199,6 +199,14 @@ struct AnimFrameParams
 	Vec4	translation;
 };
 
+struct MonsterStat
+{
+	int maxHP;
+	int atk;
+	float moveSpeed;
+	float visionRange;
+};
+
 #include <shlobj.h>
 #include <filesystem>
 static std::wstring GetLatestWinPixGpuCapturerPath_Cpp17()

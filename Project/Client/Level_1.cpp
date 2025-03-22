@@ -16,6 +16,7 @@
 #include <Engine/Player.h>
 #include <Engine/PlayerScript.h>
 #include <Engine/Flag.h>
+#include <Engine/Monster.h>
 
 CLevel_1::CLevel_1()
 {
@@ -94,36 +95,64 @@ void CLevel_1::Init()
 		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
-		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.0f));
+		light->GetLight()->SetAmbient(Vec3(0.7f, 0.7f, 0.7f));
 		light->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
 		this->AddGameObject(light, 3, false);
 	}
 
-	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
-	std::vector<CGameObject*> obj = data->Instantiate();
-	CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
-	player->SetName(L"Mage");
-	player->AddComponent(new CTransform);
-	player->AddComponent(new CPlayerScript);
-	for (auto& o : obj)
 	{
-		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
-		o->SetName(name);
+		CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
+		std::vector<CGameObject*> obj = data->Instantiate();
+		CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+		player->SetName(L"Mage");
+		player->AddComponent(new CTransform);
+		player->AddComponent(new CPlayerScript);
+		for (auto& o : obj)
+		{
+			std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
+			o->SetName(name);
 
-		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
-		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		rot.x += -90;
-		o->GetTransform()->SetRelativeRotation(rot);
-		//o->GetTransform()->SetRelativePosition(100, 0, 0);
-		//o->GetTransform()->SetRelativeScale(1, 1, 1);
-		//o->AddComponent(new CTestPlayer);
-		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		o->SetCheckFrustum(true);
-		player->AddChild(o);
+			//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+			Vec3 rot = o->GetTransform()->GetRelativeRotation();
+			rot.x += -90;
+			o->GetTransform()->SetRelativeRotation(rot);
+			//o->GetTransform()->SetRelativePosition(100, 0, 0);
+			//o->GetTransform()->SetRelativeScale(1, 1, 1);
+			//o->AddComponent(new CTestPlayer);
+			//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+			o->SetCheckFrustum(true);
+			player->AddChild(o);
+		}
+		this->AddGameObject(player, 10, false);
+		CLevelManager::GetInst()->SetPlayer(player);
 	}
-	this->AddGameObject(player, 10, false);
+
+	{
+		//CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Monster");
+		//std::vector<CGameObject*> obj2 = data2->Instantiate();
+		CMonster* monster = new CMonster();
+		monster->SetName(L"Monster");
+		monster->AddComponent(new CTransform);
+		monster->AddComponent(new CMeshRenderer);
+		monster->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
+		monster->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
+		monster->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+		monster->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Rock"));
+		/*for (auto& o : obj2)
+		{
+			std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
+			o->SetName(name);
+			Vec3 rot = o->GetTransform()->GetRelativeRotation();
+			rot.x += -90;
+			o->GetTransform()->SetRelativeRotation(rot);
+			o->SetCheckFrustum(true);
+			monster->AddChild(o);
+		}*/
+		this->AddGameObject(monster, 10, false);
+	}
+
 
 	CGameObject* object = new CGameObject;
 	CGameObject* object2 = new CGameObject;

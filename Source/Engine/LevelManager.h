@@ -1,6 +1,7 @@
 #pragma once
 
 class CLevel;
+class CGameObject;
 
 
 class CLevelManager
@@ -16,6 +17,8 @@ public:
 	int Init();
 	void Progress();
 	void ChangeLevel(CLevel* newLevel);
+	CGameObject* GetPlayer() { return m_Player; }
+	void SetPlayer(CGameObject* player) { m_Player = player; }
 
 private:
 	void CleanUpCurrentLevel();
@@ -26,5 +29,6 @@ public:
 private:
 	class CLevel* m_CurLevel;
 	float m_timer = 0.f;
+	class CGameObject* m_Player;
 };
 

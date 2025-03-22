@@ -55,6 +55,7 @@ enum class EComponent_Type
 	Rigidbody,
 	UI,
 	UIButton,
+	MonsterAI,
 	
 	// Rendering Component
 	MeshRenderer,
@@ -112,9 +113,11 @@ enum class EState_Type
 	Idle,
 	Run,
 	Dash,
+	Attack,
 	Attack_Q,
 	Attack_W,
 	Attack_E,
+	Chase,
 	Hit,
 	Death,
 	END
@@ -125,4 +128,9 @@ enum class EPlayerAttribute
 	Fire,  
 	Water,  
 	Electric 
+};
+
+enum class EMonsterType
+{
+	Slime
 };

@@ -13,6 +13,7 @@ class CAnimator;
 class CRigidBody;
 class CUI;
 class CStateManager;
+class CMonsterAI;
 
 class CGameObject :
     public CRef
@@ -37,6 +38,7 @@ public:
     CAnimator* GetAnimator()                            { return (CAnimator*)GetComponent(EComponent_Type::Animator); }
     CRigidBody* GetRigidBody()                          { return (CRigidBody*)GetComponent(EComponent_Type::Rigidbody); }
     CUI* GetUI()                                        { return (CUI*)GetComponent(EComponent_Type::UI); }
+    CMonsterAI* GetMonsterAI()                          { return (CMonsterAI*)GetComponent(EComponent_Type::MonsterAI); }
     CStateManager* GetStateManager()                    { return m_StateManager; }
 
     bool GetCheckFrustum() { return m_CheckFrustum; }

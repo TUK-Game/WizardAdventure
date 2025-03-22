@@ -192,6 +192,24 @@
     <Filter Include="01. Manager\16. Skill">
       <UniqueIdentifier>{c0669c37-668a-41ae-a9fe-84913a9e43d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. GameObject\Monster">
+      <UniqueIdentifier>{e6a88a08-5671-468a-b070-ad8b12656141}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\Player">
+      <UniqueIdentifier>{354355c8-cf7f-42b6-988c-0a5f60d6ba63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\10. AI">
+      <UniqueIdentifier>{57173f00-e481-4cea-9eb7-919185495e65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. State\MonsterState">
+      <UniqueIdentifier>{e2edb8de-bbd6-4a5e-a178-b2b794d3060b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. State\MonsterState\Attack">
+      <UniqueIdentifier>{1e12d49b-ce25-4b75-bd5e-ed9422d50220}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. State\MonsterState\Move">
+      <UniqueIdentifier>{fe03a543-94b3-4581-85db-0b097fb97b50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -476,9 +494,6 @@
     <ClInclude Include="SaveLoadManager.h">
       <Filter>01. Manager\14. Save/Load</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>03. GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="State.h">
       <Filter>06. State</Filter>
     </ClInclude>
@@ -508,6 +523,21 @@
     </ClInclude>
     <ClInclude Include="PlayerAttackWState.h">
       <Filter>06. State\PlayerState\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>03. GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>03. GameObject\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterAI.h">
+      <Filter>04. Component\10. AI</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterIdleState.h">
+      <Filter>06. State\MonsterState\Move</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterChaseState.h">
+      <Filter>06. State\MonsterState\Move</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -742,9 +772,6 @@
     <ClCompile Include="SaveLoadManager.cpp">
       <Filter>01. Manager\14. Save/Load</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>03. GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="StateManager.cpp">
       <Filter>01. Manager\15. State</Filter>
     </ClCompile>
@@ -771,6 +798,21 @@
     </ClCompile>
     <ClCompile Include="PlayerAttackWState.cpp">
       <Filter>06. State\PlayerState\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>03. GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>03. GameObject\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterAI.cpp">
+      <Filter>04. Component\10. AI</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterIdleState.cpp">
+      <Filter>06. State\MonsterState\Move</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterChaseState.cpp">
+      <Filter>06. State\MonsterState\Move</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

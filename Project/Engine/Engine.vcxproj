@@ -226,6 +226,10 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshData.h" />
     <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="MonsterAI.h" />
+    <ClInclude Include="MonsterIdleState.h" />
+    <ClInclude Include="MonsterChaseState.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="OrientedBoxCollider.h" />
     <ClInclude Include="PacketFlag.h" />
@@ -358,6 +362,10 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="MonsterAI.cpp" />
+    <ClCompile Include="MonsterIdleState.cpp" />
+    <ClCompile Include="MonsterChaseState.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OrientedBoxCollider.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
