@@ -137,6 +137,9 @@ int CAssetManager::LoadTexture()
 	tex->Init(path / L"Rock.png");
 	AddAsset(L"Rock", tex);
 
+	tex = new CTexture;
+	tex->Init(path / L"Map.jpg");
+	AddAsset(L"Map", tex);
 	return S_OK;
 }
 
@@ -151,6 +154,11 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Mushroom"));
 	AddAsset(L"Mushroom", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Map"));
+	AddAsset(L"Map", material);
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));

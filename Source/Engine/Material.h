@@ -19,7 +19,7 @@ public:
 	CSharedPtr<CComputeShader> GetComputeShader() { return m_ComputeShader; }
 	
 	int GetInt(unsigned char index) { return m_Params.IntParams[index]; }
-
+	CTexture* GetTexture(int index) { return m_arrTexture[index]; }
 
 	void SetGraphicsShader(CSharedPtr<CGraphicShader> shader) { m_GraphicsShader = shader; }
 	void SetComputeShader(CSharedPtr<CComputeShader> shader) { m_ComputeShader = shader; }

@@ -82,13 +82,13 @@ void CRenderManager::RenderShadow()
 	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->WaitTargetToResource();
 }
 
-void CRenderManager::RenderMap()
+void CRenderManager::RenderMap(CGameObject* object)
 {
 	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::MAP)->OMSetRenderTargets();
 
 	CCamera* mapCamera = m_vecCamera[2];
 	mapCamera->SortObject();
-	mapCamera->RenderMap();
+	mapCamera->RenderMap(object);
 
 	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::MAP)->WaitTargetToResource();
 }

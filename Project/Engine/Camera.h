@@ -46,7 +46,7 @@ public:
 
 public:
 	virtual void FinalUpdate() override;
-	void RenderMap();
+	void RenderMap(CGameObject* object);
     void RenderDeferred();
     void RenderForward();
     void RenderShadow();

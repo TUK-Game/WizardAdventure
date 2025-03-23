@@ -19,11 +19,6 @@ int CDevice::Init()
 	m_Viewport = { 0, 0, static_cast<FLOAT>(CEngine::GetInst()->GetWindowInfo().Width), static_cast<FLOAT>(CEngine::GetInst()->GetWindowInfo().Height), 0.0f, 1.0f};
 	m_ScissorRect = CD3DX12_RECT(0, 0, CEngine::GetInst()->GetWindowInfo().Width, CEngine::GetInst()->GetWindowInfo().Height);
 
-#ifdef _DEBUG
-	::D3D12GetDebugInterface(IID_PPV_ARGS(&m_DebugController));
-	m_DebugController->EnableDebugLayer();
-#endif
-
 	::CreateDXGIFactory(IID_PPV_ARGS(&m_DXGI));
 	::D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_Device));
 
@@ -64,6 +59,12 @@ int CDevice::Init()
 	CreateRenderTargetGroups();
 
 	CImGuiManager::GetInst()->Init();
+
+
+	//ComPtr<ID3D12InfoQueue> infoQueue;
+	//m_Device->QueryInterface(IID_PPV_ARGS(&infoQueue));
+	//infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, TRUE);
+	
 
 	return S_OK;
 }
@@ -177,7 +178,7 @@ void CDevice::CreateRenderTargetGroups()
 		std::vector<RenderTarget> rtVec(RENDER_TARGET_MAP_GROUP_MEMBER_COUNT);
 
 		rtVec[0].target = CAssetManager::GetInst()->CreateTexture(L"MiniMapTarget",
-			DXGI_FORMAT_R8G8B8A8_UNORM, CEngine::GetInst()->GetWindowInfo().Width, CEngine::GetInst()->GetWindowInfo().Height,
+			DXGI_FORMAT_R32G32B32A32_FLOAT, CEngine::GetInst()->GetWindowInfo().Width, CEngine::GetInst()->GetWindowInfo().Height,
 			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 

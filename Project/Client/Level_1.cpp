@@ -29,6 +29,7 @@ CLevel_1::CLevel_1()
 
 CLevel_1::~CLevel_1()
 {
+	delete m_MiniMapBackground;
 }
 
 void CLevel_1::Init()
@@ -176,18 +177,21 @@ void CLevel_1::Init()
 	mapCamera->AddComponent(new CTransform);
 	mapCamera->AddComponent(new CCamera);
 	mapCamera->GetCamera()->SetProjType(EProjection_Type::Perspective);
+	mapCamera->GetCamera()->SetFOV(10.f); // 0 : main camera
 	mapCamera->GetCamera()->SetPriority(2); // 0 : main camera
 	mapCamera->GetCamera()->CheckLayerAll();
 	mapCamera->GetCamera()->CheckLayer(4);
-	mapCamera->GetTransform()->SetRelativePosition(0.f, 100.f, 0.f);
+	mapCamera->GetCamera()->SetFar(100000);
+	mapCamera->GetTransform()->SetRelativePosition(4919.f, 84667.f, 6754.f);
+	mapCamera->GetTransform()->SetRelativeRotation(90.f, 0.f, 0.f);
 	this->AddGameObject(mapCamera, 0, false);
 	
 
 	CGameObject* ui = new CGameObject;
 	ui->AddComponent(new CTransform);
 	ui->AddComponent(new CMeshRenderer);
-	ui->GetTransform()->SetRelativePosition(Vec3(.0f, 0.5f, 1.0f));
-	ui->GetTransform()->SetRelativeScale(Vec3(.2f, .35f, .2f));
+	ui->GetTransform()->SetRelativePosition(Vec3(.0f, 0.0f, 0.0f));
+	ui->GetTransform()->SetRelativeScale(Vec3(1.f, 1.f, 1.f));
 	ui->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 	CMaterial* material = new CMaterial;
 	CTexture* texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::MAP)->GetRTTexture(0);
@@ -204,11 +208,12 @@ void CLevel_1::Init()
 void CLevel_1::Begin()
 {
 	CLevel::Begin();
-	//this->Update();
-	//this->FinalUpdate();
-	//CDevice::GetInst()->RenderBegin();
-	//CRenderManager::GetInst()->RenderMap();
-	//CDevice::GetInst()->RenderEnd();
+	this->Update();
+	this->FinalUpdate();
+	m_MiniMapBackground = new CGameObject;
+	CDevice::GetInst()->RenderBegin();
+	CRenderManager::GetInst()->RenderMap(m_MiniMapBackground);
+	CDevice::GetInst()->RenderEnd();
 }
 
 void CLevel_1::Update()

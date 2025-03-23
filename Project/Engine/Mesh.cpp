@@ -14,6 +14,14 @@ CMesh::CMesh()
 
 CMesh::~CMesh()
 {
+	if(m_VertexUploadBuffer)
+		m_VertexUploadBuffer->Release();
+	
+	if (m_IndexUploadBuffer)
+		m_IndexUploadBuffer->Release();
+
+	m_VertexUploadBuffer = NULL;
+	m_IndexUploadBuffer = NULL;
 }
 
 int CMesh::Init(const std::vector<Vertex>& vecVertex, const std::vector<UINT>& vecIndex)
@@ -88,7 +96,7 @@ int CMesh::CreateVertexBuffer(const std::vector<Vertex>& vecVertex)
 		&defaultHeapProps,
 		D3D12_HEAP_FLAG_NONE,
 		&bufferDesc,
-		D3D12_RESOURCE_STATE_COMMON, 
+		D3D12_RESOURCE_STATE_COMMON,
 		nullptr,
 		IID_PPV_ARGS(&m_VertexBuffer))))
 	{
@@ -116,7 +124,14 @@ int CMesh::CreateVertexBuffer(const std::vector<Vertex>& vecVertex)
 
 	auto commandList = CDevice::GetInst()->GetCmdQueue()->GetGraphicsCmdList(); 
 
-	commandList.Get()->CopyResource(m_VertexBuffer.Get(), m_VertexUploadBuffer.Get());
+	CD3DX12_RESOURCE_BARRIER barrierToCopyDest = CD3DX12_RESOURCE_BARRIER::Transition(
+		m_VertexBuffer.Get(),
+		D3D12_RESOURCE_STATE_COMMON,
+		D3D12_RESOURCE_STATE_COPY_DEST
+	);
+	commandList->ResourceBarrier(1, &barrierToCopyDest);
+
+	commandList.Get()->CopyResource(m_VertexBuffer.Get(), m_VertexUploadBuffer);
 
 	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
 		m_VertexBuffer.Get(),
@@ -168,8 +183,15 @@ int CMesh::CreateIndexBuffer(const std::vector<UINT>& buffer)
 	m_IndexUploadBuffer->Unmap(0, nullptr);
 
 	auto commandList = CDevice::GetInst()->GetCmdQueue()->GetGraphicsCmdList(); 
+	CD3DX12_RESOURCE_BARRIER barrierToCopyDest = CD3DX12_RESOURCE_BARRIER::Transition(
+		indexBuffer.Get(),
+		D3D12_RESOURCE_STATE_COMMON,
+		D3D12_RESOURCE_STATE_COPY_DEST
+	);
+	commandList->ResourceBarrier(1, &barrierToCopyDest);
 
-	commandList.Get()->CopyResource(indexBuffer.Get(), m_IndexUploadBuffer.Get());
+
+	commandList.Get()->CopyResource(indexBuffer.Get(), m_IndexUploadBuffer);
 
 	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
 		indexBuffer.Get(),

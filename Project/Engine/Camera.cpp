@@ -13,6 +13,8 @@
 #include "Device.h"
 #include "ParticleSystem.h"
 #include "InstancingManager.h"
+#include "AssetManager.h"
+
 #include <iostream>
 
 Matrix CCamera::s_matView;
@@ -81,16 +83,26 @@ void CCamera::FinalUpdate()
 	m_Frustum.FinalUpdate();
 }
 
-void CCamera::RenderMap()
+void CCamera::RenderMap(CGameObject* object)
 {
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
+
+
+	object->AddComponent(new CTransform);
+	object->AddComponent(new CMeshRenderer);
+	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Map"));
+	object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+	object->GetTransform()->SetRelativePosition(5000, -100, 6500);
+	object->GetTransform()->SetRelativeScale(27000, 1, 16000);
+	object->GetTransform()->FinalUpdate();
+	object->GetMeshRenderer()->RenderMap();
+
 
 	for (auto& object : m_vecDeferred)
 	{
 		object->GetMeshRenderer()->RenderMap();
 	}
-	//CInstancingManager::GetInst()->Render(m_vecDeferred, L"DeferredMap");
 }
 
 

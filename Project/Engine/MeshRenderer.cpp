@@ -73,7 +73,7 @@ void CMeshRenderer::RenderShadow()
 }
 
 void CMeshRenderer::RenderMap(std::shared_ptr<CInstancingBuffer>& buffer)
-{
+{	
 	CAssetManager::GetInst()->FindAsset<CMaterial>(L"DeferredMap")->GraphicsBinding();
 	buffer->PushData();
 	m_Mesh->Render(buffer, 0);
@@ -82,7 +82,9 @@ void CMeshRenderer::RenderMap(std::shared_ptr<CInstancingBuffer>& buffer)
 void CMeshRenderer::RenderMap()
 {
 	GetTransform()->GraphicsBinding();
-	CAssetManager::GetInst()->FindAsset<CMaterial>(L"DeferredMap")->GraphicsBinding();
+	CMaterial* material = CAssetManager::GetInst()->FindAsset<CMaterial>(L"DeferredMap");
+	material->SetTexture(0, GetMaterial()->GetTexture(0));
+	material->GraphicsBinding();
 	m_Mesh->Render();
 }
 
