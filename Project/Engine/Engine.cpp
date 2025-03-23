@@ -47,17 +47,19 @@ int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wc
 
     CPathManager::GetInst()->Init();
 
+    CDevice::GetInst()->GetCmdQueue()->RenderBegin();
     if (FAILED(CAssetManager::GetInst()->Init()))
         return E_FAIL;
-    CDevice::GetInst()->GetCmdQueue()->GetGraphicsCmdList()->Close();
-    ID3D12CommandList* cmdListArr[] = { CDevice::GetInst()->GetCmdQueue()->GetGraphicsCmdList().Get() };
-    CDevice::GetInst()->GetCmdQueue()->GetCmdQueue()->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
+    CDevice::GetInst()->GetCmdQueue()->RenderEnd();
 
     if (FAILED(CInputManager::GetInst()->Init()))
         return E_FAIL;
 
     if (FAILED(CCollisionManager::GetInst()->Init()))
         return E_FAIL;
+
+
+
 
     if (FAILED(CLevelManager::GetInst()->Init()))
         return E_FAIL;

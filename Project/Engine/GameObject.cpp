@@ -143,7 +143,6 @@ void CGameObject::Render()
 
 void CGameObject::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
 {
-	//GetTransform()->SetRelativeScale(10.f, 10.f, 10.f);
 }
 
 

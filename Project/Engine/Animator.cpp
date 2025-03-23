@@ -34,8 +34,14 @@ void CAnimator::FinalUpdate()
 	m_FrameRatio = static_cast<float>(m_Frame - m_Frame);
 }
 
+void CAnimator::SetBones(const std::vector<BoneInfo>* bones)
+{
+	m_Bones = bones;
+}
+
 void CAnimator::SetAnimClip(const std::vector<AnimClipInfo>* animClips)
 {
+	std::cout << "My name is " << ws2s(GetOwner()->GetMeshRenderer()->GetMesh()->GetName()) << ", I have " << animClips->size() << "Animation" << '\n';
 	for (int i = 0; i < animClips->size(); ++i)
 	{
 		std::wstring name = animClips->at(i).animName;

@@ -137,6 +137,9 @@ int CAssetManager::LoadTexture()
 	tex->Init(path / L"Rock.png");
 	AddAsset(L"Rock", tex);
 
+	tex = new CTexture;
+	tex->Init(path / L"Map.jpg");
+	AddAsset(L"Map", tex);
 	return S_OK;
 }
 
@@ -151,6 +154,11 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Mushroom"));
 	AddAsset(L"Mushroom", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Map"));
+	AddAsset(L"Map", material);
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
@@ -189,6 +197,10 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Particle"));
 	AddAsset(L"Particle", material);
 
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"DebugCollision"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Kita"));
+	AddAsset(L"DC", material);
 	// LIGHT
 	{
 		material = new CMaterial;
@@ -219,6 +231,11 @@ int CAssetManager::LoadMaterial()
 		AddAsset(L"Shadow", material);
 	}
 
+	{
+		material = new CMaterial;
+		material->SetGraphicsShader(FindAsset<CGraphicShader>(L"DeferredMap"));
+		AddAsset(L"DeferredMap", material);
+	}
 
 	{
 		material = new CMaterial;
@@ -238,7 +255,7 @@ int CAssetManager::LoadMaterial()
 
 int CAssetManager::LoadMeshData()
 {
-	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Mage.jhd", L"Mage");
+	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Mage.jhd");
 	AddAsset(L"Mage", data);
 
 	data= CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Crab.jhd", L"Crab");
@@ -247,8 +264,8 @@ int CAssetManager::LoadMeshData()
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Mage.jhd");
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/wizard.jhd", L"wizard");
 
-	/*data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/wolf.fbx");
-	AddAsset(L"Wolf", data);*/	
+	CMeshData* data1 = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/level_1.jhd", L"map");
+	AddAsset(L"level_1", data1);	
 
 	//data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/floor_world.fbx");
 	//AddAsset(L"Floor", data);
@@ -268,6 +285,11 @@ int CAssetManager::LoadGraphicShader()
 	AddAsset(L"Forward", shader);
 
 	shader = new CGraphicShader;
+	name = L"Deferred.hlsl";
+	LoadShader(shader, name, {SHADER_TYPE::DEFERRED, RASTERIZER_TYPE::WIREFRAME });
+	AddAsset(L"DebugCollision", shader);
+
+	shader = new CGraphicShader;
 	name = L"Skybox.hlsl";
 	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_EQUAL });
 	AddAsset(L"Skybox", shader);
@@ -276,6 +298,11 @@ int CAssetManager::LoadGraphicShader()
 	name = L"Deferred.hlsl";
 	LoadShader(shader, name, { SHADER_TYPE::DEFERRED });
 	AddAsset(L"Deferred", shader);
+
+	shader = new CGraphicShader;
+	name = L"Deferred.hlsl";
+	LoadShader(shader, name, { SHADER_TYPE::DEFERRED, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::DEFAULT }, "VS_Main", "PS_Map");
+	AddAsset(L"DeferredMap", shader);
 
 	shader = new CGraphicShader;
 	name = L"particle.hlsl";

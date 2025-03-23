@@ -25,10 +25,10 @@ bool CCollisionManager::Init()
 	CreateProfile("Wall", ECollision_Channel::Wall, true, ECollision_Interaction::Ignore);
 	CreateProfile("Player", ECollision_Channel::Player, true);
 
-	SetCollisionInteraction("Default", ECollision_Channel::Player, ECollision_Interaction::Collision);
-	SetCollisionInteraction("Default", ECollision_Channel::Default, ECollision_Interaction::Collision);
+	SetCollisionInteraction("Player", ECollision_Channel::Player, ECollision_Interaction::Ignore);
 
-	SetCollisionInteraction("Player", ECollision_Channel::Default, ECollision_Interaction::Collision);
+	SetCollisionInteraction("Wall", ECollision_Channel::Wall, ECollision_Interaction::Ignore);
+	SetCollisionInteraction("Wall", ECollision_Channel::Player, ECollision_Interaction::Collision);
 
 	return true;
 }

@@ -32,7 +32,8 @@ public:
 	virtual void Load(const std::wstring& path);
 	virtual void Save(const std::wstring& path);
 
-	std::vector<CGameObject*> Instantiate();
+	std::vector<CGameObject*> Instantiate(ECollision_Channel channel);
+	std::vector<CGameObject*> InstantiateWalls();
 
 public:
 	virtual CMeshData* Clone() override { return new CMeshData(*this); }

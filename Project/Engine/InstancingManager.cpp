@@ -6,6 +6,7 @@
 #include "Transform.h"
 #include "Camera.h"
 #include "Logger.h"
+#include "AssetManager.h"
 
 CInstancingManager::CInstancingManager()
 {
@@ -16,8 +17,14 @@ CInstancingManager::~CInstancingManager()
 
 }
 
-void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects)
+void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects, const std::wstring& materialName)	
 {
+	if(materialName == L"DeferredMap")
+	{
+		CAssetManager::GetInst()->FindAsset<CMaterial>(materialName)->GraphicsBinding();
+	}
+
+
 	// 같은 인스턴스 아이디 같는 오브젝트끼리 모으는 캐쉬
 	std::unordered_map<UINT64, std::vector<CGameObject*>> cache;
 
@@ -38,18 +45,29 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects)
 		if (vec.size() == 1)
 		{
 			vec[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-			vec[0]->GetMeshRenderer()->Render();
+			if (materialName == L"DeferredMap")
+			{
+				vec[0]->GetMeshRenderer()->RenderMap();
+			}
+			else
+			{
+				vec[0]->GetMeshRenderer()->Render();
+			}
 		}
 		else
 		{
 			const UINT64 instanceId = pair.first;
-			vec[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-			//if (!vec[0]->GetMeshRenderer()->GetMaterial()->GetInt(0))
-			//{
-			//	for (const auto& obj : vec)
-			//		obj->GetMeshRenderer()->Render();
-			//	continue;
-			//}
+			if(vec[0]->GetInstancing())
+				vec[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+			else
+				vec[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+
+			if (!vec[0]->GetMeshRenderer()->GetMaterial()->GetInt(0))
+			{
+				for (const auto& obj : vec)
+					obj->GetMeshRenderer()->Render();
+				continue;
+			}
 
 			for (CGameObject* gameObject : vec)
 			{
@@ -63,7 +81,11 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects)
 			}	
 
 			std::shared_ptr<CInstancingBuffer>& buffer = m_Buffers[instanceId];
-			vec[0]->GetMeshRenderer()->Render(buffer);
+
+			if(materialName == L"DeferredMap")
+				vec[0]->GetMeshRenderer()->RenderMap(buffer);	
+			else
+				vec[0]->GetMeshRenderer()->Render(buffer);	
 		}
 	}
 }

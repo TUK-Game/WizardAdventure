@@ -20,6 +20,7 @@ enum class EKey
 	Alt,
 	Ctrl,
 	Space,
+	Tab,
 
 	Up, Down, Left, Right,
 

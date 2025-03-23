@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Player.h"
 #include "StateManager.h"
 #include "PlayerIdleState.h"
@@ -11,6 +11,7 @@
 #include "Engine.h"
 #include "SkillManager.h"
 #include <iostream>
+#include <Engine/Engine.h>
 
 CPlayer::CPlayer(EPlayerAttribute attribute)
     : m_Attribute(attribute), m_SkillManager(new CSkillManager(attribute))
@@ -90,7 +91,7 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
         transform->SetRelativePosition(transform->GetRelativePosition() + moveDir);
 
         if (shouldRotate) {
-            float angle = atan2(moveDir.x, moveDir.z) * (180.0f / XM_PI); // ¶óµð¾È ¡æ µµ ´ÜÀ§ º¯È¯
+            float angle = atan2(moveDir.x, moveDir.z) * (180.0f / XM_PI); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
             transform->SetRelativeRotation(0.f, angle + 180.f, 0.f);
         }
     }
@@ -99,4 +100,9 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
 void CPlayer::Attack(int skillIndex)
 {
     m_SkillManager->UseSkill(skillIndex);
+}
+
+void CPlayer::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
+{
+    std::cout << "ì•„ì•¼" << std::endl;
 }

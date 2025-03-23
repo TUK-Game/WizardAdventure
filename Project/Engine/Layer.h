@@ -16,10 +16,12 @@ public:
 
 public:
 	const std::vector<CGameObject*>& GetObjects() const	{ return m_vecObjects; }
+	const std::vector<CGameObject*>& GetParentObjects() const	{ return m_vecParentObjects; }
 
 	void RegisterGameObject(CGameObject* object)	{ m_vecObjects.push_back(object); }
 	void AddGameObject(CGameObject* parent, bool bChildMove);
 	void RemoveGameObject(CGameObject* object);
+	void RemoveGameObjectInLevel(CGameObject* object);
 
 public:
 	void Begin();

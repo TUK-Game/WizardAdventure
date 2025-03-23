@@ -13,6 +13,8 @@
 #include "Device.h"
 #include "ParticleSystem.h"
 #include "InstancingManager.h"
+#include "AssetManager.h"
+
 #include <iostream>
 
 Matrix CCamera::s_matView;
@@ -81,30 +83,25 @@ void CCamera::FinalUpdate()
 	m_Frustum.FinalUpdate();
 }
 
-void CCamera::Render()
+void CCamera::RenderMap(CGameObject* object)
 {
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-	SortObject();
 
-	PushLightData();
+	object->AddComponent(new CTransform);
+	object->AddComponent(new CMeshRenderer);
+	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Map"));
+	object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+	object->GetTransform()->SetRelativePosition(5000, -100, 6500);
+	object->GetTransform()->SetRelativeScale(27000, 1, 16000);
+	object->GetTransform()->FinalUpdate();
+	object->GetMeshRenderer()->RenderMap();
 
-	// Deferred
-	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->OMSetRenderTargets();
+
 	for (auto& object : m_vecDeferred)
 	{
-		object->Render();
-	}
-
-	// Light OMSet
-
-	// Swapchain
-	INT8 backIndex = CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex();
-	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->OMSetRenderTargets(1, backIndex);
-	for (auto& object : m_vecForward)
-	{
-		object->Render();
+		object->GetMeshRenderer()->RenderMap();
 	}
 }
 
@@ -114,7 +111,7 @@ void CCamera::RenderDeferred()
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-	CInstancingManager::GetInst()->Render(m_vecDeferred);
+	CInstancingManager::GetInst()->Render(m_vecDeferred, L"Deferred");
 }
 
 void CCamera::RenderForward()
@@ -122,7 +119,7 @@ void CCamera::RenderForward()
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-	CInstancingManager::GetInst()->Render(m_vecForward);
+	CInstancingManager::GetInst()->Render(m_vecForward, L"Forward");
 
 	for (auto& object : m_vecParticle)
 	{
@@ -157,24 +154,19 @@ void CCamera::SortObject()
 
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
-		// ī�޶� ���������� �ʴ� ���̾�� �����Ѵ�.
 		if (!(m_LayerCheck & (1 << i)))
 			continue;
 
-		// ���̾ ���� ������Ʈ�� �����´�.
 		CLayer* pLayer = pCurLevel->GetLayer(i);
 		const std::vector<CGameObject*>& vecObjects = pLayer->GetObjects();
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
-			// ���̾� �ȿ��ִ� ��ü�� �߿��� ������ ����� ���� ��ü�� �Ÿ���.
-			// TODO: Material ������ ����ó�� �߰�
 			if ((vecObjects[j]->GetRenderComponent() == nullptr
 				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
 				&& vecObjects[j]->GetParticleSystem() == nullptr)
 				continue;
 
-			// �������� �ø�
 			if (vecObjects[j]->GetCheckFrustum() && vecObjects[j]->GetCollider())
 			{
 				if (!vecObjects[j]->GetCollider()->IsFrustum(m_Frustum))
@@ -201,8 +193,6 @@ void CCamera::SortObject()
 				m_vecParticle.push_back(vecObjects[j]);
 			}
 			//m_vecObjects.push_back(vecObjects[j]);
-
-			// TODO: Material ������ Ÿ�Կ� ���� �з� �ۼ�
 		}
 	}
 }

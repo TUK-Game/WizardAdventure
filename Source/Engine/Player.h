@@ -20,9 +20,14 @@ public:
 
     Vec3 GetCurrentMoveDir() { return m_currentMoveDir; }
     EPlayerAttribute GetAttribute() const { return m_Attribute; }
+
+public:
+    virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
+
 private:
     Vec3 m_currentMoveDir;
-    EPlayerAttribute m_Attribute;  // ÇÃ·¹ÀÌ¾î ¼Ó¼º
-    CSkillManager* m_SkillManager; // ÇÃ·¹ÀÌ¾î ½ºÅ³ °ü¸®
+    EPlayerAttribute m_Attribute;  // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ó¼ï¿½
+    CSkillManager* m_SkillManager; // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½
+    float m_Speed = 1000.f;
 };
 

@@ -27,6 +27,7 @@ public:
 public:
 	void AddGameObject(CGameObject* object, int layerIndex, bool bChildMove);
 	void RemoveGameObject(CGameObject* object);
+	void RemoveGameObjectInLevel(CGameObject* object);
 
 public:
 	virtual CLevel* Clone() override	{ return new CLevel(*this); }
@@ -34,6 +35,8 @@ public:
 private:
 	std::array<CLayer*, MAX_LAYER>	m_Layer;
 	class CLevelCollision* m_collision;
-
+	
+public:
+	class CGameObject* m_MiniMap;
 };
 

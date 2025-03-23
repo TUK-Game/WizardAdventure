@@ -9,7 +9,7 @@ class CInstancingManager
 	DECLARE_SINGLETON(CInstancingManager)
 
 public:
-	void Render(std::vector<CGameObject*>& gameObjects);
+	void Render(std::vector<CGameObject*>& gameObjects, const std::wstring& materialName);
 
 	void ClearBuffer();
 	void Clear() { m_Buffers.clear(); }

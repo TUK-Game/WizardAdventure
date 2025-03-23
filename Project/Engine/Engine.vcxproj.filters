@@ -542,6 +542,9 @@
     <ClInclude Include="MonsterAttackState.h">
       <Filter>06. State\MonsterState\Attack</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionObject.h">
+      <Filter>03. GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -819,6 +822,9 @@
     </ClCompile>
     <ClCompile Include="MonsterAttackState.cpp">
       <Filter>06. State\MonsterState\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionObject.cpp">
+      <Filter>03. GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

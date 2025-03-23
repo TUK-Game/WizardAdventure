@@ -189,6 +189,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="ClientSession.h" />
     <ClInclude Include="ClientSessionManager.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="CollisionObject.h" />
     <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComputeShader.h" />
@@ -335,6 +336,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="ClientSession.cpp" />
     <ClCompile Include="ClientSessionManager.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="CollisionObject.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComputeShader.cpp" />

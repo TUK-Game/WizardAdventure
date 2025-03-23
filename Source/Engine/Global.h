@@ -71,7 +71,6 @@ using namespace Microsoft::WRL;
 #include <ImGui/imgui_impl_win32.h>
 
 
-
 #include "Singleton.h"
 #include "Flag.h"
 #include "Define.h"

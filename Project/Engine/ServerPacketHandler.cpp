@@ -20,5 +20,7 @@ bool Handle_C_ENTER_GAME(CPacketSessionRef& session, Protocol::C_ENTER_GAME& pkt
 
 bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 {
+	std::cout << "Recv Pacekt C_MOVE_PACKET" << std::endl;
+
 	return true;
 }

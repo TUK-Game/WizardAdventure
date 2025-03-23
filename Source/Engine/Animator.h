@@ -13,7 +13,7 @@ public:
 	virtual ~CAnimator();
 
 public:
-	void SetBones(const std::vector<BoneInfo>* bones) { m_Bones = bones; }
+	void SetBones(const std::vector<BoneInfo>* bones);
 	void SetAnimClip(const std::vector<AnimClipInfo>* animClips);
 	void PushData();
 	float GetDuration() { return m_Duration; }

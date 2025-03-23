@@ -10,7 +10,8 @@ void CPlayerIdleState::Enter(CGameObject* entity)
 #endif
 	std::vector<CGameObject*> objs = entity->GetChild();
 	for (const auto o : objs) {
-		o->GetAnimator()->Play(L"IDLE");
+		if(o->GetAnimator())
+			o->GetAnimator()->Play(L"IDLE");
 	}
 }
 

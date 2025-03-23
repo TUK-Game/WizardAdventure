@@ -17,6 +17,9 @@ public:
 
 public:
 	virtual CLevel_1* Clone() override { return new CLevel_1(*this); }
+
+public:
+	class CGameObject* m_MiniMapBackground;
 };
 
 
