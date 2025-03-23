@@ -77,6 +77,17 @@ void CLevel::RemoveGameObject(CGameObject* object)
 	}
 }
 
+void CLevel::RemoveGameObjectInLevel(CGameObject* object)
+{
+	if (!object) return;
+
+	int layerNum = object->GetLayerIndex();
+	if (m_Layer[layerNum])
+	{
+		m_Layer[layerNum]->RemoveGameObjectInLevel(object);
+	}
+}
+
 void CLevel::End()
 {
 	for (auto& layer : m_Layer)

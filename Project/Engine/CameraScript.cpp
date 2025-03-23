@@ -7,6 +7,8 @@
 #include "ImGuiManager.h"
 #include "Camera.h"
 #include "GameObject.h"
+#include "Level.h"
+#include "MeshRenderer.h"
 #include "Logger.h"
 CCameraScript::CCameraScript()
 	: m_Speed(1000.f)
@@ -46,7 +48,16 @@ void CCameraScript::Update()
 		GetOwner()->GetCamera()->SetFOV(60.f);
 		GetTransform()->SetRelativeRotation(49.f, -34.f, 0.f);
 	}
-
+	if (KEY_DOWN(EKey::Tab))
+	{
+		CGameObject* obj = CLevelManager::GetInst()->GetCurrentLevel()->m_MiniMap;
+		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(obj, 4, false);
+	}
+	if (KEY_UP(EKey::Tab))
+	{
+		CGameObject* obj = CLevelManager::GetInst()->GetCurrentLevel()->m_MiniMap;
+		CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObjectInLevel(obj);
+	}
 
 	if (GetOwner()->GetCamera()->GetCameraType() == ECamera_Type::Fixed)
 		FixedMove();

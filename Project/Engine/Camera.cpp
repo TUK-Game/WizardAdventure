@@ -112,7 +112,6 @@ void CCamera::RenderDeferred()
 	s_matProjection = m_matProjection;
 
 	CInstancingManager::GetInst()->Render(m_vecDeferred, L"Deferred");
-	CInstancingManager::GetInst()->ClearBuffer();
 }
 
 void CCamera::RenderForward()

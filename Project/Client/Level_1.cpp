@@ -30,6 +30,7 @@ CLevel_1::CLevel_1()
 CLevel_1::~CLevel_1()
 {
 	delete m_MiniMapBackground;
+	delete m_MiniMap;
 }
 
 void CLevel_1::Init()
@@ -187,21 +188,21 @@ void CLevel_1::Init()
 	this->AddGameObject(mapCamera, 0, false);
 	
 
-	CGameObject* ui = new CGameObject;
-	ui->AddComponent(new CTransform);
-	ui->AddComponent(new CMeshRenderer);
-	ui->GetTransform()->SetRelativePosition(Vec3(.0f, 0.0f, 0.0f));
-	ui->GetTransform()->SetRelativeScale(Vec3(1.f, 1.f, 1.f));
-	ui->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
+	m_MiniMap = new CGameObject;
+	m_MiniMap->SetName(L"MiniMap");
+	m_MiniMap->AddComponent(new CTransform);
+	m_MiniMap->AddComponent(new CMeshRenderer);
+	m_MiniMap->GetTransform()->SetRelativePosition(Vec3(.0f, 0.0f, 0.0f));
+	m_MiniMap->GetTransform()->SetRelativeScale(Vec3(1.f, 1.f, 1.f));
+	m_MiniMap->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 	CMaterial* material = new CMaterial;
 	CTexture* texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::MAP)->GetRTTexture(0);
 	
 	CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
 	material->SetTexture(0, texture);
 	material->SetGraphicsShader(shader);
-	ui->GetMeshRenderer()->SetMaterial(material);
-	this->AddGameObject(ui, 4, false);
-
+	m_MiniMap->GetMeshRenderer()->SetMaterial(material);
+	//this->AddGameObject(ui, 4, false);
 #pragma endregion
 }
 

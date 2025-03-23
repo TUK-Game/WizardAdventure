@@ -16,6 +16,7 @@ CInputManager::CInputManager()
 		VK_MENU,
 		VK_CONTROL,
 		VK_SPACE,
+		VK_TAB,
 
 		VK_UP, VK_DOWN, VK_LEFT, VK_RIGHT,
 
