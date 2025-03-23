@@ -37,17 +37,21 @@ void CMonsterAI::UpdateAI()
     Vec3 myPos = GetTransform()->GetWorldPosition();
     Vec3 targetPos = m_Target->GetTransform()->GetWorldPosition();
 
-    Vec3 direction = Vec3(targetPos.x - myPos.x, 0, targetPos.z - myPos.z);
-    direction.Normalize();
-    float angle = atan2(direction.x, direction.z) * (180.0f / XM_PI); // 라디안 → 도 단위 변환
-    GetTransform()->SetRelativeRotation(0.f, angle + 180.f, 0.f);
+    Vec3 dir = targetPos - myPos;
+    dir.y = 0.f;
+    if (dir.Length() > 0.001f)
+    {
+        dir.Normalize();
+        float angle = atan2(dir.x, dir.z) * (180.0f / XM_PI);
+        m_TargetAngle = angle + 180.f;
+    }
 
     float distance = (targetPos - myPos).Length();
 
     CStateManager* sm = GetStateManager();
     if (!sm) return;
 
-    if (distance <= m_AttackRange)
+    if (distance <= m_AttackRange && IsFacingTarget(20.f))
     {
         sm->HandleEvent(GetOwner(), "Attack");
     }
@@ -61,3 +65,55 @@ void CMonsterAI::UpdateAI()
     }
 }
 
+void CMonsterAI::RotateToTarget(float deltaTime)
+{
+    CTransform* transform = GetTransform();
+
+    float currentY = transform->GetRelativeRotation().y;
+    float targetY = m_TargetAngle;
+
+    // 최소 회전 각도로 보정
+    float diff = targetY - currentY;
+    if (diff > 180.f) diff -= 360.f;
+    else if (diff < -180.f) diff += 360.f;
+
+    float rotationSpeed = 180.f; // 도/초
+    float deltaAngle = rotationSpeed * deltaTime;
+
+    if (fabs(diff) < deltaAngle)
+        currentY = targetY;
+    else
+        currentY += (diff > 0 ? deltaAngle : -deltaAngle);
+
+    Vec3 rot = transform->GetRelativeRotation();
+    rot.y = currentY;
+    transform->SetRelativeRotation(rot);
+}
+
+bool CMonsterAI::IsFacingTarget(float angleThresholdDeg) 
+{
+    CTransform* transform = GetTransform();
+    if (!transform || !m_Target) return false;
+
+    float currentAngle = transform->GetRelativeRotation().y;
+
+    Vec3 myPos = transform->GetWorldPosition();
+    Vec3 targetPos = m_Target->GetTransform()->GetWorldPosition();
+
+    Vec3 toTarget = targetPos - myPos;
+    toTarget.y = 0.f;
+
+    if (toTarget.Length() < 0.001f)
+        return true; // 너무 가까우면 그냥 true
+
+    toTarget.Normalize();
+    float targetAngle = atan2(toTarget.x, toTarget.z) * (180.0f / XM_PI) + 180.f;
+
+    float diff = targetAngle - currentAngle;
+
+    // -180 ~ 180 범위로 정규화
+    if (diff > 180.f) diff -= 360.f;
+    else if (diff < -180.f) diff += 360.f;
+
+    return fabs(diff) <= angleThresholdDeg;
+}
