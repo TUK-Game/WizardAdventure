@@ -13,7 +13,14 @@ void CPlayerScript::Update()
     CStateManager* stateManager = player->GetStateManager();
     if (!stateManager) return;
 
-    if (KEY_PUSH(EKey::Up) || KEY_PUSH(EKey::Down) || KEY_PUSH(EKey::Left) || KEY_PUSH(EKey::Right))
+    Vec3 moveDir(0, 0, 0);
+    if (KEY_PUSH(EKey::Up))    moveDir.z += 1;
+    if (KEY_PUSH(EKey::Down))  moveDir.z -= 1;
+    if (KEY_PUSH(EKey::Left))  moveDir.x -= 1;
+    if (KEY_PUSH(EKey::Right)) moveDir.x += 1;
+
+
+    if (moveDir.Length() > 0.01f)
     {
         stateManager->HandleEvent(player, "Move");
     }

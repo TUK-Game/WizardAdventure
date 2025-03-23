@@ -11,6 +11,10 @@ void CMonsterChaseState::Enter(CGameObject* entity)
 #ifdef _DEBUG;
 	std::cout << "Entering Monster Chase State" << std::endl;
 #endif
+    std::vector<CGameObject*> objs = entity->GetChild();
+    for (const auto o : objs) {
+        o->GetAnimator()->Play(L"MONSTERWALK");
+    }
 }
 
 void CMonsterChaseState::Update(CGameObject* entity, float deltaTime)
@@ -31,7 +35,7 @@ void CMonsterChaseState::Update(CGameObject* entity, float deltaTime)
     if (dist < 1.f) return; // 너무 가까우면 이동 생략
     dir.Normalize();
 
-    Vec3 nextPos = myPos + dir * 30.f * deltaTime;
+    Vec3 nextPos = myPos + dir * 300.f * deltaTime;
     myTransform->SetRelativePosition(nextPos);
 }
 

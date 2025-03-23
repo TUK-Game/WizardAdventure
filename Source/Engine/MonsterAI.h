@@ -15,8 +15,8 @@ public:
     virtual CMonsterAI* Clone() override { return new CMonsterAI(*this); }
     CGameObject* GetTarget()            { return m_Target; }
 private:
-    float m_DetectRange = 500.f;
-    float m_AttackRange = 100.f;
+    float m_DetectRange = 5000.f;
+    float m_AttackRange = 500.f;
 
     CGameObject* m_Target = nullptr;
 private:

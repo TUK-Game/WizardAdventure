@@ -130,17 +130,17 @@ void CLevel_1::Init()
 	}
 
 	{
-		//CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Monster");
-		//std::vector<CGameObject*> obj2 = data2->Instantiate();
+		CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
+		std::vector<CGameObject*> obj2 = data2->Instantiate();
 		CMonster* monster = new CMonster();
 		monster->SetName(L"Monster");
 		monster->AddComponent(new CTransform);
-		monster->AddComponent(new CMeshRenderer);
+		/*monster->AddComponent(new CMeshRenderer);
 		monster->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
 		monster->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
 		monster->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-		monster->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Rock"));
-		/*for (auto& o : obj2)
+		monster->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Rock"));*/
+		for (auto& o : obj2)
 		{
 			std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
 			o->SetName(name);
@@ -149,7 +149,7 @@ void CLevel_1::Init()
 			o->GetTransform()->SetRelativeRotation(rot);
 			o->SetCheckFrustum(true);
 			monster->AddChild(o);
-		}*/
+		}
 		this->AddGameObject(monster, 10, false);
 	}
 

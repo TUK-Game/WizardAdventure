@@ -47,11 +47,11 @@ void CMonsterAI::UpdateAI()
     CStateManager* sm = GetStateManager();
     if (!sm) return;
 
-    /*if (distance <= m_AttackRange)
+    if (distance <= m_AttackRange)
     {
         sm->HandleEvent(GetOwner(), "Attack");
     }
-    else */if (distance <= m_DetectRange)
+    else if (distance <= m_DetectRange)
     {
         sm->HandleEvent(GetOwner(), "Chase");
     }

@@ -10,8 +10,9 @@ void CMonsterIdleState::Enter(CGameObject* entity)
 #endif
 	std::vector<CGameObject*> objs = entity->GetChild();
 	for (const auto o : objs) {
-		o->GetAnimator()->Play(L"IDLE");
+		o->GetAnimator()->Play(L"MONSTERIDLE");
 	}
+
 }
 
 void CMonsterIdleState::Update(CGameObject* entity, float deltaTime)

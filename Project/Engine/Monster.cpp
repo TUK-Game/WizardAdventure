@@ -3,6 +3,7 @@
 #include "StateManager.h"
 #include "MonsterIdleState.h"
 #include "MonsterChaseState.h"
+#include "MonsterAttackState.h"
 #include "Transform.h"
 #include "Engine.h"
 #include "MonsterAI.h"
@@ -47,14 +48,16 @@ void CMonster::CreateStateManager()
     m_StateManager = new CStateManager();
     m_StateManager->AddState(new CMonsterIdleState);
     m_StateManager->AddState(new CMonsterChaseState);
-    // Attack Ãß°¡
+    m_StateManager->AddState(new CMonsterAttackState);
+    
     m_StateManager->ChangeState(this, EState_Type::Idle);
 
     m_StateManager->SetTransition(EState_Type::Idle, "Chase", EState_Type::Chase);
+    m_StateManager->SetTransition(EState_Type::Idle, "Attack", EState_Type::Attack);
 
-    //m_StateManager->SetTransition(EState_Type::Chase, "Attack", EState_Type::Attack);
+    m_StateManager->SetTransition(EState_Type::Chase, "Attack", EState_Type::Attack);
     m_StateManager->SetTransition(EState_Type::Chase, "Idle", EState_Type::Idle);
 
-    //m_StateManager->SetTransition(EState_Type::Attack, "Idle", EState_Type::Idle);
+    m_StateManager->SetTransition(EState_Type::Attack, "Idle", EState_Type::Idle);
 
 }
