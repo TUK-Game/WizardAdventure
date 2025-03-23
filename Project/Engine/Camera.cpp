@@ -86,7 +86,11 @@ void CCamera::Render()
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-	CInstancingManager::GetInst()->Render(m_vecDeferred);
+	for (auto& object : m_vecDeferred)
+	{
+		object->GetMeshRenderer()->RenderMap();
+	}
+	//CInstancingManager::GetInst()->Render(m_vecDeferred, L"DeferredMap");
 }
 
 
@@ -95,7 +99,7 @@ void CCamera::RenderDeferred()
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-	CInstancingManager::GetInst()->Render(m_vecDeferred);
+	CInstancingManager::GetInst()->Render(m_vecDeferred, L"Deferred");
 	CInstancingManager::GetInst()->ClearBuffer();
 }
 
@@ -104,7 +108,7 @@ void CCamera::RenderForward()
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-	CInstancingManager::GetInst()->Render(m_vecForward);
+	CInstancingManager::GetInst()->Render(m_vecForward, L"Forward");
 
 	for (auto& object : m_vecParticle)
 	{

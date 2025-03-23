@@ -25,6 +25,8 @@ public:
     virtual void Render() override;
 	void Render(std::shared_ptr<class CInstancingBuffer>& buffer);
 	void RenderShadow();
+	void RenderMap(std::shared_ptr<CInstancingBuffer>& buffer);
+	void RenderMap();
 
     UINT64 GetInstanceID();
 

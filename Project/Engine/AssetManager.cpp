@@ -223,6 +223,11 @@ int CAssetManager::LoadMaterial()
 		AddAsset(L"Shadow", material);
 	}
 
+	{
+		material = new CMaterial;
+		material->SetGraphicsShader(FindAsset<CGraphicShader>(L"DeferredMap"));
+		AddAsset(L"DeferredMap", material);
+	}
 
 	{
 		material = new CMaterial;
@@ -285,7 +290,7 @@ int CAssetManager::LoadGraphicShader()
 
 	shader = new CGraphicShader;
 	name = L"Deferred.hlsl";
-	LoadShader(shader, name, { SHADER_TYPE::DEFERRED, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::DEFAULT }, "VS_Main", "PS_Main");
+	LoadShader(shader, name, { SHADER_TYPE::DEFERRED, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::DEFAULT }, "VS_Main", "PS_Map");
 	AddAsset(L"DeferredMap", shader);
 
 	shader = new CGraphicShader;

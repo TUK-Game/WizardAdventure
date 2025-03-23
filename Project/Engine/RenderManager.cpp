@@ -29,7 +29,7 @@ void CRenderManager::Render()
 	
 	RenderLights();
 
-	//RenderMap();
+	RenderMap();
 
 	RenderFinal();
 
@@ -64,7 +64,7 @@ void CRenderManager::ClearRTV()
 	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->ClearRenderTargetView();
 
 	// Map
-	//CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::MAP)->ClearRenderTargetView();
+	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::MAP)->ClearRenderTargetView();
 }
 
 void CRenderManager::RenderShadow()
@@ -135,7 +135,7 @@ void CRenderManager::RenderForward()
 
 	for (auto& camera : m_vecCamera)
 	{
-		if (camera == mainCamera /*|| m_vecCamera[2] == camera*/)
+		if (camera == mainCamera || m_vecCamera[2] == camera)
 			continue;
 
 		camera->SortObject();

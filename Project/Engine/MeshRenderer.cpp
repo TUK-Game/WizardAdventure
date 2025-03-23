@@ -72,6 +72,20 @@ void CMeshRenderer::RenderShadow()
 	m_Mesh->Render();
 }
 
+void CMeshRenderer::RenderMap(std::shared_ptr<CInstancingBuffer>& buffer)
+{
+	CAssetManager::GetInst()->FindAsset<CMaterial>(L"DeferredMap")->GraphicsBinding();
+	buffer->PushData();
+	m_Mesh->Render(buffer, 0);
+}
+
+void CMeshRenderer::RenderMap()
+{
+	GetTransform()->GraphicsBinding();
+	CAssetManager::GetInst()->FindAsset<CMaterial>(L"DeferredMap")->GraphicsBinding();
+	m_Mesh->Render();
+}
+
 UINT64 CMeshRenderer::GetInstanceID()
 {
 	if (m_Mesh == nullptr || m_Materials[0] == nullptr)
