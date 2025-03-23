@@ -101,14 +101,14 @@ void CLevel_1::Init()
 
 	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
 	std::vector<CGameObject*> obj = data->Instantiate(ECollision_Channel::Player);
-	CPlayer* player = new CPlayer;
+	CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
 	player->SetName(L"Mage");
 	player->AddComponent(new CTransform);
 	player->AddComponent(new CBoxCollider);
 	player->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
 	player->GetTransform()->SetRelativePosition(11240, 20, 1127);
 	player->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
-	pltayer->AddComponent(new CPlayerScript);
+	player->AddComponent(new CPlayerScript);
 
 #ifdef COLLISION_MESH_DRAW
 	CCollisionObject* co = new CCollisionObject();
@@ -132,29 +132,30 @@ void CLevel_1::Init()
 		player->AddChild(o);
 	}
 	this->AddGameObject(player, 3, false);
+	CLevelManager::GetInst()->SetPlayer(player);
 
 	{
 		CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
-		std::vector<CGameObject*> obj2 = data2->Instantiate();
+		std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
 		CMonster* monster = new CMonster();
 		monster->SetName(L"Monster");
 		monster->AddComponent(new CTransform);
-		/*monster->AddComponent(new CMeshRenderer);
-		monster->GetTransform()->SetRelativeScale(100.f, 100.f, 100.f);
-		monster->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
-		monster->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
-		monster->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Rock"));*/
+		monster->AddComponent(new CBoxCollider);
+		monster->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
+		monster->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
+		monster->GetTransform()->SetRelativePosition(11240, 20, 1100);
 		for (auto& o : obj2)
 		{
 			std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
 			o->SetName(name);
 			Vec3 rot = o->GetTransform()->GetRelativeRotation();
-			rot.x += -90;
 			o->GetTransform()->SetRelativeRotation(rot);
+			//o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
 			o->SetCheckFrustum(true);
+			o->SetInstancing(false);
 			monster->AddChild(o);
 		}
-		this->AddGameObject(monster, 10, false);
+		this->AddGameObject(monster, 3, false);
 	}
 
 

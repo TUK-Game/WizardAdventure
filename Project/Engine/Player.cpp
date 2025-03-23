@@ -11,7 +11,9 @@
 #include "Engine.h"
 #include "SkillManager.h"
 #include <iostream>
-#include <Engine/Engine.h>
+#include "Engine.h"
+
+//#include <Engine/Engine.h>
 
 CPlayer::CPlayer(EPlayerAttribute attribute)
     : m_Attribute(attribute), m_SkillManager(new CSkillManager(attribute))
@@ -88,7 +90,7 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
     {
         moveDir.Normalize(); 
         m_currentMoveDir = moveDir;
-        transform->SetRelativePosition(transform->GetRelativePosition() + moveDir);
+        transform->SetRelativePosition(transform->GetRelativePosition() + (moveDir * m_Speed * CEngine::GetInst()->GetDeltaTime()));
 
         if (shouldRotate) {
             float angle = atan2(moveDir.x, moveDir.z) * (180.0f / XM_PI); // ������ �� �� ���� ��ȯ
