@@ -182,6 +182,7 @@ void CLevel_1::Init()
 	mapCamera->GetTransform()->SetRelativePosition(0.f, 100.f, 0.f);
 	this->AddGameObject(mapCamera, 0, false);
 	
+
 	CGameObject* ui = new CGameObject;
 	ui->AddComponent(new CTransform);
 	ui->AddComponent(new CMeshRenderer);
@@ -198,13 +199,16 @@ void CLevel_1::Init()
 	this->AddGameObject(ui, 4, false);
 
 #pragma endregion
-
-
 }
 
 void CLevel_1::Begin()
 {
 	CLevel::Begin();
+	//this->Update();
+	//this->FinalUpdate();
+	//CDevice::GetInst()->RenderBegin();
+	//CRenderManager::GetInst()->RenderMap();
+	//CDevice::GetInst()->RenderEnd();
 }
 
 void CLevel_1::Update()

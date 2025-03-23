@@ -81,7 +81,7 @@ void CCamera::FinalUpdate()
 	m_Frustum.FinalUpdate();
 }
 
-void CCamera::Render()
+void CCamera::RenderMap()
 {
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
@@ -143,24 +143,19 @@ void CCamera::SortObject()
 
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
-		// ī�޶� ���������� �ʴ� ���̾�� �����Ѵ�.
 		if (!(m_LayerCheck & (1 << i)))
 			continue;
 
-		// ���̾ ���� ������Ʈ�� �����´�.
 		CLayer* pLayer = pCurLevel->GetLayer(i);
 		const std::vector<CGameObject*>& vecObjects = pLayer->GetObjects();
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
-			// ���̾� �ȿ��ִ� ��ü�� �߿��� ������ ����� ���� ��ü�� �Ÿ���.
-			// TODO: Material ������ ����ó�� �߰�
 			if ((vecObjects[j]->GetRenderComponent() == nullptr
 				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
 				&& vecObjects[j]->GetParticleSystem() == nullptr)
 				continue;
 
-			// �������� �ø�
 			if (vecObjects[j]->GetCheckFrustum() && vecObjects[j]->GetCollider())
 			{
 				if (!vecObjects[j]->GetCollider()->IsFrustum(m_Frustum))
@@ -187,8 +182,6 @@ void CCamera::SortObject()
 				m_vecParticle.push_back(vecObjects[j]);
 			}
 			//m_vecObjects.push_back(vecObjects[j]);
-
-			// TODO: Material ������ Ÿ�Կ� ���� �з� �ۼ�
 		}
 	}
 }

@@ -46,7 +46,7 @@ public:
 
 public:
 	virtual void FinalUpdate() override;
-	void Render();
+	void RenderMap();
     void RenderDeferred();
     void RenderForward();
     void RenderShadow();
