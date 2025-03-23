@@ -21,6 +21,7 @@
 #include <Engine/Device.h>
 #include <Engine/RenderTargetGroup.h>
 
+#include <Engine/Animator.h>
 CLevel_1::CLevel_1()
 {
 	CLevelManager::GetInst()->SetLevel(this);
@@ -86,46 +87,86 @@ void CLevel_1::Init()
 		light->GetTransform()->SetRelativePosition(0.f, 5000.f, 100.f);
 		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
-		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.0f));
-		light->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
+		light->GetLight()->SetDiffuse(Vec3(0.8f, 0.8f, 0.8f));
+		light->GetLight()->SetAmbient(Vec3(0.8f, 0.8f, 0.8f));
+		light->GetLight()->SetSpecular(Vec3(0.8f, 0.8f, 0.8f));
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
 		this->AddGameObject(light, 3, false);
 	}
 
-	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
-	std::vector<CGameObject*> obj = data->Instantiate(ECollision_Channel::Player);
-	CPlayer* player = new CPlayer;
-	player->SetName(L"Mage");
-	player->AddComponent(new CTransform);
-	player->AddComponent(new CBoxCollider);
-	player->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
-	//player->GetTransform()->SetRelativePosition(11240, 20, 1127);
-	player->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0,0,0), Vec3(0, 100, 0));
-	player->AddComponent(new CPlayerScript);
+		CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
+		std::vector<CGameObject*> obj = data->Instantiate(ECollision_Channel::Player);
+		CPlayer* player = new CPlayer;
+		player->SetName(L"Mage");
+		player->AddComponent(new CTransform);
+		player->AddComponent(new CBoxCollider);
+		player->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
+		//player->GetTransform()->SetRelativePosition(11240, 20, 1127);
+		player->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
+		player->AddComponent(new CPlayerScript);
 
 #ifdef COLLISION_MESH_DRAW
-	CCollisionObject* co = new CCollisionObject();
-	co->InitToChild(player, Vec3(0, 100, 0), Vec3(100, 200, 24));
-	player->AddChild(co);
+		CCollisionObject* co = new CCollisionObject();
+		co->InitToChild(player, Vec3(0, 100, 0), Vec3(100, 200, 24));
+		player->AddChild(co);
 #endif
 
-	for (auto& o : obj)
-	{
-		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
-		o->SetName(name);
+		for (auto& o : obj)
+		{
+			std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
+			o->SetName(name);
 
-		o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
-		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		o->GetTransform()->SetRelativeRotation(rot);
-		//o->GetTransform()->SetRelativePosition(2500.f, 577.f, -105.f);
-		//o->AddComponent(new CTestPlayer);
-		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		o->SetCheckFrustum(true);
-		player->AddChild(o);
+			o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
+			Vec3 rot = o->GetTransform()->GetRelativeRotation();
+			o->GetTransform()->SetRelativeRotation(rot);
+			//o->GetTransform()->SetRelativePosition(2500.f, 577.f, -105.f);
+			//o->AddComponent(new CTestPlayer);
+			//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+			o->SetCheckFrustum(true);
+			o->SetInstancing(false);
+			player->AddChild(o);
+		}
+		this->AddGameObject(player, 3, false);
+
+	{
+		CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
+		std::vector<CGameObject*> obj = data->Instantiate(ECollision_Channel::Player);
+		CGameObject* player = new CGameObject;
+		player->SetName(L"Mage1");
+		player->AddComponent(new CTransform);
+		player->AddComponent(new CBoxCollider);
+		player->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
+		//player->GetTransform()->SetRelativePosition(11240, 20, 1127);
+		player->GetTransform()->SetRelativePosition(140, 20, 112);
+		player->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
+		//player->AddComponent(new CPlayerScript);
+
+#ifdef COLLISION_MESH_DRAW
+		CCollisionObject* co = new CCollisionObject();
+		co->InitToChild(player, Vec3(0, 100, 0), Vec3(100, 200, 24));
+		player->AddChild(co);
+#endif
+
+		for (auto& o : obj)
+		{
+			std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
+			o->SetName(name);
+
+			o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
+			Vec3 rot = o->GetTransform()->GetRelativeRotation();
+			o->GetTransform()->SetRelativeRotation(rot);
+			//o->GetTransform()->SetRelativePosition(2500.f, 577.f, -105.f);
+			//o->AddComponent(new CTestPlayer);
+			//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+			o->SetCheckFrustum(true);
+			o->GetAnimator()->Play(L"IDLE");
+			o->SetInstancing(false);
+			player->AddChild(o);
+		}
+		this->AddGameObject(player, 3, false);
+
 	}
-	this->AddGameObject(player, 3, false);
 
 //	CMeshData* data1 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"level_1");
 //	std::vector<CGameObject*> obj1 = data1->Instantiate(ECollision_Channel::Wall);

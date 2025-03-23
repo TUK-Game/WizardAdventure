@@ -242,7 +242,7 @@ int CAssetManager::LoadMaterial()
 
 int CAssetManager::LoadMeshData()
 {
-	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Crab.jhd");
+	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Mage.jhd");
 	AddAsset(L"Mage", data);
 
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Mage.jhd");

@@ -43,13 +43,17 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects)
 		else
 		{
 			const UINT64 instanceId = pair.first;
-			vec[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-			//if (!vec[0]->GetMeshRenderer()->GetMaterial()->GetInt(0))
-			//{
-			//	for (const auto& obj : vec)
-			//		obj->GetMeshRenderer()->Render();
-			//	continue;
-			//}
+			if(vec[0]->GetInstancing())
+				vec[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+			else
+				vec[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+
+			if (!vec[0]->GetMeshRenderer()->GetMaterial()->GetInt(0))
+			{
+				for (const auto& obj : vec)
+					obj->GetMeshRenderer()->Render();
+				continue;
+			}
 
 			for (CGameObject* gameObject : vec)
 			{
@@ -63,7 +67,7 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects)
 			}	
 
 			std::shared_ptr<CInstancingBuffer>& buffer = m_Buffers[instanceId];
-			vec[0]->GetMeshRenderer()->Render(buffer);
+			vec[0]->GetMeshRenderer()->Render(buffer);	
 		}
 	}
 }

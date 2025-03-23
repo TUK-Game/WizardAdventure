@@ -34,6 +34,11 @@ void CAnimator::FinalUpdate()
 	m_FrameRatio = static_cast<float>(m_Frame - m_Frame);
 }
 
+void CAnimator::SetBones(const std::vector<BoneInfo>* bones)
+{
+	m_Bones = bones;
+}
+
 void CAnimator::SetAnimClip(const std::vector<AnimClipInfo>* animClips)
 {
 	std::cout << "My name is " << ws2s(GetOwner()->GetMeshRenderer()->GetMesh()->GetName()) << ", I have " << animClips->size() << "Animation" << '\n';
@@ -43,7 +48,7 @@ void CAnimator::SetAnimClip(const std::vector<AnimClipInfo>* animClips)
 		RemoveNamespace(name);
 		m_AnimClipsMap[name] = animClips->at(i);
 		m_Ws2Idx[name] = i;
-
+		
 		std::cout << "Animation Name" << i << ": " << ws2s(name) << '\n';
 	}
 	std::cout << '\n';

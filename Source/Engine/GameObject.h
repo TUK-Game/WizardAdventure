@@ -38,7 +38,7 @@ public:
     CRigidBody* GetRigidBody()                          { return (CRigidBody*)GetComponent(EComponent_Type::Rigidbody); }
     CUI* GetUI()                                        { return (CUI*)GetComponent(EComponent_Type::UI); }
     CStateManager* GetStateManager()                    { return m_StateManager; }
-
+    bool GetInstancing()                                { return m_bInstancing; }
     bool GetCheckFrustum() { return m_CheckFrustum; }
     void SetStatic(bool flag) { m_Static = flag; }
     bool IsStatic() { return m_Static; }
@@ -48,6 +48,7 @@ public:
     void SetParent(CGameObject* parent) { m_Parent = parent; } 
     void SetLayerIndex(int index) { m_LayerIndex = index; }
     void SetTag(const std::wstring& tag) { m_Tag = tag; }
+    void SetInstancing(bool instancing) { m_bInstancing = instancing; }
 
     int GetLayerIndex() { return m_LayerIndex; }
     std::wstring GetTag() const { return m_Tag; }
@@ -84,7 +85,9 @@ private:
     int m_LayerIndex; // 소속 레이어 번호
     bool m_CheckFrustum = true; // 프러스텀 여부
     bool m_Static = false; // 정적/동적 오브젝트 여부 
+    bool m_bInstancing = false; // 인스턴싱 여부
     std::wstring m_Tag = L"Default"; // 기본 태그 (Default)
+
 
 protected:
     CStateManager* m_StateManager;
