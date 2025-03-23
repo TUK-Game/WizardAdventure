@@ -22,6 +22,8 @@
 #include <Engine/CollisionObject.h>
 #include <Engine/Device.h>
 #include <Engine/RenderTargetGroup.h>
+#include <Engine/SubLevel.h>
+#include <Engine/BoxCollider.h>
 
 #include <Engine/Animator.h>
 CLevel_1::CLevel_1()
@@ -37,6 +39,12 @@ CLevel_1::~CLevel_1()
 
 void CLevel_1::Init()
 {
+	CLevel::Init();
+
+	m_SubLevel = std::make_shared<CSubLevel>();
+	m_SubLevel->SetBoundingBox(Vec3(0.f, 0.f, 0.f), Vec3(7000, 3000, 9000));
+	m_SubLevel->SplitSubScene(4);
+
 	this->SetName(L"Level_1");
 
 	this->GetLayer(0)->SetName(L"Camera");
@@ -96,7 +104,7 @@ void CLevel_1::Init()
 		light->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
-		this->AddGameObject(light, 3, false);
+		this->AddGameObject(light, 4, false);
 	}
 
 	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");

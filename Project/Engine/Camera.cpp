@@ -16,6 +16,7 @@
 #include "AssetManager.h"
 
 #include <iostream>
+#include "SubLevel.h"
 
 Matrix CCamera::s_matView;
 Matrix CCamera::s_matProjection;
@@ -151,14 +152,27 @@ void CCamera::SortObject()
 	m_vecParticle.clear();
 
 	CLevel* pCurLevel = CLevelManager::GetInst()->GetCurrentLevel();
-
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
 		if (!(m_LayerCheck & (1 << i)))
 			continue;
 
-		CLayer* pLayer = pCurLevel->GetLayer(i);
-		const std::vector<CGameObject*>& vecObjects = pLayer->GetObjects();
+		std::vector<CGameObject*> vecObjects;
+		if (i == 3 || i == 10)
+		{
+			std::shared_ptr<CSubLevel> level = pCurLevel->m_SubLevel;
+			if (level)
+			{
+				if (m_Frustum.IsInFrustum(pCurLevel->m_SubLevel->GetBoundingBox()))
+				{
+					level->PickGameObject(m_Frustum, vecObjects, i);
+				}
+			}
+		}
+		else
+		{
+			vecObjects = pCurLevel->GetLayer(i)->GetParentObjects();
+		}
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
@@ -209,7 +223,7 @@ void CCamera::SortShadowObject()
 			continue;
 
 		CLayer* pLayer = pCurLevel->GetLayer(i);
-		const std::vector<CGameObject*>& vecObjects = pLayer->GetObjects();
+		const std::vector<CGameObject*>& vecObjects = pLayer->GetParentObjects();
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{

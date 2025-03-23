@@ -545,6 +545,9 @@
     <ClInclude Include="CollisionObject.h">
       <Filter>03. GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="SubLevel.h">
+      <Filter>02. Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -825,6 +828,9 @@
     </ClCompile>
     <ClCompile Include="CollisionObject.cpp">
       <Filter>03. GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SubLevel.cpp">
+      <Filter>02. Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
