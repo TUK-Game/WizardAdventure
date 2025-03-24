@@ -1,27 +1,27 @@
 #include "pch.h"
-#include "PlayerAttackWState.h"
+#include "PlayerAttackRState.h"
 #include "Player.h"
 #include "Animator.h"
 #include "InputManager.h"
 #include "StateManager.h"
 
-void CPlayerAttackWState::Enter(CGameObject* entity)
+void CPlayerAttackRState::Enter(CGameObject* entity)
 {
 #ifdef _DEBUG;
-	std::cout << "Entering AttackW State" << std::endl;
+	std::cout << "Entering AttackR State" << std::endl;
 #endif
     std::vector<CGameObject*> objs = entity->GetChild();
     for (const auto o : objs) {
         CAnimator* ani = o->GetAnimator();
-        ani->Play(L"MAGEATTACK2");
+        ani->Play(L"MAGEATTACK3");
         m_AttackDuration = ani->GetDuration();
     }
     m_ElapsedTime = 0.f;
     CPlayer* player = dynamic_cast<CPlayer*>(entity);
-    player->Attack(1);
+    player->Attack(2);
 }
 
-void CPlayerAttackWState::Update(CGameObject* entity, float deltaTime)
+void CPlayerAttackRState::Update(CGameObject* entity, float deltaTime)
 {
 
     m_ElapsedTime += deltaTime;
@@ -29,9 +29,9 @@ void CPlayerAttackWState::Update(CGameObject* entity, float deltaTime)
         entity->GetStateManager()->HandleEvent(entity, "EndAttack");
 }
 
-void CPlayerAttackWState::Exit(CGameObject* entity)
+void CPlayerAttackRState::Exit(CGameObject* entity)
 {
 #ifdef _DEBUG;
-    std::cout << "Exiting AttackW State" << std::endl;
+    std::cout << "Exiting AttackR State" << std::endl;
 #endif
 }

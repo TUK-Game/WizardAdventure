@@ -5,8 +5,9 @@
 #include "PlayerRunState.h"
 #include "PlayerDashState.h"
 #include "PlayerAttackQState.h"
-#include "PlayerAttackWState.h"
+#include "PlayerAttackRState.h"
 #include "PlayerAttackEState.h"
+#include "PlayerAttackLState.h"
 #include "Transform.h"
 #include "Engine.h"
 #include "SkillManager.h"
@@ -58,27 +59,32 @@ void CPlayer::CreateStateManager()
     m_StateManager->AddState(new CPlayerRunState);
     m_StateManager->AddState(new CPlayerDashState);
     m_StateManager->AddState(new CPlayerAttackQState);
-    m_StateManager->AddState(new CPlayerAttackWState);
+    m_StateManager->AddState(new CPlayerAttackRState);
     m_StateManager->AddState(new CPlayerAttackEState);
+    m_StateManager->AddState(new CPlayerAttackEState);
+    m_StateManager->AddState(new CPlayerAttackLState);
 
     m_StateManager->SetTransition(EState_Type::Idle, "Move", EState_Type::Run);
     m_StateManager->SetTransition(EState_Type::Idle, "Dash", EState_Type::Dash);
     m_StateManager->SetTransition(EState_Type::Idle, "Attack_Q", EState_Type::Attack_Q);
-    m_StateManager->SetTransition(EState_Type::Idle, "Attack_W", EState_Type::Attack_W);
+    m_StateManager->SetTransition(EState_Type::Idle, "Attack_R", EState_Type::Attack_R);
     m_StateManager->SetTransition(EState_Type::Idle, "Attack_E", EState_Type::Attack_E);
+    m_StateManager->SetTransition(EState_Type::Idle, "Attack_LButton", EState_Type::Attack_LButton);
 
 
     m_StateManager->SetTransition(EState_Type::Run, "Stop", EState_Type::Idle);
     m_StateManager->SetTransition(EState_Type::Run, "Dash", EState_Type::Dash);
     m_StateManager->SetTransition(EState_Type::Run, "Attack_Q", EState_Type::Attack_Q);
-    m_StateManager->SetTransition(EState_Type::Run, "Attack_W", EState_Type::Attack_W);
+    m_StateManager->SetTransition(EState_Type::Run, "Attack_R", EState_Type::Attack_R);
     m_StateManager->SetTransition(EState_Type::Run, "Attack_E", EState_Type::Attack_E);
+    m_StateManager->SetTransition(EState_Type::Run, "Attack_LButton", EState_Type::Attack_LButton);
 
     m_StateManager->SetTransition(EState_Type::Dash, "EndDash", EState_Type::Run);
 
     m_StateManager->SetTransition(EState_Type::Attack_Q, "EndAttack", EState_Type::Idle);
-    m_StateManager->SetTransition(EState_Type::Attack_W, "EndAttack", EState_Type::Idle);
+    m_StateManager->SetTransition(EState_Type::Attack_R, "EndAttack", EState_Type::Idle);
     m_StateManager->SetTransition(EState_Type::Attack_E, "EndAttack", EState_Type::Idle);
+    m_StateManager->SetTransition(EState_Type::Attack_LButton, "EndAttack", EState_Type::Idle);
 }
 
 void CPlayer::Move(Vec3 moveDir, bool shouldRotate)

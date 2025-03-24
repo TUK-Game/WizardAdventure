@@ -22,10 +22,10 @@ void CPlayerRunState::Update(CGameObject* entity, float deltaTime)
     CPlayer* player = dynamic_cast<CPlayer*>(entity);
 
     Vec3 moveDir = Vec3(0, 0, 0);
-    if (KEY_PUSH(EKey::Up))    moveDir.z += 1;
-    if (KEY_PUSH(EKey::Down))  moveDir.z -= 1;
-    if (KEY_PUSH(EKey::Left))  moveDir.x -= 1;
-    if (KEY_PUSH(EKey::Right)) moveDir.x += 1;
+    if (KEY_PUSH(EKey::W))    moveDir.z += 1;
+    if (KEY_PUSH(EKey::S))  moveDir.z -= 1;
+    if (KEY_PUSH(EKey::A))  moveDir.x -= 1;
+    if (KEY_PUSH(EKey::D)) moveDir.x += 1;
 
     if (moveDir.Length() > 0)
     {

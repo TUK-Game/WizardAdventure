@@ -240,8 +240,9 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAttackEState.h" />
+    <ClInclude Include="PlayerAttackLState.h" />
     <ClInclude Include="PlayerAttackQState.h" />
-    <ClInclude Include="PlayerAttackWState.h" />
+    <ClInclude Include="PlayerAttackRState.h" />
     <ClInclude Include="PlayerDashState.h" />
     <ClInclude Include="PlayerIdleState.h" />
     <ClInclude Include="PlayerRunState.h" />
@@ -383,8 +384,9 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerAttackEState.cpp" />
+    <ClCompile Include="PlayerAttackLState.cpp" />
     <ClCompile Include="PlayerAttackQState.cpp" />
-    <ClCompile Include="PlayerAttackWState.cpp" />
+    <ClCompile Include="PlayerAttackRState.cpp" />
     <ClCompile Include="PlayerDashState.cpp" />
     <ClCompile Include="PlayerIdleState.cpp" />
     <ClCompile Include="PlayerRunState.cpp" />

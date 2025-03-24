@@ -521,7 +521,7 @@
     <ClInclude Include="PlayerAttackEState.h">
       <Filter>06. State\PlayerState\Attack</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerAttackWState.h">
+    <ClInclude Include="PlayerAttackRState.h">
       <Filter>06. State\PlayerState\Attack</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -547,6 +547,9 @@
     </ClInclude>
     <ClInclude Include="SubLevel.h">
       <Filter>02. Level</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAttackLState.h">
+      <Filter>06. State\PlayerState\Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -805,7 +808,7 @@
     <ClCompile Include="PlayerAttackEState.cpp">
       <Filter>06. State\PlayerState\Attack</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerAttackWState.cpp">
+    <ClCompile Include="PlayerAttackRState.cpp">
       <Filter>06. State\PlayerState\Attack</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -831,6 +834,9 @@
     </ClCompile>
     <ClCompile Include="SubLevel.cpp">
       <Filter>02. Level</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAttackLState.cpp">
+      <Filter>06. State\PlayerState\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
