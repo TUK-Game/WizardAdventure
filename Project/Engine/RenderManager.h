@@ -25,6 +25,7 @@ public:
 	void RegisterLight(CLight* light);
 
 	void PushLightData();
+	void PushFogData();
 	void RemoveObject(class CGameObject* obj);
 private:
 	std::vector<CCamera*>	m_vecCamera;

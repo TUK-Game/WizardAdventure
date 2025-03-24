@@ -124,13 +124,13 @@ void CConstantBuffer::PushComputeData(void* buffer, UINT size)
 	m_CurrentIndex++;
 }
 
-void CConstantBuffer::SetGlobalData(void* buffer, UINT size)
+void CConstantBuffer::SetGlobalData(void* buffer, UINT size, int rootsignatureIndex)
 {
 	assert(m_ElementSize == ((size + 255) & ~255));
 
 	::memcpy(&m_MappedBuffer[0], buffer, size);
 
-	GRAPHICS_CMD_LIST->SetGraphicsRootConstantBufferView(0, GetGpuVirtualAddress(0));
+	GRAPHICS_CMD_LIST->SetGraphicsRootConstantBufferView(rootsignatureIndex, GetGpuVirtualAddress(0));
 }
 
 

@@ -47,7 +47,7 @@ void CCameraScript::Update()
 	{
 		GetOwner()->GetCamera()->SetCameraType(ECamera_Type::Fixed);
 		GetOwner()->GetCamera()->SetFOV(60.f);
-		GetOwner()->GetCamera()->SetFar(3000.f);
+		GetOwner()->GetCamera()->SetFar(5000.f);
 		GetTransform()->SetRelativeRotation(49.f, -34.f, 0.f);
 	}
 	if (KEY_DOWN(EKey::Tab))

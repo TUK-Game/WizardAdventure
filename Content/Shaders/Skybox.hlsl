@@ -1,9 +1,7 @@
 #ifndef _SKYBOX_HLSLI_
 #define _SKYBOX_HLSLI_
 
-//#include "params.hlsli"
-
-cbuffer TRANSFORM_PARAMS : register(b1)
+cbuffer TRANSFORM_PARAMS : register(b2)
 {
     row_major matrix matWorld;
     row_major matrix matView;
@@ -12,7 +10,7 @@ cbuffer TRANSFORM_PARAMS : register(b1)
     row_major matrix matWVP;
 };
 
-cbuffer MATERIAL_PARAMS : register(b2)
+cbuffer MATERIAL_PARAMS : register(b3)
 {
     int int_0;
     int int_1;

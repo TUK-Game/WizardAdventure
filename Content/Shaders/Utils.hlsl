@@ -109,4 +109,17 @@ void Skinning(inout float3 pos, inout float3 normal, inout float3 tangent,
     normal = normalize(info.normal);
 }
 
+float4 Fog(float4 cColor, float3 vPosition)
+{
+    float3 vCameraPosition = cameraPosition.xyz;
+    float3 vPositionToCamera = vCameraPosition - vPosition.xyz;
+    float fDistanceToCamera = length(vPositionToCamera);
+    
+    float fFogRange = fogRange;
+    float fFogFactor = saturate((fDistanceToCamera - fogStart) / fFogRange);
+    
+    float4 cColorByFog = lerp(cColor, fogColor, fFogFactor);
+    return cColorByFog;
+}
+
 #endif

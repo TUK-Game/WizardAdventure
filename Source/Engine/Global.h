@@ -198,6 +198,14 @@ struct AnimFrameParams
 	Vec4	translation;
 };
 
+struct FogParams
+{
+	Vec3	cameraPosition;
+	float   range;
+	Vec4    fogColor;
+	float   Start;
+};
+
 struct MonsterStat
 {
 	int maxHP;

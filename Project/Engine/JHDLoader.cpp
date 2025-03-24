@@ -101,7 +101,7 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 				file.read(reinterpret_cast<char*>(&num), sizeof(num));
 				if (bCopy)
 					continue;
-				meshInfo->vertices[i].Normal = Vec3(num[0], num[1], num[2]);
+				meshInfo->vertices[i].Normal = Vec3(num[0], num[1], -num[2]);
 			}
 		}
 		else if (!strcmp(pstrToken, "Tangents:\n"))

@@ -837,9 +837,6 @@
     <None Include="SimpleMath.inl">
       <Filter>01. Manager\05. Math</Filter>
     </None>
-    <None Include="default.hlsli">
-      <Filter>HLSL</Filter>
-    </None>
     <None Include="fmod.cs">
       <Filter>05. Asset\05. Sound\01. FMOD</Filter>
     </None>

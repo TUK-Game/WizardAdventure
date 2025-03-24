@@ -26,7 +26,15 @@ cbuffer GLOBAL_PARAMS : register(b0)
     LightInfo light[50];
 }
 
-cbuffer TRANSFORM_PARAMS : register(b1)
+cbuffer FOG_PARAMS : register(b1)
+{
+    float3 cameraPosition;
+    float fogRange;
+    float4 fogColor;
+    float fogStart;
+}
+
+cbuffer TRANSFORM_PARAMS : register(b2)
 {
     row_major matrix matWorld;
     row_major matrix matView;
@@ -36,7 +44,7 @@ cbuffer TRANSFORM_PARAMS : register(b1)
     row_major matrix matViewInv;
 };
 
-cbuffer MATERIAL_PARAMS : register(b2)
+cbuffer MATERIAL_PARAMS : register(b3)
 {
     int int_0;
     int int_1;

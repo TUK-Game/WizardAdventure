@@ -427,10 +427,6 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <None Include="..\..\Build\protoc-21.12-win64\bin\Enum.proto" />
     <None Include="..\..\Build\protoc-21.12-win64\bin\Protocol.proto" />
     <None Include="..\..\Build\protoc-21.12-win64\bin\Struct.proto" />
-    <None Include="default.hlsli">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
     <None Include="fmod.cs" />
     <None Include="fmod_dsp.cs" />
     <None Include="fmod_errors.cs" />

@@ -3,6 +3,7 @@
 enum class EConstantBuffer_Type : unsigned char
 {
 	Global, 
+	Fog,
 	Transform,
 	Material,
 
@@ -31,7 +32,7 @@ public:
 	void PushGraphicsData(void* buffer, UINT size);
 	void PushComputeData(void* buffer, UINT size);
 
-	void SetGlobalData(void* buffer, UINT size);
+	void SetGlobalData(void* buffer, UINT size, int rootsignatureIndex);
 
 private:
 	int CreateBuffer();

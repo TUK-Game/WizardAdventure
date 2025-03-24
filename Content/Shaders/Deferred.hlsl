@@ -27,6 +27,7 @@ struct VS_OUT
     float3 viewNormal : NORMAL;
     float3 viewTangent : TANGENT;
     float3 viewBinormal : BINORMAL;
+    float3 worldPos : POSITION2;
 };
 
 VS_OUT VS_Main(VS_IN input)
@@ -44,6 +45,8 @@ VS_OUT VS_Main(VS_IN input)
         output.viewNormal = normalize(mul(float4(input.normal, 0.f), input.Instance_matWV).xyz);
         output.viewTangent = normalize(mul(float4(input.tangent, 0.f), input.Instance_matWV).xyz);
         output.viewBinormal = normalize(cross(output.viewTangent, output.viewNormal));
+        output.worldPos = mul(float4(input.pos, 1.f), input.Instance_matWorld).xyz;
+
     }
     else
     {
@@ -57,6 +60,7 @@ VS_OUT VS_Main(VS_IN input)
         output.viewNormal = normalize(mul(float4(input.normal, 0.f), matWV).xyz);
         output.viewTangent = normalize(mul(float4(input.tangent, 0.f), matWV).xyz);
         output.viewBinormal = normalize(cross(output.viewTangent, output.viewNormal));
+        output.worldPos = mul(float4(input.pos, 1.f), matWorld).xyz;
     }
     
     return output;
@@ -90,6 +94,7 @@ PS_OUT PS_Main(VS_OUT input)
 
     output.position = float4(input.viewPos.xyz, 0.f);
     output.normal = float4(viewNormal.xyz, 0.f);
+    color = Fog(color, input.worldPos.xyz);
     output.color = color;
 
     return output;
@@ -109,16 +114,7 @@ PS_MAPOUT PS_Map(VS_OUT input)
     if (tex_on_0)   
         color = tex_0.Sample(sam_0, input.uv);
 
-    float3 viewNormal = input.viewNormal;
-    if (tex_on_1)
-    {
-         // [0,255] 범위에서 [0,1]로 변환
-        float3 tangentSpaceNormal = tex_1.Sample(sam_0, input.uv).xyz;
-         // [0,1] 범위에서 [-1,1]로 변환
-        tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
-        float3x3 matTBN = { input.viewTangent, input.viewBinormal, input.viewNormal };
-        viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
-    }
+
 
     output.color = color;
 

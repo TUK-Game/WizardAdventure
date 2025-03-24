@@ -270,7 +270,7 @@ void CCamera::PushLightData()
 		++lightParams.lightCount;
 	}
 
-	CONST_BUFFER(EConstantBuffer_Type::Global)->SetGlobalData(&lightParams, sizeof(lightParams));
+	CONST_BUFFER(EConstantBuffer_Type::Global)->SetGlobalData(&lightParams, sizeof(lightParams), 0);
 }
 
 

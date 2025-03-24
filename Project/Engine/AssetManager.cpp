@@ -114,7 +114,7 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"Hitori", tex);
 
 	tex = new CTexture;
-	tex->Init(path / L"Skybox03.dds", RESOURCE_TEXTURE_CUBE);
+	tex->Init(path / L"SkyboxDark.dds", RESOURCE_TEXTURE_CUBE);
 	AddAsset(L"Skybox", tex);
 
 	tex = new CTexture;
