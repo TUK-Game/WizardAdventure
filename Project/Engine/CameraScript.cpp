@@ -41,11 +41,13 @@ void CCameraScript::Update()
 	{
 		GetOwner()->GetCamera()->SetCameraType(ECamera_Type::Free);
 		GetOwner()->GetCamera()->SetFOV(90.f);
+		GetOwner()->GetCamera()->SetFar(10000.f);
 	}
 	if (KEY_PUSH(EKey::Num2))
 	{
 		GetOwner()->GetCamera()->SetCameraType(ECamera_Type::Fixed);
 		GetOwner()->GetCamera()->SetFOV(60.f);
+		GetOwner()->GetCamera()->SetFar(3000.f);
 		GetTransform()->SetRelativeRotation(49.f, -34.f, 0.f);
 	}
 	if (KEY_DOWN(EKey::Tab))
@@ -104,8 +106,10 @@ void CCameraScript::FreeMove()
 		CGameObject* obj = CLevelManager::GetInst()->Pick(pos.x, pos.y);
 		if (obj)
 		{
-			CImGuiManager::GetInst()->SetSelectedObject(obj);
+#ifdef READY_IMGUI
+			//CImGuiManager::GetInst()->SetSelectedObject(obj);
 			//obj->SetActive(false);
+#endif
 			std::cout << "My name is " << ws2s(obj->GetName()) << '\n';
 		}
 	}

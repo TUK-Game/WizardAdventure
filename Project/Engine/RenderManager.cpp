@@ -17,8 +17,9 @@ CRenderManager::~CRenderManager()
 
 void CRenderManager::Render()
 {
+#ifdef READY_IMGUI
 	CImGuiManager::GetInst()->ReadyWindow();
-
+#endif
 	ClearRTV();
 
 	PushLightData();
@@ -39,8 +40,9 @@ void CRenderManager::Render()
 	//{
 	//	camera->Render();
 	//}
+#ifdef READY_IMGUI
 	CImGuiManager::GetInst()->Render();
-
+#endif
 	// Present
 	CDevice::GetInst()->RenderEnd();
 }

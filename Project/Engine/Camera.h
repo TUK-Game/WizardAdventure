@@ -25,6 +25,7 @@ public:
     int GetPriority() const                 { return m_Priority; }
     UINT GetLayerCheck()                    { return m_LayerCheck; }
     CGameObject* GetTarget()                { return m_Target; }
+    CFrustum& GetFrustum()                  { return m_Frustum; }
 
     void SetCustomMatView(const Matrix& matView);
     void SetProjType(EProjection_Type type) { m_ProjectionType = type; }

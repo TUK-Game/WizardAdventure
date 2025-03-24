@@ -75,7 +75,7 @@ void CLevel::Deregister()
 	{
 		if (i == 10)
 		{
-			m_SubLevel->Deregister();
+			//m_SubLevel->Deregister();
 		}
 		else
 			m_Layer[i]->m_vecObjects.clear();
@@ -87,7 +87,7 @@ void CLevel::AddGameObject(CGameObject* object, int layerIndex, bool bChildMove)
 	// layer가 오브젝트를 비추는 layer일 때
 	if (layerIndex == 10)
 	{
-		bool b = m_SubLevel->AddGameObject(object, layerIndex, bChildMove);
+		bool b = m_SubLevel->AddGameObject(object, bChildMove);
 	}
 	else
 		m_Layer[layerIndex]->AddGameObject(object, bChildMove);

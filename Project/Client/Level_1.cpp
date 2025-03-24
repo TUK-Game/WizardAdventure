@@ -43,7 +43,7 @@ void CLevel_1::Init()
 
 	m_SubLevel = std::make_shared<CSubLevel>();
 	m_SubLevel->SetBoundingBox(Vec3(4000.f, 0.f, 5000.f), Vec3(8000, 3000, 9000));
-	m_SubLevel->SplitSubScene(4);
+	m_SubLevel->SplitSubScene(1);
 
 	this->SetName(L"Level_1");
 

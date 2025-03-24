@@ -68,3 +68,9 @@ private:\
 #define RESOURCE_TEXTURE2DARRAY		0x03
 #define RESOURCE_TEXTURE_CUBE		0x04
 #define RESOURCE_BUFFER				0x05
+
+
+
+//#define READY_IMGUI
+
+#define MAX_OBJECTS_SUBLEVEL 200

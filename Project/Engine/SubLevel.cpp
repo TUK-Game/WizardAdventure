@@ -7,7 +7,6 @@
 #include "Layer.h"
 #include "Frustum.h"
 
-std::vector<int> layerIndex({ 10 });
 
 CSubLevel::CSubLevel()
 {
@@ -26,10 +25,7 @@ void CSubLevel::Begin()
 {
 	if (m_SubLevels.empty())
 	{
-		for (int idx : layerIndex)
-		{
-			GetLayer(idx)->Begin();
-		}
+		m_Layer->Begin();
 	}
 	else
 	{
@@ -42,10 +38,7 @@ void CSubLevel::Update()
 {
 	if (m_SubLevels.empty())
 	{
-		for (int idx : layerIndex)
-		{
-			GetLayer(idx)->Update();
-		}
+		m_Layer->Update();
 	}
 	else
 	{
@@ -58,10 +51,7 @@ void CSubLevel::FinalUpdate()
 {
 	if (m_SubLevels.empty())
 	{
-		for (int idx : layerIndex)
-		{
-			GetLayer(idx)->FinalUpdate();
-		}
+		m_Layer->FinalUpdate();
 	}
 	else
 	{
@@ -70,30 +60,12 @@ void CSubLevel::FinalUpdate()
 	}
 }
 
-void CSubLevel::Deregister()
-{
-	if (m_SubLevels.empty())
-	{
-		for (int idx : layerIndex)
-		{
-			GetLayer(idx)->m_vecObjects.clear();
-		}
-	}
-	else
-	{
-		for (const auto& level : m_SubLevels)
-			level->Deregister();
-	}
-}
-
 void CSubLevel::End()
 {
 	if (m_SubLevels.empty())
 	{
-		for (int idx : layerIndex)
-		{
-			GetLayer(idx)->m_vecObjects.clear();
-		}
+		m_Layer->m_vecObjects.clear();	
+		m_Layer->m_vecParentObjects.clear();	
 	}
 	else
 	{
@@ -102,7 +74,7 @@ void CSubLevel::End()
 	}
 }
 
-bool CSubLevel::AddGameObject(CGameObject* object, int layerIndex, bool bChildMove)
+bool CSubLevel::AddGameObject(CGameObject* object, bool bChildMove)
 {
 	if (m_SubLevels.empty())
 	{
@@ -117,7 +89,7 @@ bool CSubLevel::AddGameObject(CGameObject* object, int layerIndex, bool bChildMo
 			const auto& collider = (CBoxCollider*)(object->GetCollider());
 			if (m_BoundingBox.Intersects(collider->GetBoundingBox()))
 			{
-				GetLayer(layerIndex)->AddGameObject(object, bChildMove);
+				Insert(object, bChildMove);
 				return true;
 			}
 			break;
@@ -133,21 +105,34 @@ bool CSubLevel::AddGameObject(CGameObject* object, int layerIndex, bool bChildMo
 	{
 		for (const auto& level : m_SubLevels)
 		{
-			if (level->AddGameObject(object, layerIndex, bChildMove))
+			if (level->AddGameObject(object, bChildMove))
 				return true;
 		}
 	}
 	return false;
 }
 
+void CSubLevel::Insert(CGameObject* object, bool bChildMove)
+{
+	int objNum = m_Layer->GetObjects().size();
+	if (objNum >= MAX_OBJECTS_SUBLEVEL)
+	{
+		SplitSubScene(1);
+		for (const auto& object : m_Layer->GetObjects())
+		{
+			AddGameObject(object, false);
+		}
+		m_Layer->ClearObjectsVector();
+	}
+	else
+		m_Layer->AddGameObject(object, bChildMove);
+}
+
 void CSubLevel::RemoveGameObject(CGameObject* object)
 {
 	if (m_SubLevels.empty())
 	{
-		for (int idx : layerIndex)
-		{
-			GetLayer(idx)->RemoveGameObject(object);
-		}
+		m_Layer->RemoveGameObject(object);
 	}
 	else
 	{
@@ -156,46 +141,32 @@ void CSubLevel::RemoveGameObject(CGameObject* object)
 	}
 }
 
-void CSubLevel::RegisterGameObject(CGameObject* object, int layer)
-{
-	if(m_SubLevels.empty())
-		GetLayer(layer)->RegisterGameObject(object);
-	else
-	{
-		for (const auto& level : m_SubLevels)
-			level->RegisterGameObject(object, layer);
-	}
-}
-
-void CSubLevel::PickGameObject(CFrustum& frustum, std::vector<CGameObject*>& objects, int layerIndex)
+void CSubLevel::PickGameObject(CFrustum& frustum, std::vector<CGameObject*>& objects)
 {
 	if (!frustum.IsInFrustum(m_BoundingBox))
 		return;
 
 	if (m_SubLevels.empty())
 	{
-		for (const auto& object : GetLayer(layerIndex)->GetParentObjects())
+		std::vector<CGameObject*> objs = m_Layer->GetParentObjects();
+		for (const auto& object : objs)
 		{
-			objects.push_back(object);
-			std::vector<CGameObject*> childs = object->GetChild();
-			for (const auto& child : childs)
-			{
-				objects.push_back(child);
-			}
+			if(object->GetCollider()->IsFrustum(frustum))
+				objects.emplace_back(object);
 		}
 	}
 	else
 	{
 		for (const auto& level : m_SubLevels)
-			level->PickGameObject(frustum, objects, layerIndex);
+			level->PickGameObject(frustum, objects);
 	}
 }
 
-void CSubLevel::PickGameObject(std::vector<CGameObject*>& objects, int layerIndex)
+void CSubLevel::PickGameObject(std::vector<CGameObject*>& objects)
 {
 	if (m_SubLevels.empty())
 	{
-		for (const auto& object : GetLayer(layerIndex)->GetParentObjects())
+		for (const auto& object : m_Layer->GetParentObjects())
 		{
 			objects.push_back(object);
 		}
@@ -203,7 +174,7 @@ void CSubLevel::PickGameObject(std::vector<CGameObject*>& objects, int layerInde
 	else
 	{
 		for (const auto& level : m_SubLevels)
-			level->PickGameObject(objects, layerIndex);
+			level->PickGameObject(objects);
 	}
 }
 
@@ -230,10 +201,6 @@ void CSubLevel::SplitSubScene(int splitLevels)
 	}
 	else
 	{
-		for (int i = 0; i < MAX_LAYER; ++i)
-		{
-			m_Layer[i] = new CLayer;
-			m_Layer[i]->m_LayerIndex = i;
-		}
+		m_Layer = new CLayer;
 	}
 }

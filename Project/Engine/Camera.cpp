@@ -165,8 +165,9 @@ void CCamera::SortObject()
 			{
 				if (m_Frustum.IsInFrustum(pCurLevel->m_SubLevel->GetBoundingBox()))
 				{
-					level->PickGameObject(m_Frustum, vecObjects, i);
+					level->PickGameObject(m_Frustum, m_vecDeferred);
 				}
+				continue;
 			}
 		}
 		else

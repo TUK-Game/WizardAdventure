@@ -1,10 +1,11 @@
 #pragma once
-#include "Level.h"
+#include "Ref.h"
 
 class CFrustum;
+class CGameObject;
 
 class CSubLevel :
-	public CLevel
+	public CRef
 {
 public:
 	CSubLevel();
@@ -19,16 +20,15 @@ public:
 	virtual void Begin();
 	virtual void Update();
 	virtual void FinalUpdate();
-	virtual void Deregister();
 	virtual void End();
 
 public:
-	bool AddGameObject(CGameObject* object, int layerIndex, bool bChildMove);
+	bool AddGameObject(CGameObject* object, bool bChildMove);
+	void Insert(CGameObject* object, bool bChildMove);
 	void RemoveGameObject(CGameObject* object);
-	void RegisterGameObject(CGameObject* object, int);
 
-	void PickGameObject(CFrustum& frustum, std::vector<CGameObject*>& objects, int layerIndex);
-	void PickGameObject(std::vector<CGameObject*>& objects, int layerIndex);
+	void PickGameObject(CFrustum& frustum, std::vector<CGameObject*>& objects);
+	void PickGameObject(std::vector<CGameObject*>& objects);
 
 	void SplitSubScene(int splitLevels);
 public:
@@ -37,7 +37,8 @@ public:
 	
 	
 public:
-	BoundingBox					m_BoundingBox;
+	BoundingBox								m_BoundingBox;
 	std::vector<std::shared_ptr<CSubLevel>> m_SubLevels;
+	class CLayer*							m_Layer;
 };
 
