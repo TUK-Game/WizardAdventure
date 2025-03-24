@@ -2,6 +2,7 @@
 #include "MonsterIdleState.h"
 #include "GameObject.h"
 #include "Animator.h"
+#include "MonsterAI.h"
 
 void CMonsterIdleState::Enter(CGameObject* entity)
 {
@@ -17,7 +18,7 @@ void CMonsterIdleState::Enter(CGameObject* entity)
 
 void CMonsterIdleState::Update(CGameObject* entity, float deltaTime)
 {
-
+	entity->GetMonsterAI()->RotateToTarget(deltaTime);
 }
 
 void CMonsterIdleState::Exit(CGameObject* entity)

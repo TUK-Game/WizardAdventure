@@ -23,6 +23,8 @@ void CMonsterChaseState::Update(CGameObject* entity, float deltaTime)
     CGameObject* target = entity->GetMonsterAI()->GetTarget();  
     if (!target) return;
 
+    entity->GetMonsterAI()->RotateToTarget(deltaTime);
+
     CTransform* myTransform = entity->GetTransform();
     CTransform* targetTransform = target->GetTransform();
 
@@ -31,6 +33,7 @@ void CMonsterChaseState::Update(CGameObject* entity, float deltaTime)
 
     Vec3 dir = targetPos - myPos;
     float dist = dir.Length();
+
 
     if (dist < 1.f) return; // 너무 가까우면 이동 생략
     dir.Normalize();
