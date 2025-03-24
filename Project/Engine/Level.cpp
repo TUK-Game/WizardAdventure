@@ -32,10 +32,9 @@ void CLevel::Begin()
 {
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		if (i == 3 || i == 10)
+		if (i == 10)
 		{
-			if(i == 3)
-				m_SubLevel->Begin();
+			m_SubLevel->Begin();
 		}
 		else
 			m_Layer[i]->Begin();
@@ -46,10 +45,9 @@ void CLevel::Update()
 {
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		if (i == 3 || i == 10)
+		if (i == 10)
 		{
-			if (i == 3)
-				m_SubLevel->Update();
+			m_SubLevel->Update();
 		}
 		else
 			m_Layer[i]->Update();
@@ -60,10 +58,9 @@ void CLevel::FinalUpdate()
 {
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		if (i == 3 || i == 10)
+		if (i == 10)
 		{
-			if (i == 3)
-				m_SubLevel->FinalUpdate();
+			m_SubLevel->FinalUpdate();
 		}
 		else
 			m_Layer[i]->FinalUpdate();
@@ -76,10 +73,9 @@ void CLevel::Deregister()
 {
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		if (i == 3 || i == 10)
+		if (i == 10)
 		{
-			if (i == 3)
-				m_SubLevel->Deregister();
+			m_SubLevel->Deregister();
 		}
 		else
 			m_Layer[i]->m_vecObjects.clear();
@@ -89,7 +85,7 @@ void CLevel::Deregister()
 void CLevel::AddGameObject(CGameObject* object, int layerIndex, bool bChildMove)
 {
 	// layer가 오브젝트를 비추는 layer일 때
-	if (layerIndex == 3 || layerIndex == 10)
+	if (layerIndex == 10)
 	{
 		bool b = m_SubLevel->AddGameObject(object, layerIndex, bChildMove);
 	}
@@ -102,7 +98,7 @@ void CLevel::RemoveGameObject(CGameObject* object)
 	if (!object) return;
 
 	int layerNum = object->GetLayerIndex();
-	if (layerNum == 3 || layerNum == 10)
+	if (layerNum == 10)
 	{
 		m_SubLevel->RemoveGameObject(object);
 	}
@@ -127,10 +123,9 @@ void CLevel::End()
 {
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		if (i == 3 || i == 10)
+		if (i == 10)
 		{
-			if (i == 3)
-				m_SubLevel->End();
+			m_SubLevel->End();
 		}
 		else
 			if(m_Layer[i])

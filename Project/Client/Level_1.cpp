@@ -42,7 +42,7 @@ void CLevel_1::Init()
 	CLevel::Init();
 
 	m_SubLevel = std::make_shared<CSubLevel>();
-	m_SubLevel->SetBoundingBox(Vec3(0.f, 0.f, 0.f), Vec3(7000, 3000, 9000));
+	m_SubLevel->SetBoundingBox(Vec3(4000.f, 0.f, 5000.f), Vec3(8000, 3000, 9000));
 	m_SubLevel->SplitSubScene(4);
 
 	this->SetName(L"Level_1");
@@ -149,7 +149,7 @@ void CLevel_1::Init()
 		monster->SetName(L"Monster");
 		monster->AddComponent(new CTransform);
 		monster->AddComponent(new CBoxCollider);
-		monster->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
+		monster->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player")); // temp
 		monster->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
 		monster->GetTransform()->SetRelativePosition(11240, 20, 1100);
 		for (auto& o : obj2)
@@ -239,7 +239,6 @@ void CLevel_1::Init()
 	material->SetTexture(0, texture);
 	material->SetGraphicsShader(shader);
 	m_MiniMap->GetMeshRenderer()->SetMaterial(material);
-	//this->AddGameObject(ui, 4, false);
 #pragma endregion
 }
 

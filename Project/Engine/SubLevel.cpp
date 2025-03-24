@@ -7,7 +7,7 @@
 #include "Layer.h"
 #include "Frustum.h"
 
-std::vector<int> layerIndex({ 3, 10 });
+std::vector<int> layerIndex({ 10 });
 
 CSubLevel::CSubLevel()
 {
@@ -177,6 +177,11 @@ void CSubLevel::PickGameObject(CFrustum& frustum, std::vector<CGameObject*>& obj
 		for (const auto& object : GetLayer(layerIndex)->GetParentObjects())
 		{
 			objects.push_back(object);
+			std::vector<CGameObject*> childs = object->GetChild();
+			for (const auto& child : childs)
+			{
+				objects.push_back(child);
+			}
 		}
 	}
 	else

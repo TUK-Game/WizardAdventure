@@ -16,7 +16,6 @@ void CLayer::AddGameObject(CGameObject* parent, bool bChildMove)
 {
 	m_vecParentObjects.push_back(parent);
 	parent->m_LayerIndex = m_LayerIndex;
-
 	// 자식이 있다면, 자식도 해당 레이어 소속으로 변경
 	static std::list<CGameObject*> queue;
 	queue.clear();
@@ -40,6 +39,7 @@ void CLayer::AddGameObject(CGameObject* parent, bool bChildMove)
 		{
 			pObject->m_LayerIndex = m_LayerIndex;
 		}
+		m_vecObjects.push_back(pObject);
 	}
 }
 
