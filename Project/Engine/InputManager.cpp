@@ -72,10 +72,12 @@ int CInputManager::Init()
 
 void CInputManager::Update()
 {
+#ifdef READY_IMGUI
 	// 게임 윈도우가 포커싱 중일 때
 	ImGuiIO& io = ImGui::GetIO();
 	if (io.WantCaptureMouse)
 		return;
+#endif
 
 	if (GetFocus() == CEngine::GetInst()->GetWindowInfo().hWnd)
 	{

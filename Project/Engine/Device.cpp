@@ -57,9 +57,9 @@ int CDevice::Init()
 	CreateConstantBuffer(CBV_REGISTER::b2, sizeof(MaterialParams), 400000);
 
 	CreateRenderTargetGroups();
-
+#ifdef READY_IMGUI
 	CImGuiManager::GetInst()->Init();
-
+#endif
 
 	//ComPtr<ID3D12InfoQueue> infoQueue;
 	//m_Device->QueryInterface(IID_PPV_ARGS(&infoQueue));

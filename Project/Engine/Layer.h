@@ -29,6 +29,7 @@ public:
 	void Update();
 	void FinalUpdate();
 	void ClearObjects();
+	void ClearObjectsVector();
 
 public:
 	virtual CLayer* Clone() override { return new CLayer(*this); }

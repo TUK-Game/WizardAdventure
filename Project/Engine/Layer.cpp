@@ -119,3 +119,9 @@ void CLayer::ClearObjects()
 	m_vecParentObjects.clear(); 
 	m_vecObjects.clear();       
 }
+
+void CLayer::ClearObjectsVector()
+{
+	m_vecParentObjects.clear();
+	m_vecObjects.clear();
+}
