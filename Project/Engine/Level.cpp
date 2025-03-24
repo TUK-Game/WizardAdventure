@@ -3,15 +3,11 @@
 #include "Layer.h"
 #include "GameObject.h"
 #include "LevelCollision.h"
+#include "SubLevel.h"
 
 CLevel::CLevel()
 	: m_Layer{}
 {
-	for (int i = 0; i < MAX_LAYER; ++i)
-	{
-		m_Layer[i] = new CLayer;
-		m_Layer[i]->m_LayerIndex = i;
-	}
 	m_collision = new CLevelCollision();
 }
 
@@ -25,29 +21,49 @@ CLevel::~CLevel()
 
 void CLevel::Init()
 {
+	for (int i = 0; i < MAX_LAYER; ++i)
+	{
+		m_Layer[i] = new CLayer;
+		m_Layer[i]->m_LayerIndex = i;
+	}
 }
 
 void CLevel::Begin()
 {
-	for (auto& layer : m_Layer)
+	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		layer->Begin();
+		if (i == 10)
+		{
+			m_SubLevel->Begin();
+		}
+		else
+			m_Layer[i]->Begin();
 	}
 }
 
 void CLevel::Update()
 {
-	for (auto& layer : m_Layer)
+	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		layer->Update();
+		if (i == 10)
+		{
+			m_SubLevel->Update();
+		}
+		else
+			m_Layer[i]->Update();
 	}
 }
 
 void CLevel::FinalUpdate()
 {
-	for (auto& layer : m_Layer)
+	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		layer->FinalUpdate();
+		if (i == 10)
+		{
+			m_SubLevel->FinalUpdate();
+		}
+		else
+			m_Layer[i]->FinalUpdate();
 	}
 
 	m_collision->Collision();
@@ -55,15 +71,26 @@ void CLevel::FinalUpdate()
 
 void CLevel::Deregister()
 {
-	for (auto& layer : m_Layer)
+	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		layer->m_vecObjects.clear();
+		if (i == 10)
+		{
+			m_SubLevel->Deregister();
+		}
+		else
+			m_Layer[i]->m_vecObjects.clear();
 	}
 }
 
 void CLevel::AddGameObject(CGameObject* object, int layerIndex, bool bChildMove)
 {
-	m_Layer[layerIndex]->AddGameObject(object, bChildMove);
+	// layer가 오브젝트를 비추는 layer일 때
+	if (layerIndex == 10)
+	{
+		bool b = m_SubLevel->AddGameObject(object, layerIndex, bChildMove);
+	}
+	else
+		m_Layer[layerIndex]->AddGameObject(object, bChildMove);
 }
 
 void CLevel::RemoveGameObject(CGameObject* object)
@@ -71,6 +98,10 @@ void CLevel::RemoveGameObject(CGameObject* object)
 	if (!object) return;
 
 	int layerNum = object->GetLayerIndex();
+	if (layerNum == 10)
+	{
+		m_SubLevel->RemoveGameObject(object);
+	}
 	if (m_Layer[layerNum])
 	{
 		m_Layer[layerNum]->RemoveGameObject(object);
@@ -90,11 +121,14 @@ void CLevel::RemoveGameObjectInLevel(CGameObject* object)
 
 void CLevel::End()
 {
-	for (auto& layer : m_Layer)
+	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		if (layer)
+		if (i == 10)
 		{
-			layer->ClearObjects(); // 각 레이어의 오브젝트 정리
+			m_SubLevel->End();
 		}
+		else
+			if(m_Layer[i])
+				m_Layer[i]->m_vecObjects.clear();
 	}
 }

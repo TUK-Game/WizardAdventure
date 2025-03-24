@@ -16,7 +16,7 @@
 #include "Light.h"
 #include "../../3rdParty/ImGuizmo/ImGuizmo.h"
 #include "../../3rdParty/ImGui/imgui_internal.h"
-
+#include "SubLevel.h"
 static int objCounter = 0;
 
 CImGuiManager::CImGuiManager()
@@ -129,7 +129,12 @@ void CImGuiManager::DrawLevelWindow()
 	int index = 0;
 	for (int j = 0; j < MAX_LAYER; ++j)
 	{
-		auto& gameObjects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(j)->GetObjects();
+
+		std::vector<CGameObject*> gameObjects;
+		if (j == 10)
+			CLevelManager::GetInst()->GetCurrentLevel()->m_SubLevel->PickGameObject(gameObjects, j);
+		else
+			gameObjects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(j)->GetParentObjects();
 
 		for (auto& gameObject : gameObjects)
 		{

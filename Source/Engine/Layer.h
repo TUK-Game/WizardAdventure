@@ -9,6 +9,7 @@ class CLayer :
 	public CRef
 {
 	friend class CLevel;
+	friend class CSubLevel;
 
 public:
 	CLayer();

@@ -22,6 +22,8 @@
 #include <Engine/CollisionObject.h>
 #include <Engine/Device.h>
 #include <Engine/RenderTargetGroup.h>
+#include <Engine/SubLevel.h>
+#include <Engine/BoxCollider.h>
 
 #include <Engine/Animator.h>
 CLevel_1::CLevel_1()
@@ -37,6 +39,12 @@ CLevel_1::~CLevel_1()
 
 void CLevel_1::Init()
 {
+	CLevel::Init();
+
+	m_SubLevel = std::make_shared<CSubLevel>();
+	m_SubLevel->SetBoundingBox(Vec3(4000.f, 0.f, 5000.f), Vec3(8000, 3000, 9000));
+	m_SubLevel->SplitSubScene(4);
+
 	this->SetName(L"Level_1");
 
 	this->GetLayer(0)->SetName(L"Camera");
@@ -96,7 +104,7 @@ void CLevel_1::Init()
 		light->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
-		this->AddGameObject(light, 3, false);
+		this->AddGameObject(light, 4, false);
 	}
 
 	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
@@ -141,7 +149,7 @@ void CLevel_1::Init()
 		monster->SetName(L"Monster");
 		monster->AddComponent(new CTransform);
 		monster->AddComponent(new CBoxCollider);
-		monster->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
+		monster->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player")); // temp
 		monster->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
 		monster->GetTransform()->SetRelativePosition(11240, 20, 1100);
 		for (auto& o : obj2)
@@ -231,7 +239,6 @@ void CLevel_1::Init()
 	material->SetTexture(0, texture);
 	material->SetGraphicsShader(shader);
 	m_MiniMap->GetMeshRenderer()->SetMaterial(material);
-	//this->AddGameObject(ui, 4, false);
 #pragma endregion
 }
 

@@ -2,7 +2,7 @@
 
 class CLayer;
 class CGameObject;
-
+class CSubLevel;
 
 class CLevel :
 	public CRef
@@ -15,7 +15,7 @@ public:
 	CLayer* GetLayer(int index) const { return m_Layer[index]; }
 	class CLevelCollision* GetLevelCollision() { return m_collision; }
 
-	void Deregister();
+	virtual void Deregister();
 
 public:
 	virtual void Init();
@@ -32,11 +32,12 @@ public:
 public:
 	virtual CLevel* Clone() override	{ return new CLevel(*this); }
 
-private:
+protected:
 	std::array<CLayer*, MAX_LAYER>	m_Layer;
 	class CLevelCollision* m_collision;
 	
 public:
 	class CGameObject* m_MiniMap;
+	std::shared_ptr<CSubLevel> m_SubLevel;
 };
 
