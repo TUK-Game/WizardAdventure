@@ -111,8 +111,8 @@ void Skinning(inout float3 pos, inout float3 normal, inout float3 tangent,
 
 float4 Fog(float4 cColor, float3 vPosition)
 {
-    float3 vCameraPosition = cameraPosition.xyz;
-    float3 vPositionToCamera = vCameraPosition - vPosition.xyz;
+    float2 vCameraPosition = cameraPosition.xz;
+    float2 vPositionToCamera = vCameraPosition - vPosition.xz;
     float fDistanceToCamera = length(vPositionToCamera);
     
     float fFogRange = fogRange;

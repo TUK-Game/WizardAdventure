@@ -170,7 +170,7 @@ void CRenderManager::PushFogData()
 {
 	FogParams params{};
 	params.cameraPosition = GetMainCamera()->GetTransform()->GetWorldPosition();
-	params.fogColor = Vec4(1, 1, 1, 1);
+	params.fogColor = Vec4(0.5f, 0.5f, 0.5f, 1);
 	params.Start = 2000;
 	params.range = 4000 - 2000; // End - Start
 
