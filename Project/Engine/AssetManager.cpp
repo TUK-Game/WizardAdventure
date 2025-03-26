@@ -140,6 +140,14 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"Map.jpg");
 	AddAsset(L"Map", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Lava.png");
+	AddAsset(L"Lava", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Lava_Normal.png");
+	AddAsset(L"Lava_Normal", tex);
 	return S_OK;
 }
 
@@ -192,6 +200,13 @@ int CAssetManager::LoadMaterial()
 	material->SetTexture(0, FindAsset<CTexture>(L"Rock"));
 	material->SetTexture(1, FindAsset<CTexture>(L"Rock_Normal"));
 	AddAsset(L"Rock", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Lava"));
+	material->SetTexture(1, FindAsset<CTexture>(L"Lava_Normal"));
+	AddAsset(L"Lava", material);
+
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Particle"));

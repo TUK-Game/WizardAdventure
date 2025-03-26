@@ -15,7 +15,7 @@ CFireBall::CFireBall()
     AddComponent(new CMeshRenderer());  
     GetTransform()->SetRelativeScale(30.f, 30.f, 30.f);
     GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Sphere"));
-    GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+    GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Lava"));
     AddComponent(new CRigidBody());
 
     // AddComponent(new CCollider());      
