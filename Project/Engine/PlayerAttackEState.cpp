@@ -13,12 +13,12 @@ void CPlayerAttackEState::Enter(CGameObject* entity)
     std::vector<CGameObject*> objs = entity->GetChild();
     for (const auto o : objs) {
         CAnimator* ani = o->GetAnimator();
-        ani->Play(L"MAGEATTACK3");
+        ani->Play(L"MAGEATTACK2");
         m_AttackDuration = ani->GetDuration();
     }
     m_ElapsedTime = 0.f;
     CPlayer* player = dynamic_cast<CPlayer*>(entity);
-    player->Attack(2);
+    player->Attack(1);
 }
 
 void CPlayerAttackEState::Update(CGameObject* entity, float deltaTime)

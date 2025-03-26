@@ -301,3 +301,31 @@ void CCamera::SetCustomMatView(const Matrix& matView)
 	std::cout << "camera pos: " << pos.x << " " << pos.y << " " << pos.z << std::endl;
 	m_bUseCustomMatView = true;  // 커스텀 뷰 행렬 사용
 }
+
+
+void CCamera::ScreenToRay(const Vec2& screenPos, CCamera* cam, Vec3& outOrigin, Vec3& outDir)
+{
+	// 뷰포트 정보
+	Vec2 viewport = CDevice::GetInst()->GetViewportSize(); // (width, height)
+
+	// NDC(-1~1)로 변환
+	float ndcX = (2.0f * screenPos.x) / viewport.x - 1.0f;
+	float ndcY = 1.0f - (2.0f * screenPos.y) / viewport.y;
+
+	Vec3 ndcNear(ndcX, ndcY, 0.f); // Near plane
+	Vec3 ndcFar(ndcX, ndcY, 1.f);  // Far plane
+
+	// 역 변환 (Clip → World)
+	Matrix view = cam->GetViewMat();
+	Matrix proj = cam->GetProjMat();
+	Matrix invVP = XMMatrixInverse(nullptr, view * proj);
+
+	Vec3 nearWorld, farWorld;
+
+	XMStoreFloat3(&nearWorld, XMVector3TransformCoord(XMLoadFloat3(&ndcNear), invVP));
+	XMStoreFloat3(&farWorld, XMVector3TransformCoord(XMLoadFloat3(&ndcFar), invVP));
+
+	outOrigin = nearWorld;
+	outDir = (farWorld - nearWorld);
+	outDir.Normalize();
+}

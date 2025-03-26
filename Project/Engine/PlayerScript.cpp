@@ -14,10 +14,10 @@ void CPlayerScript::Update()
     if (!stateManager) return;
 
     Vec3 moveDir(0, 0, 0);
-    if (KEY_PUSH(EKey::Up))    moveDir.z += 1;
-    if (KEY_PUSH(EKey::Down))  moveDir.z -= 1;
-    if (KEY_PUSH(EKey::Left))  moveDir.x -= 1;
-    if (KEY_PUSH(EKey::Right)) moveDir.x += 1;
+    if (KEY_PUSH(EKey::W))    moveDir.z += 1;
+    if (KEY_PUSH(EKey::S))  moveDir.z -= 1;
+    if (KEY_PUSH(EKey::A))  moveDir.x -= 1;
+    if (KEY_PUSH(EKey::D)) moveDir.x += 1;
 
 
     if (moveDir.Length() > 0.01f)
@@ -28,16 +28,20 @@ void CPlayerScript::Update()
     {
         stateManager->HandleEvent(player, "Dash");
     }
+    if (KEY_DOWN(EKey::LButton))
+    {
+        stateManager->HandleEvent(player, "Attack_LButton");
+    }
     if (KEY_DOWN(EKey::Q))
     {
         stateManager->HandleEvent(player, "Attack_Q");
     }
-    if (KEY_DOWN(EKey::W))
-    {
-        stateManager->HandleEvent(player, "Attack_W");
-    }
     if (KEY_DOWN(EKey::E))
     {
         stateManager->HandleEvent(player, "Attack_E");
+    }
+    if (KEY_DOWN(EKey::R))
+    {
+        stateManager->HandleEvent(player, "Attack_R");
     }
 }

@@ -15,7 +15,7 @@ class CDevice :
 public:
 	ComPtr<IDXGIFactory> GetDXGI()		{ return m_DXGI; }
 	ComPtr<ID3D12Device> GetDevice()	{ return m_Device; }
-
+	Vec2 GetViewportSize() { return Vec2(m_Viewport.Width, m_Viewport.Height); }
 	std::shared_ptr<CGraphicsCommandQueue> GetCmdQueue()	{ return m_GraphicsCmdQueue; }
 	std::shared_ptr<CComputeCommandQueue> GetComputeCmdQueue()	{ return m_ComputeCmdQueue; }
 	std::shared_ptr<CSwapChain> GetSwapChain()						{ return m_SwapChain; }
@@ -38,6 +38,7 @@ private:
 
 private:
 	D3D12_VIEWPORT	m_Viewport;
+	
 	D3D12_RECT		m_ScissorRect;
 
 	ComPtr<ID3D12Debug>			m_DebugController;

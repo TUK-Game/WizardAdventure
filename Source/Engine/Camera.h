@@ -44,6 +44,7 @@ public:
     void CheckLayer(UINT layerIndex)        { m_LayerCheck ^= (1 << layerIndex); }
     void CheckLayerAll()                    { m_LayerCheck = 0xffffffff; }
     void CheckLayerClear()                  { m_LayerCheck = 0; }
+    void ScreenToRay(const Vec2& screenPos, CCamera* cam, Vec3& outOrigin, Vec3& outDir);
 
 public:
 	virtual void FinalUpdate() override;

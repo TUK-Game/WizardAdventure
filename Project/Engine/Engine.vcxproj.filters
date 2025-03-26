@@ -210,6 +210,12 @@
     <Filter Include="06. State\MonsterState\Move">
       <UniqueIdentifier>{fe03a543-94b3-4581-85db-0b097fb97b50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. GameObject\Player\Skill">
+      <UniqueIdentifier>{e701c7c4-23d6-401d-b489-530128f69a74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\Player\Skill\Fire">
+      <UniqueIdentifier>{019c9dec-01dc-418c-88e8-46cec7013dfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -521,7 +527,7 @@
     <ClInclude Include="PlayerAttackEState.h">
       <Filter>06. State\PlayerState\Attack</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerAttackWState.h">
+    <ClInclude Include="PlayerAttackRState.h">
       <Filter>06. State\PlayerState\Attack</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -547,6 +553,12 @@
     </ClInclude>
     <ClInclude Include="SubLevel.h">
       <Filter>02. Level</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAttackLState.h">
+      <Filter>06. State\PlayerState\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBall.h">
+      <Filter>03. GameObject\Player\Skill\Fire</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -805,7 +817,7 @@
     <ClCompile Include="PlayerAttackEState.cpp">
       <Filter>06. State\PlayerState\Attack</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerAttackWState.cpp">
+    <ClCompile Include="PlayerAttackRState.cpp">
       <Filter>06. State\PlayerState\Attack</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -831,6 +843,12 @@
     </ClCompile>
     <ClCompile Include="SubLevel.cpp">
       <Filter>02. Level</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAttackLState.cpp">
+      <Filter>06. State\PlayerState\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBall.cpp">
+      <Filter>03. GameObject\Player\Skill\Fire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

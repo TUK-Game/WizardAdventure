@@ -26,8 +26,8 @@ public:
 
 private:
     Vec3 m_currentMoveDir;
-    EPlayerAttribute m_Attribute;  // �÷��̾� �Ӽ�
-    CSkillManager* m_SkillManager; // �÷��̾� ��ų ����
+    EPlayerAttribute m_Attribute;  
+    CSkillManager* m_SkillManager;
     float m_Speed = 1000.f;
 };
 
