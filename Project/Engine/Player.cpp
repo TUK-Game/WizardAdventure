@@ -17,7 +17,7 @@
 //#include <Engine/Engine.h>
 
 CPlayer::CPlayer(EPlayerAttribute attribute)
-    : m_Attribute(attribute), m_SkillManager(new CSkillManager(attribute))
+    : m_Attribute(attribute), m_SkillManager(new CSkillManager(attribute, this))
 {
     CreateStateManager();
 }
@@ -99,7 +99,7 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
         transform->SetRelativePosition(transform->GetRelativePosition() + (moveDir * m_Speed * CEngine::GetInst()->GetDeltaTime()));
 
         if (shouldRotate) {
-            float angle = atan2(moveDir.x, moveDir.z) * (180.0f / XM_PI); // ������ �� �� ���� ��ȯ
+            float angle = atan2(moveDir.x, moveDir.z) * (180.0f / XM_PI); 
             transform->SetRelativeRotation(0.f, angle + 180.f, 0.f);
         }
     }
