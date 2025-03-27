@@ -26,6 +26,8 @@ public:
 
 public:
 	void AddGameObject(CGameObject* object, int layerIndex, bool bChildMove);
+	void SafeAddGameObject(CGameObject* object, int layerIndex, bool bChildMove);
+
 	void RemoveGameObject(CGameObject* object);
 	void RemoveGameObjectInLevel(CGameObject* object);
 

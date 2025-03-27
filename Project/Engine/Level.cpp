@@ -93,6 +93,11 @@ void CLevel::AddGameObject(CGameObject* object, int layerIndex, bool bChildMove)
 		m_Layer[layerIndex]->AddGameObject(object, bChildMove);
 }
 
+void CLevel::SafeAddGameObject(CGameObject* object, int layerIndex, bool bChildMove)
+{
+	m_Layer[layerIndex]->SafeAddGameObject(object, bChildMove);
+}
+
 void CLevel::RemoveGameObject(CGameObject* object)
 {
 	if (!object) return;

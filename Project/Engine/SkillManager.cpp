@@ -21,7 +21,8 @@ void CSkillManager::UseSkill(int skillIndex)
         if (skillIndex == 0) std::cout << "(Q)!" << std::endl;
         if (skillIndex == 1) std::cout << "Flame Wave (E)!" << std::endl;
         if (skillIndex == 2) std::cout << "Meteor Strike (R)!" << std::endl;
-        if (skillIndex == 3) CastFireballTowardMouse();
+        if (skillIndex == 3) 
+            CastFireballTowardMouse();
         break;
 
     case EPlayerAttribute::Water:
@@ -58,7 +59,7 @@ void CSkillManager::CastFireballTowardMouse()
     fireBall->SetSpeed(1200.f);
     fireBall->GetRigidBody()->ApplyForce(fireDir * 900000.f);
 
-    CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(fireBall, 3, false);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 3, false);
 }
 
 

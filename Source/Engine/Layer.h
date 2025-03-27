@@ -4,6 +4,11 @@
 
 class CGameObject;
 
+struct PendingAddObject
+{
+	CGameObject* parent;
+	bool bChildMove;
+};
 
 class CLayer :
 	public CRef
@@ -21,6 +26,10 @@ public:
 
 	void RegisterGameObject(CGameObject* object)	{ m_vecObjects.push_back(object); }
 	void AddGameObject(CGameObject* parent, bool bChildMove);
+	void SafeAddGameObject(CGameObject* parent, bool bChildMove);
+
+	void FlushPendingObjects();
+
 	void RemoveGameObject(CGameObject* object);
 	void RemoveGameObjectInLevel(CGameObject* object);
 
@@ -37,6 +46,7 @@ public:
 private:
 	std::vector<CGameObject*>	m_vecParentObjects;	// 최상위 부모 오브젝트
 	std::vector<CGameObject*>	m_vecObjects;		// 모든 오브젝트
+	std::vector<PendingAddObject> m_vecPendingAddObjects;
 	int							m_LayerIndex;		// 레이어 번호
 };
 

@@ -32,9 +32,9 @@ void CFireBall::Update()
 
 void CFireBall::FinalUpdate()
 {
+    CGameObject::FinalUpdate();
     m_ElapsedTime += DELTA_TIME;
     if (m_ElapsedTime >= m_Duration) {
         CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObject(this);
     }
-    CGameObject::FinalUpdate();
 }

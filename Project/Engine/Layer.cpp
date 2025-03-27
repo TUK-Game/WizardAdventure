@@ -43,6 +43,21 @@ void CLayer::AddGameObject(CGameObject* parent, bool bChildMove)
 	}
 }
 
+void CLayer::SafeAddGameObject(CGameObject* parent, bool bChildMove)
+{
+	m_vecPendingAddObjects.push_back({ parent, bChildMove });
+	parent->m_LayerIndex = m_LayerIndex;
+}
+
+void CLayer::FlushPendingObjects()
+{
+	for (const PendingAddObject& item : m_vecPendingAddObjects)
+	{
+		AddGameObject(item.parent, item.bChildMove);
+	}
+	m_vecPendingAddObjects.clear();
+}
+
 void CLayer::RemoveGameObject(CGameObject* object)
 {
 	if (!object) return;
@@ -108,6 +123,7 @@ void CLayer::FinalUpdate()
 	{
 		object->FinalUpdate();
 	}
+	FlushPendingObjects();
 }
 
 void CLayer::ClearObjects()
