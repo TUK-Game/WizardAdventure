@@ -9,6 +9,7 @@ public:
 
 private:
     void CastFireballTowardMouse();
+    void CastFireballTowardQ();
 
 private:
     Vec3 CalculateMouseDirectionFromPlayerTopView(const Vec3& fromPos);

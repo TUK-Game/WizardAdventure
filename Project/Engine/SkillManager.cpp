@@ -18,7 +18,8 @@ void CSkillManager::UseSkill(int skillIndex)
     switch (m_Attribute)
     {
     case EPlayerAttribute::Fire:
-        if (skillIndex == 0) std::cout << "(Q)!" << std::endl;
+        if (skillIndex == 0)
+            CastFireballTowardQ();
         if (skillIndex == 1) std::cout << "Flame Wave (E)!" << std::endl;
         if (skillIndex == 2) std::cout << "Meteor Strike (R)!" << std::endl;
         if (skillIndex == 3) 
@@ -61,6 +62,32 @@ void CSkillManager::CastFireballTowardMouse()
 
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 3, false);
 }
+
+void CSkillManager::CastFireballTowardQ()
+{
+    CGameObject* player = m_Owner;
+    if (!player) return;
+
+    Vec3 spawnPos = player->GetTransform()->GetWorldPosition();
+    Vec3 fireDir = CalculateMouseDirectionFromPlayerTopView(spawnPos);
+
+    float angle = atan2(fireDir.x, fireDir.z) * (180.0f / XM_PI);
+    player->GetTransform()->SetRelativeRotation(0.f, angle + 180.f, 0.f);
+
+    CFireBall* fireBall = new CFireBall();
+    fireBall->GetTransform()->SetRelativePosition(spawnPos);
+    fireBall->GetTransform()->SetRelativeScale(120.f, 120.f, 120.f);
+    fireBall->SetDirection(fireDir);
+    fireBall->SetDuration(2.5f);
+    fireBall->SetSpeed(1200.f);
+    CRigidBody* rigidbody = fireBall->GetRigidBody();
+    rigidbody->ApplyForce(fireDir * 70000.f);
+    rigidbody->ApplyTorque(Vec3(0.f, 500.f, 0.f));
+    rigidbody->SetAngularDrag(0.01f);
+
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 3, false);
+}
+
 
 
 Vec3 CSkillManager::CalculateMouseDirectionFromPlayerTopView(const Vec3& fromPos)

@@ -9,6 +9,7 @@ public:
 
     void SetDirection(const Vec3& dir) { m_Direction = dir; }
     void SetSpeed(float speed) { m_Speed = speed; }
+    void SetDuration(float duration) { m_Duration = duration; }
 
     virtual void Update();
     virtual void FinalUpdate();
