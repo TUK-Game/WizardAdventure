@@ -74,3 +74,37 @@ private:\
 #define READY_IMGUI
 
 #define MAX_OBJECTS_SUBLEVEL 200
+
+
+/*----------
+	Random
+-----------*/
+
+static std::random_device _rd;
+static std::default_random_engine _rng(_rd());
+
+inline int RandomInt(int min, int max)
+{
+	std::uniform_int_distribution<int> dist(min, max);
+	return dist(_rng);
+}
+
+inline float RandomFloat(float min = 0.f, float max = 1.f)
+{
+	std::uniform_real_distribution<float> dist(min, max);
+	return dist(_rng);
+}
+
+// ·£´ý bool ¹ÝÈ¯ (50% È®·ü)
+inline bool RandomBool()
+{
+	std::bernoulli_distribution dist(0.5);
+	return dist(_rng);
+}
+
+// Æ¯Á¤ È®·ü·Î true ¹ÝÈ¯ (¿¹: È®·ü 0.25f ¡æ 25%)
+inline bool RandomChance(float probability)
+{
+	std::bernoulli_distribution dist(probability);
+	return dist(_rng);
+}

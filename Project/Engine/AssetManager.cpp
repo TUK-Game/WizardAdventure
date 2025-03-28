@@ -84,6 +84,9 @@ int CAssetManager::LoadMesh()
 	if (FAILED(CreateRectangleMesh()))
 		return E_FAIL;
 	
+	if (FAILED(CreateCircleMesh()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -650,6 +653,57 @@ int CAssetManager::CreateRectangleMesh()
 		return E_FAIL;
 
 	AddAsset(L"Rectangle", mesh);
+
+	return S_OK;
+}
+
+int CAssetManager::CreateCircleMesh()
+{
+	float radius = 0.5f;
+	UINT segmentCount = 36; // 원을 몇 개의 삼각형으로 나눌지
+
+	std::vector<Vertex> vecVertex;
+	std::vector<UINT> vecIndex;
+
+	// 중심점
+	Vertex center;
+	center.Pos = Vec3(0.0f, 0.0f, 0.0f);
+	center.UV = Vec2(0.5f, 0.5f);
+	center.Normal = Vec3(0.0f, 0.0f, -1.0f); // Z-방향을 앞면으로 설정
+	center.Tangent = Vec3(1.0f, 0.0f, 0.0f);
+	vecVertex.push_back(center);
+
+	// 바깥 원형 정점
+	for (UINT i = 0; i <= segmentCount; ++i)
+	{
+		float angle = XM_2PI * i / segmentCount;
+		float x = radius * cosf(angle);
+		float y = radius * sinf(angle);
+
+		Vertex v;
+		v.Pos = Vec3(x, y, 0.0f);
+		v.UV = Vec2((x / radius + 1.0f) * 0.5f, (-y / radius + 1.0f) * 0.5f); // 중심 기준 UV
+		v.Normal = Vec3(0.0f, 0.0f, -1.0f);
+		v.Tangent = Vec3(-sinf(angle), cosf(angle), 0.0f);
+		vecVertex.push_back(v);
+	}
+
+	// 인덱스 (삼각형 팬 방식)
+	for (UINT i = 1; i <= segmentCount; ++i)
+	{
+		vecIndex.push_back(0);        // 중심점
+		vecIndex.push_back(i);        // 현재 원점
+		vecIndex.push_back(i + 1);    // 다음 원점
+	}
+
+	// 마지막 삼각형의 끝점이 처음 원점과 이어져야 함
+	// 위 반복문에서 i = segmentCount일 때 i+1은 segmentCount+1인데, 그건 vecVertex에 있음
+
+	CMesh* mesh = new CMesh;
+	if (FAILED(mesh->Init(vecVertex, vecIndex)))
+		return E_FAIL;
+
+	AddAsset(L"Circle", mesh);
 
 	return S_OK;
 }

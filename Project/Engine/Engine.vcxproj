@@ -200,6 +200,8 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Enum.pb.h" />
     <ClInclude Include="FireBall.h" />
+    <ClInclude Include="FireCircle.h" />
+    <ClInclude Include="FirePillar.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="fmod.h" />
     <ClInclude Include="fmod.hpp" />
@@ -351,6 +353,8 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="FireBall.cpp" />
+    <ClCompile Include="FireCircle.cpp" />
+    <ClCompile Include="FirePillar.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Global.cpp" />

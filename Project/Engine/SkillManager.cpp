@@ -5,6 +5,8 @@
 #include "InputManager.h"
 #include "RenderManager.h"
 #include "FireBall.h"
+#include "FirePillar.h"
+#include "FireCircle.h"
 #include "LevelManager.h"
 #include "Level.h"
 #include "RigidBody.h"
@@ -20,7 +22,8 @@ void CSkillManager::UseSkill(int skillIndex)
     case EPlayerAttribute::Fire:
         if (skillIndex == 0)
             CastFireballTowardQ();
-        if (skillIndex == 1) std::cout << "Flame Wave (E)!" << std::endl;
+        if (skillIndex == 1)
+            SpawnFirePillarAtMouse();
         if (skillIndex == 2) std::cout << "Meteor Strike (R)!" << std::endl;
         if (skillIndex == 3) 
             CastFireballTowardMouse();
@@ -89,6 +92,36 @@ void CSkillManager::CastFireballTowardQ()
 }
 
 
+void CSkillManager::SpawnFirePillarAtMouse()
+{
+    Vec3 centerPos = GetMouseGroundPoint(); // 마우스 위치 (XZ 평면)
+
+    CFireCircle* fireCircle = new CFireCircle;
+    fireCircle->GetTransform()->SetRelativePosition(centerPos);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireCircle, 3, false);
+
+
+    centerPos.y = RandomFloat(-200.f, -150.f);
+    int count = 5;
+    float radius = 150.f;
+    for (int i = 0; i < count; ++i) {
+        float angleDeg = i * (360.f / count);
+        float angleRad = XMConvertToRadians(angleDeg);
+
+        float offsetX = cosf(angleRad) * radius;
+        float offsetZ = sinf(angleRad) * radius;
+
+        Vec3 spawnPos = centerPos + Vec3(offsetX, 0.f, offsetZ); // y는 지면 아래로
+
+        CFirePillar* pillar = new CFirePillar();
+        pillar->SetBasePos(spawnPos);
+        pillar->GetTransform()->SetRelativePosition(spawnPos);
+
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(pillar, 3, false);
+    }
+    
+}
+
 
 Vec3 CSkillManager::CalculateMouseDirectionFromPlayerTopView(const Vec3& fromPos)
 {
@@ -111,4 +144,20 @@ Vec3 CSkillManager::CalculateMouseDirectionFromPlayerTopView(const Vec3& fromPos
         dir = Vec3(0, 0, 1); // 기본 방향
 
     return dir;
+}
+
+
+Vec3 CSkillManager::GetMouseGroundPoint()
+{
+    Vec2 mousePos = CInputManager::GetInst()->GetMousePosition();
+    CCamera* cam = CRenderManager::GetInst()->GetMainCamera();
+    if (!cam) return Vec3::Zero;
+
+    Vec3 origin, dir;
+    cam->ScreenToRay(mousePos, cam, origin, dir);
+
+    // 평면 Y = 0 (지면과 교차)
+    float t = -origin.y / dir.y;
+    Vec3 hitPos = origin + dir * t;
+    return hitPos;
 }

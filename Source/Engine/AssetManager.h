@@ -67,6 +67,8 @@ private:
 	int CreateCubeMesh();
 	int CreateSphereMesh();
 	int CreateRectangleMesh();
+	int CreateCircleMesh();
+
 
 private:
 	std::array<std::unordered_map<std::wstring, CSharedPtr<CAsset>>, (int)EAsset_Type::END>	m_mapAsset;

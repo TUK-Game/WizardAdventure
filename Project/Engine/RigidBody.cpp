@@ -7,7 +7,7 @@
 
 CRigidBody::CRigidBody()
     : CComponent(EComponent_Type::Rigidbody), m_Velocity(0, 0, 0), m_Acceleration(0, 0, 0),
-    m_AngularVelocity(0, 0, 0), m_Mass(1.0f), m_Drag(0.002f), m_AngularDrag(0.05f),  m_bUseGravity(false), m_bKinematic(false)
+    m_AngularVelocity(0, 0, 0), m_Mass(1.0f), m_Drag(0.002f), m_AngularDrag(0.05f),  m_bUseGravity(false), m_bKinematic(true)
 {
 }
 
@@ -15,7 +15,7 @@ CRigidBody::~CRigidBody() {}
 
 void CRigidBody::ApplyForce(const Vector3& force)
 {
-    if (m_bKinematic) return;
+    if (!m_bKinematic) return;
 
     m_Acceleration.x += force.x / m_Mass;
     m_Acceleration.y += force.y / m_Mass;
@@ -24,7 +24,7 @@ void CRigidBody::ApplyForce(const Vector3& force)
 
 void CRigidBody::ApplyImpulse(const Vector3& impulse)
 {
-    if (m_bKinematic) return;
+    if (!m_bKinematic) return;
 
     m_Velocity.x += impulse.x / m_Mass;
     m_Velocity.y += impulse.y / m_Mass;
@@ -33,7 +33,7 @@ void CRigidBody::ApplyImpulse(const Vector3& impulse)
 
 void CRigidBody::ApplyTorque(const Vector3& torque)
 {
-    if (m_bKinematic) return;
+    if (!m_bKinematic) return;
 
     m_AngularVelocity.x += torque.x / m_Mass;
     m_AngularVelocity.y += torque.y / m_Mass;
@@ -48,7 +48,7 @@ void CRigidBody::Begin()
 
 void CRigidBody::Update()
 {
-    if (m_bKinematic) return;
+    if (!m_bKinematic) return;
 
     // 중력 적용 (항상 가해지는 힘)
     if (m_bUseGravity)
@@ -89,22 +89,22 @@ void CRigidBody::Update()
 
 void CRigidBody::FinalUpdate()
 {
-    // 충돌 감지 & 반응 추가 가능
-    if (GetOwner())
-    {
-        CTransform* transform = GetTransform();
-        if (transform->GetRelativePosition().y < 0.f)
-        {
-            transform->SetRelativePosition(transform->GetRelativePosition().x, 0.0f, transform->GetRelativePosition().z);
+    //// 충돌 감지 & 반응 추가 가능
+    //if (GetOwner())
+    //{
+    //    CTransform* transform = GetTransform();
+    //    if (transform->GetRelativePosition().y < 0.f)
+    //    {
+    //        transform->SetRelativePosition(transform->GetRelativePosition().x, 0.0f, transform->GetRelativePosition().z);
 
-            // 속도 반전 (튕기는 효과)
-            m_Velocity.y = -m_Velocity.y * 0.7f; // 0.7f는 탄성 계수 (1.0f이면 완전 탄성 충돌)
+    //        // 속도 반전 (튕기는 효과)
+    //        m_Velocity.y = -m_Velocity.y * 0.7f; // 0.7f는 탄성 계수 (1.0f이면 완전 탄성 충돌)
 
-            // 아주 작은 값이면 멈추도록 처리 (멈추지 않으면 무한 진동할 수도 있음)
-            if (fabs(m_Velocity.y) < 0.1f)
-            {
-                m_Velocity.y = 0.0f;
-            }
-        }
-    }
+    //        // 아주 작은 값이면 멈추도록 처리 (멈추지 않으면 무한 진동할 수도 있음)
+    //        if (fabs(m_Velocity.y) < 0.1f)
+    //        {
+    //            m_Velocity.y = 0.0f;
+    //        }
+    //    }
+    //}
 }

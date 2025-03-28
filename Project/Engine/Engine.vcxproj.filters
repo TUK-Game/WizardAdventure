@@ -560,6 +560,12 @@
     <ClInclude Include="FireBall.h">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
     </ClInclude>
+    <ClInclude Include="FirePillar.h">
+      <Filter>03. GameObject\Player\Skill\Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="FireCircle.h">
+      <Filter>03. GameObject\Player\Skill\Fire</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -848,6 +854,12 @@
       <Filter>06. State\PlayerState\Attack</Filter>
     </ClCompile>
     <ClCompile Include="FireBall.cpp">
+      <Filter>03. GameObject\Player\Skill\Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="FirePillar.cpp">
+      <Filter>03. GameObject\Player\Skill\Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="FireCircle.cpp">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
     </ClCompile>
   </ItemGroup>
