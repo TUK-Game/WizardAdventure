@@ -213,6 +213,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="GraphicShader.h" />
+    <ClInclude Include="ImageWidget.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="InstancingBuffer.h" />
@@ -273,11 +274,14 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="SubLevel.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="TableDescriptorHeap.h" />
+    <ClInclude Include="TestWidget.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="UIButton.h" />
+    <ClInclude Include="Widget.h" />
+    <ClInclude Include="WidgetWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\3rdParty\ImGuizmo\GraphEditor.cpp">
@@ -355,6 +359,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="GraphicShader.cpp" />
+    <ClCompile Include="ImageWidget.cpp" />
     <ClCompile Include="ImGuiManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="InstancingBuffer.cpp" />
@@ -421,11 +426,14 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="SubLevel.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="TableDescriptorHeap.cpp" />
+    <ClCompile Include="TestWidget.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="UIButton.cpp" />
+    <ClCompile Include="Widget.cpp" />
+    <ClCompile Include="WidgetWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Build\protoc-21.12-win64\bin\Enum.proto" />

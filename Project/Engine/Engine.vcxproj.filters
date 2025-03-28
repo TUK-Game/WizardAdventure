@@ -216,6 +216,9 @@
     <Filter Include="03. GameObject\Player\Skill\Fire">
       <UniqueIdentifier>{019c9dec-01dc-418c-88e8-46cec7013dfe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07. UI">
+      <UniqueIdentifier>{c19c8332-545b-409d-8ee4-d46673b6ef3a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -560,6 +563,18 @@
     <ClInclude Include="FireBall.h">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
     </ClInclude>
+    <ClInclude Include="WidgetWindow.h">
+      <Filter>07. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget.h">
+      <Filter>07. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageWidget.h">
+      <Filter>07. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="TestWidget.h">
+      <Filter>07. UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -849,6 +864,18 @@
     </ClCompile>
     <ClCompile Include="FireBall.cpp">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="WidgetWindow.cpp">
+      <Filter>07. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget.cpp">
+      <Filter>07. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageWidget.cpp">
+      <Filter>07. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="TestWidget.cpp">
+      <Filter>07. UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,8 @@
 #include "Level.h"
 #include "MeshRenderer.h"
 #include "Logger.h"
+#include "ImageWidget.h"
+
 CCameraScript::CCameraScript()
 	: m_Speed(1000.f)
 {
@@ -52,13 +54,17 @@ void CCameraScript::Update()
 	}
 	if (KEY_DOWN(EKey::Tab))
 	{
-		CGameObject* obj = CLevelManager::GetInst()->GetCurrentLevel()->m_MiniMap;
-		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(obj, 4, false);
+		//CGameObject* obj = CLevelManager::GetInst()->GetCurrentLevel()->m_MiniMap;
+		//CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(obj, 4, false);
+		CWidget* widget = CLevelManager::GetInst()->GetCurrentLevel()->FindWidget(L"MiniMap");
+		widget->SetEnable(true);
 	}
 	if (KEY_UP(EKey::Tab))
 	{
-		CGameObject* obj = CLevelManager::GetInst()->GetCurrentLevel()->m_MiniMap;
-		CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObjectInLevel(obj);
+		CWidget* widget = CLevelManager::GetInst()->GetCurrentLevel()->FindWidget(L"MiniMap");
+		widget->SetEnable(false);
+		//CGameObject* obj = CLevelManager::GetInst()->GetCurrentLevel()->m_MiniMap;
+		//CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObjectInLevel(obj);
 	}
 
 	if (GetOwner()->GetCamera()->GetCameraType() == ECamera_Type::Fixed)

@@ -139,6 +139,19 @@ void CCamera::RenderShadow()
 	}
 }
 
+void CCamera::RenderUI()
+{
+	if ((m_LayerCheck & (1 << 4)))
+	{
+		CLevel* pCurLevel = CLevelManager::GetInst()->GetCurrentLevel();
+		std::vector<CSharedPtr<class CWidgetWindow>> windows = pCurLevel->GetWidgetwindows();
+		for (auto& widget : windows)
+		{
+			widget->Render();
+		}
+	}
+}
+
 void CCamera::SetPriority(int priority)
 {
 	m_Priority = priority;
@@ -207,9 +220,10 @@ void CCamera::SortObject()
 			{
 				m_vecParticle.push_back(vecObjects[j]);
 			}
-			//m_vecObjects.push_back(vecObjects[j]);
 		}
 	}
+
+
 }
 
 void CCamera::SortShadowObject()

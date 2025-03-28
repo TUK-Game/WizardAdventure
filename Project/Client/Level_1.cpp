@@ -26,6 +26,8 @@
 #include <Engine/BoxCollider.h>
 
 #include <Engine/Animator.h>
+#include <Engine/TestWidget.h>
+
 CLevel_1::CLevel_1()
 {
 	CLevelManager::GetInst()->SetLevel(this);
@@ -34,7 +36,6 @@ CLevel_1::CLevel_1()
 CLevel_1::~CLevel_1()
 {
 	delete m_MiniMapBackground;
-	delete m_MiniMap;
 }
 
 void CLevel_1::Init()
@@ -64,7 +65,7 @@ void CLevel_1::Init()
 
 #pragma endregion
 
-
+	CreateWidgetWindow<TestWidget>(L"fuck");
 
 #pragma region UI_Camera
 	{
@@ -225,20 +226,7 @@ void CLevel_1::Init()
 	this->AddGameObject(mapCamera, 0, false);
 	
 
-	m_MiniMap = new CGameObject;
-	m_MiniMap->SetName(L"MiniMap");
-	m_MiniMap->AddComponent(new CTransform);
-	m_MiniMap->AddComponent(new CMeshRenderer);
-	m_MiniMap->GetTransform()->SetRelativePosition(Vec3(.0f, 0.0f, 0.0f));
-	m_MiniMap->GetTransform()->SetRelativeScale(Vec3(1.f, 1.f, 1.f));
-	m_MiniMap->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
-	CMaterial* material = new CMaterial;
-	CTexture* texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::MAP)->GetRTTexture(0);
-	
-	CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
-	material->SetTexture(0, texture);
-	material->SetGraphicsShader(shader);
-	m_MiniMap->GetMeshRenderer()->SetMaterial(material);
+
 #pragma endregion
 }
 

@@ -145,6 +145,7 @@ void CRenderManager::RenderForward()
 
 		camera->SortObject();
 		camera->RenderForward();
+		camera->RenderUI();
 	}
 }
 

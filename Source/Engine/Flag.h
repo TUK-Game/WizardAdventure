@@ -65,6 +65,13 @@ enum class EComponent_Type
 	Script
 };
 
+enum class EWidgetComponent_Type
+{
+	Transform,
+	MeshRenderer,
+	END,
+};
+
 enum class EAsset_Type
 {
 	Mesh,
