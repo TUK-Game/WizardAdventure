@@ -24,7 +24,7 @@
 #include <Engine/RenderTargetGroup.h>
 #include <Engine/SubLevel.h>
 #include <Engine/BoxCollider.h>
-
+#include <Engine/PlayWidgetWindow.h>
 #include <Engine/Animator.h>
 #include <Engine/TestWidget.h>
 
@@ -42,8 +42,10 @@ void CLevel_1::Init()
 {
 	CLevel::Init();
 
+	m_MapSize = Vec3(8000, 3000, 7500);
+	m_MapCenter = Vec3(4000, 0, 6500);
 	m_SubLevel = std::make_shared<CSubLevel>();
-	m_SubLevel->SetBoundingBox(Vec3(4000.f, 0.f, 5000.f), Vec3(8000, 3000, 9000));
+	m_SubLevel->SetBoundingBox(m_MapCenter, m_MapSize);
 	m_SubLevel->SplitSubScene(1);
 
 	this->SetName(L"Level_1");
@@ -65,7 +67,6 @@ void CLevel_1::Init()
 
 #pragma endregion
 
-	CreateWidgetWindow<TestWidget>(L"fuck");
 
 #pragma region UI_Camera
 	{
@@ -228,6 +229,14 @@ void CLevel_1::Init()
 
 
 #pragma endregion
+
+#pragma region Widget
+
+	CreateWidgetWindow<TestWidget>(L"fuck");
+	CreateWidgetWindow<CPlayWidgetWindow>(L"fuck2");
+
+#pragma endregion
+
 }
 
 void CLevel_1::Begin()

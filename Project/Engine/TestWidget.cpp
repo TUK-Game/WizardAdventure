@@ -4,6 +4,7 @@
 #include "MeshRenderer.h"
 #include "Transform.h"
 #include "AssetManager.h"
+#include "MapPlayerWidget.h"
 
 TestWidget::TestWidget()
 {
@@ -16,22 +17,18 @@ TestWidget::~TestWidget()
 bool TestWidget::Init()
 {
 	CWidgetWindow::Init();
-	CImageWidget* widget = CreateWidget<CImageWidget>(L"image");
-	widget->AddComponent(new CMeshRenderer);
-	widget->AddComponent(new CTransform);
-	widget->SetTexture(L"Kita");
-	widget->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
-	widget->GetTransform()->SetRelativeScale(10, 10, 10);
-	widget->SetEnable(false);
 
-	widget = CreateWidget<CImageWidget>(L"MiniMap");
+	CImageWidget* widget = CreateWidget<CImageWidget>(L"MiniMap");
 	widget->AddComponent(new CMeshRenderer);
 	widget->AddComponent(new CTransform);
 	widget->SetTexture(L"MiniMapTarget");
 	widget->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
-	//widget->GetTransform()->SetRelativeScale(190, 190, 10);
-	widget->GetTransform()->SetRelativePosition(1, 0, 0);
+	widget->GetTransform()->SetRelativeScale(2, 2, 2);
 	widget->SetEnable(false);
+
+	//CMapPlayerWidget* pwidget = CreateWidget<CMapPlayerWidget>(L"PI");
+
+
 	return true;
 }
 

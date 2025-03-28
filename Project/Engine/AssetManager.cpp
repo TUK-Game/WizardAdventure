@@ -164,7 +164,7 @@ int CAssetManager::LoadMaterial()
 	AddAsset(L"Mushroom", material);
 
 	material = new CMaterial;
-	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"DeferredMapBack"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Map"));
 	AddAsset(L"Map", material);
 
@@ -320,6 +320,11 @@ int CAssetManager::LoadGraphicShader()
 	AddAsset(L"DeferredMap", shader);
 
 	shader = new CGraphicShader;
+	name = L"Deferred.hlsl";
+	LoadShader(shader, name, { SHADER_TYPE::DEFERRED, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND }, "VS_Main", "PS_MapBack");
+	AddAsset(L"DeferredMapBack", shader);
+
+	shader = new CGraphicShader;
 	name = L"particle.hlsl";
 	LoadShader(shader, name, {SHADER_TYPE::PARTICLE, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND, D3D_PRIMITIVE_TOPOLOGY_POINTLIST},
 		"VS_Main", "PS_Main", "GS_Main");
@@ -327,7 +332,7 @@ int CAssetManager::LoadGraphicShader()
 
 	shader = new CGraphicShader;
 	name = L"Forward.hlsl";
-	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE}, "VS_Tex", "PS_Tex");
+	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND}, "VS_Tex", "PS_Tex");
 	AddAsset(L"Texture", shader);
 
 	// LIGHT

@@ -89,7 +89,6 @@ void CCamera::RenderMap(CGameObject* object)
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-
 	object->AddComponent(new CTransform);
 	object->AddComponent(new CMeshRenderer);
 	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Map"));
@@ -98,7 +97,6 @@ void CCamera::RenderMap(CGameObject* object)
 	object->GetTransform()->SetRelativeScale(27000, 1, 16000);
 	object->GetTransform()->FinalUpdate();
 	object->GetMeshRenderer()->RenderMap();
-
 
 	for (auto& object : m_vecDeferred)
 	{

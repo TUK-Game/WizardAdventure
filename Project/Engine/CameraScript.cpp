@@ -52,19 +52,13 @@ void CCameraScript::Update()
 		GetOwner()->GetCamera()->SetFar(5000.f);
 		GetTransform()->SetRelativeRotation(49.f, -34.f, 0.f);
 	}
-	if (KEY_DOWN(EKey::Tab))
-	{
-		//CGameObject* obj = CLevelManager::GetInst()->GetCurrentLevel()->m_MiniMap;
-		//CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(obj, 4, false);
-		CWidget* widget = CLevelManager::GetInst()->GetCurrentLevel()->FindWidget(L"MiniMap");
-		widget->SetEnable(true);
-	}
-	if (KEY_UP(EKey::Tab))
+	if (KEY_DOWN(EKey::M))
 	{
 		CWidget* widget = CLevelManager::GetInst()->GetCurrentLevel()->FindWidget(L"MiniMap");
-		widget->SetEnable(false);
-		//CGameObject* obj = CLevelManager::GetInst()->GetCurrentLevel()->m_MiniMap;
-		//CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObjectInLevel(obj);
+		if(widget->GetEnable())
+			widget->SetEnable(false);
+		else
+			widget->SetEnable(true);
 	}
 
 	if (GetOwner()->GetCamera()->GetCameraType() == ECamera_Type::Fixed)

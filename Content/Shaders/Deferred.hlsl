@@ -118,7 +118,20 @@ PS_MAPOUT PS_Map(VS_OUT input)
 
 
     output.color = color;
+    output.color.a = 0.9;
+    return output;
+}
 
+PS_MAPOUT PS_MapBack(VS_OUT input)
+{
+    PS_MAPOUT output = (PS_MAPOUT) 0;
+
+    float4 color = float4(1.f, 1.f, 1.f, 0.3f);
+    if (tex_on_0)   
+        color = tex_0.Sample(sam_0, input.uv);
+
+    output.color = color;
+    output.color.a = 0.3;
     return output;
 }
 #endif

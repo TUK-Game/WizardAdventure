@@ -219,6 +219,12 @@
     <Filter Include="07. UI">
       <UniqueIdentifier>{c19c8332-545b-409d-8ee4-d46673b6ef3a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07. UI\01. Widget">
+      <UniqueIdentifier>{f8964258-10bc-4ec6-9e5d-e4ba33205ddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07. UI\02. WidgetWindow">
+      <UniqueIdentifier>{ed0cb1cf-2aca-4793-9d74-885920abbe95}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -570,10 +576,19 @@
       <Filter>07. UI</Filter>
     </ClInclude>
     <ClInclude Include="ImageWidget.h">
-      <Filter>07. UI</Filter>
+      <Filter>07. UI\01. Widget</Filter>
     </ClInclude>
     <ClInclude Include="TestWidget.h">
-      <Filter>07. UI</Filter>
+      <Filter>07. UI\02. WidgetWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="MapPlayerWidget.h">
+      <Filter>07. UI\01. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayWidgetWindow.h">
+      <Filter>07. UI\02. WidgetWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="GaugeWidget.h">
+      <Filter>07. UI\01. Widget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -872,10 +887,19 @@
       <Filter>07. UI</Filter>
     </ClCompile>
     <ClCompile Include="ImageWidget.cpp">
-      <Filter>07. UI</Filter>
+      <Filter>07. UI\01. Widget</Filter>
     </ClCompile>
     <ClCompile Include="TestWidget.cpp">
-      <Filter>07. UI</Filter>
+      <Filter>07. UI\02. WidgetWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="MapPlayerWidget.cpp">
+      <Filter>07. UI\01. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayWidgetWindow.cpp">
+      <Filter>07. UI\02. WidgetWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="GaugeWidget.cpp">
+      <Filter>07. UI\01. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

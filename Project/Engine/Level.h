@@ -16,6 +16,8 @@ public:
 	CLayer* GetLayer(int index) const { return m_Layer[index]; }
 	class CLevelCollision* GetLevelCollision() { return m_collision; }
 	std::vector<CSharedPtr<class CWidgetWindow>>& GetWidgetwindows() { return m_vecWidgetWindow; }
+	Vec3 GetMapSize() { return m_MapSize; }
+	Vec3 GetMapCenter() { return m_MapCenter; }
 
 	virtual void Deregister();
 
@@ -67,10 +69,11 @@ public:
 	virtual CLevel* Clone() override	{ return new CLevel(*this); }
 
 protected:
-	std::array<CLayer*, MAX_LAYER>	m_Layer;
-	class CLevelCollision* m_collision;
+	std::array<CLayer*, MAX_LAYER>					m_Layer;
+	class CLevelCollision*							m_collision;
 	std::vector<CSharedPtr<class CWidgetWindow>>	m_vecWidgetWindow;
-
+	Vec3											m_MapSize;
+	Vec3											m_MapCenter;
 public:
 	std::shared_ptr<CSubLevel> m_SubLevel;
 };
