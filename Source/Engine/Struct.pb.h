@@ -185,14 +185,17 @@ class PosInfo final :
     kObjectIdFieldNumber = 1,
     kXFieldNumber = 2,
     kYFieldNumber = 3,
+    kZFieldNumber = 4,
+    kYawFieldNumber = 5,
+    kStateFieldNumber = 6,
   };
-  // uint32 object_id = 1;
+  // uint64 object_id = 1;
   void clear_object_id();
-  uint32_t object_id() const;
-  void set_object_id(uint32_t value);
+  uint64_t object_id() const;
+  void set_object_id(uint64_t value);
   private:
-  uint32_t _internal_object_id() const;
-  void _internal_set_object_id(uint32_t value);
+  uint64_t _internal_object_id() const;
+  void _internal_set_object_id(uint64_t value);
   public:
 
   // float x = 2;
@@ -213,6 +216,33 @@ class PosInfo final :
   void _internal_set_y(float value);
   public:
 
+  // float z = 4;
+  void clear_z();
+  float z() const;
+  void set_z(float value);
+  private:
+  float _internal_z() const;
+  void _internal_set_z(float value);
+  public:
+
+  // float yaw = 5;
+  void clear_yaw();
+  float yaw() const;
+  void set_yaw(float value);
+  private:
+  float _internal_yaw() const;
+  void _internal_set_yaw(float value);
+  public:
+
+  // .Protocol.MoveState state = 6;
+  void clear_state();
+  ::Protocol::MoveState state() const;
+  void set_state(::Protocol::MoveState value);
+  private:
+  ::Protocol::MoveState _internal_state() const;
+  void _internal_set_state(::Protocol::MoveState value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.PosInfo)
  private:
   class _Internal;
@@ -221,9 +251,12 @@ class PosInfo final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    uint32_t object_id_;
+    uint64_t object_id_;
     float x_;
     float y_;
+    float z_;
+    float yaw_;
+    int state_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -354,7 +387,7 @@ class ObjectInfo final :
   enum : int {
     kPosInfoFieldNumber = 3,
     kObjectIdFieldNumber = 1,
-    kStateFieldNumber = 2,
+    kObjectTypeFieldNumber = 2,
   };
   // .Protocol.PosInfo pos_info = 3;
   bool has_pos_info() const;
@@ -374,22 +407,22 @@ class ObjectInfo final :
       ::Protocol::PosInfo* pos_info);
   ::Protocol::PosInfo* unsafe_arena_release_pos_info();
 
-  // uint32 object_id = 1;
+  // uint64 object_id = 1;
   void clear_object_id();
-  uint32_t object_id() const;
-  void set_object_id(uint32_t value);
+  uint64_t object_id() const;
+  void set_object_id(uint64_t value);
   private:
-  uint32_t _internal_object_id() const;
-  void _internal_set_object_id(uint32_t value);
+  uint64_t _internal_object_id() const;
+  void _internal_set_object_id(uint64_t value);
   public:
 
-  // .Protocol.EGameObjectType state = 2;
-  void clear_state();
-  ::Protocol::EGameObjectType state() const;
-  void set_state(::Protocol::EGameObjectType value);
+  // .Protocol.ObjectType object_type = 2;
+  void clear_object_type();
+  ::Protocol::ObjectType object_type() const;
+  void set_object_type(::Protocol::ObjectType value);
   private:
-  ::Protocol::EGameObjectType _internal_state() const;
-  void _internal_set_state(::Protocol::EGameObjectType value);
+  ::Protocol::ObjectType _internal_object_type() const;
+  void _internal_set_object_type(::Protocol::ObjectType value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.ObjectInfo)
@@ -401,8 +434,8 @@ class ObjectInfo final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::Protocol::PosInfo* pos_info_;
-    uint32_t object_id_;
-    int state_;
+    uint64_t object_id_;
+    int object_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -419,22 +452,22 @@ class ObjectInfo final :
 #endif  // __GNUC__
 // PosInfo
 
-// uint32 object_id = 1;
+// uint64 object_id = 1;
 inline void PosInfo::clear_object_id() {
-  _impl_.object_id_ = 0u;
+  _impl_.object_id_ = uint64_t{0u};
 }
-inline uint32_t PosInfo::_internal_object_id() const {
+inline uint64_t PosInfo::_internal_object_id() const {
   return _impl_.object_id_;
 }
-inline uint32_t PosInfo::object_id() const {
+inline uint64_t PosInfo::object_id() const {
   // @@protoc_insertion_point(field_get:Protocol.PosInfo.object_id)
   return _internal_object_id();
 }
-inline void PosInfo::_internal_set_object_id(uint32_t value) {
+inline void PosInfo::_internal_set_object_id(uint64_t value) {
   
   _impl_.object_id_ = value;
 }
-inline void PosInfo::set_object_id(uint32_t value) {
+inline void PosInfo::set_object_id(uint64_t value) {
   _internal_set_object_id(value);
   // @@protoc_insertion_point(field_set:Protocol.PosInfo.object_id)
 }
@@ -479,48 +512,108 @@ inline void PosInfo::set_y(float value) {
   // @@protoc_insertion_point(field_set:Protocol.PosInfo.y)
 }
 
+// float z = 4;
+inline void PosInfo::clear_z() {
+  _impl_.z_ = 0;
+}
+inline float PosInfo::_internal_z() const {
+  return _impl_.z_;
+}
+inline float PosInfo::z() const {
+  // @@protoc_insertion_point(field_get:Protocol.PosInfo.z)
+  return _internal_z();
+}
+inline void PosInfo::_internal_set_z(float value) {
+  
+  _impl_.z_ = value;
+}
+inline void PosInfo::set_z(float value) {
+  _internal_set_z(value);
+  // @@protoc_insertion_point(field_set:Protocol.PosInfo.z)
+}
+
+// float yaw = 5;
+inline void PosInfo::clear_yaw() {
+  _impl_.yaw_ = 0;
+}
+inline float PosInfo::_internal_yaw() const {
+  return _impl_.yaw_;
+}
+inline float PosInfo::yaw() const {
+  // @@protoc_insertion_point(field_get:Protocol.PosInfo.yaw)
+  return _internal_yaw();
+}
+inline void PosInfo::_internal_set_yaw(float value) {
+  
+  _impl_.yaw_ = value;
+}
+inline void PosInfo::set_yaw(float value) {
+  _internal_set_yaw(value);
+  // @@protoc_insertion_point(field_set:Protocol.PosInfo.yaw)
+}
+
+// .Protocol.MoveState state = 6;
+inline void PosInfo::clear_state() {
+  _impl_.state_ = 0;
+}
+inline ::Protocol::MoveState PosInfo::_internal_state() const {
+  return static_cast< ::Protocol::MoveState >(_impl_.state_);
+}
+inline ::Protocol::MoveState PosInfo::state() const {
+  // @@protoc_insertion_point(field_get:Protocol.PosInfo.state)
+  return _internal_state();
+}
+inline void PosInfo::_internal_set_state(::Protocol::MoveState value) {
+  
+  _impl_.state_ = value;
+}
+inline void PosInfo::set_state(::Protocol::MoveState value) {
+  _internal_set_state(value);
+  // @@protoc_insertion_point(field_set:Protocol.PosInfo.state)
+}
+
 // -------------------------------------------------------------------
 
 // ObjectInfo
 
-// uint32 object_id = 1;
+// uint64 object_id = 1;
 inline void ObjectInfo::clear_object_id() {
-  _impl_.object_id_ = 0u;
+  _impl_.object_id_ = uint64_t{0u};
 }
-inline uint32_t ObjectInfo::_internal_object_id() const {
+inline uint64_t ObjectInfo::_internal_object_id() const {
   return _impl_.object_id_;
 }
-inline uint32_t ObjectInfo::object_id() const {
+inline uint64_t ObjectInfo::object_id() const {
   // @@protoc_insertion_point(field_get:Protocol.ObjectInfo.object_id)
   return _internal_object_id();
 }
-inline void ObjectInfo::_internal_set_object_id(uint32_t value) {
+inline void ObjectInfo::_internal_set_object_id(uint64_t value) {
   
   _impl_.object_id_ = value;
 }
-inline void ObjectInfo::set_object_id(uint32_t value) {
+inline void ObjectInfo::set_object_id(uint64_t value) {
   _internal_set_object_id(value);
   // @@protoc_insertion_point(field_set:Protocol.ObjectInfo.object_id)
 }
 
-// .Protocol.EGameObjectType state = 2;
-inline void ObjectInfo::clear_state() {
-  _impl_.state_ = 0;
+// .Protocol.ObjectType object_type = 2;
+inline void ObjectInfo::clear_object_type() {
+  _impl_.object_type_ = 0;
 }
-inline ::Protocol::EGameObjectType ObjectInfo::_internal_state() const {
-  return static_cast< ::Protocol::EGameObjectType >(_impl_.state_);
+inline ::Protocol::ObjectType ObjectInfo::_internal_object_type() const {
+  return static_cast< ::Protocol::ObjectType >(_impl_.object_type_);
 }
-inline ::Protocol::EGameObjectType ObjectInfo::state() const {
-  // @@protoc_insertion_point(field_get:Protocol.ObjectInfo.state)
-  return _internal_state();
+inline ::Protocol::ObjectType ObjectInfo::object_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.ObjectInfo.object_type)
+  return _internal_object_type();
 }
-inline void ObjectInfo::_internal_set_state(::Protocol::EGameObjectType value) {
+inline void ObjectInfo::_internal_set_object_type(::Protocol::ObjectType value) {
   
-  _impl_.state_ = value;
+  _impl_.object_type_ = value;
 }
-inline void ObjectInfo::set_state(::Protocol::EGameObjectType value) {
-  _internal_set_state(value);
-  // @@protoc_insertion_point(field_set:Protocol.ObjectInfo.state)
+inline void ObjectInfo::set_object_type(::Protocol::ObjectType value) {
+  _internal_set_object_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.ObjectInfo.object_type)
 }
 
 // .Protocol.PosInfo pos_info = 3;

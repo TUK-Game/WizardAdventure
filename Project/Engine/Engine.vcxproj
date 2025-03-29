@@ -135,6 +135,7 @@
     <PreBuildEvent>
       <Command>cd $(SolutionDir)Build\
 call EngineCopy.bat
+cd $(SolutionDir)Server\Build\
 call protoc-21.12-win64\bin\GenPackets.bat</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -160,6 +161,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <PreBuildEvent>
       <Command>cd $(SolutionDir)Build\
 call EngineCopy.bat
+cd $(SolutionDir)Server\Build\
 call protoc-21.12-win64\bin\GenPackets.bat</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -186,8 +188,6 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraScript.h" />
     <ClInclude Include="ClientPacketHandler.h" />
-    <ClInclude Include="ClientSession.h" />
-    <ClInclude Include="ClientSessionManager.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="CollisionObject.h" />
     <ClInclude Include="CommandQueue.h" />
@@ -237,7 +237,6 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="MonsterChaseState.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="OrientedBoxCollider.h" />
-    <ClInclude Include="PacketFlag.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="PathManager.h" />
     <ClInclude Include="pch.h" />
@@ -259,7 +258,6 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="SaveLoadManager.h" />
     <ClInclude Include="Script.h" />
-    <ClInclude Include="ServerPacketHandler.h" />
     <ClInclude Include="ServerSession.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SharedPtr.h" />
@@ -338,8 +336,6 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraScript.cpp" />
     <ClCompile Include="ClientPacketHandler.cpp" />
-    <ClCompile Include="ClientSession.cpp" />
-    <ClCompile Include="ClientSessionManager.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CollisionObject.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
@@ -349,6 +345,8 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Enum.pb.cc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -409,7 +407,6 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="SaveLoadManager.cpp" />
     <ClCompile Include="Script.cpp" />
-    <ClCompile Include="ServerPacketHandler.cpp" />
     <ClCompile Include="ServerSession.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
@@ -432,9 +429,9 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="UIButton.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Build\protoc-21.12-win64\bin\Enum.proto" />
-    <None Include="..\..\Build\protoc-21.12-win64\bin\Protocol.proto" />
-    <None Include="..\..\Build\protoc-21.12-win64\bin\Struct.proto" />
+    <None Include="..\..\Server\Build\protoc-21.12-win64\bin\Enum.proto" />
+    <None Include="..\..\Server\Build\protoc-21.12-win64\bin\Protocol.proto" />
+    <None Include="..\..\Server\Build\protoc-21.12-win64\bin\Struct.proto" />
     <None Include="fmod.cs" />
     <None Include="fmod_dsp.cs" />
     <None Include="fmod_errors.cs" />

@@ -38,11 +38,11 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "d3dcompiler")
 
 #ifdef _DEBUG
-#pragma comment(lib, "ServerCore/Debug/ServerCore_d.lib")
-#pragma comment(lib, "Protobuf/Debug/libprotobufd.lib")
+#pragma comment(lib, "ServerCore/ServerCore_d.lib")
+#pragma comment(lib, "Protobuf/libprotobufd.lib")
 #else
-#pragma comment(lib, "ServerCore/Release/ServerCore.lib")
-#pragma comment(lib, "Protobuf/Release/libprotobuf.lib")
+#pragma comment(lib, "ServerCore/ServerCore.lib")
+#pragma comment(lib, "Protobuf/libprotobuf.lib")
 #endif // _DEBUG
 
 #ifndef _DEBUG

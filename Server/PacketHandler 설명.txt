@@ -1,0 +1,22 @@
+빌드하면 작성된 프로토파일(.proto)의 내용에 따라 코드가 자동으로 생생됨.
+컨텐츠 프로그래머는 여기서 주석이 달려 있는 함수만 사용하면 됨. (다른건 몰라도 됨)
+
+
+// ===== Process Packet =====
+// 패킷이 도착하면 호출됨. (조립이 완료되었을 경우만)
+// 스레드마다 독립적으로 수행되기 때문에 호출 시점은 랜덤.
+// => 컨텐츠 관련 패킷 처리는 처리하는 함수를 JobQueue에 등록하는 방식으로 처리해야 함. => 등록하지 않고 Room에 접근하면 data race 가능성 생김
+//
+// CPacketSessionRef& session : 패킷을 보낸 세션(발송인 정보)
+// Protocol& pkt : 도착한 패킷
+// 반환값은 지금은 상관 없지만 일단 true 로 작성. 패킷 검사할 때 사용되는데 아직 안 만듦. (몰라도 됨)
+
+
+// ===== Create SendBuffer (Serialization) =====
+// 패킷을 보낼 준비가 되었다면 패킷을 직렬화한 뒤 Send 해야 하는데, 이 때 직렬화하기 위한 함수가 이것임.
+// ex)
+// 1. ServerPacketHandler::MakeSendBuffer(Protocol& pkt);
+// 2. session->Send(CSendBuffer sendbuffer);
+// 
+// 반환 값(CSendBuffer) : 직렬화된 버퍼
+

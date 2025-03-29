@@ -168,9 +168,6 @@
     <Filter Include="00. Network\03. Protocol">
       <UniqueIdentifier>{f61276d7-d9cf-4330-864f-0d4c28bd5c77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00. Network\03. Protocol\Proto">
-      <UniqueIdentifier>{f08cc243-f361-4e72-848a-0b3029957ecd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Manager\14. Save/Load">
       <UniqueIdentifier>{76618a6c-f4d4-4604-8e9e-624c97bc5979}</UniqueIdentifier>
     </Filter>
@@ -215,6 +212,9 @@
     </Filter>
     <Filter Include="03. GameObject\Player\Skill\Fire">
       <UniqueIdentifier>{019c9dec-01dc-418c-88e8-46cec7013dfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. Network\03. Protocol\Base">
+      <UniqueIdentifier>{27c6cdc7-311e-4e17-b230-c17972e362b7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -464,34 +464,10 @@
     <ClInclude Include="..\..\3rdParty\ImGuizmo\ImZoomSlider.h">
       <Filter>IMGUIZMO</Filter>
     </ClInclude>
-    <ClInclude Include="ServerPacketHandler.h">
-      <Filter>00. Network\02. PacketHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="ClientPacketHandler.h">
-      <Filter>00. Network\02. PacketHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="PacketFlag.h">
-      <Filter>00. Network\02. PacketHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="Enum.pb.h">
-      <Filter>00. Network\03. Protocol</Filter>
-    </ClInclude>
-    <ClInclude Include="Protocol.pb.h">
-      <Filter>00. Network\03. Protocol</Filter>
-    </ClInclude>
-    <ClInclude Include="Struct.pb.h">
-      <Filter>00. Network\03. Protocol</Filter>
-    </ClInclude>
     <ClInclude Include="NetworkManager.h">
       <Filter>00. Network</Filter>
     </ClInclude>
     <ClInclude Include="ServerSession.h">
-      <Filter>00. Network\01. Session</Filter>
-    </ClInclude>
-    <ClInclude Include="ClientSession.h">
-      <Filter>00. Network\01. Session</Filter>
-    </ClInclude>
-    <ClInclude Include="ClientSessionManager.h">
       <Filter>00. Network\01. Session</Filter>
     </ClInclude>
     <ClInclude Include="Logger.h">
@@ -565,6 +541,18 @@
     </ClInclude>
     <ClInclude Include="FireCircle.h">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientPacketHandler.h">
+      <Filter>00. Network\02. PacketHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum.pb.h">
+      <Filter>00. Network\03. Protocol\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Protocol.pb.h">
+      <Filter>00. Network\03. Protocol\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct.pb.h">
+      <Filter>00. Network\03. Protocol\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -769,31 +757,10 @@
     <ClCompile Include="..\..\3rdParty\ImGuizmo\ImSequencer.cpp">
       <Filter>IMGUIZMO</Filter>
     </ClCompile>
-    <ClCompile Include="Enum.pb.cc">
-      <Filter>00. Network\03. Protocol</Filter>
-    </ClCompile>
-    <ClCompile Include="Protocol.pb.cc">
-      <Filter>00. Network\03. Protocol</Filter>
-    </ClCompile>
-    <ClCompile Include="Struct.pb.cc">
-      <Filter>00. Network\03. Protocol</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientPacketHandler.cpp">
-      <Filter>00. Network\02. PacketHandler</Filter>
-    </ClCompile>
-    <ClCompile Include="ServerPacketHandler.cpp">
-      <Filter>00. Network\02. PacketHandler</Filter>
-    </ClCompile>
     <ClCompile Include="NetworkManager.cpp">
       <Filter>00. Network</Filter>
     </ClCompile>
     <ClCompile Include="ServerSession.cpp">
-      <Filter>00. Network\01. Session</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientSession.cpp">
-      <Filter>00. Network\01. Session</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientSessionManager.cpp">
       <Filter>00. Network\01. Session</Filter>
     </ClCompile>
     <ClCompile Include="SaveLoadManager.cpp">
@@ -862,6 +829,18 @@
     <ClCompile Include="FireCircle.cpp">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
     </ClCompile>
+    <ClCompile Include="Enum.pb.cc">
+      <Filter>00. Network\03. Protocol\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Protocol.pb.cc">
+      <Filter>00. Network\03. Protocol\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Struct.pb.cc">
+      <Filter>00. Network\03. Protocol\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientPacketHandler.cpp">
+      <Filter>00. Network\02. PacketHandler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -876,14 +855,14 @@
     <None Include="fmod_errors.cs">
       <Filter>05. Asset\05. Sound\01. FMOD</Filter>
     </None>
-    <None Include="..\..\Build\protoc-21.12-win64\bin\Enum.proto">
-      <Filter>00. Network\03. Protocol\Proto</Filter>
+    <None Include="..\..\Server\Build\protoc-21.12-win64\bin\Enum.proto">
+      <Filter>00. Network\03. Protocol</Filter>
     </None>
-    <None Include="..\..\Build\protoc-21.12-win64\bin\Protocol.proto">
-      <Filter>00. Network\03. Protocol\Proto</Filter>
+    <None Include="..\..\Server\Build\protoc-21.12-win64\bin\Protocol.proto">
+      <Filter>00. Network\03. Protocol</Filter>
     </None>
-    <None Include="..\..\Build\protoc-21.12-win64\bin\Struct.proto">
-      <Filter>00. Network\03. Protocol\Proto</Filter>
+    <None Include="..\..\Server\Build\protoc-21.12-win64\bin\Struct.proto">
+      <Filter>00. Network\03. Protocol</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

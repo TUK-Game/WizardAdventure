@@ -15,7 +15,7 @@ void CServerSession::OnConnected()
 {
 	std::cout << "Connected Server" << std::endl;
 
-	Protocol::C_ENTER_GAME pkt;
+	Protocol::C_LOGIN pkt;
 	std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(SendBuffer);
 }

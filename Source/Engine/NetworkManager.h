@@ -23,12 +23,8 @@ public:
 	bool Init();
 	void ExecuteJobs();
 
-private:
-	bool InitHost();
-	bool InitClient();
-
 public:
-	static std::shared_ptr<class CServerSession>	s_GameSession;	// Client로 로그인할 경우 서버 세션
+	static std::shared_ptr<class CServerSession>	s_GameSession;
 
 private:
 	CLockQueue<std::shared_ptr<CJob>>		m_JobQueue;

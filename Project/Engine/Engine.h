@@ -29,7 +29,7 @@ private:
 
 private:
 	WindowInfo		m_WindowInfo;
-	ENetwork_Type	m_NetworkType;
+	ENetwork_Type	m_NetworkType;	// 서버 연동 키 누르면 바뀌는거라 연결 실패했을 때 재연동 불가능. 다시 접속하려면 클라이언트 다시 켜야함.
 	CTimer*			m_Timer;
 	float			m_DeltaTime;
 };

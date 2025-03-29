@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="01. Game">
+      <UniqueIdentifier>{158c392d-937e-48a4-aee6-6f5f5bbf1448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Game\GameObject">
+      <UniqueIdentifier>{ba4992f5-7866-498c-8f3b-81dd9e017c41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Game\GameObject\Creature">
+      <UniqueIdentifier>{c4556b59-d700-4d62-a862-3400358b5a8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Game\GameObject\Creature\01. Player">
+      <UniqueIdentifier>{6cb9e4ab-9984-4216-93bc-0819943850a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Game\GameObject\Creature\02. Monster">
+      <UniqueIdentifier>{e03e177c-1ae4-4b63-8907-97bdfafb3cfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Session">
+      <UniqueIdentifier>{dc4550f0-e26d-4d7e-bb0c-bf53c6f49cf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Protocol">
+      <UniqueIdentifier>{bf74476f-4995-4053-89d0-39f2b37f8be8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Protocol\Base">
+      <UniqueIdentifier>{9d2b2967-4c3d-4f89-9543-c992331d94e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. PacketHandler">
+      <UniqueIdentifier>{7b01c184-4ef7-439f-bf18-ebb7e0c85c12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. Util">
+      <UniqueIdentifier>{ad68b8b2-920f-40d9-8111-3c9528e85d13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCH">
+      <UniqueIdentifier>{9d25ff34-b3c8-4fe2-8830-d6b4ea415213}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Game\Room">
+      <UniqueIdentifier>{089fb071-9adf-4d9e-84dd-8fa38d24d71e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Util.cpp">
+      <Filter>99. Util</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>01. Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectUtil.cpp">
+      <Filter>99. Util</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Enum.pb.cc">
+      <Filter>04. Protocol\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Protocol.pb.cc">
+      <Filter>04. Protocol\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Struct.pb.cc">
+      <Filter>04. Protocol\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerPacketHandler.cpp">
+      <Filter>02. PacketHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSession.cpp">
+      <Filter>03. Session</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSessionManager.cpp">
+      <Filter>03. Session</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>PCH</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>01. Game\GameObject\Creature\01. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>01. Game\GameObject\Creature\02. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Creature.cpp">
+      <Filter>01. Game\GameObject\Creature</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>01. Game\Room</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Util.h">
+      <Filter>99. Util</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>01. Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectUtil.h">
+      <Filter>99. Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum.pb.h">
+      <Filter>04. Protocol\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Protocol.pb.h">
+      <Filter>04. Protocol\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct.pb.h">
+      <Filter>04. Protocol\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerPacketHandler.h">
+      <Filter>02. PacketHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSessionManager.h">
+      <Filter>03. Session</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSession.h">
+      <Filter>03. Session</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>PCH</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>01. Game\GameObject\Creature\01. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>01. Game\GameObject\Creature\02. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Creature.h">
+      <Filter>01. Game\GameObject\Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>01. Game\Room</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Common\protoc-21.12-win64\bin\GenPackets.bat">
+      <Filter>04. Protocol\Base</Filter>
+    </None>
+    <None Include="..\..\Build\protoc-21.12-win64\bin\Enum.proto">
+      <Filter>04. Protocol</Filter>
+    </None>
+    <None Include="..\..\Build\protoc-21.12-win64\bin\Protocol.proto">
+      <Filter>04. Protocol</Filter>
+    </None>
+    <None Include="..\..\Build\protoc-21.12-win64\bin\Struct.proto">
+      <Filter>04. Protocol</Filter>
+    </None>
+  </ItemGroup>
+</Project>

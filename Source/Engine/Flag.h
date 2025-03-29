@@ -3,8 +3,7 @@
 enum class ENetwork_Type
 {
 	Offline,
-	OnlineClient,
-	OnlineHost,
+	Online
 };
 
 enum class CBV_REGISTER : unsigned char
