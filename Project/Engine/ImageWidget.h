@@ -11,7 +11,7 @@ protected:
     virtual ~CImageWidget();
 
 public:
-    void SetTexture(const std::wstring& name);
+    virtual void SetTexture(const std::wstring& name);
     virtual CImageWidget* Clone() override { return new CImageWidget(*this); }
 };
 

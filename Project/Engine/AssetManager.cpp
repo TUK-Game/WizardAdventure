@@ -148,6 +148,10 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"Lava_Normal.png");
 	AddAsset(L"Lava_Normal", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Fireball.png");
+	AddAsset(L"Fireball", tex);
 	return S_OK;
 }
 
@@ -182,6 +186,11 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Hitori"));
 	AddAsset(L"Hitori", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Fireball"));
+	AddAsset(L"Fireball", material);
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Skybox"));
@@ -335,6 +344,10 @@ int CAssetManager::LoadGraphicShader()
 	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND}, "VS_Tex", "PS_Tex");
 	AddAsset(L"Texture", shader);
 
+	shader = new CGraphicShader;
+	name = L"Forward.hlsl";
+	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND }, "VS_Tex", "PS_TexSkill");
+	AddAsset(L"SkillUI", shader);
 	// LIGHT
 	{
 		// DirLight

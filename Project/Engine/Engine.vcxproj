@@ -268,6 +268,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SkillManager.h" />
+    <ClInclude Include="SkillWidget.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="State.h" />
@@ -421,6 +422,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="SkillManager.cpp" />
+    <ClCompile Include="SkillWidget.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StateManager.cpp" />

@@ -6,6 +6,7 @@
 
 CImageWidget::CImageWidget()
 {
+
 }
 
 CImageWidget::~CImageWidget()

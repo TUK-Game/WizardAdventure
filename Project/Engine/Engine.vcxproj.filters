@@ -590,6 +590,9 @@
     <ClInclude Include="GaugeWidget.h">
       <Filter>07. UI\01. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="SkillWidget.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -900,6 +903,9 @@
     </ClCompile>
     <ClCompile Include="GaugeWidget.cpp">
       <Filter>07. UI\01. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillWidget.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

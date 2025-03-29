@@ -82,4 +82,6 @@ StructuredBuffer<Matrix> mat_bone : register(t7);
 
 SamplerState sam_0 : register(s0);
 
+#define PI 3.141592f
+
 #endif
