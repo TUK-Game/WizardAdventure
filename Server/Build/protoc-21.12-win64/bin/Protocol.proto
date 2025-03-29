@@ -1,0 +1,45 @@
+syntax = "proto3";
+package Protocol;
+
+import "Enum.proto";
+import "Struct.proto";
+
+message C_LOGIN
+{
+
+}
+
+message S_LOGIN
+{
+	bool success = 1;
+}
+
+message C_ENTER_GAME
+{
+}
+
+message S_ENTER_GAME
+{
+	bool success = 1;
+	PlayerInfo player = 2;
+}
+
+message C_LEAVE_GAME
+{
+
+}
+
+message S_LEAVE_GAME
+{
+
+}
+
+message S_SPAWN
+{
+	repeated ObjectInfo objects = 1;
+}
+
+message S_DESPAWN
+{
+	repeated uint64 object_ids = 1;
+}
