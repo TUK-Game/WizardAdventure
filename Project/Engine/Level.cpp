@@ -56,7 +56,8 @@ void CLevel::Update()
 
 	for (auto& widget : m_vecWidgetWindow)
 	{
-		widget->Update();
+		if(widget)
+			widget->Update();
 	}
 }
 
@@ -76,7 +77,8 @@ void CLevel::FinalUpdate()
 
 	for (auto& widget : m_vecWidgetWindow)
 	{
-		widget->FinalUpdate();
+		if (widget)
+			widget->FinalUpdate();
 	}
 }
 

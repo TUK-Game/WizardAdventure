@@ -2,6 +2,9 @@
 #include "CommandQueue.h"
 #include "SwapChain.h"
 #include "Device.h"
+#include "LevelManager.h"
+#include "Level.h"
+#include "WidgetWindow.h"
 
 // ************************
 // GraphicsCommandQueue
@@ -115,6 +118,24 @@ void CGraphicsCommandQueue::RenderEnd()
 	// 커맨드 리스트 수행
 	ID3D12CommandList* cmdListArr[] = { m_CmdList.Get() };
 	m_GraphicsCmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
+
+	// 텍스트 렌더링
+
+	CDevice::GetInst()->m_d2dDeviceContext->SetTarget(CDevice::GetInst()->m_d2dRenderTargets[CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex()].Get());
+	ID3D11Resource* ppd3dResources[] = { CDevice::GetInst()->m_d3d11WrappedBackBuffers[CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex()].Get() };
+	CDevice::GetInst()->m_d3d11On12Device->AcquireWrappedResources(ppd3dResources, _countof(ppd3dResources));
+
+	CDevice::GetInst()->m_d2dDeviceContext->BeginDraw();
+
+	auto window = CLevelManager::GetInst()->GetCurrentLevel()->GetWidgetWindow(EWIDGETWINDOW_TYPE::TEXT_WINDOW);
+	if (window)
+		window->Render();
+	
+	CDevice::GetInst()->m_d2dDeviceContext->EndDraw();
+
+	CDevice::GetInst()->m_d3d11On12Device->ReleaseWrappedResources(ppd3dResources, _countof(ppd3dResources));
+
+	CDevice::GetInst()->m_DeviceContext->Flush();
 
 	m_SwapChain->Present();
 

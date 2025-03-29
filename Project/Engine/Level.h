@@ -15,7 +15,8 @@ public:
 public:
 	CLayer* GetLayer(int index) const { return m_Layer[index]; }
 	class CLevelCollision* GetLevelCollision() { return m_collision; }
-	std::vector<CSharedPtr<class CWidgetWindow>>& GetWidgetwindows() { return m_vecWidgetWindow; }
+	std::array<CSharedPtr<class CWidgetWindow>, (UINT)EWIDGETWINDOW_TYPE::END>& GetWidgetwindows() { return m_vecWidgetWindow; }
+	CSharedPtr<class CWidgetWindow> GetWidgetWindow(EWIDGETWINDOW_TYPE type) { return m_vecWidgetWindow[(UINT)type]; }
 	Vec3 GetMapSize() { return m_MapSize; }
 	Vec3 GetMapCenter() { return m_MapCenter; }
 
@@ -37,8 +38,11 @@ public:
 
 public:
 	template <typename T>
-	T* CreateWidgetWindow(const std::wstring& name)
+	T* CreateWidgetWindow(EWIDGETWINDOW_TYPE type, const std::wstring& name)
 	{
+		if (m_vecWidgetWindow[(UINT)type])
+			return nullptr;
+
 		T* window = new T;
 		window->SetName(name);
 		if (!window->Init())
@@ -46,8 +50,9 @@ public:
 			delete (window);
 			return nullptr;
 		}
+		window->SetWindowType(type);
 
-		m_vecWidgetWindow.push_back(window);
+		m_vecWidgetWindow[(UINT)type] = window;
 
 		return window;
 	}
@@ -69,11 +74,12 @@ public:
 	virtual CLevel* Clone() override	{ return new CLevel(*this); }
 
 protected:
-	std::array<CLayer*, MAX_LAYER>					m_Layer;
-	class CLevelCollision*							m_collision;
-	std::vector<CSharedPtr<class CWidgetWindow>>	m_vecWidgetWindow;
-	Vec3											m_MapSize;
-	Vec3											m_MapCenter;
+	std::array<CLayer*, MAX_LAYER>												m_Layer;
+	class CLevelCollision*														m_collision;
+	std::array<CSharedPtr<class CWidgetWindow>, (UINT)EWIDGETWINDOW_TYPE::END>	m_vecWidgetWindow;
+	Vec3																		m_MapSize;
+	Vec3																		m_MapCenter;
+
 public:
 	std::shared_ptr<CSubLevel> m_SubLevel;
 };

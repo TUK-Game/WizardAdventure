@@ -35,6 +35,7 @@ public:
 private:
 	void CreateConstantBuffer(CBV_REGISTER reg, UINT bufferSize, UINT count);
 	void CreateRenderTargetGroups();
+	void Create2DDevice();
 
 private:
 	D3D12_VIEWPORT	m_Viewport;
@@ -56,5 +57,23 @@ private:
 
 	std::vector<std::shared_ptr<CConstantBuffer>>	m_ConstantBuffers;
 	std::array<std::shared_ptr<CRenderTargetGroup>, RENDER_TARGET_GROUP_COUNT> m_RenderTargetGroups;
+
+public:
+	// Text
+	ComPtr<ID3D11On12Device>	m_d3d11On12Device;
+	ComPtr<ID2D1Device2>		m_d2dDevice = NULL;
+	ComPtr<ID2D1Factory3>		m_d2dFactory;
+	ComPtr<ID2D1DeviceContext2> m_d2dDeviceContext = NULL;
+	ComPtr<ID3D11DeviceContext> m_DeviceContext;
+	ComPtr<IDWriteFactory>		m_WriteFactory = NULL;
+
+	ComPtr<ID2D1SolidColorBrush> m_d2dbrBackground = NULL;
+	ComPtr<ID2D1SolidColorBrush> m_d2dbrBorder = NULL;
+	ComPtr<IDWriteTextFormat>	 m_dwFont = NULL;
+	ComPtr<IDWriteTextLayout>	 m_dwTextLayout = NULL;
+	ComPtr<ID2D1SolidColorBrush> m_d2dbrText = NULL;
+	ComPtr<ID3D11Resource> m_d3d11WrappedBackBuffers[SWAP_CHAIN_BUFFER_COUNT];
+	ComPtr<ID2D1Bitmap1> m_d2dRenderTargets[SWAP_CHAIN_BUFFER_COUNT];
+
 };
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "Widget.h"
+#include "Widget.h" 
 
 class CImageWidget :
 	public CWidget
@@ -12,6 +12,8 @@ protected:
 
 public:
     virtual void SetTexture(const std::wstring& name);
+
+public:
     virtual CImageWidget* Clone() override { return new CImageWidget(*this); }
 };
 

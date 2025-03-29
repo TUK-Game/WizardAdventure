@@ -142,10 +142,11 @@ void CCamera::RenderUI()
 	if ((m_LayerCheck & (1 << 4)))
 	{
 		CLevel* pCurLevel = CLevelManager::GetInst()->GetCurrentLevel();
-		std::vector<CSharedPtr<class CWidgetWindow>> windows = pCurLevel->GetWidgetwindows();
-		for (auto& widget : windows)
+		auto windows = pCurLevel->GetWidgetwindows();
+		for (auto& window : windows)
 		{
-			widget->Render();
+			if (window && EWIDGETWINDOW_TYPE::TEXT_WINDOW != window->GetWindowType())
+				window->Render();
 		}
 	}
 }

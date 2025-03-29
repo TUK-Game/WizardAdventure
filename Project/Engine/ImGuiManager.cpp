@@ -169,6 +169,9 @@ void CImGuiManager::DrawLevelWindow()
 
 	for (auto& window : windows)
 	{
+		if (!window)
+			continue;
+
 		std::vector<CGameObject*> gameObjects;
 
 		for (int i = 0; i < window->GetWidgetCount(); ++i)

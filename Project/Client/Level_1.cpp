@@ -232,8 +232,7 @@ void CLevel_1::Init()
 
 #pragma region Widget
 
-	CreateWidgetWindow<TestWidget>(L"fuck");
-	CreateWidgetWindow<CPlayWidgetWindow>(L"fuck2");
+	CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"fuck2");
 
 #pragma endregion
 

@@ -15,7 +15,9 @@ public:
     int GetZOrder() const { return m_zOrder; }
     class CWidget* GetWidget(int idx) { return m_vecWidget[idx]; }
     int GetWidgetCount() const { return (int)m_vecWidget.size(); }
+    EWIDGETWINDOW_TYPE GetWindowType() { return m_Type; }
 
+    void SetWindowType(EWIDGETWINDOW_TYPE type) { m_Type = type; }
     void SetZOrder(int z) { m_zOrder = z; }
 
     bool CheckWidget(class CWidget* widget)
@@ -69,7 +71,8 @@ public:
     virtual CWidgetWindow* Clone() override { return new CWidgetWindow(*this); }
 
 protected:
-    int             m_zOrder;
+    int                               m_zOrder;
     std::vector<CSharedPtr<CWidget>>  m_vecWidget;
+    EWIDGETWINDOW_TYPE                m_Type;
 };
 
