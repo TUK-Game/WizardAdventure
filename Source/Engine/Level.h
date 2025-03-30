@@ -57,6 +57,14 @@ public:
 		return window;
 	}
 
+	CWidgetWindow* FindWidgetWindow(EWIDGETWINDOW_TYPE type)
+	{
+		if(m_vecWidgetWindow[(UINT)type])
+			return m_vecWidgetWindow[(UINT)type];
+
+		return nullptr;
+	}
+
 	CWidget* FindWidget(const std::wstring& name)
 	{
 		for (size_t i = 0; i < m_vecWidgetWindow.size(); ++i)

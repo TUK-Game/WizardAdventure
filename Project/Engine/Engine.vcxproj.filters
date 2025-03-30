@@ -596,6 +596,9 @@
     <ClInclude Include="SkillWidget.h">
       <Filter>07. UI\01. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="TextWindow.h">
+      <Filter>07. UI\02. WidgetWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -912,6 +915,9 @@
     </ClCompile>
     <ClCompile Include="SkillWidget.cpp">
       <Filter>07. UI\01. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="TextWindow.cpp">
+      <Filter>07. UI\02. WidgetWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

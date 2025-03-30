@@ -27,6 +27,7 @@
 #include <Engine/PlayWidgetWindow.h>
 #include <Engine/Animator.h>
 #include <Engine/TestWidget.h>
+#include <Engine/TextWindow.h>
 
 CLevel_1::CLevel_1()
 {
@@ -233,6 +234,7 @@ void CLevel_1::Init()
 #pragma region Widget
 
 	CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"fuck2");
+	CreateWidgetWindow<CTextWindow>(EWIDGETWINDOW_TYPE::TEXT_WINDOW, L"fuck");
 
 #pragma endregion
 

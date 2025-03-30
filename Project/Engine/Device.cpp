@@ -226,11 +226,8 @@ void CDevice::Create2DDevice()
 
 	m_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(0.3f, 0.0f, 0.0f, 0.5f), &m_d2dbrBackground);
 	m_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0x9ACD32, 1.0f)), &m_d2dbrBorder);
-
-	hResult = m_WriteFactory->CreateTextFormat(L"궁서체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL, 48.0f, L"en-US", &m_dwFont);
-	hResult = m_dwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	hResult = m_dwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	m_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Purple, 1.0f), &m_d2dbrText);
+	AddFont();
+	AddColor();
 	hResult = m_WriteFactory->CreateTextLayout(L"텍스트 레이아웃", 8, m_dwFont.Get(), 4096.0f, 4096.0f, &m_dwTextLayout);
 
 	float fDpi = (float)GetDpiForWindow(CEngine::GetInst()->GetWindowInfo().hWnd);
@@ -252,4 +249,55 @@ void CDevice::Create2DDevice()
 		if (pdxgiSurface) pdxgiSurface->Release();
 	}
 #pragma endregion
+}
+
+void CDevice::AddFont()
+{
+	std::vector<std::wstring> vec{ L"Arial", L"궁서체", L"바탕" };
+	for (const auto& name : vec)
+	{
+		AddMachineFont(name);
+	}
+}
+
+void CDevice::AddColor()
+{
+	std::vector<std::wstring> vec{ L"Red", L"Green", L"Blue" };
+	for (const auto& name : vec)
+	{
+		AddMachineColor(name);
+	}
+}
+
+void CDevice::AddMachineColor(const std::wstring& name)
+{
+	ID2D1SolidColorBrush* d2dbrText = NULL;
+
+	static const std::unordered_map<std::wstring, D2D1::ColorF::Enum> colorMap = 
+	{
+	  {L"Red", D2D1::ColorF::Red},
+	  {L"Green", D2D1::ColorF::Green},
+	  {L"Blue", D2D1::ColorF::Blue},
+	  {L"Purple", D2D1::ColorF::Purple},
+	  {L"Yellow", D2D1::ColorF::Yellow},
+	  {L"Orange", D2D1::ColorF::Orange},
+	  {L"Black", D2D1::ColorF::Black},
+	  {L"White", D2D1::ColorF::White},
+	  {L"Gray", D2D1::ColorF::Gray},
+	};
+	auto iter = colorMap.find(name);
+	assert(iter != colorMap.end());
+
+	HRESULT hr = m_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(iter->second, 1.0f), &d2dbrText);
+	m_BrushMap[name] = d2dbrText;
+}
+
+void CDevice::AddMachineFont(const std::wstring& name)
+{
+	IDWriteTextFormat*	 dwFont = NULL;
+
+	HRESULT hResult = m_WriteFactory->CreateTextFormat(name.c_str(), NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL, 48.0f, L"en-US", &dwFont);
+	hResult = dwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	hResult = dwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	m_FontMap[name] = dwFont;
 }

@@ -281,6 +281,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="TestWidget.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextWidget.h" />
+    <ClInclude Include="TextWindow.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UI.h" />
@@ -438,6 +439,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="TestWidget.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextWidget.cpp" />
+    <ClCompile Include="TextWindow.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UI.cpp" />
