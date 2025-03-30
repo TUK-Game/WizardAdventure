@@ -17,6 +17,8 @@
 #include "../../3rdParty/ImGuizmo/ImGuizmo.h"
 #include "../../3rdParty/ImGui/imgui_internal.h"
 #include "SubLevel.h"
+#include "WidgetWindow.h"
+#include "Widget.h"
 static int objCounter = 0;
 
 CImGuiManager::CImGuiManager()
@@ -135,6 +137,47 @@ void CImGuiManager::DrawLevelWindow()
 			CLevelManager::GetInst()->GetCurrentLevel()->m_SubLevel->PickGameObject(gameObjects);
 		else
 			gameObjects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(j)->GetParentObjects();
+
+		for (auto& gameObject : gameObjects)
+		{
+			std::string objName = ws2s(gameObject->GetName()); // Wide String -> String 변환
+			objName = Trim(objName); // 공백 제거
+
+			if (objName.size() == 1)
+			{
+				objName.clear(); // 강제로 문자열을 비워서 ID 충돌 방지
+			}
+
+			if (objName.empty()) // 이름이 비어 있으면 기본 이름 설정
+			{
+				objName = "Unnamed Object##" + std::to_string(index);
+			}
+			else
+			{
+				objName += "##" + std::to_string(index); // 기존 이름에도 고유 ID 추가 (ID 충돌 방지)
+			}
+
+			if (ImGui::Selectable(objName.c_str(), m_SelectedObject == gameObject))
+			{
+				m_SelectedObject = gameObject;
+			}
+			index++; // 객체마다 고유 ID 부여
+		}
+	}
+
+	auto& windows = CLevelManager::GetInst()->GetCurrentLevel()->GetWidgetwindows();
+
+	for (auto& window : windows)
+	{
+		if (!window)
+			continue;
+
+		std::vector<CGameObject*> gameObjects;
+
+		for (int i = 0; i < window->GetWidgetCount(); ++i)
+		{
+			gameObjects.push_back(window->GetWidget(i));
+		}
 
 		for (auto& gameObject : gameObjects)
 		{

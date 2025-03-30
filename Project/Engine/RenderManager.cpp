@@ -60,7 +60,7 @@ void CRenderManager::ClearRTV()
 	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->ClearRenderTargetView(backIndex);
 
 	// Shadow 
-	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->ClearRenderTargetView();
+	//CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->ClearRenderTargetView();
 
 	// Deferred
 	CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->ClearRenderTargetView();
@@ -145,6 +145,7 @@ void CRenderManager::RenderForward()
 
 		camera->SortObject();
 		camera->RenderForward();
+		camera->RenderUI();
 	}
 }
 

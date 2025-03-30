@@ -62,10 +62,12 @@ int CDevice::Init()
 	CImGuiManager::GetInst()->Init();
 #endif
 
+
 	//ComPtr<ID3D12InfoQueue> infoQueue;
 	//m_Device->QueryInterface(IID_PPV_ARGS(&infoQueue));
 	//infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, TRUE);
-	
+
+	Create2DDevice();
 
 	return S_OK;
 }
@@ -186,4 +188,116 @@ void CDevice::CreateRenderTargetGroups()
 		m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::MAP)] = std::make_shared<CRenderTargetGroup>();
 		m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::MAP)]->Create(RENDER_TARGET_GROUP_TYPE::MAP, rtVec, dsTexture);
 	}
+}
+
+void CDevice::Create2DDevice()
+{
+#pragma region Text
+	ID3D11Device* pd3d11Device = NULL;
+	ID3D12CommandQueue* ppd3dCommandQueues[] = { GetCmdQueue()->GetCmdQueue().Get() };
+	HRESULT hResult = ::D3D11On12CreateDevice(m_Device.Get(),
+		D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+		NULL,
+		0,
+		reinterpret_cast<IUnknown**>(ppd3dCommandQueues),
+		1,
+		0,
+		&pd3d11Device,
+		&m_DeviceContext,
+		NULL);
+	hResult = pd3d11Device->QueryInterface(IID_PPV_ARGS(&m_d3d11On12Device));
+	if (pd3d11Device) pd3d11Device->Release();
+
+	D2D1_FACTORY_OPTIONS factoryOption = { D2D1_DEBUG_LEVEL_NONE };
+	hResult = ::D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
+		__uuidof(ID2D1Factory3), &factoryOption, (void**)&m_d2dFactory);
+
+	IDXGIDevice* pdxgiDevice = NULL;
+	hResult = m_d3d11On12Device->QueryInterface(IID_PPV_ARGS(&pdxgiDevice));
+	if (pdxgiDevice != NULL)
+		hResult = m_d2dFactory->CreateDevice(pdxgiDevice, &m_d2dDevice);
+
+	hResult = m_d2dDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &m_d2dDeviceContext);
+	hResult = ::DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)&m_WriteFactory);
+	if (pdxgiDevice) pdxgiDevice->Release();
+
+
+	m_d2dDeviceContext->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
+
+	m_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(0.3f, 0.0f, 0.0f, 0.5f), &m_d2dbrBackground);
+	m_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0x9ACD32, 1.0f)), &m_d2dbrBorder);
+	AddFont();
+	AddColor();
+	hResult = m_WriteFactory->CreateTextLayout(L"텍스트 레이아웃", 8, m_dwFont.Get(), 4096.0f, 4096.0f, &m_dwTextLayout);
+
+	float fDpi = (float)GetDpiForWindow(CEngine::GetInst()->GetWindowInfo().hWnd);
+	D2D1_BITMAP_PROPERTIES1 d2dBitmapProperties = D2D1::BitmapProperties1(D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW, D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED), fDpi, fDpi);
+
+	auto swapchain = GetSwapChain()->GetSwapChain();
+	for (UINT i = 0; i < SWAP_CHAIN_BUFFER_COUNT; i++)
+	{
+		ComPtr<ID3D12Resource> r;
+		hResult = swapchain->GetBuffer(i, IID_PPV_ARGS(&r));
+		D3D11_RESOURCE_FLAGS d3d11Flags = { D3D11_BIND_RENDER_TARGET };
+		m_d3d11On12Device->CreateWrappedResource(r.Get(), &d3d11Flags,
+			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT, IID_PPV_ARGS(&m_d3d11WrappedBackBuffers[i]));
+
+		IDXGISurface* pdxgiSurface = NULL;
+
+		m_d3d11WrappedBackBuffers[i]->QueryInterface(__uuidof(IDXGISurface), (void**)&pdxgiSurface);
+		m_d2dDeviceContext->CreateBitmapFromDxgiSurface(pdxgiSurface, &d2dBitmapProperties, &m_d2dRenderTargets[i]);
+		if (pdxgiSurface) pdxgiSurface->Release();
+	}
+#pragma endregion
+}
+
+void CDevice::AddFont()
+{
+	std::vector<std::wstring> vec{ L"Arial", L"궁서체", L"바탕" };
+	for (const auto& name : vec)
+	{
+		AddMachineFont(name);
+	}
+}
+
+void CDevice::AddColor()
+{
+	std::vector<std::wstring> vec{ L"Red", L"Green", L"Blue" };
+	for (const auto& name : vec)
+	{
+		AddMachineColor(name);
+	}
+}
+
+void CDevice::AddMachineColor(const std::wstring& name)
+{
+	ID2D1SolidColorBrush* d2dbrText = NULL;
+
+	static const std::unordered_map<std::wstring, D2D1::ColorF::Enum> colorMap = 
+	{
+	  {L"Red", D2D1::ColorF::Red},
+	  {L"Green", D2D1::ColorF::Green},
+	  {L"Blue", D2D1::ColorF::Blue},
+	  {L"Purple", D2D1::ColorF::Purple},
+	  {L"Yellow", D2D1::ColorF::Yellow},
+	  {L"Orange", D2D1::ColorF::Orange},
+	  {L"Black", D2D1::ColorF::Black},
+	  {L"White", D2D1::ColorF::White},
+	  {L"Gray", D2D1::ColorF::Gray},
+	};
+	auto iter = colorMap.find(name);
+	assert(iter != colorMap.end());
+
+	HRESULT hr = m_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(iter->second, 1.0f), &d2dbrText);
+	m_BrushMap[name] = d2dbrText;
+}
+
+void CDevice::AddMachineFont(const std::wstring& name)
+{
+	IDWriteTextFormat*	 dwFont = NULL;
+
+	HRESULT hResult = m_WriteFactory->CreateTextFormat(name.c_str(), NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL, 48.0f, L"en-US", &dwFont);
+	hResult = dwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	hResult = dwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	m_FontMap[name] = dwFont;
 }

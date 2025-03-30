@@ -14,6 +14,11 @@
 #include <filesystem>
 #include <random>
 #include <d3d12.h>
+#include <d2d1_3.h>
+#include <dwrite.h>
+#include <dwrite_1.h>
+#include <d3d11on12.h>
+#include <d2d1_1helper.h>
 #include <wrl.h>
 #include <d3dcompiler.h>
 #include <dxgi.h>
@@ -36,6 +41,9 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "dxgi")
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "d3dcompiler")
+#pragma comment(lib, "d2d1")
+#pragma comment(lib, "dwrite")
+#pragma comment(lib, "d3d11")
 
 #ifdef _DEBUG
 #pragma comment(lib, "ServerCore/ServerCore_d.lib")

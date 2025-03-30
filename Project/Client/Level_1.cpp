@@ -24,8 +24,11 @@
 #include <Engine/RenderTargetGroup.h>
 #include <Engine/SubLevel.h>
 #include <Engine/BoxCollider.h>
-
+#include <Engine/PlayWidgetWindow.h>
 #include <Engine/Animator.h>
+#include <Engine/TestWidget.h>
+#include <Engine/TextWindow.h>
+
 CLevel_1::CLevel_1()
 {
 	CLevelManager::GetInst()->SetLevel(this);
@@ -34,15 +37,16 @@ CLevel_1::CLevel_1()
 CLevel_1::~CLevel_1()
 {
 	delete m_MiniMapBackground;
-	delete m_MiniMap;
 }
 
 void CLevel_1::Init()
 {
 	CLevel::Init();
 
+	m_MapSize = Vec3(8000, 3000, 7500);
+	m_MapCenter = Vec3(4000, 0, 6500);
 	m_SubLevel = std::make_shared<CSubLevel>();
-	m_SubLevel->SetBoundingBox(Vec3(4000.f, 0.f, 5000.f), Vec3(8000, 3000, 9000));
+	m_SubLevel->SetBoundingBox(m_MapCenter, m_MapSize);
 	m_SubLevel->SplitSubScene(1);
 
 	this->SetName(L"Level_1");
@@ -63,7 +67,6 @@ void CLevel_1::Init()
 	CAssetManager::GetInst()->SetVolume("UI", 30);
 
 #pragma endregion
-
 
 
 #pragma region UI_Camera
@@ -225,21 +228,16 @@ void CLevel_1::Init()
 	this->AddGameObject(mapCamera, 0, false);
 	
 
-	m_MiniMap = new CGameObject;
-	m_MiniMap->SetName(L"MiniMap");
-	m_MiniMap->AddComponent(new CTransform);
-	m_MiniMap->AddComponent(new CMeshRenderer);
-	m_MiniMap->GetTransform()->SetRelativePosition(Vec3(.0f, 0.0f, 0.0f));
-	m_MiniMap->GetTransform()->SetRelativeScale(Vec3(1.f, 1.f, 1.f));
-	m_MiniMap->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
-	CMaterial* material = new CMaterial;
-	CTexture* texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::MAP)->GetRTTexture(0);
-	
-	CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
-	material->SetTexture(0, texture);
-	material->SetGraphicsShader(shader);
-	m_MiniMap->GetMeshRenderer()->SetMaterial(material);
+
 #pragma endregion
+
+#pragma region Widget
+
+	CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"fuck2");
+	CreateWidgetWindow<CTextWindow>(EWIDGETWINDOW_TYPE::TEXT_WINDOW, L"fuck");
+
+#pragma endregion
+
 }
 
 void CLevel_1::Begin()

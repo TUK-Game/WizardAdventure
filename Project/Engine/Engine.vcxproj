@@ -213,8 +213,10 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="fmod_output.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GaugeWidget.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="GraphicShader.h" />
+    <ClInclude Include="ImageWidget.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="InstancingBuffer.h" />
@@ -226,6 +228,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="MapPlayerWidget.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshData.h" />
@@ -249,6 +252,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="PlayerIdleState.h" />
     <ClInclude Include="PlayerRunState.h" />
     <ClInclude Include="PlayerScript.h" />
+    <ClInclude Include="PlayWidgetWindow.h" />
     <ClInclude Include="Protocol.pb.h" />
     <ClInclude Include="Ref.h" />
     <ClInclude Include="RenderComponent.h" />
@@ -264,6 +268,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SkillManager.h" />
+    <ClInclude Include="SkillWidget.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="State.h" />
@@ -273,11 +278,16 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="SubLevel.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="TableDescriptorHeap.h" />
+    <ClInclude Include="TestWidget.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextWidget.h" />
+    <ClInclude Include="TextWindow.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="UIButton.h" />
+    <ClInclude Include="Widget.h" />
+    <ClInclude Include="WidgetWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\3rdParty\ImGuizmo\GraphEditor.cpp">
@@ -355,8 +365,10 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="FirePillar.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GaugeWidget.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="GraphicShader.cpp" />
+    <ClCompile Include="ImageWidget.cpp" />
     <ClCompile Include="ImGuiManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="InstancingBuffer.cpp" />
@@ -367,6 +379,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="LevelCollision.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="MapPlayerWidget.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshData.cpp" />
@@ -395,6 +408,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="PlayerIdleState.cpp" />
     <ClCompile Include="PlayerRunState.cpp" />
     <ClCompile Include="PlayerScript.cpp" />
+    <ClCompile Include="PlayWidgetWindow.cpp" />
     <ClCompile Include="Protocol.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -411,6 +425,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="SkillManager.cpp" />
+    <ClCompile Include="SkillWidget.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StateManager.cpp" />
@@ -422,11 +437,16 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="SubLevel.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="TableDescriptorHeap.cpp" />
+    <ClCompile Include="TestWidget.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextWidget.cpp" />
+    <ClCompile Include="TextWindow.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="UIButton.cpp" />
+    <ClCompile Include="Widget.cpp" />
+    <ClCompile Include="WidgetWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Server\Build\protoc-21.12-win64\bin\Enum.proto" />

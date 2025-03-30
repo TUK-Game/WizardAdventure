@@ -10,6 +10,8 @@
 #include "Level.h"
 #include "MeshRenderer.h"
 #include "Logger.h"
+#include "ImageWidget.h"
+
 CCameraScript::CCameraScript()
 	: m_Speed(1000.f)
 {
@@ -50,15 +52,13 @@ void CCameraScript::Update()
 		GetOwner()->GetCamera()->SetFar(5000.f);
 		GetTransform()->SetRelativeRotation(49.f, -34.f, 0.f);
 	}
-	if (KEY_DOWN(EKey::Tab))
+	if (KEY_DOWN(EKey::M))
 	{
-		CGameObject* obj = CLevelManager::GetInst()->GetCurrentLevel()->m_MiniMap;
-		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(obj, 4, false);
-	}
-	if (KEY_UP(EKey::Tab))
-	{
-		CGameObject* obj = CLevelManager::GetInst()->GetCurrentLevel()->m_MiniMap;
-		CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObjectInLevel(obj);
+		CWidget* widget = CLevelManager::GetInst()->GetCurrentLevel()->FindWidget(L"MiniMap");
+		if(widget->GetEnable())
+			widget->SetEnable(false);
+		else
+			widget->SetEnable(true);
 	}
 
 	if (GetOwner()->GetCamera()->GetCameraType() == ECamera_Type::Fixed)

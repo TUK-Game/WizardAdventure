@@ -26,6 +26,10 @@ public:
 
 	std::shared_ptr<CConstantBuffer> GetConstantBuffer(EConstantBuffer_Type type) { return m_ConstantBuffers[static_cast<unsigned char>(type)]; }
 	std::shared_ptr<CRenderTargetGroup> GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE type) { return m_RenderTargetGroups[static_cast<unsigned char>(type)]; }
+
+	const std::unordered_map<std::wstring, ID2D1SolidColorBrush*>& GetBrushMap() const { return m_BrushMap; }
+	const std::unordered_map<std::wstring, IDWriteTextFormat*>& GetFontMap() const { return m_FontMap; }
+
 public:
 	int Init();
 
@@ -35,7 +39,12 @@ public:
 private:
 	void CreateConstantBuffer(CBV_REGISTER reg, UINT bufferSize, UINT count);
 	void CreateRenderTargetGroups();
+	void Create2DDevice();
 
+	void AddFont();
+	void AddColor();
+	void AddMachineColor(const std::wstring& name);
+	void AddMachineFont(const std::wstring& name);
 private:
 	D3D12_VIEWPORT	m_Viewport;
 	
@@ -56,5 +65,26 @@ private:
 
 	std::vector<std::shared_ptr<CConstantBuffer>>	m_ConstantBuffers;
 	std::array<std::shared_ptr<CRenderTargetGroup>, RENDER_TARGET_GROUP_COUNT> m_RenderTargetGroups;
+
+	std::unordered_map<std::wstring, ID2D1SolidColorBrush*> m_BrushMap;
+	std::unordered_map<std::wstring, IDWriteTextFormat*> m_FontMap;
+public:
+	// Text
+	ComPtr<ID3D11On12Device>	m_d3d11On12Device;
+	ComPtr<ID2D1Device2>		m_d2dDevice = NULL;
+	ComPtr<ID2D1Factory3>		m_d2dFactory;
+	ComPtr<ID2D1DeviceContext2> m_d2dDeviceContext = NULL;
+	ComPtr<ID3D11DeviceContext> m_DeviceContext;
+	ComPtr<IDWriteFactory>		m_WriteFactory = NULL;
+
+	ComPtr<ID2D1SolidColorBrush> m_d2dbrBackground = NULL;
+	ComPtr<ID2D1SolidColorBrush> m_d2dbrBorder = NULL;
+	ComPtr<IDWriteTextFormat>	 m_dwFont = NULL;	
+	ComPtr<IDWriteTextLayout>	 m_dwTextLayout = NULL;
+	ComPtr<ID2D1SolidColorBrush> m_d2dbrText = NULL;
+	ComPtr<ID3D11Resource> m_d3d11WrappedBackBuffers[SWAP_CHAIN_BUFFER_COUNT];
+	ComPtr<ID2D1Bitmap1> m_d2dRenderTargets[SWAP_CHAIN_BUFFER_COUNT];
+
+
 };
 

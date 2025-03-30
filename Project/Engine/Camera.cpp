@@ -89,7 +89,6 @@ void CCamera::RenderMap(CGameObject* object)
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-
 	object->AddComponent(new CTransform);
 	object->AddComponent(new CMeshRenderer);
 	object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Map"));
@@ -98,7 +97,6 @@ void CCamera::RenderMap(CGameObject* object)
 	object->GetTransform()->SetRelativeScale(27000, 1, 16000);
 	object->GetTransform()->FinalUpdate();
 	object->GetMeshRenderer()->RenderMap();
-
 
 	for (auto& object : m_vecDeferred)
 	{
@@ -136,6 +134,20 @@ void CCamera::RenderShadow()
 	for (auto& object : m_vecShadow)
 	{
 		object->GetMeshRenderer()->RenderShadow();
+	}
+}
+
+void CCamera::RenderUI()
+{
+	if ((m_LayerCheck & (1 << 4)))
+	{
+		CLevel* pCurLevel = CLevelManager::GetInst()->GetCurrentLevel();
+		auto windows = pCurLevel->GetWidgetwindows();
+		for (auto& window : windows)
+		{
+			if (window && EWIDGETWINDOW_TYPE::TEXT_WINDOW != window->GetWindowType())
+				window->Render();
+		}
 	}
 }
 
@@ -207,9 +219,10 @@ void CCamera::SortObject()
 			{
 				m_vecParticle.push_back(vecObjects[j]);
 			}
-			//m_vecObjects.push_back(vecObjects[j]);
 		}
 	}
+
+
 }
 
 void CCamera::SortShadowObject()

@@ -110,4 +110,20 @@ float4 PS_Tex(VS_TEX_OUT input) : SV_Target
 }
 
 
+float4 PS_TexSkill(VS_TEX_OUT input) : SV_Target
+{
+    float4 skillColor = tex_0.Sample(sam_0, input.uv);
+
+    float2 delta = input.uv - float2(0.5f, 0.5f);
+    float angle = atan2(delta.x, delta.y);
+    float normalizedAngle = (angle + PI) / (2.0f * PI);
+
+    if (normalizedAngle <= (float_0))
+    {
+        float4 overlayColor = float4(0.0f, 0.0f, 0.0f, 0.5f);
+        return lerp(skillColor, overlayColor, overlayColor.a);
+    }
+    
+    return skillColor;
+}
 #endif

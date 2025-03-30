@@ -52,6 +52,7 @@ public:
     void RenderDeferred();
     void RenderForward();
     void RenderShadow();
+    void RenderUI();
     void SortShadowObject();
 
 private:

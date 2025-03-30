@@ -1,0 +1,13 @@
+#pragma once
+#include "WidgetWindow.h"
+class TestWidget :
+	public CWidgetWindow
+{
+public:
+    TestWidget();
+    virtual ~TestWidget();
+
+public:
+    virtual bool Init();
+};
+

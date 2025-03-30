@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "LevelCollision.h"
 #include "SubLevel.h"
+#include "WidgetWindow.h"
 
 CLevel::CLevel()
 	: m_Layer{}
@@ -52,6 +53,12 @@ void CLevel::Update()
 		else
 			m_Layer[i]->Update();
 	}
+
+	for (auto& widget : m_vecWidgetWindow)
+	{
+		if(widget)
+			widget->Update();
+	}
 }
 
 void CLevel::FinalUpdate()
@@ -67,6 +74,12 @@ void CLevel::FinalUpdate()
 	}
 
 	m_collision->Collision();
+
+	for (auto& widget : m_vecWidgetWindow)
+	{
+		if (widget)
+			widget->FinalUpdate();
+	}
 }
 
 void CLevel::Deregister()

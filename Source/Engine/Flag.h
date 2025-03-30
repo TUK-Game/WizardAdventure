@@ -64,6 +64,22 @@ enum class EComponent_Type
 	Script
 };
 
+enum class EWidgetComponent_Type
+{
+	Transform,
+	MeshRenderer,
+	END,
+};
+
+enum class EWIDGETWINDOW_TYPE
+{
+	GAME_WINDOW,
+	MAP_WINDOW,
+
+	TEXT_WINDOW,
+	END
+};
+
 enum class EAsset_Type
 {
 	Mesh,
