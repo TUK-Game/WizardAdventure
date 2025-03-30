@@ -23,10 +23,6 @@ CFireBall::CFireBall()
 
 void CFireBall::Update()
 {
-  /*  Vec3 pos = GetTransform()->GetWorldPosition();
-    pos += m_Direction * m_Speed * DELTA_TIME;
-    GetTransform()->SetRelativePosition(pos);*/
-
     CGameObject::Update();
 }
 
