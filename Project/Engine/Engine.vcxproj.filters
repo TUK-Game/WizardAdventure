@@ -593,6 +593,9 @@
     <ClInclude Include="TextWindow.h">
       <Filter>07. UI\02. WidgetWindow</Filter>
     </ClInclude>
+    <ClInclude Include="Meteors.h">
+      <Filter>03. GameObject\Player\Skill\Fire</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -909,6 +912,9 @@
     </ClCompile>
     <ClCompile Include="TextWindow.cpp">
       <Filter>07. UI\02. WidgetWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Meteors.cpp">
+      <Filter>03. GameObject\Player\Skill\Fire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

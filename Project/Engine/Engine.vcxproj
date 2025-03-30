@@ -233,6 +233,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshData.h" />
     <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="Meteors.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="MonsterAI.h" />
     <ClInclude Include="MonsterAttackState.h" />
@@ -384,6 +385,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
+    <ClCompile Include="Meteors.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MonsterAI.cpp" />
     <ClCompile Include="MonsterAttackState.cpp" />
