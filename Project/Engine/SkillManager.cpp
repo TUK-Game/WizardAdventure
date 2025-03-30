@@ -24,7 +24,8 @@ void CSkillManager::UseSkill(int skillIndex)
             CastFireballTowardQ();
         if (skillIndex == 1)
             SpawnFirePillarAtMouse();
-        if (skillIndex == 2) std::cout << "Meteor Strike (R)!" << std::endl;
+        if (skillIndex == 2)
+            CastMeteor();
         if (skillIndex == 3) 
             CastFireballTowardMouse();
         break;
@@ -122,6 +123,36 @@ void CSkillManager::SpawnFirePillarAtMouse()
     
 }
 
+void CSkillManager::CastMeteor()
+{
+    Vec3 centerPos = m_Owner->GetTransform()->GetRelativePosition();
+
+    int count = 20;
+    float radius = 700.f;
+
+    for (int i = 0; i < count; ++i) {
+        float theta = RandomFloat(0.f, XM_2PI); 
+        float r = sqrtf(RandomFloat(0.f, 1.f)) * radius; 
+
+        float offsetX = cosf(theta) * r;
+        float offsetZ = sinf(theta) * r;
+
+        Vec3 spawnPos = centerPos + Vec3(offsetX, RandomFloat(1300.f, 2000.f), offsetZ);
+
+        CFireBall* meteor = new CFireBall();
+        meteor->GetTransform()->SetRelativePosition(spawnPos);
+
+        float scale = RandomFloat(50.f, 150.f);
+        meteor->GetTransform()->SetRelativeScale(scale, scale, scale);
+        meteor->SetDuration(5.5f);
+        meteor->SetSpeed(1200.f);
+
+        CRigidBody* rigidbody = meteor->GetRigidBody();
+        rigidbody->SetGravity(true);
+
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteor, 3, false);
+    }
+}
 
 Vec3 CSkillManager::CalculateMouseDirectionFromPlayerTopView(const Vec3& fromPos)
 {

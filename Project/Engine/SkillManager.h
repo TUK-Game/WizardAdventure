@@ -10,6 +10,7 @@ public:
 private:
     void CastFireballTowardMouse();
     void CastFireballTowardQ();
+    void CastMeteor();
     void SpawnFirePillarAtMouse();
 
 private:
