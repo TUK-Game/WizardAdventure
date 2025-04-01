@@ -6,10 +6,10 @@ CGameSessionManager g_SessionManager;
 
 CGameSessionManager::CGameSessionManager()
 {
+	m_mapSession.insert(std::make_pair(0, nullptr));
 	m_mapSession.insert(std::make_pair(1, nullptr));
 	m_mapSession.insert(std::make_pair(2, nullptr));
 	m_mapSession.insert(std::make_pair(3, nullptr));
-	m_mapSession.insert(std::make_pair(4, nullptr));
 }
 
 CGameSessionManager::~CGameSessionManager()

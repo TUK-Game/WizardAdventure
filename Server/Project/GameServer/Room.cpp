@@ -29,33 +29,33 @@ void CRoom::Update()
 	DoTimer(33, &CRoom::Update);
 }
 
-bool CRoom::EnterRoom(CGameObjectRef object, bool bRandPos /*= true*/)
+bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 {
-	bool success = AddObject(object);
+	bool success = AddPlayer(newPlayer);
 
 	if (success)
 	{
-		std::cout << "Enter Player " << object->ObjectInfo->object_id() << std::endl;
+		std::cout << "Enter Player " << newPlayer->PlayerInfo->player_id() << std::endl;
 	}
 
 	// 랜덤 위치
 	if (bRandPos)
 	{
-		object->PosInfo->set_x(CUtil::GetRandom(0.f, 500.f));
-		object->PosInfo->set_y(CUtil::GetRandom(0.f, 500.f));
-		object->PosInfo->set_z(100.f);
-		object->PosInfo->set_yaw(CUtil::GetRandom(0.f, 100.f));
+		newPlayer->PosInfo->set_x(CUtil::GetRandom(0.f, 500.f));
+		newPlayer->PosInfo->set_y(CUtil::GetRandom(0.f, 500.f));
+		newPlayer->PosInfo->set_z(100.f);
+		newPlayer->PosInfo->set_yaw(CUtil::GetRandom(0.f, 100.f));
 	}
 
 	// 입장 사실을 새 플레이어에게 알린다
-	if (auto player = dynamic_pointer_cast<CPlayer>(object))
+	if (auto player = dynamic_pointer_cast<CPlayer>(newPlayer))
 	{
 		Protocol::S_ENTER_GAME enterGamePkt;
 		enterGamePkt.set_success(success);
 
-		Protocol::ObjectInfo* playerInfo = new Protocol::ObjectInfo();
-		playerInfo->CopyFrom(*object->ObjectInfo);
-		enterGamePkt.set_allocated_player(playerInfo);
+		Protocol::PlayerInfo* playerInfo = new Protocol::PlayerInfo();
+		playerInfo->CopyFrom(*player->PlayerInfo);
+		enterGamePkt.set_allocated_player(playerInfo);	
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(enterGamePkt);
 		if (auto session = player->GetSession())
@@ -64,71 +64,70 @@ bool CRoom::EnterRoom(CGameObjectRef object, bool bRandPos /*= true*/)
 
 	// 입장 사실을 다른 플레이어에게 알린다
 	{
-		Protocol::S_SPAWN spawnPkt;
+		Protocol::S_SPAWN_PLAYER spawnPkt;
 
-		Protocol::ObjectInfo* objectInfo = spawnPkt.add_objects();
-		objectInfo->CopyFrom(*object->ObjectInfo);
+		Protocol::PlayerInfo* objectInfo = spawnPkt.add_player();
+		objectInfo->CopyFrom(*(newPlayer->PlayerInfo));
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(spawnPkt);
-		Broadcast(sendBuffer, object->ObjectInfo->object_id());
+		Broadcast(sendBuffer, newPlayer->PlayerInfo->player_id());
 	}
 
 	// 기존의 플레이어 정보를 새 플레이어에게 알린다
-	if (auto player = dynamic_pointer_cast<CPlayer>(object))
 	{
-		Protocol::S_SPAWN spawnPkt;
+		Protocol::S_SPAWN_PLAYER spawnPkt;
 
-		for (auto& item : m_mapObject)
+		for (auto& player : m_Players)
 		{
-			if (item.second->IsPlayer() == false)
+			if (player == nullptr)
+				continue;
+			if (player->PlayerInfo->player_id() == newPlayer->PlayerInfo->player_id())
 				continue;
 
-			Protocol::ObjectInfo* playerInfo = spawnPkt.add_objects();
-			playerInfo->CopyFrom(*item.second->ObjectInfo);
+			Protocol::PlayerInfo* playerInfo = spawnPkt.add_player();
+			playerInfo->CopyFrom(*player->PlayerInfo);
 		}
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(spawnPkt);
-		if (auto session = player->GetSession())
+		if (auto session = newPlayer->GetSession())
 			session->Send(sendBuffer);
 	}
 
 	return success;
 }
 
-bool CRoom::LeaveRoom(CGameObjectRef object)
+bool CRoom::LeaveRoom(CPlayerRef leavePlayer)
 {
-	if (object == nullptr)
+	if (leavePlayer == nullptr)
 		return false;
 
-	const uint64 objectId = object->ObjectInfo->object_id();
-	bool success = RemoveObject(objectId);
+	const uint64 playerId = leavePlayer->PlayerInfo->player_id();
+	bool success = RemovePlayer(playerId);
 
 	if (success)
 	{
-		std::cout << "Leave Player " << object->ObjectInfo->object_id() << std::endl;
+		std::cout << "Leave Player " << playerId << std::endl;
 	}
 
 	// 퇴장 사실을 퇴장하는 플레이어에게 알린다
-	if (auto player = dynamic_pointer_cast<CPlayer>(object))
 	{
 		Protocol::S_LEAVE_GAME leaveGamePkt;
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(leaveGamePkt);
-		if (auto session = player->GetSession())
+		if (auto session = leavePlayer->GetSession())
 			session->Send(sendBuffer);
 	}
 
 	// 퇴장 사실을 알린다
 	{
-		Protocol::S_DESPAWN despawnPkt;
-		despawnPkt.add_object_ids(objectId);
+		Protocol::S_DESPAWN_PLAYER despawnPkt;	
+		despawnPkt.add_player_ids(playerId);
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(despawnPkt);
-		Broadcast(sendBuffer, objectId);
+		Broadcast(sendBuffer, playerId);
 
-		if (auto player = dynamic_pointer_cast<CPlayer>(object))
-			if (auto session = player->GetSession())
-				session->Send(sendBuffer);
+		if (auto session = leavePlayer->GetSession())
+			session->Send(sendBuffer);
 	}
 
 	return success;
@@ -144,6 +143,16 @@ bool CRoom::HandleLeavePlayer(CPlayerRef player)
 	return LeaveRoom(player);
 }
 
+bool CRoom::AddPlayer(CPlayerRef player)
+{
+	if (m_Players[player->PlayerInfo->player_id()])
+		return false;
+
+	m_Players[player->PlayerInfo->player_id()] = player;
+	player->m_Room.store(GetRoomRef());
+	return true;
+}
+
 bool CRoom::AddObject(CGameObjectRef object)
 {
 	if (m_mapObject.find(object->ObjectInfo->object_id()) != m_mapObject.end())
@@ -152,6 +161,20 @@ bool CRoom::AddObject(CGameObjectRef object)
 	m_mapObject.insert(make_pair(object->ObjectInfo->object_id(), object));
 
 	object->m_Room.store(GetRoomRef());
+
+	return true;
+}
+
+bool CRoom::RemovePlayer(uint64 playerId)
+{
+	if (m_Players[playerId] == nullptr)
+		return false;
+
+	CPlayerRef player = m_Players[playerId];
+	if (player)
+		player->m_Room.store(std::weak_ptr<CRoom>());
+
+	m_Players[playerId] = nullptr;
 
 	return true;
 }
@@ -173,14 +196,11 @@ bool CRoom::RemoveObject(uint64 objectId)
 
 void CRoom::Broadcast(CSendBufferRef sendBuffer, uint64 exceptId/* = 0*/)
 {
-	// TEMP
-	// TODO: mapObject(X) players(O)
-	for (auto& item : m_mapObject)
+	for (auto& player : m_Players)
 	{
-		CPlayerRef player = dynamic_pointer_cast<CPlayer>(item.second);
 		if (player == nullptr)
 			continue;
-		if (player->ObjectInfo->object_id() == exceptId)
+		if (player->PlayerInfo->player_id() == exceptId)
 			continue;
 
 		if (CGameSessionRef session = player->GetSession())

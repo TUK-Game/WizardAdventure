@@ -21,7 +21,7 @@ message C_ENTER_GAME
 message S_ENTER_GAME
 {
 	bool success = 1;
-	ObjectInfo player = 2;
+	PlayerInfo player = 2;
 }
 
 message C_LEAVE_GAME
@@ -34,9 +34,20 @@ message S_LEAVE_GAME
 
 }
 
+// 플레이어만 스포인가 오브젝트 전체가 스폰인가?
 message S_SPAWN
 {
 	repeated ObjectInfo objects = 1;
+}
+
+message S_SPAWN_PLAYER
+{
+	repeated PlayerInfo player = 1;
+}
+
+message S_DESPAWN_PLAYER
+{
+	repeated uint64 player_ids = 1;
 }
 
 message S_DESPAWN

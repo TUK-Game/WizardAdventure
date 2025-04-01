@@ -23,6 +23,10 @@ void CServerSession::OnConnected()
 void CServerSession::OnDisconnected()
 {
 	std::cout << "Disconnected Server" << std::endl;
+
+	Protocol::C_LEAVE_GAME pkt;
+	std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(SendBuffer);
 }
 
 void CServerSession::OnRecvPacket(BYTE* buffer, int32 len)

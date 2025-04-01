@@ -12,6 +12,9 @@ class CPlayer : public CCreature
 public:
 	CPlayer();
 	virtual ~CPlayer();
+	
+public:
+	Protocol::PlayerInfo* PlayerInfo;
 
 public:
 	std::shared_ptr<CGameSession> GetSession() const { return m_Session.lock(); }

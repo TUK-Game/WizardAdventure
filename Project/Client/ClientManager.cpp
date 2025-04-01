@@ -4,6 +4,7 @@
 #include <Engine/Engine.h>
 #include <Engine/NetworkManager.h>
 #include <Engine/SaveLoadManager.h>
+#include <Engine/ServerSession.h>
 //#include <ImGui/imgui_impl_win32.h>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -91,7 +92,13 @@ LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     }
     break;
     case WM_DESTROY:
+    {
+        if (CEngine::GetInst()->GetNetworkType() == ENetwork_Type::Online)
+        {
+            CNetworkManager::GetInst()->s_GameSession->OnDisconnected();
+        }
         PostQuitMessage(0);
+    }
         break;
     default:
         if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))

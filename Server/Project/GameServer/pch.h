@@ -19,6 +19,8 @@
 #include "Util.h"
 #include "GameSession.h"
 
+#define MAX_PLAYERS 4
+
 USING_SHARED_PTR(CGameSession);
 USING_SHARED_PTR(CPlayer);
 USING_SHARED_PTR(CMonster);

@@ -15,9 +15,10 @@ bool Handle_S_LOGIN(CPacketSessionRef& session, Protocol::S_LOGIN& pkt)
 	{
 		std::cout << "로그인 성공!" << std::endl;
 		// 입장
-		//Protocol::C_ENTER_GAME enterPkt;
-		//auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterPkt);
-		//session->Send(sendBuffer);
+		Protocol::C_ENTER_GAME enterPkt;
+
+		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterPkt);
+		session->Send(sendBuffer);
 		return true;
 	}
 
@@ -33,6 +34,16 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 }
 
 bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt)
+{
+	return true;
+}
+
+bool Handle_S_SPAWN_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_PLAYER& pkt)
+{
+	return true;
+}
+
+bool Handle_S_DESPAWN_PLAYER(CPacketSessionRef& session, Protocol::S_DESPAWN_PLAYER& pkt)
 {
 	return true;
 }
