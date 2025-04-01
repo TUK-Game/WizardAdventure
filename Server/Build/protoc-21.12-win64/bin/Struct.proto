@@ -22,7 +22,7 @@ message ObjectInfo
 
 message PlayerInfo
 {
-	uint8 player_id = 1;
+	uint32 player_id = 1;
 	PlayerType player_type = 2;
 	ObjectInfo object_info = 3;
 }

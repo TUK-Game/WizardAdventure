@@ -66,7 +66,7 @@ bool CRoom::EnterRoom(CGameObjectRef object, bool bRandPos /*= true*/)
 	{
 		Protocol::S_SPAWN spawnPkt;
 
-		Protocol::ObjectInfo* objectInfo = spawnPkt.add_players();
+		Protocol::ObjectInfo* objectInfo = spawnPkt.add_objects();
 		objectInfo->CopyFrom(*object->ObjectInfo);
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(spawnPkt);
@@ -83,7 +83,7 @@ bool CRoom::EnterRoom(CGameObjectRef object, bool bRandPos /*= true*/)
 			if (item.second->IsPlayer() == false)
 				continue;
 
-			Protocol::ObjectInfo* playerInfo = spawnPkt.add_players();
+			Protocol::ObjectInfo* playerInfo = spawnPkt.add_objects();
 			playerInfo->CopyFrom(*item.second->ObjectInfo);
 		}
 

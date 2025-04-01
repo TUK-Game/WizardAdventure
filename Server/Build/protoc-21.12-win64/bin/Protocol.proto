@@ -21,7 +21,7 @@ message C_ENTER_GAME
 message S_ENTER_GAME
 {
 	bool success = 1;
-	PlayerInfo player = 2;
+	ObjectInfo player = 2;
 }
 
 message C_LEAVE_GAME
