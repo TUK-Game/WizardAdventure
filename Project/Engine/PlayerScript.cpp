@@ -5,6 +5,8 @@
 #include "InputManager.h"
 #include "Animator.h"
 #include <iostream>
+#include "NetworkManager.h"
+#include "ServerSession.h"
 
 void CPlayerScript::Update()
 {
@@ -23,6 +25,7 @@ void CPlayerScript::Update()
     if (moveDir.Length() > 0.01f)
     {
         stateManager->HandleEvent(player, "Move");
+        CNetworkManager::GetInst()->s_GameSession->OnMovePlayer();
     }
     if (KEY_DOWN(EKey::Space))
     {

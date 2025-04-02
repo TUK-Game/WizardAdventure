@@ -13,11 +13,12 @@ enum : uint16
 	PKT_S_ENTER_GAME = 1003,
 	PKT_C_LEAVE_GAME = 1004,
 	PKT_S_LEAVE_GAME = 1005,
-	PKT_S_SPAWN = 1006,
-	PKT_S_SPAWN_NEW_PLAYER = 1007,
-	PKT_S_SPAWN_EXISTING_PLAYER = 1008,
-	PKT_S_DESPAWN_PLAYER = 1009,
-	PKT_S_DESPAWN = 1010,
+	PKT_C_MOVE = 1006,
+	PKT_S_SPAWN = 1007,
+	PKT_S_SPAWN_NEW_PLAYER = 1008,
+	PKT_S_SPAWN_EXISTING_PLAYER = 1009,
+	PKT_S_DESPAWN_PLAYER = 1010,
+	PKT_S_DESPAWN = 1011,
 };
 
 // ===== Process Packet =====
@@ -25,6 +26,7 @@ bool Handle_INVALID(CPacketSessionRef& session, BYTE* buffer, int32 len);
 bool Handle_C_LOGIN(CPacketSessionRef& session, Protocol::C_LOGIN& pkt);
 bool Handle_C_ENTER_GAME(CPacketSessionRef& session, Protocol::C_ENTER_GAME& pkt);
 bool Handle_C_LEAVE_GAME(CPacketSessionRef& session, Protocol::C_LEAVE_GAME& pkt);
+bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt);
 
 class ServerPacketHandler
 {
@@ -36,6 +38,7 @@ public:
 		g_PacketHandler[PKT_C_LOGIN] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_LOGIN>(Handle_C_LOGIN, session, buffer, len); };
 		g_PacketHandler[PKT_C_ENTER_GAME] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_ENTER_GAME>(Handle_C_ENTER_GAME, session, buffer, len); };
 		g_PacketHandler[PKT_C_LEAVE_GAME] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_LEAVE_GAME>(Handle_C_LEAVE_GAME, session, buffer, len); };
+		g_PacketHandler[PKT_C_MOVE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_MOVE>(Handle_C_MOVE, session, buffer, len); };
 	}
 
 	static bool HandlePacket(CPacketSessionRef& session, BYTE* buffer, int32 len)

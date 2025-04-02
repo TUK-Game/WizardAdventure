@@ -34,7 +34,7 @@ CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
    AddComponent(new CTransform);
    AddComponent(new CBoxCollider);
    GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
-   GetTransform()->SetRelativePosition(0, -300, 600);
+   //GetTransform()->SetRelativePosition(0, -300, 600);
    GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
    if(Owner)
        AddComponent(new CPlayerScript);

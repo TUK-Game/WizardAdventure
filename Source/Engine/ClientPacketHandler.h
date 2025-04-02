@@ -13,11 +13,12 @@ enum : uint16
 	PKT_S_ENTER_GAME = 1003,
 	PKT_C_LEAVE_GAME = 1004,
 	PKT_S_LEAVE_GAME = 1005,
-	PKT_S_SPAWN = 1006,
-	PKT_S_SPAWN_NEW_PLAYER = 1007,
-	PKT_S_SPAWN_EXISTING_PLAYER = 1008,
-	PKT_S_DESPAWN_PLAYER = 1009,
-	PKT_S_DESPAWN = 1010,
+	PKT_C_MOVE = 1006,
+	PKT_S_SPAWN = 1007,
+	PKT_S_SPAWN_NEW_PLAYER = 1008,
+	PKT_S_SPAWN_EXISTING_PLAYER = 1009,
+	PKT_S_DESPAWN_PLAYER = 1010,
+	PKT_S_DESPAWN = 1011,
 };
 
 // ===== Process Packet =====
@@ -56,6 +57,7 @@ public:
 	static CSendBufferRef MakeSendBuffer(Protocol::C_LOGIN& pkt) { return MakeSendBuffer(pkt, PKT_C_LOGIN); }
 	static CSendBufferRef MakeSendBuffer(Protocol::C_ENTER_GAME& pkt) { return MakeSendBuffer(pkt, PKT_C_ENTER_GAME); }
 	static CSendBufferRef MakeSendBuffer(Protocol::C_LEAVE_GAME& pkt) { return MakeSendBuffer(pkt, PKT_C_LEAVE_GAME); }
+	static CSendBufferRef MakeSendBuffer(Protocol::C_MOVE& pkt) { return MakeSendBuffer(pkt, PKT_C_MOVE); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>

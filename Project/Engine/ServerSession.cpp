@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ServerSession.h"
 #include "ClientPacketHandler.h"
+#include "Player.h"
+#include "Transform.h"
 
 CServerSession::CServerSession()
 {
@@ -15,7 +17,7 @@ void CServerSession::OnConnected()
 {
 	std::cout << "Connected Server" << std::endl;
 
-	Protocol::C_LOGIN pkt;
+	Protocol::C_LOGIN pkt;	
 	std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(SendBuffer);
 }
@@ -40,4 +42,23 @@ void CServerSession::OnRecvPacket(BYTE* buffer, int32 len)
 void CServerSession::OnSend(int32 len)
 {
 	//std::cout << "OnSend len - " << len << std::endl;
+}
+
+void CServerSession::OnMovePlayer()
+{
+	std::cout << "I'm Move!!!!" << std::endl;
+
+	Protocol::C_MOVE pkt;
+
+	Protocol::PlayerMoveInfo* info = new Protocol::PlayerMoveInfo();
+	info->set_player_id(m_Id);
+
+	Protocol::PosInfo* PosInfo = new Protocol::PosInfo();
+	//PosInfo->set_x(10.f);
+	info->set_allocated_pos_info(PosInfo);
+
+	pkt.set_allocated_player_move_info(info);
+	
+	std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(SendBuffer);
 }

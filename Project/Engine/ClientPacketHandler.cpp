@@ -6,6 +6,9 @@
 #include "Level.h"
 #include "RenderManager.h"
 #include "Camera.h"
+#include "NetworkManager.h"
+#include "ServerSession.h"
+#include "Transform.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -40,11 +43,17 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	UINT64 id = pkt.player().player_id();
 
 	CPlayer* player = new CPlayer(EPlayerAttribute::Fire, true);
+
+	const Protocol::Vector3& position = pkt.player().object_info().pos_info().position();
+	player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z() );
+
 	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
 	CLevelManager::GetInst()->SetOwnPlayer(player);
 	CLevelManager::GetInst()->SetPlayer(player, id);
 	CRenderManager::GetInst()->GetMainCamera()->SetTarget(player);
 
+	CNetworkManager::GetInst()->s_GameSession->SetOwnPlayer(player);
+	CNetworkManager::GetInst()->s_GameSession->SetClientID(id);
 	return true;
 }
 

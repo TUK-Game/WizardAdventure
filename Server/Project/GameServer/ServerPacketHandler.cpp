@@ -53,3 +53,13 @@ bool Handle_C_LEAVE_GAME(CPacketSessionRef& session, Protocol::C_LEAVE_GAME& pkt
 
 	return true;
 }
+
+bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
+{
+	std::cout << "움직임 감지!!!!!!!!!!!!!" << std::endl;
+	// TODO - 움직임 업데이트 로직 및 패킷 재전송
+	// 1. 움직임 업데이트 -> 룸에서 업데이트 하도록 실행
+	// 2. 여기서 플레이어 위치정보 포장해서 재전송
+
+	return true;
+}

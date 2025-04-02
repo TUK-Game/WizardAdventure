@@ -41,10 +41,11 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 	// 랜덤 위치
 	if (bRandPos)
 	{
-		newPlayer->PosInfo->set_x(CUtil::GetRandom(0.f, 500.f));
-		newPlayer->PosInfo->set_y(CUtil::GetRandom(0.f, 500.f));
-		newPlayer->PosInfo->set_z(100.f);
-		newPlayer->PosInfo->set_yaw(CUtil::GetRandom(0.f, 100.f));
+		Protocol::Vector3* position = new Protocol::Vector3();
+		position->set_x(0.f);
+		position->set_y(-600.f);
+		position->set_z(600.f);
+		newPlayer->PosInfo->set_allocated_position(position);
 	}
 
 	// 입장 사실을 새 플레이어에게 알린다
