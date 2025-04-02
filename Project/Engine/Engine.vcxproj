@@ -202,6 +202,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="FireBall.h" />
     <ClInclude Include="FireCircle.h" />
     <ClInclude Include="FirePillar.h" />
+    <ClInclude Include="FireSword.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="fmod.h" />
     <ClInclude Include="fmod.hpp" />
@@ -246,8 +247,9 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAttackEState.h" />
-    <ClInclude Include="PlayerAttackLState.h" />
+    <ClInclude Include="PlayerAttackLButtonState.h" />
     <ClInclude Include="PlayerAttackQState.h" />
+    <ClInclude Include="PlayerAttackRButtonState.h" />
     <ClInclude Include="PlayerAttackRState.h" />
     <ClInclude Include="PlayerDashState.h" />
     <ClInclude Include="PlayerIdleState.h" />
@@ -364,6 +366,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="FireCircle.cpp" />
     <ClCompile Include="FirePillar.cpp" />
+    <ClCompile Include="FireSword.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GaugeWidget.cpp" />
@@ -403,8 +406,9 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerAttackEState.cpp" />
-    <ClCompile Include="PlayerAttackLState.cpp" />
+    <ClCompile Include="PlayerAttackLButtonState.cpp" />
     <ClCompile Include="PlayerAttackQState.cpp" />
+    <ClCompile Include="PlayerAttackRButtonState.cpp" />
     <ClCompile Include="PlayerAttackRState.cpp" />
     <ClCompile Include="PlayerDashState.cpp" />
     <ClCompile Include="PlayerIdleState.cpp" />

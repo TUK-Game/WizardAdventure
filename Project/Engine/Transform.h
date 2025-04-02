@@ -35,7 +35,7 @@ public:
     void SetParentTransform(CTransform* parent) { m_ParentTransform = parent; }
 
     void LookAt(const Vec3& dir);
-
+    void LookToDirection(const Vec3& direction);
     static bool CloseEnough(const float& a, const float& b, const float& epsilon = std::numeric_limits<float>::epsilon());
     static Vec3 DecomposeRotationMatrix(const Matrix& rotation);
     static Matrix ExtractRotationMatrix(Matrix& transform);

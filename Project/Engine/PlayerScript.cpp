@@ -32,6 +32,10 @@ void CPlayerScript::Update()
     {
         stateManager->HandleEvent(player, "Attack_LButton");
     }
+    if (KEY_DOWN(EKey::RButton))
+    {
+        stateManager->HandleEvent(player, "Attack_RButton");
+    }
     if (KEY_DOWN(EKey::Q))
     {
         stateManager->HandleEvent(player, "Attack_Q");

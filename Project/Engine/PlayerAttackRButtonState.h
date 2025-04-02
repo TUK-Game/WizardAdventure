@@ -1,13 +1,13 @@
 #pragma once
 #include "State.h"
 
-class CPlayerAttackLState :
+class CPlayerAttackRButtonState  :
     public CState
 {
     void Enter(CGameObject* entity) override;
     void Update(CGameObject* entity, float deltaTime) override;
     void Exit(CGameObject* entity) override;
-    EState_Type GetStateType() const override { return EState_Type::Attack_LButton; }
+    EState_Type GetStateType() const override { return EState_Type::Attack_RButton; }
     
 private:
     float m_AttackDuration = 2.0f;
