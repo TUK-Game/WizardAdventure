@@ -57,9 +57,57 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	return true;
 }
 
+bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW_PLAYER& pkt)
+{
+	// 1. 입장한 플레이어 받기
+	const Protocol::PlayerInfo& info = pkt.player();
+
+	CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+
+	const Protocol::Vector3& position = pkt.player().object_info().pos_info().position();
+	player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
+	
+	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
+	CLevelManager::GetInst()->SetPlayer(player, info.player_id());
+
+	return true;
+}
+
+bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_EXISTING_PLAYER& pkt)
+{
+	// 2. 처음 입장할 떄 이미 있는 플레이어 받기
+	int playerNum = pkt.player_size();
+	std::cout << "현재 수: " << playerNum << std::endl;
+	for (int i = 0; i < playerNum; ++i)
+	{
+		const Protocol::PlayerInfo& info = pkt.player(i);
+
+		CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+
+		const Protocol::Vector3& position = info.object_info().pos_info().position();
+		player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
+
+		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
+		CLevelManager::GetInst()->SetPlayer(player, info.player_id());
+	}
+	return true;
+}
+
+
 bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt)
 {
 	std::cout << "======================퇴장======================" << std::endl;
+	return true;
+}
+
+bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
+{
+	UINT64 id = pkt.player_move_info().player_id();
+	std::cout << id << "player가 이동했음" << std::endl;
+
+	const Protocol::Vector3& position = pkt.player_move_info().pos_info().position();
+	CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
+
 	return true;
 }
 
@@ -83,32 +131,6 @@ bool Handle_S_SPAWN(CPacketSessionRef& session, Protocol::S_SPAWN& pkt)
 	return true;
 }
 
-bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW_PLAYER& pkt)
-{
-	// 1. 입장한 플레이어 받기
-	const Protocol::PlayerInfo& info = pkt.player();
-
-	CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
-	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
-	CLevelManager::GetInst()->SetPlayer(player, info.player_id());
-
-	return true;
-}
-
-bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_EXISTING_PLAYER& pkt)
-{
-	// 2. 처음 입장할 떄 이미 있는 플레이어 받기
-	int playerNum = pkt.player_size();
-	for (int i = 0; i < playerNum; ++i)
-	{
-		const Protocol::PlayerInfo& info = pkt.player(i);
-
-		CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
-		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
-		CLevelManager::GetInst()->SetPlayer(player, info.player_id());
-	}
-	return true;
-}
 
 bool Handle_S_DESPAWN(CPacketSessionRef& session, Protocol::S_DESPAWN& pkt)
 {

@@ -38,15 +38,16 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 		std::cout << "Enter Player " << newPlayer->PlayerInfo->player_id() << std::endl;
 	}
 
-	// 랜덤 위치
-	if (bRandPos)
-	{
-		Protocol::Vector3* position = new Protocol::Vector3();
-		position->set_x(0.f);
-		position->set_y(-600.f);
-		position->set_z(600.f);
-		newPlayer->PosInfo->set_allocated_position(position);
-	}
+	Protocol::Vector3* position = new Protocol::Vector3();
+	Protocol::ObjectInfo* objectInfo = new Protocol::ObjectInfo();
+	Protocol::PosInfo* posInfo = new Protocol::PosInfo();
+	position->set_x(0.f);
+	position->set_y(-600.f);
+	position->set_z(600.f);
+
+	posInfo->set_allocated_position(position);
+	objectInfo->set_allocated_pos_info(posInfo);
+	newPlayer->PlayerInfo->set_allocated_object_info(objectInfo);
 
 	// 입장 사실을 새 플레이어에게 알린다
 	{
@@ -66,8 +67,8 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 	{
 		Protocol::S_SPAWN_NEW_PLAYER spawnPkt;
 
-		Protocol::PlayerInfo* objectInfo = spawnPkt.mutable_player();
-		objectInfo->CopyFrom(*(newPlayer->PlayerInfo));
+		Protocol::PlayerInfo* playerInfo = spawnPkt.mutable_player();
+		playerInfo->CopyFrom(*(newPlayer->PlayerInfo));
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(spawnPkt);
 		Broadcast(sendBuffer, newPlayer->PlayerInfo->player_id());
@@ -141,6 +142,40 @@ bool CRoom::HandleEnterPlayer(CPlayerRef player)
 bool CRoom::HandleLeavePlayer(CPlayerRef player)
 {
 	return LeaveRoom(player);
+}
+
+bool CRoom::HandleMovePlayer(CPlayerRef player)
+{
+	// 1. 충돌체크
+	
+	// 2. 위치조정
+
+	// 3. 모든 클라에 위치 전송
+	{
+		Protocol::S_MOVE movePkt;
+		Protocol::PlayerMoveInfo* moveInfo = new Protocol::PlayerMoveInfo();
+		Protocol::PosInfo* posInfo = new Protocol::PosInfo();
+		Protocol::Vector3* pos = new Protocol::Vector3();
+		moveInfo->set_player_id(player->PlayerInfo->player_id());
+
+		const Protocol::Vector3& position = player->PlayerInfo->object_info().pos_info().position();
+		pos->set_x(position.x());
+		pos->set_y(position.y());
+		pos->set_z(position.z());
+
+		posInfo->set_allocated_position(pos);
+		moveInfo->set_allocated_pos_info(posInfo);
+		movePkt.set_allocated_player_move_info(moveInfo);
+
+		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
+		Broadcast(sendBuffer, player->PlayerInfo->player_id());
+
+		/*if (auto session = player->GetSession())
+			session->Send(sendBuffer);*/
+	}
+
+
+	return true;
 }
 
 bool CRoom::AddPlayer(CPlayerRef player)

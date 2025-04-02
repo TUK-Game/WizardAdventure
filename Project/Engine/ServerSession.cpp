@@ -54,7 +54,15 @@ void CServerSession::OnMovePlayer()
 	info->set_player_id(m_Id);
 
 	Protocol::PosInfo* PosInfo = new Protocol::PosInfo();
-	//PosInfo->set_x(10.f);
+	Protocol::Vector3* pos = new Protocol::Vector3();
+
+	CTransform* transform = m_OwnPlayer->GetTransform();
+	Vec3 playerPos = transform->GetRelativePosition();
+	pos->set_x(playerPos.x);
+	pos->set_y(playerPos.y);
+	pos->set_z(playerPos.z);
+
+	PosInfo->set_allocated_position(pos);
 	info->set_allocated_pos_info(PosInfo);
 
 	pkt.set_allocated_player_move_info(info);

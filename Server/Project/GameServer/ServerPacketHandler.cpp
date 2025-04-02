@@ -59,7 +59,20 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 	std::cout << "움직임 감지!!!!!!!!!!!!!" << std::endl;
 	// TODO - 움직임 업데이트 로직 및 패킷 재전송
 	// 1. 움직임 업데이트 -> 룸에서 업데이트 하도록 실행
-	// 2. 여기서 플레이어 위치정보 포장해서 재전송
+	// 2. 플레이어 위치정보 포장해서 재전송
+	auto gameSession = static_pointer_cast<CGameSession>(session);
+
+	CPlayerRef player = gameSession->Player.load();
+	if (player == nullptr)
+		return false;
+
+	const Protocol::Vector3& pos = pkt.player_move_info().pos_info().position();
+	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(pos.x());
+	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(pos.y());
+	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(pos.z());
+
+
+	g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
 
 	return true;
 }

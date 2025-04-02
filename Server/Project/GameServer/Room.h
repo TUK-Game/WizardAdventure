@@ -18,6 +18,8 @@ public:
 	bool HandleEnterPlayer(CPlayerRef player);
 	bool HandleLeavePlayer(CPlayerRef player);
 
+	bool HandleMovePlayer(CPlayerRef player);
+
 private:
 	bool AddPlayer(CPlayerRef player);
 	bool RemovePlayer(uint64 playerId);
