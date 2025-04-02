@@ -50,11 +50,22 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 
 bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt)
 {
+	std::cout << "======================퇴장======================" << std::endl;
 	return true;
 }
 
 bool Handle_S_DESPAWN_PLAYER(CPacketSessionRef& session, Protocol::S_DESPAWN_PLAYER& pkt)
 {
+	// 퇴장한 플레이어 데이터 삭제
+	UINT64 id = pkt.player_ids();
+	std::cout << id << "번 플레이어가 퇴장했음" << std::endl;
+
+	auto player = CLevelManager::GetInst()->GetPlayer(id);
+	if (player)
+	{
+		CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObject(player);
+	}
+	CLevelManager::GetInst()->SetPlayer(nullptr, id);
 	return true;
 }
 

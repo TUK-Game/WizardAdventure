@@ -133,8 +133,7 @@ struct S_SPAWN_EXISTING_PLAYERDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S_SPAWN_EXISTING_PLAYERDefaultTypeInternal _S_SPAWN_EXISTING_PLAYER_default_instance_;
 PROTOBUF_CONSTEXPR S_DESPAWN_PLAYER::S_DESPAWN_PLAYER(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.player_ids_)*/{}
-  , /*decltype(_impl_._player_ids_cached_byte_size_)*/{0}
+    /*decltype(_impl_.player_ids_)*/uint64_t{0u}
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct S_DESPAWN_PLAYERDefaultTypeInternal {
   PROTOBUF_CONSTEXPR S_DESPAWN_PLAYERDefaultTypeInternal()
@@ -279,7 +278,7 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "ER\022$\n\006player\030\001 \001(\0132\024.Protocol.PlayerInfo"
   "\"\?\n\027S_SPAWN_EXISTING_PLAYER\022$\n\006player\030\001 "
   "\003(\0132\024.Protocol.PlayerInfo\"&\n\020S_DESPAWN_P"
-  "LAYER\022\022\n\nplayer_ids\030\001 \003(\004\"\037\n\tS_DESPAWN\022\022"
+  "LAYER\022\022\n\nplayer_ids\030\001 \001(\004\"\037\n\tS_DESPAWN\022\022"
   "\n\nobject_ids\030\001 \003(\004b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_deps[2] = {
@@ -1462,11 +1461,11 @@ S_DESPAWN_PLAYER::S_DESPAWN_PLAYER(const S_DESPAWN_PLAYER& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   S_DESPAWN_PLAYER* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.player_ids_){from._impl_.player_ids_}
-    , /*decltype(_impl_._player_ids_cached_byte_size_)*/{0}
+      decltype(_impl_.player_ids_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.player_ids_ = from._impl_.player_ids_;
   // @@protoc_insertion_point(copy_constructor:Protocol.S_DESPAWN_PLAYER)
 }
 
@@ -1475,8 +1474,7 @@ inline void S_DESPAWN_PLAYER::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.player_ids_){arena}
-    , /*decltype(_impl_._player_ids_cached_byte_size_)*/{0}
+      decltype(_impl_.player_ids_){uint64_t{0u}}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -1492,7 +1490,6 @@ S_DESPAWN_PLAYER::~S_DESPAWN_PLAYER() {
 
 inline void S_DESPAWN_PLAYER::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.player_ids_.~RepeatedField();
 }
 
 void S_DESPAWN_PLAYER::SetCachedSize(int size) const {
@@ -1505,7 +1502,7 @@ void S_DESPAWN_PLAYER::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.player_ids_.Clear();
+  _impl_.player_ids_ = uint64_t{0u};
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1515,13 +1512,10 @@ const char* S_DESPAWN_PLAYER::_InternalParse(const char* ptr, ::_pbi::ParseConte
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated uint64 player_ids = 1;
+      // uint64 player_ids = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedUInt64Parser(_internal_mutable_player_ids(), ptr, ctx);
-          CHK_(ptr);
-        } else if (static_cast<uint8_t>(tag) == 8) {
-          _internal_add_player_ids(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.player_ids_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1555,13 +1549,10 @@ uint8_t* S_DESPAWN_PLAYER::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated uint64 player_ids = 1;
-  {
-    int byte_size = _impl_._player_ids_cached_byte_size_.load(std::memory_order_relaxed);
-    if (byte_size > 0) {
-      target = stream->WriteUInt64Packed(
-          1, _internal_player_ids(), byte_size, target);
-    }
+  // uint64 player_ids = 1;
+  if (this->_internal_player_ids() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(1, this->_internal_player_ids(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1580,18 +1571,9 @@ size_t S_DESPAWN_PLAYER::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated uint64 player_ids = 1;
-  {
-    size_t data_size = ::_pbi::WireFormatLite::
-      UInt64Size(this->_impl_.player_ids_);
-    if (data_size > 0) {
-      total_size += 1 +
-        ::_pbi::WireFormatLite::Int32Size(static_cast<int32_t>(data_size));
-    }
-    int cached_size = ::_pbi::ToCachedSize(data_size);
-    _impl_._player_ids_cached_byte_size_.store(cached_size,
-                                    std::memory_order_relaxed);
-    total_size += data_size;
+  // uint64 player_ids = 1;
+  if (this->_internal_player_ids() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_player_ids());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -1612,7 +1594,9 @@ void S_DESPAWN_PLAYER::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_impl_.player_ids_.MergeFrom(from._impl_.player_ids_);
+  if (from._internal_player_ids() != 0) {
+    _this->_internal_set_player_ids(from._internal_player_ids());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -1630,7 +1614,7 @@ bool S_DESPAWN_PLAYER::IsInitialized() const {
 void S_DESPAWN_PLAYER::InternalSwap(S_DESPAWN_PLAYER* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  _impl_.player_ids_.InternalSwap(&other->_impl_.player_ids_);
+  swap(_impl_.player_ids_, other->_impl_.player_ids_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata S_DESPAWN_PLAYER::GetMetadata() const {

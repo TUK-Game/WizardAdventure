@@ -1481,27 +1481,14 @@ class S_DESPAWN_PLAYER final :
   enum : int {
     kPlayerIdsFieldNumber = 1,
   };
-  // repeated uint64 player_ids = 1;
-  int player_ids_size() const;
-  private:
-  int _internal_player_ids_size() const;
-  public:
+  // uint64 player_ids = 1;
   void clear_player_ids();
+  uint64_t player_ids() const;
+  void set_player_ids(uint64_t value);
   private:
-  uint64_t _internal_player_ids(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >&
-      _internal_player_ids() const;
-  void _internal_add_player_ids(uint64_t value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >*
-      _internal_mutable_player_ids();
+  uint64_t _internal_player_ids() const;
+  void _internal_set_player_ids(uint64_t value);
   public:
-  uint64_t player_ids(int index) const;
-  void set_player_ids(int index, uint64_t value);
-  void add_player_ids(uint64_t value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >&
-      player_ids() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >*
-      mutable_player_ids();
 
   // @@protoc_insertion_point(class_scope:Protocol.S_DESPAWN_PLAYER)
  private:
@@ -1511,8 +1498,7 @@ class S_DESPAWN_PLAYER final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t > player_ids_;
-    mutable std::atomic<int> _player_ids_cached_byte_size_;
+    uint64_t player_ids_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2011,51 +1997,24 @@ S_SPAWN_EXISTING_PLAYER::player() const {
 
 // S_DESPAWN_PLAYER
 
-// repeated uint64 player_ids = 1;
-inline int S_DESPAWN_PLAYER::_internal_player_ids_size() const {
-  return _impl_.player_ids_.size();
-}
-inline int S_DESPAWN_PLAYER::player_ids_size() const {
-  return _internal_player_ids_size();
-}
+// uint64 player_ids = 1;
 inline void S_DESPAWN_PLAYER::clear_player_ids() {
-  _impl_.player_ids_.Clear();
+  _impl_.player_ids_ = uint64_t{0u};
 }
-inline uint64_t S_DESPAWN_PLAYER::_internal_player_ids(int index) const {
-  return _impl_.player_ids_.Get(index);
-}
-inline uint64_t S_DESPAWN_PLAYER::player_ids(int index) const {
-  // @@protoc_insertion_point(field_get:Protocol.S_DESPAWN_PLAYER.player_ids)
-  return _internal_player_ids(index);
-}
-inline void S_DESPAWN_PLAYER::set_player_ids(int index, uint64_t value) {
-  _impl_.player_ids_.Set(index, value);
-  // @@protoc_insertion_point(field_set:Protocol.S_DESPAWN_PLAYER.player_ids)
-}
-inline void S_DESPAWN_PLAYER::_internal_add_player_ids(uint64_t value) {
-  _impl_.player_ids_.Add(value);
-}
-inline void S_DESPAWN_PLAYER::add_player_ids(uint64_t value) {
-  _internal_add_player_ids(value);
-  // @@protoc_insertion_point(field_add:Protocol.S_DESPAWN_PLAYER.player_ids)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >&
-S_DESPAWN_PLAYER::_internal_player_ids() const {
+inline uint64_t S_DESPAWN_PLAYER::_internal_player_ids() const {
   return _impl_.player_ids_;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >&
-S_DESPAWN_PLAYER::player_ids() const {
-  // @@protoc_insertion_point(field_list:Protocol.S_DESPAWN_PLAYER.player_ids)
+inline uint64_t S_DESPAWN_PLAYER::player_ids() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_DESPAWN_PLAYER.player_ids)
   return _internal_player_ids();
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >*
-S_DESPAWN_PLAYER::_internal_mutable_player_ids() {
-  return &_impl_.player_ids_;
+inline void S_DESPAWN_PLAYER::_internal_set_player_ids(uint64_t value) {
+  
+  _impl_.player_ids_ = value;
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >*
-S_DESPAWN_PLAYER::mutable_player_ids() {
-  // @@protoc_insertion_point(field_mutable_list:Protocol.S_DESPAWN_PLAYER.player_ids)
-  return _internal_mutable_player_ids();
+inline void S_DESPAWN_PLAYER::set_player_ids(uint64_t value) {
+  _internal_set_player_ids(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_DESPAWN_PLAYER.player_ids)
 }
 
 // -------------------------------------------------------------------

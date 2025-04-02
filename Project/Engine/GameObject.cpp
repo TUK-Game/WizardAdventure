@@ -256,11 +256,11 @@ void CGameObject::RemoveFromParent()
 void CGameObject::Destroy()
 {
 	// 모든 자식 오브젝트 삭제
-	for (CGameObject* child : m_vecChild)
-	{
-		child->Destroy();
-		//delete child;
-	}
+	//for (CGameObject* child : m_vecChild)
+	//{
+	//	child->Destroy();
+	//	//delete child;
+	//}
 	m_vecChild.clear();
 
 	// 부모와의 연결 해제

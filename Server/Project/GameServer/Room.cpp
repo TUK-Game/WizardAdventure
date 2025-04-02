@@ -120,13 +120,13 @@ bool CRoom::LeaveRoom(CPlayerRef leavePlayer)
 	// 퇴장 사실을 알린다
 	{
 		Protocol::S_DESPAWN_PLAYER despawnPkt;	
-		despawnPkt.add_player_ids(playerId);
+		despawnPkt.set_player_ids(playerId);
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(despawnPkt);
 		Broadcast(sendBuffer, playerId);
 
-		if (auto session = leavePlayer->GetSession())
-			session->Send(sendBuffer);
+	/*	if (auto session = leavePlayer->GetSession())
+			session->Send(sendBuffer);*/
 	}
 
 	return success;
