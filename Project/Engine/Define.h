@@ -73,6 +73,8 @@ private:\
 
 #define READY_IMGUI
 
+#define DEBUG_SOLOPLAY
+
 #define MAX_OBJECTS_SUBLEVEL 200
 
 #define MAX_PLAYERS 4

@@ -110,9 +110,11 @@ void CLevel_1::Init()
 		this->AddGameObject(light, 4, false);
 	}
 
-	/*CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+#ifdef DEBUG_SOLOPLAY
+	CPlayer* player = new CPlayer(EPlayerAttribute::Fire, true);
 	this->AddGameObject(player, 3, false);	
-	CLevelManager::GetInst()->SetOwnPlayer(player);*/
+	CLevelManager::GetInst()->SetOwnPlayer(player);
+#endif // DEBUG_SOLOPLAY
 
 //	{
 //		CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
@@ -171,7 +173,9 @@ void CLevel_1::Init()
 	camera->SetName(L"MainCamera");
 	camera->AddComponent(new CTransform);
 	camera->AddComponent(new CCamera);
-	//camera->GetCamera()->SetTarget(player);
+#ifdef DEBUG_SOLOPLAY
+	camera->GetCamera()->SetTarget(player);
+#endif 
 	camera->AddComponent(new CCameraScript);
 	camera->GetCamera()->SetProjType(EProjection_Type::Perspective);
 	camera->GetCamera()->SetPriority(0); // 0 : main camera

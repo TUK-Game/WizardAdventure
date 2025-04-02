@@ -145,7 +145,9 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
             float angle = atan2(moveDir.x, moveDir.z) * (180.0f / XM_PI); 
             transform->SetRelativeRotation(0.f, angle + 180.f, 0.f);
         }
+#ifndef DEBUG_SOLOPLAY
         CNetworkManager::GetInst()->s_GameSession->OnMovePlayer();
+#endif 
     }
 }
 

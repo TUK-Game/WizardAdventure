@@ -53,12 +53,13 @@ LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         {
         case VK_NUMPAD0:
         {
+#ifndef DEBUG_SOLOPLAY
             if (CEngine::GetInst()->GetNetworkType() == ENetwork_Type::Offline)
             {
                 CEngine::GetInst()->SetNetworkType(ENetwork_Type::Online);
                 CNetworkManager::GetInst()->Init();
             }
-
+#endif
             break;
         }
         case VK_NUMPAD8:

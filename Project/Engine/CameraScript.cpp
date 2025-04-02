@@ -23,8 +23,10 @@ CCameraScript::~CCameraScript()
 
 void CCameraScript::Begin()
 {
-	//if(GetOwner()->GetCamera()->GetTarget())
-	//	m_TargetTransform = GetOwner()->GetCamera()->GetTarget()->GetTransform();
+#ifdef DEBUG_SOLOPLAY
+	if(GetOwner()->GetCamera()->GetTarget())
+		m_TargetTransform = GetOwner()->GetCamera()->GetTarget()->GetTransform();
+#endif
 	m_Offset = Vec3(420, 1028, -600);
 }
 
