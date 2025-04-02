@@ -39,8 +39,8 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR PosInfo::PosInfo(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.position_)*/nullptr
+  , /*decltype(_impl_.rotation_)*/nullptr
   , /*decltype(_impl_.object_id_)*/uint64_t{0u}
-  , /*decltype(_impl_.yaw_)*/0
   , /*decltype(_impl_.state_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct PosInfoDefaultTypeInternal {
@@ -119,7 +119,7 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.object_id_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.position_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.yaw_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.rotation_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.state_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::ObjectInfo, _internal_metadata_),
@@ -167,24 +167,25 @@ static const ::_pb::Message* const file_default_instances[] = {
 const char descriptor_table_protodef_Struct_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\014Struct.proto\022\010Protocol\032\nEnum.proto\"*\n\007"
   "Vector3\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002"
-  "\"r\n\007PosInfo\022\021\n\tobject_id\030\001 \001(\004\022#\n\010Positi"
-  "on\030\002 \001(\0132\021.Protocol.Vector3\022\013\n\003yaw\030\003 \001(\002"
-  "\022\"\n\005state\030\004 \001(\0162\023.Protocol.MoveState\"o\n\n"
-  "ObjectInfo\022\021\n\tobject_id\030\001 \001(\004\022)\n\013object_"
-  "type\030\002 \001(\0162\024.Protocol.ObjectType\022#\n\010pos_"
-  "info\030\003 \001(\0132\021.Protocol.PosInfo\"u\n\nPlayerI"
-  "nfo\022\021\n\tplayer_id\030\001 \001(\r\022)\n\013player_type\030\002 "
-  "\001(\0162\024.Protocol.PlayerType\022)\n\013object_info"
-  "\030\003 \001(\0132\024.Protocol.ObjectInfo\"H\n\016PlayerMo"
-  "veInfo\022\021\n\tplayer_id\030\001 \001(\r\022#\n\010pos_info\030\002 "
-  "\001(\0132\021.Protocol.PosInfob\006proto3"
+  "\"\212\001\n\007PosInfo\022\021\n\tobject_id\030\001 \001(\004\022#\n\010Posit"
+  "ion\030\002 \001(\0132\021.Protocol.Vector3\022#\n\010Rotation"
+  "\030\003 \001(\0132\021.Protocol.Vector3\022\"\n\005state\030\004 \001(\016"
+  "2\023.Protocol.MoveState\"o\n\nObjectInfo\022\021\n\to"
+  "bject_id\030\001 \001(\004\022)\n\013object_type\030\002 \001(\0162\024.Pr"
+  "otocol.ObjectType\022#\n\010pos_info\030\003 \001(\0132\021.Pr"
+  "otocol.PosInfo\"u\n\nPlayerInfo\022\021\n\tplayer_i"
+  "d\030\001 \001(\r\022)\n\013player_type\030\002 \001(\0162\024.Protocol."
+  "PlayerType\022)\n\013object_info\030\003 \001(\0132\024.Protoc"
+  "ol.ObjectInfo\"H\n\016PlayerMoveInfo\022\021\n\tplaye"
+  "r_id\030\001 \001(\r\022#\n\010pos_info\030\002 \001(\0132\021.Protocol."
+  "PosInfob\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Struct_2eproto_deps[1] = {
   &::descriptor_table_Enum_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_Struct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Struct_2eproto = {
-    false, false, 510, descriptor_table_protodef_Struct_2eproto,
+    false, false, 535, descriptor_table_protodef_Struct_2eproto,
     "Struct.proto",
     &descriptor_table_Struct_2eproto_once, descriptor_table_Struct_2eproto_deps, 1, 5,
     schemas, file_default_instances, TableStruct_Struct_2eproto::offsets,
@@ -475,11 +476,16 @@ void Vector3::InternalSwap(Vector3* other) {
 class PosInfo::_Internal {
  public:
   static const ::Protocol::Vector3& position(const PosInfo* msg);
+  static const ::Protocol::Vector3& rotation(const PosInfo* msg);
 };
 
 const ::Protocol::Vector3&
 PosInfo::_Internal::position(const PosInfo* msg) {
   return *msg->_impl_.position_;
+}
+const ::Protocol::Vector3&
+PosInfo::_Internal::rotation(const PosInfo* msg) {
+  return *msg->_impl_.rotation_;
 }
 PosInfo::PosInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -492,14 +498,17 @@ PosInfo::PosInfo(const PosInfo& from)
   PosInfo* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.position_){nullptr}
+    , decltype(_impl_.rotation_){nullptr}
     , decltype(_impl_.object_id_){}
-    , decltype(_impl_.yaw_){}
     , decltype(_impl_.state_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   if (from._internal_has_position()) {
     _this->_impl_.position_ = new ::Protocol::Vector3(*from._impl_.position_);
+  }
+  if (from._internal_has_rotation()) {
+    _this->_impl_.rotation_ = new ::Protocol::Vector3(*from._impl_.rotation_);
   }
   ::memcpy(&_impl_.object_id_, &from._impl_.object_id_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.state_) -
@@ -513,8 +522,8 @@ inline void PosInfo::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.position_){nullptr}
+    , decltype(_impl_.rotation_){nullptr}
     , decltype(_impl_.object_id_){uint64_t{0u}}
-    , decltype(_impl_.yaw_){0}
     , decltype(_impl_.state_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -532,6 +541,7 @@ PosInfo::~PosInfo() {
 inline void PosInfo::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.position_;
+  if (this != internal_default_instance()) delete _impl_.rotation_;
 }
 
 void PosInfo::SetCachedSize(int size) const {
@@ -548,6 +558,10 @@ void PosInfo::Clear() {
     delete _impl_.position_;
   }
   _impl_.position_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.rotation_ != nullptr) {
+    delete _impl_.rotation_;
+  }
+  _impl_.rotation_ = nullptr;
   ::memset(&_impl_.object_id_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.state_) -
       reinterpret_cast<char*>(&_impl_.object_id_)) + sizeof(_impl_.state_));
@@ -576,11 +590,11 @@ const char* PosInfo::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) 
         } else
           goto handle_unusual;
         continue;
-      // float yaw = 3;
+      // .Protocol.Vector3 Rotation = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 29)) {
-          _impl_.yaw_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr = ctx->ParseMessage(_internal_mutable_rotation(), ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -635,14 +649,11 @@ uint8_t* PosInfo::_InternalSerialize(
         _Internal::position(this).GetCachedSize(), target, stream);
   }
 
-  // float yaw = 3;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_yaw = this->_internal_yaw();
-  uint32_t raw_yaw;
-  memcpy(&raw_yaw, &tmp_yaw, sizeof(tmp_yaw));
-  if (raw_yaw != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(3, this->_internal_yaw(), target);
+  // .Protocol.Vector3 Rotation = 3;
+  if (this->_internal_has_rotation()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(3, _Internal::rotation(this),
+        _Internal::rotation(this).GetCachedSize(), target, stream);
   }
 
   // .Protocol.MoveState state = 4;
@@ -675,18 +686,16 @@ size_t PosInfo::ByteSizeLong() const {
         *_impl_.position_);
   }
 
+  // .Protocol.Vector3 Rotation = 3;
+  if (this->_internal_has_rotation()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.rotation_);
+  }
+
   // uint64 object_id = 1;
   if (this->_internal_object_id() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_object_id());
-  }
-
-  // float yaw = 3;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_yaw = this->_internal_yaw();
-  uint32_t raw_yaw;
-  memcpy(&raw_yaw, &tmp_yaw, sizeof(tmp_yaw));
-  if (raw_yaw != 0) {
-    total_size += 1 + 4;
   }
 
   // .Protocol.MoveState state = 4;
@@ -717,15 +726,12 @@ void PosInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOB
     _this->_internal_mutable_position()->::Protocol::Vector3::MergeFrom(
         from._internal_position());
   }
+  if (from._internal_has_rotation()) {
+    _this->_internal_mutable_rotation()->::Protocol::Vector3::MergeFrom(
+        from._internal_rotation());
+  }
   if (from._internal_object_id() != 0) {
     _this->_internal_set_object_id(from._internal_object_id());
-  }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_yaw = from._internal_yaw();
-  uint32_t raw_yaw;
-  memcpy(&raw_yaw, &tmp_yaw, sizeof(tmp_yaw));
-  if (raw_yaw != 0) {
-    _this->_internal_set_yaw(from._internal_yaw());
   }
   if (from._internal_state() != 0) {
     _this->_internal_set_state(from._internal_state());

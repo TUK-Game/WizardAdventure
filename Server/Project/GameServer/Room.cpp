@@ -154,17 +154,22 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 	{
 		Protocol::S_MOVE movePkt;
 		Protocol::PlayerMoveInfo* moveInfo = new Protocol::PlayerMoveInfo();
-		Protocol::PosInfo* posInfo = new Protocol::PosInfo();
 		Protocol::Vector3* pos = new Protocol::Vector3();
+		Protocol::Vector3* rot = new Protocol::Vector3();
 		moveInfo->set_player_id(player->PlayerInfo->player_id());
 
 		const Protocol::Vector3& position = player->PlayerInfo->object_info().pos_info().position();
+		const Protocol::Vector3& rotation = player->PlayerInfo->object_info().pos_info().rotation();
 		pos->set_x(position.x());
 		pos->set_y(position.y());
 		pos->set_z(position.z());
 
-		posInfo->set_allocated_position(pos);
-		moveInfo->set_allocated_pos_info(posInfo);
+		rot->set_x(rotation.x());
+		rot->set_y(rotation.y());
+		rot->set_z(rotation.z());
+
+		moveInfo->mutable_pos_info()->set_allocated_position(pos);
+		moveInfo->mutable_pos_info()->set_allocated_rotation(rot);
 		movePkt.set_allocated_player_move_info(moveInfo);
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);

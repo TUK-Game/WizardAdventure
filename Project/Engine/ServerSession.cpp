@@ -53,19 +53,22 @@ void CServerSession::OnMovePlayer()
 	Protocol::PlayerMoveInfo* info = new Protocol::PlayerMoveInfo();
 	info->set_player_id(m_Id);
 
-	Protocol::PosInfo* PosInfo = new Protocol::PosInfo();
 	Protocol::Vector3* pos = new Protocol::Vector3();
+	Protocol::Vector3* rot = new Protocol::Vector3();
 
 	CTransform* transform = m_OwnPlayer->GetTransform();
 	Vec3 playerPos = transform->GetRelativePosition();
+	Vec3 playerRotation = transform->GetRelativeRotation();
 	pos->set_x(playerPos.x);
 	pos->set_y(playerPos.y);
 	pos->set_z(playerPos.z);
 
-	PosInfo->set_allocated_position(pos);
-	info->set_allocated_pos_info(PosInfo);
+	rot->set_x(playerRotation.x);
+	rot->set_y(playerRotation.y);
+	rot->set_z(playerRotation.z);
 
-	pkt.set_allocated_player_move_info(info);
+	pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_position(pos);
+	pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_rotation(rot);
 	
 	std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(SendBuffer);

@@ -106,7 +106,9 @@ bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 	std::cout << id << "player가 이동했음" << std::endl;
 
 	const Protocol::Vector3& position = pkt.player_move_info().pos_info().position();
+	const Protocol::Vector3& rotation = pkt.player_move_info().pos_info().rotation();
 	CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
+	CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(rotation.x(), rotation.y(), rotation.z());
 
 	return true;
 }

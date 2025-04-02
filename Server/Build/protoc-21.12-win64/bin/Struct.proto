@@ -14,7 +14,7 @@ message PosInfo
 {
 	uint64 object_id = 1;
 	Vector3 Position = 2;
-	float yaw = 3;
+	Vector3 Rotation = 3;
 	MoveState state = 4;
 }
 

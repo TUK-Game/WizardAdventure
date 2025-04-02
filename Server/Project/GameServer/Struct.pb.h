@@ -365,8 +365,8 @@ class PosInfo final :
 
   enum : int {
     kPositionFieldNumber = 2,
+    kRotationFieldNumber = 3,
     kObjectIdFieldNumber = 1,
-    kYawFieldNumber = 3,
     kStateFieldNumber = 4,
   };
   // .Protocol.Vector3 Position = 2;
@@ -387,6 +387,24 @@ class PosInfo final :
       ::Protocol::Vector3* position);
   ::Protocol::Vector3* unsafe_arena_release_position();
 
+  // .Protocol.Vector3 Rotation = 3;
+  bool has_rotation() const;
+  private:
+  bool _internal_has_rotation() const;
+  public:
+  void clear_rotation();
+  const ::Protocol::Vector3& rotation() const;
+  PROTOBUF_NODISCARD ::Protocol::Vector3* release_rotation();
+  ::Protocol::Vector3* mutable_rotation();
+  void set_allocated_rotation(::Protocol::Vector3* rotation);
+  private:
+  const ::Protocol::Vector3& _internal_rotation() const;
+  ::Protocol::Vector3* _internal_mutable_rotation();
+  public:
+  void unsafe_arena_set_allocated_rotation(
+      ::Protocol::Vector3* rotation);
+  ::Protocol::Vector3* unsafe_arena_release_rotation();
+
   // uint64 object_id = 1;
   void clear_object_id();
   uint64_t object_id() const;
@@ -394,15 +412,6 @@ class PosInfo final :
   private:
   uint64_t _internal_object_id() const;
   void _internal_set_object_id(uint64_t value);
-  public:
-
-  // float yaw = 3;
-  void clear_yaw();
-  float yaw() const;
-  void set_yaw(float value);
-  private:
-  float _internal_yaw() const;
-  void _internal_set_yaw(float value);
   public:
 
   // .Protocol.MoveState state = 4;
@@ -423,8 +432,8 @@ class PosInfo final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::Protocol::Vector3* position_;
+    ::Protocol::Vector3* rotation_;
     uint64_t object_id_;
-    float yaw_;
     int state_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -1142,24 +1151,94 @@ inline void PosInfo::set_allocated_position(::Protocol::Vector3* position) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.PosInfo.Position)
 }
 
-// float yaw = 3;
-inline void PosInfo::clear_yaw() {
-  _impl_.yaw_ = 0;
+// .Protocol.Vector3 Rotation = 3;
+inline bool PosInfo::_internal_has_rotation() const {
+  return this != internal_default_instance() && _impl_.rotation_ != nullptr;
 }
-inline float PosInfo::_internal_yaw() const {
-  return _impl_.yaw_;
+inline bool PosInfo::has_rotation() const {
+  return _internal_has_rotation();
 }
-inline float PosInfo::yaw() const {
-  // @@protoc_insertion_point(field_get:Protocol.PosInfo.yaw)
-  return _internal_yaw();
+inline void PosInfo::clear_rotation() {
+  if (GetArenaForAllocation() == nullptr && _impl_.rotation_ != nullptr) {
+    delete _impl_.rotation_;
+  }
+  _impl_.rotation_ = nullptr;
 }
-inline void PosInfo::_internal_set_yaw(float value) {
+inline const ::Protocol::Vector3& PosInfo::_internal_rotation() const {
+  const ::Protocol::Vector3* p = _impl_.rotation_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vector3&>(
+      ::Protocol::_Vector3_default_instance_);
+}
+inline const ::Protocol::Vector3& PosInfo::rotation() const {
+  // @@protoc_insertion_point(field_get:Protocol.PosInfo.Rotation)
+  return _internal_rotation();
+}
+inline void PosInfo::unsafe_arena_set_allocated_rotation(
+    ::Protocol::Vector3* rotation) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rotation_);
+  }
+  _impl_.rotation_ = rotation;
+  if (rotation) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.PosInfo.Rotation)
+}
+inline ::Protocol::Vector3* PosInfo::release_rotation() {
   
-  _impl_.yaw_ = value;
+  ::Protocol::Vector3* temp = _impl_.rotation_;
+  _impl_.rotation_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
 }
-inline void PosInfo::set_yaw(float value) {
-  _internal_set_yaw(value);
-  // @@protoc_insertion_point(field_set:Protocol.PosInfo.yaw)
+inline ::Protocol::Vector3* PosInfo::unsafe_arena_release_rotation() {
+  // @@protoc_insertion_point(field_release:Protocol.PosInfo.Rotation)
+  
+  ::Protocol::Vector3* temp = _impl_.rotation_;
+  _impl_.rotation_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vector3* PosInfo::_internal_mutable_rotation() {
+  
+  if (_impl_.rotation_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vector3>(GetArenaForAllocation());
+    _impl_.rotation_ = p;
+  }
+  return _impl_.rotation_;
+}
+inline ::Protocol::Vector3* PosInfo::mutable_rotation() {
+  ::Protocol::Vector3* _msg = _internal_mutable_rotation();
+  // @@protoc_insertion_point(field_mutable:Protocol.PosInfo.Rotation)
+  return _msg;
+}
+inline void PosInfo::set_allocated_rotation(::Protocol::Vector3* rotation) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.rotation_;
+  }
+  if (rotation) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(rotation);
+    if (message_arena != submessage_arena) {
+      rotation = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, rotation, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.rotation_ = rotation;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.PosInfo.Rotation)
 }
 
 // .Protocol.MoveState state = 4;
