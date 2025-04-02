@@ -5,7 +5,7 @@
 class CPlayer : public CGameObject
 {
 public:
-    CPlayer(EPlayerAttribute attribute);
+    CPlayer(EPlayerAttribute attribute, bool Owner = false);
     virtual ~CPlayer();
 
     virtual void Begin();

@@ -75,6 +75,7 @@ private:\
 
 #define MAX_OBJECTS_SUBLEVEL 200
 
+#define MAX_PLAYERS 4
 
 /*----------
 	Random

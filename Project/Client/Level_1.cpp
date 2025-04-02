@@ -110,40 +110,9 @@ void CLevel_1::Init()
 		this->AddGameObject(light, 4, false);
 	}
 
-	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
-	std::vector<CGameObject*> obj = data->Instantiate(ECollision_Channel::Player);
-	CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
-	player->SetName(L"Mage");
-	player->AddComponent(new CTransform);
-	player->AddComponent(new CBoxCollider);
-	player->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
-	player->GetTransform()->SetRelativePosition(0, -300, 600);
-	player->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
-	player->AddComponent(new CPlayerScript);
-
-#ifdef COLLISION_MESH_DRAW
-	CCollisionObject* co = new CCollisionObject();
-	co->InitToChild(player, Vec3(0, 100, 0), Vec3(100, 200, 24));
-	player->AddChild(co);
-	#endif
-
-	for (auto& o : obj)
-	{
-		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
-		o->SetName(name);
-
-		o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
-		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		o->GetTransform()->SetRelativeRotation(rot);
-		//o->GetTransform()->SetRelativePosition(2500.f, 577.f, -105.f);
-		//o->AddComponent(new CTestPlayer);
-		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		o->SetCheckFrustum(true);
-		o->SetInstancing(false);
-		player->AddChild(o);
-	}
-	this->AddGameObject(player, 3, false);
-	CLevelManager::GetInst()->SetPlayer(player);
+	/*CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+	this->AddGameObject(player, 3, false);	
+	CLevelManager::GetInst()->SetOwnPlayer(player);*/
 
 //	{
 //		CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
@@ -202,7 +171,7 @@ void CLevel_1::Init()
 	camera->SetName(L"MainCamera");
 	camera->AddComponent(new CTransform);
 	camera->AddComponent(new CCamera);
-	camera->GetCamera()->SetTarget(player);
+	//camera->GetCamera()->SetTarget(player);
 	camera->AddComponent(new CCameraScript);
 	camera->GetCamera()->SetProjType(EProjection_Type::Perspective);
 	camera->GetCamera()->SetPriority(0); // 0 : main camera

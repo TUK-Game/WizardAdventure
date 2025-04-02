@@ -23,7 +23,8 @@ CCameraScript::~CCameraScript()
 
 void CCameraScript::Begin()
 {
-	m_TargetTransform = GetOwner()->GetCamera()->GetTarget()->GetTransform();
+	//if(GetOwner()->GetCamera()->GetTarget())
+	//	m_TargetTransform = GetOwner()->GetCamera()->GetTarget()->GetTransform();
 	m_Offset = Vec3(420, 1028, -600);
 }
 
@@ -51,6 +52,7 @@ void CCameraScript::Update()
 		GetOwner()->GetCamera()->SetFOV(60.f);
 		GetOwner()->GetCamera()->SetFar(5000.f);
 		GetTransform()->SetRelativeRotation(49.f, -34.f, 0.f);
+		m_TargetTransform = GetOwner()->GetCamera()->GetTarget()->GetTransform();
 	}
 	if (KEY_DOWN(EKey::M))
 	{

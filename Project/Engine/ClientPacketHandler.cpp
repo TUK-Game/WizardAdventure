@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "ClientPacketHandler.h"
 #include "Protocol.pb.h"
+#include "LevelManager.h"
+#include "Player.h"
+#include "Level.h"
+#include "RenderManager.h"
+#include "Camera.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -30,15 +35,20 @@ bool Handle_S_LOGIN(CPacketSessionRef& session, Protocol::S_LOGIN& pkt)
 
 bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt)
 {
+	std::cout << "등장" << std::endl;
+	// 플레이어 생성
+	UINT64 id = pkt.player().player_id();
+
+	CPlayer* player = new CPlayer(EPlayerAttribute::Fire, true);
+	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
+	CLevelManager::GetInst()->SetOwnPlayer(player);
+	CLevelManager::GetInst()->SetPlayer(player, id);
+	CRenderManager::GetInst()->GetMainCamera()->SetTarget(player);
+
 	return true;
 }
 
 bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt)
-{
-	return true;
-}
-
-bool Handle_S_SPAWN_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_PLAYER& pkt)
 {
 	return true;
 }
@@ -50,6 +60,33 @@ bool Handle_S_DESPAWN_PLAYER(CPacketSessionRef& session, Protocol::S_DESPAWN_PLA
 
 bool Handle_S_SPAWN(CPacketSessionRef& session, Protocol::S_SPAWN& pkt)
 {
+	return true;
+}
+
+bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW_PLAYER& pkt)
+{
+	// 1. 입장한 플레이어 받기
+	const Protocol::PlayerInfo& info = pkt.player();
+
+	CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
+	CLevelManager::GetInst()->SetPlayer(player, info.player_id());
+
+	return true;
+}
+
+bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_EXISTING_PLAYER& pkt)
+{
+	// 2. 처음 입장할 떄 이미 있는 플레이어 받기
+	int playerNum = pkt.player_size();
+	for (int i = 0; i < playerNum; ++i)
+	{
+		const Protocol::PlayerInfo& info = pkt.player(i);
+
+		CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
+		CLevelManager::GetInst()->SetPlayer(player, info.player_id());
+	}
 	return true;
 }
 

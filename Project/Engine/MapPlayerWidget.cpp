@@ -17,7 +17,7 @@ CMapPlayerWidget::~CMapPlayerWidget()
 
 bool CMapPlayerWidget::Init()
 {
-	m_OwnerPlayer = CLevelManager::GetInst()->GetPlayer();
+	m_OwnerPlayer = CLevelManager::GetInst()->GetOwnPlayer();
 	m_MapCenter = CLevelManager::GetInst()->GetCurrentLevel()->GetMapCenter();
 	m_MapSize = CLevelManager::GetInst()->GetCurrentLevel()->GetMapSize() * 2;
 	AddComponent(new CMeshRenderer);

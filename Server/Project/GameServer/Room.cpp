@@ -48,25 +48,24 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 	}
 
 	// 입장 사실을 새 플레이어에게 알린다
-	if (auto player = dynamic_pointer_cast<CPlayer>(newPlayer))
 	{
 		Protocol::S_ENTER_GAME enterGamePkt;
 		enterGamePkt.set_success(success);
 
 		Protocol::PlayerInfo* playerInfo = new Protocol::PlayerInfo();
-		playerInfo->CopyFrom(*player->PlayerInfo);
+		playerInfo->CopyFrom(*newPlayer->PlayerInfo);
 		enterGamePkt.set_allocated_player(playerInfo);	
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(enterGamePkt);
-		if (auto session = player->GetSession())
+		if (auto session = newPlayer->GetSession())
 			session->Send(sendBuffer);
 	}
 
 	// 입장 사실을 다른 플레이어에게 알린다
 	{
-		Protocol::S_SPAWN_PLAYER spawnPkt;
+		Protocol::S_SPAWN_NEW_PLAYER spawnPkt;
 
-		Protocol::PlayerInfo* objectInfo = spawnPkt.add_player();
+		Protocol::PlayerInfo* objectInfo = spawnPkt.mutable_player();
 		objectInfo->CopyFrom(*(newPlayer->PlayerInfo));
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(spawnPkt);
@@ -75,7 +74,7 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 
 	// 기존의 플레이어 정보를 새 플레이어에게 알린다
 	{
-		Protocol::S_SPAWN_PLAYER spawnPkt;
+		Protocol::S_SPAWN_EXISTING_PLAYER spawnPkt;
 
 		for (auto& player : m_Players)
 		{

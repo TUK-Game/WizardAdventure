@@ -13,13 +13,55 @@
 #include "SkillManager.h"
 #include <iostream>
 #include "Engine.h"
+#include "MeshData.h"
+#include "AssetManager.h"
+#include "BoxCollider.h"
+#include "CollisionManager.h"
+#include "PlayerScript.h"
+#include "MeshRenderer.h"
 
 //#include <Engine/Engine.h>
 
-CPlayer::CPlayer(EPlayerAttribute attribute)
+CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
     : m_Attribute(attribute), m_SkillManager(new CSkillManager(attribute, this))
 {
     CreateStateManager();
+
+    CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
+    std::vector<CGameObject*> obj = data->Instantiate(ECollision_Channel::Player);
+
+   SetName(L"Mage");
+   AddComponent(new CTransform);
+   AddComponent(new CBoxCollider);
+   GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
+   GetTransform()->SetRelativePosition(0, -300, 600);
+   GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
+   if(Owner)
+       AddComponent(new CPlayerScript);
+
+#ifdef COLLISION_MESH_DRAW
+    CCollisionObject* co = new CCollisionObject();
+    co->InitToChild(player, Vec3(0, 100, 0), Vec3(100, 200, 24));
+    player->AddChild(co);
+#endif
+
+    for (auto& o : obj)
+    {
+        std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
+        o->SetName(name);
+
+        o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
+        Vec3 rot = o->GetTransform()->GetRelativeRotation();
+        o->GetTransform()->SetRelativeRotation(rot);
+        //o->GetTransform()->SetRelativePosition(2500.f, 577.f, -105.f);
+        //o->AddComponent(new CTestPlayer);
+        //o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+        o->SetCheckFrustum(true);
+        o->SetInstancing(false);
+        this->AddChild(o);
+    }
+
+    Begin();
 }
 
 CPlayer::~CPlayer()

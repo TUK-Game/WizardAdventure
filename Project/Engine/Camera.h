@@ -93,7 +93,6 @@ private:
     std::vector<CGameObject*>   m_vecShadow;
     
     class CGameObject* m_Target;
-
 public:
     static Matrix s_matView;
     static Matrix s_matProjection;

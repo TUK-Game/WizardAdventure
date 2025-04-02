@@ -17,10 +17,12 @@ public:
 	int Init();
 	void Progress();
 	void ChangeLevel(CLevel* newLevel);
-	CGameObject* GetPlayer() { return m_Player; }
-	void SetPlayer(CGameObject* player) { m_Player = player; }
+	CGameObject* GetOwnPlayer() { return m_OwnPlayer; }
+	CGameObject* GetPlayer(UINT64 playerId) { return m_Players[playerId]; }
+	void SetOwnPlayer(CGameObject* player) { m_OwnPlayer = player; }
+	void SetPlayer(CGameObject* player, UINT64 playerId) { m_Players[playerId] = player; }
 
-private:
+private:	
 	void CleanUpCurrentLevel();
 
 public:
@@ -29,6 +31,7 @@ public:
 private:
 	class CLevel* m_CurLevel;
 	float m_timer = 0.f;
-	class CGameObject* m_Player;
+	class CGameObject* m_OwnPlayer;
+	std::array<CGameObject*, MAX_PLAYERS> m_Players;
 };
 

@@ -40,7 +40,12 @@ message S_SPAWN
 	repeated ObjectInfo objects = 1;
 }
 
-message S_SPAWN_PLAYER
+message S_SPAWN_NEW_PLAYER
+{
+	PlayerInfo player = 1;
+}
+
+message S_SPAWN_EXISTING_PLAYER
 {
 	repeated PlayerInfo player = 1;
 }
