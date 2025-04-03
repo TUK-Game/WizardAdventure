@@ -37,15 +37,17 @@ const char descriptor_table_protodef_Enum_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "\031\n\025CREATURE_TYPE_MONSTER\020\002\022\025\n\021CREATURE_T"
   "YPE_NPC\020\003*h\n\nPlayerType\022\024\n\020PLAYER_TYPE_N"
   "ONE\020\000\022\024\n\020PLAYER_TYPE_FIRE\020\001\022\023\n\017PLAYER_TY"
-  "PE_ICE\020\002\022\031\n\025PLAYER_TYPE_LIGHTNING\020\003*t\n\tM"
-  "oveState\022\023\n\017MOVE_STATE_NONE\020\000\022\023\n\017MOVE_ST"
-  "ATE_IDLE\020\001\022\022\n\016MOVE_STATE_RUN\020\002\022\023\n\017MOVE_S"
-  "TATE_DASH\020\003\022\024\n\020MOVE_STATE_SKILL\020\004b\006proto"
-  "3"
+  "PE_ICE\020\002\022\031\n\025PLAYER_TYPE_LIGHTNING\020\003*\342\001\n\t"
+  "MoveState\022\023\n\017MOVE_STATE_NONE\020\000\022\023\n\017MOVE_S"
+  "TATE_IDLE\020\001\022\022\n\016MOVE_STATE_RUN\020\002\022\023\n\017MOVE_"
+  "STATE_DASH\020\003\022\026\n\022MOVE_STATE_SKILL_Q\020\004\022\026\n\022"
+  "MOVE_STATE_SKILL_E\020\005\022\026\n\022MOVE_STATE_SKILL"
+  "_R\020\006\022\034\n\030MOVE_STATE_SKILL_MOUSE_R\020\007\022\034\n\030MO"
+  "VE_STATE_SKILL_MOUSE_L\020\010b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Enum_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto = {
-    false, false, 481, descriptor_table_protodef_Enum_2eproto,
+    false, false, 592, descriptor_table_protodef_Enum_2eproto,
     "Enum.proto",
     &descriptor_table_Enum_2eproto_once, nullptr, 0, 0,
     schemas, file_default_instances, TableStruct_Enum_2eproto::offsets,
@@ -118,6 +120,10 @@ bool MoveState_IsValid(int value) {
     case 2:
     case 3:
     case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
       return true;
     default:
       return false;

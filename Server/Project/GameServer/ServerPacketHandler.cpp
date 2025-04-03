@@ -76,6 +76,8 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_y(rot.y());
 	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_z(rot.z());
 
+	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->set_state(pkt.player_move_info().pos_info().state());
+
 	g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
 
 	return true;

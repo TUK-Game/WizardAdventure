@@ -15,6 +15,8 @@
 #include "UIButton.h"
 #include "MeshRenderer.h"
 #include "SubLevel.h"
+#include "StateManager.h"
+#include "Protocol.pb.h"
 
 CGameObject::CGameObject()
 	: m_arrComponent{}
@@ -152,9 +154,86 @@ void CGameObject::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
 }
 
 
+Protocol::MoveState CGameObject::GetStateForProtocol()
+{
+	auto type = m_StateManager->GetCurrentStateType();
+	switch (type)
+	{
+	case EState_Type::Idle:
+		return Protocol::MOVE_STATE_IDLE;
+		break;
+	case EState_Type::Run:
+		return Protocol::MOVE_STATE_RUN;
+		break;
+	case EState_Type::Dash:
+		return Protocol::MOVE_STATE_DASH;
+		break;
+	case EState_Type::Attack:
+		break;
+	case EState_Type::Attack_Q:
+		return Protocol::MOVE_STATE_SKILL_Q;
+		break;
+	case EState_Type::Attack_R:
+		return Protocol::MOVE_STATE_SKILL_R;
+		break;
+	case EState_Type::Attack_E:
+		return Protocol::MOVE_STATE_SKILL_E;
+		break;
+	case EState_Type::Attack_LButton:
+		return Protocol::MOVE_STATE_SKILL_MOUSE_L;
+		break;
+	case EState_Type::Attack_RButton:
+		return Protocol::MOVE_STATE_SKILL_MOUSE_R;
+		break;
+	case EState_Type::Chase:
+		break;
+	case EState_Type::Hit:
+		break;
+	case EState_Type::Death:
+		break;
+	case EState_Type::END:
+		break;
+	}
+}
+
 void CGameObject::SetParentTransform(CTransform* transform)
 {
 	GetTransform()->SetParentTransform(transform);
+}
+
+void CGameObject::SetProtocolStateForClient(Protocol::MoveState state)
+{
+	switch (state)
+	{	
+	case Protocol::MOVE_STATE_NONE:
+		break;
+	case Protocol::MOVE_STATE_IDLE:
+		m_StateManager->HandleEvent(this, "Stop");
+		break;
+	case Protocol::MOVE_STATE_RUN:
+		m_StateManager->HandleEvent(this, "Move");
+		break;
+	case Protocol::MOVE_STATE_DASH:
+		m_StateManager->HandleEvent(this, "Dash");
+		break;
+	case Protocol::MOVE_STATE_SKILL_Q:
+		m_StateManager->HandleEvent(this, "Attack_Q");
+		break;
+	case Protocol::MOVE_STATE_SKILL_E:
+		m_StateManager->HandleEvent(this, "Attack_E");
+		break;
+	case Protocol::MOVE_STATE_SKILL_R:
+		m_StateManager->HandleEvent(this, "Attack_R");
+		break;
+	case Protocol::MOVE_STATE_SKILL_MOUSE_R:
+		m_StateManager->HandleEvent(this, "Attack_R");
+		break;
+	case Protocol::MOVE_STATE_SKILL_MOUSE_L:
+		m_StateManager->HandleEvent(this, "Attack_LButton");
+		break;
+	default:
+		break;
+	}
 }
 
 void CGameObject::AddComponent(CComponent* component)

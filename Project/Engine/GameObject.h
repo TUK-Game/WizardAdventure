@@ -15,6 +15,12 @@ class CUI;
 class CStateManager;
 class CMonsterAI;
 
+namespace Protocol 
+{
+    enum MoveState : int;
+}
+
+
 class CGameObject :
     public CRef
 {
@@ -42,15 +48,17 @@ public:
     CStateManager* GetStateManager()                    { return m_StateManager; }
     bool GetInstancing()                                { return m_bInstancing; }
     bool GetCheckFrustum() { return m_CheckFrustum; }
-    void SetStatic(bool flag) { m_Static = flag; }
+    Protocol::MoveState GetStateForProtocol();
     bool IsStatic() { return m_Static; }
 
+    void SetStatic(bool flag) { m_Static = flag; }
     void SetCheckFrustum(bool checkFrustum) { m_CheckFrustum = checkFrustum; }
     void SetParentTransform(CTransform* transform);
     void SetParent(CGameObject* parent) { m_Parent = parent; } 
     void SetLayerIndex(int index) { m_LayerIndex = index; }
     void SetTag(const std::wstring& tag) { m_Tag = tag; }
     void SetInstancing(bool instancing) { m_bInstancing = instancing; }
+    void SetProtocolStateForClient(Protocol::MoveState state);
 
     int GetLayerIndex() { return m_LayerIndex; }
     std::wstring GetTag() const { return m_Tag; }

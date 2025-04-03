@@ -170,13 +170,14 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 		moveInfo->mutable_pos_info()->set_allocated_position(pos);
 		moveInfo->mutable_pos_info()->set_allocated_rotation(rot);
+		moveInfo->mutable_pos_info()->set_state(player->PlayerInfo->object_info().pos_info().state());
 		movePkt.set_allocated_player_move_info(moveInfo);
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
 		Broadcast(sendBuffer, player->PlayerInfo->player_id());
 
-		/*if (auto session = player->GetSession())
-			session->Send(sendBuffer);*/
+		if (auto session = player->GetSession())
+			session->Send(sendBuffer);
 	}
 
 

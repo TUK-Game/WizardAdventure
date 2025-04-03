@@ -69,6 +69,7 @@ void CServerSession::OnMovePlayer()
 
 	pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_position(pos);
 	pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_rotation(rot);
+	pkt.mutable_player_move_info()->mutable_pos_info()->set_state(m_OwnPlayer->GetStateForProtocol());
 	
 	std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(SendBuffer);

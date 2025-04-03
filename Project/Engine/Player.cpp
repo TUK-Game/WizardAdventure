@@ -154,6 +154,10 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
 void CPlayer::Attack(int skillIndex)
 {
     m_SkillManager->UseSkill(skillIndex);
+#ifndef DEBUG_SOLOPLAY
+    CNetworkManager::GetInst()->s_GameSession->OnMovePlayer();
+#endif 
+
 }
 
 void CPlayer::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)

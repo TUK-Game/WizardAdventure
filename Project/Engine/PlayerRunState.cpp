@@ -4,6 +4,9 @@
 #include "Animator.h"
 #include "InputManager.h"
 #include "StateManager.h"
+#include "LevelManager.h"
+#include "ServerSession.h"
+#include "NetworkManager.h"
 
 void CPlayerRunState::Enter(CGameObject* entity)
 {
@@ -21,6 +24,9 @@ void CPlayerRunState::Update(CGameObject* entity, float deltaTime)
 {
     CPlayer* player = dynamic_cast<CPlayer*>(entity);
 
+    if (CLevelManager::GetInst()->GetOwnPlayer() != player)
+        return;
+
     Vec3 moveDir = Vec3(0, 0, 0);
     if (KEY_PUSH(EKey::W))    moveDir.z += 1;
     if (KEY_PUSH(EKey::S))  moveDir.z -= 1;
@@ -36,6 +42,9 @@ void CPlayerRunState::Update(CGameObject* entity, float deltaTime)
     {
         // 입력이 없으면 Idle 상태로 전환
         player->GetStateManager()->HandleEvent(player, "Stop");
+#ifndef DEBUG_SOLOPLAY
+        CNetworkManager::GetInst()->s_GameSession->OnMovePlayer();
+#endif 
     }
 }
 
