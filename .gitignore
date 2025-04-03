@@ -5,6 +5,7 @@
 *.exe
 *.cso
 *.fbx
+*.lib
 
 Engine_d.lib
 Engine.lib

@@ -1,2 +1,2 @@
 C:/Users/JHD/Documents/GitHub/WizardAdventure/3rdParty/FBX/lib/release/libfbxsdk-md.lib filter=lfs diff=lfs merge=lfs -text
-*.lib filter=lfs diff=lfs merge=lfs -text
+
