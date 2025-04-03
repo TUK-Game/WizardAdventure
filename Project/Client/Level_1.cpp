@@ -99,7 +99,7 @@ void CLevel_1::Init()
 		light->SetName(L"DirectionalLight");
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
-		light->GetTransform()->SetRelativePosition(0.f, 5000.f, 100.f);
+		light->GetTransform()->SetRelativePosition(0.f, 5000.f, 1000.f);
 		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
@@ -142,32 +142,32 @@ void CLevel_1::Init()
 //
 //
 //
-//	CMeshData* data1 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"level_1");
-//	std::vector<CGameObject*> obj1 = data1->Instantiate(ECollision_Channel::Wall);
-//	int m = 0;
-//	for (auto& o : obj1)
-//	{
-//		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName() + std::to_wstring(m++);
-//		o->SetName(name);
-//
-//		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
-//		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-//		o->GetTransform()->SetRelativeRotation(rot);
-//		//o->GetTransform()->SetRelativePosition(100, 0, 0);
-//		//o->GetTransform()->SetRelativeScale(1, 1, 1);
-//		//o->AddComponent(new CTestPlayer);
-//		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-//		o->SetCheckFrustum(true);
-//		o->SetInstancing(true);
-//		this->AddGameObject(o, 10, false);
-//
-//#ifdef COLLISION_MESH_DRAW
-//		CCollisionObject* co = new CCollisionObject();
-//		co->Init(o);
-//		this->AddGameObject(co, 10, false);
-//#endif
-//
-//	}
+	CMeshData* data1 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"level_1");
+	std::vector<CGameObject*> obj1 = data1->Instantiate(ECollision_Channel::Wall);
+	int m = 0;
+	for (auto& o : obj1)
+	{
+		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName() + std::to_wstring(m++);
+		o->SetName(name);
+
+		//o->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+		Vec3 rot = o->GetTransform()->GetRelativeRotation();
+		o->GetTransform()->SetRelativeRotation(rot);
+		//o->GetTransform()->SetRelativePosition(100, 0, 0);
+		//o->GetTransform()->SetRelativeScale(1, 1, 1);
+		//o->AddComponent(new CTestPlayer);
+		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+		o->SetCheckFrustum(true);
+		o->SetInstancing(true);
+		this->AddGameObject(o, 10, false);
+
+#ifdef COLLISION_MESH_DRAW
+		CCollisionObject* co = new CCollisionObject();
+		co->Init(o);
+		this->AddGameObject(co, 10, false);
+#endif
+
+	}
 
 	CGameObject* camera = new CGameObject;
 	camera->SetName(L"MainCamera");
