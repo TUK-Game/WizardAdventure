@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "RenderManager.h"
 #include "FireBall.h"
+#include "FireSword.h"
 #include "Meteors.h"
 #include "FirePillar.h"
 #include "FireCircle.h"
@@ -26,9 +27,11 @@ void CSkillManager::UseSkill(int skillIndex)
         if (skillIndex == 1)
             SpawnFirePillarAtMouse();
         if (skillIndex == 2)
-            CastMeteor();
+            FireSwordSpreadShot();
         if (skillIndex == 3) 
             CastFireballTowardMouse();
+        if (skillIndex == 4)
+            CastMeteor();
         break;
 
     case EPlayerAttribute::Water:
@@ -36,6 +39,7 @@ void CSkillManager::UseSkill(int skillIndex)
         if (skillIndex == 1) std::cout << "Ice Shield (E)!" << std::endl;
         if (skillIndex == 2) std::cout << "Tsunami (R)!" << std::endl;
         if (skillIndex == 3) std::cout << "(LButton)!" << std::endl;
+        if (skillIndex == 4) std::cout << "(RButton)!" << std::endl;
         break;
 
     case EPlayerAttribute::Electric:
@@ -43,10 +47,10 @@ void CSkillManager::UseSkill(int skillIndex)
         if (skillIndex == 1) std::cout << "Lightning Shield (E)!" << std::endl;
         if (skillIndex == 2) std::cout << "Storm Burst (R)!" << std::endl;
         if (skillIndex == 3) std::cout << "(LButton)!" << std::endl;
+        if (skillIndex == 4) std::cout << "(RButton)!" << std::endl;
         break;
     }
 }
-
 
 void CSkillManager::CastFireballTowardMouse()
 {
@@ -93,7 +97,6 @@ void CSkillManager::CastFireballTowardQ()
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 3, false);
 }
 
-
 void CSkillManager::SpawnFirePillarAtMouse()
 {
     Vec3 centerPos = GetMouseGroundPoint(); // 마우스 위치 (XZ 평면)
@@ -121,7 +124,42 @@ void CSkillManager::SpawnFirePillarAtMouse()
 
         CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(pillar, 3, false);
     }                                                                                               
-    
+}
+
+void CSkillManager::FireSwordSpreadShot()
+{
+    if (!m_Owner) return;
+
+    const int count = 8;
+    const float radius = 80.f;
+    Vec3 center = m_Owner->GetTransform()->GetRelativePosition();
+
+    for (int i = 0; i < count; ++i)
+    {
+        float angleDeg = i * (360.f / count);
+        float angleRad = XMConvertToRadians(angleDeg);
+
+        // 원형 배치 위치
+        float offsetX = cosf(angleRad) * radius;
+        float offsetZ = sinf(angleRad) * radius;
+        Vec3 spawnPos = center + Vec3(offsetX, 300.f, offsetZ);
+        Vec3 readyDir = spawnPos - center;
+        readyDir.Normalize();
+        Vec3 targetPos = GetMouseGroundPoint();
+
+        CFireSword* sword = new CFireSword();
+        sword->GetTransform()->SetRelativePosition(center);
+        sword->GetTransform()->LookAt(readyDir);
+        sword->SetReadyDirection(readyDir);
+        sword->SetTargetPos(targetPos);
+        sword->SetSpeed(800.f);              
+        sword->SetWaitTimeForTranslate(1.5f);     
+        sword->SetWaitTimeForRotate(1.f);
+
+
+        CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(sword, 3, false);
+    }
+
 }
 
 void CSkillManager::CastMeteor()
@@ -154,6 +192,29 @@ Vec3 CSkillManager::CalculateMouseDirectionFromPlayerTopView(const Vec3& fromPos
 
     return dir;
 }
+
+Vec3 CSkillManager::CalculateMouseDirectionFromPos(const Vec3& fromPos)
+{
+    Vec2 mousePos = CInputManager::GetInst()->GetMousePosition();
+    CCamera* cam = CRenderManager::GetInst()->GetMainCamera();
+    if (!cam) return Vec3(0, 0, 1);
+
+    Vec3 rayOrigin, rayDir;
+    cam->ScreenToRay(mousePos, cam, rayOrigin, rayDir);
+
+    // XZ 평면(Y = fromPos.y) 기준 교차점
+    float t = -rayOrigin.y / rayDir.y;
+    Vec3 hitPos = rayOrigin + rayDir * t;
+
+    Vec3 dir = hitPos - fromPos;
+    if (dir.Length() > 0.001f)
+        dir.Normalize();
+    else
+        dir = Vec3(0, 0, 1); // 기본 방향
+
+    return dir;
+}
+
 
 
 Vec3 CSkillManager::GetMouseGroundPoint()

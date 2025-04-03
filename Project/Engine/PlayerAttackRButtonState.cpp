@@ -1,11 +1,11 @@
 #include "pch.h"
-#include "PlayerAttackLState.h"
+#include "PlayerAttackRButtonState.h"
 #include "Player.h"
 #include "Animator.h"
 #include "InputManager.h"
 #include "StateManager.h"
 
-void CPlayerAttackLState::Enter(CGameObject* entity)
+void CPlayerAttackRButtonState::Enter(CGameObject* entity)
 {
 #ifdef _DEBUG;
 	std::cout << "Entering AttackL State" << std::endl;
@@ -18,17 +18,17 @@ void CPlayerAttackLState::Enter(CGameObject* entity)
     }
     m_ElapsedTime = 0.f;
     CPlayer* player = dynamic_cast<CPlayer*>(entity);
-    player->Attack(3);
+    player->Attack(4);
 }
 
-void CPlayerAttackLState::Update(CGameObject* entity, float deltaTime)
+void CPlayerAttackRButtonState::Update(CGameObject* entity, float deltaTime)
 {
     m_ElapsedTime += deltaTime;
     if (m_ElapsedTime >= m_AttackDuration)
         entity->GetStateManager()->HandleEvent(entity, "EndAttack");
 }
 
-void CPlayerAttackLState::Exit(CGameObject* entity)
+void CPlayerAttackRButtonState::Exit(CGameObject* entity)
 {
 #ifdef _DEBUG;
     std::cout << "Exiting AttackL State" << std::endl;

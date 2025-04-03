@@ -1,0 +1,79 @@
+#include "pch.h"
+#include "FireSword.h"
+#include "Transform.h"
+#include "MeshRenderer.h"
+#include "RigidBody.h"
+#include "AssetManager.h"
+#include "Level.h"
+#include "LevelManager.h"
+#include "Engine.h"
+
+CFireSword::CFireSword()
+{
+    AddComponent(new CTransform());
+    AddComponent(new CMeshRenderer());  
+    GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Sphere"));
+    GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Lava"));
+
+    // AddComponent(new CCollider());      
+}
+
+void CFireSword::Update()
+{
+    CGameObject::Update();
+    Vec3 pos = GetTransform()->GetWorldPosition();
+
+    if (!m_ReadyToRotate)
+    {
+        m_Elapsed += DELTA_TIME;
+        float t = m_Elapsed / m_TranslateWaitTime;
+        t = std::clamp(t, 0.0f, 1.0f);
+
+        float scale = m_ReadyScale * t;
+        GetTransform()->SetRelativeScale(scale / 10.f, scale / 10.f, scale);
+
+        float readySpeed = m_Speed * ((1.0f - t) / 1.0f);
+        pos += m_ReadyDirection * readySpeed * DELTA_TIME;
+        GetTransform()->SetRelativePosition(pos);
+
+        if (m_Elapsed >= m_RotateWaitTime)
+        {
+            m_ReadyToRotate = true;
+            m_Elapsed = 0.f;
+            Vec3 targetDir = m_TargetPos - pos;
+            targetDir.Normalize();
+            m_Direction = targetDir;
+        }
+        return;
+    }
+
+    if (m_ReadyToRotate && !m_ReadyToFire)
+    {
+        m_Elapsed += DELTA_TIME;
+        float t = m_Elapsed / m_RotateWaitTime;
+        t = std::clamp(t, 0.0f, 1.0f);
+
+        // 보간된 방향
+        Vec3 blendedDirection = DirectX::SimpleMath::Vector3::Lerp(m_ReadyDirection, m_Direction, t);
+        blendedDirection.Normalize();
+        GetTransform()->LookAt(blendedDirection);
+
+        if (m_Elapsed >= m_RotateWaitTime)
+        {
+            m_ReadyToFire = true;
+            m_Elapsed = 0.f;
+        }
+        return;
+    }
+
+    if (m_ReadyToFire)
+    {
+        pos += m_Direction * m_Speed * DELTA_TIME;
+        GetTransform()->SetRelativePosition(pos);
+    }
+}
+
+void CFireSword::FinalUpdate()
+{
+    CGameObject::FinalUpdate();
+}

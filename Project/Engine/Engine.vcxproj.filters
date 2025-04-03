@@ -539,7 +539,7 @@
     <ClInclude Include="SubLevel.h">
       <Filter>02. Level</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerAttackLState.h">
+    <ClInclude Include="PlayerAttackLButtonState.h">
       <Filter>06. State\PlayerState\Attack</Filter>
     </ClInclude>
     <ClInclude Include="FireBall.h">
@@ -595,6 +595,12 @@
     </ClInclude>
     <ClInclude Include="Meteors.h">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="FireSword.h">
+      <Filter>03. GameObject\Player\Skill\Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAttackRButtonState.h">
+      <Filter>06. State\PlayerState\Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -859,7 +865,7 @@
     <ClCompile Include="SubLevel.cpp">
       <Filter>02. Level</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerAttackLState.cpp">
+    <ClCompile Include="PlayerAttackLButtonState.cpp">
       <Filter>06. State\PlayerState\Attack</Filter>
     </ClCompile>
     <ClCompile Include="FireBall.cpp">
@@ -915,6 +921,12 @@
     </ClCompile>
     <ClCompile Include="Meteors.cpp">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="FireSword.cpp">
+      <Filter>03. GameObject\Player\Skill\Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAttackRButtonState.cpp">
+      <Filter>06. State\PlayerState\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
