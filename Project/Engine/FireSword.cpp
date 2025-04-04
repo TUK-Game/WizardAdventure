@@ -2,6 +2,7 @@
 #include "FireSword.h"
 #include "Transform.h"
 #include "MeshRenderer.h"
+#include "MeshData.h"
 #include "RigidBody.h"
 #include "AssetManager.h"
 #include "Level.h"
@@ -11,9 +12,22 @@
 CFireSword::CFireSword()
 {
     AddComponent(new CTransform());
-    AddComponent(new CMeshRenderer());  
-    GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Sphere"));
-    GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Lava"));
+    CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"SwordLava");
+    std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
+    for (auto& o : obj2)
+    {
+        std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
+        o->SetName(name);
+        Vec3 rot = o->GetTransform()->GetRelativeRotation();
+        o->GetTransform()->SetRelativeRotation(rot);
+        //o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
+        o->SetCheckFrustum(true);
+        o->SetInstancing(false);
+        AddChild(o);
+    }
+    
+
+
 
     // AddComponent(new CCollider());      
 }
