@@ -115,6 +115,7 @@ bool CSubLevel::AddGameObject(CGameObject* object, bool bChildMove)
 void CSubLevel::Insert(CGameObject* object, bool bChildMove)
 {
 	int objNum = m_Layer->GetObjects().size();
+	m_Layer->AddGameObject(object, bChildMove);
 	if (objNum >= MAX_OBJECTS_SUBLEVEL)
 	{
 		SplitSubScene(1);
@@ -124,8 +125,6 @@ void CSubLevel::Insert(CGameObject* object, bool bChildMove)
 		}
 		m_Layer->ClearObjectsVector();
 	}
-	else
-		m_Layer->AddGameObject(object, bChildMove);
 }
 
 void CSubLevel::RemoveGameObject(CGameObject* object)

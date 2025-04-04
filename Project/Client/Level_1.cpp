@@ -43,7 +43,7 @@ void CLevel_1::Init()
 {
 	CLevel::Init();
 
-	m_MapSize = Vec3(80000, 3000, 75000);
+	m_MapSize = Vec3(8000, 3000, 7500);
 	m_MapCenter = Vec3(4000, 0, 6500);
 	m_SubLevel = std::make_shared<CSubLevel>();
 	m_SubLevel->SetBoundingBox(m_MapCenter, m_MapSize);
