@@ -43,7 +43,7 @@ void CLevel_1::Init()
 {
 	CLevel::Init();
 
-	m_MapSize = Vec3(8000, 3000, 7500);
+	m_MapSize = Vec3(80000, 3000, 75000);
 	m_MapCenter = Vec3(4000, 0, 6500);
 	m_SubLevel = std::make_shared<CSubLevel>();
 	m_SubLevel->SetBoundingBox(m_MapCenter, m_MapSize);
@@ -99,12 +99,13 @@ void CLevel_1::Init()
 		light->SetName(L"DirectionalLight");
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
-		light->GetTransform()->SetRelativePosition(0.f, 5000.f, 1000.f);
+		light->GetTransform()->SetRelativePosition(6000.f, 10000.f, 6000.f);
 		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
 		light->GetLight()->SetAmbient(Vec3(0.7f, 0.7f, 0.7f));
 		light->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
+		light->GetLight()->GetShadowCamera()->GetCamera()->SetFar(1000000);
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
 		this->AddGameObject(light, 4, false);
