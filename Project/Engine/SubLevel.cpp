@@ -160,7 +160,7 @@ void CSubLevel::PickGameObject(CFrustum& frustum, std::vector<CGameObject*>& obj
 			level->PickGameObject(frustum, objects);
 	}
 }
-
+	
 void CSubLevel::PickGameObject(std::vector<CGameObject*>& objects)
 {
 	if (m_SubLevels.empty())

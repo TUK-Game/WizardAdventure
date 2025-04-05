@@ -6,6 +6,7 @@
 #include "GameSession.h"
 #include "Protocol.pb.h"
 #include "Room.h"
+#include "JsonLoader.h"
 
 enum
 {
@@ -33,6 +34,7 @@ void DoWorkerJob(CServerServiceRef& service)
 int main()
 {
 	ServerPacketHandler::Init();
+	CJsonLoader::LoadMap(L"Level_1", nullptr);
 
 	CServerServiceRef service = std::make_shared<CServerService>(
 		CNetAddress(L"127.0.0.1", 7777),

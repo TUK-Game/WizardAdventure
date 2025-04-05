@@ -26,6 +26,7 @@ void CPathManager::Init()
 	AddPath(TEXTURE_PATH, TEXT("Texture"));
 	AddPath(SOUND_PATH, TEXT("Sound"));
 	AddPath(MAP_PATH, TEXT("Map"));
+	AddPath(JSON_PATH, TEXT("Json"));
 	//AddPath(FONT_PATH, TEXT("Font"));
 }
 

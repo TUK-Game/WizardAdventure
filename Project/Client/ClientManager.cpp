@@ -5,6 +5,7 @@
 #include <Engine/NetworkManager.h>
 #include <Engine/SaveLoadManager.h>
 #include <Engine/ServerSession.h>
+#include <Engine/JsonConverter.h>
 //#include <ImGui/imgui_impl_win32.h>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -60,6 +61,11 @@ LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 CNetworkManager::GetInst()->Init();
             }
 #endif
+            break;
+        }
+        case VK_NUMPAD7:
+        {
+            CJsonConverter::GetInst()->SaveMapCollision(L"Level_1");
             break;
         }
         case VK_NUMPAD8:

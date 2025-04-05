@@ -111,7 +111,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Project\ServerCore\;$(SolutionDir)3rdParty\Protobuf\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Project\ServerCore\;$(SolutionDir)3rdParty\Protobuf\;$(SolutionDir)3rdParty\Json\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -133,7 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Project\ServerCore\;$(SolutionDir)3rdParty\Protobuf\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Project\ServerCore\;$(SolutionDir)3rdParty\Protobuf\;$(SolutionDir)3rdParty\Json\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -155,6 +155,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="JsonLoader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameSession.cpp" />
     <ClCompile Include="GameSessionManager.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Enum.pb.h" />
     <ClInclude Include="GameSession.h" />
     <ClInclude Include="GameSessionManager.h" />
+    <ClInclude Include="JsonLoader.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ObjectUtil.h" />

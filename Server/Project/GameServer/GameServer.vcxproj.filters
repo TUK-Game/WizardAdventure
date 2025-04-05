@@ -37,6 +37,9 @@
     <Filter Include="01. Game\Room">
       <UniqueIdentifier>{089fb071-9adf-4d9e-84dd-8fa38d24d71e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Json">
+      <UniqueIdentifier>{d3fd2021-b339-4d2b-a971-9121d0a4202a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Util.cpp">
@@ -82,6 +85,9 @@
     <ClCompile Include="Room.cpp">
       <Filter>01. Game\Room</Filter>
     </ClCompile>
+    <ClCompile Include="JsonLoader.cpp">
+      <Filter>05. Json</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -125,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="Room.h">
       <Filter>01. Game\Room</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonLoader.h">
+      <Filter>05. Json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

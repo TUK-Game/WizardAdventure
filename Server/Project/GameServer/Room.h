@@ -20,10 +20,10 @@ public:
 
 	bool HandleMovePlayer(CPlayerRef player);
 
+	bool AddObject(CGameObjectRef object);
 private:
 	bool AddPlayer(CPlayerRef player);
 	bool RemovePlayer(uint64 playerId);
-	bool AddObject(CGameObjectRef object);
 	bool RemoveObject(uint64 objectId);
 
 	bool EnterRoom(CPlayerRef object, bool bRandPos = true);
@@ -34,7 +34,6 @@ private:
 
 private:
 	std::unordered_map<uint64, CGameObjectRef> m_mapObject;
-	// TODO: player array
 	std::array<CPlayerRef, MAX_PLAYERS> m_Players;
 };
 
