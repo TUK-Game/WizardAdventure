@@ -46,7 +46,6 @@ void CServerSession::OnSend(int32 len)
 
 void CServerSession::OnMovePlayer()
 {
-	std::cout << "I'm Move!!!!" << std::endl;
 
 	Protocol::C_MOVE pkt;
 

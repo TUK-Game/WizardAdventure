@@ -40,6 +40,9 @@
     <Filter Include="05. Json">
       <UniqueIdentifier>{d3fd2021-b339-4d2b-a971-9121d0a4202a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. Collision">
+      <UniqueIdentifier>{0f110ed1-b7a3-499f-bedf-4143b88fe374}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Util.cpp">
@@ -88,6 +91,15 @@
     <ClCompile Include="JsonLoader.cpp">
       <Filter>05. Json</Filter>
     </ClCompile>
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>06. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>06. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelCollision.cpp">
+      <Filter>06. Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -134,6 +146,15 @@
     </ClInclude>
     <ClInclude Include="JsonLoader.h">
       <Filter>05. Json</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>06. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>06. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelCollision.h">
+      <Filter>06. Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

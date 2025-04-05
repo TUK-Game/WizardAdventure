@@ -4,15 +4,23 @@
 #include "GameSession.h"
 #include "Monster.h"
 #include "ObjectUtil.h"
+#include "LevelCollision.h"
+#include "BoxCollider.h"
 
 CRoomRef g_Room = std::make_shared<CRoom>();
 
 CRoom::CRoom()
 {
+	m_LevelCollision = new CLevelCollision();
 }
 
 CRoom::~CRoom()
 {
+	if(m_LevelCollision)
+	{
+		delete m_LevelCollision;
+		m_LevelCollision = nullptr;
+	}
 }
 
 CRoomRef CRoom::GetRoomRef()
@@ -23,6 +31,20 @@ CRoomRef CRoom::GetRoomRef()
 void CRoom::Update()
 {
 	//std::cout << "Update Room" << std::endl;
+	for (const auto& object : m_mapObject)
+	{
+		auto& gameObject = object.second;
+
+		gameObject->Update();	
+	}
+
+	for (const auto& player : m_Players)
+	{
+		if(player)
+			player->Update();
+	}
+
+	m_LevelCollision->Collision();
 
 	// 33ms 이후 실행 예약
 	// => 대충 30프레임
@@ -41,13 +63,16 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 	Protocol::Vector3* position = new Protocol::Vector3();
 	Protocol::ObjectInfo* objectInfo = new Protocol::ObjectInfo();
 	Protocol::PosInfo* posInfo = new Protocol::PosInfo();
-	position->set_x(0.f);
-	position->set_y(-600.f);
-	position->set_z(600.f);
+	position->set_x(11240.f);
+	position->set_y(20.f);
+	position->set_z(1127.f);
 
 	posInfo->set_allocated_position(position);
 	objectInfo->set_allocated_pos_info(posInfo);
 	newPlayer->PlayerInfo->set_allocated_object_info(objectInfo);
+	newPlayer->PosInfo->set_allocated_position(position);
+	newPlayer->GetCollider()->SetCollisionProfile("Player");
+	newPlayer->GetCollider()->SetBoxInfo(XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(100.f, 200.f, 24.f), XMFLOAT3(0.f, 100.f, 0.f));
 
 	// 입장 사실을 새 플레이어에게 알린다
 	{

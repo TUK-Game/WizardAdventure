@@ -3,6 +3,9 @@
 #include "json.hpp"
 #include "Room.h"
 #include "GameObject.h"	
+#include "BoxCollider.h"
+#include "CollisionManager.h"
+#include "ObjectUtil.h"
 #include <iostream>
 #include <fstream>
 
@@ -28,10 +31,15 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 	{
 		std::string name = obj["name"];
 		std::vector<float> pos = obj["position"];
+		std::vector<float> size = obj["size"];
 		
-		CGameObject* object = new CGameObject;
+		if (pos[1] < -20.f)
+			continue;
 
-		//room->AddObject();
+		CGameObjectRef object = CObjectUtil::CreateObject();
+		object->GetCollider()->SetCollisionProfile("Wall");
+		object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0], size[1], size[2]));
+		room->AddObject(object);
 	}
-
+	std::cout << "Json read¿Ï·á" << std::endl;
 }

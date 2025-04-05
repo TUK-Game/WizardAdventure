@@ -150,12 +150,15 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BoxCollider.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="Enum.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="JsonLoader.cpp" />
+    <ClCompile Include="LevelCollision.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameSession.cpp" />
     <ClCompile Include="GameSessionManager.cpp" />
@@ -180,11 +183,14 @@
     <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoxCollider.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Creature.h" />
     <ClInclude Include="Enum.pb.h" />
     <ClInclude Include="GameSession.h" />
     <ClInclude Include="GameSessionManager.h" />
     <ClInclude Include="JsonLoader.h" />
+    <ClInclude Include="LevelCollision.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ObjectUtil.h" />

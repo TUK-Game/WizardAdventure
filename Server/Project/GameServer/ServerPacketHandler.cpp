@@ -56,7 +56,6 @@ bool Handle_C_LEAVE_GAME(CPacketSessionRef& session, Protocol::C_LEAVE_GAME& pkt
 
 bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 {
-	std::cout << "움직임 감지!!!!!!!!!!!!!" << std::endl;
 	// TODO - 움직임 업데이트 로직 및 패킷 재전송
 	// 1. 움직임 업데이트 -> 룸에서 업데이트 하도록 실행
 	// 2. 플레이어 위치정보 포장해서 재전송
@@ -77,6 +76,10 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_z(rot.z());
 
 	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->set_state(pkt.player_move_info().pos_info().state());
+
+	player->PosInfo->mutable_position()->set_x(pos.x());
+	player->PosInfo->mutable_position()->set_y(pos.y());
+	player->PosInfo->mutable_position()->set_z(pos.z());
 
 	g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
 

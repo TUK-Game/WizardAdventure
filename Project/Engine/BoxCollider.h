@@ -20,7 +20,7 @@ public:
 public:
 	virtual void FinalUpdate() override;
 		
-public:
+public:	
 	virtual CBoxCollider* Clone() override { return new CBoxCollider(*this); }
 
 private:

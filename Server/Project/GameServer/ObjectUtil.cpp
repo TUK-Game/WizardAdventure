@@ -18,9 +18,21 @@ CPlayerRef CObjectUtil::CreatePlayer(CGameSessionRef session)
 	player->PlayerInfo->set_player_id(session->GetId());
 	player->ObjectInfo->set_object_id(newId);
 	player->PosInfo->set_object_id(newId);
-
 	player->m_Session = session;
 	session->Player.store(player);
 
 	return player;
+}
+
+CGameObjectRef CObjectUtil::CreateObject()
+{
+	// ID »ý¼º
+	const int64 newId = s_IdGenerator.fetch_add(1);
+
+	CGameObjectRef object = std::make_shared<CGameObject>();
+
+	object->ObjectInfo->set_object_id(newId);
+	object->PosInfo->set_object_id(newId);
+
+	return object;
 }

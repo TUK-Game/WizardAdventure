@@ -67,6 +67,7 @@ float4 PS_Main(VS_OUT input) : SV_Target
     color.xyz = (totalColor.diffuse.xyz * color.xyz)
         + totalColor.ambient.xyz * color.xyz
         + totalColor.specular.xyz;
+    color = Fog(color, input.pos.xyz);
 
     return color;
 }

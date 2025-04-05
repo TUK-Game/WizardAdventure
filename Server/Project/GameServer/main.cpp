@@ -7,6 +7,7 @@
 #include "Protocol.pb.h"
 #include "Room.h"
 #include "JsonLoader.h"
+#include "CollisionManager.h"
 
 enum
 {
@@ -34,7 +35,9 @@ void DoWorkerJob(CServerServiceRef& service)
 int main()
 {
 	ServerPacketHandler::Init();
-	CJsonLoader::LoadMap(L"Level_1", nullptr);
+	g_CollisionManager->Init();
+	CJsonLoader::LoadMap(L"Level_1", g_Room);
+
 
 	CServerServiceRef service = std::make_shared<CServerService>(
 		CNetAddress(L"127.0.0.1", 7777),

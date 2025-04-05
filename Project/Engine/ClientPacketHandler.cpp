@@ -103,7 +103,6 @@ bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt
 bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 {
 	UINT64 id = pkt.player_move_info().player_id();
-	std::cout << id << "player가 이동했음" << std::endl;
 
 	const Protocol::Vector3& position = pkt.player_move_info().pos_info().position();
 	const Protocol::Vector3& rotation = pkt.player_move_info().pos_info().rotation();

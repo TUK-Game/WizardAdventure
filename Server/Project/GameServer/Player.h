@@ -19,6 +19,10 @@ public:
 public:
 	std::shared_ptr<CGameSession> GetSession() const { return m_Session.lock(); }
 
+	virtual void Update();
+
+	virtual void CollisionBegin(CBoxCollider* src, CBoxCollider* dest);
+
 private:
 	std::weak_ptr<CGameSession>	m_Session;
 };

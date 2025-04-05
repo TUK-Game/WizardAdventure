@@ -1,6 +1,7 @@
 #pragma once
 
 #include "JobQueue.h"
+#include "DirectXCollision.h"
 
 class CRoom : public CJobQueue
 {
@@ -13,6 +14,9 @@ public:
 
 public:
 	void Update();
+
+public:
+	class CLevelCollision* GetLevelCollision() { return m_LevelCollision; }
 
 public:
 	bool HandleEnterPlayer(CPlayerRef player);
@@ -35,6 +39,8 @@ private:
 private:
 	std::unordered_map<uint64, CGameObjectRef> m_mapObject;
 	std::array<CPlayerRef, MAX_PLAYERS> m_Players;
+
+	class CLevelCollision* m_LevelCollision;
 };
 
 // TEMP

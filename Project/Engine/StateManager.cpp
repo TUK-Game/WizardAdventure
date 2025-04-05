@@ -18,7 +18,6 @@ void CStateManager::ChangeState(CGameObject* entity, EState_Type newState)
 {
     if (m_CurrentState)
     {
-        std::cout << "초기기기ㅣ" << std::endl;
         m_CurrentState->Exit(entity);
     }
 

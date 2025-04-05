@@ -74,7 +74,7 @@ private:\
 
 #define READY_IMGUI
 
-#define DEBUG_SOLOPLAY
+//#define DEBUG_SOLOPLAY
 
 #define MAX_OBJECTS_SUBLEVEL 200
 
