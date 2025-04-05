@@ -46,7 +46,6 @@ void CServerSession::OnSend(int32 len)
 
 void CServerSession::OnMovePlayer()
 {
-
 	Protocol::C_MOVE pkt;
 
 	Protocol::PlayerMoveInfo* info = new Protocol::PlayerMoveInfo();

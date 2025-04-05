@@ -33,6 +33,7 @@ private:
 	CollisionProfile* m_profile = nullptr;
 	std::list<CBoxCollider*> m_collisionList;
 	XMFLOAT3 m_Offset;
+	ECollision_Channel m_Channel;
 	
 	class CGameObject* m_Owner = nullptr;
 };

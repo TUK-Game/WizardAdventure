@@ -3,30 +3,30 @@
 #include "BoxCollider.h"
 CLevelCollision::CLevelCollision()
 {
-	m_vecCollider.reserve(100);
 }
 
 CLevelCollision::~CLevelCollision()
 {
 }
 
-void CLevelCollision::AddCollider(CBoxCollider* collider)
+void CLevelCollision::AddCollider(CBoxCollider* collider, ECollision_Channel channel)
 {
-	m_vecCollider.push_back(collider);
+	m_vecCollider[(int)channel].push_back(collider);
 }
 
 void CLevelCollision::Collision()
 {
-	size_t size = m_vecCollider.size();
+	size_t size = m_vecCollider[(int)ECollision_Channel::Wall].size();
+	size_t size2 = m_vecCollider[(int)ECollision_Channel::Player].size();
 	if (size > 1)
 	{
-		for (size_t i = 0; i < size - 1; ++i)
+		for (size_t i = 0; i < size; ++i)
 		{
-			CBoxCollider* src = m_vecCollider[i];
+			CBoxCollider* src = m_vecCollider[(int)ECollision_Channel::Wall][i];
 
-			for (size_t j = i + 1; j < size; ++j)
+			for (size_t j = 0; j < size2; ++j)
 			{
-				CBoxCollider* dest = m_vecCollider[j];
+				CBoxCollider* dest = m_vecCollider[(int)ECollision_Channel::Player][j];
 
 				if (src->GetOwner() == dest->GetOwner())
 					continue;
@@ -73,5 +73,5 @@ void CLevelCollision::Collision()
 		}
 	}
 
-	m_vecCollider.clear();
+	m_vecCollider[(int)ECollision_Channel::Player].clear();
 }

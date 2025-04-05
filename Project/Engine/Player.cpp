@@ -146,7 +146,8 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
             transform->SetRelativeRotation(0.f, angle + 180.f, 0.f);
         }
 #ifndef DEBUG_SOLOPLAY
-        CNetworkManager::GetInst()->s_GameSession->OnMovePlayer();
+        if(m_StateManager->GetCurrentStateType() != EState_Type::Dash)
+            CNetworkManager::GetInst()->s_GameSession->OnMovePlayer();
 #endif 
     }
 }

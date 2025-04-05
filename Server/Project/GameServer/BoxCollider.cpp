@@ -29,6 +29,7 @@ void CBoxCollider::CreateCollisionProfile(std::string name, ECollision_Channel c
 void CBoxCollider::SetCollisionProfile(const std::string& name)
 {
 	m_profile = g_CollisionManager->FindProfile(name);
+	m_Channel = m_profile->channel;
 }
 
 void CBoxCollider::AddCollisionList(CBoxCollider* collider)
@@ -97,7 +98,10 @@ void CBoxCollider::SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 offset
 
 void CBoxCollider::Update()
 {
+	if (m_Channel == ECollision_Channel::Wall)
+		return;
+
 	Protocol::Vector3 pos = m_Owner->PosInfo->position();
 	m_BoundingBox.Center = XMFLOAT3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z) ;
-	g_Room->GetLevelCollision()->AddCollider(this);
+	g_Room->GetLevelCollision()->AddCollider(this, ECollision_Channel::Player);
 }

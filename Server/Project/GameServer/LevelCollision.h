@@ -6,10 +6,10 @@ public:
 	~CLevelCollision();
 
 public:
-	void AddCollider(class CBoxCollider* collider);
+	void AddCollider(class CBoxCollider* collider, ECollision_Channel channel);
 	void Collision();
 
 private:
-	std::vector<class CBoxCollider*>		m_vecCollider;
+	std::array<std::vector<class CBoxCollider*>, (int)ECollision_Channel::Max>		m_vecCollider;
 };
 

@@ -24,7 +24,10 @@ void CPlayerDashState::Update(CGameObject* entity, float deltaTime)
 
     m_ElapsedTime += deltaTime;
     if (m_ElapsedTime >= m_DashDuration)
+    {
         player->GetStateManager()->HandleEvent(player, "EndDash");
+
+    }
 }
 
 void CPlayerDashState::Exit(CGameObject* entity)

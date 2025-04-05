@@ -42,9 +42,6 @@ void CPlayerRunState::Update(CGameObject* entity, float deltaTime)
     {
         // 입력이 없으면 Idle 상태로 전환
         player->GetStateManager()->HandleEvent(player, "Stop");
-#ifndef DEBUG_SOLOPLAY
-        CNetworkManager::GetInst()->s_GameSession->OnMovePlayer();
-#endif 
     }
 }
 

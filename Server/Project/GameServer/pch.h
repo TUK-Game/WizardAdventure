@@ -27,7 +27,6 @@ using namespace DirectX;
 
 enum class ECollision_Channel
 {
-	Default,
 	Player,
 	Wall,
 	Max
@@ -38,6 +37,7 @@ enum class ECollision_Interaction
 	Ignore,
 	Collision
 };
+
 
 struct CollisionProfile
 {
