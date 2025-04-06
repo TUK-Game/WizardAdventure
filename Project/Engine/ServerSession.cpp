@@ -46,29 +46,43 @@ void CServerSession::OnSend(int32 len)
 
 void CServerSession::OnMovePlayer()
 {
-	Protocol::C_MOVE pkt;
-
-	Protocol::PlayerMoveInfo* info = new Protocol::PlayerMoveInfo();
-	info->set_player_id(m_Id);
-
-	Protocol::Vector3* pos = new Protocol::Vector3();
-	Protocol::Vector3* rot = new Protocol::Vector3();
-
 	CTransform* transform = m_OwnPlayer->GetTransform();
+	Vec3 prevPlayerPos = m_OwnPlayer->m_PrevPosition;
 	Vec3 playerPos = transform->GetRelativePosition();
 	Vec3 playerRotation = transform->GetRelativeRotation();
-	pos->set_x(playerPos.x);
-	pos->set_y(playerPos.y);
-	pos->set_z(playerPos.z);
 
-	rot->set_x(playerRotation.x);
-	rot->set_y(playerRotation.y);
-	rot->set_z(playerRotation.z);
+	float maxStep = 30.f;
+	float totalDistanc = std::sqrt(std::pow(playerPos.x - prevPlayerPos.x, 2) + std::pow(playerPos.y - prevPlayerPos.y, 2) +
+		std::pow(playerPos.z - prevPlayerPos.z, 2));
+	int step = std::ceil(totalDistanc / maxStep);
 
-	pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_position(pos);
-	pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_rotation(rot);
-	pkt.mutable_player_move_info()->mutable_pos_info()->set_state(m_OwnPlayer->GetStateForProtocol());
+	Vec3 moveStep = (playerPos - prevPlayerPos) / step;
+
+	std::cout << moveStep.x << " " << moveStep.y << " " << moveStep.z << std::endl;
 	
-	std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
-	Send(SendBuffer);
+	for (int i = 0; i < 1; ++i)
+	{
+		Protocol::C_MOVE pkt;
+
+		Protocol::PlayerMoveInfo* info = new Protocol::PlayerMoveInfo();
+		info->set_player_id(m_Id);
+
+		Protocol::Vector3* pos = new Protocol::Vector3();
+		Protocol::Vector3* rot = new Protocol::Vector3();
+
+		pos->set_x(prevPlayerPos.x + moveStep.x * i);
+		pos->set_y(prevPlayerPos.y + moveStep.y * i);
+		pos->set_z(prevPlayerPos.z + moveStep.z * i);
+
+		rot->set_x(playerRotation.x);
+		rot->set_y(playerRotation.y);
+		rot->set_z(playerRotation.z);
+
+		pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_position(pos);
+		pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_rotation(rot);
+		pkt.mutable_player_move_info()->mutable_pos_info()->set_state(m_OwnPlayer->GetStateForProtocol());
+
+		std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+		Send(SendBuffer);
+	}
 }

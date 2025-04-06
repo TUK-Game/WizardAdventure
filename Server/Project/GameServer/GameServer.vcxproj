@@ -153,6 +153,7 @@
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Creature.cpp" />
+    <ClCompile Include="CreatureCollider.cpp" />
     <ClCompile Include="Enum.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -186,6 +187,7 @@
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Creature.h" />
+    <ClInclude Include="CreatureCollider.h" />
     <ClInclude Include="Enum.pb.h" />
     <ClInclude Include="GameSession.h" />
     <ClInclude Include="GameSessionManager.h" />

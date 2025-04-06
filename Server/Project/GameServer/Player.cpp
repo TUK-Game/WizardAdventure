@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Player.h"
+#include "CreatureCollider.h"
+#include "Room.h"
 
 CPlayer::CPlayer()
 {
@@ -8,8 +10,10 @@ CPlayer::CPlayer()
 	PosInfo = new Protocol::PosInfo();
 	PlayerInfo = new Protocol::PlayerInfo();
 	ObjectInfo->set_allocated_pos_info(PosInfo);
-	PosInfo = new Protocol::PosInfo();
 	PlayerInfo->set_allocated_object_info(ObjectInfo);
+
+	m_BoxCollider = new CCreatureCollider();
+	m_BoxCollider->SetOwner(this);
 }
 
 CPlayer::~CPlayer()
@@ -24,4 +28,67 @@ void CPlayer::Update()
 void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
 	std::cout << "나 박음" << std::endl;
+}
+
+void CPlayer::CollisionEvent(CBoxCollider* src, CBoxCollider* dest)
+{
+	for (int i = 0; i < 3; ++i)
+	{
+
+		XMFLOAT3 dc = dest->GetBoundingBox().Center;
+		XMFLOAT3 de = dest->GetBoundingBox().Extents;
+
+		XMFLOAT3 sc = src->GetBoundingBox().Center;
+		XMFLOAT3 se = src->GetBoundingBox().Extents;
+
+		Protocol::Vector3* pos = new Protocol::Vector3;
+
+		pos->CopyFrom(PlayerInfo->object_info().pos_info().position());
+
+		float dx = sc.x - dc.x;
+		float dz = sc.z - dc.z;
+
+		float px = (de.x + se.x) - abs(dx);
+		float pz = (de.z + se.z) - abs(dz);
+
+		const float margin = 40.f;
+		// 더 가까운 축이 어디인지 확인
+		if (px < pz)
+		{
+			// X축 방향 충돌
+			if (dx > 0)
+			{
+				pos->set_x(dc.x + de.x + se.x + margin);
+				block[0] = true;
+			}
+			else
+			{
+				pos->set_x(dc.x - de.x - se.x - margin);
+				block[1] = true;
+			}
+			// Z축은 그대로 유지
+		}
+		else
+		{
+			// Z축 방향 충돌
+			if (dz > 0)
+			{
+				pos->set_z(dc.z + de.z + se.z + margin);
+				block[2] = true;
+			}
+			else
+			{
+				pos->set_z(dc.z - de.z - se.z - margin);
+				block[3] = true;
+			}
+
+			// X축은 그대로 유지
+		}
+
+		PlayerInfo->mutable_object_info()->mutable_pos_info()->set_allocated_position(pos);
+
+
+		CPlayerRef player = m_Session.lock()->Player.load();
+		g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
+	}
 }

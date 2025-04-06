@@ -21,6 +21,7 @@ public:
 	virtual void Update();
 
 	virtual void CollisionBegin(CBoxCollider* src, CBoxCollider* dest) {}
+	virtual void CollisionEvent(CBoxCollider* src, CBoxCollider* dest) {}
 	virtual void CollisionEnd(CBoxCollider* src, CBoxCollider* dest) {}
 
 public:	// public 이라서 m_ 안붙임. (ex. struct 필드)

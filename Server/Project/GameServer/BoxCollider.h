@@ -14,7 +14,7 @@ public:
 	void SetOwner(class CGameObject* owner) { m_Owner = owner; }
 public:
 	bool Collision(CBoxCollider* dest);
-	void SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 offset = XMFLOAT3(0.f, 0.f, 0.f));
+	virtual void SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 offset = XMFLOAT3(0.f, 0.f, 0.f));
 
 	void CreateCollisionProfile(std::string name, ECollision_Channel channel);
 	void SetCollisionProfile(const std::string& name);
@@ -23,12 +23,13 @@ public:
 	void DeleteCollisionList(CBoxCollider* collider);
 	void ClearCollisionList();
 	void CallCollisionBegin(CBoxCollider* dest);
+	void CollisionEvent(CBoxCollider* dest);
 	void CallCollisionEnd(CBoxCollider* dest);
 public:
-	void Update();
+	virtual void Update();
 
 
-private:
+protected:
 	BoundingBox m_BoundingBox;
 	CollisionProfile* m_profile = nullptr;
 	std::list<CBoxCollider*> m_collisionList;

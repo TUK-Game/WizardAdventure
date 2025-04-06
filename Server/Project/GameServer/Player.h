@@ -22,6 +22,9 @@ public:
 	virtual void Update();
 
 	virtual void CollisionBegin(CBoxCollider* src, CBoxCollider* dest);
+	virtual void CollisionEvent(CBoxCollider* src, CBoxCollider* dest);
+
+	bool block[4]{};
 
 private:
 	std::weak_ptr<CGameSession>	m_Session;

@@ -23,6 +23,7 @@ public:
 
 public:
     virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
+    Vec3 m_PrevPosition;
 
 private:
     Vec3 m_currentMoveDir;

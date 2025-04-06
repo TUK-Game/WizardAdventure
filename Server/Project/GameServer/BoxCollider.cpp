@@ -81,6 +81,11 @@ void CBoxCollider::CallCollisionBegin(CBoxCollider* dest)
 	GetOwner()->CollisionBegin(this, dest);
 }
 
+void CBoxCollider::CollisionEvent(CBoxCollider* dest)
+{
+	GetOwner()->CollisionEvent(this, dest);
+}
+
 void CBoxCollider::CallCollisionEnd(CBoxCollider* dest)
 {
 	GetOwner()->CollisionEnd(this, dest);
@@ -98,10 +103,10 @@ void CBoxCollider::SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 offset
 
 void CBoxCollider::Update()
 {
-	if (m_Channel == ECollision_Channel::Wall)
-		return;
+	//if (m_Channel == ECollision_Channel::Wall)
+	//	return;
 
-	Protocol::Vector3 pos = m_Owner->PosInfo->position();
-	m_BoundingBox.Center = XMFLOAT3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z) ;
-	g_Room->GetLevelCollision()->AddCollider(this, ECollision_Channel::Player);
+	//Protocol::Vector3 pos = m_Owner->PosInfo->position();
+	//m_BoundingBox.Center = XMFLOAT3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z) ;
+	//g_Room->GetLevelCollision()->AddCollider(this, ECollision_Channel::Player);
 }

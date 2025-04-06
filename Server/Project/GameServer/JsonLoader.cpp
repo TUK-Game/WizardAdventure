@@ -6,6 +6,7 @@
 #include "BoxCollider.h"
 #include "CollisionManager.h"
 #include "ObjectUtil.h"
+#include "LevelCollision.h"
 #include <iostream>
 #include <fstream>
 
@@ -36,9 +37,16 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 		if (pos[1] < -20.f)
 			continue;
 
+		//for (float& s : size)
+		//{
+		//	if (s < 10.f)
+		//		s = 10.f;
+		//}
+
 		CGameObjectRef object = CObjectUtil::CreateObject();
 		object->GetCollider()->SetCollisionProfile("Wall");
 		object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0], size[1], size[2]));
+		room->GetLevelCollision()->AddCollider(object->GetCollider(), ECollision_Channel::Wall);
 		room->AddObject(object);
 	}
 	std::cout << "Json read¿Ï·á" << std::endl;

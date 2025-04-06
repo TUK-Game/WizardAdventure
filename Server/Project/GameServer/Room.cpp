@@ -70,7 +70,6 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 	posInfo->set_allocated_position(position);
 	objectInfo->set_allocated_pos_info(posInfo);
 	newPlayer->PlayerInfo->set_allocated_object_info(objectInfo);
-	newPlayer->PosInfo->set_allocated_position(position);
 	newPlayer->GetCollider()->SetCollisionProfile("Player");
 	newPlayer->GetCollider()->SetBoxInfo(XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(100.f, 200.f, 24.f), XMFLOAT3(0.f, 100.f, 0.f));
 

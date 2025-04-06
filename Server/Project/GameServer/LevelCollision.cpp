@@ -56,6 +56,11 @@ void CLevelCollision::Collision()
 						src->CallCollisionBegin(dest);
 						dest->CallCollisionBegin(src);
 					}
+					else
+					{
+						src->CollisionEvent(dest);
+						dest->CollisionEvent(src);
+					}
 				}
 
 				// 충돌중인 물체 간 충돌이 끝나는 순간

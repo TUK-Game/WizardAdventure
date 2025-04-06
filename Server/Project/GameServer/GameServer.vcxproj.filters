@@ -100,6 +100,9 @@
     <ClCompile Include="LevelCollision.cpp">
       <Filter>06. Collision</Filter>
     </ClCompile>
+    <ClCompile Include="CreatureCollider.cpp">
+      <Filter>06. Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -154,6 +157,9 @@
       <Filter>06. Collision</Filter>
     </ClInclude>
     <ClInclude Include="LevelCollision.h">
+      <Filter>06. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="CreatureCollider.h">
       <Filter>06. Collision</Filter>
     </ClInclude>
   </ItemGroup>

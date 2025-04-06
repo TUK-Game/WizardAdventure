@@ -72,7 +72,7 @@ PS_OUT PS_DirLight(VS_OUT input)
             float shadowDepth = tex_2.Sample(sam_0, uv).x;
             if (shadowDepth > 0 && depth > shadowDepth + 0.00001f)
             {
-                color.diffuse *= 0.0f;
+                color.diffuse *= 0.5f;
                 color.specular = (float4) 0.f;
             }
         }
