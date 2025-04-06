@@ -48,19 +48,20 @@ void CServerSession::OnMovePlayer()
 {
 	CTransform* transform = m_OwnPlayer->GetTransform();
 	Vec3 prevPlayerPos = m_OwnPlayer->m_PrevPosition;
-	Vec3 playerPos = transform->GetRelativePosition();
+	Vec3 playerPos = m_OwnPlayer->m_NextPosition;;
+	//Vec3 playerPos = transform->GetRelativePosition();
 	Vec3 playerRotation = transform->GetRelativeRotation();
 
-	float maxStep = 30.f;
+	float maxStep = 10.f;
 	float totalDistanc = std::sqrt(std::pow(playerPos.x - prevPlayerPos.x, 2) + std::pow(playerPos.y - prevPlayerPos.y, 2) +
 		std::pow(playerPos.z - prevPlayerPos.z, 2));
-	int step = std::ceil(totalDistanc / maxStep);
+	int step = (std::max)(1, static_cast<int>(std::round(totalDistanc / maxStep)));
 
-	Vec3 moveStep = (playerPos - prevPlayerPos) / step;
+	Vec3 moveStep = (playerPos - prevPlayerPos);// / step;
 
-	std::cout << moveStep.x << " " << moveStep.y << " " << moveStep.z << std::endl;
+	std::cout << "Step : " << step << " " <<  moveStep.x << " " << moveStep.y << " " << moveStep.z << std::endl;
 	
-	for (int i = 0; i < 1; ++i)
+	for (int i = 1; i <= 1; ++i)
 	{
 		Protocol::C_MOVE pkt;
 
@@ -85,4 +86,7 @@ void CServerSession::OnMovePlayer()
 		std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 		Send(SendBuffer);
 	}
+	//m_OwnPlayer->GetTransform()->SetRelativePosition(playerPos);
+
+	//m_OwnPlayer->m_PrevPosition = playerPos;
 }
