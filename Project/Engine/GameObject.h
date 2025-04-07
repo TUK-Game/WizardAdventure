@@ -42,6 +42,8 @@ public:
     CStateManager* GetStateManager()                    { return m_StateManager; }
     bool GetInstancing()                                { return m_bInstancing; }
     bool GetCheckFrustum() { return m_CheckFrustum; }
+
+
     void SetStatic(bool flag) { m_Static = flag; }
     bool IsStatic() { return m_Static; }
 

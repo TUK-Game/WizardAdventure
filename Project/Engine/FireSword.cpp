@@ -6,6 +6,7 @@
 #include "RigidBody.h"
 #include "AssetManager.h"
 #include "Level.h"
+#include "Layer.h"
 #include "LevelManager.h"
 #include "Engine.h"
 
@@ -25,17 +26,13 @@ CFireSword::CFireSword()
         o->SetInstancing(false);
         AddChild(o);
     }
-    
-
-
-
     // AddComponent(new CCollider());      
 }
 
 void CFireSword::Update()
 {
     CGameObject::Update();
-    Vec3 pos = GetTransform()->GetWorldPosition();
+    Vec3 pos = GetTransform()->GetRelativePosition();
 
     if (!m_ReadyToRotate)
     {
@@ -43,8 +40,10 @@ void CFireSword::Update()
         float t = m_Elapsed / m_TranslateWaitTime;
         t = std::clamp(t, 0.0f, 1.0f);
 
-        float scale = m_ReadyScale * t;
-        GetTransform()->SetRelativeScale(scale , scale , scale);
+        for (auto obj : GetChild())
+        {
+            obj->GetTransform()->SetRelativeScale(t, t, t);
+        }
 
         float readySpeed = m_Speed * ((1.0f - t) / 1.0f);
         pos += m_ReadyDirection * readySpeed * DELTA_TIME;
@@ -67,7 +66,7 @@ void CFireSword::Update()
         float t = m_Elapsed / m_RotateWaitTime;
         t = std::clamp(t, 0.0f, 1.0f);
 
-        // 보간된 방향
+        // 보간된 방향o
         Vec3 blendedDirection = DirectX::SimpleMath::Vector3::Lerp(m_ReadyDirection, m_Direction, t);
         blendedDirection.Normalize();
         GetTransform()->LookAt(blendedDirection);
@@ -80,14 +79,16 @@ void CFireSword::Update()
         return;
     }
 
-    if (m_ReadyToFire)
-    {
-        pos += m_Direction * m_Speed * DELTA_TIME;
-        GetTransform()->SetRelativePosition(pos);
-    }
+    pos += m_Direction * m_Speed * DELTA_TIME;
+    GetTransform()->SetRelativePosition(pos);
+
+    
 }
 
 void CFireSword::FinalUpdate()
 {
     CGameObject::FinalUpdate();
+    Vec3 pos = GetTransform()->GetRelativePosition();
+    if (pos.y < -200.f) // 충돌시 삭제로 변경해야함
+        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
 }

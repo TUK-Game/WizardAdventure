@@ -136,7 +136,7 @@ void CSkillManager::FireSwordSpreadShot()
 
     for (int i = 0; i < count; ++i)
     {
-        float angleDeg = i * (360.f / count);
+        float angleDeg = i * (360.f / count) + 10.f;
         float angleRad = XMConvertToRadians(angleDeg);
 
         // 원형 배치 위치
@@ -150,6 +150,7 @@ void CSkillManager::FireSwordSpreadShot()
         CFireSword* sword = new CFireSword();
         sword->GetTransform()->SetRelativePosition(center);
         sword->GetTransform()->LookAt(readyDir);
+
         sword->SetReadyDirection(readyDir);
         sword->SetTargetPos(targetPos);
         sword->SetSpeed(800.f);              

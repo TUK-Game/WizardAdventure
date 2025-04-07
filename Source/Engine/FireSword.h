@@ -14,7 +14,7 @@ public:
     void SetSpeed(float speed) { m_Speed = speed; }
     void SetWaitTimeForRotate(float time) { m_RotateWaitTime = time; }
     void SetWaitTimeForTranslate(float time) { m_TranslateWaitTime = time; }
-    void SetReadyScale(float scale) { m_ReadyScale = scale; }
+
     virtual void Update();
     virtual void FinalUpdate();
 
@@ -26,7 +26,6 @@ private:
     bool m_ReadyToFire {false};
     bool m_ReadyToRotate {false};
 
-    float m_ReadyScale {100.f};
     float m_RotateWaitTime{0.5f};
     float m_TranslateWaitTime{0.5f};
     float m_Elapsed {0.f};

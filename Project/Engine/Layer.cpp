@@ -68,7 +68,6 @@ void CLayer::FlushPendingRemovals()
 	for (CGameObject* obj : m_vecPendingRemoveObjects)
 	{
 		RemoveGameObject(obj);
-		//obj->Destroy();
 	}
 	m_vecPendingRemoveObjects.clear();
 }
