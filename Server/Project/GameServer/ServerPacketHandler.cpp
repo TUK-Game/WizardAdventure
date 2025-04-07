@@ -67,17 +67,16 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 
 	const Protocol::Vector3& pos = pkt.player_move_info().pos_info().position();
 	const Protocol::Vector3& rot = pkt.player_move_info().pos_info().rotation();
+	Protocol::Vector3 dir = pkt.dir();
 
 	player->m_NextAmount.CopyFrom(pos);
-	//player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(pos.x());
-	//player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(pos.y());
-	//player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(pos.z());
 
 	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_x(rot.x());
 	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_y(rot.y());
 	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_z(rot.z());
-
-	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->set_state(pkt.player_move_info().pos_info().state());
+	player->SetDir(dir);
+	auto state = pkt.player_move_info().pos_info().state();
+	player->SetState(state);
 
 	g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
 

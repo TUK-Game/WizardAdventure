@@ -216,6 +216,9 @@ void CGameObject::SetProtocolStateForClient(Protocol::MoveState state)
 	case Protocol::MOVE_STATE_DASH:
 		m_StateManager->HandleEvent(this, "Dash");
 		break;
+	case Protocol::MOVE_STATE_DASH_END:
+		m_StateManager->HandleEvent(this, "EndDash");
+		break;
 	case Protocol::MOVE_STATE_SKILL_Q:
 		m_StateManager->HandleEvent(this, "Attack_Q");
 		break;

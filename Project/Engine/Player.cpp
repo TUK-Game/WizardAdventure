@@ -143,7 +143,9 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
         m_currentMoveDir = moveDir;
         m_Amount = moveDir * m_Speed * CEngine::GetInst()->GetDeltaTime();
         m_NextPosition = transform->GetRelativePosition() + (moveDir * m_Speed * CEngine::GetInst()->GetDeltaTime());
-        //transform->SetRelativePosition(transform->GetRelativePosition() + m_Amount);
+#ifdef DEBUG_SOLOPLAY
+        transform->SetRelativePosition(transform->GetRelativePosition() + m_Amount);
+#endif
 
         if (shouldRotate) {
             float angle = atan2(moveDir.x, moveDir.z) * (180.0f / XM_PI); 

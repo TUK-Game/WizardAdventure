@@ -31,6 +31,9 @@ CRoomRef CRoom::GetRoomRef()
 void CRoom::Update()
 {
 	//std::cout << "Update Room" << std::endl;
+	g_Timer->Update();
+	m_DeltaTime = g_Timer->GetDeltaTime();
+
 	for (const auto& object : m_mapObject)
 	{
 		auto& gameObject = object.second;
@@ -184,9 +187,10 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 		player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(nowPos.x() + (player->m_NextAmount.x() / step));
 		player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(nowPos.y() + (player->m_NextAmount.y() / step));
 		player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(nowPos.z() + (player->m_NextAmount.z() / step));
-		player->Update();
+		player->GetCollider()->Update();
 		if (m_LevelCollision->CollisionWithWall(player->GetCollider()))
 		{
+			std::cout << "¹ÚÀ½" << std::endl;
 			player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(nowPos.x());
 			player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(nowPos.y());
 			player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(nowPos.z());
@@ -196,6 +200,7 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 	const Protocol::Vector3& position = player->PlayerInfo->object_info().pos_info().position();
 	const Protocol::Vector3& rotation = player->PlayerInfo->object_info().pos_info().rotation();
+	std::cout << "º¸³¿ " << position.x() << " " << position.y() << " " << position.z() << '\n';
 	pos->set_x(position.x());
 	pos->set_y(position.y());
 	pos->set_z(position.z());
@@ -206,7 +211,7 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 	moveInfo->mutable_pos_info()->set_allocated_position(pos);
 	moveInfo->mutable_pos_info()->set_allocated_rotation(rot);
-	moveInfo->mutable_pos_info()->set_state(player->PlayerInfo->object_info().pos_info().state());
+	moveInfo->mutable_pos_info()->set_state(player->GetState());
 	movePkt.set_allocated_player_move_info(moveInfo);
 
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);

@@ -103,6 +103,9 @@
     <ClCompile Include="CreatureCollider.cpp">
       <Filter>06. Collision</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>99. Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -161,6 +164,9 @@
     </ClInclude>
     <ClInclude Include="CreatureCollider.h">
       <Filter>06. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>99. Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

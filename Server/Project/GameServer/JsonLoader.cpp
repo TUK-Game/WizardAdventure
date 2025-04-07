@@ -34,14 +34,14 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 		std::vector<float> pos = obj["position"];
 		std::vector<float> size = obj["size"];
 		
-		if (pos[1] < -20.f)
+		if (pos[1] < -50.f)
 			continue;
 
 
 
 		for (int i = 0; i < 3; ++i)
 		{
-				size[i] += 10.f;
+				size[i] += 5.f;
 		}
 
 		CGameObjectRef object = CObjectUtil::CreateObject();

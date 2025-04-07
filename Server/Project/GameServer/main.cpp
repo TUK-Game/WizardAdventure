@@ -8,7 +8,6 @@
 #include "Room.h"
 #include "JsonLoader.h"
 #include "CollisionManager.h"
-
 enum
 {
 	WORKER_TICK = 64	// Job 처리 timeout
@@ -37,7 +36,7 @@ int main()
 	ServerPacketHandler::Init();
 	g_CollisionManager->Init();
 	CJsonLoader::LoadMap(L"Level_1", g_Room);
-
+	g_Timer->Init();
 
 	CServerServiceRef service = std::make_shared<CServerService>(
 		CNetAddress(L"127.0.0.1", 7777),

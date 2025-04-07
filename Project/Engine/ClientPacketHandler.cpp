@@ -65,8 +65,8 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 	CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
 
 	const Protocol::Vector3& position = pkt.player().object_info().pos_info().position();
+	player->SetName(L"Player" + std::to_wstring(info.player_id()));
 	player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
-	
 	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
 	CLevelManager::GetInst()->SetPlayer(player, info.player_id());
 
@@ -85,6 +85,7 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 		CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
 
 		const Protocol::Vector3& position = info.object_info().pos_info().position();
+		player->SetName(L"Player" + std::to_wstring(info.player_id()));
 		player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
 
 		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
@@ -110,6 +111,7 @@ bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 	CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
 	CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(rotation.x(), rotation.y(), rotation.z());
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
+	std::cout << position.x() << " " << position.y() << " " << position.z() << '\n';
 	return true;
 }
 

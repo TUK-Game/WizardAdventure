@@ -41,6 +41,7 @@ private:
 	std::array<CPlayerRef, MAX_PLAYERS> m_Players;
 
 	class CLevelCollision* m_LevelCollision;
+	float m_DeltaTime = 0.f;
 };
 
 // TEMP
