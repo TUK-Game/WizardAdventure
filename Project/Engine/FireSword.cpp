@@ -44,7 +44,7 @@ void CFireSword::Update()
         t = std::clamp(t, 0.0f, 1.0f);
 
         float scale = m_ReadyScale * t;
-        GetTransform()->SetRelativeScale(scale / 10.f, scale / 10.f, scale);
+        GetTransform()->SetRelativeScale(scale , scale , scale);
 
         float readySpeed = m_Speed * ((1.0f - t) / 1.0f);
         pos += m_ReadyDirection * readySpeed * DELTA_TIME;

@@ -157,7 +157,7 @@ void CSkillManager::FireSwordSpreadShot()
         sword->SetWaitTimeForRotate(1.f);
 
 
-        CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(sword, 3, false);
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(sword, 3, false);
     }
 
 }

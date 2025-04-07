@@ -6,7 +6,9 @@
 #include "RigidBody.h"
 #include "AssetManager.h"
 #include "Level.h"
+#include "Layer.h"
 #include "LevelManager.h"
+
 #include "Engine.h"
 
 CMeteors::CMeteors(Vec3 centerPos, int count, float interval)
@@ -31,7 +33,7 @@ void CMeteors::FinalUpdate()
 {
     CGameObject::FinalUpdate();
     if (m_SpawnedCount >= m_TotalCount) {
-        CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObject(this);
+        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
     }
 }
 
