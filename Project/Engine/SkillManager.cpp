@@ -60,8 +60,7 @@ void CSkillManager::CastFireballTowardMouse()
     Vec3 spawnPos = player->GetTransform()->GetWorldPosition();
     Vec3 fireDir = CalculateMouseDirectionFromPlayerTopView(spawnPos);
 
-    float angle = atan2(fireDir.x, fireDir.z) * (180.0f / XM_PI);
-    player->GetTransform()->SetRelativeRotation(0.f, angle + 180.f, 0.f);
+    SetLookRotationY(fireDir);
 
     CFireBall* fireBall = new CFireBall();
     fireBall->GetTransform()->SetRelativePosition(spawnPos);
@@ -80,8 +79,7 @@ void CSkillManager::CastFireballTowardQ()
     Vec3 spawnPos = player->GetTransform()->GetWorldPosition();
     Vec3 fireDir = CalculateMouseDirectionFromPlayerTopView(spawnPos);
 
-    float angle = atan2(fireDir.x, fireDir.z) * (180.0f / XM_PI);
-    player->GetTransform()->SetRelativeRotation(0.f, angle + 180.f, 0.f);
+    SetLookRotationY(fireDir);
 
     CFireBall* fireBall = new CFireBall();
     fireBall->GetTransform()->SetRelativePosition(spawnPos);
@@ -104,6 +102,10 @@ void CSkillManager::SpawnFirePillarAtMouse()
     CFireCircle* fireCircle = new CFireCircle;
     fireCircle->GetTransform()->SetRelativePosition(centerPos);
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireCircle, 3, false);
+
+    Vec3 lookDir = centerPos - m_Owner->GetTransform()->GetRelativePosition();
+    lookDir.Normalize();
+    SetLookRotationY(lookDir);
 
 
     centerPos.y = RandomFloat(-200.f, -150.f);
@@ -133,7 +135,10 @@ void CSkillManager::FireSwordSpreadShot()
     const int count = 8;
     const float radius = 80.f;
     Vec3 center = m_Owner->GetTransform()->GetRelativePosition();
-
+    Vec3 targetPos = GetMouseGroundPoint();
+    Vec3 lookDir = targetPos - center;
+    lookDir.Normalize();
+    SetLookRotationY(lookDir);
     for (int i = 0; i < count; ++i)
     {
         float angleDeg = i * (360.f / count) + 10.f;
@@ -145,7 +150,6 @@ void CSkillManager::FireSwordSpreadShot()
         Vec3 spawnPos = center + Vec3(offsetX, 300.f, offsetZ);
         Vec3 readyDir = spawnPos - center;
         readyDir.Normalize();
-        Vec3 targetPos = GetMouseGroundPoint();
 
         CFireSword* sword = new CFireSword();
         sword->GetTransform()->SetRelativePosition(center);
@@ -231,4 +235,11 @@ Vec3 CSkillManager::GetMouseGroundPoint()
     float t = -origin.y / dir.y;
     Vec3 hitPos = origin + dir * t;
     return hitPos;
+}
+
+void CSkillManager::SetLookRotationY(const Vec3& dir)
+{
+
+    float angle = atan2(dir.x, dir.z) * (180.0f / XM_PI);
+    m_Owner->GetTransform()->SetRelativeRotation(0.f, angle + 180.f, 0.f);
 }
