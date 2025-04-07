@@ -44,7 +44,7 @@ void CRoom::Update()
 			player->Update();
 	}
 
-	m_LevelCollision->Collision();
+	//m_LevelCollision->Collision();
 
 	// 33ms 이후 실행 예약
 	// => 대충 30프레임
@@ -61,17 +61,13 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 	}
 
 	Protocol::Vector3* position = new Protocol::Vector3();
-	Protocol::ObjectInfo* objectInfo = new Protocol::ObjectInfo();
-	Protocol::PosInfo* posInfo = new Protocol::PosInfo();
 	position->set_x(11240.f);
 	position->set_y(20.f);
 	position->set_z(1127.f);
 
-	posInfo->set_allocated_position(position);
-	objectInfo->set_allocated_pos_info(posInfo);
-	newPlayer->PlayerInfo->set_allocated_object_info(objectInfo);
+	newPlayer->PlayerInfo->mutable_object_info()->mutable_pos_info()->set_allocated_position(position);
 	newPlayer->GetCollider()->SetCollisionProfile("Player");
-	newPlayer->GetCollider()->SetBoxInfo(XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(100.f, 200.f, 24.f), XMFLOAT3(0.f, 100.f, 0.f));
+	newPlayer->GetCollider()->SetBoxInfo(XMFLOAT3(11240.f, 20.f, 1127.f), XMFLOAT3(100.f, 200.f, 24.f), XMFLOAT3(0.f, 100.f, 0.f));
 
 	// 입장 사실을 새 플레이어에게 알린다
 	{
@@ -175,35 +171,49 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 	// 2. 위치조정
 
 	// 3. 모든 클라에 위치 전송
+	Protocol::S_MOVE movePkt;
+	Protocol::PlayerMoveInfo* moveInfo = new Protocol::PlayerMoveInfo();
+	Protocol::Vector3* pos = new Protocol::Vector3();
+	Protocol::Vector3* rot = new Protocol::Vector3();
+	moveInfo->set_player_id(player->PlayerInfo->player_id());
+
+	int step = 1;
+	for(int i = 1; i <= step; ++i)
 	{
-		Protocol::S_MOVE movePkt;
-		Protocol::PlayerMoveInfo* moveInfo = new Protocol::PlayerMoveInfo();
-		Protocol::Vector3* pos = new Protocol::Vector3();
-		Protocol::Vector3* rot = new Protocol::Vector3();
-		moveInfo->set_player_id(player->PlayerInfo->player_id());
-
-		const Protocol::Vector3& position = player->PlayerInfo->object_info().pos_info().position();
-		const Protocol::Vector3& rotation = player->PlayerInfo->object_info().pos_info().rotation();
-		pos->set_x(position.x());
-		pos->set_y(position.y());
-		pos->set_z(position.z());
-
-		rot->set_x(rotation.x());
-		rot->set_y(rotation.y());
-		rot->set_z(rotation.z());
-
-		moveInfo->mutable_pos_info()->set_allocated_position(pos);
-		moveInfo->mutable_pos_info()->set_allocated_rotation(rot);
-		moveInfo->mutable_pos_info()->set_state(player->PlayerInfo->object_info().pos_info().state());
-		movePkt.set_allocated_player_move_info(moveInfo);
-
-		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
-		Broadcast(sendBuffer, player->PlayerInfo->player_id());
-
-		if (auto session = player->GetSession())
-			session->Send(sendBuffer);
+		Protocol::Vector3 nowPos = player->PlayerInfo->object_info().pos_info().position();
+		player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(nowPos.x() + (player->m_NextAmount.x() / step));
+		player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(nowPos.y() + (player->m_NextAmount.y() / step));
+		player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(nowPos.z() + (player->m_NextAmount.z() / step));
+		player->Update();
+		if (m_LevelCollision->CollisionWithWall(player->GetCollider()))
+		{
+			player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(nowPos.x());
+			player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(nowPos.y());
+			player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(nowPos.z());
+			break;
+		}
 	}
 
+	const Protocol::Vector3& position = player->PlayerInfo->object_info().pos_info().position();
+	const Protocol::Vector3& rotation = player->PlayerInfo->object_info().pos_info().rotation();
+	pos->set_x(position.x());
+	pos->set_y(position.y());
+	pos->set_z(position.z());
+
+	rot->set_x(rotation.x());
+	rot->set_y(rotation.y());
+	rot->set_z(rotation.z());
+
+	moveInfo->mutable_pos_info()->set_allocated_position(pos);
+	moveInfo->mutable_pos_info()->set_allocated_rotation(rot);
+	moveInfo->mutable_pos_info()->set_state(player->PlayerInfo->object_info().pos_info().state());
+	movePkt.set_allocated_player_move_info(moveInfo);
+
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
+	Broadcast(sendBuffer, player->PlayerInfo->player_id());
+
+	if (auto session = player->GetSession())
+		session->Send(sendBuffer);
 
 	return true;
 }

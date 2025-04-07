@@ -36,7 +36,7 @@ CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
    AddComponent(new CBoxCollider);
    GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
    GetTransform()->SetRelativePosition(11240.f, 20, 1127);
-   m_PrevPosition = Vec3(11240.f, 20.f, 1127.f);
+   m_Amount = Vec3(11240.f, 20.f, 1127.f);
    m_NextPosition = Vec3(11240.f, 20.f, 1127.f);
    GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
    if(Owner)
@@ -141,9 +141,9 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
     {
         moveDir.Normalize(); 
         m_currentMoveDir = moveDir;
-        m_PrevPosition = transform->GetRelativePosition();
+        m_Amount = moveDir * m_Speed * CEngine::GetInst()->GetDeltaTime();
         m_NextPosition = transform->GetRelativePosition() + (moveDir * m_Speed * CEngine::GetInst()->GetDeltaTime());
-        //transform->SetRelativePosition(transform->GetRelativePosition() + (moveDir * m_Speed * CEngine::GetInst()->GetDeltaTime()));
+        //transform->SetRelativePosition(transform->GetRelativePosition() + m_Amount);
 
         if (shouldRotate) {
             float angle = atan2(moveDir.x, moveDir.z) * (180.0f / XM_PI); 

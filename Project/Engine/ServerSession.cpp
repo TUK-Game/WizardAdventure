@@ -47,33 +47,54 @@ void CServerSession::OnSend(int32 len)
 void CServerSession::OnMovePlayer()
 {
 	CTransform* transform = m_OwnPlayer->GetTransform();
-	Vec3 prevPlayerPos = m_OwnPlayer->m_PrevPosition;
-	Vec3 playerPos = m_OwnPlayer->m_NextPosition;;
-	//Vec3 playerPos = transform->GetRelativePosition();
+	Vec3 playerPos = transform->GetRelativePosition();
 	Vec3 playerRotation = transform->GetRelativeRotation();
-
-	float maxStep = 10.f;
-	float totalDistanc = std::sqrt(std::pow(playerPos.x - prevPlayerPos.x, 2) + std::pow(playerPos.y - prevPlayerPos.y, 2) +
-		std::pow(playerPos.z - prevPlayerPos.z, 2));
-	int step = (std::max)(1, static_cast<int>(std::round(totalDistanc / maxStep)));
-
-	Vec3 moveStep = (playerPos - prevPlayerPos);// / step;
-
-	std::cout << "Step : " << step << " " <<  moveStep.x << " " << moveStep.y << " " << moveStep.z << std::endl;
-	
-	for (int i = 1; i <= 1; ++i)
+	Vec3 amount = m_OwnPlayer->m_Amount;
+	float step = 1;
+	std::cout << amount.x << " " << amount.y << " " << amount.z << "\n";
+	for(int i = 1; i <= step; ++i)
 	{
 		Protocol::C_MOVE pkt;
-
 		Protocol::PlayerMoveInfo* info = new Protocol::PlayerMoveInfo();
-		info->set_player_id(m_Id);
-
 		Protocol::Vector3* pos = new Protocol::Vector3();
 		Protocol::Vector3* rot = new Protocol::Vector3();
+		info->set_player_id(m_Id);
+		pos->set_x(amount.x);
+		pos->set_y(amount.y);
+		pos->set_z(amount.z);
+		  
+		rot->set_x(playerRotation.x);
+		rot->set_y(playerRotation.y);
+		rot->set_z(playerRotation.z);
 
-		pos->set_x(prevPlayerPos.x + moveStep.x * i);
-		pos->set_y(prevPlayerPos.y + moveStep.y * i);
-		pos->set_z(prevPlayerPos.z + moveStep.z * i);
+		pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_position(pos);
+		pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_rotation(rot);
+		pkt.mutable_player_move_info()->mutable_pos_info()->set_state(m_OwnPlayer->GetStateForProtocol());
+
+		std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+		Send(SendBuffer);
+	}
+}
+
+void CServerSession::OnActPlayer()
+{
+	CTransform* transform = m_OwnPlayer->GetTransform();
+	Vec3 playerPos = transform->GetRelativePosition();
+	Vec3 playerRotation = transform->GetRelativeRotation();
+	m_OwnPlayer->m_Amount = Vec3(0.f, 0.f, 0.f);
+	Vec3 amount = m_OwnPlayer->m_Amount;
+	float step = 1;
+	std::cout << amount.x << " " << amount.y << " " << amount.z << "zz\n";
+	for (int i = 1; i <= step; ++i)
+	{
+		Protocol::C_MOVE pkt;
+		Protocol::PlayerMoveInfo* info = new Protocol::PlayerMoveInfo();
+		Protocol::Vector3* pos = new Protocol::Vector3();
+		Protocol::Vector3* rot = new Protocol::Vector3();
+		info->set_player_id(m_Id);
+		pos->set_x(amount.x);
+		pos->set_y(amount.y);
+		pos->set_z(amount.z);
 
 		rot->set_x(playerRotation.x);
 		rot->set_y(playerRotation.y);
@@ -86,7 +107,30 @@ void CServerSession::OnMovePlayer()
 		std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 		Send(SendBuffer);
 	}
-	//m_OwnPlayer->GetTransform()->SetRelativePosition(playerPos);
-
-	//m_OwnPlayer->m_PrevPosition = playerPos;
 }
+
+//Protocol::C_MOVE pkt;
+//
+//Protocol::PlayerMoveInfo* info = new Protocol::PlayerMoveInfo();
+//info->set_player_id(m_Id);
+//
+//Protocol::Vector3* pos = new Protocol::Vector3();
+//Protocol::Vector3* rot = new Protocol::Vector3();
+//
+//CTransform* transform = m_OwnPlayer->GetTransform();
+//Vec3 playerPos = transform->GetRelativePosition();
+//Vec3 playerRotation = transform->GetRelativeRotation();
+//pos->set_x(playerPos.x);
+//pos->set_y(playerPos.y);
+//pos->set_z(playerPos.z);
+//
+//rot->set_x(playerRotation.x);
+//rot->set_y(playerRotation.y);
+//rot->set_z(playerRotation.z);
+//
+//pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_position(pos);
+//pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_rotation(rot);
+//pkt.mutable_player_move_info()->mutable_pos_info()->set_state(m_OwnPlayer->GetStateForProtocol());
+//
+//std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+//Send(SendBuffer);

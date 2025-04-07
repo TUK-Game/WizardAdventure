@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "LevelCollision.h"
 #include "BoxCollider.h"
+#include "GameObject.h"
+
 CLevelCollision::CLevelCollision()
 {
 }
@@ -79,4 +81,26 @@ void CLevelCollision::Collision()
 	}
 
 	m_vecCollider[(int)ECollision_Channel::Player].clear();
+}
+
+bool CLevelCollision::CollisionWithWall(CBoxCollider* collider)
+{
+	size_t size = m_vecCollider[(int)ECollision_Channel::Wall].size();
+	if (size > 1)
+	{
+		CBoxCollider* dest = collider;
+		for (size_t i = 0; i < size; ++i)
+		{
+			CBoxCollider* src = m_vecCollider[(int)ECollision_Channel::Wall][i];
+
+			// 충돌 체크
+			if (src->Collision(dest))
+			{
+				src->CallCollisionBegin(dest);
+				dest->CallCollisionBegin(src);
+				return true;
+			}
+		}
+	}
+	return false;
 }

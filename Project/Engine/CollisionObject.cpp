@@ -3,6 +3,7 @@
 #include "MeshRenderer.h"
 #include "Transform.h"
 #include "AssetManager.h"
+#include "BoxCollider.h"
 
 CCollisionObject::CCollisionObject()
 {
@@ -18,6 +19,7 @@ void CCollisionObject::Init(CGameObject* owner)
 	this->SetName(owner->GetName() + L"CO");
 	this->AddComponent(new CTransform);
 	this->AddComponent(new CMeshRenderer);
+	this->AddComponent(new CBoxCollider());
 	this->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 	this->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"DC"));
 	this->GetTransform()->SetRelativeScale(owner->GetMeshRenderer()->GetMesh()->GetMeshSize());

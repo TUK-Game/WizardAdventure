@@ -37,11 +37,12 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 		if (pos[1] < -20.f)
 			continue;
 
-		//for (float& s : size)
-		//{
-		//	if (s < 10.f)
-		//		s = 10.f;
-		//}
+
+
+		for (int i = 0; i < 3; ++i)
+		{
+				size[i] += 10.f;
+		}
 
 		CGameObjectRef object = CObjectUtil::CreateObject();
 		object->GetCollider()->SetCollisionProfile("Wall");

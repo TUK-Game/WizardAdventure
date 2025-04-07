@@ -165,7 +165,11 @@ void CLevel_1::Init()
 #ifdef COLLISION_MESH_DRAW
 		CCollisionObject* co = new CCollisionObject();
 		co->Init(o);
-		this->AddGameObject(co, 10, false);
+		co->AddComponent(new CBoxCollider);
+		co->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Wall"));
+		co->SetInstancing(true);
+		co->SetCheckFrustum(false);
+		this->AddGameObject(co, 11, false);
 #endif
 
 	}

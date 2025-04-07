@@ -23,7 +23,7 @@ public:
 
 public:
     virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
-    Vec3 m_PrevPosition;
+    Vec3 m_Amount;
     Vec3 m_NextPosition;
 
 private:

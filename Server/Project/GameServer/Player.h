@@ -24,7 +24,8 @@ public:
 	virtual void CollisionBegin(CBoxCollider* src, CBoxCollider* dest);
 	virtual void CollisionEvent(CBoxCollider* src, CBoxCollider* dest);
 
-	bool block[4]{};
+	const float m_StepSize = 3;
+	Protocol::Vector3 m_NextAmount;
 
 private:
 	std::weak_ptr<CGameSession>	m_Session;

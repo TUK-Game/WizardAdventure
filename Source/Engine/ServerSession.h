@@ -19,6 +19,7 @@ public:
 	virtual void OnSend(int32 len) override;
 
 	void OnMovePlayer();
+	void OnActPlayer();
 
 private:
 	class CPlayer* m_OwnPlayer;
