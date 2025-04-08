@@ -178,9 +178,15 @@ void CLevel_1::Init()
 	camera->SetName(L"MainCamera");
 	camera->AddComponent(new CTransform);
 	camera->AddComponent(new CCamera);
-#ifdef DEBUG_SOLOPLAY
+#ifndef DEBUG_SOLOPLAY
+	//camera->GetCamera()->SetCameraType(ECamera_Type::Fixed);
+	//camera->GetCamera()->SetTarget(CLevelManager::GetInst()->GetOwnPlayer());
+	camera->GetCamera()->SetFOV(60.f);
+	camera->GetCamera()->SetFar(5000.f);
+	camera->GetTransform()->SetRelativeRotation(49.f, -34.f, 0.f);
+#else
 	camera->GetCamera()->SetTarget(player);
-#endif 
+#endif
 	camera->AddComponent(new CCameraScript);
 	camera->GetCamera()->SetProjType(EProjection_Type::Perspective);
 	camera->GetCamera()->SetPriority(0); // 0 : main camera

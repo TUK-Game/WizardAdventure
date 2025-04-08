@@ -23,7 +23,7 @@ public:
 	void CreateCollisionProfile(std::string name, ECollision_Channel channel);
 
 public:
-	virtual bool Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance) = 0;
+	virtual bool Intersects(const Vec4& rayOrigin, const Vec4& rayDir, OUT float& distance) = 0;
 	virtual void SetMaxMinPos(Vec4 centerPos, Vec3 maxPos, Vec3 minPos, Vec3 offset = Vec3(0.f, 0.f, 0.f)) {}
 	virtual void SetMaxMinPos(Vec3 centerPos, Vec3 maxPos, Vec3 minPos, Vec3 offset = Vec3(0.f, 0.f, 0.f)) {}
 	virtual bool IsFrustum(class CFrustum& frustum) { return false; }

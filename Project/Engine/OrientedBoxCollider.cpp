@@ -12,7 +12,7 @@ COrientedBoxCollider::~COrientedBoxCollider()
 {
 }
 
-bool COrientedBoxCollider::Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance)
+bool COrientedBoxCollider::Intersects(const Vec4& rayOrigin, const Vec4& rayDir, OUT float& distance)
 {
 	return m_BoundingOrientedBox.Intersects(rayOrigin, rayDir, OUT distance);
 }

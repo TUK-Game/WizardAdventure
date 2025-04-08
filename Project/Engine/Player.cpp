@@ -177,7 +177,7 @@ void CPlayer::Attack(int skillIndex)
 {
     m_SkillManager->UseSkill(skillIndex);
 #ifndef DEBUG_SOLOPLAY
-    CNetworkManager::GetInst()->s_GameSession->OnMovePlayer();
+    CNetworkManager::GetInst()->s_GameSession->OnActPlayer();
 #endif 
 
 }

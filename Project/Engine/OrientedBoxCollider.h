@@ -11,7 +11,7 @@ public:
 	BoundingOrientedBox& GetBoundingOrietedBox() { return m_BoundingOrientedBox; }
 
 public:
-	virtual bool Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance);
+	virtual bool Intersects(const Vec4& rayOrigin, const Vec4& rayDir, OUT float& distance);
 	virtual bool IsFrustum(class CFrustum& frustum);
 
 public:

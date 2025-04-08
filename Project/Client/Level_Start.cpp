@@ -13,7 +13,6 @@
 #include <Engine/LevelManager.h>
 #include <Engine/Layer.h>
 #include <Engine/MeshData.h>
-#include <Engine/UIButton.h>
 #include <Engine/Player.h>
 #include <Engine/PlayerScript.h>
 #include <Engine/Flag.h>
@@ -24,7 +23,8 @@
 #include <Engine/Device.h>
 #include <Engine/RenderTargetGroup.h>
 #include <Engine/SubLevel.h>
-#include <Engine/BoxCollider.h>
+#include <Engine/Engine.h>
+#include <Engine/NetworkManager.h>
 #include <Engine/PlayWidgetWindow.h>
 #include <Engine/Animator.h>
 #include <Engine/TestWidget.h>
@@ -37,6 +37,7 @@ CLevel_Start::CLevel_Start()
 
 CLevel_Start::~CLevel_Start()
 {
+
 }
 
 void CLevel_Start::Init()

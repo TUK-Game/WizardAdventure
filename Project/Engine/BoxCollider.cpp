@@ -17,7 +17,7 @@ CBoxCollider::~CBoxCollider()
 {
 }
 
-bool CBoxCollider::Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance)
+bool CBoxCollider::Intersects(const Vec4& rayOrigin, const Vec4& rayDir, OUT float& distance)
 {
 	return m_BoundingBox.Intersects(rayOrigin, rayDir, OUT distance); 
 }

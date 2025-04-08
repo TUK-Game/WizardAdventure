@@ -10,6 +10,9 @@ public:
     ~CCameraScript();
 
 public:
+    void SetTransform(class CTransform* transform) { m_TargetTransform = transform; }
+
+public:
     virtual void Begin() override;
     virtual void Update() override;
 

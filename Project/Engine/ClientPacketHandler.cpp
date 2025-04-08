@@ -9,6 +9,7 @@
 #include "NetworkManager.h"
 #include "ServerSession.h"
 #include "Transform.h"
+#include "CameraScript.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -51,7 +52,6 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	CLevelManager::GetInst()->SetOwnPlayer(player);
 	CLevelManager::GetInst()->SetPlayer(player, id);
 	CRenderManager::GetInst()->GetMainCamera()->SetTarget(player);
-
 	CNetworkManager::GetInst()->s_GameSession->SetOwnPlayer(player);
 	CNetworkManager::GetInst()->s_GameSession->SetClientID(id);
 	return true;
