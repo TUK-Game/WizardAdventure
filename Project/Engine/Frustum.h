@@ -15,7 +15,6 @@ class CFrustum
 {
 public:
 	void FinalUpdate();
-	bool ContainsSphere(const Vec3& pos, float radius);
 	bool IsInFrustum(BoundingBox& box);
 	bool IsInFrustum(BoundingOrientedBox& box);
 private:

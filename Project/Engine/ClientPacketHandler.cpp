@@ -45,7 +45,7 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	CPlayer* player = new CPlayer(EPlayerAttribute::Fire, true);
 
 	const Protocol::Vector3& position = pkt.player().object_info().pos_info().position();
-	player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z() );
+	player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
 
 	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
 	CLevelManager::GetInst()->SetOwnPlayer(player);

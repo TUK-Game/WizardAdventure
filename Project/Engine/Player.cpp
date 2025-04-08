@@ -39,7 +39,7 @@ CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
    GetTransform()->SetRelativePosition(11240.f, 20, 1127);
    m_Amount = Vec3(11240.f, 20.f, 1127.f);
    m_NextPosition = Vec3(11240.f, 20.f, 1127.f);
-   GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
+   GetCollider()->SetMaxMinPos(Vec3(11240.f, 20.f, 1127.f), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
    if(Owner)
        AddComponent(new CPlayerScript);
 
@@ -80,6 +80,7 @@ void CPlayer::Begin()
 {
     CGameObject::Begin();
     m_StateManager->ChangeState(this, EState_Type::Idle);
+    m_Interpolator->SetTarget(GetTransform()->GetRelativePosition());
 }
 
 void CPlayer::Update()

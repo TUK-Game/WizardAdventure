@@ -15,7 +15,7 @@ public:
             m_PrevPos = newPos;
             m_TargetPos = newPos;
             m_ElapsedTime = 0.f;
-            m_Duration = 0.1f;
+            m_Duration = 1.f;
             m_LastRecvTime = now;
             m_HasPrevRecvTime = true;
             return;

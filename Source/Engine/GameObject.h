@@ -52,7 +52,6 @@ public:
     bool GetCheckFrustum() { return m_CheckFrustum; }
 
 
-    void SetStatic(bool flag) { m_Static = flag; }
     Protocol::MoveState GetStateForProtocol();
     bool IsStatic() { return m_Static; }
 

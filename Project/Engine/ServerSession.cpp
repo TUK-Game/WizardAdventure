@@ -116,28 +116,4 @@ void CServerSession::OnActPlayer()
 	Send(SendBuffer);
 }
 
-//Protocol::C_MOVE pkt;
-//
-//Protocol::PlayerMoveInfo* info = new Protocol::PlayerMoveInfo();
-//info->set_player_id(m_Id);
-//
-//Protocol::Vector3* pos = new Protocol::Vector3();
-//Protocol::Vector3* rot = new Protocol::Vector3();
-//
-//CTransform* transform = m_OwnPlayer->GetTransform();
-//Vec3 playerPos = transform->GetRelativePosition();
-//Vec3 playerRotation = transform->GetRelativeRotation();
-//pos->set_x(playerPos.x);
-//pos->set_y(playerPos.y);
-//pos->set_z(playerPos.z);
-//
-//rot->set_x(playerRotation.x);
-//rot->set_y(playerRotation.y);
-//rot->set_z(playerRotation.z);
-//
-//pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_position(pos);
-//pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_rotation(rot);
-//pkt.mutable_player_move_info()->mutable_pos_info()->set_state(m_OwnPlayer->GetStateForProtocol());
-//
-//std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
-//Send(SendBuffer);
+	
