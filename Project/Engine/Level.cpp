@@ -35,7 +35,8 @@ void CLevel::Begin()
 	{
 		if (i == 10)
 		{
-			m_SubLevel->Begin();
+			if (m_SubLevel)
+				m_SubLevel->Begin();
 		}
 		else
 			m_Layer[i]->Begin();
@@ -48,7 +49,8 @@ void CLevel::Update()
 	{
 		if (i == 10)
 		{
-			m_SubLevel->Update();
+			if (m_SubLevel)
+				m_SubLevel->Update();
 		}
 		else
 			m_Layer[i]->Update();
@@ -67,7 +69,8 @@ void CLevel::FinalUpdate()
 	{
 		if (i == 10)
 		{
-			m_SubLevel->FinalUpdate();
+			if (m_SubLevel)
+				m_SubLevel->FinalUpdate();
 		}
 		else
 			m_Layer[i]->FinalUpdate();

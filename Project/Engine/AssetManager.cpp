@@ -155,6 +155,10 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"Fireball.png");
 	AddAsset(L"Fireball", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Start.png");
+	AddAsset(L"Start", tex);
 	return S_OK;
 }
 
@@ -194,6 +198,11 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Fireball"));
 	AddAsset(L"Fireball", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Start"));
+	AddAsset(L"Start", material);
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Skybox"));
