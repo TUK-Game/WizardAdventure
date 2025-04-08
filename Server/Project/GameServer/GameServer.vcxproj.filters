@@ -37,6 +37,12 @@
     <Filter Include="01. Game\Room">
       <UniqueIdentifier>{089fb071-9adf-4d9e-84dd-8fa38d24d71e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Json">
+      <UniqueIdentifier>{d3fd2021-b339-4d2b-a971-9121d0a4202a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Collision">
+      <UniqueIdentifier>{0f110ed1-b7a3-499f-bedf-4143b88fe374}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Util.cpp">
@@ -82,6 +88,24 @@
     <ClCompile Include="Room.cpp">
       <Filter>01. Game\Room</Filter>
     </ClCompile>
+    <ClCompile Include="JsonLoader.cpp">
+      <Filter>05. Json</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>06. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>06. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelCollision.cpp">
+      <Filter>06. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="CreatureCollider.cpp">
+      <Filter>06. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>99. Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -125,6 +149,24 @@
     </ClInclude>
     <ClInclude Include="Room.h">
       <Filter>01. Game\Room</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonLoader.h">
+      <Filter>05. Json</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>06. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>06. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelCollision.h">
+      <Filter>06. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="CreatureCollider.h">
+      <Filter>06. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>99. Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

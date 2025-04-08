@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "StateManager.h"
 #include "GameObject.h"
+#include "ServerSession.h"
+#include "NetworkManager.h"
 
 CStateManager::~CStateManager()
 {
@@ -17,7 +19,9 @@ void CStateManager::Update(CGameObject* entity, float deltaTime)
 void CStateManager::ChangeState(CGameObject* entity, EState_Type newState)
 {
     if (m_CurrentState)
+    {
         m_CurrentState->Exit(entity);
+    }
 
     m_CurrentState = m_States[newState];
     if (m_CurrentState)
@@ -44,6 +48,9 @@ void CStateManager::HandleEvent(CGameObject* owner, const std::string& event)
         {
             EState_Type nextType = m_TransitionTable[currentType][event];
             ChangeState(owner, nextType);
+#ifndef DEBUG_SOLOPLAY
+            CNetworkManager::GetInst()->s_GameSession->OnActPlayer();
+#endif 
         }
     }
 }

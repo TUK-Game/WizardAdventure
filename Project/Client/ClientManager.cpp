@@ -5,6 +5,8 @@
 #include <Engine/Engine.h>
 #include <Engine/NetworkManager.h>
 #include <Engine/SaveLoadManager.h>
+#include <Engine/ServerSession.h>
+#include <Engine/JsonConverter.h>
 //#include <ImGui/imgui_impl_win32.h>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -14,10 +16,10 @@ CClientManager::CClientManager()
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     _CrtSetBreakAlloc(100);
-    //if (GetModuleHandle(L"WinPixGpuCapturer.dll") == 0)
-    //{
-    //    LoadLibrary(GetLatestWinPixGpuCapturerPath_Cpp17().c_str());
-    //}
+    if (GetModuleHandle(L"WinPixGpuCapturer.dll") == 0)
+    {
+        LoadLibrary(GetLatestWinPixGpuCapturerPath_Cpp17().c_str());
+    }
 }
 
 CClientManager::~CClientManager()
@@ -53,12 +55,18 @@ LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         {
         case VK_NUMPAD0:
         {
+#ifndef DEBUG_SOLOPLAY
             if (CEngine::GetInst()->GetNetworkType() == ENetwork_Type::Offline)
             {
                 CEngine::GetInst()->SetNetworkType(ENetwork_Type::Online);
                 CNetworkManager::GetInst()->Init();
             }
-
+#endif
+            break;
+        }
+        case VK_NUMPAD7:
+        {
+            CJsonConverter::GetInst()->SaveMapCollision(L"Level_1");
             break;
         }
         case VK_NUMPAD8:
@@ -92,7 +100,13 @@ LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     }
     break;
     case WM_DESTROY:
+    {
+        if (CEngine::GetInst()->GetNetworkType() == ENetwork_Type::Online)
+        {
+            CNetworkManager::GetInst()->s_GameSession->OnDisconnected();
+        }
         PostQuitMessage(0);
+    }
         break;
     default:
         if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))

@@ -111,7 +111,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Project\ServerCore\;$(SolutionDir)3rdParty\Protobuf\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Project\ServerCore\;$(SolutionDir)3rdParty\Protobuf\;$(SolutionDir)3rdParty\Json\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -133,7 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Project\ServerCore\;$(SolutionDir)3rdParty\Protobuf\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Project\ServerCore\;$(SolutionDir)3rdParty\Protobuf\;$(SolutionDir)3rdParty\Json\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -150,11 +150,16 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BoxCollider.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Creature.cpp" />
+    <ClCompile Include="CreatureCollider.cpp" />
     <ClCompile Include="Enum.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="JsonLoader.cpp" />
+    <ClCompile Include="LevelCollision.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameSession.cpp" />
     <ClCompile Include="GameSessionManager.cpp" />
@@ -176,13 +181,19 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoxCollider.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Creature.h" />
+    <ClInclude Include="CreatureCollider.h" />
     <ClInclude Include="Enum.pb.h" />
     <ClInclude Include="GameSession.h" />
     <ClInclude Include="GameSessionManager.h" />
+    <ClInclude Include="JsonLoader.h" />
+    <ClInclude Include="LevelCollision.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ObjectUtil.h" />
@@ -192,6 +203,7 @@
     <ClInclude Include="Room.h" />
     <ClInclude Include="ServerPacketHandler.h" />
     <ClInclude Include="Struct.pb.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>

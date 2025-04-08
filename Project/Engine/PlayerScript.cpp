@@ -6,6 +6,7 @@
 #include "Animator.h"
 #include <iostream>
 
+
 void CPlayerScript::Update()
 {
     CPlayer* player = (CPlayer*)GetOwner();

@@ -34,9 +34,37 @@ message S_LEAVE_GAME
 
 }
 
+// 플레이어의 움직임
+message C_MOVE
+{
+	PlayerMoveInfo player_move_info = 1;
+	Vector3 dir = 2;
+}
+
+message S_MOVE
+{
+	PlayerMoveInfo player_move_info = 1;
+}
+
+// 플레이어만 스포인가 오브젝트 전체가 스폰인가?
 message S_SPAWN
 {
 	repeated ObjectInfo objects = 1;
+}
+
+message S_SPAWN_NEW_PLAYER
+{
+	PlayerInfo player = 1;
+}
+
+message S_SPAWN_EXISTING_PLAYER
+{
+	repeated PlayerInfo player = 1;
+}
+
+message S_DESPAWN_PLAYER
+{
+	uint64 player_ids = 1;
 }
 
 message S_DESPAWN

@@ -12,7 +12,7 @@ public:
 
 public:
 	virtual bool Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance);
-	virtual bool IsFrustum(class CFrustum frustum);
+	virtual bool IsFrustum(class CFrustum& frustum);
 
 public:
 	virtual void FinalUpdate() override;

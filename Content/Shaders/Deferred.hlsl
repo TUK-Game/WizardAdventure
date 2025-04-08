@@ -94,7 +94,7 @@ PS_OUT PS_Main(VS_OUT input)
 
     output.position = float4(input.viewPos.xyz, 0.f);
     output.normal = float4(viewNormal.xyz, 0.f);
-    if (input.worldPos.y < -10.f)
+    //if (input.worldPos.y < -10.f)
         color = Fog(color, input.worldPos.xyz);
     output.color = color;
 

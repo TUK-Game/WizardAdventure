@@ -99,78 +99,50 @@ void CLevel_1::Init()
 		light->SetName(L"DirectionalLight");
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
-		light->GetTransform()->SetRelativePosition(0.f, 5000.f, 100.f);
+		light->GetTransform()->SetRelativePosition(6000.f, 10000.f, 6000.f);
 		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
 		light->GetLight()->SetAmbient(Vec3(0.7f, 0.7f, 0.7f));
 		light->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
+		light->GetLight()->GetShadowCamera()->GetCamera()->SetFar(1000000);
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
 		this->AddGameObject(light, 4, false);
 	}
 
-	CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
-	std::vector<CGameObject*> obj = data->Instantiate(ECollision_Channel::Player);
-	CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
-	player->SetName(L"Mage");
-	player->AddComponent(new CTransform);
-	player->AddComponent(new CBoxCollider);
-	player->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
-	player->GetTransform()->SetRelativePosition(11240, 20, 1127);
-	player->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
-	player->AddComponent(new CPlayerScript);
+#ifdef DEBUG_SOLOPLAY
+	CPlayer* player = new CPlayer(EPlayerAttribute::Fire, true);
+	this->AddGameObject(player, 3, false);	
+	CLevelManager::GetInst()->SetOwnPlayer(player);
+#endif // DEBUG_SOLOPLAY
 
-#ifdef COLLISION_MESH_DRAW
-	CCollisionObject* co = new CCollisionObject();
-	co->InitToChild(player, Vec3(0, 100, 0), Vec3(100, 200, 24));
-	player->AddChild(co);
-	#endif
-
-	for (auto& o : obj)
-	{
-		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
-		o->SetName(name);
-
-		o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
-		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-		o->GetTransform()->SetRelativeRotation(rot);
-		//o->GetTransform()->SetRelativePosition(2500.f, 577.f, -105.f);
-		//o->AddComponent(new CTestPlayer);
-		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		o->SetCheckFrustum(true);
-		o->SetInstancing(false);
-		player->AddChild(o);
-	}
-	this->AddGameObject(player, 3, false);
-	CLevelManager::GetInst()->SetPlayer(player);
-
-	{
-		CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
-		std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
-		CMonster* monster = new CMonster();
-		monster->SetName(L"Monster");
-		monster->AddComponent(new CTransform);
-		monster->AddComponent(new CBoxCollider);
-		monster->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player")); // temp
-		monster->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
-		monster->GetTransform()->SetRelativePosition(11240, 20, 1100);
-		for (auto& o : obj2)
-		{
-			std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
-			o->SetName(name);
-			Vec3 rot = o->GetTransform()->GetRelativeRotation();
-			o->GetTransform()->SetRelativeRotation(rot);
-			//o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
-			o->SetCheckFrustum(true);
-			o->SetInstancing(false);
-			monster->AddChild(o);
-		}
-		this->AddGameObject(monster, 3, false);
-	}
-
-
-
+//	{
+//		CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
+//		std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
+//		CMonster* monster = new CMonster();
+//		monster->SetName(L"Monster");
+//		monster->AddComponent(new CTransform);
+//		monster->AddComponent(new CBoxCollider);
+//		monster->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player")); // temp
+//		monster->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
+//		monster->GetTransform()->SetRelativePosition(11240, 20, 1100);
+//		for (auto& o : obj2)
+//		{
+//			std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
+//			o->SetName(name);
+//			Vec3 rot = o->GetTransform()->GetRelativeRotation();
+//			o->GetTransform()->SetRelativeRotation(rot);
+//			//o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
+//			o->SetCheckFrustum(true);
+//			o->SetInstancing(false);
+//			monster->AddChild(o);
+//		}
+//		this->AddGameObject(monster, 3, false);
+//	}
+//
+//
+//
 	CMeshData* data1 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"level_1");
 	std::vector<CGameObject*> obj1 = data1->Instantiate(ECollision_Channel::Wall);
 	int m = 0;
@@ -193,7 +165,11 @@ void CLevel_1::Init()
 #ifdef COLLISION_MESH_DRAW
 		CCollisionObject* co = new CCollisionObject();
 		co->Init(o);
-		this->AddGameObject(co, 10, false);
+		co->AddComponent(new CBoxCollider);
+		co->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Wall"));
+		co->SetInstancing(true);
+		co->SetCheckFrustum(false);
+		this->AddGameObject(co, 11, false);
 #endif
 
 	}
@@ -202,14 +178,16 @@ void CLevel_1::Init()
 	camera->SetName(L"MainCamera");
 	camera->AddComponent(new CTransform);
 	camera->AddComponent(new CCamera);
+#ifdef DEBUG_SOLOPLAY
 	camera->GetCamera()->SetTarget(player);
+#endif 
 	camera->AddComponent(new CCameraScript);
 	camera->GetCamera()->SetProjType(EProjection_Type::Perspective);
 	camera->GetCamera()->SetPriority(0); // 0 : main camera
 	camera->GetCamera()->CheckLayerAll();
 	camera->GetCamera()->CheckLayer(4);
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
-	this->AddGameObject(camera, 0, false);
+	this->AddGameObject(camera, 15, false);
 
 #pragma region UI MAP
 

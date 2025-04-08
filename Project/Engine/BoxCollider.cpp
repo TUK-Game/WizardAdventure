@@ -22,7 +22,7 @@ bool CBoxCollider::Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance)
 	return m_BoundingBox.Intersects(rayOrigin, rayDir, OUT distance); 
 }
 
-bool CBoxCollider::IsFrustum(CFrustum frustum)
+bool CBoxCollider::IsFrustum(CFrustum& frustum)
 {
 	if (!frustum.IsInFrustum(m_BoundingBox))
 	{

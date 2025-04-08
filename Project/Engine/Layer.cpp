@@ -1,6 +1,8 @@
 ﻿#include "pch.h"
 #include "Layer.h"
 #include "GameObject.h"
+#include "LevelManager.h"
+#include "Level.h"
 
 CLayer::CLayer()
 	: m_LayerIndex(-1)
@@ -76,8 +78,11 @@ void CLayer::RemoveGameObject(CGameObject* object)
 {
 	if (!object) return;
 
-	// 객체 삭제 전 부모-자식 관계 정리
-	object->Destroy(); // 모든 자식 삭제 + 부모 관계 해제
+	auto childs = object->GetChild();
+	for (CGameObject* child : childs)
+	{
+		CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObject(child);
+	}
 
 	// 모든 오브젝트 벡터에서 제거
 	m_vecObjects.erase(std::remove(m_vecObjects.begin(), m_vecObjects.end(), object), m_vecObjects.end());

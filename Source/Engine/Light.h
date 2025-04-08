@@ -19,6 +19,7 @@ public:
 	Vec3 GetDiffuse() { return Vec3(m_Light.color.diffuse.x, m_Light.color.diffuse.y, m_Light.color.diffuse.z); }
 	Vec3 GetAmbient() { return Vec3(m_Light.color.ambient.x, m_Light.color.ambient.y, m_Light.color.ambient.z); }
 	Vec3 GetSpecular() { return Vec3(m_Light.color.specular.x, m_Light.color.specular.y, m_Light.color.specular.z); }
+	CGameObject* GetShadowCamera() { return m_ShadowCamera; }
 
 	void SetLightDirection(Vec3 direction);
 

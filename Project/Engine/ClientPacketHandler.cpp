@@ -1,6 +1,14 @@
 #include "pch.h"
 #include "ClientPacketHandler.h"
 #include "Protocol.pb.h"
+#include "LevelManager.h"
+#include "Player.h"
+#include "Level.h"
+#include "RenderManager.h"
+#include "Camera.h"
+#include "NetworkManager.h"
+#include "ServerSession.h"
+#include "Transform.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -15,9 +23,10 @@ bool Handle_S_LOGIN(CPacketSessionRef& session, Protocol::S_LOGIN& pkt)
 	{
 		std::cout << "로그인 성공!" << std::endl;
 		// 입장
-		//Protocol::C_ENTER_GAME enterPkt;
-		//auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterPkt);
-		//session->Send(sendBuffer);
+		Protocol::C_ENTER_GAME enterPkt;
+
+		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterPkt);
+		session->Send(sendBuffer);
 		return true;
 	}
 
@@ -29,11 +38,96 @@ bool Handle_S_LOGIN(CPacketSessionRef& session, Protocol::S_LOGIN& pkt)
 
 bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt)
 {
+	std::cout << "등장" << std::endl;
+	// 플레이어 생성
+	UINT64 id = pkt.player().player_id();
+
+	CPlayer* player = new CPlayer(EPlayerAttribute::Fire, true);
+
+	const Protocol::Vector3& position = pkt.player().object_info().pos_info().position();
+	player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z() );
+
+	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
+	CLevelManager::GetInst()->SetOwnPlayer(player);
+	CLevelManager::GetInst()->SetPlayer(player, id);
+	CRenderManager::GetInst()->GetMainCamera()->SetTarget(player);
+
+	CNetworkManager::GetInst()->s_GameSession->SetOwnPlayer(player);
+	CNetworkManager::GetInst()->s_GameSession->SetClientID(id);
 	return true;
 }
 
+bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW_PLAYER& pkt)
+{
+	// 1. 입장한 플레이어 받기
+	const Protocol::PlayerInfo& info = pkt.player();
+
+	CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+
+	const Protocol::Vector3& position = pkt.player().object_info().pos_info().position();
+	player->SetName(L"Player" + std::to_wstring(info.player_id()));
+	player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
+	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
+	CLevelManager::GetInst()->SetPlayer(player, info.player_id());
+
+	return true;
+}
+
+bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_EXISTING_PLAYER& pkt)
+{
+	// 2. 처음 입장할 떄 이미 있는 플레이어 받기
+	int playerNum = pkt.player_size();
+	std::cout << "현재 수: " << playerNum << std::endl;
+	for (int i = 0; i < playerNum; ++i)
+	{
+		const Protocol::PlayerInfo& info = pkt.player(i);
+
+		CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+
+		const Protocol::Vector3& position = info.object_info().pos_info().position();
+		player->SetName(L"Player" + std::to_wstring(info.player_id()));
+		player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
+
+		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
+		CLevelManager::GetInst()->SetPlayer(player, info.player_id());
+	}
+	return true;
+}
+
+
 bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt)
 {
+	std::cout << "======================퇴장======================" << std::endl;
+	return true;
+}
+
+bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
+{
+	UINT64 id = pkt.player_move_info().player_id();
+
+	const Protocol::Vector3& position = pkt.player_move_info().pos_info().position();
+	const Protocol::Vector3& rotation = pkt.player_move_info().pos_info().rotation();
+	Protocol::MoveState state = pkt.player_move_info().pos_info().state();
+	//CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
+	((CPlayer*)CLevelManager::GetInst()->GetPlayer(id))->SetTarget(Vec3(position.x(), position.y(), position.z()));
+	CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(rotation.x(), rotation.y(), rotation.z());
+	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
+	std::cout << position.x() << " " << position.y() << " " << position.z() << '\n';
+	return true;
+}
+
+bool Handle_S_DESPAWN_PLAYER(CPacketSessionRef& session, Protocol::S_DESPAWN_PLAYER& pkt)
+{
+	// 퇴장한 플레이어 데이터 삭제
+	UINT64 id = pkt.player_ids();
+	std::cout << id << "번 플레이어가 퇴장했음" << std::endl;
+
+	auto player = CLevelManager::GetInst()->GetPlayer(id);
+	if (player)
+	{
+		CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObject(player);
+	}
+	CLevelManager::GetInst()->SetPlayer(nullptr, id);
 	return true;
 }
 
@@ -41,6 +135,7 @@ bool Handle_S_SPAWN(CPacketSessionRef& session, Protocol::S_SPAWN& pkt)
 {
 	return true;
 }
+
 
 bool Handle_S_DESPAWN(CPacketSessionRef& session, Protocol::S_DESPAWN& pkt)
 {

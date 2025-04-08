@@ -223,6 +223,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="InstancingBuffer.h" />
     <ClInclude Include="InstancingManager.h" />
     <ClInclude Include="JHDLoader.h" />
+    <ClInclude Include="JsonConverter.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelCollision.h" />
@@ -378,6 +379,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="InstancingBuffer.cpp" />
     <ClCompile Include="InstancingManager.cpp" />
     <ClCompile Include="JHDLoader.cpp" />
+    <ClCompile Include="JsonConverter.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelCollision.cpp" />

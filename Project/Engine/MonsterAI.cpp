@@ -27,7 +27,7 @@ void CMonsterAI::FinalUpdate()
 void CMonsterAI::DetectTarget()
 {
     // 플레이어 타겟 설정(임시)
-    m_Target = CLevelManager::GetInst()->GetPlayer();
+    m_Target = CLevelManager::GetInst()->GetOwnPlayer();
 }
 
 void CMonsterAI::UpdateAI()

@@ -25,6 +25,7 @@ USING_SHARED_PTR(CClientService);
 USING_SHARED_PTR(CSendBuffer);
 USING_SHARED_PTR(CJob);
 USING_SHARED_PTR(CJobQueue);
+USING_SHARED_PTR(CTimer);
 
 #define size16(val)		static_cast<int16>(sizeof(val))
 #define size32(val)		static_cast<int32>(sizeof(val))

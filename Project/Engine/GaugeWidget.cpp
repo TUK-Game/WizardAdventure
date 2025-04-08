@@ -8,7 +8,7 @@
 
 bool CGaugeWidget::Init()
 {
-	m_OwnerPlayer = CLevelManager::GetInst()->GetPlayer();
+	m_OwnerPlayer = CLevelManager::GetInst()->GetOwnPlayer();
 	AddComponent(new CMeshRenderer);
 	AddComponent(new CTransform);
 	GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));

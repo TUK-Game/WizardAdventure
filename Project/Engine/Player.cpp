@@ -14,19 +14,66 @@
 #include "SkillManager.h"
 #include <iostream>
 #include "Engine.h"
-
+#include "MeshData.h"
+#include "AssetManager.h"
+#include "BoxCollider.h"
+#include "CollisionManager.h"
+#include "PlayerScript.h"
+#include "MeshRenderer.h"
+#include "NetworkManager.h"
+#include "ServerSession.h"
 //#include <Engine/Engine.h>
 
-CPlayer::CPlayer(EPlayerAttribute attribute)
-    : m_Attribute(attribute), m_SkillManager(new CSkillManager(attribute, this))
+CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
+    : m_Attribute(attribute), m_SkillManager(new CSkillManager(attribute, this)), m_Interpolator(new CInterpolator())
 {
     CreateStateManager();
+
+    CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
+    std::vector<CGameObject*> obj = data->Instantiate(ECollision_Channel::Player);
+
+   SetName(L"Mage");
+   AddComponent(new CTransform);
+   AddComponent(new CBoxCollider);
+   GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
+   GetTransform()->SetRelativePosition(11240.f, 20, 1127);
+   m_Amount = Vec3(11240.f, 20.f, 1127.f);
+   m_NextPosition = Vec3(11240.f, 20.f, 1127.f);
+   GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
+   if(Owner)
+       AddComponent(new CPlayerScript);
+
+#ifdef COLLISION_MESH_DRAW
+    CCollisionObject* co = new CCollisionObject();
+    co->InitToChild(player, Vec3(0, 100, 0), Vec3(100, 200, 24));
+    player->AddChild(co);
+#endif
+
+    for (auto& o : obj)
+    {
+        std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
+        o->SetName(name);
+
+        o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
+        Vec3 rot = o->GetTransform()->GetRelativeRotation();
+        o->GetTransform()->SetRelativeRotation(rot);
+        //o->GetTransform()->SetRelativePosition(2500.f, 577.f, -105.f);
+        //o->AddComponent(new CTestPlayer);
+        //o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+        o->SetCheckFrustum(true);
+        o->SetInstancing(false);
+        this->AddChild(o);
+    }
+
+    Begin();
 }
 
 CPlayer::~CPlayer()
 {
     if (m_SkillManager)
         delete m_SkillManager;
+    if (m_Interpolator)
+        delete m_Interpolator;
 }
 
 void CPlayer::Begin()
@@ -37,9 +84,16 @@ void CPlayer::Begin()
 
 void CPlayer::Update()
 {
+    float time = DELTA_TIME;
     if (m_StateManager) {
-        m_StateManager->Update(this, DELTA_TIME);
+        m_StateManager->Update(this, time);
     }
+#ifndef DEBUG_SOLOPLAY
+    m_Interpolator->Update(time);
+    GetTransform()->SetRelativePosition((m_Interpolator->GetInterpolatedPos()));
+#endif // DEBUG_SOLOPLAY
+
+  
     CGameObject::Update();
 }
 
@@ -101,18 +155,30 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
     {
         moveDir.Normalize(); 
         m_currentMoveDir = moveDir;
-        transform->SetRelativePosition(transform->GetRelativePosition() + (moveDir * m_Speed * CEngine::GetInst()->GetDeltaTime()));
+        m_Amount = moveDir * m_Speed * CEngine::GetInst()->GetDeltaTime();
+        m_NextPosition = transform->GetRelativePosition() + (moveDir * m_Speed * CEngine::GetInst()->GetDeltaTime());
+#ifdef DEBUG_SOLOPLAY
+        transform->SetRelativePosition(transform->GetRelativePosition() + m_Amount);
+#endif
 
         if (shouldRotate) {
             float angle = atan2(moveDir.x, moveDir.z) * (180.0f / XM_PI); 
             transform->SetRelativeRotation(0.f, angle + 180.f, 0.f);
         }
+#ifndef DEBUG_SOLOPLAY
+        if(m_StateManager->GetCurrentStateType() != EState_Type::Dash)
+            CNetworkManager::GetInst()->s_GameSession->OnMovePlayer();
+#endif 
     }
 }
 
 void CPlayer::Attack(int skillIndex)
 {
     m_SkillManager->UseSkill(skillIndex);
+#ifndef DEBUG_SOLOPLAY
+    CNetworkManager::GetInst()->s_GameSession->OnMovePlayer();
+#endif 
+
 }
 
 void CPlayer::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)

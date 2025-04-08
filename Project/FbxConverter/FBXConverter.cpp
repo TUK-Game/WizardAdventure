@@ -393,16 +393,16 @@ std::vector<float> CFBXConverter::GetNormal(FbxMesh* mesh, uint32_t controlPoint
         case FbxGeometryElement::eDirect:
         {
             result[0] = static_cast<float>(vertexNormal->GetDirectArray().GetAt(controlPointIndex).mData[0]);
-            result[1] = static_cast<float>(vertexNormal->GetDirectArray().GetAt(controlPointIndex).mData[1]);
-            result[2] = -static_cast<float>(vertexNormal->GetDirectArray().GetAt(controlPointIndex).mData[2]);
+            result[1] = static_cast<float>(vertexNormal->GetDirectArray().GetAt(controlPointIndex).mData[2]);
+            result[2] = -static_cast<float>(vertexNormal->GetDirectArray().GetAt(controlPointIndex).mData[1]);
         }
         break;
         case FbxGeometryElement::eIndexToDirect:
         {
             int index = vertexNormal->GetIndexArray().GetAt(controlPointIndex); // 인덱스를 얻어온다.
             result[0] = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[0]);
-            result[1] = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[1]);
-            result[2] = -static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[2]);
+            result[1] = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[2]);
+            result[2] = -static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[1]);
         }
         break;
         }
@@ -412,16 +412,16 @@ std::vector<float> CFBXConverter::GetNormal(FbxMesh* mesh, uint32_t controlPoint
         case FbxGeometryElement::eDirect:
         {
             result[0] = static_cast<float>(vertexNormal->GetDirectArray().GetAt(vertexCounter).mData[0]);
-            result[1] = static_cast<float>(vertexNormal->GetDirectArray().GetAt(vertexCounter).mData[1]);
-            result[2] = -static_cast<float>(vertexNormal->GetDirectArray().GetAt(vertexCounter).mData[2]);
+            result[1] = static_cast<float>(vertexNormal->GetDirectArray().GetAt(vertexCounter).mData[2]);
+            result[2] = -static_cast<float>(vertexNormal->GetDirectArray().GetAt(vertexCounter).mData[1]);
         }
         break;
         case FbxGeometryElement::eIndexToDirect:
         {
             int index = vertexNormal->GetIndexArray().GetAt(vertexCounter); // 인덱스를 얻어온다.
             result[0] = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[0]);
-            result[1] = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[1]);
-            result[2] = -static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[2]);
+            result[1] = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[2]);
+            result[2] = -static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[1]);
         }
         break;
         }

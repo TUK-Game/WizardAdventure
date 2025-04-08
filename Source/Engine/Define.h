@@ -37,6 +37,7 @@ private:\
 #define TEXTURE_PATH	L"TexturePath"
 #define SOUND_PATH		L"SoundPath"
 #define MAP_PATH		L"MapPath"
+#define JSON_PATH		L"JsonPath"
 
 
 /*----------
@@ -73,8 +74,11 @@ private:\
 
 #define READY_IMGUI
 
+#define DEBUG_SOLOPLAY
+
 #define MAX_OBJECTS_SUBLEVEL 200
 
+#define MAX_PLAYERS 4
 
 /*----------
 	Random

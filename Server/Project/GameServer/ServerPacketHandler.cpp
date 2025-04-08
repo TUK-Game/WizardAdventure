@@ -53,3 +53,32 @@ bool Handle_C_LEAVE_GAME(CPacketSessionRef& session, Protocol::C_LEAVE_GAME& pkt
 
 	return true;
 }
+
+bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
+{
+	// TODO - 움직임 업데이트 로직 및 패킷 재전송
+	// 1. 움직임 업데이트 -> 룸에서 업데이트 하도록 실행
+	// 2. 플레이어 위치정보 포장해서 재전송
+	auto gameSession = static_pointer_cast<CGameSession>(session);
+
+	CPlayerRef player = gameSession->Player.load();
+	if (player == nullptr)
+		return false;
+
+	const Protocol::Vector3& pos = pkt.player_move_info().pos_info().position();
+	const Protocol::Vector3& rot = pkt.player_move_info().pos_info().rotation();
+	Protocol::Vector3 dir = pkt.dir();
+
+	player->m_NextAmount.CopyFrom(pos);
+
+	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_x(rot.x());
+	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_y(rot.y());
+	player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_z(rot.z());
+	player->SetDir(dir);
+	auto state = pkt.player_move_info().pos_info().state();
+	player->SetState(state);
+
+	g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
+
+	return true;
+}

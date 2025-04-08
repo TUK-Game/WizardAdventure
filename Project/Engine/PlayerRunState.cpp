@@ -4,6 +4,9 @@
 #include "Animator.h"
 #include "InputManager.h"
 #include "StateManager.h"
+#include "LevelManager.h"
+#include "ServerSession.h"
+#include "NetworkManager.h"
 
 void CPlayerRunState::Enter(CGameObject* entity)
 {
@@ -20,6 +23,9 @@ void CPlayerRunState::Enter(CGameObject* entity)
 void CPlayerRunState::Update(CGameObject* entity, float deltaTime)
 {
     CPlayer* player = dynamic_cast<CPlayer*>(entity);
+
+    if (CLevelManager::GetInst()->GetOwnPlayer() != player)
+        return;
 
     Vec3 moveDir = Vec3(0, 0, 0);
     if (KEY_PUSH(EKey::W))    moveDir.z += 1;
