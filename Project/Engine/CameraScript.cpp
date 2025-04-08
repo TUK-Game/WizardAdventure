@@ -25,7 +25,7 @@ void CCameraScript::Begin()
 {
 	if(GetOwner()->GetCamera()->GetTarget())
 		m_TargetTransform = GetOwner()->GetCamera()->GetTarget()->GetTransform();
-	m_Offset = Vec3(420, 1028, -600);
+	m_Offset = Vec3(462.0f, 1130.2f, -659.8f);
 }
 
 void CCameraScript::Update()
