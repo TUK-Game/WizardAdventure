@@ -109,7 +109,7 @@ bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 	const Protocol::Vector3& rotation = pkt.player_move_info().pos_info().rotation();
 	Protocol::MoveState state = pkt.player_move_info().pos_info().state();
 	//CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
-	((CPlayer*)CLevelManager::GetInst()->GetPlayer(id))->m_temp.SetTarget(Vec3(position.x(), position.y(), position.z()));
+	((CPlayer*)CLevelManager::GetInst()->GetPlayer(id))->SetTarget(Vec3(position.x(), position.y(), position.z()));
 	CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(rotation.x(), rotation.y(), rotation.z());
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
 	std::cout << position.x() << " " << position.y() << " " << position.z() << '\n';

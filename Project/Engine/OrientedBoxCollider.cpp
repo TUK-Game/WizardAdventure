@@ -17,7 +17,7 @@ bool COrientedBoxCollider::Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& di
 	return m_BoundingOrientedBox.Intersects(rayOrigin, rayDir, OUT distance);
 }
 
-bool COrientedBoxCollider::IsFrustum(CFrustum frustum)
+bool COrientedBoxCollider::IsFrustum(CFrustum& frustum)
 {
 	if (!frustum.IsInFrustum(m_BoundingOrientedBox))
 		return false;

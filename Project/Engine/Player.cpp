@@ -24,7 +24,7 @@
 //#include <Engine/Engine.h>
 
 CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
-    : m_Attribute(attribute), m_SkillManager(new CSkillManager(attribute, this))
+    : m_Attribute(attribute), m_SkillManager(new CSkillManager(attribute, this)), m_Interpolator(new CInterpolator())
 {
     CreateStateManager();
 
@@ -71,6 +71,8 @@ CPlayer::~CPlayer()
 {
     if (m_SkillManager)
         delete m_SkillManager;
+    if (m_Interpolator)
+        delete m_Interpolator;
 }
 
 void CPlayer::Begin()
@@ -81,11 +83,12 @@ void CPlayer::Begin()
 
 void CPlayer::Update()
 {
+    float time = DELTA_TIME;
     if (m_StateManager) {
-        m_StateManager->Update(this, DELTA_TIME);
+        m_StateManager->Update(this, time);
     }
-    m_temp.Update(DELTA_TIME);
-    GetTransform()->SetRelativePosition((m_temp.GetInterpolatedPos()));
+    m_Interpolator->Update(time);
+    GetTransform()->SetRelativePosition((m_Interpolator->GetInterpolatedPos()));
     CGameObject::Update();
 }
 
