@@ -187,7 +187,7 @@ void CLevel_1::Init()
 	camera->GetCamera()->CheckLayerAll();
 	camera->GetCamera()->CheckLayer(4);
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
-	this->AddGameObject(camera, 0, false);
+	this->AddGameObject(camera, 15, false);
 
 #pragma region UI MAP
 

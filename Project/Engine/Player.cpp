@@ -84,6 +84,8 @@ void CPlayer::Update()
     if (m_StateManager) {
         m_StateManager->Update(this, DELTA_TIME);
     }
+    m_temp.Update(DELTA_TIME);
+    GetTransform()->SetRelativePosition((m_temp.GetInterpolatedPos()));
     CGameObject::Update();
 }
 
