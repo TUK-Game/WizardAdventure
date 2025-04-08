@@ -3,6 +3,7 @@
 #include "JobQueue.h"
 #include "DirectXCollision.h"
 
+
 class CRoom : public CJobQueue
 {
 public:
@@ -47,3 +48,5 @@ private:
 // TEMP
 // TODO: RoomManager
 extern CRoomRef g_Room;	
+
+void ToProtoVector3(Protocol::Vector3* to, const XMFLOAT3& from);

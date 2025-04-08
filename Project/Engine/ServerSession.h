@@ -25,3 +25,4 @@ private:
 	class CPlayer* m_OwnPlayer;
 	UINT64			m_Id;
 };
+

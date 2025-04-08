@@ -18,7 +18,7 @@ public:
 	Protocol::Vector3& GetDir() { return m_Dir; }
 
 	void SetState(Protocol::MoveState state) { m_State = state; }
-	void SetDir(Protocol::Vector3& dir) { m_Dir = dir; }
+	void SetDir(const Protocol::Vector3& dir) { m_Dir = dir; }
 public:
 	Protocol::PlayerInfo* PlayerInfo;
 
@@ -39,6 +39,6 @@ private:
 	Protocol::MoveState m_State;
 	Protocol::Vector3 m_Dir;
 	// temp	
-	float m_Speed = 1000.f;
+	float m_Speed = 5000.f;
 };
 

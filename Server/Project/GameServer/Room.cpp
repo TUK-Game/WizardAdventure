@@ -9,6 +9,18 @@
 
 CRoomRef g_Room = std::make_shared<CRoom>();
 
+void ToProtoVector3(Protocol::Vector3* to, const XMFLOAT3& from)
+{
+	to->set_x(from.x);
+	to->set_y(from.y);
+	to->set_z(from.z);
+}
+
+XMFLOAT3 ProtoToXMFLOAT3(const Protocol::Vector3& from)
+{
+	return XMFLOAT3(from.x(), from.y(), from.z());
+}
+
 CRoom::CRoom()
 {
 	m_LevelCollision = new CLevelCollision();
@@ -170,49 +182,56 @@ bool CRoom::HandleLeavePlayer(CPlayerRef player)
 bool CRoom::HandleMovePlayer(CPlayerRef player)
 {
 	// 1. 충돌체크
-	
 	// 2. 위치조정
-
 	// 3. 모든 클라에 위치 전송
-	Protocol::S_MOVE movePkt;
-	Protocol::PlayerMoveInfo* moveInfo = new Protocol::PlayerMoveInfo();
-	Protocol::Vector3* pos = new Protocol::Vector3();
-	Protocol::Vector3* rot = new Protocol::Vector3();
-	moveInfo->set_player_id(player->PlayerInfo->player_id());
-
 	int step = 1;
-	for(int i = 1; i <= step; ++i)
+
+	Protocol::Vector3& protoNow = *player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+	XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
+
+	// 이동량
+	XMFLOAT3 moveAmount = ProtoToXMFLOAT3(player->m_NextAmount);
+
+	moveAmount.x /= static_cast<float>(step);
+	moveAmount.y /= static_cast<float>(step);
+	moveAmount.z /= static_cast<float>(step);
+
+	for (int i = 1; i <= step; ++i)
 	{
-		Protocol::Vector3 nowPos = player->PlayerInfo->object_info().pos_info().position();
-		player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(nowPos.x() + (player->m_NextAmount.x() / step));
-		player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(nowPos.y() + (player->m_NextAmount.y() / step));
-		player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(nowPos.z() + (player->m_NextAmount.z() / step));
+		nowPos.x += moveAmount.x;
+		nowPos.y += moveAmount.y;
+		nowPos.z += moveAmount.z;
+
+		ToProtoVector3(&protoNow, nowPos);
+
 		player->GetCollider()->Update();
+
 		if (m_LevelCollision->CollisionWithWall(player->GetCollider()))
 		{
 			std::cout << "박음" << std::endl;
-			player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(nowPos.x());
-			player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(nowPos.y());
-			player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(nowPos.z());
+
+			nowPos.x -= moveAmount.x;
+			nowPos.y -= moveAmount.y;
+			nowPos.z -= moveAmount.z;
+
+			ToProtoVector3(&protoNow, nowPos);
 			break;
 		}
 	}
 
-	const Protocol::Vector3& position = player->PlayerInfo->object_info().pos_info().position();
-	const Protocol::Vector3& rotation = player->PlayerInfo->object_info().pos_info().rotation();
-	std::cout << "보냄 " << position.x() << " " << position.y() << " " << position.z() << '\n';
-	pos->set_x(position.x());
-	pos->set_y(position.y());
-	pos->set_z(position.z());
+	Protocol::S_MOVE movePkt;
+	auto* moveInfo = movePkt.mutable_player_move_info();
+	moveInfo->set_player_id(player->PlayerInfo->player_id());
 
-	rot->set_x(rotation.x());
-	rot->set_y(rotation.y());
-	rot->set_z(rotation.z());
+	auto* posInfo = moveInfo->mutable_pos_info();
+	ToProtoVector3(posInfo->mutable_position(), nowPos);
 
-	moveInfo->mutable_pos_info()->set_allocated_position(pos);
-	moveInfo->mutable_pos_info()->set_allocated_rotation(rot);
-	moveInfo->mutable_pos_info()->set_state(player->GetState());
-	movePkt.set_allocated_player_move_info(moveInfo);
+	const auto& rot = player->PlayerInfo->object_info().pos_info().rotation();
+	ToProtoVector3(posInfo->mutable_rotation(), XMFLOAT3(rot.x(), rot.y(), rot.z()));
+
+	posInfo->set_state(player->GetState());
+
+	std::cout << "보냄 " << nowPos.x << " " << nowPos.y << " " << nowPos.z << '\n';
 
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
 	Broadcast(sendBuffer, player->PlayerInfo->player_id());

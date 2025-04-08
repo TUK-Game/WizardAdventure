@@ -4,6 +4,13 @@
 #include "Player.h"
 #include "Transform.h"
 
+void ProtoToVector3(const Vec3& from, Protocol::Vector3* to)
+{
+	to->set_x(from.x);
+	to->set_y(from.y);
+	to->set_z(from.z);
+}
+
 CServerSession::CServerSession()
 {
 }
@@ -47,73 +54,52 @@ void CServerSession::OnSend(int32 len)
 void CServerSession::OnMovePlayer()
 {
 	CTransform* transform = m_OwnPlayer->GetTransform();
-	Vec3 playerPos = transform->GetRelativePosition();
-	Vec3 playerRotation = transform->GetRelativeRotation();
-	Vec3 playerDir = m_OwnPlayer->GetTransform()->GetRelativeDir(EDir::Front);
-	Vec3 amount = m_OwnPlayer->m_Amount;
+	Vec3 pos = m_OwnPlayer->m_Amount;
+	Vec3 rot = transform->GetRelativeRotation();
+	Vec3 dir = transform->GetRelativeDir(EDir::Front);
+
 	Protocol::C_MOVE pkt;
-	Protocol::PlayerMoveInfo* info = new Protocol::PlayerMoveInfo();
-	Protocol::Vector3* pos = new Protocol::Vector3();
-	Protocol::Vector3* rot = new Protocol::Vector3();
-	Protocol::Vector3* dir = new Protocol::Vector3();
-	info->set_player_id(m_Id);
-	pos->set_x(amount.x);
-	pos->set_y(amount.y);
-	pos->set_z(amount.z);
-	  
-	rot->set_x(playerRotation.x);
-	rot->set_y(playerRotation.y);
-	rot->set_z(playerRotation.z);
+	auto* moveInfo = pkt.mutable_player_move_info();
+	auto* posInfo = moveInfo->mutable_pos_info();
 
-	dir->set_x(playerDir.x);
-	dir->set_y(playerDir.y);
-	dir->set_z(playerDir.z);
+	moveInfo->set_player_id(m_Id);
+	posInfo->set_state(m_OwnPlayer->GetStateForProtocol());
 
+	ProtoToVector3(pos, posInfo->mutable_position());
+	ProtoToVector3(rot, posInfo->mutable_rotation());
+	ProtoToVector3(dir, pkt.mutable_dir());
 
-	pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_position(pos);
-	pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_rotation(rot);
-	pkt.set_allocated_dir(dir);
-	pkt.mutable_player_move_info()->mutable_pos_info()->set_state(m_OwnPlayer->GetStateForProtocol());
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
 
-	std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
-	Send(SendBuffer);
 }
 
 void CServerSession::OnActPlayer()
 {
 	CTransform* transform = m_OwnPlayer->GetTransform();
-	Vec3 playerPos = transform->GetRelativePosition();
-	Vec3 playerRotation = transform->GetRelativeRotation();
-	Vec3 playerDir = m_OwnPlayer->GetCurrentMoveDir();
-	m_OwnPlayer->m_Amount = Vec3(0.f, 0.f, 0.f);
-	Vec3 amount = m_OwnPlayer->m_Amount;
+
+	Vec3 pos = Vec3(0.f, 0.f, 0.f); 
+	Vec3 rot = transform->GetRelativeRotation();
+	Vec3 dir = m_OwnPlayer->GetCurrentMoveDir();
+
+	m_OwnPlayer->m_Amount = pos; 
 
 	Protocol::C_MOVE pkt;
-	Protocol::PlayerMoveInfo* info = new Protocol::PlayerMoveInfo();
-	Protocol::Vector3* pos = new Protocol::Vector3();
-	Protocol::Vector3* rot = new Protocol::Vector3();
-	Protocol::Vector3* dir = new Protocol::Vector3();
-	info->set_player_id(m_Id);
-	pos->set_x(amount.x);
-	pos->set_y(amount.y);
-	pos->set_z(amount.z);
+	auto* moveInfo = pkt.mutable_player_move_info();
+	auto* posInfo = moveInfo->mutable_pos_info();
 
-	rot->set_x(playerRotation.x);
-	rot->set_y(playerRotation.y);
-	rot->set_z(playerRotation.z);
+	moveInfo->set_player_id(m_Id);
+	posInfo->set_state(m_OwnPlayer->GetStateForProtocol());
+	
+	ProtoToVector3(pos, posInfo->mutable_position());
+	ProtoToVector3(rot, posInfo->mutable_rotation());
+	ProtoToVector3(dir, pkt.mutable_dir());
 
-	dir->set_x(playerDir.x);
-	dir->set_y(playerDir.y);
-	dir->set_z(playerDir.z);
-	std::cout << playerDir.x << " " << playerDir.y << " " << playerDir.z << '\n';
+	std::cout << dir.x << " " << dir.y << " " << dir.z << '\n';
 
-	pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_position(pos);
-	pkt.mutable_player_move_info()->mutable_pos_info()->set_allocated_rotation(rot);
-	pkt.set_allocated_dir(dir);
-	pkt.mutable_player_move_info()->mutable_pos_info()->set_state(m_OwnPlayer->GetStateForProtocol());
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
 
-	std::shared_ptr<CSendBuffer> SendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
-	Send(SendBuffer);
 }
 
 	

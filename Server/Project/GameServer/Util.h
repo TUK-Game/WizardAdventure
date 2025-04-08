@@ -25,5 +25,6 @@ public:
 			return distribution(generator);
 		}
 	}
-};
 
+
+};

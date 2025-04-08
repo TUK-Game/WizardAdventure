@@ -26,7 +26,7 @@ public:
 	virtual bool Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance) = 0;
 	virtual void SetMaxMinPos(Vec4 centerPos, Vec3 maxPos, Vec3 minPos, Vec3 offset = Vec3(0.f, 0.f, 0.f)) {}
 	virtual void SetMaxMinPos(Vec3 centerPos, Vec3 maxPos, Vec3 minPos, Vec3 offset = Vec3(0.f, 0.f, 0.f)) {}
-	virtual bool IsFrustum(class CFrustum& frustum) = 0;
+	virtual bool IsFrustum(class CFrustum& frustum) { return false; }
 	virtual bool Collision(CBaseCollider* dest) { return false; }
 
 	void SetCollisionProfile(const std::string& name);

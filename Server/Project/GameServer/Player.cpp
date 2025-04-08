@@ -33,13 +33,16 @@ void CPlayer::Update()
 		}
 		else
 		{
-			//XMVECTOR dir = DirectX::XMVector3Normalize(DirectX::XMVectorSet(m_Dir.x(), m_Dir.y(), m_Dir.z(), 0.0f));
+			float scale = m_DashDurtation * deltaTime * m_Speed;
+			XMFLOAT3 scaledDir =
+			{
+				m_Dir.x() * scale,
+				m_Dir.y() * scale,
+				m_Dir.z() * scale
+			};
 
-			XMFLOAT3 xdir;
-			//XMStoreFloat3(&xdir, dir);
-			m_NextAmount.set_x(m_Dir.x() * m_DashDurtation * deltaTime * m_Speed);
-			m_NextAmount.set_y(m_Dir.y() * m_DashDurtation * deltaTime * m_Speed);
-			m_NextAmount.set_z(m_Dir.z() * m_DashDurtation * deltaTime * m_Speed);
+			ToProtoVector3(&m_NextAmount, scaledDir);
+
 			std::cout << m_NextAmount.x() << " " << m_NextAmount.y() << " " << m_NextAmount.z() << '\n';
 		}
 		g_Room->HandleMovePlayer(m_Session.lock()->Player);

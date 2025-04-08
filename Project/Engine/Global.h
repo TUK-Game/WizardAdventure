@@ -223,6 +223,8 @@ struct MonsterStat
 	float visionRange;
 };
 
+
+
 #include <shlobj.h>
 #include <filesystem>
 static std::wstring GetLatestWinPixGpuCapturerPath_Cpp17()

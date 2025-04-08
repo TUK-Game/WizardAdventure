@@ -61,5 +61,3 @@ USING_SHARED_PTR(CCollisionManager);
 #define SEND_PACKET(pkt)													\
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);	\
 	session->Send(sendBuffer);
-
-
