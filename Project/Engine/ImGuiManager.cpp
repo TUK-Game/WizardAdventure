@@ -134,7 +134,11 @@ void CImGuiManager::DrawLevelWindow()
 
 		std::vector<CGameObject*> gameObjects;
 		if (j == 10)
-			CLevelManager::GetInst()->GetCurrentLevel()->m_SubLevel->PickGameObject(gameObjects);
+		{
+			auto subLevel = CLevelManager::GetInst()->GetCurrentLevel()->m_SubLevel;
+			if (subLevel)
+				subLevel->PickGameObject(gameObjects);
+		}
 		else
 			gameObjects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(j)->GetParentObjects();
 

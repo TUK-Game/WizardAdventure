@@ -27,8 +27,10 @@ public:
 	void RegisterGameObject(CGameObject* object)	{ m_vecObjects.push_back(object); }
 	void AddGameObject(CGameObject* parent, bool bChildMove);
 	void SafeAddGameObject(CGameObject* parent, bool bChildMove);
+	void SafeRemoveGameObject(CGameObject* obj);
 
 	void FlushPendingObjects();
+	void FlushPendingRemovals();
 
 	void RemoveGameObject(CGameObject* object);
 	void RemoveGameObjectInLevel(CGameObject* object);
@@ -47,6 +49,7 @@ private:
 	std::vector<CGameObject*>	m_vecParentObjects;	// 최상위 부모 오브젝트
 	std::vector<CGameObject*>	m_vecObjects;		// 모든 오브젝트
 	std::vector<PendingAddObject> m_vecPendingAddObjects;
+	std::vector<CGameObject*>	m_vecPendingRemoveObjects;
 	int							m_LayerIndex;		// 레이어 번호
 };
 

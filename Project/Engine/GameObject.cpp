@@ -259,7 +259,6 @@ void CGameObject::Destroy()
 	for (CGameObject* child : m_vecChild)
 	{
 		child->Destroy();
-		//delete child;
 	}
 	m_vecChild.clear();
 

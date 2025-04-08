@@ -140,8 +140,11 @@ void CRenderManager::RenderForward()
 
 	for (auto& camera : m_vecCamera)
 	{
-		if (camera == mainCamera || m_vecCamera[2] == camera)
+		if (camera == mainCamera)
 			continue;
+		if (m_vecCamera.size() >= 3)
+			if (m_vecCamera[2] == camera)
+				continue;
 
 		camera->SortObject();
 		camera->RenderForward();

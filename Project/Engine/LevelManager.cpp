@@ -45,6 +45,17 @@ int CLevelManager::Init()
 
 void CLevelManager::Progress()
 {
+	if (m_NextLevel)
+	{
+		if (m_CurLevel)
+			CleanUpCurrentLevel();
+		m_CurLevel = m_NextLevel;
+		m_NextLevel = nullptr;
+
+		m_CurLevel->Init();
+		m_CurLevel->Begin();
+	}
+
 	m_CurLevel->Update();
 
 	//m_CurLevel->Deregister();
@@ -121,6 +132,6 @@ void CLevelManager::CleanUpCurrentLevel()
 
 void CLevelManager::ChangeLevel(CLevel* newLevel)
 {
-	CleanUpCurrentLevel();
-	// m_CurLevel을 newLevel로 
+	m_NextLevel = newLevel;
+
 }

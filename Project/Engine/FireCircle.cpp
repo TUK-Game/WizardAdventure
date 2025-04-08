@@ -4,6 +4,7 @@
 #include "MeshRenderer.h"
 #include "AssetManager.h"
 #include "Level.h"
+#include "Layer.h"
 #include "LevelManager.h"
 #include "Engine.h"
 
@@ -28,6 +29,6 @@ void CFireCircle::FinalUpdate()
     CGameObject::FinalUpdate();
     m_ElapsedTime += DELTA_TIME;
     if (m_ElapsedTime >= m_Duration) {
-        CLevelManager::GetInst()->GetCurrentLevel()->RemoveGameObject(this);
+        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
     }
 }

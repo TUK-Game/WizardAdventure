@@ -51,6 +51,9 @@
     <ClInclude Include="Level_1.h">
       <Filter>02, Level</Filter>
     </ClInclude>
+    <ClInclude Include="Level_Start.h">
+      <Filter>02, Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,6 +66,9 @@
       <Filter>01. Manager</Filter>
     </ClCompile>
     <ClCompile Include="Level_1.cpp">
+      <Filter>02, Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Level_Start.cpp">
       <Filter>02, Level</Filter>
     </ClCompile>
   </ItemGroup>

@@ -155,6 +155,35 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"Fireball.png");
 	AddAsset(L"Fireball", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Start.png");
+	AddAsset(L"Start", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"StartBTN.png");
+	AddAsset(L"StartBTN", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"StartBTN_Pressed.png");
+	AddAsset(L"StartBTN_Pressed", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"ExitBTN.png");
+	AddAsset(L"ExitBTN", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"ExitBTN_Pressed.png");
+	AddAsset(L"ExitBTN_Pressed", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"MenuBTN.png");
+	AddAsset(L"MenuBTN", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"MenuBTN_Pressed.png");
+	AddAsset(L"MenuBTN_Pressed", tex);
+
 	return S_OK;
 }
 
@@ -194,6 +223,11 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Fireball"));
 	AddAsset(L"Fireball", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Start"));
+	AddAsset(L"Start", material);
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Skybox"));
@@ -287,6 +321,9 @@ int CAssetManager::LoadMeshData()
 
 	data= CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Crab.jhd", L"Crab");
 	AddAsset(L"Crab", data);
+
+	data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/SwordLava.jhd", L"SwordLava");
+	AddAsset(L"SwordLava", data);
 
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Mage.jhd");
 	//CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/wizard.jhd", L"wizard");

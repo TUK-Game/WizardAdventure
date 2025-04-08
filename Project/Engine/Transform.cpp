@@ -177,8 +177,42 @@ void CTransform::LookAt(const Vec3& dir)
 	matrix.Up(up);
 	matrix.Backward(front);
 
-	m_RelativeRotation = DecomposeRotationMatrix(matrix);
+	SetRelativeRotation(DecomposeRotationMatrix(matrix));
 }
+
+void CTransform::LookToDirection(const Vec3& direction)
+{
+	Vec3 front = direction;
+	if (front.LengthSquared() < 1e-6f)
+		return; 
+
+	front.Normalize();
+
+	Vec3 up = Vec3::Up;
+
+	Vec3 right = up.Cross(front);
+	if (right.LengthSquared() < 1e-6f)
+	{
+		up = Vec3::Forward;
+		right = up.Cross(front);
+	}
+	right.Normalize();
+
+	up = front.Cross(right);
+	up.Normalize();
+
+	Matrix rotationMatrix = Matrix::Identity;
+	rotationMatrix.Right(right);
+	rotationMatrix.Up(up);
+	rotationMatrix.Backward(front); 
+
+	Vec3 test = DecomposeRotationMatrix(rotationMatrix);
+	std::cout << test.x << " " << test.y << " " << test.z << std::endl;
+
+	SetRelativeRotation(test);
+}
+
+
 
 bool CTransform::CloseEnough(const float& a, const float& b, const float& epsilon)
 {
@@ -229,7 +263,7 @@ Vec3 CTransform::DecomposeRotationMatrix(const Matrix& rotation)
 		}
 	}
 
-	return ret;
+	return (ret / XM_PI) * 180.f;;
 }
 
 

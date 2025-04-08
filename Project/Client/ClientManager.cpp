@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ClientManager.h"
 #include "Level_1.h"
+#include "Level_Start.h"
 #include <Engine/Engine.h>
 #include <Engine/NetworkManager.h>
 #include <Engine/SaveLoadManager.h>
@@ -27,7 +28,7 @@ int CClientManager::Init(HINSTANCE instance)
 {
     m_hInstance = instance;
 
-    CLevel_1* level = new CLevel_1;
+    CLevel_Start* level = new CLevel_Start;
     if (FAILED(InitEngine()))
         return E_FAIL;
 

@@ -49,6 +49,11 @@ void CLayer::SafeAddGameObject(CGameObject* parent, bool bChildMove)
 	parent->m_LayerIndex = m_LayerIndex;
 }
 
+void CLayer::SafeRemoveGameObject(CGameObject* obj)
+{
+	m_vecPendingRemoveObjects.push_back(obj);
+}
+
 void CLayer::FlushPendingObjects()
 {
 	for (const PendingAddObject& item : m_vecPendingAddObjects)
@@ -56,6 +61,15 @@ void CLayer::FlushPendingObjects()
 		AddGameObject(item.parent, item.bChildMove);
 	}
 	m_vecPendingAddObjects.clear();
+}
+
+void CLayer::FlushPendingRemovals()
+{
+	for (CGameObject* obj : m_vecPendingRemoveObjects)
+	{
+		RemoveGameObject(obj);
+	}
+	m_vecPendingRemoveObjects.clear();
 }
 
 void CLayer::RemoveGameObject(CGameObject* object)
@@ -71,7 +85,7 @@ void CLayer::RemoveGameObject(CGameObject* object)
 	// 최상위 부모 오브젝트 벡터에서도 제거
 	m_vecParentObjects.erase(std::remove(m_vecParentObjects.begin(), m_vecParentObjects.end(), object), m_vecParentObjects.end());
 
-	if (object)
+	if (object) 
 		delete object;
 }
 
@@ -124,6 +138,7 @@ void CLayer::FinalUpdate()
 		object->FinalUpdate();
 	}
 	FlushPendingObjects();
+	FlushPendingRemovals();
 }
 
 void CLayer::ClearObjects()
