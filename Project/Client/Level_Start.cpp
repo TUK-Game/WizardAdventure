@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Level_Start.h"
+#include "Level_1.h"
 #include <Engine/AssetManager.h>
 #include <Engine/Camera.h>
 #include <Engine/Transform.h>
@@ -89,8 +90,6 @@ void CLevel_Start::Init()
 	camera->SetName(L"MainCamera");
 	camera->AddComponent(new CTransform);
 	camera->AddComponent(new CCamera);
-//	camera->GetCamera()->SetTarget(player);
-//  camera->AddComponent(new CCameraScript);
 	camera->GetCamera()->SetProjType(EProjection_Type::Perspective);
 	camera->GetCamera()->SetPriority(0); // 0 : main camera
 	camera->GetCamera()->CheckLayerAll();
@@ -100,21 +99,77 @@ void CLevel_Start::Init()
 
 
 	// Main Texture
-	CGameObject* mainTexture = new CGameObject;
-	mainTexture->SetName(L"MainTexture");
-	mainTexture->AddComponent(new CTransform);
-	mainTexture->AddComponent(new CMeshRenderer);
-	mainTexture->GetTransform()->SetRelativeScale(Vec3(2.f, 2.f, 1.f));
-	mainTexture->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
+	CGameObject* ui = new CGameObject;
+	ui->SetName(L"MainTexture");
+	ui->AddComponent(new CTransform);
+	ui->AddComponent(new CMeshRenderer);
+	ui->GetTransform()->SetRelativeScale(Vec3(2.f, 2.f, 1.f));
+	ui->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 	CMaterial* material = new CMaterial;
 	CTexture* texture;
 	texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"Start");
 	CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
 	material->SetTexture(0, texture);
 	material->SetGraphicsShader(shader);
-	mainTexture->GetMeshRenderer()->SetMaterial(material);
-	this->AddGameObject(mainTexture, 4, false);
+	ui->GetMeshRenderer()->SetMaterial(material);
+	this->AddGameObject(ui, 4, false);
 
+	// Button
+	ui = new CGameObject;
+	ui->SetName(L"StartBTN");
+	ui->AddComponent(new CTransform);
+	ui->AddComponent(new CMeshRenderer);
+	ui->AddComponent(new CUIButton);
+	ui->GetTransform()->SetRelativeScale(Vec3(0.25f, 0.2f, 1.f));
+	ui->GetTransform()->SetRelativePosition(Vec3(0.75f, -0.25f, 0.f));
+	ui->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
+	material = new CMaterial;
+	texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"StartBTN");
+	shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
+	material->SetTexture(0, texture);
+	material->SetGraphicsShader(shader);
+	ui->GetMeshRenderer()->SetMaterial(material);
+	ui->GetUIButton()->SetOnClick([]() {
+		CLevelManager::GetInst()->ChangeLevel(new CLevel_1);
+		});
+	this->AddGameObject(ui, 4, false);
+
+	// Button
+	ui = new CGameObject;
+	ui->SetName(L"MenuBTN");
+	ui->AddComponent(new CTransform);
+	ui->AddComponent(new CMeshRenderer);
+	ui->AddComponent(new CUIButton);
+	ui->GetTransform()->SetRelativeScale(Vec3(0.25f, 0.2f, 1.f));
+	ui->GetTransform()->SetRelativePosition(Vec3(0.75f, -0.5f, 0.f));
+	ui->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
+	material = new CMaterial;
+	texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN");
+	shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
+	material->SetTexture(0, texture);
+	material->SetGraphicsShader(shader);
+	ui->GetMeshRenderer()->SetMaterial(material);
+	this->AddGameObject(ui, 4, false);
+
+	// Button
+	ui = new CGameObject;
+	ui->SetName(L"ExitBTN");
+	ui->AddComponent(new CTransform);
+	ui->AddComponent(new CMeshRenderer);
+	ui->AddComponent(new CUIButton);
+	ui->GetTransform()->SetRelativeScale(Vec3(0.25f, 0.2f, 1.f));
+	ui->GetTransform()->SetRelativePosition(Vec3(0.75f, -0.75f, 0.f));
+	ui->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
+	material = new CMaterial;
+	texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"ExitBTN");
+	shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
+	material->SetTexture(0, texture);
+	material->SetGraphicsShader(shader);
+	ui->GetMeshRenderer()->SetMaterial(material);
+	ui->GetUIButton()->SetOnClick([]() {
+		 PostQuitMessage(0);
+		});
+	this->AddGameObject(ui, 4, false);
 
 }
 
@@ -140,4 +195,5 @@ void CLevel_Start::FinalUpdate()
 void CLevel_Start::End()
 {
 	CLevel::End();
+	CAssetManager::GetInst()->SoundStop("Play");
 }

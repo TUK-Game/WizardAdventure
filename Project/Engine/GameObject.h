@@ -12,6 +12,7 @@ class CParticleSystem;
 class CAnimator;
 class CRigidBody;
 class CUI;
+class CUIButton;
 class CStateManager;
 class CMonsterAI;
 
@@ -38,6 +39,7 @@ public:
     CAnimator* GetAnimator()                            { return (CAnimator*)GetComponent(EComponent_Type::Animator); }
     CRigidBody* GetRigidBody()                          { return (CRigidBody*)GetComponent(EComponent_Type::Rigidbody); }
     CUI* GetUI()                                        { return (CUI*)GetComponent(EComponent_Type::UI); }
+    CUIButton* GetUIButton()                            { return (CUIButton*)GetComponent(EComponent_Type::UIButton); }
     CMonsterAI* GetMonsterAI()                          { return (CMonsterAI*)GetComponent(EComponent_Type::MonsterAI); }
     CStateManager* GetStateManager()                    { return m_StateManager; }
     bool GetInstancing()                                { return m_bInstancing; }

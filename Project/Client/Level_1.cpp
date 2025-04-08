@@ -31,7 +31,7 @@
 
 CLevel_1::CLevel_1()
 {
-	CLevelManager::GetInst()->SetLevel(this);
+	//CLevelManager::GetInst()->SetLevel(this);
 }
 
 CLevel_1::~CLevel_1()

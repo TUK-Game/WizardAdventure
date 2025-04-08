@@ -27,7 +27,8 @@ public:
 	class CGameObject* Pick(INT32 x, INT32 y);
 
 private:
-	class CLevel* m_CurLevel;
+	CLevel* m_CurLevel = nullptr;
+	CLevel* m_NextLevel = nullptr;
 	float m_timer = 0.f;
 	class CGameObject* m_Player;
 };

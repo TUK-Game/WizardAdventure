@@ -159,6 +159,31 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"Start.png");
 	AddAsset(L"Start", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"StartBTN.png");
+	AddAsset(L"StartBTN", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"StartBTN_Pressed.png");
+	AddAsset(L"StartBTN_Pressed", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"ExitBTN.png");
+	AddAsset(L"ExitBTN", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"ExitBTN_Pressed.png");
+	AddAsset(L"ExitBTN_Pressed", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"MenuBTN.png");
+	AddAsset(L"MenuBTN", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"MenuBTN_Pressed.png");
+	AddAsset(L"MenuBTN_Pressed", tex);
+
 	return S_OK;
 }
 

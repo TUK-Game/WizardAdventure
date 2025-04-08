@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "LevelCollision.h"
 #include "SubLevel.h"
+#include "AssetManager.h"
 #include "WidgetWindow.h"
 
 CLevel::CLevel()
@@ -146,10 +147,12 @@ void CLevel::End()
 	{
 		if (i == 10)
 		{
-			m_SubLevel->End();
+			if (m_SubLevel)
+				m_SubLevel->End();
 		}
 		else
 			if(m_Layer[i])
 				m_Layer[i]->m_vecObjects.clear();
 	}
+
 }
