@@ -87,8 +87,12 @@ void CPlayer::Update()
     if (m_StateManager) {
         m_StateManager->Update(this, time);
     }
+#ifndef DEBUG_SOLOPLAY
     m_Interpolator->Update(time);
     GetTransform()->SetRelativePosition((m_Interpolator->GetInterpolatedPos()));
+#endif // DEBUG_SOLOPLAY
+
+  
     CGameObject::Update();
 }
 

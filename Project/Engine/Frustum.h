@@ -19,7 +19,6 @@ public:
 	bool IsInFrustum(BoundingBox& box);
 	bool IsInFrustum(BoundingOrientedBox& box);
 private:
-	std::array<Vec4, PLANE_END> _planes;
 	BoundingFrustum frustum;
 };
 
