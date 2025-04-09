@@ -5,6 +5,7 @@
 #include "UI.h"
 #include "GameObject.h"
 #include "AssetManager.h"
+#include "MeshRenderer.h"
 
 CUIButton::CUIButton() : CComponent(EComponent_Type::UIButton)
 {
@@ -16,36 +17,42 @@ CUIButton::~CUIButton()
 
 void CUIButton::Update()
 {
-    bool isMouseOver = IsMouseOver(); // 마우스가 버튼 위에 있는지 확인
+    bool isMouseOver = IsMouseOver();
+    bool isPressed = (GetAsyncKeyState(VK_LBUTTON) & 0x8000);
 
-    // 마우스가 버튼 위로 처음 들어왔을 때 한 번만 실행
-    if (isMouseOver && !m_bIsHovered)
-    {
-        CAssetManager::GetInst()->SoundPlay("Click"); // 호버 사운드 재생
-        m_bIsHovered = true; // 호버링 상태 업데이트
-    }
-    else if (!isMouseOver) // 마우스가 벗어나면 다시 초기화
-    {
-        m_bIsHovered = false;
-    }
-
-    // 마우스 클릭 처리
-    static bool isClicked = false;
     if (isMouseOver)
     {
-        if ((GetAsyncKeyState(VK_LBUTTON) & 0x8000) && !isClicked)
+        if (!m_bIsHovered)
         {
-            CAssetManager::GetInst()->SoundPlay("Click");
-            isClicked = true;
-
-            if (onClick)
-                onClick(); // 버튼 클릭 이벤트 실행
+            m_bIsHovered = true;
+            UpdateTextureByState(); // 상태 변경 시 텍스처 갱신
         }
-        else if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000))
+
+        if (isPressed && !m_bIsPressed)
         {
-            isClicked = false;
+            m_bIsPressed = true;
+            UpdateTextureByState();
+        }
+        else if (!isPressed && m_bIsPressed)
+        {
+            m_bIsPressed = false;
+            UpdateTextureByState();
+
+            CAssetManager::GetInst()->SoundPlay("Click");
+            if (onClick)
+                onClick();
         }
     }
+    else
+    {
+        if (m_bIsHovered || m_bIsPressed)
+        {
+            m_bIsHovered = false;
+            m_bIsPressed = false;
+            UpdateTextureByState();
+        }
+    }
+
 }
 
 void CUIButton::FinalUpdate()
@@ -57,7 +64,15 @@ void CUIButton::SetOnClick(std::function<void()> func)
     onClick = func;
 }
 
+void CUIButton::SetBTNTextures(CTexture* defaultTex, CTexture* hoverTex, CTexture* pressedTex)
+{
+    m_DefaultTex = defaultTex;
+    m_HoverTex = hoverTex;
+    m_PressedTex = pressedTex;
 
+    // 초기 텍스처 설정
+    GetOwner()->GetMeshRenderer()->GetMaterial()->SetTexture(0, m_DefaultTex);
+}
 
 Vec2 CUIButton::GetMouseNDC()
 {
@@ -87,4 +102,23 @@ bool CUIButton::IsMouseOver()
 
     return (mousePos.x >= left && mousePos.x <= right &&
         mousePos.y >= bottom && mousePos.y <= top);
+}
+
+void CUIButton::UpdateTextureByState()
+{
+    CMaterial* material = GetOwner()->GetMeshRenderer()->GetMaterial();
+    if (!material) return;
+
+    if (m_bIsPressed && m_PressedTex)
+    {
+        material->SetTexture(0, m_PressedTex);
+    }
+    else if (m_bIsHovered && m_HoverTex)
+    {
+        material->SetTexture(0, m_HoverTex);
+    }
+    else if (m_DefaultTex)
+    {
+        material->SetTexture(0, m_DefaultTex);
+    }
 }

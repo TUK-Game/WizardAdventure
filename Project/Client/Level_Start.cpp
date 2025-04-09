@@ -67,26 +67,6 @@ void CLevel_Start::Init()
 	}
 #pragma endregion
 
-
-	// directional light
-	//{
-	//	CGameObject* light = new CGameObject;
-	//	light->SetName(L"DirectionalLight");
-	//	light->AddComponent(new CTransform);
-	//	light->AddComponent(new CLight);
-	//	light->GetTransform()->SetRelativePosition(0.f, 5000.f, 100.f);
-	//	light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
-	//	light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
-	//	light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
-	//	light->GetLight()->SetAmbient(Vec3(0.7f, 0.7f, 0.7f));
-	//	light->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
-	//	CRenderManager::GetInst()->RegisterLight(light->GetLight());
-
-	//	this->AddGameObject(light, 4, false);
-	//}
-
-
-
 	CGameObject* camera = new CGameObject;
 	camera->SetName(L"MainCamera");
 	camera->AddComponent(new CTransform);
@@ -115,7 +95,7 @@ void CLevel_Start::Init()
 	ui->GetMeshRenderer()->SetMaterial(material);
 	this->AddGameObject(ui, 4, false);
 
-	// Button
+	// Start Button
 	ui = new CGameObject;
 	ui->SetName(L"StartBTN");
 	ui->AddComponent(new CTransform);
@@ -125,17 +105,20 @@ void CLevel_Start::Init()
 	ui->GetTransform()->SetRelativePosition(Vec3(0.75f, -0.25f, 0.f));
 	ui->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 	material = new CMaterial;
-	texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"StartBTN");
 	shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
-	material->SetTexture(0, texture);
 	material->SetGraphicsShader(shader);
 	ui->GetMeshRenderer()->SetMaterial(material);
+	ui->GetUIButton()->SetBTNTextures(
+		CAssetManager::GetInst()->FindAsset<CTexture>(L"StartBTN"),
+		CAssetManager::GetInst()->FindAsset<CTexture>(L"StartBTN_Hover"),
+		CAssetManager::GetInst()->FindAsset<CTexture>(L"StartBTN_Pressed")
+	);
 	ui->GetUIButton()->SetOnClick([]() {
 		CLevelManager::GetInst()->ChangeLevel(new CLevel_1);
 		});
 	this->AddGameObject(ui, 4, false);
 
-	// Button
+	// Menu Button
 	ui = new CGameObject;
 	ui->SetName(L"MenuBTN");
 	ui->AddComponent(new CTransform);
@@ -145,14 +128,17 @@ void CLevel_Start::Init()
 	ui->GetTransform()->SetRelativePosition(Vec3(0.75f, -0.5f, 0.f));
 	ui->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 	material = new CMaterial;
-	texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN");
 	shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
-	material->SetTexture(0, texture);
 	material->SetGraphicsShader(shader);
 	ui->GetMeshRenderer()->SetMaterial(material);
+	ui->GetUIButton()->SetBTNTextures(
+		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN"),
+		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Hover"),
+		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Pressed")
+	);
 	this->AddGameObject(ui, 4, false);
 
-	// Button
+	// Exit Button
 	ui = new CGameObject;
 	ui->SetName(L"ExitBTN");
 	ui->AddComponent(new CTransform);
@@ -162,11 +148,14 @@ void CLevel_Start::Init()
 	ui->GetTransform()->SetRelativePosition(Vec3(0.75f, -0.75f, 0.f));
 	ui->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 	material = new CMaterial;
-	texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"ExitBTN");
 	shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
-	material->SetTexture(0, texture);
 	material->SetGraphicsShader(shader);
 	ui->GetMeshRenderer()->SetMaterial(material);
+	ui->GetUIButton()->SetBTNTextures(
+		CAssetManager::GetInst()->FindAsset<CTexture>(L"ExitBTN"),
+		CAssetManager::GetInst()->FindAsset<CTexture>(L"ExitBTN_Hover"),
+		CAssetManager::GetInst()->FindAsset<CTexture>(L"ExitBTN_Pressed")
+	);
 	ui->GetUIButton()->SetOnClick([]() {
 		 PostQuitMessage(0);
 		});

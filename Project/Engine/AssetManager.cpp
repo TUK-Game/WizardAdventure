@@ -169,6 +169,10 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"StartBTN_Pressed", tex);
 
 	tex = new CTexture;
+	tex->Init(path / L"StartBTN_Hover.png");
+	AddAsset(L"StartBTN_Hover", tex);
+
+	tex = new CTexture;
 	tex->Init(path / L"ExitBTN.png");
 	AddAsset(L"ExitBTN", tex);
 
@@ -177,12 +181,20 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"ExitBTN_Pressed", tex);
 
 	tex = new CTexture;
+	tex->Init(path / L"ExitBTN_Hover.png");
+	AddAsset(L"ExitBTN_Hover", tex);
+
+	tex = new CTexture;
 	tex->Init(path / L"MenuBTN.png");
 	AddAsset(L"MenuBTN", tex);
 
 	tex = new CTexture;
 	tex->Init(path / L"MenuBTN_Pressed.png");
 	AddAsset(L"MenuBTN_Pressed", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"MenuBTN_Hover.png");
+	AddAsset(L"MenuBTN_Hover", tex);
 
 	return S_OK;
 }

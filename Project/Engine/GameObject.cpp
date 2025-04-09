@@ -41,8 +41,8 @@ CGameObject::~CGameObject()
 			delete component;
 	}
 
-	for (auto& child : m_vecChild)
-		delete child;
+	//for (auto& child : m_vecChild)
+	//	delete child;
 
 	if (m_StateManager)
 		delete m_StateManager;
