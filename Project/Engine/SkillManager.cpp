@@ -171,7 +171,7 @@ void CSkillManager::CastMeteor()
 {
     Vec3 centerPos = m_Owner->GetTransform()->GetRelativePosition();
 
-    CMeteors* meteors = new CMeteors(centerPos, 20, 0.125f);
+    CMeteors* meteors = new CMeteors(centerPos, 30, 0.125f);
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteors, 3, false);
 }
 

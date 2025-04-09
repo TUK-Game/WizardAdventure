@@ -40,7 +40,7 @@ void CMeteors::FinalUpdate()
 
 void CMeteors::SpawnMeteor()
 {
-    float radius = 700.f;
+    float radius = 500.f;
     float theta = RandomFloat(0.f, XM_2PI);
     float r = sqrtf(RandomFloat(0.f, 1.f)) * radius;
 
@@ -57,6 +57,9 @@ void CMeteors::SpawnMeteor()
 
     CRigidBody* rigidbody = meteor->GetRigidBody();
     rigidbody->SetGravity(true);
+    rigidbody->SetDrag(0.f);
+    rigidbody->SetVelocity(Vec3(RandomFloat(-300.f, 300.f), 0.f, RandomFloat(-300.f, 300.f)));
+    
 
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteor, 3, false);
 }
