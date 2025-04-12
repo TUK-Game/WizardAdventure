@@ -12,7 +12,9 @@
 #include "LevelManager.h"
 #include "Level.h"
 #include "RigidBody.h"
+#include "Player.h"
 #include "Camera.h"
+#include "SkillDamage.h"
 
 CSkillManager::CSkillManager(EPlayerAttribute attribute, CGameObject* owner)
     : m_Attribute(attribute), m_Owner(owner) {}
@@ -67,6 +69,9 @@ void CSkillManager::CastFireballTowardMouse()
     fireBall->SetDirection(fireDir);
     fireBall->SetSpeed(1200.f);
     fireBall->GetRigidBody()->ApplyForce(fireDir * 900000.f);
+    fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
+    fireBall->SetDamage(SkillDamage::FireBall);
+
 
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 3, false);
 }
@@ -87,6 +92,10 @@ void CSkillManager::CastFireballTowardQ()
     fireBall->SetDirection(fireDir);
     fireBall->SetDuration(2.5f);
     fireBall->SetSpeed(1200.f);
+
+    fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
+    fireBall->SetDamage(SkillDamage::FireBallQ);
+
     CRigidBody* rigidbody = fireBall->GetRigidBody();
     rigidbody->ApplyForce(fireDir * 70000.f);
     rigidbody->ApplyTorque(Vec3(0.f, 500.f, 0.f));
@@ -123,6 +132,8 @@ void CSkillManager::SpawnFirePillarAtMouse()
         CFirePillar* pillar = new CFirePillar();
         pillar->SetBasePos(spawnPos);
         pillar->GetTransform()->SetRelativePosition(spawnPos);
+        pillar->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
+        pillar->SetDamage(SkillDamage::Pillar);
 
         CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(pillar, 3, false);
     }                                                                                               
@@ -160,6 +171,8 @@ void CSkillManager::FireSwordSpreadShot()
         sword->SetSpeed(800.f);              
         sword->SetWaitTimeForTranslate(1.5f);     
         sword->SetWaitTimeForRotate(1.f);
+        sword->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
+        sword->SetDamage(SkillDamage::FireSword);
 
 
         CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(sword, 3, false);
@@ -172,6 +185,7 @@ void CSkillManager::CastMeteor()
     Vec3 centerPos = m_Owner->GetTransform()->GetRelativePosition();
 
     CMeteors* meteors = new CMeteors(centerPos, 30, 0.125f);
+    meteors->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteors, 3, false);
 }
 

@@ -81,6 +81,8 @@ void CPlayer::Begin()
     CGameObject::Begin();
     m_StateManager->ChangeState(this, EState_Type::Idle);
     m_Interpolator->SetTarget(GetTransform()->GetRelativePosition());
+    InitStats();
+
 }
 
 void CPlayer::Update()
@@ -185,4 +187,11 @@ void CPlayer::Attack(int skillIndex)
 void CPlayer::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
 {
     std::cout << "아야" << std::endl;
+}
+
+
+void CPlayer::InitStats() {
+    GetMutableStats().maxHp = 100;
+    GetMutableStats().currentHp = 100;
+    GetMutableStats().attack = 10;
 }

@@ -1,8 +1,8 @@
 #pragma once
-#include "GameObject.h"
+#include "SkillObject.h"
 
 class CFireBall :
-    public CGameObject
+    public CSkillObject
 {
 public:
     CFireBall();
@@ -13,6 +13,8 @@ public:
 
     virtual void Update();
     virtual void FinalUpdate();
+
+    virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
 
 private:
     Vec3 m_Direction;

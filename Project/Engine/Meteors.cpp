@@ -8,8 +8,8 @@
 #include "Level.h"
 #include "Layer.h"
 #include "LevelManager.h"
-
 #include "Engine.h"
+#include "SkillDamage.h"
 
 CMeteors::CMeteors(Vec3 centerPos, int count, float interval)
     : m_CenterPos(centerPos), m_TotalCount(count), m_Interval(interval)
@@ -54,12 +54,13 @@ void CMeteors::SpawnMeteor()
     float scale = RandomFloat(50.f, 150.f);
     meteor->GetTransform()->SetRelativeScale(scale, scale, scale);
     meteor->SetDuration(5.5f);
+    meteor->SetCaster(GetCaster());
+    meteor->SetDamage(SkillDamage::Meteor);
 
     CRigidBody* rigidbody = meteor->GetRigidBody();
     rigidbody->SetGravity(true);
     rigidbody->SetDrag(0.f);
     rigidbody->SetVelocity(Vec3(RandomFloat(-300.f, 300.f), 0.f, RandomFloat(-300.f, 300.f)));
-    
 
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteor, 3, false);
 }

@@ -608,6 +608,12 @@
     <ClInclude Include="JsonConverter.h">
       <Filter>JSON</Filter>
     </ClInclude>
+    <ClInclude Include="SkillObject.h">
+      <Filter>03. GameObject\Player\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillDamage.h">
+      <Filter>03. GameObject\Player\Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -936,6 +942,9 @@
     </ClCompile>
     <ClCompile Include="JsonConverter.cpp">
       <Filter>JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillObject.cpp">
+      <Filter>03. GameObject\Player\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -35,3 +35,8 @@ void CFireBall::FinalUpdate()
         CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
     }
 }
+
+void CFireBall::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
+{
+    CSkillObject::CollisionBegin(src, dest); 
+}

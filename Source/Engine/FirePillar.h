@@ -1,8 +1,8 @@
 #pragma once
-#include "GameObject.h"
+#include "SkillObject.h"
 
 class CFirePillar :
-    public CGameObject
+    public CSkillObject
 {
 public:
     CFirePillar();

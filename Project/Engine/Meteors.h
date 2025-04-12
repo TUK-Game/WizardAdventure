@@ -1,8 +1,8 @@
 #pragma once
-#include "GameObject.h"
+#include "SkillObject.h"
 
 class CMeteors :
-    public CGameObject
+    public CSkillObject
 {
 public:
     CMeteors(Vec3 centerPos, int count, float interval);

@@ -108,6 +108,8 @@ public:
     Vec3 GetCurrentMoveDir() { return m_currentMoveDir; }
     EPlayerAttribute GetAttribute() const { return m_Attribute; }
 
+    void InitStats();
+
 public:
     virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
     Vec3 m_Amount;
