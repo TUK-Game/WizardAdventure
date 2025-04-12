@@ -74,7 +74,7 @@
     <OutDir>$(SolutionDir)Bin\$(ProjectName)\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
     <LibraryPath>$(SolutionDir)3rdParty\;$(SolutionDir)Bin\;$(LibraryPath)</LibraryPath>
-    <ExternalIncludePath>$(SolutionDir)Source\;$(SolutionDir)3rdParty\Protobuf\;$(SolutionDir)3rdParty\FBX\;$(SolutionDir)3rdParty\;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)Source\;$(SolutionDir)3rdParty\Protobuf\;$(SolutionDir)3rdParty\FBX\;$(SolutionDir)3rdParty\PhysX\include\;$(SolutionDir)3rdParty\;$(ExternalIncludePath)</ExternalIncludePath>
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

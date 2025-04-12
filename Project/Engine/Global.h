@@ -75,6 +75,19 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "FBX/lib/release/zlib-md.lib")
 #endif 
 
+#ifndef _DEBUG
+#pragma comment(lib, "PhysX/release/PhysXCommon_64.lib")
+#pragma comment(lib, "PhysX/release/PhysX_64.lib")
+#pragma comment(lib, "PhysX/release/PhysXFoundation_64.lib")
+#pragma comment(lib, "PhysX/release/PhysXCooking_64.lib")
+#else
+#pragma comment(lib, "PhysX/debug/PhysXCommon_64.lib")
+#pragma comment(lib, "PhysX/debug/PhysX_64.lib")
+#pragma comment(lib, "PhysX/debug/PhysXFoundation_64.lib")
+#pragma comment(lib, "PhysX/debug/PhysXCooking_64.lib")
+#endif
+// https://nvidia-omniverse.github.io/PhysX/physx/5.6.0/index.html
+
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_impl_dx12.h>
 #include <ImGui/imgui_impl_win32.h>

@@ -9,6 +9,23 @@
 #include <Engine/JsonConverter.h>
 //#include <ImGui/imgui_impl_win32.h>
 
+// PhysX TEMP ==================================================
+#include <PxPhysicsAPI.h>
+
+class UserErrorCallback : public physx::PxErrorCallback
+{
+public:
+    virtual void reportError(physx::PxErrorCode::Enum code, const char* message, const char* file, int line)
+    {
+        // error processing implementation
+    }
+};
+
+static UserErrorCallback            g_DefaultErrorCallback;
+static physx::PxDefaultAllocator    g_DefaultAllocatorCallback;
+
+// =============================================================
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 CClientManager::CClientManager()
@@ -16,10 +33,10 @@ CClientManager::CClientManager()
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     _CrtSetBreakAlloc(100);
-    if (GetModuleHandle(L"WinPixGpuCapturer.dll") == 0)
-    {
-        LoadLibrary(GetLatestWinPixGpuCapturerPath_Cpp17().c_str());
-    }
+    //if (GetModuleHandle(L"WinPixGpuCapturer.dll") == 0)
+    //{
+    //    LoadLibrary(GetLatestWinPixGpuCapturerPath_Cpp17().c_str());
+    //}
 }
 
 CClientManager::~CClientManager()
@@ -36,6 +53,29 @@ int CClientManager::Init(HINSTANCE instance)
 
     std::cout << "====== 서버 연동(Key 0) ======" << std::endl;
     std::cout << std::endl;
+
+    // PhysX TEMP ==================================================
+
+    physx::PxFoundation* foundation = PxCreateFoundation(PX_PHYSICS_VERSION, g_DefaultAllocatorCallback, g_DefaultErrorCallback);
+    if (!foundation)
+    {
+        ASSERT_CRASH("PxCreateFoundation failed!")
+        return E_FAIL;
+    }
+    bool recordMemoryAllocations = true;
+
+    physx::PxTolerancesScale toleranceScale;    // 물리 엔진 내부의 기준 길이/속도/질량 단위를 정의하여 수치 안정성과 정확도를 확보하는 구조체
+    toleranceScale.length = 1.f;    // 1미터
+    toleranceScale.speed = 10.f;   // 10m/s
+
+    physx::PxPhysics* physics = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, toleranceScale, false, nullptr);
+    if (!physics)
+    {
+        ASSERT_CRASH("PxCreatePhysics failed!")
+        return E_FAIL;
+    }
+
+    // =============================================================
 
     return S_OK;
 }
