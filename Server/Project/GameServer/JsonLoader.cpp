@@ -34,16 +34,6 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 		std::vector<float> pos = obj["position"];
 		std::vector<float> size = obj["size"];
 		
-		if (pos[1] < -50.f)
-			continue;
-
-
-
-		for (int i = 0; i < 3; ++i)
-		{
-				size[i] += 5.f;
-		}
-
 		CGameObjectRef object = CObjectUtil::CreateObject();
 		object->GetCollider()->SetCollisionProfile("Wall");
 		object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0], size[1], size[2]));

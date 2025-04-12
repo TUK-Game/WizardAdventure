@@ -94,7 +94,7 @@ void CBoxCollider::CallCollisionEnd(CBoxCollider* dest)
 void CBoxCollider::SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 offset)
 {
 	m_BoundingBox.Center = centerPos;
-	m_BoundingBox.Extents = XMFLOAT3(size.x / 2, size.y / 2, size.z / 2);
+	m_BoundingBox.Extents = XMFLOAT3(size.x, size.y, size.z);
 	m_Offset = offset;
 	m_Owner->PosInfo->mutable_position()->set_x(centerPos.x);
 	m_Owner->PosInfo->mutable_position()->set_y(centerPos.y);
