@@ -3,6 +3,8 @@
 #include "Monster.h"
 #include "Player.h"
 #include "Room.h"
+#include "BoxCollider.h"
+#include "LevelCollision.h"
 
 CMonsterAI::CMonsterAI()
 {
@@ -147,6 +149,11 @@ void CMonsterAI::Chase(float deltaTime)
 
     RotateToTarget(deltaTime);
 
+    HandleMoveMonster(deltaTime);
+}
+
+void CMonsterAI::HandleMoveMonster(float deltaTime)
+{
     const auto& myPos = m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->position();
     const auto& targetPos = m_Target->PlayerInfo->mutable_object_info()->mutable_pos_info()->position();
     Vec3 myPosition = Vec3(myPos.x(), myPos.y(), myPos.z());
@@ -155,12 +162,45 @@ void CMonsterAI::Chase(float deltaTime)
     Vec3 dir = targetPosition - myPosition;
     float dist = dir.Length();
 
-
     if (dist < 1.f) return; // 너무 가까우면 이동 생략
     dir.Normalize();
 
-    Vec3 nextPos = myPosition + dir * 300.f * deltaTime;
-    m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(nextPos.x);
-    m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(nextPos.y);
-    m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(nextPos.z);
+    int step = 1;
+
+    Protocol::Vector3& protoNow = *m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+    XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
+
+    // 이동량
+    Vec3 moveAmount = dir * 300.f * deltaTime;
+
+    moveAmount.x /= static_cast<float>(step);
+    moveAmount.y /= static_cast<float>(step);
+    moveAmount.z /= static_cast<float>(step);
+
+    for (int i = 1; i <= step; ++i)
+    {
+        nowPos.x += moveAmount.x;
+        nowPos.y += moveAmount.y;
+        nowPos.z += moveAmount.z;
+
+        ToProtoVector3(&protoNow, nowPos);
+
+        m_Owner->GetCollider()->Update();
+
+        if (g_Room->GetLevelCollision()->CollisionWithWall(m_Owner->GetCollider()))
+        {
+            std::cout << "박음" << std::endl;
+
+            nowPos.x -= moveAmount.x;
+            nowPos.y -= moveAmount.y;
+            nowPos.z -= moveAmount.z;
+
+            ToProtoVector3(&protoNow, nowPos);
+            break;
+        }
+    }
+
+    m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(nowPos.x);
+    m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(nowPos.y);
+    m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(nowPos.z);
 }

@@ -118,6 +118,7 @@
     <ClCompile Include="SimpleMath.cpp">
       <Filter>07. Math</Filter>
     </ClCompile>
+    <ClCompile Include="MonsterCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -186,6 +187,7 @@
     <ClInclude Include="SimpleMath.h">
       <Filter>07. Math</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\protoc-21.12-win64\bin\GenPackets.bat">

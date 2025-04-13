@@ -62,11 +62,10 @@ void CJsonLoader::Load(std::ifstream& file, CRoomRef room, ECollision_Channel ch
 		case ECollision_Channel::Monster:
 		{
 			CMonsterRef object = CObjectUtil::CreateMonster();
-			object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0], size[1], size[2]));
+			object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0], size[1], size[2]), XMFLOAT3(0, 100, 0));
 			object->GetCollider()->SetCollisionProfile("Monster");
 			object->MonsterInfo->mutable_object_info()->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
 			object->SetState(Protocol::MOVE_STATE_IDLE);
-			room->GetLevelCollision()->AddCollider(object->GetCollider(), channel);
 			room->AddObject((uint32)EObject_Type::Monster, object);
 			break;
 		}

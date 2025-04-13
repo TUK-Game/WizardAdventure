@@ -2,6 +2,7 @@
 #include "Monster.h"
 #include "CreatureCollider.h"
 #include "MonsterAI.h"
+#include "MonsterCollider.h"
 
 CMonster::CMonster()
 {
@@ -12,7 +13,7 @@ CMonster::CMonster()
 	ObjectInfo->set_allocated_pos_info(PosInfo);
 	MonsterInfo->set_allocated_object_info(ObjectInfo);
 
-	m_BoxCollider = new CCreatureCollider();
+	m_BoxCollider = new CMonsterCollider();
 	m_BoxCollider->SetOwner(this);
 
 	m_Ai = new CMonsterAI();
@@ -22,6 +23,7 @@ CMonster::CMonster()
 CMonster::~CMonster()
 {
 	delete MonsterInfo;
+	delete m_Ai;
 }
 
 void CMonster::Update(float deltaTime)

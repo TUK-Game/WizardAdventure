@@ -28,8 +28,8 @@ CMonster::CMonster()
 	AddComponent(new CTransform);
 	AddComponent(new CBoxCollider);
 	GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player")); // temp
-	GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
-	GetTransform()->SetRelativePosition(11240, 20, 3000);
+	GetCollider()->SetMaxMinPos(Vec3(11000, 20, 3500), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
+	GetTransform()->SetRelativePosition(11000, 20, 3500);
 	for (auto& o : obj2)
 	{
 		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
