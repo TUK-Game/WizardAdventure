@@ -165,6 +165,7 @@
     <ClCompile Include="GameSessionManager.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="MonsterAI.cpp" />
     <ClCompile Include="ObjectUtil.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -177,6 +178,7 @@
     </ClCompile>
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="ServerPacketHandler.cpp" />
+    <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="Struct.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -196,12 +198,14 @@
     <ClInclude Include="LevelCollision.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="MonsterAI.h" />
     <ClInclude Include="ObjectUtil.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Protocol.pb.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="ServerPacketHandler.h" />
+    <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Struct.pb.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Util.h" />
@@ -211,6 +215,7 @@
     <None Include="..\..\Build\protoc-21.12-win64\bin\Protocol.proto" />
     <None Include="..\..\Build\protoc-21.12-win64\bin\Struct.proto" />
     <None Include="..\Common\protoc-21.12-win64\bin\GenPackets.bat" />
+    <None Include="SimpleMath.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

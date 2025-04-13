@@ -99,9 +99,9 @@ void CRoom::UpdateClients()
 		pos->set_z(srcPosInfo.position().z());
 
 		Protocol::Vector3* rot = destPosInfo->mutable_rotation();
-		rot->set_x(srcPosInfo.rotation().x());
-		rot->set_y(srcPosInfo.rotation().y());
-		rot->set_z(srcPosInfo.rotation().z());
+		rot->set_x(0.f);
+		rot->set_y(0.f);
+		rot->set_z(0.f);
 
 		destPosInfo->set_state(monster->GetState());
 	}

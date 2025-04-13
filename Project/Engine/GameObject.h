@@ -63,6 +63,7 @@ public:
     void SetTag(const std::wstring& tag) { m_Tag = tag; }
     void SetInstancing(bool instancing) { m_bInstancing = instancing; }
     void SetProtocolStateForClient(Protocol::MoveState state);
+    void SetProtocolStateForClientMonster(Protocol::MoveState state);
 
     int GetLayerIndex() { return m_LayerIndex; }
     std::wstring GetTag() const { return m_Tag; }

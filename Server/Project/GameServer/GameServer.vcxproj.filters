@@ -43,6 +43,12 @@
     <Filter Include="06. Collision">
       <UniqueIdentifier>{0f110ed1-b7a3-499f-bedf-4143b88fe374}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Game\AI">
+      <UniqueIdentifier>{93920c26-5403-4275-8054-15ddcbbadb9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07. Math">
+      <UniqueIdentifier>{498efb10-c839-46db-b648-ddad6cfad307}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Util.cpp">
@@ -106,6 +112,12 @@
     <ClCompile Include="Timer.cpp">
       <Filter>99. Util</Filter>
     </ClCompile>
+    <ClCompile Include="MonsterAI.cpp">
+      <Filter>01. Game\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleMath.cpp">
+      <Filter>07. Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -168,6 +180,12 @@
     <ClInclude Include="Timer.h">
       <Filter>99. Util</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterAI.h">
+      <Filter>01. Game\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleMath.h">
+      <Filter>07. Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\protoc-21.12-win64\bin\GenPackets.bat">
@@ -181,6 +199,9 @@
     </None>
     <None Include="..\..\Build\protoc-21.12-win64\bin\Struct.proto">
       <Filter>04. Protocol</Filter>
+    </None>
+    <None Include="SimpleMath.inl">
+      <Filter>07. Math</Filter>
     </None>
   </ItemGroup>
 </Project>

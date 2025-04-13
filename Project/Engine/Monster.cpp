@@ -22,12 +22,12 @@ CMonster::CMonster()
 	std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
 
 	CreateStateManager();
-	AddComponent(new CMonsterAI);
+	//AddComponent(new CMonsterAI);
 	SetName(L"Crab");
 	AddComponent(new CTransform);
 	AddComponent(new CBoxCollider);
 	GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player")); // temp
-	//GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
+	GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
 	GetTransform()->SetRelativePosition(11240, 20, 3000);
 	for (auto& o : obj2)
 	{
@@ -40,6 +40,7 @@ CMonster::CMonster()
 		o->SetInstancing(false);
 		this->AddChild(o);
 	}
+	Begin();
 }
 
 CMonster::~CMonster()
@@ -49,6 +50,7 @@ CMonster::~CMonster()
 void CMonster::Begin()
 {
 	CGameObject::Begin();
+	m_StateManager->ChangeState(this, EState_Type::Idle);
 }
 
 void CMonster::Update()
@@ -76,7 +78,6 @@ void CMonster::CreateStateManager()
 	m_StateManager->AddState(new CMonsterChaseState);
 	m_StateManager->AddState(new CMonsterAttackState);
 
-	m_StateManager->ChangeState(this, EState_Type::Idle);
 
 	m_StateManager->SetTransition(EState_Type::Idle, "Chase", EState_Type::Chase);
 	m_StateManager->SetTransition(EState_Type::Idle, "Attack", EState_Type::Attack);

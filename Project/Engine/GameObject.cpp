@@ -239,6 +239,34 @@ void CGameObject::SetProtocolStateForClient(Protocol::MoveState state)
 	}
 }
 
+void CGameObject::SetProtocolStateForClientMonster(Protocol::MoveState state)
+{
+	switch (state)
+	{
+	case Protocol::MOVE_STATE_NONE:
+		break;
+	case Protocol::MOVE_STATE_IDLE:
+		m_StateManager->HandleEvent(this, "Idle");
+		break;
+	case Protocol::MOVE_STATE_RUN:
+		break;
+	case Protocol::MOVE_STATE_DASH:
+		break;
+	case Protocol::MOVE_STATE_DASH_END:
+		break;
+	case Protocol::MOVE_STATE_SKILL_Q:
+		break;
+	case Protocol::MOVE_STATE_SKILL_E:
+		break;
+	case Protocol::MOVE_STATE_SKILL_R:
+		break;
+	case Protocol::MOVE_STATE_SKILL_MOUSE_R:
+		break;
+	case Protocol::MOVE_STATE_SKILL_MOUSE_L:
+		break;
+	}
+}
+
 void CGameObject::AddComponent(CComponent* component)
 {
 	if (!component)

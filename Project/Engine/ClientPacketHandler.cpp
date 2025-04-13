@@ -131,7 +131,7 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		// 몬스터 정보 갱신
 		monster->GetTransform()->SetRelativePosition({ pos.x(), pos.y(), pos.z() });
 		monster->GetTransform()->SetRelativeRotation({ rot.x(), rot.y(), rot.z() });
-		monster->SetProtocolStateForClient(state);
+		monster->SetProtocolStateForClientMonster(state);
 	}
 	return true;
 }
