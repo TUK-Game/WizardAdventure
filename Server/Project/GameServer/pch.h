@@ -28,6 +28,7 @@ using namespace DirectX;
 enum class ECollision_Channel
 {
 	Player,
+	Monster,
 	Wall,
 	Max
 };
@@ -38,6 +39,12 @@ enum class ECollision_Interaction
 	Collision
 };
 
+enum class EObject_Type
+{
+	Monster,
+	Wall,
+	Max
+};
 
 struct CollisionProfile
 {

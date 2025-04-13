@@ -23,6 +23,7 @@ public:
 public:
 	const std::vector<CGameObject*>& GetObjects() const	{ return m_vecObjects; }
 	const std::vector<CGameObject*>& GetParentObjects() const	{ return m_vecParentObjects; }
+	std::unordered_map<UINT64, class CMonster*>& GetMonsterMap() { return m_MonsterMap; }
 
 	void RegisterGameObject(CGameObject* object)	{ m_vecObjects.push_back(object); }
 	void AddGameObject(CGameObject* parent, bool bChildMove);
@@ -50,6 +51,8 @@ private:
 	std::vector<CGameObject*>	m_vecObjects;		// 모든 오브젝트
 	std::vector<PendingAddObject> m_vecPendingAddObjects;
 	std::vector<CGameObject*>	m_vecPendingRemoveObjects;
+
+	std::unordered_map<UINT64, class CMonster*> m_MonsterMap;
 	int							m_LayerIndex;		// 레이어 번호
 };
 

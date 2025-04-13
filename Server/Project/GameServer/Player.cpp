@@ -17,6 +17,7 @@ CPlayer::CPlayer()
 
 CPlayer::~CPlayer()
 {
+	delete PlayerInfo;
 }
 
 void CPlayer::Update()

@@ -25,8 +25,9 @@ void CCollisionManager::Init()
 {
 	CreateProfile("Wall", ECollision_Channel::Wall, true, ECollision_Interaction::Ignore);
 	CreateProfile("Player", ECollision_Channel::Player, true);
+	CreateProfile("Monster", ECollision_Channel::Monster, true);
 
-	SetCollisionInteraction("Player", ECollision_Channel::Player, ECollision_Interaction::Ignore);
+	SetCollisionInteraction("Monster", ECollision_Channel::Wall, ECollision_Interaction::Collision);
 
 	SetCollisionInteraction("Wall", ECollision_Channel::Wall, ECollision_Interaction::Ignore);
 	SetCollisionInteraction("Wall", ECollision_Channel::Player, ECollision_Interaction::Collision);

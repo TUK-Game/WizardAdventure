@@ -10,6 +10,8 @@
 #include "ServerSession.h"
 #include "Transform.h"
 #include "CameraScript.h"
+#include "Monster.h"
+#include "Layer.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -98,6 +100,39 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt)
 {
 	std::cout << "======================퇴장======================" << std::endl;
+	return true;
+}
+
+bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO& pkt)
+{
+	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
+	std::vector<CGameObject*> monsters = level->GetLayer(11)->GetParentObjects();
+	auto& monsterMap = level->GetLayer(11)->GetMonsterMap();
+
+	for (int i = 0; i < pkt.monster_info_size(); ++i)
+	{
+		const Protocol::MonsterInfo& info = pkt.monster_info(i);
+		uint32_t objectId = info.object_id();
+
+		CMonster* monster = monsterMap[objectId];
+
+		if (nullptr == monster)
+		{
+			monster = new CMonster();
+			monsterMap[objectId] = monster;
+			level->AddGameObject(monster, 11, false);
+		}
+
+		const Protocol::PosInfo& posInfo = info.object_info().pos_info();
+		const Protocol::Vector3& pos = posInfo.position();
+		const Protocol::Vector3& rot = posInfo.rotation();
+		Protocol::MoveState state = posInfo.state();
+
+		// 몬스터 정보 갱신
+		monster->GetTransform()->SetRelativePosition({ pos.x(), pos.y(), pos.z() });
+		monster->GetTransform()->SetRelativeRotation({ rot.x(), rot.y(), rot.z() });
+		monster->SetProtocolStateForClient(state);
+	}
 	return true;
 }
 

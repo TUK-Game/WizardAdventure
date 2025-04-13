@@ -46,6 +46,12 @@ message S_MOVE
 	PlayerMoveInfo player_move_info = 1;
 }
 
+// 몬스터 정보 전송
+message S_MONSTER_INFO
+{	
+	repeated MonsterInfo monster_info = 1;
+}
+
 // 플레이어만 스포인가 오브젝트 전체가 스폰인가?
 message S_SPAWN
 {
@@ -71,3 +77,4 @@ message S_DESPAWN
 {
 	repeated uint64 object_ids = 1;
 }
+

@@ -40,17 +40,24 @@ CRoomRef CRoom::GetRoomRef()
 	return static_pointer_cast<CRoom>(shared_from_this());
 }
 
+void CRoom::Init()
+{
+}
+
 void CRoom::Update()
 {
 	//std::cout << "Update Room" << std::endl;
 	g_Timer->Update();
 	m_DeltaTime = g_Timer->GetDeltaTime();
 
-	for (const auto& object : m_mapObject)
+	for (const auto& layer : m_mapObject)
 	{
-		auto& gameObject = object.second;
+		for (const auto object : layer)
+		{
+			auto& gameObject = object.second;
 
-		gameObject->Update();	
+			gameObject->Update();
+		}
 	}
 
 	for (const auto& player : m_Players)
@@ -59,11 +66,47 @@ void CRoom::Update()
 			player->Update();
 	}
 
-	//m_LevelCollision->Collision();
+	m_LevelCollision->Collision();
+
+	// 몬스터 정보 전송
+	UpdateClients();
 
 	// 33ms 이후 실행 예약
 	// => 대충 30프레임
 	DoTimer(33, &CRoom::Update);
+}
+
+void CRoom::UpdateClients()
+{
+	std::unordered_map<uint64, CGameObjectRef> monsters = GetLayerObjects((int)EObject_Type::Monster);
+
+	Protocol::S_MONSTER_INFO pkt;
+	for (const auto& pair : monsters)
+	{
+		CMonster* monster = (CMonster*)(pair.second.get());
+		Protocol::MonsterInfo* info = pkt.add_monster_info();
+
+		info->set_object_id(monster->MonsterInfo->object_id());
+		info->set_monster_type(monster->MonsterInfo->monster_type());
+
+		const Protocol::PosInfo& srcPosInfo = monster->MonsterInfo->object_info().pos_info();
+
+		Protocol::PosInfo* destPosInfo = info->mutable_object_info()->mutable_pos_info();
+
+		Protocol::Vector3* pos = destPosInfo->mutable_position();
+		pos->set_x(srcPosInfo.position().x());
+		pos->set_y(srcPosInfo.position().y());
+		pos->set_z(srcPosInfo.position().z());
+
+		Protocol::Vector3* rot = destPosInfo->mutable_rotation();
+		rot->set_x(srcPosInfo.rotation().x());
+		rot->set_y(srcPosInfo.rotation().y());
+		rot->set_z(srcPosInfo.rotation().z());
+
+		destPosInfo->set_state(monster->GetState());
+	}
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	Broadcast(sendBuffer, -1);
 }
 
 bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
@@ -252,12 +295,12 @@ bool CRoom::AddPlayer(CPlayerRef player)
 	return true;
 }
 
-bool CRoom::AddObject(CGameObjectRef object)
+bool CRoom::AddObject(uint32 layer, CGameObjectRef object)
 {
-	if (m_mapObject.find(object->ObjectInfo->object_id()) != m_mapObject.end())
+	if (m_mapObject[layer].find(object->ObjectInfo->object_id()) != m_mapObject[layer].end())
 		return false;
 
-	m_mapObject.insert(make_pair(object->ObjectInfo->object_id(), object));
+	m_mapObject[layer].insert(make_pair(object->ObjectInfo->object_id(), object));
 
 	object->m_Room.store(GetRoomRef());
 
@@ -278,17 +321,17 @@ bool CRoom::RemovePlayer(uint64 playerId)
 	return true;
 }
 
-bool CRoom::RemoveObject(uint64 objectId)
+bool CRoom::RemoveObject(uint32 layer, uint64 objectId)
 {
-	if (m_mapObject.find(objectId) == m_mapObject.end())
+	if (m_mapObject[layer].find(objectId) == m_mapObject[layer].end())
 		return false;
 
-	CGameObjectRef object = m_mapObject[objectId];
+	CGameObjectRef object = m_mapObject[layer][objectId];
 	CPlayerRef player = dynamic_pointer_cast<CPlayer>(object);
 	if (player)
 		player->m_Room.store(std::weak_ptr<CRoom>());
 
-	m_mapObject.erase(objectId);
+	m_mapObject[layer].erase(objectId);
 
 	return true;
 }

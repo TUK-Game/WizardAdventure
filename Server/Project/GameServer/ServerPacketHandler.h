@@ -15,11 +15,12 @@ enum : uint16
 	PKT_S_LEAVE_GAME = 1005,
 	PKT_C_MOVE = 1006,
 	PKT_S_MOVE = 1007,
-	PKT_S_SPAWN = 1008,
-	PKT_S_SPAWN_NEW_PLAYER = 1009,
-	PKT_S_SPAWN_EXISTING_PLAYER = 1010,
-	PKT_S_DESPAWN_PLAYER = 1011,
-	PKT_S_DESPAWN = 1012,
+	PKT_S_MONSTER_INFO = 1008,
+	PKT_S_SPAWN = 1009,
+	PKT_S_SPAWN_NEW_PLAYER = 1010,
+	PKT_S_SPAWN_EXISTING_PLAYER = 1011,
+	PKT_S_DESPAWN_PLAYER = 1012,
+	PKT_S_DESPAWN = 1013,
 };
 
 // ===== Process Packet =====
@@ -51,6 +52,7 @@ public:
 	static CSendBufferRef MakeSendBuffer(Protocol::S_ENTER_GAME& pkt) { return MakeSendBuffer(pkt, PKT_S_ENTER_GAME); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_LEAVE_GAME& pkt) { return MakeSendBuffer(pkt, PKT_S_LEAVE_GAME); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_MOVE& pkt) { return MakeSendBuffer(pkt, PKT_S_MOVE); }
+	static CSendBufferRef MakeSendBuffer(Protocol::S_MONSTER_INFO& pkt) { return MakeSendBuffer(pkt, PKT_S_MONSTER_INFO); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_SPAWN& pkt) { return MakeSendBuffer(pkt, PKT_S_SPAWN); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_SPAWN_NEW_PLAYER& pkt) { return MakeSendBuffer(pkt, PKT_S_SPAWN_NEW_PLAYER); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_SPAWN_EXISTING_PLAYER& pkt) { return MakeSendBuffer(pkt, PKT_S_SPAWN_EXISTING_PLAYER); }
