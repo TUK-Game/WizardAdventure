@@ -129,7 +129,8 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		Protocol::MoveState state = posInfo.state();
 
 		// 몬스터 정보 갱신
-		monster->GetTransform()->SetRelativePosition({ pos.x(), pos.y(), pos.z() });
+		//monster->GetTransform()->SetRelativePosition({ pos.x(), pos.y(), pos.z() });
+		monster->SetTarget(Vec3(pos.x(), pos.y(), pos.z()));
 		monster->GetTransform()->SetRelativeRotation({ rot.x(), rot.y(), rot.z() });
 		monster->SetProtocolStateForClientMonster(state);
 	}
@@ -143,7 +144,7 @@ bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 	const Protocol::Vector3& position = pkt.player_move_info().pos_info().position();
 	const Protocol::Vector3& rotation = pkt.player_move_info().pos_info().rotation();
 	Protocol::MoveState state = pkt.player_move_info().pos_info().state();
-	((CPlayer*)CLevelManager::GetInst()->GetPlayer(id))->SetTarget(Vec3(position.x(), position.y(), position.z()));
+	CLevelManager::GetInst()->GetPlayer(id)->SetTarget(Vec3(position.x(), position.y(), position.z()));
 	CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(rotation.x(), rotation.y(), rotation.z());
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
 	std::cout << position.x() << " " << position.y() << " " << position.z() << '\n';

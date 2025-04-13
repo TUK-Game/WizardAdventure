@@ -23,7 +23,7 @@ CGameObject::~CGameObject()
 		delete m_BoxCollider;
 }
 
-void CGameObject::Update()
+void CGameObject::Update(float deltaTime)
 {
 	if(m_BoxCollider)
 	{

@@ -56,14 +56,14 @@ void CRoom::Update()
 		{
 			auto& gameObject = object.second;
 
-			gameObject->Update();
+			gameObject->Update(m_DeltaTime);
 		}
 	}
 
 	for (const auto& player : m_Players)
 	{
 		if(player)
-			player->Update();
+			player->Update(m_DeltaTime);
 	}
 
 	m_LevelCollision->Collision();
@@ -99,9 +99,9 @@ void CRoom::UpdateClients()
 		pos->set_z(srcPosInfo.position().z());
 
 		Protocol::Vector3* rot = destPosInfo->mutable_rotation();
-		rot->set_x(0.f);
-		rot->set_y(0.f);
-		rot->set_z(0.f);
+		rot->set_x(srcPosInfo.rotation().x());
+		rot->set_y(srcPosInfo.rotation().y());
+		rot->set_z(srcPosInfo.rotation().z());
 
 		destPosInfo->set_state(monster->GetState());
 	}

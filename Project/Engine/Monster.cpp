@@ -17,6 +17,7 @@
 #include <iostream>
 
 CMonster::CMonster()
+	: m_Interpolator(new CInterpolator())
 {
 	CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
 	std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
@@ -40,24 +41,33 @@ CMonster::CMonster()
 		o->SetInstancing(false);
 		this->AddChild(o);
 	}
-	Begin();
+	Begin();	
 }
 
 CMonster::~CMonster()
 {
+	if (m_Interpolator)
+		delete m_Interpolator;
 }
 
 void CMonster::Begin()
 {
 	CGameObject::Begin();
 	m_StateManager->ChangeState(this, EState_Type::Idle);
+	m_Interpolator->SetTarget(GetTransform()->GetRelativePosition());
 }
 
 void CMonster::Update()
 {
+	float time = DELTA_TIME;
 	if (m_StateManager) {
-		m_StateManager->Update(this, DELTA_TIME);
+		m_StateManager->Update(this, time);
 	}
+#ifndef DEBUG_SOLOPLAY
+	m_Interpolator->Update(time);
+	GetTransform()->SetRelativePosition((m_Interpolator->GetInterpolatedPos()));
+#endif // DEBUG_SOLOPLAY
+
 	CGameObject::Update();
 }
 

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Monster.h"
 #include "CreatureCollider.h"
+#include "MonsterAI.h"
 
 CMonster::CMonster()
 {
@@ -13,6 +14,9 @@ CMonster::CMonster()
 
 	m_BoxCollider = new CCreatureCollider();
 	m_BoxCollider->SetOwner(this);
+
+	m_Ai = new CMonsterAI();
+	m_Ai->SetOwner(this);
 }
 
 CMonster::~CMonster()
@@ -20,9 +24,10 @@ CMonster::~CMonster()
 	delete MonsterInfo;
 }
 
-void CMonster::Update()
+void CMonster::Update(float deltaTime)
 {
-	CGameObject::Update();
+	CGameObject::Update(deltaTime);
+	m_Ai->Update(deltaTime);
 }
 
 void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)

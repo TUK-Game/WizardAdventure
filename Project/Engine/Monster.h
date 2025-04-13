@@ -12,6 +12,7 @@ public:
     virtual void FinalUpdate();
     virtual void Render();
 
+    virtual void SetTarget(const Vec3& pos) { m_Interpolator->SetTarget(pos); }
     void SetStat(const MonsterStat& stat);
     const MonsterStat& GetStat() const { return m_Stat; }
 
@@ -22,5 +23,6 @@ public:
 private:
     MonsterStat m_Stat;
     EMonsterType m_Type;
+    CInterpolator* m_Interpolator;
 };
 

@@ -19,10 +19,8 @@ public:
 	void UpdateClients();
 public:
 	class CLevelCollision* GetLevelCollision() { return m_LevelCollision; }
-
-public:
 	std::unordered_map<uint64, CGameObjectRef>& GetLayerObjects(uint32 layer) { return m_mapObject[layer]; }
-
+	std::array<CPlayerRef, MAX_PLAYERS>& GetPlayers() { return m_Players; }
 public:
 	bool HandleEnterPlayer(CPlayerRef player);
 	bool HandleLeavePlayer(CPlayerRef player);

@@ -18,8 +18,6 @@ void CMonsterIdleState::Enter(CGameObject* entity)
 
 void CMonsterIdleState::Update(CGameObject* entity, float deltaTime)
 {
-#ifdef DEBUG_SOLOPLAY
-#endif
 	//entity->GetMonsterAI()->RotateToTarget(deltaTime);
 }
 
