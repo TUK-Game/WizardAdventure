@@ -21,6 +21,25 @@ namespace Protocol
     enum MoveState : int;
 }
 
+struct Stats {
+    int maxHp = 100;
+    int currentHp = 100;
+    int attack = 10;
+    float moveSpeed = 300.f;
+
+    void TakeDamage(int damage) {
+        currentHp = max(currentHp - damage, 0);
+    }
+
+    void Heal(int amount) {
+        currentHp = min(currentHp + amount, maxHp);
+    }
+
+    bool IsDead() const {
+        return currentHp <= 0;
+    }
+};
+
 
 class CGameObject :
     public CRef
@@ -50,7 +69,8 @@ public:
     CStateManager* GetStateManager()                    { return m_StateManager; }
     bool GetInstancing()                                { return m_bInstancing; }
     bool GetCheckFrustum() { return m_CheckFrustum; }
-
+    const Stats& GetStats() const { return m_Stats; }
+    Stats& GetMutableStats() { return m_Stats; }
 
     Protocol::MoveState GetStateForProtocol();
     bool IsStatic() { return m_Static; }
@@ -73,6 +93,10 @@ public:
     void AddChild(CGameObject* obj);
     void RemoveChild(CGameObject* obj);
     void RemoveFromParent();
+
+    void ReceiveDamage(int dmg);
+    virtual void OnDeath();
+
 
     virtual void Destroy();
     
@@ -101,6 +125,7 @@ private:
     bool m_Static = false; // 정적/동적 오브젝트 여부 
     bool m_bInstancing = false; // 인스턴싱 여부
     std::wstring m_Tag = L"Default"; // 기본 태그 (Default)
+    Stats m_Stats;
 
 
 protected:
