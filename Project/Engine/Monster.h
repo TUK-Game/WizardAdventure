@@ -12,7 +12,7 @@ public:
     virtual void FinalUpdate();
     virtual void Render();
 
-    virtual void SetTarget(const Vec3& pos) { m_Interpolator->SetTarget(pos); }
+    virtual void SetTarget(const Vec3& pos, const Vec3& rot) { m_Interpolator->SetTarget(pos, rot); }
     void SetStat(const MonsterStat& stat);
     const MonsterStat& GetStat() const { return m_Stat; }
 

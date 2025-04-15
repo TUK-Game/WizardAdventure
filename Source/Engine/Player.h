@@ -19,7 +19,7 @@ public:
 
     void Move(Vec3 moveDir, bool shouldRotate = true);
     void Attack(int skillIndex);
-    virtual void SetTarget(const Vec3& pos) { m_Interpolator->SetTarget(pos); }
+    virtual void SetTarget(const Vec3& pos, const Vec3& rot) { m_Interpolator->SetTarget(pos, rot); }
     void CreateStateManager();
 
     Vec3 GetCurrentMoveDir() { return m_currentMoveDir; }

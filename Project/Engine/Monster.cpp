@@ -54,7 +54,7 @@ void CMonster::Begin()
 {
 	CGameObject::Begin();
 	m_StateManager->ChangeState(this, EState_Type::Idle);
-	m_Interpolator->SetTarget(GetTransform()->GetRelativePosition());
+	m_Interpolator->SetTarget(GetTransform()->GetRelativePosition(), GetTransform()->GetRelativeRotation());
 }
 
 void CMonster::Update()
@@ -66,6 +66,7 @@ void CMonster::Update()
 #ifndef DEBUG_SOLOPLAY
 	m_Interpolator->Update(time);
 	GetTransform()->SetRelativePosition((m_Interpolator->GetInterpolatedPos()));
+	GetTransform()->SetRelativeRotation((m_Interpolator->GetInterpolatedRot()));
 #endif // DEBUG_SOLOPLAY
 
 	CGameObject::Update();

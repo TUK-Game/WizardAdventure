@@ -24,15 +24,21 @@ namespace Protocol
 class CInterpolator
 {
 public:
-    void SetTarget(const Vec3& newPos)
+    float LerpAngle(float a, float b, float t)
+    {
+        float delta = fmodf(b - a + 540.0f, 360.0f) - 180.0f;
+        return a + delta * t;
+    }
+
+    void SetTarget(const Vec3& newPos, const Vec3& newRot)
     {
         auto now = std::chrono::high_resolution_clock::now();
 
 
         if (!m_HasPrevRecvTime)
         {
-            m_PrevPos = newPos;
-            m_TargetPos = newPos;
+            m_PrevPos = m_TargetPos = newPos;
+            m_PrevRot = m_TargetRot = newRot;
             m_ElapsedTime = 0.f;
             m_Duration = 1.f;
             m_LastRecvTime = now;
@@ -41,6 +47,7 @@ public:
         }
 
         m_PrevPos = GetInterpolatedPos();
+        m_PrevRot = GetInterpolatedRot();
 
         // 너무 멀면 보간안하고 즉시 반영 (ex: 순간이동)
         float dist = (newPos - m_PrevPos).Length();
@@ -57,6 +64,7 @@ public:
         }
 
         m_TargetPos = newPos;
+        m_TargetRot = newRot;
 
         // 서버에서 마지막 패킷 받은지 얼마나 지났는지
         m_Duration = std::chrono::duration<float>(now - m_LastRecvTime).count();
@@ -88,14 +96,27 @@ public:
         return Vec3::Lerp(m_PrevPos, m_TargetPos, t);
     }
 
-    bool IsComplete() const
+    Vec3 GetInterpolatedRot()
     {
-        return m_ElapsedTime >= m_Duration;
+        if (m_Duration <= 0.f)
+            return m_TargetRot;
+
+        float t = m_ElapsedTime / m_Duration;
+        t = std::clamp(t, 0.f, 1.f);
+
+        return Vec3(
+            LerpAngle(m_PrevRot.x, m_TargetRot.x, t),
+            LerpAngle(m_PrevRot.y, m_TargetRot.y, t),
+            LerpAngle(m_PrevRot.z, m_TargetRot.z, t)
+        );
     }
 
 private:
     Vec3 m_PrevPos;
     Vec3 m_TargetPos;
+
+    Vec3 m_PrevRot;
+    Vec3 m_TargetRot;
 
     float m_ElapsedTime = 0.f;
     float m_Duration = 0.1f;
@@ -147,7 +168,7 @@ public:
     void SetInstancing(bool instancing) { m_bInstancing = instancing; }
     void SetProtocolStateForClient(Protocol::MoveState state);
     void SetProtocolStateForClientMonster(Protocol::MoveState state);
-    virtual void SetTarget(const Vec3& pos) {}
+    virtual void SetTarget(const Vec3& pos, const Vec3& rot) {}
 
     int GetLayerIndex() { return m_LayerIndex; }
     std::wstring GetTag() const { return m_Tag; }
