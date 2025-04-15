@@ -10,6 +10,7 @@
 #include "MeshRenderer.h"
 #include "PathManager.h"
 #include "BaseCollider.h"
+#include "Layer.h"
 
 using json = nlohmann::json;
 
@@ -30,7 +31,28 @@ void CJsonConverter::SaveMapCollision(const std::wstring& fileName)
 
     std::ofstream file{ path / (fileName + L".json") };
 
-    json map = json::array(); 
+    Save(file, objects);
+
+    SaveMonster(fileName);
+}
+
+void CJsonConverter::SaveMonster(const std::wstring& fileName)
+{
+    auto path = CPathManager::GetInst()->FindPath(JSON_PATH);
+    CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
+    
+    std::vector<CGameObject*> objects = level->GetLayer(11)->GetParentObjects(); // monster layer
+
+    std::ofstream file{ path / (fileName + L"_Monster.json") };
+
+    Save(file, objects);
+
+    std::cout << "JSON작성완료" << std::endl;
+}
+
+void CJsonConverter::Save(std::ofstream& file, const std::vector<CGameObject*>& objects)
+{
+    json map = json::array();
 
     for (auto object : objects)
     {
@@ -38,7 +60,7 @@ void CJsonConverter::SaveMapCollision(const std::wstring& fileName)
         CTransform* transform = object->GetTransform();
         CBaseCollider* collider = object->GetCollider();
         Vec3 pos = transform->GetWorldPosition();
-        std::string name = ws2s(object->GetMeshRenderer()->GetMesh()->GetName());
+        std::string name = ws2s(object->GetName());
         name.erase(std::find(name.begin(), name.end(), '\0'), name.end());
         obj["name"] = name;
         obj["position"] = { pos.x, pos.y, pos.z };
@@ -48,5 +70,4 @@ void CJsonConverter::SaveMapCollision(const std::wstring& fileName)
     }
 
     file << map.dump(4);
-    std::cout << "JSON작성완료" << std::endl;
 }

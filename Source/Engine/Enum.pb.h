@@ -128,6 +128,30 @@ inline bool PlayerType_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<PlayerType>(
     PlayerType_descriptor(), name, value);
 }
+enum MonsterType : int {
+  Monster_TYPE_Default = 0,
+  MonsterType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  MonsterType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool MonsterType_IsValid(int value);
+constexpr MonsterType MonsterType_MIN = Monster_TYPE_Default;
+constexpr MonsterType MonsterType_MAX = Monster_TYPE_Default;
+constexpr int MonsterType_ARRAYSIZE = MonsterType_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MonsterType_descriptor();
+template<typename T>
+inline const std::string& MonsterType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, MonsterType>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function MonsterType_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    MonsterType_descriptor(), enum_t_value);
+}
+inline bool MonsterType_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, MonsterType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MonsterType>(
+    MonsterType_descriptor(), name, value);
+}
 enum MoveState : int {
   MOVE_STATE_NONE = 0,
   MOVE_STATE_IDLE = 1,
@@ -197,6 +221,11 @@ template <> struct is_proto_enum< ::Protocol::PlayerType> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::PlayerType>() {
   return ::Protocol::PlayerType_descriptor();
+}
+template <> struct is_proto_enum< ::Protocol::MonsterType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::MonsterType>() {
+  return ::Protocol::MonsterType_descriptor();
 }
 template <> struct is_proto_enum< ::Protocol::MoveState> : ::std::true_type {};
 template <>

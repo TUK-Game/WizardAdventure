@@ -17,11 +17,12 @@ CPlayer::CPlayer()
 
 CPlayer::~CPlayer()
 {
+	delete PlayerInfo;
 }
 
-void CPlayer::Update()
+void CPlayer::Update(float deltaTime)
 {
-	CGameObject::Update();
+	CGameObject::Update(deltaTime);
 	if (m_State == Protocol::MOVE_STATE_DASH)
 	{
 		float deltaTime = g_Timer->GetDeltaTime();

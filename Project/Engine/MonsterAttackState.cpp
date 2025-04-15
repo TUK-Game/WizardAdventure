@@ -23,9 +23,9 @@ void CMonsterAttackState::Enter(CGameObject* entity)
 
 void CMonsterAttackState::Update(CGameObject* entity, float deltaTime)
 {
-    m_ElapsedTime += deltaTime;
-    if (m_ElapsedTime >= m_AttackDuration)
-        entity->GetStateManager()->HandleEvent(entity, "Idle");
+    //m_ElapsedTime += deltaTime;
+    //if (m_ElapsedTime >= m_AttackDuration)
+    //    entity->GetStateManager()->HandleEvent(entity, "Idle");
 }
 
 void CMonsterAttackState::Exit(CGameObject* entity)

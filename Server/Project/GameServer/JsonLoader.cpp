@@ -7,6 +7,7 @@
 #include "CollisionManager.h"
 #include "ObjectUtil.h"
 #include "LevelCollision.h"
+#include "Monster.h"
 #include <iostream>
 #include <fstream>
 
@@ -24,6 +25,28 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 		return;
 	}
 
+	Load(file, room, ECollision_Channel::Wall);
+	LoadMonster(fileName, room);
+}
+
+void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
+{
+	std::wstring path = L"..\\..\\..\\Content\\Json\\" + fileName + L"_Monster.json";
+
+	std::ifstream file{ path.c_str() };
+
+	if (!file.is_open())
+	{
+		std::cout << "파일이 없습니다." << std::endl;
+		return;
+	}
+
+	Load(file, room, ECollision_Channel::Monster);
+	std::cout << "Json read완료" << std::endl;
+}
+
+void CJsonLoader::Load(std::ifstream& file, CRoomRef room, ECollision_Channel channel)
+{
 	json map;
 
 	file >> map;
@@ -33,22 +56,28 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 		std::string name = obj["name"];
 		std::vector<float> pos = obj["position"];
 		std::vector<float> size = obj["size"];
-		
-		if (pos[1] < -50.f)
-			continue;
 
-
-
-		for (int i = 0; i < 3; ++i)
+		switch (channel)
 		{
-				size[i] += 5.f;
+		case ECollision_Channel::Monster:
+		{
+			CMonsterRef object = CObjectUtil::CreateMonster();
+			object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0], size[1], size[2]), XMFLOAT3(0, 100, 0));
+			object->GetCollider()->SetCollisionProfile("Monster");
+			object->MonsterInfo->mutable_object_info()->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
+			object->SetState(Protocol::MOVE_STATE_IDLE);
+			room->AddObject((uint32)EObject_Type::Monster, object);
+			break;
 		}
-
-		CGameObjectRef object = CObjectUtil::CreateObject();
-		object->GetCollider()->SetCollisionProfile("Wall");
-		object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0], size[1], size[2]));
-		room->GetLevelCollision()->AddCollider(object->GetCollider(), ECollision_Channel::Wall);
-		room->AddObject(object);
+		case ECollision_Channel::Wall:
+		{
+			CGameObjectRef object = CObjectUtil::CreateObject();
+			object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0], size[1], size[2]));
+			object->GetCollider()->SetCollisionProfile("Wall");
+			room->GetLevelCollision()->AddCollider(object->GetCollider(), channel);
+			room->AddObject((uint32)EObject_Type::Wall, object);
+			break;
+		}
+		}
 	}
-	std::cout << "Json read완료" << std::endl;
 }

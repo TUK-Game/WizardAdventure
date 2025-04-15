@@ -331,8 +331,8 @@ int CAssetManager::LoadMeshData()
 	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Mage.jhd");
 	AddAsset(L"Mage", data);
 
-	//data= CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Crab.jhd", L"Crab");
-	//AddAsset(L"Crab", data);
+	data= CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Crab.jhd", L"Crab");
+	AddAsset(L"Crab", data);
 
 	data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/SwordLava.jhd", L"SwordLava");
 	AddAsset(L"SwordLava", data);

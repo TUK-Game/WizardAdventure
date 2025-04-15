@@ -1,7 +1,7 @@
 #pragma once
-#include "BoxCollider.h"	
+#include "BoxCollider.h"
 
-class CCreatureCollider :
+class CMonsterCollider :
 	public CBoxCollider
 {
 public:

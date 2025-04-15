@@ -25,7 +25,7 @@ public:
 public:
 	std::shared_ptr<CGameSession> GetSession() const { return m_Session.lock(); }
 
-	virtual void Update();
+	virtual void Update(float deltaTime);
 
 	virtual void CollisionBegin(CBoxCollider* src, CBoxCollider* dest);
 	virtual void CollisionEvent(CBoxCollider* src, CBoxCollider* dest);

@@ -66,6 +66,7 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 		return false;
 
 	const auto& pos = pkt.player_move_info().pos_info().position();
+
 	const auto& rot = pkt.player_move_info().pos_info().rotation();
 	const auto& dir = pkt.dir();
 	auto state = pkt.player_move_info().pos_info().state();

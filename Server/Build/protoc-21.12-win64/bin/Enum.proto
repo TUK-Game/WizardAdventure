@@ -25,6 +25,12 @@ enum PlayerType
 	PLAYER_TYPE_LIGHTNING = 3;
 }
 
+enum MonsterType
+{
+	Monster_TYPE_Default = 0;
+}
+
+
 enum MoveState
 {
 	MOVE_STATE_NONE = 0;

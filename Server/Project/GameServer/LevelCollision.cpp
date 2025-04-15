@@ -18,69 +18,74 @@ void CLevelCollision::AddCollider(CBoxCollider* collider, ECollision_Channel cha
 
 void CLevelCollision::Collision()
 {
-	size_t size = m_vecCollider[(int)ECollision_Channel::Wall].size();
-	size_t size2 = m_vecCollider[(int)ECollision_Channel::Player].size();
-	if (size > 1)
-	{
-		for (size_t i = 0; i < size; ++i)
-		{
-			CBoxCollider* src = m_vecCollider[(int)ECollision_Channel::Wall][i];
+    for (int i = 0; i < (int)ECollision_Channel::Max; ++i)
+    {
+        size_t srcSize = m_vecCollider[i].size();
+        if (srcSize == 0 || (int)ECollision_Channel::Wall == i)
+            continue;
 
-			for (size_t j = 0; j < size2; ++j)
-			{
-				CBoxCollider* dest = m_vecCollider[(int)ECollision_Channel::Player][j];
+        for (int j = 0; j < (int)ECollision_Channel::Max; ++j)
+        {
+            size_t destSize = m_vecCollider[j].size();
+            if (destSize == 0 || (int)ECollision_Channel::Wall == j)
+                continue;
 
-				if (src->GetOwner() == dest->GetOwner())
-					continue;
+            for (size_t s = 0; s < srcSize; ++s)
+            {
+                CBoxCollider* src = m_vecCollider[i][s];
+                const CollisionProfile* srcProfile = src->GetProfile();
 
-				// 충돌 프로파일을 가져와서 충돌시켜야 하는 물체인지 판단
-				const CollisionProfile* srcProfile = src->GetProfile();
-				const CollisionProfile* destProfile = dest->GetProfile();
+                size_t start = (i == j) ? s + 1 : 0;
+                for (size_t d = start; d < destSize; ++d)
+                {
+                    CBoxCollider* dest = m_vecCollider[j][d];
+                    if (src == dest || src->GetOwner() == dest->GetOwner())
+                        continue;
 
-				ECollision_Interaction	srcInteraction = srcProfile->vecCollisionInteraction[(int)destProfile->channel];
-				ECollision_Interaction	destInteraction = destProfile->vecCollisionInteraction[(int)srcProfile->channel];
+                    const CollisionProfile* destProfile = dest->GetProfile();
 
-				if (srcInteraction == ECollision_Interaction::Ignore ||
-					destInteraction == ECollision_Interaction::Ignore)
-					continue;
+                    ECollision_Interaction srcInteraction = srcProfile->vecCollisionInteraction[(int)destProfile->channel];
+                    ECollision_Interaction destInteraction = destProfile->vecCollisionInteraction[(int)srcProfile->channel];
 
-				// 충돌 체크
-				if (src->Collision(dest))
-				{
-					// 충돌 순간
-					if (!src->CheckCollisionList(dest))
-					{
-						// 서로에게 상대방 충돌체를 충돌리스트에 추가
-						src->AddCollisionList(dest);
-						dest->AddCollisionList(src);
+                    if (srcInteraction == ECollision_Interaction::Ignore || destInteraction == ECollision_Interaction::Ignore)
+                        continue;
 
-						// 충돌 시작 함수 호출
-						src->CallCollisionBegin(dest);
-						dest->CallCollisionBegin(src);
-					}
-					else
-					{
-						src->CollisionEvent(dest);
-						dest->CollisionEvent(src);
-					}
-				}
+                    if (src->Collision(dest))
+                    {
+                        if (!src->CheckCollisionList(dest))
+                        {
+                            src->AddCollisionList(dest);
+                            dest->AddCollisionList(src);
 
-				// 충돌중인 물체 간 충돌이 끝나는 순간
-				else if (src->CheckCollisionList(dest))
-				{
-					// 충돌리스트에서 서로의 충돌체 제거
-					src->DeleteCollisionList(dest);
-					dest->DeleteCollisionList(src);
+                            src->CallCollisionBegin(dest);
+                            dest->CallCollisionBegin(src);
+                        }
+                        else
+                        {
+                            src->CollisionEvent(dest);
+                            dest->CollisionEvent(src);
+                        }
+                    }
+                    else if (src->CheckCollisionList(dest))
+                    {
+                        src->DeleteCollisionList(dest);
+                        dest->DeleteCollisionList(src);
 
-					// 충돌 종료 함수 호출
-					src->CallCollisionEnd(dest);
-					dest->CallCollisionEnd(src);
-				}
-			}
-		}
-	}
+                        src->CallCollisionEnd(dest);
+                        dest->CallCollisionEnd(src);
+                    }
+                }
+            }
+        }
+    }
 
-	m_vecCollider[(int)ECollision_Channel::Player].clear();
+    for (int i = 0; i < (int)ECollision_Channel::Max; ++i)
+    {
+        if ((int)ECollision_Channel::Wall == i)
+            continue;
+
+        m_vecCollider[i].clear();
+    }
 }
 
 bool CLevelCollision::CollisionWithWall(CBoxCollider* collider)

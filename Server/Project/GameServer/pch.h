@@ -19,6 +19,8 @@
 #include "Util.h"
 #include "GameSession.h"
 #include "Timer.h"
+#include "SimpleMath.h"
+
 // Collision
 #include "DirectXCollision.h"
 #include "DirectXMath.h"
@@ -28,6 +30,7 @@ using namespace DirectX;
 enum class ECollision_Channel
 {
 	Player,
+	Monster,
 	Wall,
 	Max
 };
@@ -38,6 +41,12 @@ enum class ECollision_Interaction
 	Collision
 };
 
+enum class EObject_Type
+{
+	Monster,
+	Wall,
+	Max
+};
 
 struct CollisionProfile
 {
@@ -61,3 +70,12 @@ USING_SHARED_PTR(CCollisionManager);
 #define SEND_PACKET(pkt)													\
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);	\
 	session->Send(sendBuffer);
+
+using Vec2 = DirectX::SimpleMath::Vector2;
+using Vec3 = DirectX::SimpleMath::Vector3;
+using Vec4 = DirectX::SimpleMath::Vector4;
+using Vector2 = DirectX::SimpleMath::Vector2;
+using Vector3 = DirectX::SimpleMath::Vector3;
+using Vector4 = DirectX::SimpleMath::Vector4;
+using Matrix = DirectX::SimpleMath::Matrix;
+using Quaternion = DirectX::SimpleMath::Quaternion;

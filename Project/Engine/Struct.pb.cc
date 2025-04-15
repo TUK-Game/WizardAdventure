@@ -82,6 +82,36 @@ struct PlayerInfoDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlayerInfoDefaultTypeInternal _PlayerInfo_default_instance_;
+PROTOBUF_CONSTEXPR MonsterInfo::MonsterInfo(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.object_info_)*/nullptr
+  , /*decltype(_impl_.object_id_)*/uint64_t{0u}
+  , /*decltype(_impl_.monster_type_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct MonsterInfoDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR MonsterInfoDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~MonsterInfoDefaultTypeInternal() {}
+  union {
+    MonsterInfo _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MonsterInfoDefaultTypeInternal _MonsterInfo_default_instance_;
+PROTOBUF_CONSTEXPR MonsterMoveInfo::MonsterMoveInfo(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.pos_info_)*/nullptr
+  , /*decltype(_impl_.object_id_)*/0u
+  , /*decltype(_impl_.monster_type_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct MonsterMoveInfoDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR MonsterMoveInfoDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~MonsterMoveInfoDefaultTypeInternal() {}
+  union {
+    MonsterMoveInfo _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MonsterMoveInfoDefaultTypeInternal _MonsterMoveInfo_default_instance_;
 PROTOBUF_CONSTEXPR PlayerMoveInfo::PlayerMoveInfo(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.pos_info_)*/nullptr
@@ -97,7 +127,7 @@ struct PlayerMoveInfoDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlayerMoveInfoDefaultTypeInternal _PlayerMoveInfo_default_instance_;
 }  // namespace Protocol
-static ::_pb::Metadata file_level_metadata_Struct_2eproto[5];
+static ::_pb::Metadata file_level_metadata_Struct_2eproto[7];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_Struct_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Struct_2eproto = nullptr;
 
@@ -140,6 +170,24 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.player_type_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.object_info_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::MonsterInfo, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::MonsterInfo, _impl_.object_id_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::MonsterInfo, _impl_.monster_type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::MonsterInfo, _impl_.object_info_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::MonsterMoveInfo, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::MonsterMoveInfo, _impl_.object_id_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::MonsterMoveInfo, _impl_.monster_type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::MonsterMoveInfo, _impl_.pos_info_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerMoveInfo, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -153,7 +201,9 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 9, -1, -1, sizeof(::Protocol::PosInfo)},
   { 19, -1, -1, sizeof(::Protocol::ObjectInfo)},
   { 28, -1, -1, sizeof(::Protocol::PlayerInfo)},
-  { 37, -1, -1, sizeof(::Protocol::PlayerMoveInfo)},
+  { 37, -1, -1, sizeof(::Protocol::MonsterInfo)},
+  { 46, -1, -1, sizeof(::Protocol::MonsterMoveInfo)},
+  { 55, -1, -1, sizeof(::Protocol::PlayerMoveInfo)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -161,6 +211,8 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::Protocol::_PosInfo_default_instance_._instance,
   &::Protocol::_ObjectInfo_default_instance_._instance,
   &::Protocol::_PlayerInfo_default_instance_._instance,
+  &::Protocol::_MonsterInfo_default_instance_._instance,
+  &::Protocol::_MonsterMoveInfo_default_instance_._instance,
   &::Protocol::_PlayerMoveInfo_default_instance_._instance,
 };
 
@@ -176,18 +228,24 @@ const char descriptor_table_protodef_Struct_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "otocol.PosInfo\"u\n\nPlayerInfo\022\021\n\tplayer_i"
   "d\030\001 \001(\r\022)\n\013player_type\030\002 \001(\0162\024.Protocol."
   "PlayerType\022)\n\013object_info\030\003 \001(\0132\024.Protoc"
-  "ol.ObjectInfo\"H\n\016PlayerMoveInfo\022\021\n\tplaye"
-  "r_id\030\001 \001(\r\022#\n\010pos_info\030\002 \001(\0132\021.Protocol."
-  "PosInfob\006proto3"
+  "ol.ObjectInfo\"x\n\013MonsterInfo\022\021\n\tobject_i"
+  "d\030\001 \001(\004\022+\n\014monster_type\030\002 \001(\0162\025.Protocol"
+  ".MonsterType\022)\n\013object_info\030\003 \001(\0132\024.Prot"
+  "ocol.ObjectInfo\"v\n\017MonsterMoveInfo\022\021\n\tob"
+  "ject_id\030\001 \001(\r\022+\n\014monster_type\030\002 \001(\0162\025.Pr"
+  "otocol.MonsterType\022#\n\010pos_info\030\003 \001(\0132\021.P"
+  "rotocol.PosInfo\"H\n\016PlayerMoveInfo\022\021\n\tpla"
+  "yer_id\030\001 \001(\r\022#\n\010pos_info\030\002 \001(\0132\021.Protoco"
+  "l.PosInfob\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Struct_2eproto_deps[1] = {
   &::descriptor_table_Enum_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_Struct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Struct_2eproto = {
-    false, false, 535, descriptor_table_protodef_Struct_2eproto,
+    false, false, 777, descriptor_table_protodef_Struct_2eproto,
     "Struct.proto",
-    &descriptor_table_Struct_2eproto_once, descriptor_table_Struct_2eproto_deps, 1, 5,
+    &descriptor_table_Struct_2eproto_once, descriptor_table_Struct_2eproto_deps, 1, 7,
     schemas, file_default_instances, TableStruct_Struct_2eproto::offsets,
     file_level_metadata_Struct_2eproto, file_level_enum_descriptors_Struct_2eproto,
     file_level_service_descriptors_Struct_2eproto,
@@ -1279,6 +1337,516 @@ void PlayerInfo::InternalSwap(PlayerInfo* other) {
 
 // ===================================================================
 
+class MonsterInfo::_Internal {
+ public:
+  static const ::Protocol::ObjectInfo& object_info(const MonsterInfo* msg);
+};
+
+const ::Protocol::ObjectInfo&
+MonsterInfo::_Internal::object_info(const MonsterInfo* msg) {
+  return *msg->_impl_.object_info_;
+}
+MonsterInfo::MonsterInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.MonsterInfo)
+}
+MonsterInfo::MonsterInfo(const MonsterInfo& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  MonsterInfo* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.object_info_){nullptr}
+    , decltype(_impl_.object_id_){}
+    , decltype(_impl_.monster_type_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_object_info()) {
+    _this->_impl_.object_info_ = new ::Protocol::ObjectInfo(*from._impl_.object_info_);
+  }
+  ::memcpy(&_impl_.object_id_, &from._impl_.object_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.monster_type_) -
+    reinterpret_cast<char*>(&_impl_.object_id_)) + sizeof(_impl_.monster_type_));
+  // @@protoc_insertion_point(copy_constructor:Protocol.MonsterInfo)
+}
+
+inline void MonsterInfo::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.object_info_){nullptr}
+    , decltype(_impl_.object_id_){uint64_t{0u}}
+    , decltype(_impl_.monster_type_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+MonsterInfo::~MonsterInfo() {
+  // @@protoc_insertion_point(destructor:Protocol.MonsterInfo)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void MonsterInfo::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.object_info_;
+}
+
+void MonsterInfo::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void MonsterInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.MonsterInfo)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && _impl_.object_info_ != nullptr) {
+    delete _impl_.object_info_;
+  }
+  _impl_.object_info_ = nullptr;
+  ::memset(&_impl_.object_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.monster_type_) -
+      reinterpret_cast<char*>(&_impl_.object_id_)) + sizeof(_impl_.monster_type_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* MonsterInfo::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // uint64 object_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.object_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.MonsterType monster_type = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_monster_type(static_cast<::Protocol::MonsterType>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.ObjectInfo object_info = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr = ctx->ParseMessage(_internal_mutable_object_info(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* MonsterInfo::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.MonsterInfo)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint64 object_id = 1;
+  if (this->_internal_object_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(1, this->_internal_object_id(), target);
+  }
+
+  // .Protocol.MonsterType monster_type = 2;
+  if (this->_internal_monster_type() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      2, this->_internal_monster_type(), target);
+  }
+
+  // .Protocol.ObjectInfo object_info = 3;
+  if (this->_internal_has_object_info()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(3, _Internal::object_info(this),
+        _Internal::object_info(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.MonsterInfo)
+  return target;
+}
+
+size_t MonsterInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.MonsterInfo)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .Protocol.ObjectInfo object_info = 3;
+  if (this->_internal_has_object_info()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.object_info_);
+  }
+
+  // uint64 object_id = 1;
+  if (this->_internal_object_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_object_id());
+  }
+
+  // .Protocol.MonsterType monster_type = 2;
+  if (this->_internal_monster_type() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_monster_type());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MonsterInfo::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    MonsterInfo::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MonsterInfo::GetClassData() const { return &_class_data_; }
+
+
+void MonsterInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<MonsterInfo*>(&to_msg);
+  auto& from = static_cast<const MonsterInfo&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.MonsterInfo)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_object_info()) {
+    _this->_internal_mutable_object_info()->::Protocol::ObjectInfo::MergeFrom(
+        from._internal_object_info());
+  }
+  if (from._internal_object_id() != 0) {
+    _this->_internal_set_object_id(from._internal_object_id());
+  }
+  if (from._internal_monster_type() != 0) {
+    _this->_internal_set_monster_type(from._internal_monster_type());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void MonsterInfo::CopyFrom(const MonsterInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.MonsterInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MonsterInfo::IsInitialized() const {
+  return true;
+}
+
+void MonsterInfo::InternalSwap(MonsterInfo* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(MonsterInfo, _impl_.monster_type_)
+      + sizeof(MonsterInfo::_impl_.monster_type_)
+      - PROTOBUF_FIELD_OFFSET(MonsterInfo, _impl_.object_info_)>(
+          reinterpret_cast<char*>(&_impl_.object_info_),
+          reinterpret_cast<char*>(&other->_impl_.object_info_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata MonsterInfo::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_Struct_2eproto_getter, &descriptor_table_Struct_2eproto_once,
+      file_level_metadata_Struct_2eproto[4]);
+}
+
+// ===================================================================
+
+class MonsterMoveInfo::_Internal {
+ public:
+  static const ::Protocol::PosInfo& pos_info(const MonsterMoveInfo* msg);
+};
+
+const ::Protocol::PosInfo&
+MonsterMoveInfo::_Internal::pos_info(const MonsterMoveInfo* msg) {
+  return *msg->_impl_.pos_info_;
+}
+MonsterMoveInfo::MonsterMoveInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.MonsterMoveInfo)
+}
+MonsterMoveInfo::MonsterMoveInfo(const MonsterMoveInfo& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  MonsterMoveInfo* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.pos_info_){nullptr}
+    , decltype(_impl_.object_id_){}
+    , decltype(_impl_.monster_type_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_pos_info()) {
+    _this->_impl_.pos_info_ = new ::Protocol::PosInfo(*from._impl_.pos_info_);
+  }
+  ::memcpy(&_impl_.object_id_, &from._impl_.object_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.monster_type_) -
+    reinterpret_cast<char*>(&_impl_.object_id_)) + sizeof(_impl_.monster_type_));
+  // @@protoc_insertion_point(copy_constructor:Protocol.MonsterMoveInfo)
+}
+
+inline void MonsterMoveInfo::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.pos_info_){nullptr}
+    , decltype(_impl_.object_id_){0u}
+    , decltype(_impl_.monster_type_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+MonsterMoveInfo::~MonsterMoveInfo() {
+  // @@protoc_insertion_point(destructor:Protocol.MonsterMoveInfo)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void MonsterMoveInfo::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.pos_info_;
+}
+
+void MonsterMoveInfo::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void MonsterMoveInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.MonsterMoveInfo)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && _impl_.pos_info_ != nullptr) {
+    delete _impl_.pos_info_;
+  }
+  _impl_.pos_info_ = nullptr;
+  ::memset(&_impl_.object_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.monster_type_) -
+      reinterpret_cast<char*>(&_impl_.object_id_)) + sizeof(_impl_.monster_type_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* MonsterMoveInfo::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // uint32 object_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.object_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.MonsterType monster_type = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_monster_type(static_cast<::Protocol::MonsterType>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.PosInfo pos_info = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr = ctx->ParseMessage(_internal_mutable_pos_info(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* MonsterMoveInfo::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.MonsterMoveInfo)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 object_id = 1;
+  if (this->_internal_object_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_object_id(), target);
+  }
+
+  // .Protocol.MonsterType monster_type = 2;
+  if (this->_internal_monster_type() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      2, this->_internal_monster_type(), target);
+  }
+
+  // .Protocol.PosInfo pos_info = 3;
+  if (this->_internal_has_pos_info()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(3, _Internal::pos_info(this),
+        _Internal::pos_info(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.MonsterMoveInfo)
+  return target;
+}
+
+size_t MonsterMoveInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.MonsterMoveInfo)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .Protocol.PosInfo pos_info = 3;
+  if (this->_internal_has_pos_info()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.pos_info_);
+  }
+
+  // uint32 object_id = 1;
+  if (this->_internal_object_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_object_id());
+  }
+
+  // .Protocol.MonsterType monster_type = 2;
+  if (this->_internal_monster_type() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_monster_type());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MonsterMoveInfo::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    MonsterMoveInfo::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MonsterMoveInfo::GetClassData() const { return &_class_data_; }
+
+
+void MonsterMoveInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<MonsterMoveInfo*>(&to_msg);
+  auto& from = static_cast<const MonsterMoveInfo&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.MonsterMoveInfo)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_pos_info()) {
+    _this->_internal_mutable_pos_info()->::Protocol::PosInfo::MergeFrom(
+        from._internal_pos_info());
+  }
+  if (from._internal_object_id() != 0) {
+    _this->_internal_set_object_id(from._internal_object_id());
+  }
+  if (from._internal_monster_type() != 0) {
+    _this->_internal_set_monster_type(from._internal_monster_type());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void MonsterMoveInfo::CopyFrom(const MonsterMoveInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.MonsterMoveInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MonsterMoveInfo::IsInitialized() const {
+  return true;
+}
+
+void MonsterMoveInfo::InternalSwap(MonsterMoveInfo* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(MonsterMoveInfo, _impl_.monster_type_)
+      + sizeof(MonsterMoveInfo::_impl_.monster_type_)
+      - PROTOBUF_FIELD_OFFSET(MonsterMoveInfo, _impl_.pos_info_)>(
+          reinterpret_cast<char*>(&_impl_.pos_info_),
+          reinterpret_cast<char*>(&other->_impl_.pos_info_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata MonsterMoveInfo::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_Struct_2eproto_getter, &descriptor_table_Struct_2eproto_once,
+      file_level_metadata_Struct_2eproto[5]);
+}
+
+// ===================================================================
+
 class PlayerMoveInfo::_Internal {
  public:
   static const ::Protocol::PosInfo& pos_info(const PlayerMoveInfo* msg);
@@ -1498,7 +2066,7 @@ void PlayerMoveInfo::InternalSwap(PlayerMoveInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PlayerMoveInfo::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Struct_2eproto_getter, &descriptor_table_Struct_2eproto_once,
-      file_level_metadata_Struct_2eproto[4]);
+      file_level_metadata_Struct_2eproto[6]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -1519,6 +2087,14 @@ Arena::CreateMaybeMessage< ::Protocol::ObjectInfo >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::Protocol::PlayerInfo*
 Arena::CreateMaybeMessage< ::Protocol::PlayerInfo >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::PlayerInfo >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::MonsterInfo*
+Arena::CreateMaybeMessage< ::Protocol::MonsterInfo >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::MonsterInfo >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::MonsterMoveInfo*
+Arena::CreateMaybeMessage< ::Protocol::MonsterMoveInfo >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::MonsterMoveInfo >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Protocol::PlayerMoveInfo*
 Arena::CreateMaybeMessage< ::Protocol::PlayerMoveInfo >(Arena* arena) {

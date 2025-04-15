@@ -94,7 +94,7 @@ void CBoxCollider::CallCollisionEnd(CBoxCollider* dest)
 void CBoxCollider::SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 offset)
 {
 	m_BoundingBox.Center = centerPos;
-	m_BoundingBox.Extents = XMFLOAT3(size.x / 2, size.y / 2, size.z / 2);
+	m_BoundingBox.Extents = XMFLOAT3(size.x, size.y, size.z);
 	m_Offset = offset;
 	m_Owner->PosInfo->mutable_position()->set_x(centerPos.x);
 	m_Owner->PosInfo->mutable_position()->set_y(centerPos.y);
@@ -108,5 +108,5 @@ void CBoxCollider::Update()
 
 	Protocol::Vector3 pos = m_Owner->PosInfo->position();
 	m_BoundingBox.Center = XMFLOAT3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z) ;
-	g_Room->GetLevelCollision()->AddCollider(this, ECollision_Channel::Player);
+	g_Room->GetLevelCollision()->AddCollider(this, m_Channel);
 }

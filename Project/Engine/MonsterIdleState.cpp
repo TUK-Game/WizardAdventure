@@ -18,7 +18,7 @@ void CMonsterIdleState::Enter(CGameObject* entity)
 
 void CMonsterIdleState::Update(CGameObject* entity, float deltaTime)
 {
-	entity->GetMonsterAI()->RotateToTarget(deltaTime);
+	//entity->GetMonsterAI()->RotateToTarget(deltaTime);
 }
 
 void CMonsterIdleState::Exit(CGameObject* entity)

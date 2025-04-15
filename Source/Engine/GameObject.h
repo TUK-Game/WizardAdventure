@@ -21,7 +21,8 @@ namespace Protocol
     enum MoveState : int;
 }
 
-struct Stats {
+struct Stats 
+{
     int maxHp = 100;
     int currentHp = 100;
     int attack = 10;
@@ -38,6 +39,110 @@ struct Stats {
     bool IsDead() const {
         return currentHp <= 0;
     }
+};
+
+class CInterpolator
+{
+public:
+    float LerpAngle(float a, float b, float t)
+    {
+        float delta = fmodf(b - a + 540.0f, 360.0f) - 180.0f;
+        return a + delta * t;
+    }
+
+    void SetTarget(const Vec3& newPos, const Vec3& newRot)
+    {
+        auto now = std::chrono::high_resolution_clock::now();
+
+
+        if (!m_HasPrevRecvTime)
+        {
+            m_PrevPos = m_TargetPos = newPos;
+            m_PrevRot = m_TargetRot = newRot;
+            m_ElapsedTime = 0.f;
+            m_Duration = 1.f;
+            m_LastRecvTime = now;
+            m_HasPrevRecvTime = true;
+            return;
+        }
+
+        m_PrevPos = GetInterpolatedPos();
+        m_PrevRot = GetInterpolatedRot();
+
+        // 너무 멀면 보간안하고 즉시 반영 (ex: 순간이동)
+        float dist = (newPos - m_PrevPos).Length();
+        constexpr float MAX_ALLOWED_DIST = 300.f;
+        if (dist > MAX_ALLOWED_DIST)
+        {
+            m_PrevPos = newPos;
+            m_TargetPos = newPos;
+            m_ElapsedTime = 0.f;
+            m_Duration = 0.1f;
+            m_LastRecvTime = now;
+            std::cout << "나텔탐\n";
+            return;
+        }
+
+        m_TargetPos = newPos;
+        m_TargetRot = newRot;
+
+        // 서버에서 마지막 패킷 받은지 얼마나 지났는지
+        m_Duration = std::chrono::duration<float>(now - m_LastRecvTime).count();
+
+        // duration 보정
+        constexpr float MIN_DUR = 0.033f;
+        constexpr float MAX_DUR = 0.2f;
+        m_Duration = std::clamp(m_Duration, MIN_DUR, MAX_DUR);
+
+        m_ElapsedTime = 0.f;
+        m_LastRecvTime = now;
+
+    }
+
+    void Update(float deltaTime)
+    {
+        constexpr float MAX_DT = 0.05f;
+        deltaTime = std::clamp(deltaTime, 0.f, MAX_DT);
+        m_ElapsedTime += deltaTime;
+    }
+
+    Vec3 GetInterpolatedPos() const
+    {
+        if (m_Duration <= 0.f)
+            return m_TargetPos;
+
+        float t = m_ElapsedTime / m_Duration;
+        t = std::clamp(t, 0.f, 1.f);
+        return Vec3::Lerp(m_PrevPos, m_TargetPos, t);
+    }
+
+    Vec3 GetInterpolatedRot()
+    {
+        if (m_Duration <= 0.f)
+            return m_TargetRot;
+
+        float t = m_ElapsedTime / m_Duration;
+        t = std::clamp(t, 0.f, 1.f);
+
+        return Vec3(
+            LerpAngle(m_PrevRot.x, m_TargetRot.x, t),
+            LerpAngle(m_PrevRot.y, m_TargetRot.y, t),
+            LerpAngle(m_PrevRot.z, m_TargetRot.z, t)
+        );
+    }
+
+private:
+    Vec3 m_PrevPos;
+    Vec3 m_TargetPos;
+
+    Vec3 m_PrevRot;
+    Vec3 m_TargetRot;
+
+    float m_ElapsedTime = 0.f;
+    float m_Duration = 0.1f;
+
+    std::chrono::high_resolution_clock::time_point m_LastRecvTime;
+    bool m_HasPrevRecvTime = false;
 };
 
 
@@ -83,6 +188,8 @@ public:
     void SetTag(const std::wstring& tag) { m_Tag = tag; }
     void SetInstancing(bool instancing) { m_bInstancing = instancing; }
     void SetProtocolStateForClient(Protocol::MoveState state);
+    void SetProtocolStateForClientMonster(Protocol::MoveState state);
+    virtual void SetTarget(const Vec3& pos, const Vec3& rot) {}
 
     int GetLayerIndex() { return m_LayerIndex; }
     std::wstring GetTag() const { return m_Tag; }
@@ -112,6 +219,7 @@ public:
     virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest);
     virtual void CollisionEnd(CBaseCollider* src, CBaseCollider* dest) {}
 
+    int m_ObjectId{};
 private:
     std::array<CComponent*, (int)EComponent_Type::END>  m_arrComponent;
     std::vector<CScript*>   m_vecScript;
