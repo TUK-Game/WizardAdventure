@@ -142,6 +142,7 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
     float maxLifeTime = vec4_0.y;
     float minSpeed = vec4_0.z;
     float maxSpeed = vec4_0.w;
+    float3 basePos = vec4_1.xyz;
 
     g_shared[0].addCount = addCount;
     GroupMemoryBarrierWithGroupSync();
@@ -186,7 +187,8 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
             float3 dir = (noise - 0.5f) * 2.f;
 
             g_particle[threadIndex.x].worldDir = normalize(dir);
-            g_particle[threadIndex.x].worldPos = (noise.xyz - 0.5f) * 25;
+            //g_particle[threadIndex.x].worldPos = (noise.xyz - 0.5f) * 25;
+            g_particle[threadIndex.x].worldPos = basePos + (noise.xyz - 0.5f) * 25;
             g_particle[threadIndex.x].lifeTime = ((maxLifeTime - minLifeTime) * noise.x) + minLifeTime;
             g_particle[threadIndex.x].curTime = 0.f;
         }

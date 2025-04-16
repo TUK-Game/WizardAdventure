@@ -74,6 +74,7 @@ void CParticleSystem::FinalUpdate()
 	m_ComputeMaterial->SetVec2(1, Vec2(DELTA_TIME, m_AccTime));
 	m_ComputeMaterial->SetVec4(0, Vec4(_minLifeTime, _maxLifeTime, _minSpeed, _maxSpeed));
 
+	m_ComputeMaterial->SetVec4(1, Vec4(m_BasePos.x, m_BasePos.y, m_BasePos.z, 0));
 	m_ComputeMaterial->Dispatch(1, 1, 1);
 }
 

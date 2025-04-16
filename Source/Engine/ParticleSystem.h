@@ -33,6 +33,7 @@ public:
 	void SetComputeMaterial(CMaterial* material) { m_ComputeMaterial = material; }
 	void SetTexture(class CTexture* texture);
 	void SetTexture(const std::wstring& name);
+	void SetBasePos(const Vec3 pos) { m_BasePos = pos; }
 public:
 
 	virtual void FinalUpdate();
@@ -50,6 +51,8 @@ private:
 	CMaterial*						m_GraphicsMaterial;
 	CMesh*							m_Mesh;
 
+
+	Vec3				m_BasePos{};
 	float				_createInterval = 0.005f;
 	float				m_AccTime = 0.f;
 

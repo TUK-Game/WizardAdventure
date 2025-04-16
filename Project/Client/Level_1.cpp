@@ -28,6 +28,7 @@
 #include <Engine/Animator.h>
 #include <Engine/TestWidget.h>
 #include <Engine/TextWindow.h>
+#include <Engine/ParticleSystemManager.h>
 
 CLevel_1::CLevel_1()
 {
@@ -69,6 +70,7 @@ void CLevel_1::Init()
 
 #pragma endregion
 
+	CParticleSystemManager::GetInst()->Init(50, this);
 
 #pragma region UI_Camera
 	{
@@ -249,4 +251,5 @@ void CLevel_1::FinalUpdate()
 void CLevel_1::End()
 {
 	CLevel::End();
+	CParticleSystemManager::GetInst()->Clear();
 }
