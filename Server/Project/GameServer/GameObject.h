@@ -28,6 +28,8 @@ public:	// public 이라서 m_ 안붙임. (ex. struct 필드)
 	Protocol::ObjectInfo*	ObjectInfo;
 	Protocol::PosInfo*		PosInfo;	
 
+	// temp
+	std::vector<WorldTriangle> m_Triangles;
 protected:
 	std::atomic<std::weak_ptr<CRoom>>	m_Room;
 

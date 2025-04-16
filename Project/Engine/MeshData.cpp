@@ -34,6 +34,8 @@ CMeshData* CMeshData::LoadFromJHD(const std::wstring& path, const std::wstring& 
 		if (mesh == NULL)
 		{
 			mesh = CMesh::CreateFromJHD(&loader.GetMesh(i), loader, i);
+			mesh->m_indexInfo = loader.GetMesh(i).indices[0];
+			mesh->m_vertexInfo = loader.GetMesh(i).vertices;
 			CAssetManager::GetInst()->AddAsset(mesh->GetName(), mesh);
 		}
 

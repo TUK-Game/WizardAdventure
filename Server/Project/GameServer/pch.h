@@ -79,3 +79,9 @@ using Vector3 = DirectX::SimpleMath::Vector3;
 using Vector4 = DirectX::SimpleMath::Vector4;
 using Matrix = DirectX::SimpleMath::Matrix;
 using Quaternion = DirectX::SimpleMath::Quaternion;
+
+
+struct WorldTriangle
+{
+	Vec3 a, b, c;
+};

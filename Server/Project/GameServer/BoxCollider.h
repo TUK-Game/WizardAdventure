@@ -10,7 +10,9 @@ public:
 	BoundingBox& GetBoundingBox() { return m_BoundingBox; }
 	CGameObject* GetOwner() { return m_Owner; }
 	const CollisionProfile* GetProfile() const { return m_profile; }
+	const std::vector<WorldTriangle>& GetWorldTriangle() { return m_Triangles; }
 
+	void SetWorldTriangle(const std::vector<WorldTriangle>& triangles) { m_Triangles = triangles; }
 	void SetOwner(class CGameObject* owner) { m_Owner = owner; }
 public:
 	bool Collision(CBoxCollider* dest);
@@ -37,5 +39,6 @@ protected:
 	ECollision_Channel m_Channel;
 	
 	class CGameObject* m_Owner = nullptr;
+	std::vector<WorldTriangle> m_Triangles;
 };
 

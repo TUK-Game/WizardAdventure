@@ -71,6 +71,9 @@ public:
 public:
 	virtual CMesh* Clone() override { return nullptr; }
 
+	// temp
+	std::vector<Vertex> m_vertexInfo;
+	std::vector<UINT32> m_indexInfo;
 private:
 	ComPtr<ID3D12Resource>		m_VertexBuffer;
 	ID3D12Resource*		m_VertexUploadBuffer;

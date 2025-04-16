@@ -53,18 +53,39 @@ void CJsonConverter::SaveMonster(const std::wstring& fileName)
 void CJsonConverter::Save(std::ofstream& file, const std::vector<CGameObject*>& objects)
 {
     json map = json::array();
-
+    std::unordered_map<std::string, bool> um;
     for (auto object : objects)
     {
         json obj;
         CTransform* transform = object->GetTransform();
         CBaseCollider* collider = object->GetCollider();
-        Vec3 pos = transform->GetWorldPosition();
-        std::string name = ws2s(object->GetName());
-        name.erase(std::find(name.begin(), name.end(), '\0'), name.end());
-        obj["name"] = name;
+        Vec3 pos = transform->GetRelativePosition();
+        Vec3 rot = transform->GetRelativeRotation();
+        Vec3 scale = transform->GetRelativeScale();
+        auto mesh = object->GetMeshRenderer()->GetMesh();
+        std::string meshName = ws2s(mesh->GetName());
+        const std::vector<Vertex>& vertices = mesh->m_vertexInfo;
+        const std::vector<UINT32>& indicse = mesh->m_indexInfo;
+        meshName.erase(std::find(meshName.begin(), meshName.end(), '\0'), meshName.end());
+
+        obj["name"] = meshName;
         obj["position"] = { pos.x, pos.y, pos.z };
+        obj["rotation"] = { rot.x, rot.y, rot.z };
+        obj["scale"] = { scale.x, scale.y, scale.z };
         obj["size"] = { collider->size.x, collider->size.y, collider->size.z };
+
+        if (um[meshName])
+        {
+            map.push_back(obj);
+            continue;
+        }
+
+        um[meshName] = true;
+        for(const Vertex& v : vertices)
+        {
+            obj["vertex"].push_back({ v.Pos.x, v.Pos.y, v.Pos.z });
+        }
+        obj["index"] = indicse;
 
         map.push_back(obj);
     }
