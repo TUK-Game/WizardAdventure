@@ -282,7 +282,7 @@ void CGameObject::AddComponent(CComponent* component)
 	}
 	else
 	{
-		// 이미 가지고 있는 컴포넌트인 경우
+		// 이미 가지고 있는 컴포넌트인 경우	
 		assert(!m_arrComponent[(int)type]);
 		m_arrComponent[(int)type] = component;
 

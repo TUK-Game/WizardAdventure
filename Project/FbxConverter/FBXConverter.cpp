@@ -1,5 +1,4 @@
 ﻿#include "FBXConverter.h"
-
 #define MAX_BONE 100
 
 CFBXConverter::~CFBXConverter()
@@ -91,26 +90,6 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh)
 
     const uint32_t vertexCount = mesh->GetControlPointsCount();
 
-    // 버텍스 로드 및 월드 좌표 변환 적용
-  
-    FbxVector4 minPos(FLT_MAX, FLT_MAX, FLT_MAX);
-    FbxVector4 maxPos(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-    FbxVector4 center = FbxVector4(0, 0, 0);
-    mesh->GetNode()->EvaluateGlobalBoundingBoxMinMaxCenter(minPos, maxPos, center);
-
-    meshInfo.centerPos[0] = static_cast<float>(center[0]);
-    meshInfo.centerPos[1] = static_cast<float>(center[1]);
-    meshInfo.centerPos[2] = static_cast<float>(center[2]);
-    meshInfo.centerPos[3] = static_cast<float>(center[3]);
-
-    meshInfo.maxPos[0] = static_cast<float>(maxPos[0]);
-    meshInfo.maxPos[1] = static_cast<float>(maxPos[1]);
-    meshInfo.maxPos[2] = static_cast<float>(maxPos[2]);
-
-    meshInfo.minPos[0] = static_cast<float>(minPos[0]);
-    meshInfo.minPos[1] = static_cast<float>(minPos[1]);
-    meshInfo.minPos[2] = static_cast<float>(minPos[2]);
-
     const uint32_t materialCount = mesh->GetNode()->GetMaterialCount();
     meshInfo.indices.resize(materialCount);
 
@@ -124,6 +103,10 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh)
 
     uint32_t vertexCounter = 0;
     std::unordered_map<Vertex, uint16_t> indexMapping;
+
+    // 바운딩 박스 초기값 설정
+    std::vector<float> minBounds{ FLT_MAX, FLT_MAX, FLT_MAX };
+    std::vector<float> maxBounds{ -FLT_MAX, -FLT_MAX, -FLT_MAX };
 
     const uint32_t triCount = mesh->GetPolygonCount();
     for (uint32_t i = 0; i < triCount; i++)
@@ -141,11 +124,35 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh)
             std::vector<float> uv;
             uv = GetUV(mesh, controlPointIndex, vertexCounter);
 
+            if (position.size() >= 3)
+            {
+                minBounds[0] = (std::min)(minBounds[0], position[0]);
+                minBounds[1] = (std::min)(minBounds[1], position[1]);
+                minBounds[2] = (std::min)(minBounds[2], position[2]);
+
+                maxBounds[0] = (std::max)(maxBounds[0], position[0]);
+                maxBounds[1] = (std::max)(maxBounds[1], position[1]);
+                maxBounds[2] = (std::max)(maxBounds[2], position[2]);
+            }
+
             InsertVertex(position, normal, tangent, biNormal, uv, meshInfo, indexMapping);
             vertexCounter++;
         }
     }
+    meshInfo.centerPos[0] = static_cast<float>((maxBounds[0] + minBounds[0]) * 0.5f);
+    meshInfo.centerPos[1] = static_cast<float>((maxBounds[1] + minBounds[1]) * 0.5f);
+    meshInfo.centerPos[2] = static_cast<float>((maxBounds[2] + minBounds[2]) * 0.5f);
+    meshInfo.centerPos[3] = static_cast<float>(0);
+
+    meshInfo.maxPos[0] = static_cast<float>(maxBounds[0]);
+    meshInfo.maxPos[1] = static_cast<float>(maxBounds[1]);
+    meshInfo.maxPos[2] = static_cast<float>(maxBounds[2]);
+
+    meshInfo.minPos[0] = static_cast<float>(minBounds[0]);
+    meshInfo.minPos[1] = static_cast<float>(minBounds[1]);
+    meshInfo.minPos[2] = static_cast<float>(minBounds[2]);
     meshInfo.boneWeights.resize(meshInfo.vertices.size());
+
     LoadAnimationData(mesh, &meshInfo);
 
 }
