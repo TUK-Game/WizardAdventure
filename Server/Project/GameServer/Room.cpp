@@ -259,7 +259,8 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 			XMVECTOR dirVec = XMVectorSet(dir.x(), dir.y(), dir.z(), 0.0f);
 			dirVec = XMVector3Normalize(dirVec);
-			dirVec = XMVectorScale(dirVec, -20); // ratio = 1.1f → 0.1만큼 추가 후퇴
+			if(player->GetState() != Protocol::MOVE_STATE_DASH && player->GetState() != Protocol::MOVE_STATE_DASH_END)
+				dirVec = XMVectorScale(dirVec, -20);
 
 			XMVECTOR now = XMLoadFloat3(&nowPos);
 			now = XMVectorSubtract(now, dirVec);
