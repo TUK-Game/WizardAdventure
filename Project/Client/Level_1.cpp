@@ -119,27 +119,10 @@ void CLevel_1::Init()
 #endif // DEBUG_SOLOPLAY
 
 	//{
-	//	CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
-	//	std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
-	//	CMonster* monster = new CMonster();
-	//	monster->SetName(L"Crab");
-	//	monster->AddComponent(new CTransform);
-	//	monster->AddComponent(new CBoxCollider);
-	//	monster->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player")); // temp
-	//	monster->GetCollider()->SetMaxMinPos(Vec3(0, 0, 0), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
-	//	monster->GetTransform()->SetRelativePosition(11240, 20, 3000);
-	//	for (auto& o : obj2)
-	//	{
-	//		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
-	//		o->SetName(name);
-	//		Vec3 rot = o->GetTransform()->GetRelativeRotation();
-	//		o->GetTransform()->SetRelativeRotation(rot);
-	//		//o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
-	//		o->SetCheckFrustum(true);
-	//		o->SetInstancing(false);
-	//		monster->AddChild(o);
-	//	}
-	//	this->AddGameObject(monster, 11, false);
+		//CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
+		//std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
+		//CMonster* monster = new CMonster();
+		//this->AddGameObject(monster, 11, false);
 	//}
 
 //

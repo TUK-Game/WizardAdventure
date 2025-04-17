@@ -125,7 +125,7 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 
 	newPlayer->PlayerInfo->mutable_object_info()->mutable_pos_info()->set_allocated_position(position);
 	newPlayer->GetCollider()->SetCollisionProfile("Player");
-	newPlayer->GetCollider()->SetBoxInfo(XMFLOAT3(11240.f, 20.f, 1127.f), XMFLOAT3(100.f, 200.f, 24.f), XMFLOAT3(0.f, 100.f, 0.f));
+	newPlayer->GetCollider()->SetBoxInfo(XMFLOAT3(11240.f, 20.f, 1127.f), XMFLOAT3(100.f, 200.f, 24.f), XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0.f, 100.f, 0.f));
 
 	// 입장 사실을 새 플레이어에게 알린다
 	{
@@ -231,7 +231,6 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 	Protocol::Vector3& protoNow = *player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
 	XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
-
 	// 이동량
 	XMFLOAT3 moveAmount = ProtoToXMFLOAT3(player->m_NextAmount);
 
@@ -252,10 +251,19 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 		if (m_LevelCollision->CollisionWithWall(player->GetCollider()))
 		{
 			std::cout << "박음" << std::endl;
-
+			Protocol::Vector3& dir = player->GetDir();
+			const float ratio = 1.1f;
 			nowPos.x -= moveAmount.x;
 			nowPos.y -= moveAmount.y;
 			nowPos.z -= moveAmount.z;
+
+			XMVECTOR dirVec = XMVectorSet(dir.x(), dir.y(), dir.z(), 0.0f);
+			dirVec = XMVector3Normalize(dirVec);
+			dirVec = XMVectorScale(dirVec, -20); // ratio = 1.1f → 0.1만큼 추가 후퇴
+
+			XMVECTOR now = XMLoadFloat3(&nowPos);
+			now = XMVectorSubtract(now, dirVec);
+			XMStoreFloat3(&nowPos, now);
 
 			ToProtoVector3(&protoNow, nowPos);
 			break;

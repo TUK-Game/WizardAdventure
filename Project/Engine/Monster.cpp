@@ -37,7 +37,7 @@ CMonster::CMonster()
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
 		o->GetTransform()->SetRelativeRotation(rot);
 		//o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
-		o->SetCheckFrustum(true);
+		o->SetCheckFrustum(false);
 		o->SetInstancing(false);
 		this->AddChild(o);
 	}

@@ -91,11 +91,25 @@ void CBoxCollider::CallCollisionEnd(CBoxCollider* dest)
 	GetOwner()->CollisionEnd(this, dest);
 }
 
-void CBoxCollider::SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 offset)
+void CBoxCollider::SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 rotation, XMFLOAT3 offset)
 {
 	m_BoundingBox.Center = centerPos;
 	m_BoundingBox.Extents = XMFLOAT3(size.x, size.y, size.z);
-	m_Offset = offset;
+	XMVECTOR rotRad = XMVectorSet(
+		XMConvertToRadians(rotation.x),
+		XMConvertToRadians(rotation.y),
+		XMConvertToRadians(rotation.z),
+		0.0f
+	);
+
+	XMVECTOR quatX = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), XMVectorGetX(rotRad));
+	XMVECTOR quatY = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), XMVectorGetY(rotRad));
+	XMVECTOR quatZ = XMQuaternionRotationAxis(XMVectorSet(0, 0, 1, 0), XMVectorGetZ(rotRad));
+
+	XMVECTOR q = XMQuaternionMultiply(quatX, XMQuaternionMultiply(quatY, quatZ));
+
+	XMStoreFloat4(&m_BoundingBox.Orientation, q);
+
 	m_Owner->PosInfo->mutable_position()->set_x(centerPos.x);
 	m_Owner->PosInfo->mutable_position()->set_y(centerPos.y);
 	m_Owner->PosInfo->mutable_position()->set_z(centerPos.z);

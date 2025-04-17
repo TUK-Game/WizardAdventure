@@ -118,7 +118,7 @@ bool CLevelCollision::CollisionWithWall(CBoxCollider* collider)
 	return false;
 }
 
-bool CLevelCollision::MeshBoxCheck(const std::vector<WorldTriangle>& triangles, const BoundingBox& box)
+bool CLevelCollision::MeshBoxCheck(const std::vector<WorldTriangle>& triangles, const BoundingOrientedBox& box)
 {
 	for (const WorldTriangle& tri : triangles)
 	{
@@ -129,69 +129,78 @@ bool CLevelCollision::MeshBoxCheck(const std::vector<WorldTriangle>& triangles, 
 	return false; 
 }
 
-bool CLevelCollision::IntersectTriangleWithBoundingBox(const WorldTriangle& tri, const BoundingBox& box)
+bool CLevelCollision::IntersectTriangleWithBoundingBox(const WorldTriangle& tri, const BoundingOrientedBox& obb)
 {
-	Vec3 v0 = tri.a - box.Center;
-	Vec3 v1 = tri.b - box.Center;
-	Vec3 v2 = tri.c - box.Center;
+	// 1. 삼각형 정점 가져오기 (월드 공간)
+	Vec3 v0 = tri.a;
+	Vec3 v1 = tri.b;
+	Vec3 v2 = tri.c;
 
-	Vec3 f0 = v1 - v0;
-	Vec3 f1 = v2 - v1;
-	Vec3 f2 = v0 - v2;
+	// 2. OBB의 로컬 축 3개 추출 (Orientation 반영)
+	XMVECTOR quat = XMLoadFloat4(&obb.Orientation);
 
-	const Vec3 axes[9] = {
-		Vec3(0, -f0.z, f0.y), Vec3(0, -f1.z, f1.y), Vec3(0, -f2.z, f2.y),
-		Vec3(f0.z, 0, -f0.x), Vec3(f1.z, 0, -f1.x), Vec3(f2.z, 0, -f2.x),
-		Vec3(-f0.y, f0.x, 0), Vec3(-f1.y, f1.x, 0), Vec3(-f2.y, f2.x, 0)
-	};
+	XMVECTOR right = XMVector3Rotate(XMVectorSet(1, 0, 0, 0), quat);
+	XMVECTOR up = XMVector3Rotate(XMVectorSet(0, 1, 0, 0), quat);
+	XMVECTOR forward = XMVector3Rotate(XMVectorSet(0, 0, 1, 0), quat);
 
-	for (int i = 0; i < 9; ++i)
+	Vec3 u = Vec3(right);
+	Vec3 v = Vec3(up);
+	Vec3 w = Vec3(forward);
+
+	// 3. 삼각형을 OBB 중심 기준으로 이동
+	Vec3 center(obb.Center);
+	Vec3 p0 = v0 - center;
+	Vec3 p1 = v1 - center;
+	Vec3 p2 = v2 - center;
+
+	// 4. 삼각형 Edge
+	Vec3 e0 = p1 - p0;
+	Vec3 e1 = p2 - p1;
+	Vec3 e2 = p0 - p2;
+
+	// 5. 검사할 축 목록
+	std::vector<Vec3> axes;
+
+	// OBB의 축 3개
+	axes.push_back(u);
+	axes.push_back(v);
+	axes.push_back(w);
+
+	// 삼각형 법선
+	Vec3 triNormal = (p1 - p0).Cross(p2 - p0);
+	axes.push_back(triNormal);
+
+	// edge x axis (총 9개)
+	for (Vec3 edge : { e0, e1, e2 })
 	{
-		const Vec3& axis = axes[i];
-		if (axis.LengthSquared() < 1e-6f) continue;
-
-		float minT, maxT;
-		float r = box.Extents.x * fabsf(axis.x) + box.Extents.y * fabsf(axis.y) + box.Extents.z * fabsf(axis.z);
-		ProjectTriangle(axis, v0, v1, v2, minT, maxT);
-
-		if (minT > r || maxT < -r)
-			return false;
+		for (Vec3 axis : { u, v, w })
+		{
+			Vec3 cross = edge.Cross(axis);
+			if (cross.LengthSquared() > 1e-6f)
+			{
+				cross.Normalize(); // 자기 자신을 정규화
+				axes.push_back(cross);
+			}
+		}
 	}
 
+	// 6. SAT 검사
+	for (const Vec3& axis : axes)
 	{
-		float minT = (std::min)({ v0.x, v1.x, v2.x });
-		float maxT = (std::max)({ v0.x, v1.x, v2.x });
-		if (minT > box.Extents.x || maxT < -box.Extents.x)
-			return false;
+		float triMin, triMax;
+		float boxRadius =
+			obb.Extents.x * fabsf(axis.Dot(u)) +
+			obb.Extents.y * fabsf(axis.Dot(v)) +
+			obb.Extents.z * fabsf(axis.Dot(w));
+
+		ProjectTriangle(axis, p0, p1, p2, triMin, triMax);
+
+		if (triMin > boxRadius || triMax < -boxRadius)
+			return false; // 분리축 발견
 	}
 
-	{
-		float minT = (std::min)({ v0.y, v1.y, v2.y });
-		float maxT = (std::max)({ v0.y, v1.y, v2.y });
-		if (minT > box.Extents.y || maxT < -box.Extents.y)
-			return false;
-	}
-
-	{
-		float minT = (std::min)({ v0.z, v1.z, v2.z });
-		float maxT = (std::max)({ v0.z, v1.z, v2.z });
-		if (minT > box.Extents.z || maxT < -box.Extents.z)
-			return false;
-	}
-
-
-	// 삼각형 평면 법선
-	Vec3 normal = (v1 - v0).Cross(v2 - v0);
-	float minT, maxT;
-	float r = box.Extents.x * fabsf(normal.x) + box.Extents.y * fabsf(normal.y) + box.Extents.z * fabsf(normal.z);
-	ProjectTriangle(normal, v0, v1, v2, minT, maxT);
-
-	if (minT > r || maxT < -r)
-		return false;
-
-	return true;
+	return true; // 충돌
 }
-
 void CLevelCollision::ProjectTriangle(const Vec3& axis, const Vec3& v0, const Vec3& v1, const Vec3& v2, float& outMin, float& outMax)
 {
 	float p0 = axis.Dot(v0);

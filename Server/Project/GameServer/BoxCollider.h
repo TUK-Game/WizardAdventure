@@ -7,7 +7,7 @@ public:
 	virtual ~CBoxCollider();
 
 public:
-	BoundingBox& GetBoundingBox() { return m_BoundingBox; }
+	BoundingOrientedBox& GetBoundingBox() { return m_BoundingBox; }
 	CGameObject* GetOwner() { return m_Owner; }
 	const CollisionProfile* GetProfile() const { return m_profile; }
 	const std::vector<WorldTriangle>& GetWorldTriangle() { return m_Triangles; }
@@ -16,7 +16,7 @@ public:
 	void SetOwner(class CGameObject* owner) { m_Owner = owner; }
 public:
 	bool Collision(CBoxCollider* dest);
-	virtual void SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 offset = XMFLOAT3(0.f, 0.f, 0.f));
+	virtual void SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 rotation, XMFLOAT3 offset = XMFLOAT3(0.f, 0.f, 0.f));
 
 	void CreateCollisionProfile(std::string name, ECollision_Channel channel);
 	void SetCollisionProfile(const std::string& name);
@@ -32,7 +32,7 @@ public:
 
 
 protected:
-	BoundingBox m_BoundingBox;
+	BoundingOrientedBox m_BoundingBox;
 	CollisionProfile* m_profile = nullptr;
 	std::list<CBoxCollider*> m_collisionList;
 	XMFLOAT3 m_Offset;
