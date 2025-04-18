@@ -6,6 +6,19 @@
 #include "LevelManager.h"
 #include "BaseCollider.h"
 #include "Engine.h"
+#include "NetworkManager.h"
+#include "ServerSession.h"
+
+void CSkillObject::Update()
+{
+    CGameObject::Update();
+    CNetworkManager::GetInst()->s_GameSession->MoveSkill(this);
+}
+
+void CSkillObject::FinalUpdate()
+{
+    CGameObject::FinalUpdate();
+}
 
 void CSkillObject::OnHit(CGameObject* target)
 {

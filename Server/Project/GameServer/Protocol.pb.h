@@ -99,6 +99,9 @@ extern S_SPAWN_EXISTING_PLAYERDefaultTypeInternal _S_SPAWN_EXISTING_PLAYER_defau
 class S_SPAWN_NEW_PLAYER;
 struct S_SPAWN_NEW_PLAYERDefaultTypeInternal;
 extern S_SPAWN_NEW_PLAYERDefaultTypeInternal _S_SPAWN_NEW_PLAYER_default_instance_;
+class S_SPAWN_PROJECTILE_SUCESSE;
+struct S_SPAWN_PROJECTILE_SUCESSEDefaultTypeInternal;
+extern S_SPAWN_PROJECTILE_SUCESSEDefaultTypeInternal _S_SPAWN_PROJECTILE_SUCESSE_default_instance_;
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Protocol::C_ENTER_GAME* Arena::CreateMaybeMessage<::Protocol::C_ENTER_GAME>(Arena*);
@@ -118,6 +121,7 @@ template<> ::Protocol::S_PROJECTILE_INFO* Arena::CreateMaybeMessage<::Protocol::
 template<> ::Protocol::S_SPAWN* Arena::CreateMaybeMessage<::Protocol::S_SPAWN>(Arena*);
 template<> ::Protocol::S_SPAWN_EXISTING_PLAYER* Arena::CreateMaybeMessage<::Protocol::S_SPAWN_EXISTING_PLAYER>(Arena*);
 template<> ::Protocol::S_SPAWN_NEW_PLAYER* Arena::CreateMaybeMessage<::Protocol::S_SPAWN_NEW_PLAYER>(Arena*);
+template<> ::Protocol::S_SPAWN_PROJECTILE_SUCESSE* Arena::CreateMaybeMessage<::Protocol::S_SPAWN_PROJECTILE_SUCESSE>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
 
@@ -950,6 +954,154 @@ class C_SPAWN_PROJECTILE final :
 };
 // -------------------------------------------------------------------
 
+class S_SPAWN_PROJECTILE_SUCESSE final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_SPAWN_PROJECTILE_SUCESSE) */ {
+ public:
+  inline S_SPAWN_PROJECTILE_SUCESSE() : S_SPAWN_PROJECTILE_SUCESSE(nullptr) {}
+  ~S_SPAWN_PROJECTILE_SUCESSE() override;
+  explicit PROTOBUF_CONSTEXPR S_SPAWN_PROJECTILE_SUCESSE(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_SPAWN_PROJECTILE_SUCESSE(const S_SPAWN_PROJECTILE_SUCESSE& from);
+  S_SPAWN_PROJECTILE_SUCESSE(S_SPAWN_PROJECTILE_SUCESSE&& from) noexcept
+    : S_SPAWN_PROJECTILE_SUCESSE() {
+    *this = ::std::move(from);
+  }
+
+  inline S_SPAWN_PROJECTILE_SUCESSE& operator=(const S_SPAWN_PROJECTILE_SUCESSE& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_SPAWN_PROJECTILE_SUCESSE& operator=(S_SPAWN_PROJECTILE_SUCESSE&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_SPAWN_PROJECTILE_SUCESSE& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_SPAWN_PROJECTILE_SUCESSE* internal_default_instance() {
+    return reinterpret_cast<const S_SPAWN_PROJECTILE_SUCESSE*>(
+               &_S_SPAWN_PROJECTILE_SUCESSE_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  friend void swap(S_SPAWN_PROJECTILE_SUCESSE& a, S_SPAWN_PROJECTILE_SUCESSE& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_SPAWN_PROJECTILE_SUCESSE* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_SPAWN_PROJECTILE_SUCESSE* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S_SPAWN_PROJECTILE_SUCESSE* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S_SPAWN_PROJECTILE_SUCESSE>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S_SPAWN_PROJECTILE_SUCESSE& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const S_SPAWN_PROJECTILE_SUCESSE& from) {
+    S_SPAWN_PROJECTILE_SUCESSE::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_SPAWN_PROJECTILE_SUCESSE* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_SPAWN_PROJECTILE_SUCESSE";
+  }
+  protected:
+  explicit S_SPAWN_PROJECTILE_SUCESSE(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kProjectileIdFieldNumber = 1,
+  };
+  // uint64 projectile_id = 1;
+  void clear_projectile_id();
+  uint64_t projectile_id() const;
+  void set_projectile_id(uint64_t value);
+  private:
+  uint64_t _internal_projectile_id() const;
+  void _internal_set_projectile_id(uint64_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_SPAWN_PROJECTILE_SUCESSE)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint64_t projectile_id_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class S_LEAVE_GAME final :
     public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:Protocol.S_LEAVE_GAME) */ {
  public:
@@ -997,7 +1149,7 @@ class S_LEAVE_GAME final :
                &_S_LEAVE_GAME_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    7;
 
   friend void swap(S_LEAVE_GAME& a, S_LEAVE_GAME& b) {
     a.Swap(&b);
@@ -1116,7 +1268,7 @@ class C_MOVE final :
                &_C_MOVE_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   friend void swap(C_MOVE& a, C_MOVE& b) {
     a.Swap(&b);
@@ -1293,7 +1445,7 @@ class C_MOVE_PROJECTILE final :
                &_C_MOVE_PROJECTILE_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   friend void swap(C_MOVE_PROJECTILE& a, C_MOVE_PROJECTILE& b) {
     a.Swap(&b);
@@ -1450,7 +1602,7 @@ class S_MOVE final :
                &_S_MOVE_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   friend void swap(S_MOVE& a, S_MOVE& b) {
     a.Swap(&b);
@@ -1607,7 +1759,7 @@ class S_MONSTER_INFO final :
                &_S_MONSTER_INFO_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   friend void swap(S_MONSTER_INFO& a, S_MONSTER_INFO& b) {
     a.Swap(&b);
@@ -1764,7 +1916,7 @@ class S_PROJECTILE_INFO final :
                &_S_PROJECTILE_INFO_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    12;
 
   friend void swap(S_PROJECTILE_INFO& a, S_PROJECTILE_INFO& b) {
     a.Swap(&b);
@@ -1921,7 +2073,7 @@ class S_SPAWN final :
                &_S_SPAWN_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    13;
 
   friend void swap(S_SPAWN& a, S_SPAWN& b) {
     a.Swap(&b);
@@ -2078,7 +2230,7 @@ class S_SPAWN_NEW_PLAYER final :
                &_S_SPAWN_NEW_PLAYER_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    14;
 
   friend void swap(S_SPAWN_NEW_PLAYER& a, S_SPAWN_NEW_PLAYER& b) {
     a.Swap(&b);
@@ -2235,7 +2387,7 @@ class S_SPAWN_EXISTING_PLAYER final :
                &_S_SPAWN_EXISTING_PLAYER_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    15;
 
   friend void swap(S_SPAWN_EXISTING_PLAYER& a, S_SPAWN_EXISTING_PLAYER& b) {
     a.Swap(&b);
@@ -2392,7 +2544,7 @@ class S_DESPAWN_PLAYER final :
                &_S_DESPAWN_PLAYER_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    16;
 
   friend void swap(S_DESPAWN_PLAYER& a, S_DESPAWN_PLAYER& b) {
     a.Swap(&b);
@@ -2540,7 +2692,7 @@ class S_DESPAWN final :
                &_S_DESPAWN_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    17;
 
   friend void swap(S_DESPAWN& a, S_DESPAWN& b) {
     a.Swap(&b);
@@ -2891,6 +3043,30 @@ inline void C_SPAWN_PROJECTILE::set_allocated_info(::Protocol::ProjectileBasicIn
   }
   _impl_.info_ = info;
   // @@protoc_insertion_point(field_set_allocated:Protocol.C_SPAWN_PROJECTILE.info)
+}
+
+// -------------------------------------------------------------------
+
+// S_SPAWN_PROJECTILE_SUCESSE
+
+// uint64 projectile_id = 1;
+inline void S_SPAWN_PROJECTILE_SUCESSE::clear_projectile_id() {
+  _impl_.projectile_id_ = uint64_t{0u};
+}
+inline uint64_t S_SPAWN_PROJECTILE_SUCESSE::_internal_projectile_id() const {
+  return _impl_.projectile_id_;
+}
+inline uint64_t S_SPAWN_PROJECTILE_SUCESSE::projectile_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_SPAWN_PROJECTILE_SUCESSE.projectile_id)
+  return _internal_projectile_id();
+}
+inline void S_SPAWN_PROJECTILE_SUCESSE::_internal_set_projectile_id(uint64_t value) {
+  
+  _impl_.projectile_id_ = value;
+}
+inline void S_SPAWN_PROJECTILE_SUCESSE::set_projectile_id(uint64_t value) {
+  _internal_set_projectile_id(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_SPAWN_PROJECTILE_SUCESSE.projectile_id)
 }
 
 // -------------------------------------------------------------------
@@ -3628,6 +3804,8 @@ S_DESPAWN::mutable_object_ids() {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -12,6 +12,8 @@
 #include "CameraScript.h"
 #include "Monster.h"
 #include "Layer.h"
+#include "SkillObject.h"
+#include "FireBall.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -56,6 +58,23 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	CRenderManager::GetInst()->GetMainCamera()->SetTarget(player);
 	CNetworkManager::GetInst()->s_GameSession->SetOwnPlayer(player);
 	CNetworkManager::GetInst()->s_GameSession->SetClientID(id);
+	return true;
+}
+
+bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_SPAWN_PROJECTILE_SUCESSE& pkt)
+{
+	UINT64 id = pkt.projectile_id();
+	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
+	if (map.find(id) != map.end())
+	{
+		map[id]->SetEnable(true);
+	}
+	else
+	{
+		CFireBall* ball = new CFireBall();
+		map[id] = ball;
+		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(ball, 12, false);
+	}
 	return true;
 }
 
@@ -139,7 +158,27 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 
 bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE_INFO& pkt)
 {
+	std::cout << "¹ÞÀ½" << std::endl;
+	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
+	UINT64 id = pkt.projectile_info().projectile_id();
+	if (map.find(id) == map.end())
+		return false;
 
+	if (pkt.mutable_projectile_info()->state() == Protocol::COLLISION)
+	{
+		//map[id]->SetActive(false);
+		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->SafeRemoveGameObject(map[id]);
+		map.erase(id);
+	}
+	else
+	{
+		const auto& pos = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
+		auto& object = map[id];
+		if (object)
+		{
+			object->GetTransform()->SetRelativePosition(Vec3(pos->x(), pos->y(), pos->z()));
+		}
+	}
 	return true;
 }
 

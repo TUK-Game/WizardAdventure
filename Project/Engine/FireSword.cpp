@@ -31,7 +31,7 @@ CFireSword::CFireSword()
 
 void CFireSword::Update()
 {
-    CGameObject::Update();
+    CSkillObject::Update();
     Vec3 pos = GetTransform()->GetRelativePosition();
 
     if (!m_ReadyToRotate)

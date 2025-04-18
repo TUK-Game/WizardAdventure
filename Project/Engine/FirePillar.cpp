@@ -44,7 +44,7 @@ void CFirePillar::Update()
         GetTransform()->SetRelativePosition(basePos);
     }
 
-    CGameObject::Update();
+    CSkillObject::Update();
 }
 
 void CFirePillar::FinalUpdate()

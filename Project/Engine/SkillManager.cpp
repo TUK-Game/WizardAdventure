@@ -77,10 +77,11 @@ void CSkillManager::CastFireballTowardMouse()
     fireBall->GetRigidBody()->ApplyForce(fireDir * 900000.f);
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
     fireBall->SetDamage(SkillDamage::FireBall);
+    fireBall->SetEnable(false);
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
 
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 3, false);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 12, false);
 }
 
 void CSkillManager::CastFireballTowardQ()
@@ -102,7 +103,7 @@ void CSkillManager::CastFireballTowardQ()
 
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
     fireBall->SetDamage(SkillDamage::FireBallQ);
-
+    fireBall->SetEnable(false);
 
     CRigidBody* rigidbody = fireBall->GetRigidBody();
     rigidbody->ApplyForce(fireDir * 70000.f);
@@ -111,7 +112,7 @@ void CSkillManager::CastFireballTowardQ()
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
 
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 3, false);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 12, false);
 }
 
 void CSkillManager::SpawnFirePillarAtMouse()
@@ -120,7 +121,7 @@ void CSkillManager::SpawnFirePillarAtMouse()
 
     CFireCircle* fireCircle = new CFireCircle;
     fireCircle->GetTransform()->SetRelativePosition(centerPos);
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireCircle, 3, false);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireCircle, 12, false);
 
     Vec3 lookDir = centerPos - m_Owner->GetTransform()->GetRelativePosition();
     lookDir.Normalize();
@@ -144,10 +145,11 @@ void CSkillManager::SpawnFirePillarAtMouse()
         pillar->GetTransform()->SetRelativePosition(spawnPos);
         pillar->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
         pillar->SetDamage(SkillDamage::Pillar);
+        pillar->SetEnable(false);
 
         CNetworkManager::GetInst()->s_GameSession->SpawnSkill(pillar);
 
-        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(pillar, 3, false);
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(pillar, 12, false);
     }                                                                                               
 }
 
@@ -185,10 +187,11 @@ void CSkillManager::FireSwordSpreadShot()
         sword->SetWaitTimeForRotate(1.f);
         sword->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
         sword->SetDamage(SkillDamage::FireSword);
+        sword->SetEnable(false);
 
         CNetworkManager::GetInst()->s_GameSession->SpawnSkill(sword);
 
-        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(sword, 3, false);
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(sword, 12, false);
     }
 
 }
@@ -201,7 +204,7 @@ void CSkillManager::CastMeteor()
     meteors->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
 
 
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteors, 3, false);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteors, 12, false);
 }
 
 Vec3 CSkillManager::CalculateMouseDirectionFromPlayerTopView(const Vec3& fromPos)

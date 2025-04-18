@@ -57,8 +57,10 @@ void CRoom::Update()
 		for (const auto object : layer)
 		{
 			auto& gameObject = object.second;
-
-			gameObject->Update(m_DeltaTime);
+			if(gameObject)
+			{
+				gameObject->Update(m_DeltaTime);
+			}
 		}
 	}
 
@@ -313,54 +315,68 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 bool CRoom::HandleSpawnProjectile(CProjectileRef projectile)
 {
-	AddObject((uint32)EObject_Type::Projectile, projectile);
+	AddProjectile(projectile);
 
+	Protocol::S_SPAWN_PROJECTILE_SUCESSE pkt;
+	pkt.set_projectile_id(projectile->ProjectileInfo->projectile_id());
+
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	Broadcast(sendBuffer, -1);
 	return true;
 }
 
 bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 {
-	int step = 1;
-
-	Protocol::Vector3& protoNow = *projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
-	XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());	
-	// 이동량
-	XMFLOAT3 moveAmount = projectile->m_NextAmount;
-
-	moveAmount.x /= static_cast<float>(step);
-	moveAmount.y /= static_cast<float>(step);
-	moveAmount.z /= static_cast<float>(step);
-
-	for (int i = 1; i <= step; ++i)
-	{
-		nowPos.x += moveAmount.x;
-		nowPos.y += moveAmount.y;
-		nowPos.z += moveAmount.z;
-
-		ToProtoVector3(&protoNow, nowPos);
-
-		projectile->GetCollider()->Update();
-
-		if (m_LevelCollision->CollisionWithWall(projectile->GetCollider()))
-		{
-			std::cout << "박음" << std::endl;
-			projectile->ProjectileInfo->set_state(Protocol::COLLISION);
-			g_pool->Release(projectile);
-			break;
-		}
-	}
-
 	Protocol::S_PROJECTILE_INFO pkt;
+	if (projectile->ProjectileInfo->state() == Protocol::COLLISION)
+	{
+		pkt.mutable_projectile_info()->set_projectile_id(projectile->ProjectileInfo->projectile_id());
+		pkt.mutable_projectile_info()->set_state(Protocol::COLLISION);
+		m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
+	}
+	else
+	{
+		int step = 1;
 
-	auto* info = pkt.mutable_projectile_info();
-	info->set_projectile_id(projectile->ProjectileInfo->projectile_id());
-	info->set_state(projectile->ProjectileInfo->state());
+		Protocol::Vector3& protoNow = *projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+		XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
+		// 이동량
+		XMFLOAT3 moveAmount = projectile->m_NextAmount;
 
-	auto* posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info();
-	posInfo->mutable_position()->set_x(nowPos.x);
-	posInfo->mutable_position()->set_y(nowPos.y);
-	posInfo->mutable_position()->set_z(nowPos.z);
+		moveAmount.x /= static_cast<float>(step);
+		moveAmount.y /= static_cast<float>(step);
+		moveAmount.z /= static_cast<float>(step);
 
+		for (int i = 1; i <= step; ++i)
+		{
+			nowPos.x += moveAmount.x;
+			nowPos.y += moveAmount.y;
+			nowPos.z += moveAmount.z;
+
+			ToProtoVector3(&protoNow, nowPos);
+
+			projectile->GetCollider()->Update();
+
+			if (m_LevelCollision->CollisionWithWall(projectile->GetCollider()))
+			{
+				std::cout << "박음" << std::endl;
+				projectile->ProjectileInfo->set_state(Protocol::COLLISION);
+				m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
+				g_pool->Release(projectile);
+				break;
+			}
+		}
+
+
+		auto* info = pkt.mutable_projectile_info();
+		info->set_projectile_id(projectile->ProjectileInfo->projectile_id());
+		info->set_state(projectile->ProjectileInfo->state());
+
+		auto* posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info();
+		posInfo->mutable_position()->set_x(nowPos.x);
+		posInfo->mutable_position()->set_y(nowPos.y);
+		posInfo->mutable_position()->set_z(nowPos.z);
+	}
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
 
@@ -386,6 +402,18 @@ bool CRoom::AddObject(uint32 layer, CGameObjectRef object)
 		return false;
 
 	m_mapObject[layer].insert(make_pair(object->ObjectInfo->object_id(), object));
+
+	object->m_Room.store(GetRoomRef());
+
+	return true;
+}
+
+bool CRoom::AddProjectile(CProjectileRef object)
+{
+	if (m_mapObject[(uint32)EObject_Type::Projectile].find(object->ProjectileInfo->projectile_id()) != m_mapObject[(uint32)EObject_Type::Projectile].end())
+		return false;
+
+	m_mapObject[(uint32)EObject_Type::Projectile].insert(make_pair(object->ProjectileInfo->projectile_id(), object));
 
 	object->m_Room.store(GetRoomRef());
 

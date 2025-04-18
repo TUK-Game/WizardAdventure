@@ -24,7 +24,7 @@ CFireBall::CFireBall()
 
 void CFireBall::Update()
 {
-    CGameObject::Update();
+    CSkillObject::Update();
 }
 
 void CFireBall::FinalUpdate()
@@ -32,7 +32,8 @@ void CFireBall::FinalUpdate()
     CGameObject::FinalUpdate();
     m_ElapsedTime += DELTA_TIME;
     if (m_ElapsedTime >= m_Duration) {
-        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+        //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+        m_bDelete = true;
     }
 }
 

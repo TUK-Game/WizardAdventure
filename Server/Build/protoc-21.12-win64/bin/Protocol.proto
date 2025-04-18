@@ -34,6 +34,11 @@ message C_SPAWN_PROJECTILE
 	ProjectileBasicInfo info = 1;
 }	
 
+message S_SPAWN_PROJECTILE_SUCESSE
+{
+	uint64 projectile_id = 1;
+}
+
 message S_LEAVE_GAME
 {
 

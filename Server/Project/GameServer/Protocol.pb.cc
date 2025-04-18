@@ -94,6 +94,19 @@ struct C_SPAWN_PROJECTILEDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 C_SPAWN_PROJECTILEDefaultTypeInternal _C_SPAWN_PROJECTILE_default_instance_;
+PROTOBUF_CONSTEXPR S_SPAWN_PROJECTILE_SUCESSE::S_SPAWN_PROJECTILE_SUCESSE(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.projectile_id_)*/uint64_t{0u}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct S_SPAWN_PROJECTILE_SUCESSEDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR S_SPAWN_PROJECTILE_SUCESSEDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~S_SPAWN_PROJECTILE_SUCESSEDefaultTypeInternal() {}
+  union {
+    S_SPAWN_PROJECTILE_SUCESSE _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S_SPAWN_PROJECTILE_SUCESSEDefaultTypeInternal _S_SPAWN_PROJECTILE_SUCESSE_default_instance_;
 PROTOBUF_CONSTEXPR S_LEAVE_GAME::S_LEAVE_GAME(
     ::_pbi::ConstantInitialized) {}
 struct S_LEAVE_GAMEDefaultTypeInternal {
@@ -238,7 +251,7 @@ struct S_DESPAWNDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S_DESPAWNDefaultTypeInternal _S_DESPAWN_default_instance_;
 }  // namespace Protocol
-static ::_pb::Metadata file_level_metadata_Protocol_2eproto[17];
+static ::_pb::Metadata file_level_metadata_Protocol_2eproto[18];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_Protocol_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Protocol_2eproto = nullptr;
 
@@ -283,6 +296,13 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_SPAWN_PROJECTILE, _impl_.info_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_SPAWN_PROJECTILE_SUCESSE, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_SPAWN_PROJECTILE_SUCESSE, _impl_.projectile_id_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_LEAVE_GAME, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -368,17 +388,18 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 19, -1, -1, sizeof(::Protocol::S_ENTER_GAME)},
   { 27, -1, -1, sizeof(::Protocol::C_LEAVE_GAME)},
   { 33, -1, -1, sizeof(::Protocol::C_SPAWN_PROJECTILE)},
-  { 40, -1, -1, sizeof(::Protocol::S_LEAVE_GAME)},
-  { 46, -1, -1, sizeof(::Protocol::C_MOVE)},
-  { 54, -1, -1, sizeof(::Protocol::C_MOVE_PROJECTILE)},
-  { 61, -1, -1, sizeof(::Protocol::S_MOVE)},
-  { 68, -1, -1, sizeof(::Protocol::S_MONSTER_INFO)},
-  { 75, -1, -1, sizeof(::Protocol::S_PROJECTILE_INFO)},
-  { 82, -1, -1, sizeof(::Protocol::S_SPAWN)},
-  { 89, -1, -1, sizeof(::Protocol::S_SPAWN_NEW_PLAYER)},
-  { 96, -1, -1, sizeof(::Protocol::S_SPAWN_EXISTING_PLAYER)},
-  { 103, -1, -1, sizeof(::Protocol::S_DESPAWN_PLAYER)},
-  { 110, -1, -1, sizeof(::Protocol::S_DESPAWN)},
+  { 40, -1, -1, sizeof(::Protocol::S_SPAWN_PROJECTILE_SUCESSE)},
+  { 47, -1, -1, sizeof(::Protocol::S_LEAVE_GAME)},
+  { 53, -1, -1, sizeof(::Protocol::C_MOVE)},
+  { 61, -1, -1, sizeof(::Protocol::C_MOVE_PROJECTILE)},
+  { 68, -1, -1, sizeof(::Protocol::S_MOVE)},
+  { 75, -1, -1, sizeof(::Protocol::S_MONSTER_INFO)},
+  { 82, -1, -1, sizeof(::Protocol::S_PROJECTILE_INFO)},
+  { 89, -1, -1, sizeof(::Protocol::S_SPAWN)},
+  { 96, -1, -1, sizeof(::Protocol::S_SPAWN_NEW_PLAYER)},
+  { 103, -1, -1, sizeof(::Protocol::S_SPAWN_EXISTING_PLAYER)},
+  { 110, -1, -1, sizeof(::Protocol::S_DESPAWN_PLAYER)},
+  { 117, -1, -1, sizeof(::Protocol::S_DESPAWN)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -388,6 +409,7 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::Protocol::_S_ENTER_GAME_default_instance_._instance,
   &::Protocol::_C_LEAVE_GAME_default_instance_._instance,
   &::Protocol::_C_SPAWN_PROJECTILE_default_instance_._instance,
+  &::Protocol::_S_SPAWN_PROJECTILE_SUCESSE_default_instance_._instance,
   &::Protocol::_S_LEAVE_GAME_default_instance_._instance,
   &::Protocol::_C_MOVE_default_instance_._instance,
   &::Protocol::_C_MOVE_PROJECTILE_default_instance_._instance,
@@ -408,23 +430,24 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "AME\022\017\n\007success\030\001 \001(\010\022$\n\006player\030\002 \001(\0132\024.P"
   "rotocol.PlayerInfo\"\016\n\014C_LEAVE_GAME\"A\n\022C_"
   "SPAWN_PROJECTILE\022+\n\004info\030\001 \001(\0132\035.Protoco"
-  "l.ProjectileBasicInfo\"\016\n\014S_LEAVE_GAME\"\\\n"
-  "\006C_MOVE\0222\n\020player_move_info\030\001 \001(\0132\030.Prot"
-  "ocol.PlayerMoveInfo\022\036\n\003dir\030\002 \001(\0132\021.Proto"
-  "col.Vector3\"F\n\021C_MOVE_PROJECTILE\0221\n\017proj"
-  "ectile_info\030\001 \001(\0132\030.Protocol.ProjectileI"
-  "nfo\"<\n\006S_MOVE\0222\n\020player_move_info\030\001 \001(\0132"
-  "\030.Protocol.PlayerMoveInfo\"=\n\016S_MONSTER_I"
-  "NFO\022+\n\014monster_info\030\001 \003(\0132\025.Protocol.Mon"
-  "sterInfo\"F\n\021S_PROJECTILE_INFO\0221\n\017project"
-  "ile_info\030\001 \001(\0132\030.Protocol.ProjectileInfo"
-  "\"0\n\007S_SPAWN\022%\n\007objects\030\001 \003(\0132\024.Protocol."
-  "ObjectInfo\":\n\022S_SPAWN_NEW_PLAYER\022$\n\006play"
-  "er\030\001 \001(\0132\024.Protocol.PlayerInfo\"\?\n\027S_SPAW"
-  "N_EXISTING_PLAYER\022$\n\006player\030\001 \003(\0132\024.Prot"
-  "ocol.PlayerInfo\"&\n\020S_DESPAWN_PLAYER\022\022\n\np"
-  "layer_ids\030\001 \001(\004\"\037\n\tS_DESPAWN\022\022\n\nobject_i"
-  "ds\030\001 \003(\004b\006proto3"
+  "l.ProjectileBasicInfo\"3\n\032S_SPAWN_PROJECT"
+  "ILE_SUCESSE\022\025\n\rprojectile_id\030\001 \001(\004\"\016\n\014S_"
+  "LEAVE_GAME\"\\\n\006C_MOVE\0222\n\020player_move_info"
+  "\030\001 \001(\0132\030.Protocol.PlayerMoveInfo\022\036\n\003dir\030"
+  "\002 \001(\0132\021.Protocol.Vector3\"F\n\021C_MOVE_PROJE"
+  "CTILE\0221\n\017projectile_info\030\001 \001(\0132\030.Protoco"
+  "l.ProjectileInfo\"<\n\006S_MOVE\0222\n\020player_mov"
+  "e_info\030\001 \001(\0132\030.Protocol.PlayerMoveInfo\"="
+  "\n\016S_MONSTER_INFO\022+\n\014monster_info\030\001 \003(\0132\025"
+  ".Protocol.MonsterInfo\"F\n\021S_PROJECTILE_IN"
+  "FO\0221\n\017projectile_info\030\001 \001(\0132\030.Protocol.P"
+  "rojectileInfo\"0\n\007S_SPAWN\022%\n\007objects\030\001 \003("
+  "\0132\024.Protocol.ObjectInfo\":\n\022S_SPAWN_NEW_P"
+  "LAYER\022$\n\006player\030\001 \001(\0132\024.Protocol.PlayerI"
+  "nfo\"\?\n\027S_SPAWN_EXISTING_PLAYER\022$\n\006player"
+  "\030\001 \003(\0132\024.Protocol.PlayerInfo\"&\n\020S_DESPAW"
+  "N_PLAYER\022\022\n\nplayer_ids\030\001 \001(\004\"\037\n\tS_DESPAW"
+  "N\022\022\n\nobject_ids\030\001 \003(\004b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_deps[2] = {
   &::descriptor_table_Enum_2eproto,
@@ -432,9 +455,9 @@ static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_de
 };
 static ::_pbi::once_flag descriptor_table_Protocol_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
-    false, false, 896, descriptor_table_protodef_Protocol_2eproto,
+    false, false, 949, descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
-    &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 17,
+    &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 18,
     schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
     file_level_metadata_Protocol_2eproto, file_level_enum_descriptors_Protocol_2eproto,
     file_level_service_descriptors_Protocol_2eproto,
@@ -1176,6 +1199,184 @@ void C_SPAWN_PROJECTILE::InternalSwap(C_SPAWN_PROJECTILE* other) {
 
 // ===================================================================
 
+class S_SPAWN_PROJECTILE_SUCESSE::_Internal {
+ public:
+};
+
+S_SPAWN_PROJECTILE_SUCESSE::S_SPAWN_PROJECTILE_SUCESSE(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.S_SPAWN_PROJECTILE_SUCESSE)
+}
+S_SPAWN_PROJECTILE_SUCESSE::S_SPAWN_PROJECTILE_SUCESSE(const S_SPAWN_PROJECTILE_SUCESSE& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  S_SPAWN_PROJECTILE_SUCESSE* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.projectile_id_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.projectile_id_ = from._impl_.projectile_id_;
+  // @@protoc_insertion_point(copy_constructor:Protocol.S_SPAWN_PROJECTILE_SUCESSE)
+}
+
+inline void S_SPAWN_PROJECTILE_SUCESSE::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.projectile_id_){uint64_t{0u}}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+S_SPAWN_PROJECTILE_SUCESSE::~S_SPAWN_PROJECTILE_SUCESSE() {
+  // @@protoc_insertion_point(destructor:Protocol.S_SPAWN_PROJECTILE_SUCESSE)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void S_SPAWN_PROJECTILE_SUCESSE::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void S_SPAWN_PROJECTILE_SUCESSE::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void S_SPAWN_PROJECTILE_SUCESSE::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S_SPAWN_PROJECTILE_SUCESSE)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.projectile_id_ = uint64_t{0u};
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S_SPAWN_PROJECTILE_SUCESSE::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // uint64 projectile_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.projectile_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* S_SPAWN_PROJECTILE_SUCESSE::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S_SPAWN_PROJECTILE_SUCESSE)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint64 projectile_id = 1;
+  if (this->_internal_projectile_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(1, this->_internal_projectile_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S_SPAWN_PROJECTILE_SUCESSE)
+  return target;
+}
+
+size_t S_SPAWN_PROJECTILE_SUCESSE::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S_SPAWN_PROJECTILE_SUCESSE)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // uint64 projectile_id = 1;
+  if (this->_internal_projectile_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_projectile_id());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S_SPAWN_PROJECTILE_SUCESSE::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    S_SPAWN_PROJECTILE_SUCESSE::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S_SPAWN_PROJECTILE_SUCESSE::GetClassData() const { return &_class_data_; }
+
+
+void S_SPAWN_PROJECTILE_SUCESSE::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<S_SPAWN_PROJECTILE_SUCESSE*>(&to_msg);
+  auto& from = static_cast<const S_SPAWN_PROJECTILE_SUCESSE&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S_SPAWN_PROJECTILE_SUCESSE)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_projectile_id() != 0) {
+    _this->_internal_set_projectile_id(from._internal_projectile_id());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void S_SPAWN_PROJECTILE_SUCESSE::CopyFrom(const S_SPAWN_PROJECTILE_SUCESSE& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S_SPAWN_PROJECTILE_SUCESSE)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S_SPAWN_PROJECTILE_SUCESSE::IsInitialized() const {
+  return true;
+}
+
+void S_SPAWN_PROJECTILE_SUCESSE::InternalSwap(S_SPAWN_PROJECTILE_SUCESSE* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_.projectile_id_, other->_impl_.projectile_id_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S_SPAWN_PROJECTILE_SUCESSE::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[6]);
+}
+
+// ===================================================================
+
 class S_LEAVE_GAME::_Internal {
  public:
 };
@@ -1211,7 +1412,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S_LEAVE_GAME::GetClassData() c
 ::PROTOBUF_NAMESPACE_ID::Metadata S_LEAVE_GAME::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[6]);
+      file_level_metadata_Protocol_2eproto[7]);
 }
 
 // ===================================================================
@@ -1462,7 +1663,7 @@ void C_MOVE::InternalSwap(C_MOVE* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_MOVE::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[7]);
+      file_level_metadata_Protocol_2eproto[8]);
 }
 
 // ===================================================================
@@ -1661,7 +1862,7 @@ void C_MOVE_PROJECTILE::InternalSwap(C_MOVE_PROJECTILE* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_MOVE_PROJECTILE::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[8]);
+      file_level_metadata_Protocol_2eproto[9]);
 }
 
 // ===================================================================
@@ -1860,7 +2061,7 @@ void S_MOVE::InternalSwap(S_MOVE* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_MOVE::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[9]);
+      file_level_metadata_Protocol_2eproto[10]);
 }
 
 // ===================================================================
@@ -2048,7 +2249,7 @@ void S_MONSTER_INFO::InternalSwap(S_MONSTER_INFO* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_MONSTER_INFO::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[10]);
+      file_level_metadata_Protocol_2eproto[11]);
 }
 
 // ===================================================================
@@ -2247,7 +2448,7 @@ void S_PROJECTILE_INFO::InternalSwap(S_PROJECTILE_INFO* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_PROJECTILE_INFO::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[11]);
+      file_level_metadata_Protocol_2eproto[12]);
 }
 
 // ===================================================================
@@ -2435,7 +2636,7 @@ void S_SPAWN::InternalSwap(S_SPAWN* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_SPAWN::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[12]);
+      file_level_metadata_Protocol_2eproto[13]);
 }
 
 // ===================================================================
@@ -2634,7 +2835,7 @@ void S_SPAWN_NEW_PLAYER::InternalSwap(S_SPAWN_NEW_PLAYER* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_SPAWN_NEW_PLAYER::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[13]);
+      file_level_metadata_Protocol_2eproto[14]);
 }
 
 // ===================================================================
@@ -2822,7 +3023,7 @@ void S_SPAWN_EXISTING_PLAYER::InternalSwap(S_SPAWN_EXISTING_PLAYER* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_SPAWN_EXISTING_PLAYER::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[14]);
+      file_level_metadata_Protocol_2eproto[15]);
 }
 
 // ===================================================================
@@ -3000,7 +3201,7 @@ void S_DESPAWN_PLAYER::InternalSwap(S_DESPAWN_PLAYER* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_DESPAWN_PLAYER::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[15]);
+      file_level_metadata_Protocol_2eproto[16]);
 }
 
 // ===================================================================
@@ -3193,7 +3394,7 @@ void S_DESPAWN::InternalSwap(S_DESPAWN* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_DESPAWN::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[16]);
+      file_level_metadata_Protocol_2eproto[17]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -3222,6 +3423,10 @@ Arena::CreateMaybeMessage< ::Protocol::C_LEAVE_GAME >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::Protocol::C_SPAWN_PROJECTILE*
 Arena::CreateMaybeMessage< ::Protocol::C_SPAWN_PROJECTILE >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::C_SPAWN_PROJECTILE >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S_SPAWN_PROJECTILE_SUCESSE*
+Arena::CreateMaybeMessage< ::Protocol::S_SPAWN_PROJECTILE_SUCESSE >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S_SPAWN_PROJECTILE_SUCESSE >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Protocol::S_LEAVE_GAME*
 Arena::CreateMaybeMessage< ::Protocol::S_LEAVE_GAME >(Arena* arena) {

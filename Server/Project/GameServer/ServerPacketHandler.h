@@ -13,17 +13,18 @@ enum : uint16
 	PKT_S_ENTER_GAME = 1003,
 	PKT_C_LEAVE_GAME = 1004,
 	PKT_C_SPAWN_PROJECTILE = 1005,
-	PKT_S_LEAVE_GAME = 1006,
-	PKT_C_MOVE = 1007,
-	PKT_C_MOVE_PROJECTILE = 1008,
-	PKT_S_MOVE = 1009,
-	PKT_S_MONSTER_INFO = 1010,
-	PKT_S_PROJECTILE_INFO = 1011,
-	PKT_S_SPAWN = 1012,
-	PKT_S_SPAWN_NEW_PLAYER = 1013,
-	PKT_S_SPAWN_EXISTING_PLAYER = 1014,
-	PKT_S_DESPAWN_PLAYER = 1015,
-	PKT_S_DESPAWN = 1016,
+	PKT_S_SPAWN_PROJECTILE_SUCESSE = 1006,
+	PKT_S_LEAVE_GAME = 1007,
+	PKT_C_MOVE = 1008,
+	PKT_C_MOVE_PROJECTILE = 1009,
+	PKT_S_MOVE = 1010,
+	PKT_S_MONSTER_INFO = 1011,
+	PKT_S_PROJECTILE_INFO = 1012,
+	PKT_S_SPAWN = 1013,
+	PKT_S_SPAWN_NEW_PLAYER = 1014,
+	PKT_S_SPAWN_EXISTING_PLAYER = 1015,
+	PKT_S_DESPAWN_PLAYER = 1016,
+	PKT_S_DESPAWN = 1017,
 };
 
 // ===== Process Packet =====
@@ -57,6 +58,7 @@ public:
 	}
 	static CSendBufferRef MakeSendBuffer(Protocol::S_LOGIN& pkt) { return MakeSendBuffer(pkt, PKT_S_LOGIN); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_ENTER_GAME& pkt) { return MakeSendBuffer(pkt, PKT_S_ENTER_GAME); }
+	static CSendBufferRef MakeSendBuffer(Protocol::S_SPAWN_PROJECTILE_SUCESSE& pkt) { return MakeSendBuffer(pkt, PKT_S_SPAWN_PROJECTILE_SUCESSE); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_LEAVE_GAME& pkt) { return MakeSendBuffer(pkt, PKT_S_LEAVE_GAME); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_MOVE& pkt) { return MakeSendBuffer(pkt, PKT_S_MOVE); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_MONSTER_INFO& pkt) { return MakeSendBuffer(pkt, PKT_S_MONSTER_INFO); }

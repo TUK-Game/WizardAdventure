@@ -13,23 +13,25 @@ enum : uint16
 	PKT_S_ENTER_GAME = 1003,
 	PKT_C_LEAVE_GAME = 1004,
 	PKT_C_SPAWN_PROJECTILE = 1005,
-	PKT_S_LEAVE_GAME = 1006,
-	PKT_C_MOVE = 1007,
-	PKT_C_MOVE_PROJECTILE = 1008,
-	PKT_S_MOVE = 1009,
-	PKT_S_MONSTER_INFO = 1010,
-	PKT_S_PROJECTILE_INFO = 1011,
-	PKT_S_SPAWN = 1012,
-	PKT_S_SPAWN_NEW_PLAYER = 1013,
-	PKT_S_SPAWN_EXISTING_PLAYER = 1014,
-	PKT_S_DESPAWN_PLAYER = 1015,
-	PKT_S_DESPAWN = 1016,
+	PKT_S_SPAWN_PROJECTILE_SUCESSE = 1006,
+	PKT_S_LEAVE_GAME = 1007,
+	PKT_C_MOVE = 1008,
+	PKT_C_MOVE_PROJECTILE = 1009,
+	PKT_S_MOVE = 1010,
+	PKT_S_MONSTER_INFO = 1011,
+	PKT_S_PROJECTILE_INFO = 1012,
+	PKT_S_SPAWN = 1013,
+	PKT_S_SPAWN_NEW_PLAYER = 1014,
+	PKT_S_SPAWN_EXISTING_PLAYER = 1015,
+	PKT_S_DESPAWN_PLAYER = 1016,
+	PKT_S_DESPAWN = 1017,
 };
 
 // ===== Process Packet =====
 bool Handle_INVALID(CPacketSessionRef& session, BYTE* buffer, int32 len);
 bool Handle_S_LOGIN(CPacketSessionRef& session, Protocol::S_LOGIN& pkt);
 bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt);
+bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_SPAWN_PROJECTILE_SUCESSE& pkt);
 bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt);
 bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt);
 bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO& pkt);
@@ -49,6 +51,7 @@ public:
 			g_PacketHandler[i] = Handle_INVALID;
 		g_PacketHandler[PKT_S_LOGIN] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_LOGIN>(Handle_S_LOGIN, session, buffer, len); };
 		g_PacketHandler[PKT_S_ENTER_GAME] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_ENTER_GAME>(Handle_S_ENTER_GAME, session, buffer, len); };
+		g_PacketHandler[PKT_S_SPAWN_PROJECTILE_SUCESSE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_SPAWN_PROJECTILE_SUCESSE>(Handle_S_SPAWN_PROJECTILE_SUCESSE, session, buffer, len); };
 		g_PacketHandler[PKT_S_LEAVE_GAME] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_LEAVE_GAME>(Handle_S_LEAVE_GAME, session, buffer, len); };
 		g_PacketHandler[PKT_S_MOVE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_MOVE>(Handle_S_MOVE, session, buffer, len); };
 		g_PacketHandler[PKT_S_MONSTER_INFO] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_MONSTER_INFO>(Handle_S_MONSTER_INFO, session, buffer, len); };

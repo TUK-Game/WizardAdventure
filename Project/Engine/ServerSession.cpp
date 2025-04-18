@@ -4,6 +4,9 @@
 #include "Player.h"
 #include "Transform.h"
 #include "SkillObject.h"
+#include "LevelManager.h"
+#include "Level.h"
+#include "Layer.h"
 
 void ProtoToVector3(const Vec3& from, Protocol::Vector3* to)
 {
@@ -103,14 +106,51 @@ void CServerSession::OnActPlayer()
 
 void CServerSession::SpawnSkill(CSkillObject* object)
 {
+	CTransform* transform = object->GetTransform();
+	const Vec3& pos = transform->GetRelativePosition();
 	Protocol::C_SPAWN_PROJECTILE pkt;
 	auto* info = pkt.mutable_info();
 
+	object->m_ProjectileId = m_projectileId;
+	info->set_new_projectile_id(m_projectileId++);
 	info->set_player_id(m_Id);
 	info->mutable_dir()->set_x(1);
+
+	auto* posInfo = pkt.mutable_info()->mutable_spawn_pos();
+	posInfo->set_x(pos.x);
+	posInfo->set_y(pos.y);
+	posInfo->set_z(pos.z);
+	
+	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
+	//if (map.find(object->m_ProjectileId) != map.end())
+	//{
+	//	map.erase(object->m_ProjectileId);
+	//}
+	map[object->m_ProjectileId] = object;
 
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(sendBuffer);
 }
 
-	
+void CServerSession::MoveSkill(CSkillObject* object)
+{
+	CTransform* transform = object->GetTransform();
+	const Vec3& pos = transform->GetRelativePosition();
+	Protocol::C_MOVE_PROJECTILE pkt;
+	auto* info = pkt.mutable_projectile_info();
+	info->set_projectile_id(object->m_ProjectileId);
+
+	if (object->m_bDelete)
+		info->set_state(Protocol::COLLISION);
+	else
+		info->set_state(Protocol::MOVE_STATE);
+
+	auto* posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
+	posInfo->set_x(pos.x);
+	posInfo->set_y(pos.y);
+	posInfo->set_z(pos.z);
+
+
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
+}

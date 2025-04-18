@@ -57,32 +57,6 @@ bool Handle_C_LEAVE_GAME(CPacketSessionRef& session, Protocol::C_LEAVE_GAME& pkt
 	return true;
 }
 
-bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PROJECTILE& pkt)
-{
-	const auto& info = pkt.info();
-
-	CProjectileRef projectile = g_pool->Allocate();
-	assert(projectile != nullptr);
-
-	ProjectileState state;
-	state.Direction = Vec3(info.dir().x(), info.dir().y(), info.dir().z());
-	state.Size = Vec3(info.size().x(), info.size().y(), info.size().z());
-	state.Speed = info.speed();
-	state.ElapsedTime = info.duration();
-	state.damage = info.damage();
-
-
-	projectile->SetProjectileState(state);
-	projectile->ProjectileInfo->set_projectile_id(g_pool->GetIdx());
-	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(info.spawn_pos().x());
-	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(info.spawn_pos().y());
-	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(info.spawn_pos().z());
-	projectile->SetCollisionBoxInfo(Vec3(info.spawn_pos().x(), info.spawn_pos().y(), info.spawn_pos().z()), state.Size, Vec3(0.f, 0.f, 0.f));
-	g_Room->DoAsync(&CRoom::HandleSpawnProjectile, projectile);
-	std::cout << "발사!" << info.player_id() << "가 쏨\n";
-	return true;
-}
-
 bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 {
 	// TODO - 움직임 업데이트 로직 및 패킷 재전송
@@ -114,22 +88,49 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 	return true;
 }
 
+bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PROJECTILE& pkt)
+{
+	const auto& info = pkt.info();
+
+	CProjectileRef projectile = g_pool->Allocate();
+	assert(projectile != nullptr);
+
+	ProjectileState state;
+	state.Direction = Vec3(info.dir().x(), info.dir().y(), info.dir().z());
+	state.Size = Vec3(info.size().x(), info.size().y(), info.size().z());
+	state.Speed = info.speed();
+	state.ElapsedTime = info.duration();
+	state.damage = info.damage();
+
+
+	projectile->SetProjectileState(state);
+	projectile->ProjectileInfo->set_projectile_id(info.new_projectile_id());
+	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(info.spawn_pos().x());
+	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(info.spawn_pos().y());
+	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(info.spawn_pos().z());
+	projectile->SetCollisionBoxInfo(Vec3(info.spawn_pos().x(), info.spawn_pos().y(), info.spawn_pos().z()), state.Size, Vec3(0.f, 0.f, 0.f));
+	g_Room->DoAsync(&CRoom::HandleSpawnProjectile, projectile);
+	std::cout << "발사!" << info.player_id() << "가 쏨\n";
+	return true;
+}
+
 bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJECTILE& pkt)
 {
 	const auto& info = pkt.projectile_info();
-
+	
 	int projectile_id = info.projectile_id();
-
+	
 	CProjectileRef object = std::dynamic_pointer_cast<CProjectile>(g_Room->GetLayerObject((uint32)EObject_Type::Projectile, projectile_id));
-
+	if (object == nullptr)
+		return true;
 	const auto& posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->position();
 	const auto state = pkt.projectile_info().state();
-
+	
 	auto* pos = object->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
 	pos->set_x(posInfo.x());
 	pos->set_y(posInfo.y());
 	pos->set_z(posInfo.z());
-
+	
 	object->ProjectileInfo->set_state(state);
 
 	g_Room->DoAsync(&CRoom::HandleMoveProjectile, object);

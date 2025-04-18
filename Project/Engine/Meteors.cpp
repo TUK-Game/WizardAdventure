@@ -21,7 +21,7 @@ CMeteors::CMeteors(Vec3 centerPos, int count, float interval)
 
 void CMeteors::Update()
 {
-    CGameObject::Update();
+    CSkillObject::Update();
     m_ElapsedTime += DELTA_TIME;
     if (m_ElapsedTime >= m_Interval)
     {
@@ -58,6 +58,7 @@ void CMeteors::SpawnMeteor()
     meteor->SetDuration(5.5f);
     meteor->SetCaster(GetCaster());
     meteor->SetDamage(SkillDamage::Meteor);
+    meteor->SetEnable(false);
 
     CRigidBody* rigidbody = meteor->GetRigidBody();
     rigidbody->SetGravity(true);
@@ -66,5 +67,5 @@ void CMeteors::SpawnMeteor()
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(meteor);
 
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteor, 3, false);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteor, 12, false);
 }

@@ -35,6 +35,7 @@ public:
 	bool HandleMoveProjectile(CProjectileRef projectile);
 
 	bool AddObject(uint32 layer, CGameObjectRef object);
+	bool AddProjectile(CProjectileRef object);
 private:
 	bool AddPlayer(CPlayerRef player);
 	bool RemovePlayer(uint64 playerId);

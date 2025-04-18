@@ -21,7 +21,7 @@ CFireCircle::CFireCircle()
 
 void CFireCircle::Update()
 {
-    CGameObject::Update();
+    CSkillObject::Update();
 }
 
 void CFireCircle::FinalUpdate()
