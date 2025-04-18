@@ -137,6 +137,12 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 	return true;
 }
 
+bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE_INFO& pkt)
+{
+
+	return true;
+}
+
 bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 {
 	UINT64 id = pkt.player_move_info().player_id();

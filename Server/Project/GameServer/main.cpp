@@ -8,6 +8,8 @@
 #include "Room.h"
 #include "JsonLoader.h"
 #include "CollisionManager.h"
+#include "ProjectilePool.h"
+
 enum
 {
 	WORKER_TICK = 64	// Job 처리 timeout
@@ -37,6 +39,7 @@ int main()
 	g_CollisionManager->Init();
 	CJsonLoader::LoadMap(L"Level_1", g_Room);
 	g_Timer->Init();
+	g_pool->Init(PROJECTILE_MAX_NUM);
 
 	CServerServiceRef service = std::make_shared<CServerService>(
 		CNetAddress(L"127.0.0.1", 7777),

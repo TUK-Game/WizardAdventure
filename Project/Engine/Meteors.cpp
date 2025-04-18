@@ -10,6 +10,8 @@
 #include "LevelManager.h"
 #include "Engine.h"
 #include "SkillDamage.h"
+#include "ServerSession.h"
+#include "NetworkManager.h"
 
 CMeteors::CMeteors(Vec3 centerPos, int count, float interval)
     : m_CenterPos(centerPos), m_TotalCount(count), m_Interval(interval)
@@ -61,6 +63,8 @@ void CMeteors::SpawnMeteor()
     rigidbody->SetGravity(true);
     rigidbody->SetDrag(0.f);
     rigidbody->SetVelocity(Vec3(RandomFloat(-300.f, 300.f), 0.f, RandomFloat(-300.f, 300.f)));
+
+    CNetworkManager::GetInst()->s_GameSession->SpawnSkill(meteor);
 
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteor, 3, false);
 }

@@ -29,6 +29,11 @@ message C_LEAVE_GAME
 
 }
 
+message C_SPAWN_PROJECTILE
+{
+	ProjectileBasicInfo info = 1;
+}	
+
 message S_LEAVE_GAME
 {
 
@@ -41,6 +46,11 @@ message C_MOVE
 	Vector3 dir = 2;
 }
 
+message C_MOVE_PROJECTILE
+{
+	ProjectileInfo projectile_info = 1;
+}
+
 message S_MOVE
 {
 	PlayerMoveInfo player_move_info = 1;
@@ -50,6 +60,11 @@ message S_MOVE
 message S_MONSTER_INFO
 {	
 	repeated MonsterInfo monster_info = 1;
+}
+
+message S_PROJECTILE_INFO
+{	
+	ProjectileInfo projectile_info = 1;
 }
 
 // 플레이어만 스포인가 오브젝트 전체가 스폰인가?

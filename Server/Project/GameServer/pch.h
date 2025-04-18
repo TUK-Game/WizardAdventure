@@ -45,6 +45,7 @@ enum class EObject_Type
 {
 	Monster,
 	Wall,
+	Projectile,
 	Max
 };
 
@@ -58,6 +59,7 @@ struct CollisionProfile
 
 
 #define MAX_PLAYERS 4
+#define PROJECTILE_MAX_NUM 100
 
 USING_SHARED_PTR(CGameSession);
 USING_SHARED_PTR(CPlayer);
@@ -65,7 +67,9 @@ USING_SHARED_PTR(CMonster);
 USING_SHARED_PTR(CCreature);
 USING_SHARED_PTR(CGameObject);
 USING_SHARED_PTR(CRoom);
+USING_SHARED_PTR(CProjectilePool);
 USING_SHARED_PTR(CCollisionManager);
+USING_SHARED_PTR(CProjectile);
 
 #define SEND_PACKET(pkt)													\
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);	\

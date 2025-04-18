@@ -17,15 +17,22 @@ public:
 	void Init();
 	void Update();
 	void UpdateClients();
+
+	void UpdateMonster();
+	void UpdateProjectile();
 public:
 	class CLevelCollision* GetLevelCollision() { return m_LevelCollision; }
 	std::unordered_map<uint64, CGameObjectRef>& GetLayerObjects(uint32 layer) { return m_mapObject[layer]; }
+	CGameObjectRef GetLayerObject(uint32 layer, uint64 id) { return m_mapObject[layer][id]; }
 	std::array<CPlayerRef, MAX_PLAYERS>& GetPlayers() { return m_Players; }
 public:
 	bool HandleEnterPlayer(CPlayerRef player);
 	bool HandleLeavePlayer(CPlayerRef player);
 
 	bool HandleMovePlayer(CPlayerRef player);
+
+	bool HandleSpawnProjectile(CProjectileRef projectile);
+	bool HandleMoveProjectile(CProjectileRef projectile);
 
 	bool AddObject(uint32 layer, CGameObjectRef object);
 private:

@@ -15,12 +15,18 @@
 #include "Player.h"
 #include "Camera.h"
 #include "SkillDamage.h"
+#include "ServerSession.h"
+#include "NetworkManager.h"
 
 CSkillManager::CSkillManager(EPlayerAttribute attribute, CGameObject* owner)
     : m_Attribute(attribute), m_Owner(owner) {}
 
 void CSkillManager::UseSkill(int skillIndex)
 {
+    CPlayer* player = CNetworkManager::GetInst()->s_GameSession->GetOwnPlayer();
+    if (m_Owner != player)
+        return;
+
     switch (m_Attribute)
     {
     case EPlayerAttribute::Fire:
@@ -72,6 +78,7 @@ void CSkillManager::CastFireballTowardMouse()
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
     fireBall->SetDamage(SkillDamage::FireBall);
 
+    CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
 
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 3, false);
 }
@@ -96,10 +103,13 @@ void CSkillManager::CastFireballTowardQ()
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
     fireBall->SetDamage(SkillDamage::FireBallQ);
 
+
     CRigidBody* rigidbody = fireBall->GetRigidBody();
     rigidbody->ApplyForce(fireDir * 70000.f);
     rigidbody->ApplyTorque(Vec3(0.f, 500.f, 0.f));
     rigidbody->SetAngularDrag(0.01f);
+
+    CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
 
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 3, false);
 }
@@ -134,6 +144,8 @@ void CSkillManager::SpawnFirePillarAtMouse()
         pillar->GetTransform()->SetRelativePosition(spawnPos);
         pillar->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
         pillar->SetDamage(SkillDamage::Pillar);
+
+        CNetworkManager::GetInst()->s_GameSession->SpawnSkill(pillar);
 
         CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(pillar, 3, false);
     }                                                                                               
@@ -174,6 +186,7 @@ void CSkillManager::FireSwordSpreadShot()
         sword->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
         sword->SetDamage(SkillDamage::FireSword);
 
+        CNetworkManager::GetInst()->s_GameSession->SpawnSkill(sword);
 
         CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(sword, 3, false);
     }
@@ -186,6 +199,8 @@ void CSkillManager::CastMeteor()
 
     CMeteors* meteors = new CMeteors(centerPos, 30, 0.125f);
     meteors->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
+
+
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteors, 3, false);
 }
 

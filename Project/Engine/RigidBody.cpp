@@ -20,7 +20,7 @@ void CRigidBody::ApplyForce(const Vector3& force)
     m_Acceleration.x += force.x / m_Mass;
     m_Acceleration.y += force.y / m_Mass;
     m_Acceleration.z += force.z / m_Mass;
-}
+}   
 
 void CRigidBody::ApplyImpulse(const Vector3& impulse)
 {

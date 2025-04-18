@@ -3,6 +3,7 @@
 #include "ClientPacketHandler.h"
 #include "Player.h"
 #include "Transform.h"
+#include "SkillObject.h"
 
 void ProtoToVector3(const Vec3& from, Protocol::Vector3* to)
 {
@@ -95,11 +96,21 @@ void CServerSession::OnActPlayer()
 	ProtoToVector3(rot, posInfo->mutable_rotation());
 	ProtoToVector3(dir, pkt.mutable_dir());
 
-	std::cout << dir.x << " " << dir.y << " " << dir.z << '\n';
-
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(sendBuffer);
 
+}
+
+void CServerSession::SpawnSkill(CSkillObject* object)
+{
+	Protocol::C_SPAWN_PROJECTILE pkt;
+	auto* info = pkt.mutable_info();
+
+	info->set_player_id(m_Id);
+	info->mutable_dir()->set_x(1);
+
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
 }
 
 	

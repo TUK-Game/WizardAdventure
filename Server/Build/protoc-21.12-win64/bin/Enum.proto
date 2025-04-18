@@ -44,3 +44,9 @@ enum MoveState
 	MOVE_STATE_SKILL_MOUSE_R = 8;
 	MOVE_STATE_SKILL_MOUSE_L = 9;
 }
+
+enum ProjectileState
+{
+	MOVE_STATE = 0;
+	COLLISION = 1;
+}
