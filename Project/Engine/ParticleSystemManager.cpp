@@ -29,12 +29,32 @@ void CParticleSystemManager::Init(int poolSize, CLevel* level)
 	}
 }
 
+void CParticleSystemManager::Update(float deltaTime)
+{
+	for (auto it = m_ReturnQueue.begin(); it != m_ReturnQueue.end();)
+	{
+		it->remainingTime -= deltaTime;
+
+		if (it->remainingTime <= 0.f)
+		{
+			it->obj->SetEnable(false);
+			
+			it = m_ReturnQueue.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+}
+
 CGameObject* CParticleSystemManager::Request()
 {
 	for (auto obj : m_Pool)
 	{
 		if (!obj->GetEnable())
 		{
+			obj->GetParticleSystem()->SetEmit(true);
 			obj->SetEnable(true);
 			return obj;
 		}
@@ -44,7 +64,8 @@ CGameObject* CParticleSystemManager::Request()
 
 void CParticleSystemManager::Return(CGameObject* obj)
 {
-	obj->SetEnable(false);
+	obj->GetParticleSystem()->SetEmit(false);
+	m_ReturnQueue.push_back({ obj, 1.0f }); 
 }
 
 void CParticleSystemManager::Clear()

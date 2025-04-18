@@ -7,6 +7,7 @@
 #include "LevelManager.h"
 #include "RenderManager.h"
 #include "InputManager.h"
+#include "ParticleSystemManager.h"
 #include "CollisionManager.h"
 #include "InstancingManager.h"
 #include "NetworkManager.h"
@@ -143,7 +144,7 @@ void CEngine::Progress()
 {
     m_Timer->Update();
     m_DeltaTime = m_Timer->GetDeltaTime();
-
+    CParticleSystemManager::GetInst()->Update(DELTA_TIME);
     CAssetManager::GetInst()->Update();
     CInputManager::GetInst()->Update();
     CLevelManager::GetInst()->Progress();

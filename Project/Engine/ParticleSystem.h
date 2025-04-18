@@ -34,6 +34,8 @@ public:
 	void SetTexture(class CTexture* texture);
 	void SetTexture(const std::wstring& name);
 	void SetBasePos(const Vec3 pos) { m_BasePos = pos; }
+	void SetEmit(bool value) { m_bEmit = value; }
+	bool IsEmitting() const { return m_bEmit; }
 public:
 
 	virtual void FinalUpdate();
@@ -62,4 +64,6 @@ private:
 	float				_maxSpeed = 50;
 	float				_startScale = 10.f;
 	float				_endScale = 5.f;
+
+	bool				m_bEmit = true;
 };

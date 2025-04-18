@@ -37,8 +37,10 @@ void CFireBall::FinalUpdate()
     CGameObject::FinalUpdate();
     m_ElapsedTime += DELTA_TIME;
     if (m_ElapsedTime >= m_Duration) {
-        CParticleSystemManager::GetInst()->Return(m_ParticleObject);
-        m_ParticleObject = nullptr;
+        if (m_ParticleObject) {
+            CParticleSystemManager::GetInst()->Return(m_ParticleObject);
+            m_ParticleObject = nullptr;
+        }
         CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
     }
 }

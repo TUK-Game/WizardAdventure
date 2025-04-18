@@ -19,7 +19,7 @@ CParticleSystem::CParticleSystem() : CComponent(EComponent_Type::ParticleSystem)
 	m_GraphicsMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"Particle");
 	m_ComputeMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"ComputeParticle");
 
-	CTexture* tex = CAssetManager::GetInst()->FindAsset<CTexture>(L"Mushroom");
+	CTexture* tex = CAssetManager::GetInst()->FindAsset<CTexture>(L"Spark");
 	m_GraphicsMaterial->SetTexture(0, tex);
 
 }
@@ -59,10 +59,13 @@ void CParticleSystem::FinalUpdate()
 	m_AccTime += DELTA_TIME;
 
 	INT32 add = 0;
-	if (_createInterval < m_AccTime)
+	if (m_bEmit)
 	{
-		m_AccTime = m_AccTime - _createInterval;
-		add = 1;
+		if (_createInterval < m_AccTime)
+		{
+			m_AccTime = m_AccTime - _createInterval;
+			add = 1;
+		}
 	}
 
 	m_ParticleBuffer->PushComputeUAVData(UAV_REGISTER::u0);
