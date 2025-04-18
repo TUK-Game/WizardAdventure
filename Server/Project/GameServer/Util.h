@@ -26,5 +26,5 @@ public:
 		}
 	}
 
-
+	static std::wstring GetMyIPv4Address();
 };

@@ -27,9 +27,19 @@ bool CNetworkManager::Init()
 
 	s_GameSession = std::make_shared<CServerSession>();
 
-	std::wstring serverIpAddress = L"127.0.0.1";
+	std::cout << "Please input server IP address" << std::endl;
+	std::cout << "(Input 0 = 127.0.0.1)" << std::endl;
+	std::cout << std::endl;
+	std::cout << "input : ";
+
+	std::wstring serverIpAddress;
+	std::wcin >> serverIpAddress;
+
+	if (serverIpAddress.size() == 1 && serverIpAddress[0] == '0')
+		serverIpAddress = L"127.0.0.1";
+
 	CClientServiceRef service = std::make_shared<CClientService>(
-		CNetAddress(serverIpAddress.c_str(), 7777),
+		CNetAddress(serverIpAddress.c_str(), 6767),
 		std::make_shared<CIocpCore>(),
 		[=]() { return s_GameSession; },
 		1);

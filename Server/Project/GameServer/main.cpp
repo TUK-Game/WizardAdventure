@@ -33,13 +33,16 @@ void DoWorkerJob(CServerServiceRef& service)
 
 int main()
 {
+	std::wstring ipAddress = CUtil::GetMyIPv4Address();
+	//ipAddress = L"127.0.0.1";
+
 	ServerPacketHandler::Init();
 	g_CollisionManager->Init();
 	CJsonLoader::LoadMap(L"Level_1", g_Room);
 	g_Timer->Init();
 
 	CServerServiceRef service = std::make_shared<CServerService>(
-		CNetAddress(L"127.0.0.1", 7777),
+		CNetAddress(ipAddress, 6767),
 		std::make_shared<CIocpCore>(),
 		[=]() { return std::make_shared<CGameSession>(); },
 		100);
