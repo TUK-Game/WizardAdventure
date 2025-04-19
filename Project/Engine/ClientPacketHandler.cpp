@@ -17,7 +17,7 @@
 #include "FireSword.h"
 #include "FirePillar.h"
 #include "FireCircle.h"
-
+#include "ParticleSystemManager.h"
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
 bool Handle_INVALID(CPacketSessionRef& session, BYTE* buffer, int32 len)
@@ -200,7 +200,6 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 
 bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE_INFO& pkt)
 {
-	std::cout << "¹ÞÀ½" << std::endl;
 	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
 	UINT64 id = pkt.projectile_info().projectile_id();
 	if (map.find(id) == map.end())
@@ -208,7 +207,16 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 
 	if (pkt.mutable_projectile_info()->state() == Protocol::COLLISION)
 	{
-		//map[id]->SetActive(false);
+		CFireBall* ball = dynamic_cast<CFireBall*>(map[id]);
+		if (ball)
+		{
+			if (ball->GetParticleObject())
+			{
+				CParticleSystemManager::GetInst()->Return(ball->GetParticleObject());
+				ball->SetParticleObject(nullptr);
+			}
+		}
+
 		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->SafeRemoveGameObject(map[id]);
 		map.erase(id);
 	}

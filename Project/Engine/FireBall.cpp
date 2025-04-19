@@ -39,30 +39,28 @@ void CFireBall::FinalUpdate()
 {
     if (m_ParticleObject)
         m_ParticleObject->GetParticleSystem()->SetBasePos(GetTransform()->GetRelativePosition());
+
     CGameObject::FinalUpdate();
+
     if (m_bOwn)
     {
+    
         m_ElapsedTime += DELTA_TIME;
         if (m_ElapsedTime >= m_Duration) {
-            if (m_ParticleObject) {
-                CParticleSystemManager::GetInst()->Return(m_ParticleObject);
-                m_ParticleObject = nullptr;
-            }
-            //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
             m_bDelete = true;
         }
     }
 
-    auto pos = GetTransform()->GetRelativePosition();
+    //auto pos = GetTransform()->GetRelativePosition();
 
-    if (pos.y < 10.f) {
-        if (m_ParticleObject) {
-            CParticleSystemManager::GetInst()->Return(m_ParticleObject);
-            m_ParticleObject = nullptr;
-        }
-        CParticleSystemManager::GetInst()->RequestExplodeAt(pos);
-        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
-    }
+    //if (pos.y < 10.f) {
+    //    if (m_ParticleObject) {
+    //        CParticleSystemManager::GetInst()->Return(m_ParticleObject);
+    //        m_ParticleObject = nullptr;
+    //    }
+    //    CParticleSystemManager::GetInst()->RequestExplodeAt(pos);
+    //    CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+    //}
 
 
 }
