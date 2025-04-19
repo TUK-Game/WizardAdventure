@@ -102,8 +102,10 @@ bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PRO
 	state.ElapsedTime = info.duration();
 	state.damage = info.damage();
 
+
 	projectile->SetProjectileState(state);
 	projectile->ProjectileInfo->set_projectile_id(info.new_projectile_id());
+	projectile->SetCollisionExplosion(pkt.info().bcollisionexplosion());
 	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(info.spawn_pos().x());
 	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(info.spawn_pos().y());
 	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(info.spawn_pos().z());

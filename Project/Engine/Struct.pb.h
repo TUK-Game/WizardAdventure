@@ -1471,6 +1471,7 @@ class ProjectileBasicInfo final :
     kDurationFieldNumber = 3,
     kSpeedFieldNumber = 4,
     kDamageFieldNumber = 5,
+    kBCollisionExplosionFieldNumber = 9,
   };
   // .Protocol.Vector3 dir = 6;
   bool has_dir() const;
@@ -1571,6 +1572,15 @@ class ProjectileBasicInfo final :
   void _internal_set_damage(float value);
   public:
 
+  // bool bCollisionExplosion = 9;
+  void clear_bcollisionexplosion();
+  bool bcollisionexplosion() const;
+  void set_bcollisionexplosion(bool value);
+  private:
+  bool _internal_bcollisionexplosion() const;
+  void _internal_set_bcollisionexplosion(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.ProjectileBasicInfo)
  private:
   class _Internal;
@@ -1587,6 +1597,7 @@ class ProjectileBasicInfo final :
     float duration_;
     float speed_;
     float damage_;
+    bool bcollisionexplosion_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -3088,6 +3099,26 @@ inline void ProjectileBasicInfo::set_allocated_spawn_pos(::Protocol::Vector3* sp
   }
   _impl_.spawn_pos_ = spawn_pos;
   // @@protoc_insertion_point(field_set_allocated:Protocol.ProjectileBasicInfo.spawn_pos)
+}
+
+// bool bCollisionExplosion = 9;
+inline void ProjectileBasicInfo::clear_bcollisionexplosion() {
+  _impl_.bcollisionexplosion_ = false;
+}
+inline bool ProjectileBasicInfo::_internal_bcollisionexplosion() const {
+  return _impl_.bcollisionexplosion_;
+}
+inline bool ProjectileBasicInfo::bcollisionexplosion() const {
+  // @@protoc_insertion_point(field_get:Protocol.ProjectileBasicInfo.bCollisionExplosion)
+  return _internal_bcollisionexplosion();
+}
+inline void ProjectileBasicInfo::_internal_set_bcollisionexplosion(bool value) {
+  
+  _impl_.bcollisionexplosion_ = value;
+}
+inline void ProjectileBasicInfo::set_bcollisionexplosion(bool value) {
+  _internal_set_bcollisionexplosion(value);
+  // @@protoc_insertion_point(field_set:Protocol.ProjectileBasicInfo.bCollisionExplosion)
 }
 
 // -------------------------------------------------------------------

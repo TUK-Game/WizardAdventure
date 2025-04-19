@@ -78,6 +78,7 @@ void CSkillManager::CastFireballTowardMouse()
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
     fireBall->SetDamage(SkillDamage::FireBall);
     fireBall->SetEnable(false);
+    fireBall->SetCollisionExplosion(true);
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
 
@@ -104,6 +105,7 @@ void CSkillManager::CastFireballTowardQ()
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
     fireBall->SetDamage(SkillDamage::FireBallQ);
     fireBall->SetEnable(false);
+    fireBall->SetCollisionExplosion(true);
 
     CRigidBody* rigidbody = fireBall->GetRigidBody();
     rigidbody->ApplyForce(fireDir * 70000.f);
@@ -190,12 +192,7 @@ void CSkillManager::FireSwordSpreadShot()
         sword->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
         sword->SetDamage(SkillDamage::FireSword);
         sword->SetEnable(false);
-
-        const auto& childs = sword->GetChild();
-        for (const auto& child : childs)
-        {
-
-        }
+        sword->SetCollisionExplosion(true);
         CNetworkManager::GetInst()->s_GameSession->SpawnSkill(sword);
 
         CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(sword, 12, false);

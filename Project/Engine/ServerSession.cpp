@@ -116,6 +116,7 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 	info->set_new_projectile_id(m_projectileId++);
 	info->set_player_id(m_Id);
 	info->mutable_dir()->set_x(1);
+	info->set_bcollisionexplosion(object->GetCollisionExplosion());
 
 	auto* posInfo = pkt.mutable_info()->mutable_spawn_pos();
 	posInfo->set_x(pos.x);

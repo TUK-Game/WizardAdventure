@@ -32,6 +32,7 @@ enum class ECollision_Channel
 	Player,
 	Monster,
 	Wall,
+	Projectile,
 	Max
 };
 

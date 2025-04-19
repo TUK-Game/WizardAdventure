@@ -176,7 +176,7 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		{
 			monster = new CMonster();
 			monsterMap[objectId] = monster;
-			level->AddGameObject(monster, 11, false);
+			level->SafeAddGameObject(monster, 11, false);
 		}
 
 		const Protocol::PosInfo& posInfo = info.object_info().pos_info();
@@ -184,10 +184,15 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		const Protocol::Vector3& rot = posInfo.rotation();
 		Protocol::MoveState state = posInfo.state();
 
+		if (state == Protocol::MOVE_STATE_NONE)
+		{
+			level->GetLayer(11)->SafeRemoveGameObject(monsterMap[objectId]);
+			monsterMap.erase(objectId);
+			continue;
+		}
+
 		// 몬스터 정보 갱신
-		//monster->GetTransform()->SetRelativePosition({ pos.x(), pos.y(), pos.z() });
 		monster->SetTarget(Vec3(pos.x(), pos.y(), pos.z()), Vec3(rot.x(), rot.y(), rot.z()));
-		//monster->GetTransform()->SetRelativeRotation({ rot.x(), rot.y(), rot.z() });
 		monster->SetProtocolStateForClientMonster(state);
 	}
 	return true;

@@ -123,7 +123,8 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 		object->GetCollider()->SetCollisionProfile("Monster");
 		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
 		object->SetState(Protocol::MOVE_STATE_IDLE);
-		room->AddObject((uint32)EObject_Type::Monster, object);
+		room->AddMonster(object);
+		//room->AddObject((uint32)EObject_Type::Monster, object);
 		break;
 	}
 

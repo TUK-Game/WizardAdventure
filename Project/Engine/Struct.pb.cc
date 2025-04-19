@@ -136,6 +136,7 @@ PROTOBUF_CONSTEXPR ProjectileBasicInfo::ProjectileBasicInfo(
   , /*decltype(_impl_.duration_)*/0
   , /*decltype(_impl_.speed_)*/0
   , /*decltype(_impl_.damage_)*/0
+  , /*decltype(_impl_.bcollisionexplosion_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct ProjectileBasicInfoDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ProjectileBasicInfoDefaultTypeInternal()
@@ -244,6 +245,7 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   PROTOBUF_FIELD_OFFSET(::Protocol::ProjectileBasicInfo, _impl_.dir_),
   PROTOBUF_FIELD_OFFSET(::Protocol::ProjectileBasicInfo, _impl_.size_),
   PROTOBUF_FIELD_OFFSET(::Protocol::ProjectileBasicInfo, _impl_.spawn_pos_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::ProjectileBasicInfo, _impl_.bcollisionexplosion_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::ProjectileInfo, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -263,7 +265,7 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 46, -1, -1, sizeof(::Protocol::MonsterMoveInfo)},
   { 55, -1, -1, sizeof(::Protocol::PlayerMoveInfo)},
   { 63, -1, -1, sizeof(::Protocol::ProjectileBasicInfo)},
-  { 77, -1, -1, sizeof(::Protocol::ProjectileInfo)},
+  { 78, -1, -1, sizeof(::Protocol::ProjectileInfo)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -298,23 +300,23 @@ const char descriptor_table_protodef_Struct_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "otocol.MonsterType\022#\n\010pos_info\030\003 \001(\0132\021.P"
   "rotocol.PosInfo\"H\n\016PlayerMoveInfo\022\021\n\tpla"
   "yer_id\030\001 \001(\r\022#\n\010pos_info\030\002 \001(\0132\021.Protoco"
-  "l.PosInfo\"\333\001\n\023ProjectileBasicInfo\022\031\n\021new"
+  "l.PosInfo\"\370\001\n\023ProjectileBasicInfo\022\031\n\021new"
   "_projectile_id\030\001 \001(\004\022\021\n\tplayer_id\030\002 \001(\r\022"
   "\020\n\010duration\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\016\n\006dama"
   "ge\030\005 \001(\002\022\036\n\003dir\030\006 \001(\0132\021.Protocol.Vector3"
   "\022\037\n\004size\030\007 \001(\0132\021.Protocol.Vector3\022$\n\tspa"
-  "wn_pos\030\010 \001(\0132\021.Protocol.Vector3\"|\n\016Proje"
-  "ctileInfo\022\025\n\rProjectile_id\030\001 \001(\004\022(\n\005stat"
-  "e\030\002 \001(\0162\031.Protocol.ProjectileState\022)\n\013ob"
-  "ject_info\030\003 \001(\0132\024.Protocol.ObjectInfob\006p"
-  "roto3"
+  "wn_pos\030\010 \001(\0132\021.Protocol.Vector3\022\033\n\023bColl"
+  "isionExplosion\030\t \001(\010\"|\n\016ProjectileInfo\022\025"
+  "\n\rProjectile_id\030\001 \001(\004\022(\n\005state\030\002 \001(\0162\031.P"
+  "rotocol.ProjectileState\022)\n\013object_info\030\003"
+  " \001(\0132\024.Protocol.ObjectInfob\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Struct_2eproto_deps[1] = {
   &::descriptor_table_Enum_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_Struct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Struct_2eproto = {
-    false, false, 1125, descriptor_table_protodef_Struct_2eproto,
+    false, false, 1154, descriptor_table_protodef_Struct_2eproto,
     "Struct.proto",
     &descriptor_table_Struct_2eproto_once, descriptor_table_Struct_2eproto_deps, 1, 9,
     schemas, file_default_instances, TableStruct_Struct_2eproto::offsets,
@@ -2179,6 +2181,7 @@ ProjectileBasicInfo::ProjectileBasicInfo(const ProjectileBasicInfo& from)
     , decltype(_impl_.duration_){}
     , decltype(_impl_.speed_){}
     , decltype(_impl_.damage_){}
+    , decltype(_impl_.bcollisionexplosion_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -2192,8 +2195,8 @@ ProjectileBasicInfo::ProjectileBasicInfo(const ProjectileBasicInfo& from)
     _this->_impl_.spawn_pos_ = new ::Protocol::Vector3(*from._impl_.spawn_pos_);
   }
   ::memcpy(&_impl_.new_projectile_id_, &from._impl_.new_projectile_id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.damage_) -
-    reinterpret_cast<char*>(&_impl_.new_projectile_id_)) + sizeof(_impl_.damage_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.bcollisionexplosion_) -
+    reinterpret_cast<char*>(&_impl_.new_projectile_id_)) + sizeof(_impl_.bcollisionexplosion_));
   // @@protoc_insertion_point(copy_constructor:Protocol.ProjectileBasicInfo)
 }
 
@@ -2210,6 +2213,7 @@ inline void ProjectileBasicInfo::SharedCtor(
     , decltype(_impl_.duration_){0}
     , decltype(_impl_.speed_){0}
     , decltype(_impl_.damage_){0}
+    , decltype(_impl_.bcollisionexplosion_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -2253,8 +2257,8 @@ void ProjectileBasicInfo::Clear() {
   }
   _impl_.spawn_pos_ = nullptr;
   ::memset(&_impl_.new_projectile_id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.damage_) -
-      reinterpret_cast<char*>(&_impl_.new_projectile_id_)) + sizeof(_impl_.damage_));
+      reinterpret_cast<char*>(&_impl_.bcollisionexplosion_) -
+      reinterpret_cast<char*>(&_impl_.new_projectile_id_)) + sizeof(_impl_.bcollisionexplosion_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2324,6 +2328,14 @@ const char* ProjectileBasicInfo::_InternalParse(const char* ptr, ::_pbi::ParseCo
       case 8:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 66)) {
           ptr = ctx->ParseMessage(_internal_mutable_spawn_pos(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool bCollisionExplosion = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
+          _impl_.bcollisionexplosion_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -2420,6 +2432,12 @@ uint8_t* ProjectileBasicInfo::_InternalSerialize(
         _Internal::spawn_pos(this).GetCachedSize(), target, stream);
   }
 
+  // bool bCollisionExplosion = 9;
+  if (this->_internal_bcollisionexplosion() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(9, this->_internal_bcollisionexplosion(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2494,6 +2512,11 @@ size_t ProjectileBasicInfo::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
+  // bool bCollisionExplosion = 9;
+  if (this->_internal_bcollisionexplosion() != 0) {
+    total_size += 1 + 1;
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -2551,6 +2574,9 @@ void ProjectileBasicInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
   if (raw_damage != 0) {
     _this->_internal_set_damage(from._internal_damage());
   }
+  if (from._internal_bcollisionexplosion() != 0) {
+    _this->_internal_set_bcollisionexplosion(from._internal_bcollisionexplosion());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2569,8 +2595,8 @@ void ProjectileBasicInfo::InternalSwap(ProjectileBasicInfo* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ProjectileBasicInfo, _impl_.damage_)
-      + sizeof(ProjectileBasicInfo::_impl_.damage_)
+      PROTOBUF_FIELD_OFFSET(ProjectileBasicInfo, _impl_.bcollisionexplosion_)
+      + sizeof(ProjectileBasicInfo::_impl_.bcollisionexplosion_)
       - PROTOBUF_FIELD_OFFSET(ProjectileBasicInfo, _impl_.dir_)>(
           reinterpret_cast<char*>(&_impl_.dir_),
           reinterpret_cast<char*>(&other->_impl_.dir_));

@@ -35,11 +35,15 @@ public:
 	bool HandleMoveProjectile(CProjectileRef projectile);
 
 	bool AddObject(uint32 layer, CGameObjectRef object);
+	bool AddMonster(CMonsterRef object);
 	bool AddProjectile(CProjectileRef object);
+
+	bool RemoveObject(uint32 layer, uint64 id);
+
 private:
 	bool AddPlayer(CPlayerRef player);
 	bool RemovePlayer(uint64 playerId);
-	bool RemoveObject(uint32 layer, uint64 objectId);
+	bool RemoveLast();
 
 	bool EnterRoom(CPlayerRef object, bool bRandPos = true);
 	bool LeaveRoom(CPlayerRef object);
@@ -49,6 +53,7 @@ private:
 
 private:
 	std::array<std::unordered_map<uint64, CGameObjectRef>, (int)EObject_Type::Max> m_mapObject;
+	std::vector<std::pair<uint32, uint64>> m_deleteObjects;
 	std::array<CPlayerRef, MAX_PLAYERS> m_Players;
 
 	class CLevelCollision* m_LevelCollision;

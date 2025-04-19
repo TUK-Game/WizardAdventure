@@ -21,7 +21,9 @@ public:
 	void SetProjectileState(const Vec3 dir, const Vec3 size, const float speed, const float duration, const float elased) { SetProjectileState(ProjectileState(dir, size, speed, duration, elased)); }
 	void SetProjectileState(const ProjectileState& state) { m_State = state; }
 	void SetCollisionBoxInfo(const Vec3& pos, const Vec3& size, const Vec3& rot);
+	void SetCollisionExplosion(bool b) { m_bCollisionExplosion = b; }
 
+	bool GetCollisionExplosino() { return m_bCollisionExplosion; }
 	ProjectileState& GetStateInfo() { return m_State; }
 public:
 	virtual void Update(float deltaTime) override;
@@ -32,7 +34,8 @@ public:
 public:
 	Protocol::ProjectileInfo* ProjectileInfo;
 	Protocol::SkillMesh m_meshType;
-private:
+protected:
+	bool m_bCollisionExplosion{};
 	ProjectileState m_State{};
 };
 

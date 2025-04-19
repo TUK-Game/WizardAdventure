@@ -67,7 +67,9 @@ void CRoom::Update()
 	for (const auto& player : m_Players)
 	{
 		if(player)
+		{
 			player->Update(m_DeltaTime);
+		}
 	}
 
 	m_LevelCollision->Collision();
@@ -75,6 +77,7 @@ void CRoom::Update()
 	// 몬스터 정보 전송
 	UpdateClients();
 
+	RemoveLast();
 	// 33ms 이후 실행 예약
 	// => 대충 30프레임
 	DoTimer(33, &CRoom::Update);
@@ -120,12 +123,6 @@ void CRoom::UpdateMonster()
 
 void CRoom::UpdateProjectile()
 {
-	std::unordered_map<uint64, CGameObjectRef> projectiles = GetLayerObjects((int)EObject_Type::Projectile);
-	Protocol::S_PROJECTILE_INFO pkt;
-	for (const auto& pair : projectiles)
-	{
-
-	}
 }
 
 bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
@@ -415,6 +412,18 @@ bool CRoom::AddObject(uint32 layer, CGameObjectRef object)
 	return true;
 }
 
+bool CRoom::AddMonster(CMonsterRef object)
+{
+	if (m_mapObject[(uint32)EObject_Type::Monster].find(object->MonsterInfo->object_id()) != m_mapObject[(uint32)EObject_Type::Monster].end())
+		return false;
+
+	m_mapObject[(uint32)EObject_Type::Monster].insert(make_pair(object->MonsterInfo->object_id(), object));
+
+	object->m_Room.store(GetRoomRef());
+
+	return true;
+}
+
 bool CRoom::AddProjectile(CProjectileRef object)
 {
 	if (m_mapObject[(uint32)EObject_Type::Projectile].find(object->ProjectileInfo->projectile_id()) != m_mapObject[(uint32)EObject_Type::Projectile].end())
@@ -441,17 +450,22 @@ bool CRoom::RemovePlayer(uint64 playerId)
 	return true;
 }
 
-bool CRoom::RemoveObject(uint32 layer, uint64 objectId)
+bool CRoom::RemoveLast()
 {
-	if (m_mapObject[layer].find(objectId) == m_mapObject[layer].end())
-		return false;
+	for (auto& key : m_deleteObjects)
+	{
+		if (m_mapObject[key.first].find(key.second) == m_mapObject[key.first].end())
+			continue;
 
-	CGameObjectRef object = m_mapObject[layer][objectId];
-	CPlayerRef player = dynamic_pointer_cast<CPlayer>(object);
-	if (player)
-		player->m_Room.store(std::weak_ptr<CRoom>());
+		m_mapObject[key.first].erase(key.second);
+	}
+	m_deleteObjects.clear();
+	return true;
+}
 
-	m_mapObject[layer].erase(objectId);
+bool CRoom::RemoveObject(uint32 layer, uint64 id)
+{
+	m_deleteObjects.push_back({ layer, id });
 
 	return true;
 }
