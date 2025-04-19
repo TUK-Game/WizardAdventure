@@ -38,6 +38,14 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 		std::vector<float> rot = obj["rotation"];
 		std::vector<float> scale = obj["scale"];
 		std::vector<float> size = obj["size"];
+		std::vector<float> mat = obj["matrix"];
+
+		Matrix matrix;
+		matrix._11 = mat[0]; matrix._12 = mat[1]; matrix._13 = mat[2]; matrix._14 = mat[3];
+		matrix._21 = mat[4]; matrix._22 = mat[5]; matrix._23 = mat[6]; matrix._24 = mat[7];
+		matrix._31 = mat[8]; matrix._32 = mat[9]; matrix._33 = mat[10]; matrix._34 = mat[11];
+		matrix._41 = mat[12]; matrix._42 = mat[13]; matrix._43 = mat[14]; matrix._44 = mat[15];
+
 		std::vector<Vec3> vertices;
 		std::vector<Vec3> worldVertices;
 		std::vector<UINT32> indices;
@@ -61,23 +69,10 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 			um[name].first = vertices;
 			um[name].second = indices;
 		}
-		Vec3 finalScale = {
-		size[0] * scale[0],
-		size[1] * scale[1],
-		size[2] * scale[2]
-		};
-
-		Matrix scaleMat = XMMatrixScaling(scale[0], scale[1], scale[2]);
-		XMVECTOR qRot = XMQuaternionRotationRollPitchYaw(rot[0], rot[1], rot[2]);
-		Matrix rotMat = XMMatrixRotationQuaternion(qRot);
-
-		Matrix transMat = XMMatrixTranslation(pos[0], pos[1], pos[2]);
-
-		Matrix worldMat = scaleMat * rotMat * transMat;
 
 		for (const Vector3& localVertex : vertices)
 		{
-			Vec3 worldVertex = Vec3::Transform(localVertex, worldMat);
+			Vec3 worldVertex = Vec3::Transform(localVertex, matrix);
 			worldVertices.push_back(worldVertex);
 		}
 

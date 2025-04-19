@@ -41,6 +41,7 @@ void CJsonConverter::SaveMapCollision(const std::wstring& fileName)
         Vec3 pos = transform->GetRelativePosition();
         Vec3 rot = transform->GetRelativeRotation();
         Vec3 scale = transform->GetRelativeScale();
+        Matrix mat = transform->GetWorldMatrix();
         auto mesh = object->GetMeshRenderer()->GetMesh();
         std::string meshName = ws2s(mesh->GetName());
         const std::vector<Vertex>& vertices = mesh->m_vertexInfo;
@@ -52,6 +53,10 @@ void CJsonConverter::SaveMapCollision(const std::wstring& fileName)
         obj["rotation"] = { rot.x, rot.y, rot.z };
         obj["scale"] = { scale.x, scale.y, scale.z };
         obj["size"] = { collider->size.x, collider->size.y, collider->size.z };
+        obj["matrix"] = { mat._11, mat._12, mat._13, mat._14,
+                          mat._21, mat._22, mat._23, mat._24,
+                          mat._31, mat._32, mat._33, mat._34,
+                          mat._41, mat._42, mat._43, mat._44 };
 
         if (um[meshName])
         {
