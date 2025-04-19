@@ -121,6 +121,8 @@ void CSkillManager::SpawnFirePillarAtMouse()
 
     CFireCircle* fireCircle = new CFireCircle;
     fireCircle->GetTransform()->SetRelativePosition(centerPos);
+    fireCircle->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
+    CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireCircle);
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireCircle, 12, false);
 
     Vec3 lookDir = centerPos - m_Owner->GetTransform()->GetRelativePosition();
@@ -189,6 +191,11 @@ void CSkillManager::FireSwordSpreadShot()
         sword->SetDamage(SkillDamage::FireSword);
         sword->SetEnable(false);
 
+        const auto& childs = sword->GetChild();
+        for (const auto& child : childs)
+        {
+
+        }
         CNetworkManager::GetInst()->s_GameSession->SpawnSkill(sword);
 
         CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(sword, 12, false);

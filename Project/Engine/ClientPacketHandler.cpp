@@ -14,6 +14,9 @@
 #include "Layer.h"
 #include "SkillObject.h"
 #include "FireBall.h"
+#include "FireSword.h"
+#include "FirePillar.h"
+#include "FireCircle.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -71,9 +74,43 @@ bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_S
 	}
 	else
 	{
-		CFireBall* ball = new CFireBall();
-		map[id] = ball;
-		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(ball, 12, false);
+		const auto& size = pkt.mutable_size();
+		switch (pkt.mesh())
+		{
+		case Protocol::FIRE_CIRCLE:
+		{
+			CFireCircle* magic = new CFireCircle();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_BALL:
+		{
+			CFireBall* magic = new CFireBall();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_PILLAR:
+		{
+			CFirePillar* magic = new CFirePillar();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_SWORD:
+		{
+			CFireSword* magic = new CFireSword();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		}
+		
 	}
 	return true;
 }
@@ -173,10 +210,12 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	else
 	{
 		const auto& pos = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
+		const auto& rot = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_rotation();
 		auto& object = map[id];
 		if (object)
 		{
 			object->GetTransform()->SetRelativePosition(Vec3(pos->x(), pos->y(), pos->z()));
+			object->GetTransform()->SetRelativeRotation(Vec3(rot->x(), rot->y(), rot->z()));
 		}
 	}
 	return true;
@@ -192,7 +231,6 @@ bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 	CLevelManager::GetInst()->GetPlayer(id)->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
 	//CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(rotation.x(), rotation.y(), rotation.z());
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
-	std::cout << position.x() << " " << position.y() << " " << position.z() << '\n';
 	return true;
 }
 

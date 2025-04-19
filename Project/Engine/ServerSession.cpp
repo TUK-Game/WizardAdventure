@@ -108,6 +108,7 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 {
 	CTransform* transform = object->GetTransform();
 	const Vec3& pos = transform->GetRelativePosition();
+	const Vec3& size = transform->GetRelativeScale();
 	Protocol::C_SPAWN_PROJECTILE pkt;
 	auto* info = pkt.mutable_info();
 
@@ -120,6 +121,36 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 	posInfo->set_x(pos.x);
 	posInfo->set_y(pos.y);
 	posInfo->set_z(pos.z);
+
+	auto* sizeInfo = pkt.mutable_info()->mutable_size();
+	sizeInfo->set_x(size.x);
+	sizeInfo->set_y(size.y);
+	sizeInfo->set_z(size.z);
+
+	switch (object->GetSkillType())
+	{
+	case SKILL::FIRE_BALL:
+	case SKILL::FIRE_METEORS:
+	{
+		pkt.set_mesh(Protocol::FIRE_BALL);
+	}
+	break;
+	case SKILL::FIRE_CIRCLE:
+	{
+		pkt.set_mesh(Protocol::FIRE_CIRCLE);
+	}
+	break;
+	case SKILL::FIRE_PILLAR:
+	{
+		pkt.set_mesh(Protocol::FIRE_PILLAR);
+	}
+	break;
+	case SKILL::FIRE_SWORD:
+	{
+		pkt.set_mesh(Protocol::FIRE_SWORD);
+	}
+	break;
+	}
 	
 	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
 	//if (map.find(object->m_ProjectileId) != map.end())
@@ -136,6 +167,7 @@ void CServerSession::MoveSkill(CSkillObject* object)
 {
 	CTransform* transform = object->GetTransform();
 	const Vec3& pos = transform->GetRelativePosition();
+	const Vec3& rot = transform->GetRelativeRotation();
 	Protocol::C_MOVE_PROJECTILE pkt;
 	auto* info = pkt.mutable_projectile_info();
 	info->set_projectile_id(object->m_ProjectileId);
@@ -146,10 +178,14 @@ void CServerSession::MoveSkill(CSkillObject* object)
 		info->set_state(Protocol::MOVE_STATE);
 
 	auto* posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
+	auto* rotInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_rotation();
 	posInfo->set_x(pos.x);
 	posInfo->set_y(pos.y);
 	posInfo->set_z(pos.z);
 
+	rotInfo->set_x(rot.x);
+	rotInfo->set_y(rot.y);
+	rotInfo->set_z(rot.z);
 
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(sendBuffer);

@@ -9,9 +9,14 @@
 #include "LevelManager.h"
 #include "Engine.h"
 
+#include "NetworkManager.h"
+#include "ServerSession.h"
+
 CFireBall::CFireBall()
     : m_Speed(1000.f)
 {
+    m_type = SKILL::FIRE_BALL;
+
     AddComponent(new CTransform());
     AddComponent(new CMeshRenderer());  
     GetTransform()->SetRelativeScale(30.f, 30.f, 30.f);
@@ -30,10 +35,13 @@ void CFireBall::Update()
 void CFireBall::FinalUpdate()
 {
     CGameObject::FinalUpdate();
-    m_ElapsedTime += DELTA_TIME;
-    if (m_ElapsedTime >= m_Duration) {
-        //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
-        m_bDelete = true;
+    if (m_bOwn)
+    {
+        m_ElapsedTime += DELTA_TIME;
+        if (m_ElapsedTime >= m_Duration) {
+            //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+            m_bDelete = true;
+        }
     }
 }
 

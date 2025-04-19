@@ -302,8 +302,6 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 	posInfo->set_state(player->GetState());
 
-	std::cout << "보냄 " << nowPos.x << " " << nowPos.y << " " << nowPos.z << '\n';
-
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
 	Broadcast(sendBuffer, player->PlayerInfo->player_id());
 
@@ -319,6 +317,10 @@ bool CRoom::HandleSpawnProjectile(CProjectileRef projectile)
 
 	Protocol::S_SPAWN_PROJECTILE_SUCESSE pkt;
 	pkt.set_projectile_id(projectile->ProjectileInfo->projectile_id());
+	pkt.mutable_size()->set_x(projectile->GetStateInfo().Size.x);
+	pkt.mutable_size()->set_y(projectile->GetStateInfo().Size.y);
+	pkt.mutable_size()->set_z(projectile->GetStateInfo().Size.z);
+	pkt.set_mesh(projectile->m_meshType);
 
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
@@ -333,6 +335,7 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 		pkt.mutable_projectile_info()->set_projectile_id(projectile->ProjectileInfo->projectile_id());
 		pkt.mutable_projectile_info()->set_state(Protocol::COLLISION);
 		m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
+		g_pool->Release(projectile);
 	}
 	else
 	{
@@ -357,17 +360,17 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 
 			projectile->GetCollider()->Update();
 
-			if (m_LevelCollision->CollisionWithWall(projectile->GetCollider()))
-			{
-				std::cout << "박음" << std::endl;
-				projectile->ProjectileInfo->set_state(Protocol::COLLISION);
-				m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
-				g_pool->Release(projectile);
-				break;
-			}
+			//if (m_LevelCollision->CollisionWithWall(projectile->GetCollider()))
+			//{
+			//	std::cout << "박음" << std::endl;
+			//	projectile->ProjectileInfo->set_state(Protocol::COLLISION);
+			//	m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
+			//	g_pool->Release(projectile);
+			//	break;
+			//}
 		}
 
-
+		const auto& rot = projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->rotation();
 		auto* info = pkt.mutable_projectile_info();
 		info->set_projectile_id(projectile->ProjectileInfo->projectile_id());
 		info->set_state(projectile->ProjectileInfo->state());
@@ -376,6 +379,10 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 		posInfo->mutable_position()->set_x(nowPos.x);
 		posInfo->mutable_position()->set_y(nowPos.y);
 		posInfo->mutable_position()->set_z(nowPos.z);
+
+		posInfo->mutable_rotation()->set_x(rot.x());
+		posInfo->mutable_rotation()->set_y(rot.y());
+		posInfo->mutable_rotation()->set_z(rot.z());
 	}
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);

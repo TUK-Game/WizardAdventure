@@ -84,6 +84,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR C_SPAWN_PROJECTILE::C_SPAWN_PROJECTILE(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.info_)*/nullptr
+  , /*decltype(_impl_.mesh_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct C_SPAWN_PROJECTILEDefaultTypeInternal {
   PROTOBUF_CONSTEXPR C_SPAWN_PROJECTILEDefaultTypeInternal()
@@ -96,7 +97,9 @@ struct C_SPAWN_PROJECTILEDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 C_SPAWN_PROJECTILEDefaultTypeInternal _C_SPAWN_PROJECTILE_default_instance_;
 PROTOBUF_CONSTEXPR S_SPAWN_PROJECTILE_SUCESSE::S_SPAWN_PROJECTILE_SUCESSE(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.projectile_id_)*/uint64_t{0u}
+    /*decltype(_impl_.size_)*/nullptr
+  , /*decltype(_impl_.projectile_id_)*/uint64_t{0u}
+  , /*decltype(_impl_.mesh_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct S_SPAWN_PROJECTILE_SUCESSEDefaultTypeInternal {
   PROTOBUF_CONSTEXPR S_SPAWN_PROJECTILE_SUCESSEDefaultTypeInternal()
@@ -122,6 +125,7 @@ PROTOBUF_CONSTEXPR C_MOVE::C_MOVE(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.player_move_info_)*/nullptr
   , /*decltype(_impl_.dir_)*/nullptr
+  , /*decltype(_impl_.mesh_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct C_MOVEDefaultTypeInternal {
   PROTOBUF_CONSTEXPR C_MOVEDefaultTypeInternal()
@@ -296,6 +300,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_SPAWN_PROJECTILE, _impl_.info_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_SPAWN_PROJECTILE, _impl_.mesh_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_SPAWN_PROJECTILE_SUCESSE, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -303,6 +308,8 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_SPAWN_PROJECTILE_SUCESSE, _impl_.projectile_id_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_SPAWN_PROJECTILE_SUCESSE, _impl_.size_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_SPAWN_PROJECTILE_SUCESSE, _impl_.mesh_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_LEAVE_GAME, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -317,6 +324,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_MOVE, _impl_.player_move_info_),
   PROTOBUF_FIELD_OFFSET(::Protocol::C_MOVE, _impl_.dir_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_MOVE, _impl_.mesh_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_MOVE_PROJECTILE, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -388,18 +396,18 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 19, -1, -1, sizeof(::Protocol::S_ENTER_GAME)},
   { 27, -1, -1, sizeof(::Protocol::C_LEAVE_GAME)},
   { 33, -1, -1, sizeof(::Protocol::C_SPAWN_PROJECTILE)},
-  { 40, -1, -1, sizeof(::Protocol::S_SPAWN_PROJECTILE_SUCESSE)},
-  { 47, -1, -1, sizeof(::Protocol::S_LEAVE_GAME)},
-  { 53, -1, -1, sizeof(::Protocol::C_MOVE)},
-  { 61, -1, -1, sizeof(::Protocol::C_MOVE_PROJECTILE)},
-  { 68, -1, -1, sizeof(::Protocol::S_MOVE)},
-  { 75, -1, -1, sizeof(::Protocol::S_MONSTER_INFO)},
-  { 82, -1, -1, sizeof(::Protocol::S_PROJECTILE_INFO)},
-  { 89, -1, -1, sizeof(::Protocol::S_SPAWN)},
-  { 96, -1, -1, sizeof(::Protocol::S_SPAWN_NEW_PLAYER)},
-  { 103, -1, -1, sizeof(::Protocol::S_SPAWN_EXISTING_PLAYER)},
-  { 110, -1, -1, sizeof(::Protocol::S_DESPAWN_PLAYER)},
-  { 117, -1, -1, sizeof(::Protocol::S_DESPAWN)},
+  { 41, -1, -1, sizeof(::Protocol::S_SPAWN_PROJECTILE_SUCESSE)},
+  { 50, -1, -1, sizeof(::Protocol::S_LEAVE_GAME)},
+  { 56, -1, -1, sizeof(::Protocol::C_MOVE)},
+  { 65, -1, -1, sizeof(::Protocol::C_MOVE_PROJECTILE)},
+  { 72, -1, -1, sizeof(::Protocol::S_MOVE)},
+  { 79, -1, -1, sizeof(::Protocol::S_MONSTER_INFO)},
+  { 86, -1, -1, sizeof(::Protocol::S_PROJECTILE_INFO)},
+  { 93, -1, -1, sizeof(::Protocol::S_SPAWN)},
+  { 100, -1, -1, sizeof(::Protocol::S_SPAWN_NEW_PLAYER)},
+  { 107, -1, -1, sizeof(::Protocol::S_SPAWN_EXISTING_PLAYER)},
+  { 114, -1, -1, sizeof(::Protocol::S_DESPAWN_PLAYER)},
+  { 121, -1, -1, sizeof(::Protocol::S_DESPAWN)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -428,26 +436,30 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "Struct.proto\"\t\n\007C_LOGIN\"\032\n\007S_LOGIN\022\017\n\007su"
   "ccess\030\001 \001(\010\"\016\n\014C_ENTER_GAME\"E\n\014S_ENTER_G"
   "AME\022\017\n\007success\030\001 \001(\010\022$\n\006player\030\002 \001(\0132\024.P"
-  "rotocol.PlayerInfo\"\016\n\014C_LEAVE_GAME\"A\n\022C_"
+  "rotocol.PlayerInfo\"\016\n\014C_LEAVE_GAME\"d\n\022C_"
   "SPAWN_PROJECTILE\022+\n\004info\030\001 \001(\0132\035.Protoco"
-  "l.ProjectileBasicInfo\"3\n\032S_SPAWN_PROJECT"
-  "ILE_SUCESSE\022\025\n\rprojectile_id\030\001 \001(\004\"\016\n\014S_"
-  "LEAVE_GAME\"\\\n\006C_MOVE\0222\n\020player_move_info"
-  "\030\001 \001(\0132\030.Protocol.PlayerMoveInfo\022\036\n\003dir\030"
-  "\002 \001(\0132\021.Protocol.Vector3\"F\n\021C_MOVE_PROJE"
-  "CTILE\0221\n\017projectile_info\030\001 \001(\0132\030.Protoco"
-  "l.ProjectileInfo\"<\n\006S_MOVE\0222\n\020player_mov"
-  "e_info\030\001 \001(\0132\030.Protocol.PlayerMoveInfo\"="
-  "\n\016S_MONSTER_INFO\022+\n\014monster_info\030\001 \003(\0132\025"
-  ".Protocol.MonsterInfo\"F\n\021S_PROJECTILE_IN"
-  "FO\0221\n\017projectile_info\030\001 \001(\0132\030.Protocol.P"
-  "rojectileInfo\"0\n\007S_SPAWN\022%\n\007objects\030\001 \003("
-  "\0132\024.Protocol.ObjectInfo\":\n\022S_SPAWN_NEW_P"
-  "LAYER\022$\n\006player\030\001 \001(\0132\024.Protocol.PlayerI"
-  "nfo\"\?\n\027S_SPAWN_EXISTING_PLAYER\022$\n\006player"
-  "\030\001 \003(\0132\024.Protocol.PlayerInfo\"&\n\020S_DESPAW"
-  "N_PLAYER\022\022\n\nplayer_ids\030\001 \001(\004\"\037\n\tS_DESPAW"
-  "N\022\022\n\nobject_ids\030\001 \003(\004b\006proto3"
+  "l.ProjectileBasicInfo\022!\n\004mesh\030\002 \001(\0162\023.Pr"
+  "otocol.SkillMesh\"w\n\032S_SPAWN_PROJECTILE_S"
+  "UCESSE\022\025\n\rprojectile_id\030\001 \001(\004\022\037\n\004size\030\002 "
+  "\001(\0132\021.Protocol.Vector3\022!\n\004mesh\030\003 \001(\0162\023.P"
+  "rotocol.SkillMesh\"\016\n\014S_LEAVE_GAME\"\177\n\006C_M"
+  "OVE\0222\n\020player_move_info\030\001 \001(\0132\030.Protocol"
+  ".PlayerMoveInfo\022\036\n\003dir\030\002 \001(\0132\021.Protocol."
+  "Vector3\022!\n\004mesh\030\003 \001(\0162\023.Protocol.SkillMe"
+  "sh\"F\n\021C_MOVE_PROJECTILE\0221\n\017projectile_in"
+  "fo\030\001 \001(\0132\030.Protocol.ProjectileInfo\"<\n\006S_"
+  "MOVE\0222\n\020player_move_info\030\001 \001(\0132\030.Protoco"
+  "l.PlayerMoveInfo\"=\n\016S_MONSTER_INFO\022+\n\014mo"
+  "nster_info\030\001 \003(\0132\025.Protocol.MonsterInfo\""
+  "F\n\021S_PROJECTILE_INFO\0221\n\017projectile_info\030"
+  "\001 \001(\0132\030.Protocol.ProjectileInfo\"0\n\007S_SPA"
+  "WN\022%\n\007objects\030\001 \003(\0132\024.Protocol.ObjectInf"
+  "o\":\n\022S_SPAWN_NEW_PLAYER\022$\n\006player\030\001 \001(\0132"
+  "\024.Protocol.PlayerInfo\"\?\n\027S_SPAWN_EXISTIN"
+  "G_PLAYER\022$\n\006player\030\001 \003(\0132\024.Protocol.Play"
+  "erInfo\"&\n\020S_DESPAWN_PLAYER\022\022\n\nplayer_ids"
+  "\030\001 \001(\004\"\037\n\tS_DESPAWN\022\022\n\nobject_ids\030\001 \003(\004b"
+  "\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_deps[2] = {
   &::descriptor_table_Enum_2eproto,
@@ -455,7 +467,7 @@ static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_de
 };
 static ::_pbi::once_flag descriptor_table_Protocol_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
-    false, false, 949, descriptor_table_protodef_Protocol_2eproto,
+    false, false, 1087, descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
     &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 18,
     schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
@@ -1026,12 +1038,14 @@ C_SPAWN_PROJECTILE::C_SPAWN_PROJECTILE(const C_SPAWN_PROJECTILE& from)
   C_SPAWN_PROJECTILE* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.info_){nullptr}
+    , decltype(_impl_.mesh_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   if (from._internal_has_info()) {
     _this->_impl_.info_ = new ::Protocol::ProjectileBasicInfo(*from._impl_.info_);
   }
+  _this->_impl_.mesh_ = from._impl_.mesh_;
   // @@protoc_insertion_point(copy_constructor:Protocol.C_SPAWN_PROJECTILE)
 }
 
@@ -1041,6 +1055,7 @@ inline void C_SPAWN_PROJECTILE::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.info_){nullptr}
+    , decltype(_impl_.mesh_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -1073,6 +1088,7 @@ void C_SPAWN_PROJECTILE::Clear() {
     delete _impl_.info_;
   }
   _impl_.info_ = nullptr;
+  _impl_.mesh_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1087,6 +1103,15 @@ const char* C_SPAWN_PROJECTILE::_InternalParse(const char* ptr, ::_pbi::ParseCon
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_info(), ptr);
           CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.SkillMesh mesh = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_mesh(static_cast<::Protocol::SkillMesh>(val));
         } else
           goto handle_unusual;
         continue;
@@ -1126,6 +1151,13 @@ uint8_t* C_SPAWN_PROJECTILE::_InternalSerialize(
         _Internal::info(this).GetCachedSize(), target, stream);
   }
 
+  // .Protocol.SkillMesh mesh = 2;
+  if (this->_internal_mesh() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      2, this->_internal_mesh(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1147,6 +1179,12 @@ size_t C_SPAWN_PROJECTILE::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *_impl_.info_);
+  }
+
+  // .Protocol.SkillMesh mesh = 2;
+  if (this->_internal_mesh() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_mesh());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -1171,6 +1209,9 @@ void C_SPAWN_PROJECTILE::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, con
     _this->_internal_mutable_info()->::Protocol::ProjectileBasicInfo::MergeFrom(
         from._internal_info());
   }
+  if (from._internal_mesh() != 0) {
+    _this->_internal_set_mesh(from._internal_mesh());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -1188,7 +1229,12 @@ bool C_SPAWN_PROJECTILE::IsInitialized() const {
 void C_SPAWN_PROJECTILE::InternalSwap(C_SPAWN_PROJECTILE* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_.info_, other->_impl_.info_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(C_SPAWN_PROJECTILE, _impl_.mesh_)
+      + sizeof(C_SPAWN_PROJECTILE::_impl_.mesh_)
+      - PROTOBUF_FIELD_OFFSET(C_SPAWN_PROJECTILE, _impl_.info_)>(
+          reinterpret_cast<char*>(&_impl_.info_),
+          reinterpret_cast<char*>(&other->_impl_.info_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata C_SPAWN_PROJECTILE::GetMetadata() const {
@@ -1201,8 +1247,19 @@ void C_SPAWN_PROJECTILE::InternalSwap(C_SPAWN_PROJECTILE* other) {
 
 class S_SPAWN_PROJECTILE_SUCESSE::_Internal {
  public:
+  static const ::Protocol::Vector3& size(const S_SPAWN_PROJECTILE_SUCESSE* msg);
 };
 
+const ::Protocol::Vector3&
+S_SPAWN_PROJECTILE_SUCESSE::_Internal::size(const S_SPAWN_PROJECTILE_SUCESSE* msg) {
+  return *msg->_impl_.size_;
+}
+void S_SPAWN_PROJECTILE_SUCESSE::clear_size() {
+  if (GetArenaForAllocation() == nullptr && _impl_.size_ != nullptr) {
+    delete _impl_.size_;
+  }
+  _impl_.size_ = nullptr;
+}
 S_SPAWN_PROJECTILE_SUCESSE::S_SPAWN_PROJECTILE_SUCESSE(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -1213,11 +1270,18 @@ S_SPAWN_PROJECTILE_SUCESSE::S_SPAWN_PROJECTILE_SUCESSE(const S_SPAWN_PROJECTILE_
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   S_SPAWN_PROJECTILE_SUCESSE* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.projectile_id_){}
+      decltype(_impl_.size_){nullptr}
+    , decltype(_impl_.projectile_id_){}
+    , decltype(_impl_.mesh_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _this->_impl_.projectile_id_ = from._impl_.projectile_id_;
+  if (from._internal_has_size()) {
+    _this->_impl_.size_ = new ::Protocol::Vector3(*from._impl_.size_);
+  }
+  ::memcpy(&_impl_.projectile_id_, &from._impl_.projectile_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.mesh_) -
+    reinterpret_cast<char*>(&_impl_.projectile_id_)) + sizeof(_impl_.mesh_));
   // @@protoc_insertion_point(copy_constructor:Protocol.S_SPAWN_PROJECTILE_SUCESSE)
 }
 
@@ -1226,7 +1290,9 @@ inline void S_SPAWN_PROJECTILE_SUCESSE::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.projectile_id_){uint64_t{0u}}
+      decltype(_impl_.size_){nullptr}
+    , decltype(_impl_.projectile_id_){uint64_t{0u}}
+    , decltype(_impl_.mesh_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -1242,6 +1308,7 @@ S_SPAWN_PROJECTILE_SUCESSE::~S_SPAWN_PROJECTILE_SUCESSE() {
 
 inline void S_SPAWN_PROJECTILE_SUCESSE::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.size_;
 }
 
 void S_SPAWN_PROJECTILE_SUCESSE::SetCachedSize(int size) const {
@@ -1254,7 +1321,13 @@ void S_SPAWN_PROJECTILE_SUCESSE::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.projectile_id_ = uint64_t{0u};
+  if (GetArenaForAllocation() == nullptr && _impl_.size_ != nullptr) {
+    delete _impl_.size_;
+  }
+  _impl_.size_ = nullptr;
+  ::memset(&_impl_.projectile_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.mesh_) -
+      reinterpret_cast<char*>(&_impl_.projectile_id_)) + sizeof(_impl_.mesh_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1269,6 +1342,23 @@ const char* S_SPAWN_PROJECTILE_SUCESSE::_InternalParse(const char* ptr, ::_pbi::
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
           _impl_.projectile_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.Vector3 size = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_size(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.SkillMesh mesh = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_mesh(static_cast<::Protocol::SkillMesh>(val));
         } else
           goto handle_unusual;
         continue;
@@ -1307,6 +1397,20 @@ uint8_t* S_SPAWN_PROJECTILE_SUCESSE::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt64ToArray(1, this->_internal_projectile_id(), target);
   }
 
+  // .Protocol.Vector3 size = 2;
+  if (this->_internal_has_size()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, _Internal::size(this),
+        _Internal::size(this).GetCachedSize(), target, stream);
+  }
+
+  // .Protocol.SkillMesh mesh = 3;
+  if (this->_internal_mesh() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      3, this->_internal_mesh(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1323,9 +1427,22 @@ size_t S_SPAWN_PROJECTILE_SUCESSE::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  // .Protocol.Vector3 size = 2;
+  if (this->_internal_has_size()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.size_);
+  }
+
   // uint64 projectile_id = 1;
   if (this->_internal_projectile_id() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_projectile_id());
+  }
+
+  // .Protocol.SkillMesh mesh = 3;
+  if (this->_internal_mesh() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_mesh());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -1346,8 +1463,15 @@ void S_SPAWN_PROJECTILE_SUCESSE::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from._internal_has_size()) {
+    _this->_internal_mutable_size()->::Protocol::Vector3::MergeFrom(
+        from._internal_size());
+  }
   if (from._internal_projectile_id() != 0) {
     _this->_internal_set_projectile_id(from._internal_projectile_id());
+  }
+  if (from._internal_mesh() != 0) {
+    _this->_internal_set_mesh(from._internal_mesh());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1366,7 +1490,12 @@ bool S_SPAWN_PROJECTILE_SUCESSE::IsInitialized() const {
 void S_SPAWN_PROJECTILE_SUCESSE::InternalSwap(S_SPAWN_PROJECTILE_SUCESSE* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_.projectile_id_, other->_impl_.projectile_id_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(S_SPAWN_PROJECTILE_SUCESSE, _impl_.mesh_)
+      + sizeof(S_SPAWN_PROJECTILE_SUCESSE::_impl_.mesh_)
+      - PROTOBUF_FIELD_OFFSET(S_SPAWN_PROJECTILE_SUCESSE, _impl_.size_)>(
+          reinterpret_cast<char*>(&_impl_.size_),
+          reinterpret_cast<char*>(&other->_impl_.size_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata S_SPAWN_PROJECTILE_SUCESSE::GetMetadata() const {
@@ -1455,6 +1584,7 @@ C_MOVE::C_MOVE(const C_MOVE& from)
   new (&_impl_) Impl_{
       decltype(_impl_.player_move_info_){nullptr}
     , decltype(_impl_.dir_){nullptr}
+    , decltype(_impl_.mesh_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -1464,6 +1594,7 @@ C_MOVE::C_MOVE(const C_MOVE& from)
   if (from._internal_has_dir()) {
     _this->_impl_.dir_ = new ::Protocol::Vector3(*from._impl_.dir_);
   }
+  _this->_impl_.mesh_ = from._impl_.mesh_;
   // @@protoc_insertion_point(copy_constructor:Protocol.C_MOVE)
 }
 
@@ -1474,6 +1605,7 @@ inline void C_MOVE::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.player_move_info_){nullptr}
     , decltype(_impl_.dir_){nullptr}
+    , decltype(_impl_.mesh_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -1511,6 +1643,7 @@ void C_MOVE::Clear() {
     delete _impl_.dir_;
   }
   _impl_.dir_ = nullptr;
+  _impl_.mesh_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1533,6 +1666,15 @@ const char* C_MOVE::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_dir(), ptr);
           CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.SkillMesh mesh = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_mesh(static_cast<::Protocol::SkillMesh>(val));
         } else
           goto handle_unusual;
         continue;
@@ -1579,6 +1721,13 @@ uint8_t* C_MOVE::_InternalSerialize(
         _Internal::dir(this).GetCachedSize(), target, stream);
   }
 
+  // .Protocol.SkillMesh mesh = 3;
+  if (this->_internal_mesh() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      3, this->_internal_mesh(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1609,6 +1758,12 @@ size_t C_MOVE::ByteSizeLong() const {
         *_impl_.dir_);
   }
 
+  // .Protocol.SkillMesh mesh = 3;
+  if (this->_internal_mesh() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_mesh());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -1635,6 +1790,9 @@ void C_MOVE::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBU
     _this->_internal_mutable_dir()->::Protocol::Vector3::MergeFrom(
         from._internal_dir());
   }
+  if (from._internal_mesh() != 0) {
+    _this->_internal_set_mesh(from._internal_mesh());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -1653,8 +1811,8 @@ void C_MOVE::InternalSwap(C_MOVE* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(C_MOVE, _impl_.dir_)
-      + sizeof(C_MOVE::_impl_.dir_)
+      PROTOBUF_FIELD_OFFSET(C_MOVE, _impl_.mesh_)
+      + sizeof(C_MOVE::_impl_.mesh_)
       - PROTOBUF_FIELD_OFFSET(C_MOVE, _impl_.player_move_info_)>(
           reinterpret_cast<char*>(&_impl_.player_move_info_),
           reinterpret_cast<char*>(&other->_impl_.player_move_info_));

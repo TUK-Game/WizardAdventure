@@ -11,6 +11,7 @@
 
 CFirePillar::CFirePillar()
 {
+    m_type = SKILL::FIRE_PILLAR;
     AddComponent(new CTransform());
     AddComponent(new CMeshRenderer());  
     GetTransform()->SetRelativeScale(70.f, 300.f, 70.f);
@@ -30,28 +31,34 @@ CFirePillar::CFirePillar()
 
 void CFirePillar::Update()
 {
-    if (m_ElapsedTime > 3.f) {
-        GetRigidBody()->SetKinematic(false);
+    if (m_bOwn)
+    {
+        if (m_ElapsedTime > 3.f) {
+            GetRigidBody()->SetKinematic(false);
+        }
+        else {
+            Vec3 pos = GetTransform()->GetRelativePosition();
+            m_BasePos = pos;
+            float offsetX = sinf(m_ElapsedTime * m_ShakeFreqX + m_PhaseOffsetX) * m_ShakeAmount;
+            float offsetZ = cosf(m_ElapsedTime * m_ShakeFreqZ + m_PhaseOffsetZ) * m_ShakeAmount;
+            Vec3 basePos = m_BasePos;
+            basePos.x += offsetX;
+            basePos.z += offsetZ;
+            GetTransform()->SetRelativePosition(basePos);
+        }
     }
-    else {
-        Vec3 pos = GetTransform()->GetRelativePosition();
-        m_BasePos = pos;
-        float offsetX = sinf(m_ElapsedTime * m_ShakeFreqX + m_PhaseOffsetX) * m_ShakeAmount;
-        float offsetZ = cosf(m_ElapsedTime * m_ShakeFreqZ + m_PhaseOffsetZ) * m_ShakeAmount;
-        Vec3 basePos = m_BasePos;
-        basePos.x += offsetX;
-        basePos.z += offsetZ;
-        GetTransform()->SetRelativePosition(basePos);
-    }
-
     CSkillObject::Update();
 }
 
 void CFirePillar::FinalUpdate()
 {
     CGameObject::FinalUpdate();
-    m_ElapsedTime += DELTA_TIME;
-    if (m_ElapsedTime >= m_Duration) {
-        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+    if (m_bOwn)
+    {
+        m_ElapsedTime += DELTA_TIME;
+        if (m_ElapsedTime >= m_Duration) {
+            m_bDelete = true;
+            //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+        }
     }
 }

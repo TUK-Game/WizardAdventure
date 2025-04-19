@@ -32,11 +32,14 @@ message C_LEAVE_GAME
 message C_SPAWN_PROJECTILE
 {
 	ProjectileBasicInfo info = 1;
+	SkillMesh mesh = 2;
 }	
 
 message S_SPAWN_PROJECTILE_SUCESSE
 {
 	uint64 projectile_id = 1;
+	Vector3 size = 2;
+	SkillMesh mesh = 3;
 }
 
 message S_LEAVE_GAME
@@ -49,6 +52,7 @@ message C_MOVE
 {
 	PlayerMoveInfo player_move_info = 1;
 	Vector3 dir = 2;
+	SkillMesh mesh = 3;
 }
 
 message C_MOVE_PROJECTILE

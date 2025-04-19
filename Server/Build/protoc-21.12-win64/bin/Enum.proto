@@ -50,3 +50,11 @@ enum ProjectileState
 	MOVE_STATE = 0;
 	COLLISION = 1;
 }
+
+enum SkillMesh
+{
+	FIRE_BALL = 0;
+	FIRE_PILLAR = 1;
+	FIRE_CIRCLE = 2;
+	FIRE_SWORD = 3;
+}

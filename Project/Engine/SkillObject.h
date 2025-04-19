@@ -7,10 +7,11 @@ class CSkillObject : public CGameObject
 {
 public:
     void SetDamage(int dmg) { m_Damage = dmg; }
-    void SetCaster(CPlayer* caster) { m_Caster = caster; }
+    void SetCaster(CPlayer* caster);
 
     int GetDamage() const { return m_Damage; }
     CPlayer* GetCaster() const { return m_Caster; }
+    SKILL GetSkillType() const { return m_type; }
 
     virtual void Update() override;
     virtual void FinalUpdate() override;
@@ -23,4 +24,6 @@ public:
 protected:
     int m_Damage = 0;
     CPlayer* m_Caster = nullptr;
+    SKILL m_type = SKILL::MAX;
+    bool m_bOwn = { false };
 };

@@ -31,6 +31,7 @@ public:
 	XMFLOAT3 m_NextAmount{};
 public:
 	Protocol::ProjectileInfo* ProjectileInfo;
+	Protocol::SkillMesh m_meshType;
 private:
 	ProjectileState m_State{};
 };

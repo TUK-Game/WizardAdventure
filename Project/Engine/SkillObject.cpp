@@ -9,10 +9,23 @@
 #include "NetworkManager.h"
 #include "ServerSession.h"
 
+
+void CSkillObject::SetCaster(CPlayer* caster)
+{
+    m_Caster = caster;
+    if (caster == CNetworkManager::GetInst()->s_GameSession->GetOwnPlayer())
+    {
+        m_bOwn = true;
+    }
+}
+
 void CSkillObject::Update()
 {
     CGameObject::Update();
-    CNetworkManager::GetInst()->s_GameSession->MoveSkill(this);
+    if(m_bOwn)
+    {
+        CNetworkManager::GetInst()->s_GameSession->MoveSkill(this);
+    }
 }
 
 void CSkillObject::FinalUpdate()

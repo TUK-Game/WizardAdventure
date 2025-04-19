@@ -188,6 +188,18 @@ enum class LIGHT_TYPE : UINT8
 	SPOT_LIGHT,
 };
 
+enum class SKILL 
+{
+	FIRE_BALL,
+	FIRE_CIRCLE,
+	FIRE_PILLAR,
+	FIRE_SWORD,
+	FIRE_METEORS,
+
+
+	MAX
+};
+
 struct LightColor
 {
 	Vec4	diffuse;
