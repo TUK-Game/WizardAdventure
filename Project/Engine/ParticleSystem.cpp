@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ParticleSystem.h"
+#include "ParticleSystemManager.h"
 #include "StructuredBuffer.h"
 #include "Mesh.h"
 #include "AssetManager.h"
@@ -57,13 +58,30 @@ void CParticleSystem::SetTexture(const std::wstring& name)
 void CParticleSystem::FinalUpdate()
 {
 	m_AccTime += DELTA_TIME;
-
 	INT32 add = 0;
+	if (m_bExplosionMode)
+	{
+		m_ExplosionElapsed += DELTA_TIME;
+
+		if (m_bEmit)
+		{
+			add = 30; 
+			m_bEmit = false; 
+		}
+
+		if (m_ExplosionElapsed >= m_ExplosionDuration)
+		{
+			m_bExplosionMode = false;
+			m_ExplosionElapsed = 0.f;
+			CParticleSystemManager::GetInst()->Return(GetOwner());
+		}
+	}
+
 	if (m_bEmit)
 	{
-		if (_createInterval < m_AccTime)
+		if (m_CreateInterval < m_AccTime)
 		{
-			m_AccTime = m_AccTime - _createInterval;
+			m_AccTime -= m_CreateInterval;
 			add = 1;
 		}
 	}
@@ -75,7 +93,7 @@ void CParticleSystem::FinalUpdate()
 	m_ComputeMaterial->SetInt(1, add);
 
 	m_ComputeMaterial->SetVec2(1, Vec2(DELTA_TIME, m_AccTime));
-	m_ComputeMaterial->SetVec4(0, Vec4(_minLifeTime, _maxLifeTime, _minSpeed, _maxSpeed));
+	m_ComputeMaterial->SetVec4(0, Vec4(m_MinLifeTime, m_MaxLifeTime, m_MinSpeed, m_MaxSpeed));
 
 	m_ComputeMaterial->SetVec4(1, Vec4(m_BasePos.x, m_BasePos.y, m_BasePos.z, 0));
 	m_ComputeMaterial->Dispatch(1, 1, 1);
@@ -86,9 +104,20 @@ void CParticleSystem::Render()
 	GetTransform()->GraphicsBinding();
 
 	m_ParticleBuffer->PushGraphicsData(SRV_REGISTER::t9);
-	m_GraphicsMaterial->SetFloat(0, _startScale);
-	m_GraphicsMaterial->SetFloat(1, _endScale);
+	m_GraphicsMaterial->SetFloat(0, m_StartScale);
+	m_GraphicsMaterial->SetFloat(1, m_EndScale);
 	m_GraphicsMaterial->GraphicsBinding();
 
 	m_Mesh->Render(m_MaxParticle);
 }
+
+void CParticleSystem::ExplodeAt(const Vec3& pos)
+{
+	m_bExplosionMode = true;
+	m_bEmit = true;
+	m_BasePos = pos;
+	m_AccTime = 0.f;
+	m_ExplosionElapsed = 0.f;
+	m_CreateInterval = 0.f; 
+}
+

@@ -16,7 +16,7 @@ CParticleSystemManager::~CParticleSystemManager()
 
 void CParticleSystemManager::Init(int poolSize, CLevel* level)
 {
-	for (UINT32 i = 0; i < poolSize; ++i)
+	for (int i = 0; i < poolSize; ++i)
 	{
 		auto obj = new CGameObject();
 
@@ -24,21 +24,22 @@ void CParticleSystemManager::Init(int poolSize, CLevel* level)
 		obj->AddComponent(new CTransform);
 		obj->SetEnable(false); 
 
-		level->AddGameObject(obj, 3 , false);
+		level->AddGameObject(obj, 2 , false);
 		m_Pool.push_back(obj);
 	}
 }
 
 void CParticleSystemManager::Update(float deltaTime)
 {
+	//std::cout << m_ReturnQueue.size() << std::endl;
 	for (auto it = m_ReturnQueue.begin(); it != m_ReturnQueue.end();)
 	{
 		it->remainingTime -= deltaTime;
-
 		if (it->remainingTime <= 0.f)
 		{
 			it->obj->SetEnable(false);
-			
+			it->obj->GetParticleSystem()->SetAvailable(true);
+
 			it = m_ReturnQueue.erase(it);
 		}
 		else
@@ -52,9 +53,10 @@ CGameObject* CParticleSystemManager::Request()
 {
 	for (auto obj : m_Pool)
 	{
-		if (!obj->GetEnable())
+		if (obj->GetParticleSystem()->IsAvailable())
 		{
 			obj->GetParticleSystem()->SetEmit(true);
+			obj->GetParticleSystem()->SetAvailable(false);
 			obj->SetEnable(true);
 			return obj;
 		}
@@ -62,9 +64,24 @@ CGameObject* CParticleSystemManager::Request()
 	return nullptr;
 }
 
+void CParticleSystemManager::RequestExplodeAt(Vec3 pos)
+{
+	for (auto obj : m_Pool)
+	{
+		if (obj->GetParticleSystem()->IsAvailable())
+		{
+			obj->GetParticleSystem()->ExplodeAt(pos);
+			obj->GetParticleSystem()->SetAvailable(false);
+			obj->SetEnable(true);
+			return;
+		}
+	}
+}
+
 void CParticleSystemManager::Return(CGameObject* obj)
 {
 	obj->GetParticleSystem()->SetEmit(false);
+	obj->GetParticleSystem()->SetBasePos(Vec3(0.f, 0.f, 0.f));
 	m_ReturnQueue.push_back({ obj, 1.0f }); 
 }
 

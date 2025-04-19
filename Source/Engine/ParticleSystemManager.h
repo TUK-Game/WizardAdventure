@@ -19,6 +19,7 @@ public:
 	void Init(int poolSize, CLevel* level);
 	void Update(float deltaTime);
 	CGameObject* Request();
+	void RequestExplodeAt(Vec3 pos);
 	void Return(CGameObject* ps);
 	void Clear();
 private:

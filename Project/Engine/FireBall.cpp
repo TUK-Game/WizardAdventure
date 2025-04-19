@@ -43,6 +43,19 @@ void CFireBall::FinalUpdate()
         }
         CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
     }
+
+    auto pos = GetTransform()->GetRelativePosition();
+
+    if (pos.y < 10.f) {
+        if (m_ParticleObject) {
+            CParticleSystemManager::GetInst()->Return(m_ParticleObject);
+            m_ParticleObject = nullptr;
+        }
+        CParticleSystemManager::GetInst()->RequestExplodeAt(pos);
+        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+    }
+
+
 }
 
 void CFireBall::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
