@@ -228,6 +228,9 @@
     <Filter Include="JSON">
       <UniqueIdentifier>{3386179b-56b2-45aa-80b5-6aeb24ee4602}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Manager\17. ParticleSystem">
+      <UniqueIdentifier>{70a82853-671d-4eb1-a7fc-ad6f71e08535}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -614,6 +617,9 @@
     <ClInclude Include="SkillDamage.h">
       <Filter>03. GameObject\Player\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleSystemManager.h">
+      <Filter>01. Manager\17. ParticleSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -945,6 +951,9 @@
     </ClCompile>
     <ClCompile Include="SkillObject.cpp">
       <Filter>03. GameObject\Player\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystemManager.cpp">
+      <Filter>01. Manager\17. ParticleSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,8 @@
 #include "Player.h"
 #include "Camera.h"
 #include "SkillDamage.h"
+#include "ParticleSystemManager.h"
+#include "ParticleSystem.h"
 
 CSkillManager::CSkillManager(EPlayerAttribute attribute, CGameObject* owner)
     : m_Attribute(attribute), m_Owner(owner) {}
@@ -184,7 +186,7 @@ void CSkillManager::CastMeteor()
 {
     Vec3 centerPos = m_Owner->GetTransform()->GetRelativePosition();
 
-    CMeteors* meteors = new CMeteors(centerPos, 30, 0.125f);
+    CMeteors* meteors = new CMeteors(centerPos, 25, 0.125f);
     meteors->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteors, 3, false);
 }

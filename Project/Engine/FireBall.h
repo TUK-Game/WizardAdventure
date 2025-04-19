@@ -17,6 +17,7 @@ public:
     virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
 
 private:
+    CGameObject* m_ParticleObject = nullptr;
     Vec3 m_Direction;
     float m_Speed;
     float m_Duration = 0.3f;

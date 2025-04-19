@@ -33,6 +33,14 @@ public:
 	void SetComputeMaterial(CMaterial* material) { m_ComputeMaterial = material; }
 	void SetTexture(class CTexture* texture);
 	void SetTexture(const std::wstring& name);
+	void SetBasePos(const Vec3 pos) { m_BasePos = pos; }
+	void SetEmit(bool value) { m_bEmit = value; }
+	bool IsEmitting() const { return m_bEmit; }
+	bool IsAvailable() const { return m_bAvailable; }
+	void SetAvailable(bool value) { m_bAvailable = value; }
+
+	void ExplodeAt(const Vec3& pos);
+
 public:
 
 	virtual void FinalUpdate();
@@ -50,13 +58,22 @@ private:
 	CMaterial*						m_GraphicsMaterial;
 	CMesh*							m_Mesh;
 
-	float				_createInterval = 0.005f;
+
+	Vec3				m_BasePos{};
+	float				m_CreateInterval = 0.005f;
 	float				m_AccTime = 0.f;
 
-	float				_minLifeTime = 0.5f;
-	float				_maxLifeTime = 1.f;
-	float				_minSpeed = 100;
-	float				_maxSpeed = 50;
-	float				_startScale = 10.f;
-	float				_endScale = 5.f;
+	float				m_MinLifeTime = 0.5f;
+	float				m_MaxLifeTime = 1.f;
+	float				m_MinSpeed = 100;
+	float				m_MaxSpeed = 200;
+	float				m_StartScale = 50.f;
+	float				m_EndScale = 5.f;
+
+	bool				m_bEmit = true;
+	bool				m_bExplosionMode = false;
+	bool				m_bAvailable = true;
+
+	float				m_ExplosionDuration = 0.5f; 
+	float				m_ExplosionElapsed = 0.f;  
 };

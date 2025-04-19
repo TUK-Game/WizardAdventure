@@ -196,6 +196,10 @@ int CAssetManager::LoadTexture()
 	tex->Init(path / L"MenuBTN_Hover.png");
 	AddAsset(L"MenuBTN_Hover", tex);
 
+	tex = new CTexture;
+	tex->Init(path / L"Spark.png");
+	AddAsset(L"Spark", tex);
+
 	return S_OK;
 }
 

@@ -7,6 +7,8 @@
 #include "Level.h"
 #include "Layer.h"
 #include "LevelManager.h"
+#include "ParticleSystem.h"
+#include "ParticleSystemManager.h"
 #include "Engine.h"
 
 CFireBall::CFireBall()
@@ -20,6 +22,7 @@ CFireBall::CFireBall()
     AddComponent(new CRigidBody());
 
     // AddComponent(new CCollider());      
+    m_ParticleObject = CParticleSystemManager::GetInst()->Request();
 }
 
 void CFireBall::Update()
@@ -29,11 +32,30 @@ void CFireBall::Update()
 
 void CFireBall::FinalUpdate()
 {
+    if (m_ParticleObject)
+        m_ParticleObject->GetParticleSystem()->SetBasePos(GetTransform()->GetRelativePosition());
     CGameObject::FinalUpdate();
     m_ElapsedTime += DELTA_TIME;
     if (m_ElapsedTime >= m_Duration) {
+        if (m_ParticleObject) {
+            CParticleSystemManager::GetInst()->Return(m_ParticleObject);
+            m_ParticleObject = nullptr;
+        }
         CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
     }
+
+    auto pos = GetTransform()->GetRelativePosition();
+
+    if (pos.y < 10.f) {
+        if (m_ParticleObject) {
+            CParticleSystemManager::GetInst()->Return(m_ParticleObject);
+            m_ParticleObject = nullptr;
+        }
+        CParticleSystemManager::GetInst()->RequestExplodeAt(pos);
+        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+    }
+
+
 }
 
 void CFireBall::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)

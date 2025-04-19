@@ -129,7 +129,7 @@ void CCamera::RenderForward()
 void CCamera::RenderShadow()
 {
 	s_matView = m_matView;
-	m_matProjection = m_matProjection;
+	s_matProjection = m_matProjection;
 
 	for (auto& object : m_vecShadow)
 	{
@@ -189,6 +189,7 @@ void CCamera::SortObject()
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
+			if (!vecObjects[j]->GetEnable()) continue;
 			if ((vecObjects[j]->GetRenderComponent() == nullptr
 				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
 				&& vecObjects[j]->GetParticleSystem() == nullptr)

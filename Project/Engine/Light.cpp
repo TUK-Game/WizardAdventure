@@ -32,7 +32,7 @@ void CLight::FinalUpdate()
 	m_ShadowCamera->GetTransform()->SetRelativePosition(GetTransform()->GetRelativePosition());
 	m_ShadowCamera->GetTransform()->SetRelativeRotation(GetTransform()->GetRelativeRotation());
 	m_ShadowCamera->GetTransform()->SetRelativeScale(GetTransform()->GetRelativeScale());
-
+	m_ShadowCamera->GetTransform()->LookAt(Vec3(0.f, -1.f, 0.f));
 	m_ShadowCamera->FinalUpdate();
 
 }
