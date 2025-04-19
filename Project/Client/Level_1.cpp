@@ -59,7 +59,7 @@ void CLevel_1::Init()
 	this->GetLayer(4)->SetName(L"UI");
 	this->GetLayer(5)->SetName(L"Light");
 	this->GetLayer(10)->SetName(L"Map");
-	this->GetLayer(11)->SetName(L"Monster");	
+	this->GetLayer(11)->SetName(L"Monster");
 
 	CAssetManager::GetInst()->LoadSound("BGM", "Play", false, "e.mp3");
 	CAssetManager::GetInst()->SetVolume("BGM", 30);
@@ -116,7 +116,7 @@ void CLevel_1::Init()
 
 #ifdef DEBUG_SOLOPLAY
 	CPlayer* player = new CPlayer(EPlayerAttribute::Fire, true);
-	this->AddGameObject(player, 3, false);	
+	this->AddGameObject(player, 3, false);
 	CLevelManager::GetInst()->SetOwnPlayer(player);
 #endif // DEBUG_SOLOPLAY
 
@@ -213,7 +213,7 @@ void CLevel_1::Init()
 	mapCamera->GetTransform()->SetRelativePosition(4919.f, 84667.f, 6754.f);
 	mapCamera->GetTransform()->SetRelativeRotation(90.f, 0.f, 0.f);
 	this->AddGameObject(mapCamera, 0, false);
-	
+
 
 
 #pragma endregion
@@ -225,6 +225,30 @@ void CLevel_1::Init()
 
 #pragma endregion
 
+
+#pragma region UI_TEST
+	{
+		CGameObject* obj = new CGameObject;
+		obj->AddComponent(new CTransform);
+		obj->AddComponent(new CMeshRenderer);
+		//obj->GetTransform()->SetRelativeScale(Vec3(160.f, 160.f, 160.f));
+		//obj->GetTransform()->SetRelativePosition(Vec3(-500.f + (i * 200), 250.f, 500.f));
+		obj->GetTransform()->SetRelativeScale(Vec3(.2f, .35f, .2f));
+		obj->GetTransform()->SetRelativePosition(Vec3(-0.8f , 0.5f, 1.0f));
+		obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
+		CMaterial* material = new CMaterial;
+		CTexture* texture;
+
+		texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
+		//texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"UAVTexture");
+		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
+		material->SetTexture(0, texture);
+		material->SetGraphicsShader(shader);
+		obj->GetMeshRenderer()->SetMaterial(material);
+		this->AddGameObject(obj, 4, false);
+	}
+
+#pragma endregion
 }
 
 void CLevel_1::Begin()

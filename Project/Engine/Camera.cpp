@@ -129,7 +129,7 @@ void CCamera::RenderForward()
 void CCamera::RenderShadow()
 {
 	s_matView = m_matView;
-	m_matProjection = m_matProjection;
+	s_matProjection = m_matProjection;
 
 	for (auto& object : m_vecShadow)
 	{
