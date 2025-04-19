@@ -12,6 +12,7 @@
 
 CFireSword::CFireSword()
 {
+    m_type = SKILL::FIRE_SWORD;
     AddComponent(new CTransform());
     CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"SwordLava");
     std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
@@ -31,64 +32,71 @@ CFireSword::CFireSword()
 
 void CFireSword::Update()
 {
-    CGameObject::Update();
-    Vec3 pos = GetTransform()->GetRelativePosition();
-
-    if (!m_ReadyToRotate)
+    CSkillObject::Update();
+    if (m_bOwn)
     {
-        m_Elapsed += DELTA_TIME;
-        float t = m_Elapsed / m_TranslateWaitTime;
-        t = std::clamp(t, 0.0f, 1.0f);
+        Vec3 pos = GetTransform()->GetRelativePosition();
 
-        for (auto obj : GetChild())
+        if (!m_ReadyToRotate)
         {
-            obj->GetTransform()->SetRelativeScale(t, t, t);
+            m_Elapsed += DELTA_TIME;
+            float t = m_Elapsed / m_TranslateWaitTime;
+            t = std::clamp(t, 0.0f, 1.0f);
+
+            for (auto obj : GetChild())
+            {
+                obj->GetTransform()->SetRelativeScale(t, t, t);
+            }
+
+            float readySpeed = m_Speed * ((1.0f - t) / 1.0f);
+            pos += m_ReadyDirection * readySpeed * DELTA_TIME;
+            GetTransform()->SetRelativePosition(pos);
+
+            if (m_Elapsed >= m_RotateWaitTime)
+            {
+                m_ReadyToRotate = true;
+                m_Elapsed = 0.f;
+                Vec3 targetDir = m_TargetPos - pos;
+                targetDir.Normalize();
+                m_Direction = targetDir;
+            }
+            return;
         }
 
-        float readySpeed = m_Speed * ((1.0f - t) / 1.0f);
-        pos += m_ReadyDirection * readySpeed * DELTA_TIME;
+        if (m_ReadyToRotate && !m_ReadyToFire)
+        {
+            m_Elapsed += DELTA_TIME;
+            float t = m_Elapsed / m_RotateWaitTime;
+            t = std::clamp(t, 0.0f, 1.0f);
+
+            // 보간된 방향o
+            Vec3 blendedDirection = DirectX::SimpleMath::Vector3::Lerp(m_ReadyDirection, m_Direction, t);
+            blendedDirection.Normalize();
+            GetTransform()->LookAt(blendedDirection);
+
+            if (m_Elapsed >= m_RotateWaitTime)
+            {
+                m_ReadyToFire = true;
+                m_Elapsed = 0.f;
+            }
+            return;
+        }
+
+        pos += m_Direction * m_Speed * DELTA_TIME;
         GetTransform()->SetRelativePosition(pos);
-
-        if (m_Elapsed >= m_RotateWaitTime)
-        {
-            m_ReadyToRotate = true;
-            m_Elapsed = 0.f;
-            Vec3 targetDir = m_TargetPos - pos;
-            targetDir.Normalize();
-            m_Direction = targetDir;
-        }
-        return;
     }
-
-    if (m_ReadyToRotate && !m_ReadyToFire)
-    {
-        m_Elapsed += DELTA_TIME;
-        float t = m_Elapsed / m_RotateWaitTime;
-        t = std::clamp(t, 0.0f, 1.0f);
-
-        // 보간된 방향o
-        Vec3 blendedDirection = DirectX::SimpleMath::Vector3::Lerp(m_ReadyDirection, m_Direction, t);
-        blendedDirection.Normalize();
-        GetTransform()->LookAt(blendedDirection);
-
-        if (m_Elapsed >= m_RotateWaitTime)
-        {
-            m_ReadyToFire = true;
-            m_Elapsed = 0.f;
-        }
-        return;
-    }
-
-    pos += m_Direction * m_Speed * DELTA_TIME;
-    GetTransform()->SetRelativePosition(pos);
-
-    
 }
 
 void CFireSword::FinalUpdate()
 {
     CGameObject::FinalUpdate();
-    Vec3 pos = GetTransform()->GetRelativePosition();
-    if (pos.y < -200.f) // 충돌시 삭제로 변경해야함
-        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+    if (m_bOwn)
+    {
+        Vec3 pos = GetTransform()->GetRelativePosition();
+        if (pos.y < -200.f) // 충돌시 삭제로 변경해야함
+        {
+            m_bDelete = true;
+            //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+        }
+    }
 }

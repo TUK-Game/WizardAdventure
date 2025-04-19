@@ -185,6 +185,58 @@ inline bool MoveState_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MoveState>(
     MoveState_descriptor(), name, value);
 }
+enum ProjectileState : int {
+  MOVE_STATE = 0,
+  COLLISION = 1,
+  ProjectileState_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  ProjectileState_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool ProjectileState_IsValid(int value);
+constexpr ProjectileState ProjectileState_MIN = MOVE_STATE;
+constexpr ProjectileState ProjectileState_MAX = COLLISION;
+constexpr int ProjectileState_ARRAYSIZE = ProjectileState_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ProjectileState_descriptor();
+template<typename T>
+inline const std::string& ProjectileState_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, ProjectileState>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function ProjectileState_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    ProjectileState_descriptor(), enum_t_value);
+}
+inline bool ProjectileState_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ProjectileState* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ProjectileState>(
+    ProjectileState_descriptor(), name, value);
+}
+enum SkillMesh : int {
+  FIRE_BALL = 0,
+  FIRE_PILLAR = 1,
+  FIRE_CIRCLE = 2,
+  FIRE_SWORD = 3,
+  SkillMesh_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  SkillMesh_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool SkillMesh_IsValid(int value);
+constexpr SkillMesh SkillMesh_MIN = FIRE_BALL;
+constexpr SkillMesh SkillMesh_MAX = FIRE_SWORD;
+constexpr int SkillMesh_ARRAYSIZE = SkillMesh_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SkillMesh_descriptor();
+template<typename T>
+inline const std::string& SkillMesh_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, SkillMesh>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function SkillMesh_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    SkillMesh_descriptor(), enum_t_value);
+}
+inline bool SkillMesh_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SkillMesh* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SkillMesh>(
+    SkillMesh_descriptor(), name, value);
+}
 // ===================================================================
 
 
@@ -231,6 +283,16 @@ template <> struct is_proto_enum< ::Protocol::MoveState> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::MoveState>() {
   return ::Protocol::MoveState_descriptor();
+}
+template <> struct is_proto_enum< ::Protocol::ProjectileState> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::ProjectileState>() {
+  return ::Protocol::ProjectileState_descriptor();
+}
+template <> struct is_proto_enum< ::Protocol::SkillMesh> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::SkillMesh>() {
+  return ::Protocol::SkillMesh_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

@@ -3,6 +3,10 @@
 #include "ClientPacketHandler.h"
 #include "Player.h"
 #include "Transform.h"
+#include "SkillObject.h"
+#include "LevelManager.h"
+#include "Level.h"
+#include "Layer.h"
 
 void ProtoToVector3(const Vec3& from, Protocol::Vector3* to)
 {
@@ -95,11 +99,95 @@ void CServerSession::OnActPlayer()
 	ProtoToVector3(rot, posInfo->mutable_rotation());
 	ProtoToVector3(dir, pkt.mutable_dir());
 
-	std::cout << dir.x << " " << dir.y << " " << dir.z << '\n';
-
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(sendBuffer);
 
 }
 
+void CServerSession::SpawnSkill(CSkillObject* object)
+{
+	CTransform* transform = object->GetTransform();
+	const Vec3& pos = transform->GetRelativePosition();
+	const Vec3& size = transform->GetRelativeScale();
+	Protocol::C_SPAWN_PROJECTILE pkt;
+	auto* info = pkt.mutable_info();
+
+	object->m_ProjectileId = m_projectileId;
+	info->set_new_projectile_id(m_projectileId++);
+	info->set_player_id(m_Id);
+	info->mutable_dir()->set_x(1);
+	info->set_bcollisionexplosion(object->GetCollisionExplosion());
+
+	auto* posInfo = pkt.mutable_info()->mutable_spawn_pos();
+	posInfo->set_x(pos.x);
+	posInfo->set_y(pos.y);
+	posInfo->set_z(pos.z);
+
+	auto* sizeInfo = pkt.mutable_info()->mutable_size();
+	sizeInfo->set_x(size.x);
+	sizeInfo->set_y(size.y);
+	sizeInfo->set_z(size.z);
+
+	switch (object->GetSkillType())
+	{
+	case SKILL::FIRE_BALL:
+	case SKILL::FIRE_METEORS:
+	{
+		pkt.set_mesh(Protocol::FIRE_BALL);
+	}
+	break;
+	case SKILL::FIRE_CIRCLE:
+	{
+		pkt.set_mesh(Protocol::FIRE_CIRCLE);
+	}
+	break;
+	case SKILL::FIRE_PILLAR:
+	{
+		pkt.set_mesh(Protocol::FIRE_PILLAR);
+	}
+	break;
+	case SKILL::FIRE_SWORD:
+	{
+		pkt.set_mesh(Protocol::FIRE_SWORD);
+	}
+	break;
+	}
 	
+	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
+	//if (map.find(object->m_ProjectileId) != map.end())
+	//{
+	//	map.erase(object->m_ProjectileId);
+	//}
+	map[object->m_ProjectileId] = object;
+
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
+}
+
+void CServerSession::MoveSkill(CSkillObject* object)
+{
+	CTransform* transform = object->GetTransform();
+	const Vec3& pos = transform->GetRelativePosition();
+	const Vec3& rot = transform->GetRelativeRotation();
+	Protocol::C_MOVE_PROJECTILE pkt;
+	auto* info = pkt.mutable_projectile_info();
+	info->set_projectile_id(object->m_ProjectileId);
+
+	if (object->m_bDelete)
+		info->set_state(Protocol::COLLISION);
+	else
+		info->set_state(Protocol::MOVE_STATE);
+
+	auto* posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
+	auto* rotInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_rotation();
+	posInfo->set_x(pos.x);
+	posInfo->set_y(pos.y);
+	posInfo->set_z(pos.z);
+
+	rotInfo->set_x(rot.x);
+	rotInfo->set_y(rot.y);
+	rotInfo->set_z(rot.z);
+
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
+}

@@ -11,7 +11,10 @@ public:
 
 public:
 	void SetOwnPlayer(class CPlayer* p) { m_OwnPlayer = p; }
-	void SetClientID(UINT64 id) { m_Id = id; }
+	void SetClientID(UINT64 id) { m_Id = id; m_projectileId = m_Id * 1000000 + 1; }
+
+	class CPlayer* GetOwnPlayer() { return m_OwnPlayer; }
+	UINT64 GetClientID() { return m_Id; }
 
 	virtual void OnConnected() override;
 	virtual void OnDisconnected() override;
@@ -20,9 +23,11 @@ public:
 
 	void OnMovePlayer();
 	void OnActPlayer();
-
+	void MoveSkill(class CSkillObject* object);
+	void SpawnSkill(class CSkillObject* object);
 private:
 	class CPlayer* m_OwnPlayer;
 	UINT64			m_Id;
+	UINT64			m_projectileId	;
 };
 

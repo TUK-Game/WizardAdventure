@@ -6,6 +6,8 @@
 #include "ObjectUtil.h"
 #include "LevelCollision.h"
 #include "BoxCollider.h"
+#include "Projectile.h"
+#include "ProjectilePool.h"
 
 CRoomRef g_Room = std::make_shared<CRoom>();
 
@@ -55,15 +57,19 @@ void CRoom::Update()
 		for (const auto object : layer)
 		{
 			auto& gameObject = object.second;
-
-			gameObject->Update(m_DeltaTime);
+			if(gameObject)
+			{
+				gameObject->Update(m_DeltaTime);
+			}
 		}
 	}
 
 	for (const auto& player : m_Players)
 	{
 		if(player)
+		{
 			player->Update(m_DeltaTime);
+		}
 	}
 
 	m_LevelCollision->Collision();
@@ -71,12 +77,18 @@ void CRoom::Update()
 	// 몬스터 정보 전송
 	UpdateClients();
 
+	RemoveLast();
 	// 33ms 이후 실행 예약
 	// => 대충 30프레임
 	DoTimer(33, &CRoom::Update);
 }
 
 void CRoom::UpdateClients()
+{
+	UpdateMonster();
+}
+
+void CRoom::UpdateMonster()
 {
 	std::unordered_map<uint64, CGameObjectRef> monsters = GetLayerObjects((int)EObject_Type::Monster);
 
@@ -109,6 +121,10 @@ void CRoom::UpdateClients()
 	Broadcast(sendBuffer, -1);
 }
 
+void CRoom::UpdateProjectile()
+{
+}
+
 bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 {
 	bool success = AddPlayer(newPlayer);
@@ -125,7 +141,7 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 
 	newPlayer->PlayerInfo->mutable_object_info()->mutable_pos_info()->set_allocated_position(position);
 	newPlayer->GetCollider()->SetCollisionProfile("Player");
-	newPlayer->GetCollider()->SetBoxInfo(XMFLOAT3(11240.f, 20.f, 1127.f), XMFLOAT3(100.f, 200.f, 24.f), XMFLOAT3(0.f, 100.f, 0.f));
+	newPlayer->GetCollider()->SetBoxInfo(XMFLOAT3(11240.f, 20.f, 1127.f), XMFLOAT3(100.f, 200.f, 24.f), XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0.f, 100.f, 0.f));
 
 	// 입장 사실을 새 플레이어에게 알린다
 	{
@@ -231,7 +247,6 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 	Protocol::Vector3& protoNow = *player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
 	XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
-
 	// 이동량
 	XMFLOAT3 moveAmount = ProtoToXMFLOAT3(player->m_NextAmount);
 
@@ -252,10 +267,20 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 		if (m_LevelCollision->CollisionWithWall(player->GetCollider()))
 		{
 			std::cout << "박음" << std::endl;
-
+			Protocol::Vector3& dir = player->GetDir();
+			const float ratio = 1.1f;
 			nowPos.x -= moveAmount.x;
 			nowPos.y -= moveAmount.y;
 			nowPos.z -= moveAmount.z;
+
+			XMVECTOR dirVec = XMVectorSet(dir.x(), dir.y(), dir.z(), 0.0f);
+			dirVec = XMVector3Normalize(dirVec);
+			if(player->GetState() != Protocol::MOVE_STATE_DASH && player->GetState() != Protocol::MOVE_STATE_DASH_END)
+				dirVec = XMVectorScale(dirVec, -20);
+
+			XMVECTOR now = XMLoadFloat3(&nowPos);
+			now = XMVectorSubtract(now, dirVec);
+			XMStoreFloat3(&nowPos, now);
 
 			ToProtoVector3(&protoNow, nowPos);
 			break;
@@ -274,13 +299,93 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 	posInfo->set_state(player->GetState());
 
-	std::cout << "보냄 " << nowPos.x << " " << nowPos.y << " " << nowPos.z << '\n';
-
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
 	Broadcast(sendBuffer, player->PlayerInfo->player_id());
 
 	if (auto session = player->GetSession())
 		session->Send(sendBuffer);
+
+	return true;
+}
+
+bool CRoom::HandleSpawnProjectile(CProjectileRef projectile)
+{
+	AddProjectile(projectile);
+
+	Protocol::S_SPAWN_PROJECTILE_SUCESSE pkt;
+	pkt.set_projectile_id(projectile->ProjectileInfo->projectile_id());
+	pkt.mutable_size()->set_x(projectile->GetStateInfo().Size.x);
+	pkt.mutable_size()->set_y(projectile->GetStateInfo().Size.y);
+	pkt.mutable_size()->set_z(projectile->GetStateInfo().Size.z);
+	pkt.set_mesh(projectile->m_meshType);
+
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	Broadcast(sendBuffer, -1);
+	return true;
+}
+
+bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
+{
+	Protocol::S_PROJECTILE_INFO pkt;
+	if (projectile->ProjectileInfo->state() == Protocol::COLLISION)
+	{
+		pkt.mutable_projectile_info()->set_projectile_id(projectile->ProjectileInfo->projectile_id());
+		pkt.mutable_projectile_info()->set_state(Protocol::COLLISION);
+		m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
+		g_pool->Release(projectile);
+	}
+	else
+	{
+		int step = 1;
+
+		Protocol::Vector3& protoNow = *projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+		XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
+		// 이동량
+		XMFLOAT3 moveAmount = projectile->m_NextAmount;
+
+		moveAmount.x /= static_cast<float>(step);
+		moveAmount.y /= static_cast<float>(step);
+		moveAmount.z /= static_cast<float>(step);
+
+		for (int i = 1; i <= step; ++i)
+		{
+			nowPos.x += moveAmount.x;
+			nowPos.y += moveAmount.y;
+			nowPos.z += moveAmount.z;
+
+			ToProtoVector3(&protoNow, nowPos);
+
+			projectile->GetCollider()->Update();
+
+			//if (m_LevelCollision->CollisionWithWall(projectile->GetCollider()))
+			//{
+			//	std::cout << "박음" << std::endl;
+			//	projectile->ProjectileInfo->set_state(Protocol::COLLISION);
+			//	m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
+			//	g_pool->Release(projectile);
+			//	break;
+			//}
+		}
+
+		const auto& rot = projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->rotation();
+		auto* info = pkt.mutable_projectile_info();
+		info->set_projectile_id(projectile->ProjectileInfo->projectile_id());
+		info->set_state(projectile->ProjectileInfo->state());
+
+		auto* posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info();
+		posInfo->mutable_position()->set_x(nowPos.x);
+		posInfo->mutable_position()->set_y(nowPos.y);
+		posInfo->mutable_position()->set_z(nowPos.z);
+
+		posInfo->mutable_rotation()->set_x(rot.x());
+		posInfo->mutable_rotation()->set_y(rot.y());
+		posInfo->mutable_rotation()->set_z(rot.z());
+	}
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	Broadcast(sendBuffer, -1);
+
+	//if (auto session = player->GetSession())
+	//	session->Send(sendBuffer);
 
 	return true;
 }
@@ -307,6 +412,30 @@ bool CRoom::AddObject(uint32 layer, CGameObjectRef object)
 	return true;
 }
 
+bool CRoom::AddMonster(CMonsterRef object)
+{
+	if (m_mapObject[(uint32)EObject_Type::Monster].find(object->MonsterInfo->object_id()) != m_mapObject[(uint32)EObject_Type::Monster].end())
+		return false;
+
+	m_mapObject[(uint32)EObject_Type::Monster].insert(make_pair(object->MonsterInfo->object_id(), object));
+
+	object->m_Room.store(GetRoomRef());
+
+	return true;
+}
+
+bool CRoom::AddProjectile(CProjectileRef object)
+{
+	if (m_mapObject[(uint32)EObject_Type::Projectile].find(object->ProjectileInfo->projectile_id()) != m_mapObject[(uint32)EObject_Type::Projectile].end())
+		return false;
+
+	m_mapObject[(uint32)EObject_Type::Projectile].insert(make_pair(object->ProjectileInfo->projectile_id(), object));
+
+	object->m_Room.store(GetRoomRef());
+
+	return true;
+}
+
 bool CRoom::RemovePlayer(uint64 playerId)
 {
 	if (m_Players[playerId] == nullptr)
@@ -321,17 +450,22 @@ bool CRoom::RemovePlayer(uint64 playerId)
 	return true;
 }
 
-bool CRoom::RemoveObject(uint32 layer, uint64 objectId)
+bool CRoom::RemoveLast()
 {
-	if (m_mapObject[layer].find(objectId) == m_mapObject[layer].end())
-		return false;
+	for (auto& key : m_deleteObjects)
+	{
+		if (m_mapObject[key.first].find(key.second) == m_mapObject[key.first].end())
+			continue;
 
-	CGameObjectRef object = m_mapObject[layer][objectId];
-	CPlayerRef player = dynamic_pointer_cast<CPlayer>(object);
-	if (player)
-		player->m_Room.store(std::weak_ptr<CRoom>());
+		m_mapObject[key.first].erase(key.second);
+	}
+	m_deleteObjects.clear();
+	return true;
+}
 
-	m_mapObject[layer].erase(objectId);
+bool CRoom::RemoveObject(uint32 layer, uint64 id)
+{
+	m_deleteObjects.push_back({ layer, id });
 
 	return true;
 }

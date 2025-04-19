@@ -22,8 +22,9 @@ void CCollisionObject::Init(CGameObject* owner)
 	this->AddComponent(new CBoxCollider());
 	this->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 	this->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"DC"));
-	this->GetTransform()->SetRelativeScale(owner->GetMeshRenderer()->GetMesh()->GetMeshSize());
+	this->GetTransform()->SetRelativeScale(owner->GetMeshRenderer()->GetMesh()->GetMeshSize() * owner->GetTransform()->GetRelativeScale());
 	this->GetTransform()->SetRelativePosition(owner->GetTransform()->GetRelativePosition());
+	this->GetTransform()->SetRelativeRotation(owner->GetTransform()->GetRelativeRotation());
 }
 
 void CCollisionObject::InitToChild(CGameObject* owner, Vec3 position, Vec3 scale)

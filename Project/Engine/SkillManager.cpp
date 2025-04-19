@@ -17,12 +17,18 @@
 #include "SkillDamage.h"
 #include "ParticleSystemManager.h"
 #include "ParticleSystem.h"
+#include "ServerSession.h"
+#include "NetworkManager.h"
 
 CSkillManager::CSkillManager(EPlayerAttribute attribute, CGameObject* owner)
     : m_Attribute(attribute), m_Owner(owner) {}
 
 void CSkillManager::UseSkill(int skillIndex)
 {
+    CPlayer* player = CNetworkManager::GetInst()->s_GameSession->GetOwnPlayer();
+    if (m_Owner != player)
+        return;
+
     switch (m_Attribute)
     {
     case EPlayerAttribute::Fire:
@@ -73,9 +79,12 @@ void CSkillManager::CastFireballTowardMouse()
     fireBall->GetRigidBody()->ApplyForce(fireDir * 900000.f);
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
     fireBall->SetDamage(SkillDamage::FireBall);
+    fireBall->SetEnable(false);
+    fireBall->SetCollisionExplosion(true);
 
+    CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
 
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 3, false);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 12, false);
 }
 
 void CSkillManager::CastFireballTowardQ()
@@ -97,22 +106,28 @@ void CSkillManager::CastFireballTowardQ()
 
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
     fireBall->SetDamage(SkillDamage::FireBallQ);
+    fireBall->SetEnable(false);
+    fireBall->SetCollisionExplosion(true);
 
     CRigidBody* rigidbody = fireBall->GetRigidBody();
     rigidbody->ApplyForce(fireDir * 70000.f);
     rigidbody->ApplyTorque(Vec3(0.f, 500.f, 0.f));
     rigidbody->SetAngularDrag(0.01f);
 
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 3, false);
+    CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
+
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 12, false);
 }
 
 void CSkillManager::SpawnFirePillarAtMouse()
 {
-    Vec3 centerPos = GetMouseGroundPoint(); // ¸¶¿ì½º À§Ä¡ (XZ Æò¸é)
+    Vec3 centerPos = GetMouseGroundPoint(); // ï¿½ï¿½ï¿½ì½º ï¿½ï¿½Ä¡ (XZ ï¿½ï¿½ï¿½)
 
     CFireCircle* fireCircle = new CFireCircle;
     fireCircle->GetTransform()->SetRelativePosition(centerPos);
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireCircle, 3, false);
+    fireCircle->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
+    CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireCircle);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireCircle, 12, false);
 
     Vec3 lookDir = centerPos - m_Owner->GetTransform()->GetRelativePosition();
     lookDir.Normalize();
@@ -129,15 +144,18 @@ void CSkillManager::SpawnFirePillarAtMouse()
         float offsetX = cosf(angleRad) * radius;
         float offsetZ = sinf(angleRad) * radius;
 
-        Vec3 spawnPos = centerPos + Vec3(offsetX, 0.f, offsetZ); // y´Â Áö¸é ¾Æ·¡·Î
+        Vec3 spawnPos = centerPos + Vec3(offsetX, 0.f, offsetZ); // yï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½
 
         CFirePillar* pillar = new CFirePillar();
         pillar->SetBasePos(spawnPos);
         pillar->GetTransform()->SetRelativePosition(spawnPos);
         pillar->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
         pillar->SetDamage(SkillDamage::Pillar);
+        pillar->SetEnable(false);
 
-        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(pillar, 3, false);
+        CNetworkManager::GetInst()->s_GameSession->SpawnSkill(pillar);
+
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(pillar, 12, false);
     }                                                                                               
 }
 
@@ -157,7 +175,7 @@ void CSkillManager::FireSwordSpreadShot()
         float angleDeg = i * (360.f / count) + 10.f;
         float angleRad = XMConvertToRadians(angleDeg);
 
-        // ¿øÇü ¹èÄ¡ À§Ä¡
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½Ä¡
         float offsetX = cosf(angleRad) * radius;
         float offsetZ = sinf(angleRad) * radius;
         Vec3 spawnPos = center + Vec3(offsetX, 300.f, offsetZ);
@@ -175,9 +193,11 @@ void CSkillManager::FireSwordSpreadShot()
         sword->SetWaitTimeForRotate(1.f);
         sword->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
         sword->SetDamage(SkillDamage::FireSword);
+        sword->SetEnable(false);
+        sword->SetCollisionExplosion(true);
+        CNetworkManager::GetInst()->s_GameSession->SpawnSkill(sword);
 
-
-        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(sword, 3, false);
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(sword, 12, false);
     }
 
 }
@@ -188,7 +208,9 @@ void CSkillManager::CastMeteor()
 
     CMeteors* meteors = new CMeteors(centerPos, 25, 0.125f);
     meteors->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteors, 3, false);
+
+
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteors, 12, false);
 }
 
 Vec3 CSkillManager::CalculateMouseDirectionFromPlayerTopView(const Vec3& fromPos)
@@ -200,16 +222,16 @@ Vec3 CSkillManager::CalculateMouseDirectionFromPlayerTopView(const Vec3& fromPos
     Vec3 rayOrigin, rayDir;
     cam->ScreenToRay(mousePos, cam, rayOrigin, rayDir);
 
-    // XZ Æò¸é(Y = fromPos.y) ±âÁØ ±³Â÷Á¡
+    // XZ ï¿½ï¿½ï¿½(Y = fromPos.y) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     float t = (fromPos.y - rayOrigin.y) / rayDir.y;
     Vec3 hitPos = rayOrigin + rayDir * t;
 
     Vec3 dir = hitPos - fromPos;
-    dir.y = 0.f; // y ¹æÇâ Á¦°Å (¼öÆò ¹ß»ç)
+    dir.y = 0.f; // y ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½)
     if (dir.Length() > 0.001f)
         dir.Normalize();
     else
-        dir = Vec3(0, 0, 1); // ±âº» ¹æÇâ
+        dir = Vec3(0, 0, 1); // ï¿½âº» ï¿½ï¿½ï¿½ï¿½
 
     return dir;
 }
@@ -223,7 +245,7 @@ Vec3 CSkillManager::CalculateMouseDirectionFromPos(const Vec3& fromPos)
     Vec3 rayOrigin, rayDir;
     cam->ScreenToRay(mousePos, cam, rayOrigin, rayDir);
 
-    // XZ Æò¸é(Y = fromPos.y) ±âÁØ ±³Â÷Á¡
+    // XZ ï¿½ï¿½ï¿½(Y = fromPos.y) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     float t = -rayOrigin.y / rayDir.y;
     Vec3 hitPos = rayOrigin + rayDir * t;
 
@@ -231,7 +253,7 @@ Vec3 CSkillManager::CalculateMouseDirectionFromPos(const Vec3& fromPos)
     if (dir.Length() > 0.001f)
         dir.Normalize();
     else
-        dir = Vec3(0, 0, 1); // ±âº» ¹æÇâ
+        dir = Vec3(0, 0, 1); // ï¿½âº» ï¿½ï¿½ï¿½ï¿½
 
     return dir;
 }
@@ -247,7 +269,7 @@ Vec3 CSkillManager::GetMouseGroundPoint()
     Vec3 origin, dir;
     cam->ScreenToRay(mousePos, cam, origin, dir);
 
-    // Æò¸é Y = 0 (Áö¸é°ú ±³Â÷)
+    // ï¿½ï¿½ï¿½ Y = 0 (ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
     float t = -origin.y / dir.y;
     Vec3 hitPos = origin + dir * t;
     return hitPos;

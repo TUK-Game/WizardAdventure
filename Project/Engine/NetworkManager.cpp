@@ -13,7 +13,7 @@ std::shared_ptr<class CServerSession>	CNetworkManager::s_GameSession;
 CNetworkManager::CNetworkManager()
 {
 }
-
+	
 CNetworkManager::~CNetworkManager()
 {
 }

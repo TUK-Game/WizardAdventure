@@ -52,7 +52,11 @@ void CPlayer::Update(float deltaTime)
 
 void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
-	std::cout << "나 박음" << std::endl;
+	if (dest->GetProfile()->channel == ECollision_Channel::Monster)
+	{
+		std::cout << "몬스터와\n";
+	}
+
 }
 
 void CPlayer::CollisionEvent(CBoxCollider* src, CBoxCollider* dest)

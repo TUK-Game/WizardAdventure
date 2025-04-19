@@ -44,3 +44,17 @@ enum MoveState
 	MOVE_STATE_SKILL_MOUSE_R = 8;
 	MOVE_STATE_SKILL_MOUSE_L = 9;
 }
+
+enum ProjectileState
+{
+	MOVE_STATE = 0;
+	COLLISION = 1;
+}
+
+enum SkillMesh
+{
+	FIRE_BALL = 0;
+	FIRE_PILLAR = 1;
+	FIRE_CIRCLE = 2;
+	FIRE_SWORD = 3;
+}

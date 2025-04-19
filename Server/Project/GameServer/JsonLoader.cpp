@@ -25,7 +25,71 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 		return;
 	}
 
-	Load(file, room, ECollision_Channel::Wall);
+	json map;
+
+	file >> map;
+
+	std::unordered_map<std::string, std::pair<std::vector<Vec3>, std::vector<uint32>>> um;
+
+	for (const auto& obj : map)
+	{
+		std::string name = obj["name"];
+		std::vector<float> pos = obj["position"];
+		std::vector<float> rot = obj["rotation"];
+		std::vector<float> scale = obj["scale"];
+		std::vector<float> size = obj["size"];
+		std::vector<float> mat = obj["matrix"];
+
+		Matrix matrix;
+		matrix._11 = mat[0]; matrix._12 = mat[1]; matrix._13 = mat[2]; matrix._14 = mat[3];
+		matrix._21 = mat[4]; matrix._22 = mat[5]; matrix._23 = mat[6]; matrix._24 = mat[7];
+		matrix._31 = mat[8]; matrix._32 = mat[9]; matrix._33 = mat[10]; matrix._34 = mat[11];
+		matrix._41 = mat[12]; matrix._42 = mat[13]; matrix._43 = mat[14]; matrix._44 = mat[15];
+
+		std::vector<Vec3> vertices;
+		std::vector<Vec3> worldVertices;
+		std::vector<UINT32> indices;
+
+		if (um.find(name) != um.end())
+		{
+			vertices = um[name].first;
+			indices = um[name].second;
+		}
+		else
+		{
+			for (const auto& vertex : obj["vertex"])
+			{
+				vertices.push_back({ vertex[0], vertex[1], vertex[2] });
+			}
+
+			for (const auto& index : obj["index"])
+			{
+				indices.push_back(index);
+			}
+			um[name].first = vertices;
+			um[name].second = indices;
+		}
+
+		for (const Vector3& localVertex : vertices)
+		{
+			Vec3 worldVertex = Vec3::Transform(localVertex, matrix);
+			worldVertices.push_back(worldVertex);
+		}
+
+		std::vector<WorldTriangle> triangles;
+		for (int i = 0; i + 2 < indices.size(); i += 3)
+		{
+			triangles.push_back({ worldVertices[indices[i]], worldVertices[indices[i + 1]], worldVertices[indices[i + 2]] });
+		}
+
+		CGameObjectRef object = CObjectUtil::CreateObject();
+		object->m_Triangles = triangles;
+		object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0] * scale[0], size[1] * scale[1], size[2] * scale[2]), XMFLOAT3(rot[0], rot[1], rot[2]));
+		object->GetCollider()->SetWorldTriangle(triangles);
+		object->GetCollider()->SetCollisionProfile("Wall");
+		room->GetLevelCollision()->AddCollider(object->GetCollider(), ECollision_Channel::Wall);
+		room->AddObject((uint32)EObject_Type::Wall, object);
+	}
 	LoadMonster(fileName, room);
 }
 
@@ -41,43 +105,34 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 		return;
 	}
 
-	Load(file, room, ECollision_Channel::Monster);
-	std::cout << "Json read완료" << std::endl;
-}
-
-void CJsonLoader::Load(std::ifstream& file, CRoomRef room, ECollision_Channel channel)
-{
 	json map;
 
 	file >> map;
+
 
 	for (const auto& obj : map)
 	{
 		std::string name = obj["name"];
 		std::vector<float> pos = obj["position"];
+		std::vector<float> rot = obj["rotation"];
+		std::vector<float> scale = obj["scale"];
 		std::vector<float> size = obj["size"];
 
-		switch (channel)
-		{
-		case ECollision_Channel::Monster:
-		{
-			CMonsterRef object = CObjectUtil::CreateMonster();
-			object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0], size[1], size[2]), XMFLOAT3(0, 100, 0));
-			object->GetCollider()->SetCollisionProfile("Monster");
-			object->MonsterInfo->mutable_object_info()->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
-			object->SetState(Protocol::MOVE_STATE_IDLE);
-			room->AddObject((uint32)EObject_Type::Monster, object);
-			break;
-		}
-		case ECollision_Channel::Wall:
-		{
-			CGameObjectRef object = CObjectUtil::CreateObject();
-			object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0], size[1], size[2]));
-			object->GetCollider()->SetCollisionProfile("Wall");
-			room->GetLevelCollision()->AddCollider(object->GetCollider(), channel);
-			room->AddObject((uint32)EObject_Type::Wall, object);
-			break;
-		}
-		}
+		CMonsterRef object = CObjectUtil::CreateMonster();
+		object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0], size[1], size[2]), XMFLOAT3(rot[0], rot[1], rot[2]), XMFLOAT3(0, 100, 0));
+		object->GetCollider()->SetCollisionProfile("Monster");
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
+		object->SetState(Protocol::MOVE_STATE_IDLE);
+		room->AddMonster(object);
+		//room->AddObject((uint32)EObject_Type::Monster, object);
+		break;
 	}
+
+
+	std::cout << "Json read완료" << std::endl;
+}
+
+void CJsonLoader::Load(std::ifstream& file, CRoomRef room, ECollision_Channel channel)
+{
+	
 }

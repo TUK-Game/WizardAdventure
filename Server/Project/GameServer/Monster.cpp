@@ -3,9 +3,15 @@
 #include "CreatureCollider.h"
 #include "MonsterAI.h"
 #include "MonsterCollider.h"
+#include "Room.h"
 
 CMonster::CMonster()
 {
+	if (ObjectInfo)
+	{
+		delete ObjectInfo;
+	}
+
 	ObjectInfo = new Protocol::ObjectInfo();
 	PosInfo = new Protocol::PosInfo();
 	MonsterInfo = new Protocol::MonsterInfo();
@@ -34,6 +40,12 @@ void CMonster::Update(float deltaTime)
 
 void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
+	if (dest->GetProfile()->channel == ECollision_Channel::Projectile &&
+		Protocol::MOVE_STATE_NONE != m_State)
+	{
+		m_State = Protocol::MOVE_STATE_NONE;
+		g_Room->RemoveObject((uint32)EObject_Type::Monster, MonsterInfo->object_id());
+	}
 }
 
 void CMonster::CollisionEvent(CBoxCollider* src, CBoxCollider* dest)

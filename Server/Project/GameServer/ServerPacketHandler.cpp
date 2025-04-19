@@ -5,6 +5,8 @@
 #include "ObjectUtil.h"
 #include "Player.h"
 #include "GameSession.h"
+#include "Projectile.h"
+#include "ProjectilePool.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -83,5 +85,62 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 
 	g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
 
+	return true;
+}
+
+bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PROJECTILE& pkt)
+{
+	const auto& info = pkt.info();
+
+	CProjectileRef projectile = g_pool->Allocate();
+	assert(projectile != nullptr);
+
+	ProjectileState state;
+	state.Direction = Vec3(info.dir().x(), info.dir().y(), info.dir().z());
+	state.Size = Vec3(info.size().x(), info.size().y(), info.size().z());
+	state.Speed = info.speed();
+	state.ElapsedTime = info.duration();
+	state.damage = info.damage();
+
+
+	projectile->SetProjectileState(state);
+	projectile->ProjectileInfo->set_projectile_id(info.new_projectile_id());
+	projectile->SetCollisionExplosion(pkt.info().bcollisionexplosion());
+	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(info.spawn_pos().x());
+	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(info.spawn_pos().y());
+	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(info.spawn_pos().z());
+	projectile->SetCollisionBoxInfo(Vec3(info.spawn_pos().x(), info.spawn_pos().y(), info.spawn_pos().z()), state.Size, Vec3(0.f, 0.f, 0.f));
+	projectile->m_meshType = pkt.mesh();
+	g_Room->DoAsync(&CRoom::HandleSpawnProjectile, projectile);
+	std::cout << "¹ß»ç!" << info.player_id() << "°¡ ½ô\n";
+	return true;
+}
+
+bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJECTILE& pkt)
+{
+	const auto& info = pkt.projectile_info();
+	
+	int projectile_id = info.projectile_id();
+	
+	CProjectileRef object = std::dynamic_pointer_cast<CProjectile>(g_Room->GetLayerObject((uint32)EObject_Type::Projectile, projectile_id));
+	if (object == nullptr)
+		return true;
+	const auto& posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->position();
+	const auto& rotInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->rotation();
+	const auto state = pkt.projectile_info().state();
+	
+	auto* pos = object->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+	auto* rot = object->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation();
+	pos->set_x(posInfo.x());
+	pos->set_y(posInfo.y());
+	pos->set_z(posInfo.z());
+	
+	rot->set_x(rotInfo.x());
+	rot->set_y(rotInfo.y());
+	rot->set_z(rotInfo.z());
+
+	object->ProjectileInfo->set_state(state);
+
+	g_Room->DoAsync(&CRoom::HandleMoveProjectile, object);
 	return true;
 }

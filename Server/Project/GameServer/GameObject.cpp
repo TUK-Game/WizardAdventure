@@ -15,10 +15,10 @@ CGameObject::CGameObject()
 
 CGameObject::~CGameObject()
 {
-	if(ObjectInfo)	
-		delete ObjectInfo;
-	if (PosInfo)
-		delete PosInfo;
+	//if(ObjectInfo)	
+	//	delete ObjectInfo;
+	//if (PosInfo)
+	//	delete PosInfo;
 	if (m_BoxCollider)
 		delete m_BoxCollider;
 }

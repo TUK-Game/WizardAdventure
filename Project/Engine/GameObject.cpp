@@ -229,7 +229,7 @@ void CGameObject::SetProtocolStateForClient(Protocol::MoveState state)
 		m_StateManager->HandleEvent(this, "Attack_R");
 		break;
 	case Protocol::MOVE_STATE_SKILL_MOUSE_R:
-		m_StateManager->HandleEvent(this, "Attack_R");
+		m_StateManager->HandleEvent(this, "Attack_RButton");
 		break;
 	case Protocol::MOVE_STATE_SKILL_MOUSE_L:
 		m_StateManager->HandleEvent(this, "Attack_LButton");
@@ -282,7 +282,7 @@ void CGameObject::AddComponent(CComponent* component)
 	}
 	else
 	{
-		// 이미 가지고 있는 컴포넌트인 경우
+		// 이미 가지고 있는 컴포넌트인 경우	
 		assert(!m_arrComponent[(int)type]);
 		m_arrComponent[(int)type] = component;
 

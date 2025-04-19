@@ -58,7 +58,7 @@ void CLayer::SafeRemoveGameObject(CGameObject* obj)
 
 void CLayer::FlushPendingObjects()
 {
-	for (const PendingAddObject& item : m_vecPendingAddObjects)
+	for (const PendingAddObject& item : m_vecPendingAddObjects)	
 	{
 		AddGameObject(item.parent, item.bChildMove);
 	}

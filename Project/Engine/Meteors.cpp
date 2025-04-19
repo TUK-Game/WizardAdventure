@@ -10,30 +10,39 @@
 #include "LevelManager.h"
 #include "Engine.h"
 #include "SkillDamage.h"
+#include "ServerSession.h"
+#include "NetworkManager.h"
 
 CMeteors::CMeteors(Vec3 centerPos, int count, float interval)
     : m_CenterPos(centerPos), m_TotalCount(count), m_Interval(interval)
 {
+    m_type = SKILL::FIRE_METEORS;
     AddComponent(new CTransform());
 }
 
 void CMeteors::Update()
 {
-    CGameObject::Update();
-    m_ElapsedTime += DELTA_TIME;
-    if (m_ElapsedTime >= m_Interval)
+    CSkillObject::Update();
+    if (m_bOwn)
     {
-        m_ElapsedTime = 0.f;
-        SpawnMeteor();
-        ++m_SpawnedCount;
+        m_ElapsedTime += DELTA_TIME;
+        if (m_ElapsedTime >= m_Interval)
+        {
+            m_ElapsedTime = 0.f;
+            SpawnMeteor();
+            ++m_SpawnedCount;
+        }
     }
 }
 
 void CMeteors::FinalUpdate()
 {
     CGameObject::FinalUpdate();
-    if (m_SpawnedCount >= m_TotalCount) {
-        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+    if (m_bOwn)
+    {
+        if (m_SpawnedCount >= m_TotalCount) {
+            CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+        }
     }
 }
 
@@ -56,11 +65,14 @@ void CMeteors::SpawnMeteor()
     meteor->SetDuration(5.5f);
     meteor->SetCaster(GetCaster());
     meteor->SetDamage(SkillDamage::Meteor);
+    meteor->SetEnable(false);
 
     CRigidBody* rigidbody = meteor->GetRigidBody();
     rigidbody->SetGravity(true);
     rigidbody->SetDrag(0.f);
     rigidbody->SetVelocity(Vec3(RandomFloat(-300.f, 300.f), 0.f, RandomFloat(-300.f, 300.f)));
 
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteor, 3, false);
+    CNetworkManager::GetInst()->s_GameSession->SpawnSkill(meteor);
+
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteor, 12, false);
 }

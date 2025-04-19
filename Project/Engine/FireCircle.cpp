@@ -10,6 +10,7 @@
 
 CFireCircle::CFireCircle()
 {
+    m_type = SKILL::FIRE_CIRCLE;
     AddComponent(new CTransform());
     AddComponent(new CMeshRenderer());  
     GetTransform()->SetRelativeScale(500.f, 500.f, 200.f);
@@ -21,14 +22,18 @@ CFireCircle::CFireCircle()
 
 void CFireCircle::Update()
 {
-    CGameObject::Update();
+    CSkillObject::Update();
 }
 
 void CFireCircle::FinalUpdate()
 {
     CGameObject::FinalUpdate();
-    m_ElapsedTime += DELTA_TIME;
-    if (m_ElapsedTime >= m_Duration) {
-        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+    if (m_bOwn)
+    {
+        m_ElapsedTime += DELTA_TIME;
+        if (m_ElapsedTime >= m_Duration) {
+            m_bDelete = true;
+            //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+        }
     }
 }

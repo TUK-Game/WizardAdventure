@@ -49,6 +49,9 @@
     <Filter Include="07. Math">
       <UniqueIdentifier>{498efb10-c839-46db-b648-ddad6cfad307}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Game\GameObject\Creature\Projectile">
+      <UniqueIdentifier>{f53452d4-605a-472b-8a38-c5b6fb9c98e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Util.cpp">
@@ -118,7 +121,15 @@
     <ClCompile Include="SimpleMath.cpp">
       <Filter>07. Math</Filter>
     </ClCompile>
-    <ClCompile Include="MonsterCollider.cpp" />
+    <ClCompile Include="MonsterCollider.cpp">
+      <Filter>06. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>01. Game\GameObject\Creature\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectilePool.cpp">
+      <Filter>01. Game\GameObject\Creature\Projectile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -187,7 +198,15 @@
     <ClInclude Include="SimpleMath.h">
       <Filter>07. Math</Filter>
     </ClInclude>
-    <ClInclude Include="MonsterCollider.h" />
+    <ClInclude Include="MonsterCollider.h">
+      <Filter>06. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>01. Game\GameObject\Creature\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectilePool.h">
+      <Filter>01. Game\GameObject\Creature\Projectile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\protoc-21.12-win64\bin\GenPackets.bat">

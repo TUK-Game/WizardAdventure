@@ -13,11 +13,27 @@ void CMonsterCollider::Update()
 	g_Room->GetLevelCollision()->AddCollider(this, m_Channel);
 }
 
-void CMonsterCollider::SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 offset)
+void CMonsterCollider::SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 rotation, XMFLOAT3 offset)
 {
 	m_BoundingBox.Center = centerPos;
 
 	m_BoundingBox.Extents = XMFLOAT3(size.x / 2, size.y / 2, size.z / 2);
+
+    XMVECTOR rotRad = XMVectorSet(
+        XMConvertToRadians(rotation.x),
+        XMConvertToRadians(rotation.y),
+        XMConvertToRadians(rotation.z),
+        0.0f
+    );
+
+    XMVECTOR quatX = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), XMVectorGetX(rotRad));
+    XMVECTOR quatY = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), XMVectorGetY(rotRad));
+    XMVECTOR quatZ = XMQuaternionRotationAxis(XMVectorSet(0, 0, 1, 0), XMVectorGetZ(rotRad));
+
+    XMVECTOR q = XMQuaternionMultiply(quatX, XMQuaternionMultiply(quatY, quatZ));
+
+    XMStoreFloat4(&m_BoundingBox.Orientation, q);
+
 	m_Offset = offset;
 	((CMonster*)m_Owner)->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(centerPos.x);
 	((CMonster*)m_Owner)->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(centerPos.y);

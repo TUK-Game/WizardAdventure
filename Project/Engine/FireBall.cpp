@@ -11,9 +11,14 @@
 #include "ParticleSystemManager.h"
 #include "Engine.h"
 
+#include "NetworkManager.h"
+#include "ServerSession.h"
+
 CFireBall::CFireBall()
     : m_Speed(1000.f)
 {
+    m_type = SKILL::FIRE_BALL;
+
     AddComponent(new CTransform());
     AddComponent(new CMeshRenderer());  
     GetTransform()->SetRelativeScale(30.f, 30.f, 30.f);
@@ -27,7 +32,7 @@ CFireBall::CFireBall()
 
 void CFireBall::Update()
 {
-    CGameObject::Update();
+    CSkillObject::Update();
 }
 
 void CFireBall::FinalUpdate()
@@ -35,13 +40,17 @@ void CFireBall::FinalUpdate()
     if (m_ParticleObject)
         m_ParticleObject->GetParticleSystem()->SetBasePos(GetTransform()->GetRelativePosition());
     CGameObject::FinalUpdate();
-    m_ElapsedTime += DELTA_TIME;
-    if (m_ElapsedTime >= m_Duration) {
-        if (m_ParticleObject) {
-            CParticleSystemManager::GetInst()->Return(m_ParticleObject);
-            m_ParticleObject = nullptr;
+    if (m_bOwn)
+    {
+        m_ElapsedTime += DELTA_TIME;
+        if (m_ElapsedTime >= m_Duration) {
+            if (m_ParticleObject) {
+                CParticleSystemManager::GetInst()->Return(m_ParticleObject);
+                m_ParticleObject = nullptr;
+            }
+            //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+            m_bDelete = true;
         }
-        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
     }
 
     auto pos = GetTransform()->GetRelativePosition();

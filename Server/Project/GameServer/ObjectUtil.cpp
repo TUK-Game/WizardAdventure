@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "GameSession.h"
 #include "Monster.h"
+#include "Projectile.h"
 
 std::atomic<int64>	CObjectUtil::s_IdGenerator = 1;
 
@@ -47,4 +48,15 @@ CMonsterRef CObjectUtil::CreateMonster()
 	monster->MonsterInfo->set_object_id(newId);
 
 	return monster;
+}
+
+CProjectileRef CObjectUtil::CreateProjectile()
+{
+	const int64 newId = s_IdGenerator.fetch_add(1);
+
+	CProjectileRef projectile = std::make_shared<CProjectile>();
+
+	projectile->ProjectileInfo->set_projectile_id(newId);
+
+	return projectile;
 }

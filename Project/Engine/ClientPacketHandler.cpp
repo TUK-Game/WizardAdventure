@@ -12,6 +12,11 @@
 #include "CameraScript.h"
 #include "Monster.h"
 #include "Layer.h"
+#include "SkillObject.h"
+#include "FireBall.h"
+#include "FireSword.h"
+#include "FirePillar.h"
+#include "FireCircle.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -56,6 +61,57 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	CRenderManager::GetInst()->GetMainCamera()->SetTarget(player);
 	CNetworkManager::GetInst()->s_GameSession->SetOwnPlayer(player);
 	CNetworkManager::GetInst()->s_GameSession->SetClientID(id);
+	return true;
+}
+
+bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_SPAWN_PROJECTILE_SUCESSE& pkt)
+{
+	UINT64 id = pkt.projectile_id();
+	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
+	if (map.find(id) != map.end())
+	{
+		map[id]->SetEnable(true);
+	}
+	else
+	{
+		const auto& size = pkt.mutable_size();
+		switch (pkt.mesh())
+		{
+		case Protocol::FIRE_CIRCLE:
+		{
+			CFireCircle* magic = new CFireCircle();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_BALL:
+		{
+			CFireBall* magic = new CFireBall();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_PILLAR:
+		{
+			CFirePillar* magic = new CFirePillar();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_SWORD:
+		{
+			CFireSword* magic = new CFireSword();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		}
+		
+	}
 	return true;
 }
 
@@ -120,7 +176,7 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		{
 			monster = new CMonster();
 			monsterMap[objectId] = monster;
-			level->AddGameObject(monster, 11, false);
+			level->SafeAddGameObject(monster, 11, false);
 		}
 
 		const Protocol::PosInfo& posInfo = info.object_info().pos_info();
@@ -128,11 +184,44 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		const Protocol::Vector3& rot = posInfo.rotation();
 		Protocol::MoveState state = posInfo.state();
 
+		if (state == Protocol::MOVE_STATE_NONE)
+		{
+			level->GetLayer(11)->SafeRemoveGameObject(monsterMap[objectId]);
+			monsterMap.erase(objectId);
+			continue;
+		}
+
 		// 몬스터 정보 갱신
-		//monster->GetTransform()->SetRelativePosition({ pos.x(), pos.y(), pos.z() });
 		monster->SetTarget(Vec3(pos.x(), pos.y(), pos.z()), Vec3(rot.x(), rot.y(), rot.z()));
-		//monster->GetTransform()->SetRelativeRotation({ rot.x(), rot.y(), rot.z() });
 		monster->SetProtocolStateForClientMonster(state);
+	}
+	return true;
+}
+
+bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE_INFO& pkt)
+{
+	std::cout << "받음" << std::endl;
+	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
+	UINT64 id = pkt.projectile_info().projectile_id();
+	if (map.find(id) == map.end())
+		return false;
+
+	if (pkt.mutable_projectile_info()->state() == Protocol::COLLISION)
+	{
+		//map[id]->SetActive(false);
+		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->SafeRemoveGameObject(map[id]);
+		map.erase(id);
+	}
+	else
+	{
+		const auto& pos = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
+		const auto& rot = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_rotation();
+		auto& object = map[id];
+		if (object)
+		{
+			object->GetTransform()->SetRelativePosition(Vec3(pos->x(), pos->y(), pos->z()));
+			object->GetTransform()->SetRelativeRotation(Vec3(rot->x(), rot->y(), rot->z()));
+		}
 	}
 	return true;
 }
@@ -147,7 +236,6 @@ bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 	CLevelManager::GetInst()->GetPlayer(id)->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
 	//CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(rotation.x(), rotation.y(), rotation.z());
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
-	std::cout << position.x() << " " << position.y() << " " << position.z() << '\n';
 	return true;
 }
 
