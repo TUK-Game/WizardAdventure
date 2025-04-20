@@ -55,7 +55,7 @@ void CMeteors::SpawnMeteor()
 
     float offsetX = cosf(theta) * r;
     float offsetZ = sinf(theta) * r;
-    Vec3 spawnPos = m_CenterPos + Vec3(offsetX, RandomFloat(1300.f, 1500.f), offsetZ);
+    Vec3 spawnPos = m_CenterPos + Vec3(offsetX, RandomFloat(1300.f, 1500.f), RandomFloat(1000.f, 2000.f));
 
     CFireBall* meteor = new CFireBall();
     meteor->GetTransform()->SetRelativePosition(spawnPos);
@@ -65,12 +65,13 @@ void CMeteors::SpawnMeteor()
     meteor->SetDuration(5.5f);
     meteor->SetCaster(GetCaster());
     meteor->SetDamage(SkillDamage::Meteor);
+    meteor->UseSmokeTrail();
     meteor->SetEnable(false);
 
     CRigidBody* rigidbody = meteor->GetRigidBody();
     rigidbody->SetGravity(true);
     rigidbody->SetDrag(0.f);
-    rigidbody->SetVelocity(Vec3(RandomFloat(-300.f, 300.f), 0.f, RandomFloat(-300.f, 300.f)));
+    rigidbody->SetVelocity(Vec3(RandomFloat(-300.f, 300.f), -1500.f, RandomFloat(-2000.f, -1000.f)));
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(meteor);
 

@@ -27,7 +27,8 @@ CFireBall::CFireBall()
     AddComponent(new CRigidBody());
 
     // AddComponent(new CCollider());      
-    m_ParticleObject = CParticleSystemManager::GetInst()->Request();
+    m_FireParticle = CParticleSystemManager::GetInst()->Request();
+
 }
 
 void CFireBall::Update()
@@ -37,8 +38,11 @@ void CFireBall::Update()
 
 void CFireBall::FinalUpdate()
 {
-    if (m_ParticleObject)
-        m_ParticleObject->GetParticleSystem()->SetBasePos(GetTransform()->GetRelativePosition());
+    Vec3 pos = GetTransform()->GetRelativePosition();
+    if (m_FireParticle)
+        m_FireParticle->GetParticleSystem()->SetBasePos(pos);
+    if (m_SmokeParticle)
+        m_SmokeParticle->GetParticleSystem()->SetBasePos(pos);
 
     CGameObject::FinalUpdate();
 
@@ -51,14 +55,16 @@ void CFireBall::FinalUpdate()
         }
     }
 
-    auto pos = GetTransform()->GetRelativePosition();
-
     if (pos.y < 10.f) {
-        if (m_ParticleObject) {
-            CParticleSystemManager::GetInst()->Return(m_ParticleObject);
-            m_ParticleObject = nullptr;
+        if (m_FireParticle) {
+            CParticleSystemManager::GetInst()->Return(m_FireParticle);
+            m_FireParticle = nullptr;
         }
-        CParticleSystemManager::GetInst()->RequestExplodeAt(pos);
+        if (m_SmokeParticle) {
+            CParticleSystemManager::GetInst()->Return(m_SmokeParticle);
+            m_SmokeParticle = nullptr;
+        }
+        //CParticleSystemManager::GetInst()->RequestExplodeAt(pos);
         CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
         CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
         CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
@@ -70,4 +76,12 @@ void CFireBall::FinalUpdate()
 void CFireBall::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
 {
     CSkillObject::CollisionBegin(src, dest); 
+}
+
+void CFireBall::UseSmokeTrail()
+{
+    m_SmokeParticle = CParticleSystemManager::GetInst()->Request();
+    if (m_SmokeParticle)
+        m_SmokeParticle->GetParticleSystem()->SetTexture(L"Smoke");
+
 }

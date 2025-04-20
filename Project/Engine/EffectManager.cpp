@@ -23,6 +23,8 @@ void CEffectManager::Init()
     explosion.scaleOverTime = true;
     explosion.startScale = 80.f;
     explosion.endScale = 250.f;
+    explosion.startAlpha = 1.f;
+    explosion.endAlpha = 0.5f;
     RegisterEffectTemplate(L"Explosion", explosion);
 
     BillboardEffectDesc smoke;

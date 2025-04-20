@@ -17,7 +17,7 @@ CParticleSystem::CParticleSystem() : CComponent(EComponent_Type::ParticleSystem)
 	m_ComputeSharedBuffer->Init(sizeof(ComputeSharedInfo), 1);
 
 	m_Mesh = CAssetManager::GetInst()->FindAsset<CMesh>(L"Point");
-	m_GraphicsMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"Particle");
+	m_GraphicsMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"Particle")->Clone();
 	m_ComputeMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"ComputeParticle");
 
 	CTexture* tex = CAssetManager::GetInst()->FindAsset<CTexture>(L"Spark");

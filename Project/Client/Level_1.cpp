@@ -73,7 +73,7 @@ void CLevel_1::Init()
 
 #pragma endregion
 
-	CParticleSystemManager::GetInst()->Init(10, this);
+	CParticleSystemManager::GetInst()->Init(30, this);
 	CEffectManager::GetInst()->Init();
 
 #pragma region UI_Camera

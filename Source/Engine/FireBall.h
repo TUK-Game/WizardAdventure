@@ -10,9 +10,11 @@ public:
     void SetDirection(const Vec3& dir) { m_Direction = dir; }
     void SetSpeed(float speed) { m_Speed = speed; }
     void SetDuration(float duration) { m_Duration = duration; }
-    void SetParticleObject(CGameObject* object) { m_ParticleObject = object; }
+    void SetParticleObject(CGameObject* object) { m_FireParticle = object; }
+    void UseSmokeTrail();
 
-    CGameObject* GetParticleObject() { return m_ParticleObject; }
+    CGameObject* GetFireParticleObject() { return m_FireParticle; }
+    CGameObject* GetSmokeParticleObject() { return m_SmokeParticle; }
 
     virtual void Update();
     virtual void FinalUpdate();
@@ -20,7 +22,9 @@ public:
     virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
 
 private:
-    CGameObject* m_ParticleObject = nullptr;
+    CGameObject* m_FireParticle = nullptr;
+    CGameObject* m_SmokeParticle = nullptr;
+
     Vec3 m_Direction;
     float m_Speed;
     float m_Duration = 0.3f;
