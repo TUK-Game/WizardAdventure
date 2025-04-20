@@ -69,6 +69,7 @@ void CRoom::Update()
 		if(player)
 		{
 			player->Update(m_DeltaTime);
+			HandlePlayer(player, m_DeltaTime);
 		}
 	}
 
@@ -251,13 +252,13 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 	XMFLOAT3 moveAmount = ProtoToXMFLOAT3(player->m_NextAmount);
 
 	moveAmount.x /= static_cast<float>(step);
-	moveAmount.y /= static_cast<float>(step);
+	moveAmount.y = 0;
 	moveAmount.z /= static_cast<float>(step);
 
 	for (int i = 1; i <= step; ++i)
 	{
 		nowPos.x += moveAmount.x;
-		nowPos.y += moveAmount.y;
+		nowPos.y += 0;
 		nowPos.z += moveAmount.z;
 
 		ToProtoVector3(&protoNow, nowPos);
@@ -268,20 +269,72 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 		{
 			std::cout << "박음" << std::endl;
 			Protocol::Vector3& dir = player->GetDir();
-			const float ratio = 1.1f;
 			nowPos.x -= moveAmount.x;
-			nowPos.y -= moveAmount.y;
 			nowPos.z -= moveAmount.z;
 
 			XMVECTOR dirVec = XMVectorSet(dir.x(), dir.y(), dir.z(), 0.0f);
 			dirVec = XMVector3Normalize(dirVec);
 			if(player->GetState() != Protocol::MOVE_STATE_DASH && player->GetState() != Protocol::MOVE_STATE_DASH_END)
+			{
 				dirVec = XMVectorScale(dirVec, -20);
+			}
 
 			XMVECTOR now = XMLoadFloat3(&nowPos);
 			now = XMVectorSubtract(now, dirVec);
 			XMStoreFloat3(&nowPos, now);
+			ToProtoVector3(&protoNow, nowPos);
+			break;
+		}
+	}
 
+	Protocol::S_MOVE movePkt;
+	auto* moveInfo = movePkt.mutable_player_move_info();
+	moveInfo->set_player_id(player->PlayerInfo->player_id());
+
+	auto* posInfo = moveInfo->mutable_pos_info();
+	ToProtoVector3(posInfo->mutable_position(), nowPos);
+
+	const auto& rot = player->PlayerInfo->object_info().pos_info().rotation();
+	ToProtoVector3(posInfo->mutable_rotation(), XMFLOAT3(rot.x(), rot.y(), rot.z()));
+
+	posInfo->set_state(player->GetState());
+
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
+	Broadcast(sendBuffer, player->PlayerInfo->player_id());
+
+	if (auto session = player->GetSession())
+		session->Send(sendBuffer);
+
+	return true;
+}
+
+bool CRoom::HandlePlayer(CPlayerRef player, float deltaTime)
+{
+	int step = 1;
+	//Protocol::Vector3& protoNow = *player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+	auto& protoNow = *player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+	XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
+	// 이동량
+	XMFLOAT3 moveAmount = XMFLOAT3(0.f, -deltaTime * 9.8f * 5, 0.f);
+
+	moveAmount.y /= static_cast<float>(step);
+
+	for (int i = 1; i <= step; ++i)
+	{
+		nowPos.y += moveAmount.y;
+
+		ToProtoVector3(&protoNow, nowPos);
+
+		player->GetCollider()->Update();
+		auto box = player->GetCollider();
+		box->SetBoxHeight(0.f);
+		if (m_LevelCollision->CollisionWithWall(box))
+		{
+			nowPos.y = 0.f;
+			std::cout << "땅" << std::endl;
+			//nowPos.y -= moveAmount.y;
+			//nowPos.y += 1;
+			//nowPos.y = max(round(nowPos.y), 0);
 			ToProtoVector3(&protoNow, nowPos);
 			break;
 		}

@@ -17,6 +17,7 @@ public:
 public:
 	bool Collision(CBoxCollider* dest);
 	virtual void SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 rotation, XMFLOAT3 offset = XMFLOAT3(0.f, 0.f, 0.f));
+	void SetBoxHeight(float height);
 
 	void CreateCollisionProfile(std::string name, ECollision_Channel channel);
 	void SetCollisionProfile(const std::string& name);

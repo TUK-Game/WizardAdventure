@@ -113,7 +113,14 @@ void CBoxCollider::SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 rotati
 	m_Owner->PosInfo->mutable_position()->set_x(centerPos.x);
 	m_Owner->PosInfo->mutable_position()->set_y(centerPos.y);
 	m_Owner->PosInfo->mutable_position()->set_z(centerPos.z);
-}	
+}
+void CBoxCollider::SetBoxHeight(float height)
+{
+	XMFLOAT3 center = m_BoundingBox.Center;
+	center.y = height;
+	m_BoundingBox.Center = center;
+}
+
 
 void CBoxCollider::Update()
 {
