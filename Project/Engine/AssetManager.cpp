@@ -203,7 +203,14 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"explosionSheet.png");
 	AddAsset(L"explosionSheet", tex);
+	
+	tex = new CTexture;
+	tex->Init(path / L"ShockwaveSheet.png");
+	AddAsset(L"ShockwaveSheet", tex);
 
+	tex = new CTexture;
+	tex->Init(path / L"SmokeSheet.png");
+	AddAsset(L"SmokeSheet", tex);
 	return S_OK;
 }
 

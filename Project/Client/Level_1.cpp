@@ -30,6 +30,7 @@
 #include <Engine/TextWindow.h>
 #include <Engine/ParticleSystemManager.h>
 #include <Engine/AnimatedBillboardEffect.h>
+#include <Engine/EffectManager.h>
 
 CLevel_1::CLevel_1()
 {
@@ -73,6 +74,7 @@ void CLevel_1::Init()
 #pragma endregion
 
 	CParticleSystemManager::GetInst()->Init(10, this);
+	CEffectManager::GetInst()->Init();
 
 #pragma region UI_Camera
 	{
@@ -239,14 +241,16 @@ void CLevel_1::Init()
 		CAnimatedBillboardEffect* effect = new CAnimatedBillboardEffect;
 		effect->SetName(L"Effect_Test");
 		BillboardEffectDesc desc;
-		desc.textureKey = L"explosionSheet";
-		desc.spriteX = 7;
-		desc.spriteY = 7;
-		desc.framePerSecond = 30.f;
+		desc.textureKey = L"ShockwaveSheet";
+		desc.spriteX = 8;
+		desc.spriteY = 8;
+		desc.framePerSecond = 128.f;
 		desc.loop = true;
 		desc.scaleOverTime = true;
-		desc.startScale = 3.5f;
-		desc.endScale = 8.0f;
+		desc.startScale = 10.f;
+		desc.endScale = 20.0f;
+		desc.startAlpha = 1.f;
+		desc.endAlpha = 1.f;
 
 		effect->Init(desc);
 		effect->GetTransform()->SetRelativePosition({ 0.f, 0.f, 0.f });
@@ -280,4 +284,5 @@ void CLevel_1::End()
 {
 	CLevel::End();
 	CParticleSystemManager::GetInst()->Clear();
+	CEffectManager::GetInst()->Clear();
 }

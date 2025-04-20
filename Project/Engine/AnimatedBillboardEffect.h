@@ -11,6 +11,8 @@ struct BillboardEffectDesc
     bool scaleOverTime = false;
     float startScale = 1.0f;
     float endScale = 2.0f;
+    float startAlpha = 1.f;
+    float endAlpha = 1.f;
 };
 
 class CAnimatedBillboardEffect :
@@ -21,6 +23,7 @@ public:
     virtual ~CAnimatedBillboardEffect();
 
     void Init(const BillboardEffectDesc& desc);
+    void Reset();
     virtual void Update() override;
     virtual void FinalUpdate() override;
 

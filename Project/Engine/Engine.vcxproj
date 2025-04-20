@@ -198,6 +198,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Device.h" />
+    <ClInclude Include="EffectManager.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Enum.pb.h" />
     <ClInclude Include="ParticleSystemManager.h" />
@@ -362,6 +363,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="ComputeShader.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="Device.cpp" />
+    <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Enum.pb.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

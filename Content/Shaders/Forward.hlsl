@@ -133,13 +133,14 @@ float4 PS_TexSkill(VS_TEX_OUT input) : SV_Target
 // Topology: POINTLIST
 // g_tex_0 : Output Texture
 // AlphaBlend : true
-// int_1 : spriteX (가로 셀 수)
-// int_2 : spriteY (세로 셀 수)
+// int_1 : spriteX 
+// int_2 : spriteY 
 // int_3 : currentFrame
 // float_0 : start scale
 // float_1 : end scale
 // float_2 : current frame (for scale)
 // float_3 : total frame count
+// vec2_2 = (startAlpha, endAlpha)
 
 struct VS_BILLBOARD_IN
 {
@@ -209,6 +210,12 @@ float4 PS_BillboardAnimated(PS_IN input) : SV_Target
     float2 offset = float2(x, y) / float2(spriteX, spriteY);
     float2 finalUV = frameUV + offset;
 
-    return tex_0.Sample(sam_0, finalUV);
+    float4 color = tex_0.Sample(sam_0, finalUV);
+
+    // 알파 보간
+    float alpha = lerp(vec2_2.x, vec2_2.y, float(float_2) / float(float_3));
+    color.a *= alpha;
+
+    return color;
 }
 #endif

@@ -228,11 +228,17 @@
     <Filter Include="JSON">
       <UniqueIdentifier>{3386179b-56b2-45aa-80b5-6aeb24ee4602}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Manager\17. ParticleSystem">
-      <UniqueIdentifier>{70a82853-671d-4eb1-a7fc-ad6f71e08535}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. GameObject\Effect">
       <UniqueIdentifier>{fe5bcfa7-6882-49db-8f69-14b4ed2f5458}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\17. Effect">
+      <UniqueIdentifier>{da6eb2a6-f3d7-4238-87b2-6f653df45ed3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\17. Effect\ParticleSystem">
+      <UniqueIdentifier>{70a82853-671d-4eb1-a7fc-ad6f71e08535}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\17. Effect\AnimatedBillboard">
+      <UniqueIdentifier>{bcc0beca-9ae0-4c65-a4e8-43603875f1e6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -621,10 +627,13 @@
       <Filter>03. GameObject\Player\Skill</Filter>
     </ClInclude>
     <ClInclude Include="ParticleSystemManager.h">
-      <Filter>01. Manager\17. ParticleSystem</Filter>
+      <Filter>01. Manager\17. Effect\ParticleSystem</Filter>
     </ClInclude>
     <ClInclude Include="AnimatedBillboardEffect.h">
       <Filter>03. GameObject\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectManager.h">
+      <Filter>01. Manager\17. Effect\AnimatedBillboard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -959,10 +968,13 @@
       <Filter>03. GameObject\Player\Skill</Filter>
     </ClCompile>
     <ClCompile Include="ParticleSystemManager.cpp">
-      <Filter>01. Manager\17. ParticleSystem</Filter>
+      <Filter>01. Manager\17. Effect\ParticleSystem</Filter>
     </ClCompile>
     <ClCompile Include="AnimatedBillboardEffect.cpp">
       <Filter>03. GameObject\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectManager.cpp">
+      <Filter>01. Manager\17. Effect\AnimatedBillboard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

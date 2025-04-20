@@ -9,8 +9,8 @@
 #include "LevelManager.h"
 #include "ParticleSystem.h"
 #include "ParticleSystemManager.h"
+#include "EffectManager.h"
 #include "Engine.h"
-
 #include "NetworkManager.h"
 #include "ServerSession.h"
 
@@ -51,16 +51,18 @@ void CFireBall::FinalUpdate()
         }
     }
 
-    //auto pos = GetTransform()->GetRelativePosition();
+    auto pos = GetTransform()->GetRelativePosition();
 
-    //if (pos.y < 10.f) {
-    //    if (m_ParticleObject) {
-    //        CParticleSystemManager::GetInst()->Return(m_ParticleObject);
-    //        m_ParticleObject = nullptr;
-    //    }
-    //    CParticleSystemManager::GetInst()->RequestExplodeAt(pos);
-    //    CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
-    //}
+    if (pos.y < 10.f) {
+        if (m_ParticleObject) {
+            CParticleSystemManager::GetInst()->Return(m_ParticleObject);
+            m_ParticleObject = nullptr;
+        }
+        CParticleSystemManager::GetInst()->RequestExplodeAt(pos);
+        CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
+        CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
+        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+    }
 
 
 }

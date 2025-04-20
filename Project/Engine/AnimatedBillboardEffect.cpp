@@ -34,6 +34,8 @@ void CAnimatedBillboardEffect::Init(const BillboardEffectDesc& desc)
     material->SetFloat(1, desc.endScale);             // float_1
     material->SetFloat(2, 0.f);                       // float_2: current frame (for scale)
     material->SetFloat(3, static_cast<float>(m_TotalFrames)); // float_3: total frames
+    material->SetVec2(2, Vec2(desc.startAlpha, desc.endAlpha)); // vec2_2
+
 
     GetMeshRenderer()->SetMesh(mesh);
     GetMeshRenderer()->SetMaterial(material);
@@ -62,4 +64,14 @@ void CAnimatedBillboardEffect::Update()
 void CAnimatedBillboardEffect::FinalUpdate()
 {
     CGameObject::FinalUpdate();
+}
+
+void CAnimatedBillboardEffect::Reset()
+{
+    m_AccTime = 0.f;
+    m_CurrentFrame = 0;
+
+    auto mat = GetMeshRenderer()->GetMaterial();
+    mat->SetInt(3, 0); // int_3 = frame index
+    mat->SetFloat(2, 0.f); // float_2 = current frame (for scale)
 }
