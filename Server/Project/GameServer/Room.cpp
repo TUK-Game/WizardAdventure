@@ -142,7 +142,9 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 
 	newPlayer->PlayerInfo->mutable_object_info()->mutable_pos_info()->set_allocated_position(position);
 	newPlayer->GetCollider()->SetCollisionProfile("Player");
-	newPlayer->GetCollider()->SetBoxInfo(XMFLOAT3(11240.f, 20.f, 1127.f), XMFLOAT3(100.f, 200.f, 24.f), XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0.f, 100.f, 0.f));
+	newPlayer->GetCollider()->SetBoxInfo(XMFLOAT3(11240.f, 20.f, 1127.f), XMFLOAT3(120.f, 200.f, 64.f), XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0.f, 100.f, 0.f));
+
+	GetLevelCollision()->AddCollider(newPlayer->GetCollider(), ECollision_Channel::Player);
 
 	// 입장 사실을 새 플레이어에게 알린다
 	{
@@ -263,11 +265,11 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 		ToProtoVector3(&protoNow, nowPos);
 
-		player->GetCollider()->Update();
+		const auto& box = player->GetCollider();
+		box->Update();
 
-		if (m_LevelCollision->CollisionWithWall(player->GetCollider()))
+		if (m_LevelCollision->CollisionWithWall(box) || m_LevelCollision->CollisionWithPlayer(box))
 		{
-			std::cout << "박음" << std::endl;
 			Protocol::Vector3& dir = player->GetDir();
 			nowPos.x -= moveAmount.x;
 			nowPos.z -= moveAmount.z;

@@ -43,8 +43,6 @@ void CPlayer::Update(float deltaTime)
 			};
 
 			ToProtoVector3(&m_NextAmount, scaledDir);
-
-			std::cout << m_NextAmount.x() << " " << m_NextAmount.y() << " " << m_NextAmount.z() << '\n';
 		}
 		g_Room->HandleMovePlayer(m_Session.lock()->Player);
 	}
