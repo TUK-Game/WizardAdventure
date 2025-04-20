@@ -28,7 +28,8 @@ CFireBall::CFireBall()
 
     // AddComponent(new CCollider());      
     m_FireParticle = CParticleSystemManager::GetInst()->Request();
-
+    if (m_FireParticle)
+        m_FireParticle->GetParticleSystem()->SetTexture(L"Spark");
 }
 
 void CFireBall::Update()
