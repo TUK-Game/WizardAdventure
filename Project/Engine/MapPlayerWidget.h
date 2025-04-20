@@ -12,7 +12,8 @@ public:
 	virtual void Update() override;
 
 public:
-	bool InitPlayer();
+
+	bool InitPlayer(class CPlayer* player, int idx);
 	void ConvertPositionToMap();
 
 public:
@@ -21,12 +22,8 @@ public:
 private:
 	CGameObject* m_OwnerPlayer;
 
-	float m_AspectRatio;
 	Vec3 m_PlayerPosition;
-	Vec3 m_MapSize;
 	Vec2 m_MapMax;
 	Vec2 m_MapMin;
-	Vec3 m_MapCenter;
-	Vec3 m_Offset;
 };
 

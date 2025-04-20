@@ -9,5 +9,6 @@ public:
 
 public:
     virtual bool Init();
+    void AddPlayer(class CPlayer* player, int idx);
 };
 

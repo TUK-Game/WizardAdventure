@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "AssetManager.h"
 #include "MapPlayerWidget.h"
+#include "Player.h"
 
 TestWidget::TestWidget()
 {
@@ -25,9 +26,15 @@ bool TestWidget::Init()
 	widget->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 	widget->GetTransform()->SetRelativeScale(2, 2, 2);
 
-	CMapPlayerWidget* pwidget = CreateWidget<CMapPlayerWidget>(L"PI");
+	//CMapPlayerWidget* pwidget = CreateWidget<CMapPlayerWidget>(L"PI");
 
 	return true;
+}
+
+void TestWidget::AddPlayer(CPlayer* player, int idx)
+{
+	CMapPlayerWidget* pwidget = CreateWidget<CMapPlayerWidget>(L"PI" + idx);
+	pwidget->InitPlayer(player, idx);
 }
 
 

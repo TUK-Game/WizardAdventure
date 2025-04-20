@@ -67,11 +67,9 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	CNetworkManager::GetInst()->s_GameSession->SetClientID(id);
 
 	const auto& window = CLevelManager::GetInst()->GetCurrentLevel()->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow");
-	
-	const auto& widget = window->FindWidget(L"PI");
-	if (widget)
+	if (window)
 	{
-		((CMapPlayerWidget*)widget)->InitPlayer();
+		window->AddPlayer(player, id);
 		window->SetEnable(false);
 	}
 	return true;
@@ -141,6 +139,11 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
 	CLevelManager::GetInst()->SetPlayer(player, info.player_id());
 
+	const auto& window = CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::MAP_WINDOW);
+	if (window)
+	{
+		((TestWidget*)window)->AddPlayer(player, info.player_id());
+	}
 	return true;
 }
 
@@ -161,6 +164,12 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 
 		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
 		CLevelManager::GetInst()->SetPlayer(player, info.player_id());
+
+		const auto& window = CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::MAP_WINDOW);
+		if (window)
+		{
+			((TestWidget*)window)->AddPlayer(player, info.player_id());
+		}
 	}
 	return true;
 }

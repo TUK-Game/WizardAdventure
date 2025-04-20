@@ -6,6 +6,7 @@
 #include "AssetManager.h"
 #include "Level.h"
 #include "Engine.h"
+#include "Player.h"
 
 CMapPlayerWidget::CMapPlayerWidget()
 {
@@ -15,23 +16,35 @@ CMapPlayerWidget::~CMapPlayerWidget()
 {
 }
 
-bool CMapPlayerWidget::InitPlayer()
+bool CMapPlayerWidget::InitPlayer(CPlayer* player, int idx)
 {
-	m_OwnerPlayer = CLevelManager::GetInst()->GetOwnPlayer();
-	m_MapCenter = CLevelManager::GetInst()->GetCurrentLevel()->GetMapCenter();
-	m_MapSize = CLevelManager::GetInst()->GetCurrentLevel()->GetMapSize() * 2;
+	m_OwnerPlayer = player;
 	m_MapMax = CLevelManager::GetInst()->GetCurrentLevel()->GetMapMaxToCamera();
 	m_MapMin = CLevelManager::GetInst()->GetCurrentLevel()->GetMapMinToCamera();
 
 	AddComponent(new CMeshRenderer);
 	AddComponent(new CTransform);
-	SetTexture(L"Kita");
+
+	switch (idx)
+	{
+	case 0:
+	{
+		SetTexture(L"Kita");
+	}
+	break;
+	case 1:
+	{
+		SetTexture(L"Nigika");
+	}
+	break;
+	case 2:
+	{
+		SetTexture(L"Hitori");
+	}
+	break;
+	}
 	GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 	GetTransform()->SetRelativeScale(0.05f, 0.05f, 0.05f);
-
-	float MapAspectRatio = m_MapSize.x / m_MapSize.y;
-	float TextureAspectRatio = (float)(CEngine::GetInst()->GetWindowInfo().Width) / (float)(CEngine::GetInst()->GetWindowInfo().Height);
-	m_AspectRatio = MapAspectRatio / TextureAspectRatio;
 
 	return true;
 }
