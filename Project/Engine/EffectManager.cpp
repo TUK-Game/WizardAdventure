@@ -32,10 +32,12 @@ void CEffectManager::Init()
     smoke.spriteX = 8;
     smoke.spriteY = 8;
     smoke.framePerSecond = 64.f;
-    smoke.loop = true;
+    smoke.loop = false;
     smoke.scaleOverTime = true;
-    smoke.startScale = 1.f;
-    smoke.endScale = 15.f;
+    smoke.startScale = 50.f;
+    smoke.endScale = 100.f;
+    smoke.startAlpha = 1.f;
+    smoke.endAlpha = 0.f;
     RegisterEffectTemplate(L"Smoke", smoke);
 
     BillboardEffectDesc shockwave;
@@ -94,6 +96,48 @@ CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, 
     return effect;
 }
 
+CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, const Vec3& pos, const Vec3& direction, float speed, bool useGravity)
+{
+    auto it = m_mapTemplates.find(name);
+    if (it == m_mapTemplates.end())
+        return nullptr;
+
+    auto desc = it->second; 
+    desc.useRigidMove = true;
+    desc.initialVelocity = direction * speed;
+    desc.useGravity = useGravity;
+
+    auto& pool = m_mapPool[name];
+    CAnimatedBillboardEffect* effect = nullptr;
+    bool isNew = false;
+
+    if (!pool.empty())
+    {
+        effect = pool.front();
+        pool.pop();
+    }
+    else
+    {
+        effect = new CAnimatedBillboardEffect;
+        effect->SetName(name);
+        effect->Init(desc);
+        isNew = true;
+    }
+
+    effect->SetEnable(true);
+    effect->SetDesc(desc); 
+    effect->Reset();
+    effect->GetTransform()->SetRelativePosition(pos);
+
+    if (isNew)
+    {
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(effect, 2, false);
+    }
+
+    m_activeEffects.push_back(effect);
+    return effect;
+}
+
 void CEffectManager::Update()
 {
     for (auto it = m_activeEffects.begin(); it != m_activeEffects.end(); )
@@ -108,6 +152,19 @@ void CEffectManager::Update()
         {
             ++it;
         }
+    }
+}
+
+void CEffectManager::SpawnRadialSmoke(const Vec3& centerPos, int smokeCount, float speed)
+{
+    for (int i = 0; i < smokeCount; ++i)
+    {
+        float angleDeg = 360.0f / smokeCount * i;
+        float angleRad = XMConvertToRadians(angleDeg);
+
+        Vec3 dir = Vec3(cosf(angleRad), 0.f, sinf(angleRad));
+        dir.Normalize();
+        SpawnEffect(L"Smoke", centerPos, dir, speed);
     }
 }
 

@@ -64,9 +64,11 @@ void CFireBall::FinalUpdate()
             CParticleSystemManager::GetInst()->Return(m_SmokeParticle);
             m_SmokeParticle = nullptr;
         }
-        //CParticleSystemManager::GetInst()->RequestExplodeAt(pos);
+        CEffectManager::GetInst()->SpawnRadialSmoke(pos);
         CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
         CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
+
+
         CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
     }
 

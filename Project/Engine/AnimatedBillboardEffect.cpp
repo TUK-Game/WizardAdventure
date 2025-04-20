@@ -4,12 +4,14 @@
 #include "Material.h"
 #include "MeshRenderer.h"
 #include "Transform.h"
+#include "RigidBody.h"
 #include "Engine.h"
 
 CAnimatedBillboardEffect::CAnimatedBillboardEffect()
 {
     AddComponent(new CTransform());
     AddComponent(new CMeshRenderer());
+    AddComponent(new CRigidBody());
 }
 
 CAnimatedBillboardEffect::~CAnimatedBillboardEffect()
@@ -74,4 +76,12 @@ void CAnimatedBillboardEffect::Reset()
     auto mat = GetMeshRenderer()->GetMaterial();
     mat->SetInt(3, 0); // int_3 = frame index
     mat->SetFloat(2, 0.f); // float_2 = current frame (for scale)
+
+    CRigidBody* rigid = GetRigidBody();
+    if (rigid && m_Desc.useRigidMove)
+    {
+        rigid->SetKinematic(true); // 움직임 허용
+        rigid->SetVelocity(m_Desc.initialVelocity);
+        rigid->SetGravity(m_Desc.useGravity);
+    }
 }
