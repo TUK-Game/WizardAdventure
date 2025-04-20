@@ -29,6 +29,7 @@
 #include <Engine/TestWidget.h>
 #include <Engine/TextWindow.h>
 #include <Engine/ParticleSystemManager.h>
+#include <Engine/AnimatedBillboardEffect.h>
 
 CLevel_1::CLevel_1()
 {
@@ -231,6 +232,26 @@ void CLevel_1::Init()
 		this->AddGameObject(obj, 4, false);
 	}
 
+#pragma endregion
+
+#pragma region EFFECT_TEST
+	{
+		CAnimatedBillboardEffect* effect = new CAnimatedBillboardEffect;
+		effect->SetName(L"Effect_Test");
+		BillboardEffectDesc desc;
+		desc.textureKey = L"explosionSheet";
+		desc.spriteX = 7;
+		desc.spriteY = 7;
+		desc.framePerSecond = 30.f;
+		desc.loop = true;
+		desc.scaleOverTime = true;
+		desc.startScale = 3.5f;
+		desc.endScale = 8.0f;
+
+		effect->Init(desc);
+		effect->GetTransform()->SetRelativePosition({ 0.f, 0.f, 0.f });
+		this->AddGameObject(effect, 2, false);
+	}
 #pragma endregion
 }
 

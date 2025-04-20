@@ -200,6 +200,10 @@ int CAssetManager::LoadTexture()
 	tex->Init(path / L"Spark.png");
 	AddAsset(L"Spark", tex);
 
+	tex = new CTexture;
+	tex->Init(path / L"explosionSheet.png");
+	AddAsset(L"explosionSheet", tex);
+
 	return S_OK;
 }
 
@@ -399,6 +403,11 @@ int CAssetManager::LoadGraphicShader()
 	name = L"Forward.hlsl";
 	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND}, "VS_Tex", "PS_Tex");
 	AddAsset(L"Texture", shader);
+
+	shader = new CGraphicShader;
+	name = L"Forward.hlsl";
+	LoadShader(shader, name,{ SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND, D3D_PRIMITIVE_TOPOLOGY_POINTLIST },"VS_BillboardAnimated", "PS_BillboardAnimated","GS_BillboardAnimated");
+	AddAsset(L"BillboardAnimated", shader);
 
 	shader = new CGraphicShader;
 	name = L"Forward.hlsl";

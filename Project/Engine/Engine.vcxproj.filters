@@ -231,6 +231,9 @@
     <Filter Include="01. Manager\17. ParticleSystem">
       <UniqueIdentifier>{70a82853-671d-4eb1-a7fc-ad6f71e08535}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. GameObject\Effect">
+      <UniqueIdentifier>{fe5bcfa7-6882-49db-8f69-14b4ed2f5458}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -620,6 +623,9 @@
     <ClInclude Include="ParticleSystemManager.h">
       <Filter>01. Manager\17. ParticleSystem</Filter>
     </ClInclude>
+    <ClInclude Include="AnimatedBillboardEffect.h">
+      <Filter>03. GameObject\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -954,6 +960,9 @@
     </ClCompile>
     <ClCompile Include="ParticleSystemManager.cpp">
       <Filter>01. Manager\17. ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatedBillboardEffect.cpp">
+      <Filter>03. GameObject\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -127,4 +127,88 @@ float4 PS_TexSkill(VS_TEX_OUT input) : SV_Target
     
     return skillColor;
 }
+
+
+// [BillboardAnimated Shader]
+// Topology: POINTLIST
+// g_tex_0 : Output Texture
+// AlphaBlend : true
+// int_1 : spriteX (°¡·Î ¼¿ ¼ö)
+// int_2 : spriteY (¼¼·Î ¼¿ ¼ö)
+// int_3 : currentFrame
+// float_0 : start scale
+// float_1 : end scale
+// float_2 : current frame (for scale)
+// float_3 : total frame count
+
+struct VS_BILLBOARD_IN
+{
+    float3 pos : POSITION;
+};
+
+struct VS_BILLBOARD_OUT
+{
+    float3 worldPos : TEXCOORD0;
+};
+
+struct PS_IN
+{
+    float4 pos : SV_Position;
+    float2 uv : TEXCOORD;
+};
+
+VS_BILLBOARD_OUT VS_BillboardAnimated(VS_BILLBOARD_IN input)
+{
+    VS_BILLBOARD_OUT output = (VS_BILLBOARD_OUT) 0;
+    output.worldPos = mul(float4(input.pos, 1.f), matWorld).xyz;
+    return output;
+}
+
+[maxvertexcount(6)]
+void GS_BillboardAnimated(point VS_BILLBOARD_OUT input[1], inout TriangleStream<PS_IN> triStream)
+{
+    float3 center = input[0].worldPos;
+
+    float3 look = normalize(center - cameraPosition);
+    float3 up = float3(0, 1, 0);
+    float3 right = normalize(cross(up, look));
+    float3 trueUp = cross(look, right);
+
+    float scale = lerp(float_0, float_1, float(float_2) / float(float_3));
+
+    float3 corners[4] =
+    {
+        center + (-right - trueUp) * scale, // 0: bottom left
+        center + (-right + trueUp) * scale, // 1: top left
+        center + (right + trueUp) * scale, // 2: top right
+        center + (right - trueUp) * scale // 3: bottom right
+    };
+
+    float2 uvs[4] = { float2(0, 1), float2(0, 0), float2(1, 0), float2(1, 1) };
+    int indices[6] = { 0, 1, 2, 0, 2, 3 };
+
+    for (int i = 0; i < 6; ++i)
+    {
+        int idx = indices[i];
+        PS_IN o;
+        o.pos = mul(float4(corners[idx], 1.0f), mul(matView, matProjection));
+        o.uv = uvs[idx];
+        triStream.Append(o);
+    }
+}
+
+float4 PS_BillboardAnimated(PS_IN input) : SV_Target
+{
+    int spriteX = int_1;
+    int spriteY = int_2;
+    int currentFrame = int_3;
+
+    float2 frameUV = input.uv / float2(spriteX, spriteY);
+    int x = currentFrame % spriteX;
+    int y = currentFrame / spriteX;
+    float2 offset = float2(x, y) / float2(spriteX, spriteY);
+    float2 finalUV = frameUV + offset;
+
+    return tex_0.Sample(sam_0, finalUV);
+}
 #endif
