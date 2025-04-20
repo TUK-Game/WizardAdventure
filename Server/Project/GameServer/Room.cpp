@@ -315,7 +315,7 @@ bool CRoom::HandlePlayer(CPlayerRef player, float deltaTime)
 	auto& protoNow = *player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
 	XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
 	// ¿Ãµø∑Æ
-	XMFLOAT3 moveAmount = XMFLOAT3(0.f, -deltaTime * 9.8f * 5, 0.f);
+	XMFLOAT3 moveAmount = XMFLOAT3(0.f, -deltaTime * GRAVITY, 0.f);
 
 	moveAmount.y /= static_cast<float>(step);
 
@@ -330,12 +330,11 @@ bool CRoom::HandlePlayer(CPlayerRef player, float deltaTime)
 		box->SetBoxHeight(0.f);
 		if (m_LevelCollision->CollisionWithWall(box))
 		{
-			nowPos.y = 0.f;
-			std::cout << "∂•" << std::endl;
-			//nowPos.y -= moveAmount.y;
-			//nowPos.y += 1;
-			//nowPos.y = max(round(nowPos.y), 0);
-			ToProtoVector3(&protoNow, nowPos);
+			if(nowPos.y > -20.f)
+			{
+				nowPos.y = 0.f;
+				ToProtoVector3(&protoNow, nowPos);
+			}
 			break;
 		}
 	}

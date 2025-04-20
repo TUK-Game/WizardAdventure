@@ -58,7 +58,7 @@ struct CollisionProfile
 	std::vector<ECollision_Interaction>	vecCollisionInteraction;
 };
 
-
+#define GRAVITY 98
 #define MAX_PLAYERS 4
 #define PROJECTILE_MAX_NUM 100
 

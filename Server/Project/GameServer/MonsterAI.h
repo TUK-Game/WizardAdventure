@@ -20,6 +20,7 @@ private:
     void UpdateAI(float deltaTime);
     void Chase(float deltaTime);
     void HandleMoveMonster(float deltaTime);
+    void HandleGravityMonster(float deltaTime);
 private:
     float m_DetectRange = 5000.f;
     float m_AttackRange = 500.f;

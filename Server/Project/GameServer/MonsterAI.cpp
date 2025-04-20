@@ -150,6 +150,7 @@ void CMonsterAI::Chase(float deltaTime)
     RotateToTarget(deltaTime);
 
     HandleMoveMonster(deltaTime);
+    HandleGravityMonster(deltaTime);
 }
 
 void CMonsterAI::HandleMoveMonster(float deltaTime)
@@ -162,7 +163,10 @@ void CMonsterAI::HandleMoveMonster(float deltaTime)
     Vec3 dir = targetPosition - myPosition;
     float dist = dir.Length();
 
-    if (dist < 1.f) return; // 너무 가까우면 이동 생략
+    if (dist < 1.f) 
+        return; 
+
+    dir.y = 0.f;
     dir.Normalize();
 
     int step = 1;
@@ -170,17 +174,14 @@ void CMonsterAI::HandleMoveMonster(float deltaTime)
     Protocol::Vector3& protoNow = *m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
     XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
 
-    // 이동량
     Vec3 moveAmount = dir * 300.f * deltaTime;
 
     moveAmount.x /= static_cast<float>(step);
-    moveAmount.y /= static_cast<float>(step);
     moveAmount.z /= static_cast<float>(step);
 
     for (int i = 1; i <= step; ++i)
     {
         nowPos.x += moveAmount.x;
-        nowPos.y += moveAmount.y;
         nowPos.z += moveAmount.z;
 
         ToProtoVector3(&protoNow, nowPos);
@@ -189,10 +190,7 @@ void CMonsterAI::HandleMoveMonster(float deltaTime)
 
         if (g_Room->GetLevelCollision()->CollisionWithWall(m_Owner->GetCollider()))
         {
-            std::cout << "박음" << std::endl;
-
             nowPos.x -= moveAmount.x;
-            nowPos.y -= moveAmount.y;
             nowPos.z -= moveAmount.z;
 
             ToProtoVector3(&protoNow, nowPos);
@@ -201,6 +199,42 @@ void CMonsterAI::HandleMoveMonster(float deltaTime)
     }
 
     m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(nowPos.x);
-    m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(nowPos.y);
     m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(nowPos.z);
+}
+
+void CMonsterAI::HandleGravityMonster(float deltaTime)
+{
+    const auto& myPos = m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->position();
+    Vec3 myPosition = Vec3(myPos.x(), myPos.y(), myPos.z());
+
+    int step = 1;
+
+    Protocol::Vector3& protoNow = *m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+    XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
+
+    float moveAmount = -GRAVITY * deltaTime;
+
+    moveAmount;
+    moveAmount;
+
+    for (int i = 1; i <= step; ++i)
+    {
+        nowPos.y += moveAmount;
+
+        ToProtoVector3(&protoNow, nowPos);
+
+        m_Owner->GetCollider()->Update();
+        auto box = m_Owner->GetCollider();
+        box->SetBoxHeight(0.f);
+        if (g_Room->GetLevelCollision()->CollisionWithWall(box))
+        {
+            if (nowPos.y > -20.f)
+            {
+                nowPos.y = 0.f;
+                ToProtoVector3(&protoNow, nowPos);
+            }
+            break;
+        }
+    }
+    m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(nowPos.y);
 }
