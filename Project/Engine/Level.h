@@ -19,6 +19,9 @@ public:
 	CSharedPtr<class CWidgetWindow> GetWidgetWindow(EWIDGETWINDOW_TYPE type) { return m_vecWidgetWindow[(UINT)type]; }
 	Vec3 GetMapSize() { return m_MapSize; }
 	Vec3 GetMapCenter() { return m_MapCenter; }
+	Vec2 GetMapMaxToCamera() { return m_MapMax; }
+	Vec2 GetMapMinToCamera() { return m_MapMin; }
+
 
 	virtual void Deregister();
 
@@ -87,7 +90,8 @@ protected:
 	std::array<CSharedPtr<class CWidgetWindow>, (UINT)EWIDGETWINDOW_TYPE::END>	m_vecWidgetWindow;
 	Vec3																		m_MapSize;
 	Vec3																		m_MapCenter;
-
+	Vec2																		m_MapMax;
+	Vec2																		m_MapMin;
 public:
 	std::shared_ptr<CSubLevel> m_SubLevel;
 };

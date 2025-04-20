@@ -29,7 +29,8 @@
 #include <Engine/TestWidget.h>
 #include <Engine/TextWindow.h>
 #include <Engine/ParticleSystemManager.h>
-
+#include <Engine/TestWidget.h>
+#include <Engine/Engine.h>
 CLevel_1::CLevel_1()
 {
 	//CLevelManager::GetInst()->SetLevel(this);
@@ -183,21 +184,32 @@ void CLevel_1::Init()
 
 #pragma region UI MAP
 
+	float centerX = 4919.f;
+	float centerZ = 6754.f;
+	float camHeight = 84667.f;
+	float fov = 10.f;
+
 	CGameObject* mapCamera = new CGameObject;
 	mapCamera->SetName(L"MiniMapCamera");
 	mapCamera->AddComponent(new CTransform);
 	mapCamera->AddComponent(new CCamera);
 	mapCamera->GetCamera()->SetProjType(EProjection_Type::Perspective);
-	mapCamera->GetCamera()->SetFOV(10.f); // 0 : main camera
+	mapCamera->GetCamera()->SetFOV(fov); // 0 : main camera
 	mapCamera->GetCamera()->SetPriority(2); // 0 : main camera
 	mapCamera->GetCamera()->CheckLayerAll();
 	mapCamera->GetCamera()->CheckLayer(4);
 	mapCamera->GetCamera()->SetFar(100000);
-	mapCamera->GetTransform()->SetRelativePosition(4919.f, 84667.f, 6754.f);
+	mapCamera->GetTransform()->SetRelativePosition(centerX, camHeight, centerZ);
 	mapCamera->GetTransform()->SetRelativeRotation(90.f, 0.f, 0.f);
 	this->AddGameObject(mapCamera, 0, false);
 
-
+	float aspect = (float)(CEngine::GetInst()->GetWindowInfo().Width) / (float)(CEngine::GetInst()->GetWindowInfo().Height);   
+	float fovrad = XMConvertToRadians(fov);
+	float halfHeight = camHeight * tan(fovrad / 2.0f);
+	float halfWidth = halfHeight * aspect;
+	
+	m_MapMax = { centerX - halfWidth, centerZ - halfHeight };
+	m_MapMin = { centerX + halfWidth, centerZ + halfHeight };
 
 #pragma endregion
 
@@ -243,6 +255,7 @@ void CLevel_1::Begin()
 	CDevice::GetInst()->RenderBegin();
 	CRenderManager::GetInst()->RenderMap(m_MiniMapBackground);
 	CDevice::GetInst()->RenderEnd();
+
 }
 
 void CLevel_1::Update()

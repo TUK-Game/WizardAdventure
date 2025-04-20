@@ -11,6 +11,7 @@ class CRenderManager :
 
 public:
 	CCamera* GetMainCamera() { return m_vecCamera[0]; }
+	CCamera* GetCamera(int priority) { return m_vecCamera[priority]; }
 public:
 	void ClearRTV();
 	void Render();

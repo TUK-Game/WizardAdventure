@@ -56,11 +56,20 @@ void CCameraScript::Update()
 	}
 	if (KEY_DOWN(EKey::M))
 	{
-		CWidget* widget = CLevelManager::GetInst()->GetCurrentLevel()->FindWidget(L"MiniMap");
+		const auto window = CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::MAP_WINDOW);
+		if (window->GetEnable())
+		{
+			window->SetEnable(false);
+		}
+		else
+		{
+			window->SetEnable(true);
+		}
+	/*	CWidget* widget = CLevelManager::GetInst()->GetCurrentLevel()->FindWidget(L"MiniMap");
 		if(widget->GetEnable())
 			widget->SetEnable(false);
 		else
-			widget->SetEnable(true);
+			widget->SetEnable(true);*/
 	}
 
 	if (GetOwner()->GetCamera()->GetCameraType() == ECamera_Type::Fixed)

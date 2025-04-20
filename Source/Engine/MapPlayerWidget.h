@@ -9,10 +9,10 @@ public:
 	virtual ~CMapPlayerWidget();
 
 public:
-	virtual bool Init() override;
 	virtual void Update() override;
 
 public:
+	bool InitPlayer();
 	void ConvertPositionToMap();
 
 public:
@@ -24,6 +24,8 @@ private:
 	float m_AspectRatio;
 	Vec3 m_PlayerPosition;
 	Vec3 m_MapSize;
+	Vec2 m_MapMax;
+	Vec2 m_MapMin;
 	Vec3 m_MapCenter;
 	Vec3 m_Offset;
 };

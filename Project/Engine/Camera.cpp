@@ -135,6 +135,7 @@ void CCamera::RenderShadow()
 	{
 		object->GetMeshRenderer()->RenderShadow();
 	}
+	//CInstancingManager::GetInst()->Render(m_vecDeferred, L"Shadow");
 }
 
 void CCamera::RenderUI()
@@ -145,7 +146,7 @@ void CCamera::RenderUI()
 		auto windows = pCurLevel->GetWidgetwindows();
 		for (auto& window : windows)
 		{
-			if (window && EWIDGETWINDOW_TYPE::TEXT_WINDOW != window->GetWindowType())
+			if (window && EWIDGETWINDOW_TYPE::TEXT_WINDOW != window->GetWindowType() && window->GetEnable())
 				window->Render();
 		}
 	}

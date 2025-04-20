@@ -24,10 +24,8 @@ bool TestWidget::Init()
 	widget->SetTexture(L"MiniMapTarget");
 	widget->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 	widget->GetTransform()->SetRelativeScale(2, 2, 2);
-	widget->SetEnable(false);
 
-	//CMapPlayerWidget* pwidget = CreateWidget<CMapPlayerWidget>(L"PI");
-
+	CMapPlayerWidget* pwidget = CreateWidget<CMapPlayerWidget>(L"PI");
 
 	return true;
 }

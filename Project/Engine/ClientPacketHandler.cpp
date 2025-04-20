@@ -18,6 +18,10 @@
 #include "FirePillar.h"
 #include "FireCircle.h"
 #include "ParticleSystemManager.h"
+
+#include "TestWidget.h"
+#include "MapPlayerWidget.h"
+
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
 bool Handle_INVALID(CPacketSessionRef& session, BYTE* buffer, int32 len)
@@ -61,6 +65,15 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	CRenderManager::GetInst()->GetMainCamera()->SetTarget(player);
 	CNetworkManager::GetInst()->s_GameSession->SetOwnPlayer(player);
 	CNetworkManager::GetInst()->s_GameSession->SetClientID(id);
+
+	const auto& window = CLevelManager::GetInst()->GetCurrentLevel()->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow");
+	
+	const auto& widget = window->FindWidget(L"PI");
+	if (widget)
+	{
+		((CMapPlayerWidget*)widget)->InitPlayer();
+		window->SetEnable(false);
+	}
 	return true;
 }
 

@@ -96,7 +96,6 @@ void CPlayer::Update()
     GetTransform()->SetRelativeRotation((m_Interpolator->GetInterpolatedRot()));
 #endif // DEBUG_SOLOPLAY
 
-  
     CGameObject::Update();
 }
 

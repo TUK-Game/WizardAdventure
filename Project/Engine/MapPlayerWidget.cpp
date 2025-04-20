@@ -15,17 +15,19 @@ CMapPlayerWidget::~CMapPlayerWidget()
 {
 }
 
-bool CMapPlayerWidget::Init()
+bool CMapPlayerWidget::InitPlayer()
 {
 	m_OwnerPlayer = CLevelManager::GetInst()->GetOwnPlayer();
 	m_MapCenter = CLevelManager::GetInst()->GetCurrentLevel()->GetMapCenter();
 	m_MapSize = CLevelManager::GetInst()->GetCurrentLevel()->GetMapSize() * 2;
+	m_MapMax = CLevelManager::GetInst()->GetCurrentLevel()->GetMapMaxToCamera();
+	m_MapMin = CLevelManager::GetInst()->GetCurrentLevel()->GetMapMinToCamera();
+
 	AddComponent(new CMeshRenderer);
 	AddComponent(new CTransform);
 	SetTexture(L"Kita");
-	GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Sphere"));
-	GetTransform()->SetRelativeScale(0.01f, 0.01f, 0.01f);
-	//SetEnable(false);
+	GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
+	GetTransform()->SetRelativeScale(0.05f, 0.05f, 0.05f);
 
 	float MapAspectRatio = m_MapSize.x / m_MapSize.y;
 	float TextureAspectRatio = (float)(CEngine::GetInst()->GetWindowInfo().Width) / (float)(CEngine::GetInst()->GetWindowInfo().Height);
@@ -36,32 +38,19 @@ bool CMapPlayerWidget::Init()
 
 void CMapPlayerWidget::Update()
 {
-	m_PlayerPosition = m_OwnerPlayer->GetTransform()->GetRelativePosition();
-	ConvertPositionToMap();
+	if (m_OwnerPlayer)
+	{
+		m_PlayerPosition = m_OwnerPlayer->GetTransform()->GetRelativePosition();
+		ConvertPositionToMap();
+	}
 }
 
 void CMapPlayerWidget::ConvertPositionToMap()
 {
-	Vec3 NormalizedPosition;
+	Vec2 playerXZ = Vec2(m_PlayerPosition.x, m_PlayerPosition.z);
+	Vec2 mapSize = m_MapMax - m_MapMin;
+	Vec2 normalizedPos{ 1.0f - (playerXZ.x - m_MapMin.x) / mapSize.x, (playerXZ.y - m_MapMin.y) / mapSize.y };
+	Vec2 ndcPos{ normalizedPos.x * 2.0f - 1.0f, 1.0f - normalizedPos.y * 2.0f };
 
-	float RelativeX = m_PlayerPosition.x - m_MapCenter.x;
-	float Relativez = m_PlayerPosition.z - m_MapCenter.z;
-
-	NormalizedPosition.x = ((RelativeX / (m_MapSize.x / 2)));
-	NormalizedPosition.y = ((Relativez / (m_MapSize.z / 2)));
-
-	if (m_AspectRatio > 1.0f)
-	{
-		NormalizedPosition.x /= m_AspectRatio;
-		NormalizedPosition.y *= m_AspectRatio;
-	}
-	else
-	{
-		NormalizedPosition.x *= m_AspectRatio;
-		NormalizedPosition.y /= m_AspectRatio;
-	}
-
-	std::cout << "X : " << NormalizedPosition.x << " , Y : " << NormalizedPosition.y << '\n';
-
-	GetTransform()->SetRelativePosition(NormalizedPosition);
+	GetTransform()->SetRelativePosition(ndcPos.x, ndcPos.y, 0.f);
 }

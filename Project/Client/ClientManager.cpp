@@ -54,29 +54,6 @@ int CClientManager::Init(HINSTANCE instance)
     std::cout << "====== 서버 연동(Key 0) ======" << std::endl;
     std::cout << std::endl;
 
-    // PhysX TEMP ==================================================
-
-    physx::PxFoundation* foundation = PxCreateFoundation(PX_PHYSICS_VERSION, g_DefaultAllocatorCallback, g_DefaultErrorCallback);
-    if (!foundation)
-    {
-        ASSERT_CRASH("PxCreateFoundation failed!")
-        return E_FAIL;
-    }
-    bool recordMemoryAllocations = true;
-
-    physx::PxTolerancesScale toleranceScale;    // 물리 엔진 내부의 기준 길이/속도/질량 단위를 정의하여 수치 안정성과 정확도를 확보하는 구조체
-    toleranceScale.length = 1.f;    // 1미터
-    toleranceScale.speed = 10.f;   // 10m/s
-
-    physx::PxPhysics* physics = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, toleranceScale, false, nullptr);
-    if (!physics)
-    {
-        ASSERT_CRASH("PxCreatePhysics failed!")
-        return E_FAIL;
-    }
-
-    // =============================================================
-
     return S_OK;
 }
 
