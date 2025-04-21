@@ -307,6 +307,12 @@ int CAssetManager::LoadMaterial()
 		material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Shadow"));
 		AddAsset(L"Shadow", material);
 	}
+	{
+		material = new CMaterial;
+		material->SetGraphicsShader(FindAsset<CGraphicShader>(L"ShadowAnim"));
+		AddAsset(L"ShadowAnim", material);
+	}
+
 
 	{
 		material = new CMaterial;
@@ -431,6 +437,13 @@ int CAssetManager::LoadGraphicShader()
 		name = L"Shadow.hlsl";
 		LoadShader(shader, name, { SHADER_TYPE::SHADOW, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::LESS}, "VS_MAIN", "PS_MAIN");
 		AddAsset(L"Shadow", shader);
+	}
+
+	{
+		shader = new CGraphicShader;
+		name = L"Shadow.hlsl";
+		LoadShader(shader, name, { SHADER_TYPE::SHADOW, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::LESS }, "VS_ANIM", "PS_MAIN");
+		AddAsset(L"ShadowAnim", shader);
 	}
 
 	return S_OK;

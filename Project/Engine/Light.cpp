@@ -12,8 +12,8 @@ CLight::CLight() : CComponent(EComponent_Type::Light)
 	m_ShadowCamera->GetCamera()->CheckLayerAll();
 	UINT8 layerIndex = 4; // UI
 	m_ShadowCamera->GetCamera()->CheckLayer(layerIndex);
-	layerIndex = 10; // Map
-	m_ShadowCamera->GetCamera()->CheckLayer(layerIndex);
+	//layerIndex = 10; // Map
+	//m_ShadowCamera->GetCamera()->CheckLayer(layerIndex);
 	m_ShadowCamera->SetLayerIndex(0);
 }
 
