@@ -36,7 +36,7 @@ void DoWorkerJob(CServerServiceRef& service)
 int main()
 {
 	std::wstring ipAddress = CUtil::GetMyIPv4Address();
-	//ipAddress = L"127.0.0.1";
+	ipAddress = L"127.0.0.1";
 
 	ServerPacketHandler::Init();
 	g_CollisionManager->Init();

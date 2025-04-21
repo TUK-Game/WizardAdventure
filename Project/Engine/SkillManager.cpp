@@ -121,7 +121,7 @@ void CSkillManager::CastFireballTowardQ()
 
 void CSkillManager::SpawnFirePillarAtMouse()
 {
-    Vec3 centerPos = GetMouseGroundPoint(); // ���콺 ��ġ (XZ ���)
+    Vec3 centerPos = GetMouseGroundPoint(); 
 
     CFireCircle* fireCircle = new CFireCircle;
     fireCircle->GetTransform()->SetRelativePosition(centerPos);
@@ -175,7 +175,6 @@ void CSkillManager::FireSwordSpreadShot()
         float angleDeg = i * (360.f / count) + 10.f;
         float angleRad = XMConvertToRadians(angleDeg);
 
-        // ���� ��ġ ��ġ
         float offsetX = cosf(angleRad) * radius;
         float offsetZ = sinf(angleRad) * radius;
         Vec3 spawnPos = center + Vec3(offsetX, 300.f, offsetZ);
@@ -222,16 +221,15 @@ Vec3 CSkillManager::CalculateMouseDirectionFromPlayerTopView(const Vec3& fromPos
     Vec3 rayOrigin, rayDir;
     cam->ScreenToRay(mousePos, cam, rayOrigin, rayDir);
 
-    // XZ ���(Y = fromPos.y) ���� ������
     float t = (fromPos.y - rayOrigin.y) / rayDir.y;
     Vec3 hitPos = rayOrigin + rayDir * t;
 
     Vec3 dir = hitPos - fromPos;
-    dir.y = 0.f; // y ���� ���� (���� �߻�)
+    dir.y = 0.f; 
     if (dir.Length() > 0.001f)
         dir.Normalize();
     else
-        dir = Vec3(0, 0, 1); // �⺻ ����
+        dir = Vec3(0, 0, 1);
 
     return dir;
 }
@@ -245,7 +243,6 @@ Vec3 CSkillManager::CalculateMouseDirectionFromPos(const Vec3& fromPos)
     Vec3 rayOrigin, rayDir;
     cam->ScreenToRay(mousePos, cam, rayOrigin, rayDir);
 
-    // XZ ���(Y = fromPos.y) ���� ������
     float t = -rayOrigin.y / rayDir.y;
     Vec3 hitPos = rayOrigin + rayDir * t;
 
@@ -253,7 +250,7 @@ Vec3 CSkillManager::CalculateMouseDirectionFromPos(const Vec3& fromPos)
     if (dir.Length() > 0.001f)
         dir.Normalize();
     else
-        dir = Vec3(0, 0, 1); // �⺻ ����
+        dir = Vec3(0, 0, 1);
 
     return dir;
 }
@@ -269,7 +266,6 @@ Vec3 CSkillManager::GetMouseGroundPoint()
     Vec3 origin, dir;
     cam->ScreenToRay(mousePos, cam, origin, dir);
 
-    // ��� Y = 0 (����� ����)
     float t = -origin.y / dir.y;
     Vec3 hitPos = origin + dir * t;
     return hitPos;

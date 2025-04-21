@@ -13,7 +13,7 @@ void CPlayerAttackRButtonState::Enter(CGameObject* entity)
     std::vector<CGameObject*> objs = entity->GetChild();
     for (const auto o : objs) {
         CAnimator* ani = o->GetAnimator();
-        ani->Play(L"MAGEATTACK1");
+        ani->Play(L"MAGEATTACK2");
         m_AttackDuration = ani->GetDuration();
     }
     m_ElapsedTime = 0.f;
