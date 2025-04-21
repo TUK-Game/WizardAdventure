@@ -1,6 +1,13 @@
 #pragma once
 #include "SkillObject.h"
 
+enum class EFireBallMode
+{
+    Default,   
+    QSkill,    
+    Meteor     
+};
+
 class CFireBall :
     public CSkillObject
 {
@@ -12,9 +19,19 @@ public:
     void SetDuration(float duration) { m_Duration = duration; }
     void SetParticleObject(CGameObject* object) { m_FireParticle = object; }
     void UseSmokeTrail();
+    void SpawnDeleteEffect();
+    
+    
+    void SetMode(EFireBallMode mode) { m_Mode = mode; }
+    EFireBallMode GetMode() const { return m_Mode; }
+    void SetStartScale(const Vec3& scale) { m_StartScale = scale; }
+    void SetEndScale(const Vec3& scale) { m_EndScale = scale; }
 
     CGameObject* GetFireParticleObject() { return m_FireParticle; }
     CGameObject* GetSmokeParticleObject() { return m_SmokeParticle; }
+
+    void UpdateByMode();
+    void UpdateScaleLerp();
 
     virtual void Update();
     virtual void FinalUpdate();
@@ -24,10 +41,12 @@ public:
 private:
     CGameObject* m_FireParticle = nullptr;
     CGameObject* m_SmokeParticle = nullptr;
-
+    Vec3 m_StartScale = Vec3(30.f, 30.f, 30.f);
+    Vec3 m_EndScale = Vec3(5.f, 5.f, 5.f);
     Vec3 m_Direction;
     float m_Speed;
     float m_Duration = 0.3f;
     float m_ElapsedTime = 0.f;
+    EFireBallMode m_Mode = EFireBallMode::Default;
 };
 

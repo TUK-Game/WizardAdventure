@@ -35,6 +35,7 @@ CFireBall::CFireBall()
 void CFireBall::Update()
 {
     CSkillObject::Update();
+    UpdateByMode();
 }
 
 void CFireBall::FinalUpdate()
@@ -49,13 +50,15 @@ void CFireBall::FinalUpdate()
 
     if (m_bOwn)
     {
-    
         m_ElapsedTime += DELTA_TIME;
         if (m_ElapsedTime >= m_Duration) {
+            SpawnDeleteEffect();
             m_bDelete = true;
         }
     }
 
+
+    // 원래 충돌처리로 해야함
     if (pos.y < 10.f) {
         if (m_FireParticle) {
             CParticleSystemManager::GetInst()->Return(m_FireParticle);
@@ -67,6 +70,7 @@ void CFireBall::FinalUpdate()
         }
         CEffectManager::GetInst()->SpawnRadialSmoke(pos);
         CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
+        CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
         CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
 
 
@@ -87,4 +91,47 @@ void CFireBall::UseSmokeTrail()
     if (m_SmokeParticle)
         m_SmokeParticle->GetParticleSystem()->SetTexture(L"Smoke");
 
+}
+
+void CFireBall::UpdateByMode()
+{
+    switch (m_Mode) {
+    case EFireBallMode::Default:
+        break;
+    case EFireBallMode::QSkill:
+        UpdateScaleLerp();
+        break;
+    case EFireBallMode::Meteor:
+        break;
+    }
+}
+
+void CFireBall::SpawnDeleteEffect()
+{
+    Vec3 pos = GetTransform()->GetRelativePosition();
+    switch (m_Mode) {
+    case EFireBallMode::Default:
+        break;
+    case EFireBallMode::QSkill:
+        CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
+        CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
+        CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
+        break;
+    case EFireBallMode::Meteor:
+        CEffectManager::GetInst()->SpawnRadialSmoke(pos);
+        CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
+        CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
+        CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
+        break;
+    }
+}
+
+
+void CFireBall::UpdateScaleLerp()
+{
+    float t = m_ElapsedTime / m_Duration;
+    t = std::clamp(t, 0.f, 1.f);
+
+    Vec3 newScale = Vec3::Lerp(m_StartScale, m_EndScale, t);
+    GetTransform()->SetRelativeScale(newScale);
 }

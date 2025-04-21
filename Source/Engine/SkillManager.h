@@ -5,11 +5,11 @@ class CSkillManager
 {
 public:
     CSkillManager(EPlayerAttribute attribute, CGameObject* owner);
-    void UseSkill(int skillIndex);
+    void UseSkill(int skillIndex, float duration = 0.f);
 
 private:
     void CastFireballTowardMouse();
-    void CastFireballTowardQ();
+    void CastFireballTowardQ(float duration);
     void CastMeteor();
     void SpawnFirePillarAtMouse();
     void FireSwordSpreadShot();

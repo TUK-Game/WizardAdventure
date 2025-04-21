@@ -23,7 +23,7 @@
 CSkillManager::CSkillManager(EPlayerAttribute attribute, CGameObject* owner)
     : m_Attribute(attribute), m_Owner(owner) {}
 
-void CSkillManager::UseSkill(int skillIndex)
+void CSkillManager::UseSkill(int skillIndex, float duration)
 {
     CPlayer* player = CNetworkManager::GetInst()->s_GameSession->GetOwnPlayer();
     if (m_Owner != player)
@@ -33,7 +33,7 @@ void CSkillManager::UseSkill(int skillIndex)
     {
     case EPlayerAttribute::Fire:
         if (skillIndex == 0)
-            CastFireballTowardQ();
+            CastFireballTowardQ(duration);
         if (skillIndex == 1)
             SpawnFirePillarAtMouse();
         if (skillIndex == 2)
@@ -75,8 +75,10 @@ void CSkillManager::CastFireballTowardMouse()
     CFireBall* fireBall = new CFireBall();
     fireBall->GetTransform()->SetRelativePosition(spawnPos);
     fireBall->SetDirection(fireDir);
-    fireBall->SetSpeed(1200.f);
-    fireBall->GetRigidBody()->ApplyForce(fireDir * 900000.f);
+    fireDir.Normalize();
+    Vec3 velocity = fireDir * 3000.f;
+    fireBall->GetRigidBody()->SetVelocity(velocity);
+
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
     fireBall->SetDamage(SkillDamage::FireBall);
     fireBall->SetEnable(false);
@@ -87,7 +89,7 @@ void CSkillManager::CastFireballTowardMouse()
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 12, false);
 }
 
-void CSkillManager::CastFireballTowardQ()
+void CSkillManager::CastFireballTowardQ(float duration)
 {
     CGameObject* player = m_Owner;
     if (!player) return;
@@ -98,19 +100,25 @@ void CSkillManager::CastFireballTowardQ()
     SetLookRotationY(fireDir);
 
     CFireBall* fireBall = new CFireBall();
-    fireBall->GetTransform()->SetRelativePosition(spawnPos);
-    fireBall->GetTransform()->SetRelativeScale(120.f, 120.f, 120.f);
-    fireBall->SetDirection(fireDir);
-    fireBall->SetDuration(2.5f);
-    fireBall->SetSpeed(1200.f);
+    fireDir.Normalize();
+    Vec3 offset = fireDir * 100.f;
+    fireBall->GetTransform()->SetRelativePosition(spawnPos + offset);
+    Vec3 startScale = Vec3(120.f, 120.f, 120.f);
+    Vec3 endScale = Vec3(30.f, 30.f, 30.f);
+    fireBall->GetTransform()->SetRelativeScale(startScale);
+    fireBall->SetStartScale(startScale);
+    fireBall->SetEndScale(endScale);
 
+    fireBall->SetDuration(duration);
+    fireBall->SetMode(EFireBallMode::QSkill);
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
     fireBall->SetDamage(SkillDamage::FireBallQ);
     fireBall->SetEnable(false);
     fireBall->SetCollisionExplosion(true);
 
     CRigidBody* rigidbody = fireBall->GetRigidBody();
-    rigidbody->ApplyForce(fireDir * 70000.f);
+    Vec3 velocity = fireDir * 400.f;
+    rigidbody->SetVelocity(velocity);
     rigidbody->ApplyTorque(Vec3(0.f, 500.f, 0.f));
     rigidbody->SetAngularDrag(0.01f);
 

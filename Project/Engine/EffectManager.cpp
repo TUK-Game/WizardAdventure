@@ -27,6 +27,19 @@ void CEffectManager::Init()
     explosion.endAlpha = 0.5f;
     RegisterEffectTemplate(L"Explosion", explosion);
 
+    BillboardEffectDesc explosion1;
+    explosion1.textureKey = L"explosionSheet1";
+    explosion1.spriteX = 8;
+    explosion1.spriteY = 8;
+    explosion1.framePerSecond = 96.f;
+    explosion1.loop = false;
+    explosion1.scaleOverTime = true;
+    explosion1.startScale = 80.f;
+    explosion1.endScale = 80.f;
+    explosion1.startAlpha = 1.f;
+    explosion1.endAlpha = 0.5f;
+    RegisterEffectTemplate(L"Explosion1", explosion1);
+
     BillboardEffectDesc smoke;
     smoke.textureKey = L"SmokeSheet";
     smoke.spriteX = 8;
@@ -83,9 +96,50 @@ CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, 
         isNew = true;
     }
 
+    effect->GetTransform()->SetRelativePosition(pos);
     effect->SetEnable(true);
     effect->Reset();
+
+    if (isNew)
+    {
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(effect, 2, false);
+    }
+
+    m_activeEffects.push_back(effect);
+    return effect;
+}
+
+CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, const Vec3& pos, float startScale, float endScale)
+{
+    auto it = m_mapTemplates.find(name);
+    if (it == m_mapTemplates.end())
+        return nullptr;
+
+    BillboardEffectDesc desc = it->second; 
+    desc.startScale = startScale;
+    desc.endScale = endScale;
+
+    auto& pool = m_mapPool[name];
+    CAnimatedBillboardEffect* effect = nullptr;
+    bool isNew = false;
+
+    if (!pool.empty())
+    {
+        effect = pool.front();
+        pool.pop();
+    }
+    else
+    {
+        effect = new CAnimatedBillboardEffect;
+        effect->SetName(name);
+        effect->Init(desc);
+        isNew = true;
+    }
+
     effect->GetTransform()->SetRelativePosition(pos);
+    effect->SetEnable(true);
+    effect->SetDesc(desc); 
+    effect->Reset();
 
     if (isNew)
     {
@@ -124,10 +178,10 @@ CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, 
         isNew = true;
     }
 
+    effect->GetTransform()->SetRelativePosition(pos);
     effect->SetEnable(true);
     effect->SetDesc(desc); 
     effect->Reset();
-    effect->GetTransform()->SetRelativePosition(pos);
 
     if (isNew)
     {

@@ -12,6 +12,7 @@ public:
 public:
     void RegisterEffectTemplate(const std::wstring& name, const BillboardEffectDesc& desc);
     CAnimatedBillboardEffect* SpawnEffect(const std::wstring& name, const Vec3& pos);
+    CAnimatedBillboardEffect* SpawnEffect(const std::wstring& name, const Vec3& pos, float startScale, float endScale);
     CAnimatedBillboardEffect* SpawnEffect(const std::wstring& name, const Vec3& pos, const Vec3& direction, float speed, bool useGravity = false);
     void SpawnRadialSmoke(const Vec3& centerPos, int smokeCount = 6, float speed = 240.f);
 

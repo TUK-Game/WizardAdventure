@@ -175,9 +175,9 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
     }
 }
 
-void CPlayer::Attack(int skillIndex)
+void CPlayer::Attack(int skillIndex, float duration)
 {
-    m_SkillManager->UseSkill(skillIndex);
+    m_SkillManager->UseSkill(skillIndex, duration);
 #ifndef DEBUG_SOLOPLAY
     CNetworkManager::GetInst()->s_GameSession->OnActPlayer();
 #endif 
