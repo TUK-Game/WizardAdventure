@@ -97,7 +97,6 @@ CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, 
     }
 
     effect->GetTransform()->SetRelativePosition(pos);
-    effect->SetEnable(true);
     effect->Reset();
 
     if (isNew)
@@ -105,6 +104,7 @@ CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, 
         CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(effect, 2, false);
     }
 
+    m_pendingEnable.push_back(effect);
     m_activeEffects.push_back(effect);
     return effect;
 }
@@ -137,7 +137,6 @@ CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, 
     }
 
     effect->GetTransform()->SetRelativePosition(pos);
-    effect->SetEnable(true);
     effect->SetDesc(desc); 
     effect->Reset();
 
@@ -146,6 +145,7 @@ CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, 
         CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(effect, 2, false);
     }
 
+    m_pendingEnable.push_back(effect);
     m_activeEffects.push_back(effect);
     return effect;
 }
@@ -179,7 +179,6 @@ CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, 
     }
 
     effect->GetTransform()->SetRelativePosition(pos);
-    effect->SetEnable(true);
     effect->SetDesc(desc); 
     effect->Reset();
 
@@ -188,12 +187,19 @@ CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, 
         CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(effect, 2, false);
     }
 
+    m_pendingEnable.push_back(effect);
     m_activeEffects.push_back(effect);
     return effect;
 }
 
 void CEffectManager::Update()
 {
+    for (auto* effect : m_pendingEnable)
+    {
+        effect->SetEnable(true);
+    }
+    m_pendingEnable.clear();
+
     for (auto it = m_activeEffects.begin(); it != m_activeEffects.end(); )
     {
         CAnimatedBillboardEffect* effect = *it;

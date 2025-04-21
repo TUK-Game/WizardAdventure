@@ -23,5 +23,6 @@ private:
     std::unordered_map<std::wstring, BillboardEffectDesc> m_mapTemplates;
     std::unordered_map<std::wstring, std::queue<CAnimatedBillboardEffect*>> m_mapPool;
     std::vector<CAnimatedBillboardEffect*> m_activeEffects;
+    std::vector<CAnimatedBillboardEffect*> m_pendingEnable;
 };
 
