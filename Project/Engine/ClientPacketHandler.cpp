@@ -72,6 +72,32 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 		window->AddPlayer(player, id);
 		window->SetEnable(false);
 	}
+
+	Protocol::C_ENTER_GAME_SUCCESS GSpkt;
+	switch (player->GetAttribute())
+	{
+	case EPlayerAttribute::Fire:
+	{
+		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_FIRE);
+		player->InitStats(100, 100, 30, 300.f);
+	}
+	break;
+	case EPlayerAttribute::Water:
+	{
+		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_ICE);
+		//player->InitStats(100, 100, 30, 300.f);
+	}
+	break;
+	case EPlayerAttribute::Electric:
+	{
+		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
+		//player->InitStats(100, 100, 30, 300.f);
+	}
+	break;
+	}
+
+	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(GSpkt);
+	session->Send(sendBuffer);
 	return true;
 }
 
@@ -216,6 +242,7 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		// 몬스터 정보 갱신
 		monster->SetTarget(Vec3(pos.x(), pos.y(), pos.z()), Vec3(rot.x(), rot.y(), rot.z()));
 		monster->SetProtocolStateForClientMonster(state);
+		monster->SetStats(info.monster_ablity().maxhp(), info.monster_ablity().hp());
 	}
 	return true;
 }
@@ -266,6 +293,24 @@ bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 	CLevelManager::GetInst()->GetPlayer(id)->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
 	//CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(rotation.x(), rotation.y(), rotation.z());
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
+	return true;
+}
+
+bool Handle_S_UPDATE_PLAYER(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYER& pkt)
+{
+	const auto& info = pkt.player_update_info();
+	UINT64 id = info.player_id();
+
+	const Protocol::Vector3& position = info.pos_info().position();
+	const Protocol::Vector3& rotation = info.pos_info().rotation();
+	Protocol::MoveState state = info.pos_info().state();
+
+	const auto& player = CLevelManager::GetInst()->GetPlayer(id);
+	player->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
+	player->SetProtocolStateForClient(state);
+
+	const auto& stats = info.player_ablity();
+	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp());
 	return true;
 }
 

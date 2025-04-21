@@ -69,7 +69,7 @@ void CRoom::Update()
 		if(player)
 		{
 			player->Update(m_DeltaTime);
-			HandlePlayer(player, m_DeltaTime);
+			UPdatePlayer(player, m_DeltaTime);
 		}
 	}
 
@@ -117,6 +117,10 @@ void CRoom::UpdateMonster()
 		rot->set_z(srcPosInfo.rotation().z());
 
 		destPosInfo->set_state(monster->GetState());
+
+		const auto& stats = monster->GetAblity();
+		info->mutable_monster_ablity()->set_hp(stats->currentHp);
+		info->mutable_monster_ablity()->set_maxhp(stats->maxHp);
 	}
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
@@ -236,6 +240,13 @@ bool CRoom::HandleEnterPlayer(CPlayerRef player)
 	return EnterRoom(player, true);
 }
 
+bool CRoom::HandlePlayerInit(CPlayerRef player)
+{
+	
+
+	return true;
+}
+
 bool CRoom::HandleLeavePlayer(CPlayerRef player)
 {
 	return LeaveRoom(player);
@@ -310,10 +321,9 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 	return true;
 }
 
-bool CRoom::HandlePlayer(CPlayerRef player, float deltaTime)
+bool CRoom::UPdatePlayer(CPlayerRef player, float deltaTime)
 {
 	int step = 1;
-	//Protocol::Vector3& protoNow = *player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
 	auto& protoNow = *player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
 	XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
 	// ÀÌµ¿·®
@@ -341,19 +351,23 @@ bool CRoom::HandlePlayer(CPlayerRef player, float deltaTime)
 		}
 	}
 
-	Protocol::S_MOVE movePkt;
-	auto* moveInfo = movePkt.mutable_player_move_info();
-	moveInfo->set_player_id(player->PlayerInfo->player_id());
+	Protocol::S_UPDATE_PLAYER pkt;
+	auto* info = pkt.mutable_player_update_info();
+	info->set_player_id(player->PlayerInfo->player_id());
 
-	auto* posInfo = moveInfo->mutable_pos_info();
+	auto* posInfo = info->mutable_pos_info();
 	ToProtoVector3(posInfo->mutable_position(), nowPos);
 
 	const auto& rot = player->PlayerInfo->object_info().pos_info().rotation();
 	ToProtoVector3(posInfo->mutable_rotation(), XMFLOAT3(rot.x(), rot.y(), rot.z()));
 
 	posInfo->set_state(player->GetState());
+	const auto& ablity = player->GetAblity();
+	info->mutable_player_ablity()->set_damage(ablity->attack);
+	info->mutable_player_ablity()->set_hp(ablity->currentHp);
+	info->mutable_player_ablity()->set_maxhp(ablity->maxHp);
 
-	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, player->PlayerInfo->player_id());
 
 	if (auto session = player->GetSession())

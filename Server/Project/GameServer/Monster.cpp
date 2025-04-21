@@ -4,6 +4,7 @@
 #include "MonsterAI.h"
 #include "MonsterCollider.h"
 #include "Room.h"
+#include "Projectile.h"
 
 CMonster::CMonster()
 {
@@ -43,8 +44,15 @@ void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 	if (dest->GetProfile()->channel == ECollision_Channel::Projectile &&
 		Protocol::MOVE_STATE_NONE != m_State)
 	{
-		m_State = Protocol::MOVE_STATE_NONE;
-		g_Room->RemoveObject((uint32)EObject_Type::Monster, MonsterInfo->object_id());
+		if (GetAblity()->currentHp > 0)
+		{
+			Damaged((dynamic_cast<CProjectile*>(dest->GetOwner()))->GetAttack());
+		}
+		else
+		{
+			m_State = Protocol::MOVE_STATE_NONE;
+			g_Room->RemoveObject((uint32)EObject_Type::Monster, MonsterInfo->object_id());
+		}
 	}
 }
 

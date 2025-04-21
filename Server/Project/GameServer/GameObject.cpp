@@ -11,6 +11,7 @@ CGameObject::CGameObject()
 
 	m_BoxCollider = new CBoxCollider;
 	m_BoxCollider->SetOwner(this);
+
 }
 
 CGameObject::~CGameObject()

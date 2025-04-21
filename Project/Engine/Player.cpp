@@ -65,6 +65,8 @@ CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
         this->AddChild(o);
     }
 
+    m_Stats = new Stats;
+
     Begin();
 }
 
@@ -74,13 +76,14 @@ CPlayer::~CPlayer()
         delete m_SkillManager;
     if (m_Interpolator)
         delete m_Interpolator;
+    if (m_Stats)
+        delete m_Stats;
 }
 
 void CPlayer::Begin()
 {
     CGameObject::Begin();
     m_StateManager->ChangeState(this, EState_Type::Idle);
-    InitStats();
     m_Interpolator->SetTarget(GetTransform()->GetRelativePosition(), GetTransform()->GetRelativeRotation());
 }
 
@@ -183,14 +186,16 @@ void CPlayer::Attack(int skillIndex)
 
 }
 
+void CPlayer::InitStats(int maxHp, int hp, int attack, float speed)
+{
+    m_Stats->maxHp = maxHp;
+    m_Stats->currentHp = hp;
+    m_Stats->attack = attack;
+    m_Stats->moveSpeed = speed;
+}
+
 void CPlayer::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
 {
-    std::cout << "아야" << std::endl;
 }
 
 
-void CPlayer::InitStats() {
-    GetMutableStats().maxHp = 100;
-    GetMutableStats().currentHp = 100;
-    GetMutableStats().attack = 10;
-}

@@ -40,6 +40,44 @@ bool Handle_C_ENTER_GAME(CPacketSessionRef& session, Protocol::C_ENTER_GAME& pkt
 	return true;
 }
 
+bool Handle_C_ENTER_GAME_SUCCESS(CPacketSessionRef& session, Protocol::C_ENTER_GAME_SUCCESS& pkt)
+{
+	// 속성별 능력치 초기화 및 클라에 전송 -> 전송은 클라가 첨에 값 넣고 중력검사 떄 같이 보내서 동기화하면 ㄱㅊ할 듯
+	uint32 id = pkt.mutable_player()->player_id();
+	auto gameSession = static_pointer_cast<CGameSession>(session);
+	CPlayerRef player = gameSession->Player.load();
+	if (player == nullptr)
+		return false;
+	
+	const auto type = pkt.mutable_player()->player_type();
+	switch (type)
+	{
+	case Protocol::PLAYER_TYPE_FIRE:
+	{
+		player->SetAttribute(EAttribution::FIRE);
+		player->SetAblity(30, 100, 30, 300.f);
+	}
+	break;
+	case Protocol::PLAYER_TYPE_ICE:
+	{
+		player->SetAttribute(EAttribution::ICE);
+		//player->SetAblity(30, 100, 30, 300.f);
+	}
+	break;
+	case Protocol::PLAYER_TYPE_LIGHTNING:
+	{
+		player->SetAttribute(EAttribution::LIGHTNING);
+		//player->SetAblity(30, 100, 30, 300.f);
+	}
+	break;
+	default:
+		break;
+	}
+
+
+	return true;
+}
+
 bool Handle_C_LEAVE_GAME(CPacketSessionRef& session, Protocol::C_LEAVE_GAME& pkt)
 {
 	auto gameSession = static_pointer_cast<CGameSession>(session);
@@ -59,9 +97,8 @@ bool Handle_C_LEAVE_GAME(CPacketSessionRef& session, Protocol::C_LEAVE_GAME& pkt
 
 bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 {
-	// TODO - 움직임 업데이트 로직 및 패킷 재전송
-	// 1. 움직임 업데이트 -> 룸에서 업데이트 하도록 실행
-	// 2. 플레이어 위치정보 포장해서 재전송
+	// TODO 플레이어 스텟 업데이트 - 
+
 	auto gameSession = static_pointer_cast<CGameSession>(session);
 	CPlayerRef player = gameSession->Player.load();
 	if (player == nullptr)
