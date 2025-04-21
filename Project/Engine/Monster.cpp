@@ -75,7 +75,6 @@ void CMonster::Update()
 #endif // DEBUG_SOLOPLAY
 
 	CGameObject::Update();
-	std::cout << "나의 HP는 " << m_Stats->currentHp << " : " << m_Stats->maxHp << "이다\n";
 }
 
 void CMonster::FinalUpdate()

@@ -47,11 +47,12 @@ void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 		if (GetAblity()->currentHp > 0)
 		{
 			Damaged((dynamic_cast<CProjectile*>(dest->GetOwner()))->GetAttack());
-		}
-		else
-		{
-			m_State = Protocol::MOVE_STATE_NONE;
-			g_Room->RemoveObject((uint32)EObject_Type::Monster, MonsterInfo->object_id());
+			if (GetAblity()->currentHp <= 0)
+			{
+				std::cout << "Á×À½\n";
+				m_State = Protocol::MOVE_STATE_NONE;
+				g_Room->RemoveObject((uint32)EObject_Type::Monster, MonsterInfo->object_id());
+			}
 		}
 	}
 }
