@@ -27,9 +27,11 @@ public:
 	std::array<CPlayerRef, MAX_PLAYERS>& GetPlayers() { return m_Players; }
 public:
 	bool HandleEnterPlayer(CPlayerRef player);
+	bool HandlePlayerInit(CPlayerRef player);
 	bool HandleLeavePlayer(CPlayerRef player);
 
 	bool HandleMovePlayer(CPlayerRef player);
+	bool UPdatePlayer(CPlayerRef player, float deltaTime);
 
 	bool HandleSpawnProjectile(CProjectileRef projectile);
 	bool HandleMoveProjectile(CProjectileRef projectile);

@@ -40,6 +40,7 @@ int main()
 
 	ServerPacketHandler::Init();
 	g_CollisionManager->Init();
+	g_Room->Init();
 	CJsonLoader::LoadMap(L"Level_1", g_Room);
 	g_Timer->Init();
 	g_pool->Init(PROJECTILE_MAX_NUM);

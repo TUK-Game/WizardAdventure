@@ -2,13 +2,38 @@
 
 #include "GameObject.h"
 
+struct Ablity
+{
+	int maxHp = 100;
+	int currentHp = 100;
+	int attack = 10;
+	float moveSpeed = 300.f;
+
+	void TakeDamage(int damage) {
+		currentHp = max(currentHp - damage, 0);
+	}
+
+	void Heal(int amount) {
+		currentHp = min(currentHp + amount, maxHp);
+	}
+
+	bool IsDead() const {
+		return currentHp <= 0;
+	}
+};
+
 class CCreature : public CGameObject
 {
 public:
 	CCreature();
 	virtual ~CCreature();
 
+public:
+	Ablity* GetAblity() const { return m_Stats; }
+
+	void Damaged(int damage) { m_Stats->currentHp -= damage; }
+
 protected:
-	bool m_bDeath{};
+	Ablity* m_Stats{ nullptr };
 };
 

@@ -80,7 +80,7 @@ void CSkillManager::CastFireballTowardMouse()
     fireBall->GetRigidBody()->SetVelocity(velocity);
 
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
-    fireBall->SetDamage(SkillDamage::FireBall);
+    fireBall->SetDamage(SkillDamage::FireBall * fireBall->GetCaster()->GetStats()->attack);
     fireBall->SetEnable(false);
     fireBall->SetCollisionExplosion(true);
 
@@ -112,7 +112,7 @@ void CSkillManager::CastFireballTowardQ(float duration)
     fireBall->SetDuration(duration);
     fireBall->SetMode(EFireBallMode::QSkill);
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
-    fireBall->SetDamage(SkillDamage::FireBallQ);
+    fireBall->SetDamage(SkillDamage::FireBallQ * fireBall->GetCaster()->GetStats()->attack);
     fireBall->SetEnable(false);
     fireBall->SetCollisionExplosion(true);
 
@@ -158,7 +158,7 @@ void CSkillManager::SpawnFirePillarAtMouse()
         pillar->SetBasePos(spawnPos);
         pillar->GetTransform()->SetRelativePosition(spawnPos);
         pillar->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
-        pillar->SetDamage(SkillDamage::Pillar);
+        pillar->SetDamage(SkillDamage::Pillar * pillar->GetCaster()->GetStats()->attack);
         pillar->SetEnable(false);
 
         CNetworkManager::GetInst()->s_GameSession->SpawnSkill(pillar);
@@ -199,7 +199,7 @@ void CSkillManager::FireSwordSpreadShot()
         sword->SetWaitTimeForTranslate(1.5f);     
         sword->SetWaitTimeForRotate(1.f);
         sword->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
-        sword->SetDamage(SkillDamage::FireSword);
+        sword->SetDamage(SkillDamage::FireSword * sword->GetCaster()->GetStats()->attack);
         sword->SetEnable(false);
         sword->SetCollisionExplosion(true);
         CNetworkManager::GetInst()->s_GameSession->SpawnSkill(sword);

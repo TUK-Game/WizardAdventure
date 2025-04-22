@@ -67,9 +67,36 @@ void CMeshRenderer::Render(std::shared_ptr<CInstancingBuffer>& buffer)
 void CMeshRenderer::RenderShadow()
 {
 	GetTransform()->GraphicsBinding();
-	//½¦µµ¿ì material 
-	CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->GraphicsBinding();
+
+	if (GetAnimator())
+	{
+		GetAnimator()->PushData();
+		CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetInt(0, 0);
+		CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->GraphicsBinding();
+	}
+	else
+	{
+		CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetInt(0, 0);
+		CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->GraphicsBinding();
+	}
 	m_Mesh->Render();
+}
+
+void CMeshRenderer::RenderShadow(std::shared_ptr<CInstancingBuffer>& buffer)
+{
+	if (GetAnimator())	
+	{
+		GetAnimator()->PushData();
+		CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetInt(0, 1);
+		CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->GraphicsBinding();
+	}
+	else
+	{
+		CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetInt(0, 1);
+		CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->GraphicsBinding();
+	}
+	buffer->PushData();
+	m_Mesh->Render(buffer, 0);
 }
 
 void CMeshRenderer::RenderMap(std::shared_ptr<CInstancingBuffer>& buffer)

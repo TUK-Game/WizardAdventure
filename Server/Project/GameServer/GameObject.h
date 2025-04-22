@@ -1,6 +1,7 @@
 #pragma once
 class CBoxCollider;
 
+
 class CGameObject : public std::enable_shared_from_this<CGameObject>
 {
 	friend class CRoom;

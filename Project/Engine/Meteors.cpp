@@ -12,7 +12,7 @@
 #include "SkillDamage.h"
 #include "ServerSession.h"
 #include "NetworkManager.h"
-
+#include "Player.h"
 CMeteors::CMeteors(Vec3 centerPos, int count, float interval)
     : m_CenterPos(centerPos), m_TotalCount(count), m_Interval(interval)
 {
@@ -64,7 +64,7 @@ void CMeteors::SpawnMeteor()
     meteor->GetTransform()->SetRelativeScale(scale, scale, scale);
     meteor->SetDuration(5.5f);
     meteor->SetCaster(GetCaster());
-    meteor->SetDamage(SkillDamage::Meteor);
+    meteor->SetDamage(SkillDamage::Meteor * m_Caster->GetStats()->attack);
     meteor->UseSmokeTrail();
     meteor->SetEnable(false);
 

@@ -8,7 +8,7 @@ struct ProjectileState
 	float Speed{};
 	float Duration{};
 	float ElapsedTime{};
-	float damage{};
+	int damage{};
 };
 
 class CProjectile : public CGameObject
@@ -19,12 +19,13 @@ public:
 
 public:
 	void SetProjectileState(const Vec3 dir, const Vec3 size, const float speed, const float duration, const float elased) { SetProjectileState(ProjectileState(dir, size, speed, duration, elased)); }
-	void SetProjectileState(const ProjectileState& state) { m_State = state; }
+	void SetProjectileState(const ProjectileState& state) { m_Stats = state; }
 	void SetCollisionBoxInfo(const Vec3& pos, const Vec3& size, const Vec3& rot);
 	void SetCollisionExplosion(bool b) { m_bCollisionExplosion = b; }
 
 	bool GetCollisionExplosino() { return m_bCollisionExplosion; }
-	ProjectileState& GetStateInfo() { return m_State; }
+	ProjectileState& GetStateInfo() { return m_Stats; }
+	int GetAttack() { return m_Stats.damage; }
 public:
 	virtual void Update(float deltaTime) override;
 
@@ -36,6 +37,6 @@ public:
 	Protocol::SkillMesh m_meshType;
 protected:
 	bool m_bCollisionExplosion{};
-	ProjectileState m_State{};
+	ProjectileState m_Stats{};
 };
 

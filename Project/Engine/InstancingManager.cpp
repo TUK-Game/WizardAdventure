@@ -19,12 +19,6 @@ CInstancingManager::~CInstancingManager()
 
 void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects, const std::wstring& materialName)	
 {
-	if(materialName == L"DeferredMap")
-	{
-		CAssetManager::GetInst()->FindAsset<CMaterial>(materialName)->GraphicsBinding();
-	}
-
-
 	// 같은 인스턴스 아이디 같는 오브젝트끼리 모으는 캐쉬
 	std::unordered_map<UINT64, std::vector<CGameObject*>> cache;
 	for (CGameObject* gameObject : gameObjects)
@@ -48,6 +42,10 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects, const st
 			{
 				vec[0]->GetMeshRenderer()->RenderMap();
 			}
+			else if (materialName == L"Shadow")
+			{
+				vec[0]->GetMeshRenderer()->RenderShadow();
+			}
 			else
 			{
 				vec[0]->GetMeshRenderer()->Render();
@@ -64,7 +62,20 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects, const st
 			if (!vec[0]->GetMeshRenderer()->GetMaterial()->GetInt(0))
 			{
 				for (const auto& obj : vec)
-					obj->GetMeshRenderer()->Render();
+				{
+					if (materialName == L"DeferredMap")
+					{
+						obj->GetMeshRenderer()->RenderMap();
+					}
+					else if (materialName == L"Shadow")
+					{
+						obj->GetMeshRenderer()->RenderShadow();
+					}
+					else
+					{
+						obj->GetMeshRenderer()->Render();
+					}
+				}
 				continue;
 			}
 
@@ -81,8 +92,10 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects, const st
 
 			std::shared_ptr<CInstancingBuffer>& buffer = m_Buffers[instanceId];
 
-			if(materialName == L"DeferredMap")
-				vec[0]->GetMeshRenderer()->RenderMap(buffer);	
+			if (materialName == L"DeferredMap")
+				vec[0]->GetMeshRenderer()->RenderMap(buffer);
+			else if (materialName == L"Shadow")
+				vec[0]->GetMeshRenderer()->RenderShadow(buffer);
 			else
 				vec[0]->GetMeshRenderer()->Render(buffer);	
 		}

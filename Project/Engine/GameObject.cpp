@@ -380,12 +380,3 @@ void CGameObject::Destroy()
 	CRef::Destroy();
 }
 
-void CGameObject::ReceiveDamage(int dmg) {
-	m_Stats.TakeDamage(dmg);
-	if (m_Stats.IsDead()) {
-		OnDeath();
-	}
-}
-
-void CGameObject::OnDeath() {
-}

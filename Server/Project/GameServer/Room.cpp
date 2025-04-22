@@ -8,6 +8,8 @@
 #include "BoxCollider.h"
 #include "Projectile.h"
 #include "ProjectilePool.h"
+#include "TriggerBox.h"
+
 
 CRoomRef g_Room = std::make_shared<CRoom>();
 
@@ -44,6 +46,14 @@ CRoomRef CRoom::GetRoomRef()
 
 void CRoom::Init()
 {
+	CTriggerBoxRef box = CObjectUtil::CreateObject<CTriggerBox>();
+	box->SetTriggerBox(Vec3(8700.f, 0.f, 3840.f), Vec3(100.f, 100.f, 1200.f));
+	AddObject((uint32)EObject_Type::TRIGGER, box);
+
+	box = CObjectUtil::CreateObject<CTriggerBox>();
+	box->SetTriggerBox(Vec3(4850, 0.f, 3875.f), Vec3(100.f, 100.f, 850.f));
+	box->SetArea(Vec3(3810.f, 0.f, 4350.f), Vec3(2080.f, 100.f, 1100.f));
+	AddObject((uint32)EObject_Type::TRIGGER, box);
 }
 
 void CRoom::Update()
@@ -69,6 +79,7 @@ void CRoom::Update()
 		if(player)
 		{
 			player->Update(m_DeltaTime);
+			UPdatePlayer(player, m_DeltaTime);
 		}
 	}
 
@@ -96,6 +107,9 @@ void CRoom::UpdateMonster()
 	for (const auto& pair : monsters)
 	{
 		CMonster* monster = (CMonster*)(pair.second.get());
+		if (!monster->GetIsActive())
+			continue;
+
 		Protocol::MonsterInfo* info = pkt.add_monster_info();
 
 		info->set_object_id(monster->MonsterInfo->object_id());
@@ -116,6 +130,10 @@ void CRoom::UpdateMonster()
 		rot->set_z(srcPosInfo.rotation().z());
 
 		destPosInfo->set_state(monster->GetState());
+
+		const auto& stats = monster->GetAblity();
+		info->mutable_monster_ablity()->set_hp(stats->currentHp);
+		info->mutable_monster_ablity()->set_maxhp(stats->maxHp);
 	}
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
@@ -141,7 +159,9 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 
 	newPlayer->PlayerInfo->mutable_object_info()->mutable_pos_info()->set_allocated_position(position);
 	newPlayer->GetCollider()->SetCollisionProfile("Player");
-	newPlayer->GetCollider()->SetBoxInfo(XMFLOAT3(11240.f, 20.f, 1127.f), XMFLOAT3(100.f, 200.f, 24.f), XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0.f, 100.f, 0.f));
+	newPlayer->GetCollider()->SetBoxInfo(Vec3(11240.f, 20.f, 1127.f), Vec3(120.f, 200.f, 64.f), Vec3(0.f, 0.f, 0.f), Vec3(0.f, 100.f, 0.f));
+
+	GetLevelCollision()->AddCollider(newPlayer->GetCollider(), ECollision_Channel::Player);
 
 	// 입장 사실을 새 플레이어에게 알린다
 	{
@@ -233,6 +253,13 @@ bool CRoom::HandleEnterPlayer(CPlayerRef player)
 	return EnterRoom(player, true);
 }
 
+bool CRoom::HandlePlayerInit(CPlayerRef player)
+{
+	
+
+	return true;
+}
+
 bool CRoom::HandleLeavePlayer(CPlayerRef player)
 {
 	return LeaveRoom(player);
@@ -251,37 +278,36 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 	XMFLOAT3 moveAmount = ProtoToXMFLOAT3(player->m_NextAmount);
 
 	moveAmount.x /= static_cast<float>(step);
-	moveAmount.y /= static_cast<float>(step);
+	moveAmount.y = 0;
 	moveAmount.z /= static_cast<float>(step);
 
 	for (int i = 1; i <= step; ++i)
 	{
 		nowPos.x += moveAmount.x;
-		nowPos.y += moveAmount.y;
+		nowPos.y += 0;
 		nowPos.z += moveAmount.z;
 
 		ToProtoVector3(&protoNow, nowPos);
 
-		player->GetCollider()->Update();
+		const auto& box = player->GetCollider();
+		box->Update();
 
-		if (m_LevelCollision->CollisionWithWall(player->GetCollider()))
+		if (m_LevelCollision->CollisionWithWall(box) || m_LevelCollision->CollisionWithPlayer(box))
 		{
-			std::cout << "박음" << std::endl;
 			Protocol::Vector3& dir = player->GetDir();
-			const float ratio = 1.1f;
 			nowPos.x -= moveAmount.x;
-			nowPos.y -= moveAmount.y;
 			nowPos.z -= moveAmount.z;
 
 			XMVECTOR dirVec = XMVectorSet(dir.x(), dir.y(), dir.z(), 0.0f);
 			dirVec = XMVector3Normalize(dirVec);
 			if(player->GetState() != Protocol::MOVE_STATE_DASH && player->GetState() != Protocol::MOVE_STATE_DASH_END)
+			{
 				dirVec = XMVectorScale(dirVec, -20);
+			}
 
 			XMVECTOR now = XMLoadFloat3(&nowPos);
 			now = XMVectorSubtract(now, dirVec);
 			XMStoreFloat3(&nowPos, now);
-
 			ToProtoVector3(&protoNow, nowPos);
 			break;
 		}
@@ -300,6 +326,61 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 	posInfo->set_state(player->GetState());
 
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
+	Broadcast(sendBuffer, player->PlayerInfo->player_id());
+
+	if (auto session = player->GetSession())
+		session->Send(sendBuffer);
+
+	return true;
+}
+
+bool CRoom::UPdatePlayer(CPlayerRef player, float deltaTime)
+{
+	int step = 1;
+	auto& protoNow = *player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+	XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
+	// 이동량
+	XMFLOAT3 moveAmount = XMFLOAT3(0.f, -deltaTime * GRAVITY, 0.f);
+
+	moveAmount.y /= static_cast<float>(step);
+
+	for (int i = 1; i <= step; ++i)
+	{
+		nowPos.y += moveAmount.y;
+
+		ToProtoVector3(&protoNow, nowPos);
+
+		player->GetCollider()->Update();
+		auto box = player->GetCollider();
+		box->SetBoxHeight(0.f);
+		if (m_LevelCollision->CollisionWithWall(box))
+		{
+			if(nowPos.y > -20.f)
+			{
+				nowPos.y = 0.f;
+				ToProtoVector3(&protoNow, nowPos);
+			}
+			break;
+		}
+	}
+
+	Protocol::S_UPDATE_PLAYER pkt;
+	auto* info = pkt.mutable_player_update_info();
+	info->set_player_id(player->PlayerInfo->player_id());
+
+	auto* posInfo = info->mutable_pos_info();
+	ToProtoVector3(posInfo->mutable_position(), nowPos);
+
+	const auto& rot = player->PlayerInfo->object_info().pos_info().rotation();
+	ToProtoVector3(posInfo->mutable_rotation(), XMFLOAT3(rot.x(), rot.y(), rot.z()));
+
+	posInfo->set_state(player->GetState());
+	const auto& ablity = player->GetAblity();
+	info->mutable_player_ablity()->set_damage(ablity->attack);
+	info->mutable_player_ablity()->set_hp(ablity->currentHp);
+	info->mutable_player_ablity()->set_maxhp(ablity->maxHp);
+
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, player->PlayerInfo->player_id());
 
 	if (auto session = player->GetSession())

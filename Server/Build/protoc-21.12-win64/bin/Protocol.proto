@@ -18,6 +18,11 @@ message C_ENTER_GAME
 {
 }
 
+message C_ENTER_GAME_SUCCESS
+{
+	PlayerInfo player = 1;
+}
+
 message S_ENTER_GAME
 {
 	bool success = 1;
@@ -63,6 +68,11 @@ message C_MOVE_PROJECTILE
 message S_MOVE
 {
 	PlayerMoveInfo player_move_info = 1;
+}
+
+message S_UPDATE_PLAYER
+{
+	PlayerUpdateInfo player_update_info = 1;
 }
 
 // 몬스터 정보 전송

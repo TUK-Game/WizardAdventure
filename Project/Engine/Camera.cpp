@@ -131,10 +131,10 @@ void CCamera::RenderShadow()
 	s_matView = m_matView;
 	s_matProjection = m_matProjection;
 
-	for (auto& object : m_vecShadow)
-	{
-		object->GetMeshRenderer()->RenderShadow();
-	}
+	CInstancingManager::GetInst()->Render(m_vecShadow, L"Shadow");
+
+	CInstancingManager::GetInst()->ClearBuffer();
+	CDevice::GetInst()->GetCmdQueue()->WaitSync();
 }
 
 void CCamera::RenderUI()
@@ -145,7 +145,7 @@ void CCamera::RenderUI()
 		auto windows = pCurLevel->GetWidgetwindows();
 		for (auto& window : windows)
 		{
-			if (window && EWIDGETWINDOW_TYPE::TEXT_WINDOW != window->GetWindowType())
+			if (window && EWIDGETWINDOW_TYPE::TEXT_WINDOW != window->GetWindowType() && window->GetEnable())
 				window->Render();
 		}
 	}
@@ -237,8 +237,26 @@ void CCamera::SortShadowObject()
 		if (!(m_LayerCheck & (1 << i)))
 			continue;
 
-		CLayer* pLayer = pCurLevel->GetLayer(i);
-		const std::vector<CGameObject*>& vecObjects = pLayer->GetObjects();
+		if (i == 4)
+			continue;
+
+		std::vector<CGameObject*> vecObjects;
+		/*if (i == 10)
+		{
+			std::shared_ptr<CSubLevel> level = pCurLevel->m_SubLevel;
+			if (level)
+			{
+				if (m_Frustum.IsInFrustum(pCurLevel->m_SubLevel->GetBoundingBox()))
+				{
+					level->PickGameObject(m_Frustum, m_vecShadow);
+				}
+				continue;
+			}
+		}
+		else*/
+		{
+			vecObjects = pCurLevel->GetLayer(i)->GetObjects();
+		}
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
@@ -263,11 +281,13 @@ void CCamera::SortShadowObject()
 			if (vecObjects[j]->IsStatic())
 				continue;
 
+			SHADER_TYPE shaderType = vecObjects[j]->GetMeshRenderer()->GetMaterial()->GetGraphicsShader()->GetShaderType();
+			if (shaderType == SHADER_TYPE::FORWARD)
+				continue;
+
 			m_vecShadow.push_back(vecObjects[j]);
 		} 
 	}
-	std::wstring name = this->GetName();
-	int a = 3;
 }
 
 void CCamera::PushLightData()

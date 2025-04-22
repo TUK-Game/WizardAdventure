@@ -41,6 +41,9 @@ CMonster::CMonster()
 		o->SetInstancing(false);
 		this->AddChild(o);
 	}
+
+	m_Stats = new Stats;
+
 	Begin();	
 }
 
@@ -48,6 +51,8 @@ CMonster::~CMonster()
 {
 	if (m_Interpolator)
 		delete m_Interpolator;
+	if (m_Stats)
+		delete m_Stats;
 }
 
 void CMonster::Begin()
@@ -98,4 +103,17 @@ void CMonster::CreateStateManager()
 
 	m_StateManager->SetTransition(EState_Type::Attack, "Idle", EState_Type::Idle);
 
+}
+
+void CMonster::ReceiveDamage(int damage)
+{
+	m_Stats->TakeDamage(damage);
+	if (m_Stats->IsDead()) {
+		OnDeath();
+	}
+
+}
+
+void CMonster::OnDeath()
+{	
 }

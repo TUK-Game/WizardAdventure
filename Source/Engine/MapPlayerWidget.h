@@ -9,10 +9,11 @@ public:
 	virtual ~CMapPlayerWidget();
 
 public:
-	virtual bool Init() override;
 	virtual void Update() override;
 
 public:
+
+	bool InitPlayer(class CPlayer* player, int idx);
 	void ConvertPositionToMap();
 
 public:
@@ -21,10 +22,8 @@ public:
 private:
 	CGameObject* m_OwnerPlayer;
 
-	float m_AspectRatio;
 	Vec3 m_PlayerPosition;
-	Vec3 m_MapSize;
-	Vec3 m_MapCenter;
-	Vec3 m_Offset;
+	Vec2 m_MapMax;
+	Vec2 m_MapMin;
 };
 

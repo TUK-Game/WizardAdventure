@@ -4,6 +4,7 @@
 #include "GameSession.h"
 #include "Monster.h"
 #include "Projectile.h"
+#include "TriggerBox.h"
 
 std::atomic<int64>	CObjectUtil::s_IdGenerator = 1;
 

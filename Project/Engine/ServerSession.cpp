@@ -152,6 +152,8 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 	}
 	break;
 	}
+
+	pkt.mutable_info()->set_damage(object->GetDamage());
 	
 	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
 	//if (map.find(object->m_ProjectileId) != map.end())

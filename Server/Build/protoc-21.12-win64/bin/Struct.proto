@@ -37,6 +37,7 @@ message MonsterInfo
 	uint64 object_id = 1;
 	MonsterType monster_type = 2;
 	ObjectInfo object_info = 3;
+	MonsterAblity monster_ablity = 4;
 }
 
 message MonsterMoveInfo
@@ -52,13 +53,36 @@ message PlayerMoveInfo
 	PosInfo pos_info = 2;
 }
 
+message PlayerAblity
+{
+	uint32 maxhp = 1;
+	uint32 hp = 2;
+	uint32 damage = 3;
+	float signaturegage = 4;
+	float maxsignaturegage = 5;
+}
+
+message PlayerUpdateInfo
+{
+	uint32 player_id = 1;
+	PosInfo pos_info = 2;
+	PlayerAblity player_ablity = 3;
+}
+
+message MonsterAblity
+{
+	uint32 maxhp = 1;
+	uint32 hp = 2;
+}
+
+
 message ProjectileBasicInfo
 {
 	uint64 new_projectile_id = 1;
 	uint32 player_id = 2;
 	float duration = 3;
 	float speed = 4;
-	float damage = 5;
+	uint32 damage = 5;
 	Vector3 dir = 6;
 	Vector3 size = 7;
 	Vector3 spawn_pos = 8;

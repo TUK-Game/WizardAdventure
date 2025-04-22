@@ -5,6 +5,15 @@
 class CGameSession;
 class CRoom;
 
+enum class EAttribution
+{
+	FIRE,
+	ICE,
+	LIGHTNING,
+
+	MAX
+};
+
 class CPlayer : public CCreature
 {
 	friend class CObjectUtil;
@@ -16,9 +25,12 @@ public:
 public:
 	Protocol::MoveState GetState() { return m_State; }
 	Protocol::Vector3& GetDir() { return m_Dir; }
+	EAttribution GetAttribution() { return m_attribution; }
 
 	void SetState(Protocol::MoveState state) { m_State = state; }
+	void SetAblity(int maxHp, int currentHp, int attack, float speed) { Ablity{ maxHp, currentHp, attack, speed }; }
 	void SetDir(const Protocol::Vector3& dir) { m_Dir = dir; }
+	void SetAttribute(const EAttribution attri) { m_attribution = attri; }
 public:
 	Protocol::PlayerInfo* PlayerInfo;
 
@@ -38,6 +50,9 @@ private:
 	std::weak_ptr<CGameSession>	m_Session;
 	Protocol::MoveState m_State;
 	Protocol::Vector3 m_Dir;
+
+	EAttribution m_attribution = EAttribution::FIRE;
+
 	// temp	
 	float m_Speed = 5000.f;
 };

@@ -187,6 +187,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TriggerBox.cpp" />
     <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +215,7 @@
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Struct.pb.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TriggerBox.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>

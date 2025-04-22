@@ -4,6 +4,7 @@
 #include "MonsterAI.h"
 #include "MonsterCollider.h"
 #include "Room.h"
+#include "Projectile.h"
 
 CMonster::CMonster()
 {
@@ -34,8 +35,11 @@ CMonster::~CMonster()
 
 void CMonster::Update(float deltaTime)
 {
-	CGameObject::Update(deltaTime);
-	m_Ai->Update(deltaTime);
+	if (m_bActive)
+	{
+		CGameObject::Update(deltaTime);
+		m_Ai->Update(deltaTime);
+	}
 }
 
 void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
@@ -43,8 +47,16 @@ void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 	if (dest->GetProfile()->channel == ECollision_Channel::Projectile &&
 		Protocol::MOVE_STATE_NONE != m_State)
 	{
-		m_State = Protocol::MOVE_STATE_NONE;
-		g_Room->RemoveObject((uint32)EObject_Type::Monster, MonsterInfo->object_id());
+		if (GetAblity()->currentHp > 0)
+		{
+			Damaged((dynamic_cast<CProjectile*>(dest->GetOwner()))->GetAttack());
+			if (GetAblity()->currentHp <= 0)
+			{
+				std::cout << "Á×À½\n";
+				m_State = Protocol::MOVE_STATE_NONE;
+				g_Room->RemoveObject((uint32)EObject_Type::Monster, MonsterInfo->object_id());
+			}
+		}
 	}
 }
 

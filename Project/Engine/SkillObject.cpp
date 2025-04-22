@@ -9,7 +9,6 @@
 #include "NetworkManager.h"
 #include "ServerSession.h"
 
-
 void CSkillObject::SetCaster(CPlayer* caster)
 {
     m_Caster = caster;
@@ -35,14 +34,14 @@ void CSkillObject::FinalUpdate()
 
 void CSkillObject::OnHit(CGameObject* target)
 {
-    if (m_Caster)
+ /*   if (m_Caster)
     {
-        int casterAtk = m_Caster->GetStats().attack;
+        int casterAtk = m_Caster->GetStats()->attack;
         int totalDamage = m_Damage + casterAtk; 
 
-        target->ReceiveDamage(totalDamage);
+        ((CMonster*)target)->ReceiveDamage(totalDamage);
 
-    }
+    }*/
 }
 
 void CSkillObject::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)

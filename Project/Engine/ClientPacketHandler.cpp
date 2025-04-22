@@ -18,6 +18,10 @@
 #include "FirePillar.h"
 #include "FireCircle.h"
 #include "ParticleSystemManager.h"
+
+#include "TestWidget.h"
+#include "MapPlayerWidget.h"
+
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
 bool Handle_INVALID(CPacketSessionRef& session, BYTE* buffer, int32 len)
@@ -61,6 +65,39 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	CRenderManager::GetInst()->GetMainCamera()->SetTarget(player);
 	CNetworkManager::GetInst()->s_GameSession->SetOwnPlayer(player);
 	CNetworkManager::GetInst()->s_GameSession->SetClientID(id);
+
+	const auto& window = CLevelManager::GetInst()->GetCurrentLevel()->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow");
+	if (window)
+	{
+		window->AddPlayer(player, id);
+		window->SetEnable(false);
+	}
+
+	Protocol::C_ENTER_GAME_SUCCESS GSpkt;
+	switch (player->GetAttribute())
+	{
+	case EPlayerAttribute::Fire:
+	{
+		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_FIRE);
+		player->InitStats(100, 100, 30, 300.f);
+	}
+	break;
+	case EPlayerAttribute::Water:
+	{
+		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_ICE);
+		//player->InitStats(100, 100, 30, 300.f);
+	}
+	break;
+	case EPlayerAttribute::Electric:
+	{
+		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
+		//player->InitStats(100, 100, 30, 300.f);
+	}
+	break;
+	}
+
+	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(GSpkt);
+	session->Send(sendBuffer);
 	return true;
 }
 
@@ -128,6 +165,11 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
 	CLevelManager::GetInst()->SetPlayer(player, info.player_id());
 
+	const auto& window = CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::MAP_WINDOW);
+	if (window)
+	{
+		((TestWidget*)window)->AddPlayer(player, info.player_id());
+	}
 	return true;
 }
 
@@ -148,6 +190,12 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 
 		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
 		CLevelManager::GetInst()->SetPlayer(player, info.player_id());
+
+		const auto& window = CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::MAP_WINDOW);
+		if (window)
+		{
+			((TestWidget*)window)->AddPlayer(player, info.player_id());
+		}
 	}
 	return true;
 }
@@ -194,6 +242,7 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		// 몬스터 정보 갱신
 		monster->SetTarget(Vec3(pos.x(), pos.y(), pos.z()), Vec3(rot.x(), rot.y(), rot.z()));
 		monster->SetProtocolStateForClientMonster(state);
+		monster->SetStats(info.monster_ablity().maxhp(), info.monster_ablity().hp());
 	}
 	return true;
 }
@@ -205,7 +254,7 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	if (map.find(id) == map.end())
 		return false;
 
-	if (pkt.mutable_projectile_info()->state() == Protocol::COLLISION)
+	if ((pkt.mutable_projectile_info()->state()) == Protocol::COLLISION)
 	{
 		CFireBall* ball = dynamic_cast<CFireBall*>(map[id]);
 		if (ball)
@@ -216,6 +265,7 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 				ball->SetParticleObject(nullptr);
 			}
 		}
+		std::cout << "삭제\n";
 
 		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->SafeRemoveGameObject(map[id]);
 		map.erase(id);
@@ -244,6 +294,24 @@ bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 	CLevelManager::GetInst()->GetPlayer(id)->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
 	//CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(rotation.x(), rotation.y(), rotation.z());
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
+	return true;
+}
+
+bool Handle_S_UPDATE_PLAYER(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYER& pkt)
+{
+	const auto& info = pkt.player_update_info();
+	UINT64 id = info.player_id();
+
+	const Protocol::Vector3& position = info.pos_info().position();
+	const Protocol::Vector3& rotation = info.pos_info().rotation();
+	Protocol::MoveState state = info.pos_info().state();
+
+	const auto& player = CLevelManager::GetInst()->GetPlayer(id);
+	player->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
+	player->SetProtocolStateForClient(state);
+
+	const auto& stats = info.player_ablity();
+	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp());
 	return true;
 }
 
