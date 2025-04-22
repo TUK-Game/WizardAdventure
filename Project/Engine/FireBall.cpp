@@ -59,7 +59,7 @@ void CFireBall::FinalUpdate()
 
 
     // 원래 충돌처리로 해야함
-    if (pos.y < 10.f) {
+    if (pos.y < -20.f) {
         if (m_FireParticle) {
             CParticleSystemManager::GetInst()->Return(m_FireParticle);
             m_FireParticle = nullptr;
@@ -72,9 +72,7 @@ void CFireBall::FinalUpdate()
         CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
         CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
         CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
-
-
-        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+        m_bDelete = true;
     }
 
 

@@ -109,6 +109,7 @@ void CSkillManager::CastFireballTowardQ(float duration)
     fireBall->SetStartScale(startScale);
     fireBall->SetEndScale(endScale);
 
+
     fireBall->SetDuration(duration);
     fireBall->SetMode(EFireBallMode::QSkill);
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));

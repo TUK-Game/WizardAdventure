@@ -178,8 +178,16 @@ bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJE
 	rot->set_z(rotInfo.z());
 
 	if(object->ProjectileInfo->state() != Protocol::COLLISION)
+	{
 		object->ProjectileInfo->set_state(state);
-
+		if (state == Protocol::COLLISION)
+		{
+			std::cout << "ÅÍÁ®¿È\n";
+		}
+		else
+			std::cout << "Àß¿È\n";
+	}
+	
 	g_Room->DoAsync(&CRoom::HandleMoveProjectile, object);
 	return true;
 }

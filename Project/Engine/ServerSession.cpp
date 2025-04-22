@@ -176,7 +176,9 @@ void CServerSession::MoveSkill(CSkillObject* object)
 	info->set_projectile_id(object->m_ProjectileId);
 
 	if (object->m_bDelete)
+	{
 		info->set_state(Protocol::COLLISION);
+	}
 	else
 		info->set_state(Protocol::MOVE_STATE);
 
