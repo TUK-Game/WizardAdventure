@@ -146,6 +146,7 @@ bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PRO
 	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(info.spawn_pos().x());
 	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(info.spawn_pos().y());
 	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(info.spawn_pos().z());
+	projectile->ProjectileInfo->set_state(Protocol::MOVE_STATE);
 	projectile->SetCollisionBoxInfo(Vec3(info.spawn_pos().x(), info.spawn_pos().y(), info.spawn_pos().z()), state.Size, Vec3(0.f, 0.f, 0.f));
 	projectile->m_meshType = pkt.mesh();
 	g_Room->DoAsync(&CRoom::HandleSpawnProjectile, projectile);
@@ -176,7 +177,8 @@ bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJE
 	rot->set_y(rotInfo.y());
 	rot->set_z(rotInfo.z());
 
-	object->ProjectileInfo->set_state(state);
+	if(object->ProjectileInfo->state() != Protocol::COLLISION)
+		object->ProjectileInfo->set_state(state);
 
 	g_Room->DoAsync(&CRoom::HandleMoveProjectile, object);
 	return true;

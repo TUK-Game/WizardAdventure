@@ -35,8 +35,11 @@ CMonster::~CMonster()
 
 void CMonster::Update(float deltaTime)
 {
-	CGameObject::Update(deltaTime);
-	m_Ai->Update(deltaTime);
+	if (m_bActive)
+	{
+		CGameObject::Update(deltaTime);
+		m_Ai->Update(deltaTime);
+	}
 }
 
 void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)

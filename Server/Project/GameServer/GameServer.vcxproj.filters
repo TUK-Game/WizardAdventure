@@ -130,6 +130,9 @@
     <ClCompile Include="ProjectilePool.cpp">
       <Filter>01. Game\GameObject\Creature\Projectile</Filter>
     </ClCompile>
+    <ClCompile Include="TriggerBox.cpp">
+      <Filter>01. Game\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -206,6 +209,9 @@
     </ClInclude>
     <ClInclude Include="ProjectilePool.h">
       <Filter>01. Game\GameObject\Creature\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggerBox.h">
+      <Filter>01. Game\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

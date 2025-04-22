@@ -9,7 +9,7 @@ void CCreatureCollider::Update()
 {
 	Protocol::Vector3 pos = ((CPlayer*)m_Owner)->PlayerInfo->object_info().pos_info().position();
 	Protocol::Vector3 rot = ((CPlayer*)m_Owner)->PlayerInfo->object_info().pos_info().rotation();
-	m_BoundingBox.Center = XMFLOAT3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z);
+	m_BoundingBox.Center = Vec3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z);
 	XMVECTOR rotRad = XMVectorSet(
 		XMConvertToRadians(rot.x()),
 		XMConvertToRadians(rot.y()),
@@ -28,7 +28,7 @@ void CCreatureCollider::Update()
 	//g_Room->GetLevelCollision()->AddCollider(this, ECollision_Channel::Player);
 }
 
-void CCreatureCollider::SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 rotation, XMFLOAT3 offset)
+void CCreatureCollider::SetBoxInfo(const Vec3& centerPos, const Vec3& size, const Vec3& rotation, const Vec3& offset)
 {
 	m_BoundingBox.Center = centerPos;
 	m_BoundingBox.Extents = XMFLOAT3(size.x / 2, size.y / 2, size.z / 2);

@@ -6,6 +6,6 @@ class CMonsterCollider :
 {
 public:
 	virtual void Update() override;
-	virtual void SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 rotation, XMFLOAT3 offset = XMFLOAT3(0.f, 0.f, 0.f));
+	virtual void SetBoxInfo(const Vec3& centerPos, const Vec3& size, const Vec3& rotation, const Vec3& offset = Vec3(0.f, 0.f, 0.f));
 };
 

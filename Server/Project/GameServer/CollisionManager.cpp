@@ -27,6 +27,10 @@ void CCollisionManager::Init()
 	CreateProfile("Player", ECollision_Channel::Player, true);
 	CreateProfile("Monster", ECollision_Channel::Monster, true);
 	CreateProfile("Projectile", ECollision_Channel::Projectile, true);
+	CreateProfile("NPC", ECollision_Channel::NPC, true);
+	CreateProfile("TRIGGER", ECollision_Channel::TRIGGER, true, ECollision_Interaction::Ignore);
+
+	SetCollisionInteraction("TRIGGER", ECollision_Channel::Player, ECollision_Interaction::Collision);
 
 	SetCollisionInteraction("Projectile", ECollision_Channel::Player, ECollision_Interaction::Ignore);
 	SetCollisionInteraction("Projectile", ECollision_Channel::Projectile, ECollision_Interaction::Ignore);

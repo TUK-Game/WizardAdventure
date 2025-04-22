@@ -8,6 +8,8 @@
 #include "BoxCollider.h"
 #include "Projectile.h"
 #include "ProjectilePool.h"
+#include "TriggerBox.h"
+
 
 CRoomRef g_Room = std::make_shared<CRoom>();
 
@@ -44,6 +46,14 @@ CRoomRef CRoom::GetRoomRef()
 
 void CRoom::Init()
 {
+	CTriggerBoxRef box = CObjectUtil::CreateObject<CTriggerBox>();
+	box->SetTriggerBox(Vec3(8700.f, 0.f, 3840.f), Vec3(100.f, 100.f, 1200.f));
+	AddObject((uint32)EObject_Type::TRIGGER, box);
+
+	box = CObjectUtil::CreateObject<CTriggerBox>();
+	box->SetTriggerBox(Vec3(4850, 0.f, 3875.f), Vec3(100.f, 100.f, 850.f));
+	box->SetArea(Vec3(3810.f, 0.f, 4350.f), Vec3(2080.f, 100.f, 1100.f));
+	AddObject((uint32)EObject_Type::TRIGGER, box);
 }
 
 void CRoom::Update()
@@ -97,6 +107,9 @@ void CRoom::UpdateMonster()
 	for (const auto& pair : monsters)
 	{
 		CMonster* monster = (CMonster*)(pair.second.get());
+		if (!monster->GetIsActive())
+			continue;
+
 		Protocol::MonsterInfo* info = pkt.add_monster_info();
 
 		info->set_object_id(monster->MonsterInfo->object_id());
@@ -146,7 +159,7 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 
 	newPlayer->PlayerInfo->mutable_object_info()->mutable_pos_info()->set_allocated_position(position);
 	newPlayer->GetCollider()->SetCollisionProfile("Player");
-	newPlayer->GetCollider()->SetBoxInfo(XMFLOAT3(11240.f, 20.f, 1127.f), XMFLOAT3(120.f, 200.f, 64.f), XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0.f, 100.f, 0.f));
+	newPlayer->GetCollider()->SetBoxInfo(Vec3(11240.f, 20.f, 1127.f), Vec3(120.f, 200.f, 64.f), Vec3(0.f, 0.f, 0.f), Vec3(0.f, 100.f, 0.f));
 
 	GetLevelCollision()->AddCollider(newPlayer->GetCollider(), ECollision_Channel::Player);
 

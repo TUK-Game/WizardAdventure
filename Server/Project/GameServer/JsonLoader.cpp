@@ -8,6 +8,8 @@
 #include "ObjectUtil.h"
 #include "LevelCollision.h"
 #include "Monster.h"
+#include "TriggerBox.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -84,7 +86,7 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 
 		CGameObjectRef object = CObjectUtil::CreateObject();
 		object->m_Triangles = triangles;
-		object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0] * scale[0], size[1] * scale[1], size[2] * scale[2]), XMFLOAT3(rot[0], rot[1], rot[2]));
+		object->GetCollider()->SetBoxInfo(Vec3(pos[0], pos[1], pos[2]), Vec3(size[0] * scale[0], size[1] * scale[1], size[2] * scale[2]), Vec3(rot[0], rot[1], rot[2]));
 		object->GetCollider()->SetWorldTriangle(triangles);
 		object->GetCollider()->SetCollisionProfile("Wall");
 		room->GetLevelCollision()->AddCollider(object->GetCollider(), ECollision_Channel::Wall);
@@ -109,6 +111,7 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 
 	file >> map;
 
+	const auto& mo = room->GetLayerObjects((uint32)(EObject_Type::TRIGGER));
 
 	for (const auto& obj : map)
 	{
@@ -119,11 +122,21 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 		std::vector<float> size = obj["size"];
 
 		CMonsterRef object = CObjectUtil::CreateMonster();
-		object->GetCollider()->SetBoxInfo(XMFLOAT3(pos[0], pos[1], pos[2]), XMFLOAT3(size[0], size[1], size[2]), XMFLOAT3(rot[0], rot[1], rot[2]), XMFLOAT3(0, 100, 0));
+		object->GetCollider()->SetBoxInfo(Vec3(pos[0], pos[1], pos[2]), Vec3(size[0], size[1], size[2]), Vec3(rot[0], rot[1], rot[2]), Vec3(0, 100, 0));
 		object->GetCollider()->SetCollisionProfile("Monster");
 		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
 		object->SetState(Protocol::MOVE_STATE_IDLE);
 		room->AddMonster(object);
+
+		for (const auto& box : mo)
+		{
+			CTriggerBoxRef trigger = dynamic_pointer_cast<CTriggerBox>(box.second);
+			if (trigger->IsMonsterInArea(Vec3(pos[0], pos[1], pos[2])))
+			{
+				trigger->AddMonster(object);
+			}
+		}
+
 		//room->AddObject((uint32)EObject_Type::Monster, object);
 		break;
 	}

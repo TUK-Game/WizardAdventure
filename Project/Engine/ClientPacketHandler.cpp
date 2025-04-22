@@ -254,7 +254,7 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	if (map.find(id) == map.end())
 		return false;
 
-	if (pkt.mutable_projectile_info()->state() == Protocol::COLLISION)
+	if ((pkt.mutable_projectile_info()->state()) == Protocol::COLLISION)
 	{
 		CFireBall* ball = dynamic_cast<CFireBall*>(map[id]);
 		if (ball)
@@ -265,6 +265,7 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 				ball->SetParticleObject(nullptr);
 			}
 		}
+		std::cout << "»èÁ¦\n";
 
 		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->SafeRemoveGameObject(map[id]);
 		map.erase(id);

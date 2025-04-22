@@ -91,7 +91,7 @@ void CBoxCollider::CallCollisionEnd(CBoxCollider* dest)
 	GetOwner()->CollisionEnd(this, dest);
 }
 
-void CBoxCollider::SetBoxInfo(XMFLOAT3 centerPos, XMFLOAT3 size, XMFLOAT3 rotation, XMFLOAT3 offset)
+void CBoxCollider::SetBoxInfo(const Vec3& centerPos, const Vec3& size, const Vec3& rotation, const Vec3& offset)
 {
 	m_BoundingBox.Center = centerPos;
 	m_BoundingBox.Extents = XMFLOAT3(size.x, size.y, size.z);

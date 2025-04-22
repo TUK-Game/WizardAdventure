@@ -11,7 +11,9 @@ public:
 public:
 	Protocol::MoveState GetState() { return m_State; }
 	Protocol::Vector3& GetDir() { return m_Dir; }
+	bool GetIsActive() { return m_bActive; }
 
+	void SetIsActive(bool b) { m_bActive = b; }
 	void SetState(Protocol::MoveState state) { m_State = state; }
 	void SetDir(const Protocol::Vector3& dir) { m_Dir = dir; }
 
@@ -27,6 +29,7 @@ public:
 private:
 	Protocol::MoveState m_State;
 	Protocol::Vector3 m_Dir;
+	bool m_bActive{ false };
 
 	class CMonsterAI* m_Ai = nullptr;
 	// temp	
