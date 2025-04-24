@@ -372,6 +372,9 @@ int CAssetManager::LoadMeshData()
 	CMeshData* data1 = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/level_1.jhd", L"map");
 	AddAsset(L"level_1", data1);	
 
+	CMeshData* data2 = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/FireTower.jhd", L"FireTower");
+	AddAsset(L"FireTower", data2);
+
 	//data = CAssetManager::GetInst()->LoadFBX(L"../../Content/Texture/FBX/floor_world.fbx");
 	//AddAsset(L"Floor", data);
 	return S_OK;

@@ -7,7 +7,7 @@
 #include "FireBall.h"
 #include "FireSword.h"
 #include "Meteors.h"
-#include "FirePillar.h"
+#include "FireTower.h"
 #include "FireCircle.h"
 #include "LevelManager.h"
 #include "Level.h"
@@ -35,7 +35,7 @@ void CSkillManager::UseSkill(int skillIndex, float duration)
         if (skillIndex == 0)
             CastFireballTowardQ(duration);
         if (skillIndex == 1)
-            SpawnFirePillarAtMouse();
+            SpawnFireTowerAtMouse();
         if (skillIndex == 2)
             FireSwordSpreadShot();
         if (skillIndex == 3) 
@@ -109,7 +109,6 @@ void CSkillManager::CastFireballTowardQ(float duration)
     fireBall->SetStartScale(startScale);
     fireBall->SetEndScale(endScale);
 
-
     fireBall->SetDuration(duration);
     fireBall->SetMode(EFireBallMode::QSkill);
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
@@ -128,9 +127,9 @@ void CSkillManager::CastFireballTowardQ(float duration)
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 12, false);
 }
 
-void CSkillManager::SpawnFirePillarAtMouse()
+void CSkillManager::SpawnFireTowerAtMouse()
 {
-    Vec3 centerPos = GetMouseGroundPoint(); 
+    Vec3 centerPos = GetMouseGroundPoint();
 
     CFireCircle* fireCircle = new CFireCircle;
     fireCircle->GetTransform()->SetRelativePosition(centerPos);
@@ -142,30 +141,16 @@ void CSkillManager::SpawnFirePillarAtMouse()
     lookDir.Normalize();
     SetLookRotationY(lookDir);
 
+    CFireTower * tower = new CFireTower();
+    tower->GetTransform()->SetRelativePosition(centerPos);
+    tower->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
+    tower->SetDamage(SkillDamage::Pillar * tower->GetCaster()->GetStats()->attack);
+    tower->SetEnable(false);
 
-    centerPos.y = RandomFloat(-200.f, -150.f);
-    int count = 5;
-    float radius = 150.f;
-    for (int i = 0; i < count; ++i) {
-        float angleDeg = i * (360.f / count);
-        float angleRad = XMConvertToRadians(angleDeg);
+    CNetworkManager::GetInst()->s_GameSession->SpawnSkill(tower);
 
-        float offsetX = cosf(angleRad) * radius;
-        float offsetZ = sinf(angleRad) * radius;
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(tower, 12, false);
 
-        Vec3 spawnPos = centerPos + Vec3(offsetX, 0.f, offsetZ); // y�� ���� �Ʒ���
-
-        CFirePillar* pillar = new CFirePillar();
-        pillar->SetBasePos(spawnPos);
-        pillar->GetTransform()->SetRelativePosition(spawnPos);
-        pillar->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
-        pillar->SetDamage(SkillDamage::Pillar * pillar->GetCaster()->GetStats()->attack);
-        pillar->SetEnable(false);
-
-        CNetworkManager::GetInst()->s_GameSession->SpawnSkill(pillar);
-
-        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(pillar, 12, false);
-    }                                                                                               
 }
 
 void CSkillManager::FireSwordSpreadShot()

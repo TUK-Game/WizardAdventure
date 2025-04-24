@@ -560,7 +560,7 @@
     <ClInclude Include="FireBall.h">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
     </ClInclude>
-    <ClInclude Include="FirePillar.h">
+    <ClInclude Include="FireTower.h">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
     </ClInclude>
     <ClInclude Include="FireCircle.h">
@@ -904,7 +904,7 @@
     <ClCompile Include="FireBall.cpp">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
     </ClCompile>
-    <ClCompile Include="FirePillar.cpp">
+    <ClCompile Include="FireTower.cpp">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
     </ClCompile>
     <ClCompile Include="FireCircle.cpp">

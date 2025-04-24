@@ -15,7 +15,7 @@
 #include "SkillObject.h"
 #include "FireBall.h"
 #include "FireSword.h"
-#include "FirePillar.h"
+#include "FireTower.h"
 #include "FireCircle.h"
 #include "ParticleSystemManager.h"
 
@@ -132,7 +132,7 @@ bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_S
 		break;
 		case Protocol::FIRE_PILLAR:
 		{
-			CFirePillar* magic = new CFirePillar();
+			CFireTower* magic = new CFireTower();
 			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
 			map[id] = magic;
 			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);

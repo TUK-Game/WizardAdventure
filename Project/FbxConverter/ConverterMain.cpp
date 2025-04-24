@@ -4,7 +4,7 @@ int main()
 {
 	CFBXConverter* converter = new CFBXConverter();
 
-	converter->LoadFBX("Mage");
+	converter->LoadFBX("FireTower");
 
 	delete converter;
 }

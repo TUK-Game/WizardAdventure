@@ -206,7 +206,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="SkillObject.h" />
     <ClInclude Include="FireBall.h" />
     <ClInclude Include="FireCircle.h" />
-    <ClInclude Include="FirePillar.h" />
+    <ClInclude Include="FireTower.h" />
     <ClInclude Include="FireSword.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="fmod.h" />
@@ -375,7 +375,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="SkillObject.cpp" />
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="FireCircle.cpp" />
-    <ClCompile Include="FirePillar.cpp" />
+    <ClCompile Include="FireTower.cpp" />
     <ClCompile Include="FireSword.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameObject.cpp" />
