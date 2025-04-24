@@ -13,11 +13,11 @@ CFireCircle::CFireCircle()
     m_type = SKILL::FIRE_CIRCLE;
     AddComponent(new CTransform());
     AddComponent(new CMeshRenderer());  
-    GetTransform()->SetRelativeScale(500.f, 500.f, 200.f);
-    GetTransform()->SetRelativeRotation(-90.f, 0.f, 0.f);
+    GetTransform()->SetRelativeScale(1000.f, 1000.f, 200.f);
+    GetTransform()->SetRelativeRotation(90.f, 0.f, 0.f);
 
-    GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Circle"));
-    GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Lava"));
+    GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
+    GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Circle"));
 }
 
 void CFireCircle::Update()

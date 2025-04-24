@@ -87,6 +87,12 @@ struct VS_TEX_OUT
     float2 uv : TEXCOORD;
 };
 
+struct VS_TEX_OUT_WORLD
+{
+    float4 pos : SV_Position;
+    float2 uv : TEXCOORD;
+};
+
 VS_TEX_OUT VS_Tex(VS_TEX_IN input)
 {
     VS_TEX_OUT output = (VS_TEX_OUT) 0;
@@ -126,6 +132,28 @@ float4 PS_TexSkill(VS_TEX_OUT input) : SV_Target
     }
     
     return skillColor;
+}
+
+VS_TEX_OUT_WORLD VS_TexWorld(VS_TEX_IN input)
+{
+    VS_TEX_OUT_WORLD output = (VS_TEX_OUT_WORLD) 0;
+
+    float4 worldPos = mul(float4(input.pos, 1.f), matWorld);
+    float4 viewPos = mul(worldPos, matView);
+    output.pos = mul(viewPos, matProjection);
+
+    output.uv = input.uv;
+    return output;
+}
+
+float4 PS_TexWorld(VS_TEX_OUT_WORLD input) : SV_Target
+{
+    float4 color = float4(1.f, 1.f, 1.f, 1.f);
+
+    if (tex_on_0)
+        color = tex_0.Sample(sam_0, input.uv);
+
+    return color;
 }
 
 

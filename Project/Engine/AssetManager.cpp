@@ -223,6 +223,10 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"FireSheet.png");
 	AddAsset(L"FireSheet", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Circle.png");
+	AddAsset(L"Circle", tex);
 	return S_OK;
 }
 
@@ -267,6 +271,11 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Start"));
 	AddAsset(L"Start", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Texture_World"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Circle"));
+	AddAsset(L"Circle", material);
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Skybox"));
@@ -431,6 +440,11 @@ int CAssetManager::LoadGraphicShader()
 	name = L"Forward.hlsl";
 	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND}, "VS_Tex", "PS_Tex");
 	AddAsset(L"Texture", shader);
+
+	shader = new CGraphicShader;
+	name = L"Forward.hlsl"; 
+	LoadShader(shader, name,{SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND}, "VS_TexWorld", "PS_TexWorld");
+	AddAsset(L"Texture_World", shader);
 
 	shader = new CGraphicShader;
 	name = L"Forward.hlsl";
