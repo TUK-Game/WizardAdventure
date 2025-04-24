@@ -35,7 +35,7 @@ void CSkillManager::UseSkill(int skillIndex, float duration)
         if (skillIndex == 0)
             CastFireballTowardQ(duration);
         if (skillIndex == 1)
-            SpawnFireTowerAtMouse();
+            SpawnFireTowerAtMouse(duration);
         if (skillIndex == 2)
             FireSwordSpreadShot();
         if (skillIndex == 3) 
@@ -127,15 +127,15 @@ void CSkillManager::CastFireballTowardQ(float duration)
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 12, false);
 }
 
-void CSkillManager::SpawnFireTowerAtMouse()
+void CSkillManager::SpawnFireTowerAtMouse(float duration)
 {
     Vec3 centerPos = GetMouseGroundPoint();
 
-    CFireCircle* fireCircle = new CFireCircle;
-    fireCircle->GetTransform()->SetRelativePosition(centerPos);
-    fireCircle->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
-    CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireCircle);
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireCircle, 12, false);
+    //CFireCircle* fireCircle = new CFireCircle;
+    //fireCircle->GetTransform()->SetRelativePosition(centerPos);
+    //fireCircle->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
+    //CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireCircle);
+    //CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireCircle, 12, false);
 
     Vec3 lookDir = centerPos - m_Owner->GetTransform()->GetRelativePosition();
     lookDir.Normalize();
@@ -143,6 +143,7 @@ void CSkillManager::SpawnFireTowerAtMouse()
 
     CFireTower * tower = new CFireTower();
     tower->GetTransform()->SetRelativePosition(centerPos);
+    tower->SetScaleDuration(duration);
     tower->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
     tower->SetDamage(SkillDamage::Pillar * tower->GetCaster()->GetStats()->attack);
     tower->SetEnable(false);

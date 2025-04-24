@@ -65,6 +65,19 @@ void CEffectManager::Init()
     shockwave.startAlpha = 1.f;
     shockwave.endAlpha = 0.f;
     RegisterEffectTemplate(L"Shockwave", shockwave);
+
+    BillboardEffectDesc fire;
+    fire.textureKey = L"FireSheet";
+    fire.spriteX = 6;
+    fire.spriteY = 6;
+    fire.framePerSecond = 36.f;
+    fire.loop = true;
+    fire.scaleOverTime = true;
+    fire.startScale = 50.f;
+    fire.endScale = 50.f;
+    fire.startAlpha = 1.f;
+    fire.endAlpha = 1.f;
+    RegisterEffectTemplate(L"fire", fire);
 }
 
 

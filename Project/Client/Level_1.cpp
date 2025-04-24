@@ -254,14 +254,14 @@ void CLevel_1::Init()
 		CAnimatedBillboardEffect* effect = new CAnimatedBillboardEffect;
 		effect->SetName(L"Effect_Test");
 		BillboardEffectDesc desc;
-		desc.textureKey = L"ShockwaveSheet";
-		desc.spriteX = 8;
-		desc.spriteY = 8;
-		desc.framePerSecond = 128.f;
+		desc.textureKey = L"FireSheet";
+		desc.spriteX = 6;
+		desc.spriteY = 6;
+		desc.framePerSecond = 36.f;
 		desc.loop = true;
-		desc.scaleOverTime = true;
+		desc.scaleOverTime = false;
 		desc.startScale = 10.f;
-		desc.endScale = 20.0f;
+		desc.endScale = 10.0f;
 		desc.startAlpha = 1.f;
 		desc.endAlpha = 1.f;
 

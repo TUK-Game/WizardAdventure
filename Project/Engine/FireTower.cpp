@@ -9,6 +9,7 @@
 #include "LevelManager.h"
 #include "Engine.h"
 #include "MeshData.h"
+#include "EffectManager.h"
 
 CFireTower::CFireTower()
 {
@@ -22,31 +23,20 @@ CFireTower::CFireTower()
         o->SetName(name);
         Vec3 rot = o->GetTransform()->GetRelativeRotation();
         o->GetTransform()->SetRelativeRotation(rot);
-        //o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
         o->SetCheckFrustum(true);
         o->SetInstancing(false);
         AddChild(o);
     }
     // AddComponent(new CCollider());      
+    
 }
 
 void CFireTower::Update()
 {
     if (m_bOwn)
     {
-  /*      if (m_ElapsedTime > 3.f) {
-            GetRigidBody()->SetKinematic(false);
-        }
-        else {
-            Vec3 pos = GetTransform()->GetRelativePosition();
-            m_BasePos = pos;
-            float offsetX = sinf(m_ElapsedTime * m_ShakeFreqX + m_PhaseOffsetX) * m_ShakeAmount;
-            float offsetZ = cosf(m_ElapsedTime * m_ShakeFreqZ + m_PhaseOffsetZ) * m_ShakeAmount;
-            Vec3 basePos = m_BasePos;
-            basePos.x += offsetX;
-            basePos.z += offsetZ;
-            GetTransform()->SetRelativePosition(basePos);
-        }*/
+        if (!m_bFinishScale) 
+            UpdateScaleLerp();
     }
     CSkillObject::Update();
 }
@@ -58,7 +48,25 @@ void CFireTower::FinalUpdate()
     {
         m_ElapsedTime += DELTA_TIME;
         if (m_ElapsedTime >= m_Duration) {
+            if (m_FireEffect) {
+                m_FireEffect->SetEnable(false);
+                m_FireEffect = nullptr; 
+            }
             m_bDelete = true;
         }
     }
+}
+
+void CFireTower::UpdateScaleLerp()
+{
+    if (m_ElapsedTime >= m_ScaleDuration) {
+        m_bFinishScale = true;
+        auto pos = GetTransform()->GetRelativePosition();
+        pos += Vec3(0.f, 250.f, 0.f);
+        m_FireEffect = CEffectManager::GetInst()->SpawnEffect(L"fire", pos);
+        return;
+    }
+    float t = m_ElapsedTime / m_ScaleDuration;
+    t = std::clamp(t, 0.f, 1.f);
+    GetTransform()->SetRelativeScale(1.f, t, 1.f);
 }

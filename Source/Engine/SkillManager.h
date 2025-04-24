@@ -11,7 +11,7 @@ private:
     void CastFireballTowardMouse();
     void CastFireballTowardQ(float duration);
     void CastMeteor();
-    void SpawnFireTowerAtMouse();
+    void SpawnFireTowerAtMouse(float duration);
     void FireSwordSpreadShot();
 
 

@@ -48,7 +48,7 @@ void CTransform::FinalUpdate()
 	// TODO: 부모 오브젝트가 있다면, 부모의 월드행렬 누적
 	if (m_ParentTransform) // 부모 오브젝트가 존재하면
 	{
-		m_matWorld = m_matWorld * m_ParentTransform->GetRTMatrix();
+		m_matWorld = m_matWorld * m_ParentTransform->GetWorldMatrix();
 		m_matRT = m_matRT * m_ParentTransform->GetRTMatrix();
 
 		// 부모의 월드 방향 벡터를 기준으로 자식 오브젝트의 월드 방향 벡터 계산
