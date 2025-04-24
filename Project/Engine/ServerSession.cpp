@@ -170,6 +170,7 @@ void CServerSession::MoveSkill(CSkillObject* object)
 {
 	CTransform* transform = object->GetTransform();
 	const Vec3& pos = transform->GetRelativePosition();
+	const Vec3& scale = transform->GetRelativeScale();
 	const Vec3& rot = transform->GetRelativeRotation();
 	Protocol::C_MOVE_PROJECTILE pkt;
 	auto* info = pkt.mutable_projectile_info();
@@ -183,10 +184,15 @@ void CServerSession::MoveSkill(CSkillObject* object)
 		info->set_state(Protocol::MOVE_STATE);
 
 	auto* posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
+	auto* scaleInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_size();
 	auto* rotInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_rotation();
 	posInfo->set_x(pos.x);
 	posInfo->set_y(pos.y);
 	posInfo->set_z(pos.z);
+
+	scaleInfo->set_x(scale.x);
+	scaleInfo->set_y(scale.y);
+	scaleInfo->set_z(scale.z);
 
 	rotInfo->set_x(rot.x);
 	rotInfo->set_y(rot.y);

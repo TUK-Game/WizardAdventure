@@ -27,6 +27,8 @@ enum : uint16
 	PKT_S_SPAWN_EXISTING_PLAYER = 1017,
 	PKT_S_DESPAWN_PLAYER = 1018,
 	PKT_S_DESPAWN = 1019,
+	PKT_S_GATE_OPNE = 1020,
+	PKT_S_GATE_CLOSE = 1021,
 };
 
 // ===== Process Packet =====
@@ -73,6 +75,8 @@ public:
 	static CSendBufferRef MakeSendBuffer(Protocol::S_SPAWN_EXISTING_PLAYER& pkt) { return MakeSendBuffer(pkt, PKT_S_SPAWN_EXISTING_PLAYER); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_DESPAWN_PLAYER& pkt) { return MakeSendBuffer(pkt, PKT_S_DESPAWN_PLAYER); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_DESPAWN& pkt) { return MakeSendBuffer(pkt, PKT_S_DESPAWN); }
+	static CSendBufferRef MakeSendBuffer(Protocol::S_GATE_OPNE& pkt) { return MakeSendBuffer(pkt, PKT_S_GATE_OPNE); }
+	static CSendBufferRef MakeSendBuffer(Protocol::S_GATE_CLOSE& pkt) { return MakeSendBuffer(pkt, PKT_S_GATE_CLOSE); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>

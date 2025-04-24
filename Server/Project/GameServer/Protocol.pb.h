@@ -78,6 +78,12 @@ extern S_DESPAWN_PLAYERDefaultTypeInternal _S_DESPAWN_PLAYER_default_instance_;
 class S_ENTER_GAME;
 struct S_ENTER_GAMEDefaultTypeInternal;
 extern S_ENTER_GAMEDefaultTypeInternal _S_ENTER_GAME_default_instance_;
+class S_GATE_CLOSE;
+struct S_GATE_CLOSEDefaultTypeInternal;
+extern S_GATE_CLOSEDefaultTypeInternal _S_GATE_CLOSE_default_instance_;
+class S_GATE_OPNE;
+struct S_GATE_OPNEDefaultTypeInternal;
+extern S_GATE_OPNEDefaultTypeInternal _S_GATE_OPNE_default_instance_;
 class S_LEAVE_GAME;
 struct S_LEAVE_GAMEDefaultTypeInternal;
 extern S_LEAVE_GAMEDefaultTypeInternal _S_LEAVE_GAME_default_instance_;
@@ -120,6 +126,8 @@ template<> ::Protocol::C_SPAWN_PROJECTILE* Arena::CreateMaybeMessage<::Protocol:
 template<> ::Protocol::S_DESPAWN* Arena::CreateMaybeMessage<::Protocol::S_DESPAWN>(Arena*);
 template<> ::Protocol::S_DESPAWN_PLAYER* Arena::CreateMaybeMessage<::Protocol::S_DESPAWN_PLAYER>(Arena*);
 template<> ::Protocol::S_ENTER_GAME* Arena::CreateMaybeMessage<::Protocol::S_ENTER_GAME>(Arena*);
+template<> ::Protocol::S_GATE_CLOSE* Arena::CreateMaybeMessage<::Protocol::S_GATE_CLOSE>(Arena*);
+template<> ::Protocol::S_GATE_OPNE* Arena::CreateMaybeMessage<::Protocol::S_GATE_OPNE>(Arena*);
 template<> ::Protocol::S_LEAVE_GAME* Arena::CreateMaybeMessage<::Protocol::S_LEAVE_GAME>(Arena*);
 template<> ::Protocol::S_LOGIN* Arena::CreateMaybeMessage<::Protocol::S_LOGIN>(Arena*);
 template<> ::Protocol::S_MONSTER_INFO* Arena::CreateMaybeMessage<::Protocol::S_MONSTER_INFO>(Arena*);
@@ -3179,6 +3187,320 @@ class S_DESPAWN final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_Protocol_2eproto;
 };
+// -------------------------------------------------------------------
+
+class S_GATE_OPNE final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_GATE_OPNE) */ {
+ public:
+  inline S_GATE_OPNE() : S_GATE_OPNE(nullptr) {}
+  ~S_GATE_OPNE() override;
+  explicit PROTOBUF_CONSTEXPR S_GATE_OPNE(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_GATE_OPNE(const S_GATE_OPNE& from);
+  S_GATE_OPNE(S_GATE_OPNE&& from) noexcept
+    : S_GATE_OPNE() {
+    *this = ::std::move(from);
+  }
+
+  inline S_GATE_OPNE& operator=(const S_GATE_OPNE& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_GATE_OPNE& operator=(S_GATE_OPNE&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_GATE_OPNE& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_GATE_OPNE* internal_default_instance() {
+    return reinterpret_cast<const S_GATE_OPNE*>(
+               &_S_GATE_OPNE_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    20;
+
+  friend void swap(S_GATE_OPNE& a, S_GATE_OPNE& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_GATE_OPNE* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_GATE_OPNE* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S_GATE_OPNE* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S_GATE_OPNE>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S_GATE_OPNE& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const S_GATE_OPNE& from) {
+    S_GATE_OPNE::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_GATE_OPNE* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_GATE_OPNE";
+  }
+  protected:
+  explicit S_GATE_OPNE(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kOpenObjectsFieldNumber = 1,
+  };
+  // repeated .Protocol.ObjectInfo open_objects = 1;
+  int open_objects_size() const;
+  private:
+  int _internal_open_objects_size() const;
+  public:
+  void clear_open_objects();
+  ::Protocol::ObjectInfo* mutable_open_objects(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ObjectInfo >*
+      mutable_open_objects();
+  private:
+  const ::Protocol::ObjectInfo& _internal_open_objects(int index) const;
+  ::Protocol::ObjectInfo* _internal_add_open_objects();
+  public:
+  const ::Protocol::ObjectInfo& open_objects(int index) const;
+  ::Protocol::ObjectInfo* add_open_objects();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ObjectInfo >&
+      open_objects() const;
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_GATE_OPNE)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ObjectInfo > open_objects_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S_GATE_CLOSE final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_GATE_CLOSE) */ {
+ public:
+  inline S_GATE_CLOSE() : S_GATE_CLOSE(nullptr) {}
+  ~S_GATE_CLOSE() override;
+  explicit PROTOBUF_CONSTEXPR S_GATE_CLOSE(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_GATE_CLOSE(const S_GATE_CLOSE& from);
+  S_GATE_CLOSE(S_GATE_CLOSE&& from) noexcept
+    : S_GATE_CLOSE() {
+    *this = ::std::move(from);
+  }
+
+  inline S_GATE_CLOSE& operator=(const S_GATE_CLOSE& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_GATE_CLOSE& operator=(S_GATE_CLOSE&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_GATE_CLOSE& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_GATE_CLOSE* internal_default_instance() {
+    return reinterpret_cast<const S_GATE_CLOSE*>(
+               &_S_GATE_CLOSE_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    21;
+
+  friend void swap(S_GATE_CLOSE& a, S_GATE_CLOSE& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_GATE_CLOSE* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_GATE_CLOSE* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S_GATE_CLOSE* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S_GATE_CLOSE>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S_GATE_CLOSE& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const S_GATE_CLOSE& from) {
+    S_GATE_CLOSE::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_GATE_CLOSE* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_GATE_CLOSE";
+  }
+  protected:
+  explicit S_GATE_CLOSE(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCloaseObjectsFieldNumber = 1,
+  };
+  // repeated .Protocol.ObjectInfo cloase_objects = 1;
+  int cloase_objects_size() const;
+  private:
+  int _internal_cloase_objects_size() const;
+  public:
+  void clear_cloase_objects();
+  ::Protocol::ObjectInfo* mutable_cloase_objects(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ObjectInfo >*
+      mutable_cloase_objects();
+  private:
+  const ::Protocol::ObjectInfo& _internal_cloase_objects(int index) const;
+  ::Protocol::ObjectInfo* _internal_add_cloase_objects();
+  public:
+  const ::Protocol::ObjectInfo& cloase_objects(int index) const;
+  ::Protocol::ObjectInfo* add_cloase_objects();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ObjectInfo >&
+      cloase_objects() const;
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_GATE_CLOSE)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ObjectInfo > cloase_objects_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
 // ===================================================================
 
 
@@ -4499,9 +4821,95 @@ S_DESPAWN::mutable_object_ids() {
   return _internal_mutable_object_ids();
 }
 
+// -------------------------------------------------------------------
+
+// S_GATE_OPNE
+
+// repeated .Protocol.ObjectInfo open_objects = 1;
+inline int S_GATE_OPNE::_internal_open_objects_size() const {
+  return _impl_.open_objects_.size();
+}
+inline int S_GATE_OPNE::open_objects_size() const {
+  return _internal_open_objects_size();
+}
+inline ::Protocol::ObjectInfo* S_GATE_OPNE::mutable_open_objects(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_GATE_OPNE.open_objects)
+  return _impl_.open_objects_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ObjectInfo >*
+S_GATE_OPNE::mutable_open_objects() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.S_GATE_OPNE.open_objects)
+  return &_impl_.open_objects_;
+}
+inline const ::Protocol::ObjectInfo& S_GATE_OPNE::_internal_open_objects(int index) const {
+  return _impl_.open_objects_.Get(index);
+}
+inline const ::Protocol::ObjectInfo& S_GATE_OPNE::open_objects(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.S_GATE_OPNE.open_objects)
+  return _internal_open_objects(index);
+}
+inline ::Protocol::ObjectInfo* S_GATE_OPNE::_internal_add_open_objects() {
+  return _impl_.open_objects_.Add();
+}
+inline ::Protocol::ObjectInfo* S_GATE_OPNE::add_open_objects() {
+  ::Protocol::ObjectInfo* _add = _internal_add_open_objects();
+  // @@protoc_insertion_point(field_add:Protocol.S_GATE_OPNE.open_objects)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ObjectInfo >&
+S_GATE_OPNE::open_objects() const {
+  // @@protoc_insertion_point(field_list:Protocol.S_GATE_OPNE.open_objects)
+  return _impl_.open_objects_;
+}
+
+// -------------------------------------------------------------------
+
+// S_GATE_CLOSE
+
+// repeated .Protocol.ObjectInfo cloase_objects = 1;
+inline int S_GATE_CLOSE::_internal_cloase_objects_size() const {
+  return _impl_.cloase_objects_.size();
+}
+inline int S_GATE_CLOSE::cloase_objects_size() const {
+  return _internal_cloase_objects_size();
+}
+inline ::Protocol::ObjectInfo* S_GATE_CLOSE::mutable_cloase_objects(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_GATE_CLOSE.cloase_objects)
+  return _impl_.cloase_objects_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ObjectInfo >*
+S_GATE_CLOSE::mutable_cloase_objects() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.S_GATE_CLOSE.cloase_objects)
+  return &_impl_.cloase_objects_;
+}
+inline const ::Protocol::ObjectInfo& S_GATE_CLOSE::_internal_cloase_objects(int index) const {
+  return _impl_.cloase_objects_.Get(index);
+}
+inline const ::Protocol::ObjectInfo& S_GATE_CLOSE::cloase_objects(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.S_GATE_CLOSE.cloase_objects)
+  return _internal_cloase_objects(index);
+}
+inline ::Protocol::ObjectInfo* S_GATE_CLOSE::_internal_add_cloase_objects() {
+  return _impl_.cloase_objects_.Add();
+}
+inline ::Protocol::ObjectInfo* S_GATE_CLOSE::add_cloase_objects() {
+  ::Protocol::ObjectInfo* _add = _internal_add_cloase_objects();
+  // @@protoc_insertion_point(field_add:Protocol.S_GATE_CLOSE.cloase_objects)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ObjectInfo >&
+S_GATE_CLOSE::cloase_objects() const {
+  // @@protoc_insertion_point(field_list:Protocol.S_GATE_CLOSE.cloase_objects)
+  return _impl_.cloase_objects_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

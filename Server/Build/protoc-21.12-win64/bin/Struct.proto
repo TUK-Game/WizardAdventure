@@ -15,7 +15,8 @@ message PosInfo
 	uint64 object_id = 1;
 	Vector3 Position = 2;
 	Vector3 Rotation = 3;
-	MoveState state = 4;
+	Vector3 Size = 4;
+	MoveState state = 5;
 }
 
 message ObjectInfo

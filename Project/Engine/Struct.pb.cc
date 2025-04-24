@@ -40,6 +40,7 @@ PROTOBUF_CONSTEXPR PosInfo::PosInfo(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.position_)*/nullptr
   , /*decltype(_impl_.rotation_)*/nullptr
+  , /*decltype(_impl_.size_)*/nullptr
   , /*decltype(_impl_.object_id_)*/uint64_t{0u}
   , /*decltype(_impl_.state_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -233,6 +234,7 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.object_id_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.position_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.rotation_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.size_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.state_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::ObjectInfo, _internal_metadata_),
@@ -335,16 +337,16 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::Vector3)},
   { 9, -1, -1, sizeof(::Protocol::PosInfo)},
-  { 19, -1, -1, sizeof(::Protocol::ObjectInfo)},
-  { 28, -1, -1, sizeof(::Protocol::PlayerInfo)},
-  { 37, -1, -1, sizeof(::Protocol::MonsterInfo)},
-  { 47, -1, -1, sizeof(::Protocol::MonsterMoveInfo)},
-  { 56, -1, -1, sizeof(::Protocol::PlayerMoveInfo)},
-  { 64, -1, -1, sizeof(::Protocol::PlayerAblity)},
-  { 75, -1, -1, sizeof(::Protocol::PlayerUpdateInfo)},
-  { 84, -1, -1, sizeof(::Protocol::MonsterAblity)},
-  { 92, -1, -1, sizeof(::Protocol::ProjectileBasicInfo)},
-  { 107, -1, -1, sizeof(::Protocol::ProjectileInfo)},
+  { 20, -1, -1, sizeof(::Protocol::ObjectInfo)},
+  { 29, -1, -1, sizeof(::Protocol::PlayerInfo)},
+  { 38, -1, -1, sizeof(::Protocol::MonsterInfo)},
+  { 48, -1, -1, sizeof(::Protocol::MonsterMoveInfo)},
+  { 57, -1, -1, sizeof(::Protocol::PlayerMoveInfo)},
+  { 65, -1, -1, sizeof(::Protocol::PlayerAblity)},
+  { 76, -1, -1, sizeof(::Protocol::PlayerUpdateInfo)},
+  { 85, -1, -1, sizeof(::Protocol::MonsterAblity)},
+  { 93, -1, -1, sizeof(::Protocol::ProjectileBasicInfo)},
+  { 108, -1, -1, sizeof(::Protocol::ProjectileInfo)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -365,48 +367,49 @@ static const ::_pb::Message* const file_default_instances[] = {
 const char descriptor_table_protodef_Struct_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\014Struct.proto\022\010Protocol\032\nEnum.proto\"*\n\007"
   "Vector3\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002"
-  "\"\212\001\n\007PosInfo\022\021\n\tobject_id\030\001 \001(\004\022#\n\010Posit"
+  "\"\253\001\n\007PosInfo\022\021\n\tobject_id\030\001 \001(\004\022#\n\010Posit"
   "ion\030\002 \001(\0132\021.Protocol.Vector3\022#\n\010Rotation"
-  "\030\003 \001(\0132\021.Protocol.Vector3\022\"\n\005state\030\004 \001(\016"
-  "2\023.Protocol.MoveState\"o\n\nObjectInfo\022\021\n\to"
-  "bject_id\030\001 \001(\004\022)\n\013object_type\030\002 \001(\0162\024.Pr"
-  "otocol.ObjectType\022#\n\010pos_info\030\003 \001(\0132\021.Pr"
-  "otocol.PosInfo\"u\n\nPlayerInfo\022\021\n\tplayer_i"
-  "d\030\001 \001(\r\022)\n\013player_type\030\002 \001(\0162\024.Protocol."
-  "PlayerType\022)\n\013object_info\030\003 \001(\0132\024.Protoc"
-  "ol.ObjectInfo\"\251\001\n\013MonsterInfo\022\021\n\tobject_"
-  "id\030\001 \001(\004\022+\n\014monster_type\030\002 \001(\0162\025.Protoco"
-  "l.MonsterType\022)\n\013object_info\030\003 \001(\0132\024.Pro"
-  "tocol.ObjectInfo\022/\n\016monster_ablity\030\004 \001(\013"
-  "2\027.Protocol.MonsterAblity\"v\n\017MonsterMove"
-  "Info\022\021\n\tobject_id\030\001 \001(\r\022+\n\014monster_type\030"
-  "\002 \001(\0162\025.Protocol.MonsterType\022#\n\010pos_info"
-  "\030\003 \001(\0132\021.Protocol.PosInfo\"H\n\016PlayerMoveI"
-  "nfo\022\021\n\tplayer_id\030\001 \001(\r\022#\n\010pos_info\030\002 \001(\013"
-  "2\021.Protocol.PosInfo\"j\n\014PlayerAblity\022\r\n\005m"
-  "axhp\030\001 \001(\r\022\n\n\002hp\030\002 \001(\r\022\016\n\006damage\030\003 \001(\r\022\025"
-  "\n\rsignaturegage\030\004 \001(\002\022\030\n\020maxsignaturegag"
-  "e\030\005 \001(\002\"y\n\020PlayerUpdateInfo\022\021\n\tplayer_id"
-  "\030\001 \001(\r\022#\n\010pos_info\030\002 \001(\0132\021.Protocol.PosI"
-  "nfo\022-\n\rplayer_ablity\030\003 \001(\0132\026.Protocol.Pl"
-  "ayerAblity\"*\n\rMonsterAblity\022\r\n\005maxhp\030\001 \001"
-  "(\r\022\n\n\002hp\030\002 \001(\r\"\370\001\n\023ProjectileBasicInfo\022\031"
-  "\n\021new_projectile_id\030\001 \001(\004\022\021\n\tplayer_id\030\002"
-  " \001(\r\022\020\n\010duration\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\016\n"
-  "\006damage\030\005 \001(\r\022\036\n\003dir\030\006 \001(\0132\021.Protocol.Ve"
-  "ctor3\022\037\n\004size\030\007 \001(\0132\021.Protocol.Vector3\022$"
-  "\n\tspawn_pos\030\010 \001(\0132\021.Protocol.Vector3\022\033\n\023"
-  "bCollisionExplosion\030\t \001(\010\"|\n\016ProjectileI"
-  "nfo\022\025\n\rProjectile_id\030\001 \001(\004\022(\n\005state\030\002 \001("
-  "\0162\031.Protocol.ProjectileState\022)\n\013object_i"
-  "nfo\030\003 \001(\0132\024.Protocol.ObjectInfob\006proto3"
+  "\030\003 \001(\0132\021.Protocol.Vector3\022\037\n\004Size\030\004 \001(\0132"
+  "\021.Protocol.Vector3\022\"\n\005state\030\005 \001(\0162\023.Prot"
+  "ocol.MoveState\"o\n\nObjectInfo\022\021\n\tobject_i"
+  "d\030\001 \001(\004\022)\n\013object_type\030\002 \001(\0162\024.Protocol."
+  "ObjectType\022#\n\010pos_info\030\003 \001(\0132\021.Protocol."
+  "PosInfo\"u\n\nPlayerInfo\022\021\n\tplayer_id\030\001 \001(\r"
+  "\022)\n\013player_type\030\002 \001(\0162\024.Protocol.PlayerT"
+  "ype\022)\n\013object_info\030\003 \001(\0132\024.Protocol.Obje"
+  "ctInfo\"\251\001\n\013MonsterInfo\022\021\n\tobject_id\030\001 \001("
+  "\004\022+\n\014monster_type\030\002 \001(\0162\025.Protocol.Monst"
+  "erType\022)\n\013object_info\030\003 \001(\0132\024.Protocol.O"
+  "bjectInfo\022/\n\016monster_ablity\030\004 \001(\0132\027.Prot"
+  "ocol.MonsterAblity\"v\n\017MonsterMoveInfo\022\021\n"
+  "\tobject_id\030\001 \001(\r\022+\n\014monster_type\030\002 \001(\0162\025"
+  ".Protocol.MonsterType\022#\n\010pos_info\030\003 \001(\0132"
+  "\021.Protocol.PosInfo\"H\n\016PlayerMoveInfo\022\021\n\t"
+  "player_id\030\001 \001(\r\022#\n\010pos_info\030\002 \001(\0132\021.Prot"
+  "ocol.PosInfo\"j\n\014PlayerAblity\022\r\n\005maxhp\030\001 "
+  "\001(\r\022\n\n\002hp\030\002 \001(\r\022\016\n\006damage\030\003 \001(\r\022\025\n\rsigna"
+  "turegage\030\004 \001(\002\022\030\n\020maxsignaturegage\030\005 \001(\002"
+  "\"y\n\020PlayerUpdateInfo\022\021\n\tplayer_id\030\001 \001(\r\022"
+  "#\n\010pos_info\030\002 \001(\0132\021.Protocol.PosInfo\022-\n\r"
+  "player_ablity\030\003 \001(\0132\026.Protocol.PlayerAbl"
+  "ity\"*\n\rMonsterAblity\022\r\n\005maxhp\030\001 \001(\r\022\n\n\002h"
+  "p\030\002 \001(\r\"\370\001\n\023ProjectileBasicInfo\022\031\n\021new_p"
+  "rojectile_id\030\001 \001(\004\022\021\n\tplayer_id\030\002 \001(\r\022\020\n"
+  "\010duration\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\016\n\006damage"
+  "\030\005 \001(\r\022\036\n\003dir\030\006 \001(\0132\021.Protocol.Vector3\022\037"
+  "\n\004size\030\007 \001(\0132\021.Protocol.Vector3\022$\n\tspawn"
+  "_pos\030\010 \001(\0132\021.Protocol.Vector3\022\033\n\023bCollis"
+  "ionExplosion\030\t \001(\010\"|\n\016ProjectileInfo\022\025\n\r"
+  "Projectile_id\030\001 \001(\004\022(\n\005state\030\002 \001(\0162\031.Pro"
+  "tocol.ProjectileState\022)\n\013object_info\030\003 \001"
+  "(\0132\024.Protocol.ObjectInfob\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Struct_2eproto_deps[1] = {
   &::descriptor_table_Enum_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_Struct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Struct_2eproto = {
-    false, false, 1479, descriptor_table_protodef_Struct_2eproto,
+    false, false, 1512, descriptor_table_protodef_Struct_2eproto,
     "Struct.proto",
     &descriptor_table_Struct_2eproto_once, descriptor_table_Struct_2eproto_deps, 1, 12,
     schemas, file_default_instances, TableStruct_Struct_2eproto::offsets,
@@ -698,6 +701,7 @@ class PosInfo::_Internal {
  public:
   static const ::Protocol::Vector3& position(const PosInfo* msg);
   static const ::Protocol::Vector3& rotation(const PosInfo* msg);
+  static const ::Protocol::Vector3& size(const PosInfo* msg);
 };
 
 const ::Protocol::Vector3&
@@ -707,6 +711,10 @@ PosInfo::_Internal::position(const PosInfo* msg) {
 const ::Protocol::Vector3&
 PosInfo::_Internal::rotation(const PosInfo* msg) {
   return *msg->_impl_.rotation_;
+}
+const ::Protocol::Vector3&
+PosInfo::_Internal::size(const PosInfo* msg) {
+  return *msg->_impl_.size_;
 }
 PosInfo::PosInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -720,6 +728,7 @@ PosInfo::PosInfo(const PosInfo& from)
   new (&_impl_) Impl_{
       decltype(_impl_.position_){nullptr}
     , decltype(_impl_.rotation_){nullptr}
+    , decltype(_impl_.size_){nullptr}
     , decltype(_impl_.object_id_){}
     , decltype(_impl_.state_){}
     , /*decltype(_impl_._cached_size_)*/{}};
@@ -730,6 +739,9 @@ PosInfo::PosInfo(const PosInfo& from)
   }
   if (from._internal_has_rotation()) {
     _this->_impl_.rotation_ = new ::Protocol::Vector3(*from._impl_.rotation_);
+  }
+  if (from._internal_has_size()) {
+    _this->_impl_.size_ = new ::Protocol::Vector3(*from._impl_.size_);
   }
   ::memcpy(&_impl_.object_id_, &from._impl_.object_id_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.state_) -
@@ -744,6 +756,7 @@ inline void PosInfo::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.position_){nullptr}
     , decltype(_impl_.rotation_){nullptr}
+    , decltype(_impl_.size_){nullptr}
     , decltype(_impl_.object_id_){uint64_t{0u}}
     , decltype(_impl_.state_){0}
     , /*decltype(_impl_._cached_size_)*/{}
@@ -763,6 +776,7 @@ inline void PosInfo::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.position_;
   if (this != internal_default_instance()) delete _impl_.rotation_;
+  if (this != internal_default_instance()) delete _impl_.size_;
 }
 
 void PosInfo::SetCachedSize(int size) const {
@@ -783,6 +797,10 @@ void PosInfo::Clear() {
     delete _impl_.rotation_;
   }
   _impl_.rotation_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.size_ != nullptr) {
+    delete _impl_.size_;
+  }
+  _impl_.size_ = nullptr;
   ::memset(&_impl_.object_id_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.state_) -
       reinterpret_cast<char*>(&_impl_.object_id_)) + sizeof(_impl_.state_));
@@ -819,9 +837,17 @@ const char* PosInfo::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) 
         } else
           goto handle_unusual;
         continue;
-      // .Protocol.MoveState state = 4;
+      // .Protocol.Vector3 Size = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_size(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.MoveState state = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
           uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_state(static_cast<::Protocol::MoveState>(val));
@@ -877,11 +903,18 @@ uint8_t* PosInfo::_InternalSerialize(
         _Internal::rotation(this).GetCachedSize(), target, stream);
   }
 
-  // .Protocol.MoveState state = 4;
+  // .Protocol.Vector3 Size = 4;
+  if (this->_internal_has_size()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(4, _Internal::size(this),
+        _Internal::size(this).GetCachedSize(), target, stream);
+  }
+
+  // .Protocol.MoveState state = 5;
   if (this->_internal_state() != 0) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteEnumToArray(
-      4, this->_internal_state(), target);
+      5, this->_internal_state(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -914,12 +947,19 @@ size_t PosInfo::ByteSizeLong() const {
         *_impl_.rotation_);
   }
 
+  // .Protocol.Vector3 Size = 4;
+  if (this->_internal_has_size()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.size_);
+  }
+
   // uint64 object_id = 1;
   if (this->_internal_object_id() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_object_id());
   }
 
-  // .Protocol.MoveState state = 4;
+  // .Protocol.MoveState state = 5;
   if (this->_internal_state() != 0) {
     total_size += 1 +
       ::_pbi::WireFormatLite::EnumSize(this->_internal_state());
@@ -950,6 +990,10 @@ void PosInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOB
   if (from._internal_has_rotation()) {
     _this->_internal_mutable_rotation()->::Protocol::Vector3::MergeFrom(
         from._internal_rotation());
+  }
+  if (from._internal_has_size()) {
+    _this->_internal_mutable_size()->::Protocol::Vector3::MergeFrom(
+        from._internal_size());
   }
   if (from._internal_object_id() != 0) {
     _this->_internal_set_object_id(from._internal_object_id());

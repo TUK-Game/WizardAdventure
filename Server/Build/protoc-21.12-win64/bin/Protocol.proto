@@ -112,3 +112,13 @@ message S_DESPAWN
 	repeated uint64 object_ids = 1;
 }
 
+message S_GATE_OPNE
+{
+	repeated ObjectInfo open_objects = 1;
+}
+
+message S_GATE_CLOSE
+{
+	repeated ObjectInfo cloase_objects = 1;
+}
+

@@ -11,7 +11,6 @@ public:
 	template<typename T>
 	static std::shared_ptr<T> CreateObject()
 	{
-
 		// ID »ý¼º
 		const int64 newId = s_IdGenerator.fetch_add(1);
 

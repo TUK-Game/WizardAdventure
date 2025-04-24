@@ -48,11 +48,15 @@ void CRoom::Init()
 {
 	CTriggerBoxRef box = CObjectUtil::CreateObject<CTriggerBox>();
 	box->SetTriggerBox(Vec3(8700.f, 0.f, 3840.f), Vec3(100.f, 100.f, 1200.f));
+	//box->SetArea(Vec3(3810.f, 0.f, 4350.f), Vec3(2080.f, 100.f, 1100.f));
+	//box->PushGatePosInfo({ Vec3(4850.f, 0.f, 3875.f), Vec3(200.f, 200.f, 850.f) });
 	AddObject((uint32)EObject_Type::TRIGGER, box);
 
 	box = CObjectUtil::CreateObject<CTriggerBox>();
 	box->SetTriggerBox(Vec3(4850, 0.f, 3875.f), Vec3(100.f, 100.f, 850.f));
 	box->SetArea(Vec3(3810.f, 0.f, 4350.f), Vec3(2080.f, 100.f, 1100.f));
+	box->PushGateInfo(Vec3(5000.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 1000.f), 0.f);
+	box->PushGateInfo(Vec3(2750.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 600.f), 0.f);
 	AddObject((uint32)EObject_Type::TRIGGER, box);
 }
 
@@ -449,6 +453,7 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 		}
 
 		const auto& rot = projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->rotation();
+		const auto& scale = projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->size();
 		auto* info = pkt.mutable_projectile_info();
 		info->set_projectile_id(projectile->ProjectileInfo->projectile_id());
 		info->set_state(projectile->ProjectileInfo->state());
@@ -457,6 +462,10 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 		posInfo->mutable_position()->set_x(nowPos.x);
 		posInfo->mutable_position()->set_y(nowPos.y);
 		posInfo->mutable_position()->set_z(nowPos.z);
+
+		posInfo->mutable_size()->set_x(scale.x());
+		posInfo->mutable_size()->set_y(scale.y());
+		posInfo->mutable_size()->set_z(scale.z());
 
 		posInfo->mutable_rotation()->set_x(rot.x());
 		posInfo->mutable_rotation()->set_y(rot.y());
@@ -547,6 +556,38 @@ bool CRoom::RemoveLast()
 bool CRoom::RemoveObject(uint32 layer, uint64 id)
 {
 	m_deleteObjects.push_back({ layer, id });
+
+	return true;
+}
+
+bool CRoom::HandleOpenGate(const std::vector<GateInfo>& posInfo)
+{
+	Protocol::S_GATE_OPNE pkt;
+
+	for (int i = 0; i < posInfo.size(); ++i)
+	{
+		CGameObjectRef object = CObjectUtil::CreateObject<CGameObject>();
+		const auto& objectPosInfo = object->ObjectInfo->mutable_pos_info();
+		objectPosInfo->mutable_position()->set_x(posInfo[i].GatePos.x);
+		objectPosInfo->mutable_position()->set_y(posInfo[i].GatePos.y);
+		objectPosInfo->mutable_position()->set_z(posInfo[i].GatePos.z);
+
+		objectPosInfo->mutable_rotation()->set_y(posInfo[i].GateYRot);
+
+		objectPosInfo->mutable_size()->set_x(posInfo[i].GateSize.x);
+		objectPosInfo->mutable_size()->set_y(posInfo[i].GateSize.y);
+		objectPosInfo->mutable_size()->set_z(posInfo[i].GateSize.z);
+
+		object->GetCollider()->SetCollisionProfile("Wall");
+		object->GetCollider()->SetBoxInfo(posInfo[i].GatePos, posInfo[i].GateSize, Vec3(0.f, posInfo[i].GateYRot, 0.f));
+		GetLevelCollision()->AddCollider(object->GetCollider(), ECollision_Channel::Wall);
+		AddObject((uint32)EObject_Type::Wall, object);
+
+		Protocol::ObjectInfo* info = pkt.add_open_objects();
+		info->CopyFrom(*object->ObjectInfo);
+	}
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	Broadcast(sendBuffer, -1);
 
 	return true;
 }

@@ -42,6 +42,8 @@ public:
 
 	bool RemoveObject(uint32 layer, uint64 id);
 
+	bool HandleOpenGate(const std::vector<struct GateInfo>& posInfo);
+
 private:
 	bool AddPlayer(CPlayerRef player);
 	bool RemovePlayer(uint64 playerId);

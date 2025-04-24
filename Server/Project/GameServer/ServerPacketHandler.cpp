@@ -164,15 +164,21 @@ bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJE
 	if (object == nullptr)
 		return true;
 	const auto& posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->position();
+	const auto& scaleInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->size();
 	const auto& rotInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->rotation();
 	const auto state = pkt.projectile_info().state();
 	
 	auto* pos = object->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+	auto* scale = object->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_size();
 	auto* rot = object->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation();
 	pos->set_x(posInfo.x());
 	pos->set_y(posInfo.y());
 	pos->set_z(posInfo.z());
-	
+
+	scale->set_x(scaleInfo.x());
+	scale->set_y(scaleInfo.y());
+	scale->set_z(scaleInfo.z());
+
 	rot->set_x(rotInfo.x());
 	rot->set_y(rotInfo.y());
 	rot->set_z(rotInfo.z());
@@ -180,12 +186,6 @@ bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJE
 	if(object->ProjectileInfo->state() != Protocol::COLLISION)
 	{
 		object->ProjectileInfo->set_state(state);
-		if (state == Protocol::COLLISION)
-		{
-			std::cout << "ÅÍÁ®¿È\n";
-		}
-		else
-			std::cout << "Àß¿È\n";
 	}
 	
 	g_Room->DoAsync(&CRoom::HandleMoveProjectile, object);

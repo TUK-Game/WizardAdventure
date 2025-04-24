@@ -18,6 +18,8 @@
 #include "FirePillar.h"
 #include "FireCircle.h"
 #include "ParticleSystemManager.h"
+#include "MeshRenderer.h"
+#include "AssetManager.h"
 
 #include "TestWidget.h"
 #include "MapPlayerWidget.h"
@@ -273,11 +275,13 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	else
 	{
 		const auto& pos = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
+		const auto& scale = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_size();
 		const auto& rot = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_rotation();
 		auto& object = map[id];
 		if (object)
 		{
 			object->GetTransform()->SetRelativePosition(Vec3(pos->x(), pos->y(), pos->z()));
+			object->GetTransform()->SetRelativeScale(Vec3(scale->x(), scale->y(), scale->z()));
 			object->GetTransform()->SetRelativeRotation(Vec3(rot->x(), rot->y(), rot->z()));
 		}
 	}
@@ -337,6 +341,35 @@ bool Handle_S_SPAWN(CPacketSessionRef& session, Protocol::S_SPAWN& pkt)
 
 
 bool Handle_S_DESPAWN(CPacketSessionRef& session, Protocol::S_DESPAWN& pkt)
+{
+	return true;
+}
+
+bool Handle_S_GATE_OPNE(CPacketSessionRef& session, Protocol::S_GATE_OPNE& pkt)
+{
+	for (int i = 0; i < pkt.open_objects_size(); ++i)
+	{
+		const auto& info = pkt.open_objects(i);
+
+		CGameObject* object = new CGameObject;
+		object->AddComponent(new CTransform);
+		object->AddComponent(new CMeshRenderer);
+		const auto& posInfo = info.pos_info().position();
+		const auto& sizeInfo = info.pos_info().size();
+		const auto& rotInfo = info.pos_info().rotation();
+		object->SetName(L"Gate" + i);
+		object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+		object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+		object->GetTransform()->SetRelativePosition(posInfo.x(), posInfo.y(), posInfo.z());
+		object->GetTransform()->SetRelativeScale(sizeInfo.x(), sizeInfo.y(), sizeInfo.z());
+		object->GetTransform()->SetRelativeRotation(rotInfo.x(), rotInfo.y(), rotInfo.z());
+
+		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(object, 12, false);
+	}
+	return true;
+}
+
+bool Handle_S_GATE_CLOSE(CPacketSessionRef& session, Protocol::S_GATE_CLOSE& pkt)
 {
 	return true;
 }

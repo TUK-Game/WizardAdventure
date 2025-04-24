@@ -114,6 +114,11 @@ void CBoxCollider::SetBoxInfo(const Vec3& centerPos, const Vec3& size, const Vec
 	m_Owner->PosInfo->mutable_position()->set_y(centerPos.y);
 	m_Owner->PosInfo->mutable_position()->set_z(centerPos.z);
 }
+void CBoxCollider::SetBoxPosAndSize(const Vec3& centerPos, const Vec3& size)
+{
+	m_BoundingBox.Center = centerPos;
+	m_BoundingBox.Extents = size;
+}
 void CBoxCollider::SetBoxHeight(float height)
 {
 	XMFLOAT3 center = m_BoundingBox.Center;
@@ -128,6 +133,9 @@ void CBoxCollider::Update()
 		return;
 
 	Protocol::Vector3 pos = m_Owner->PosInfo->position();
-	m_BoundingBox.Center = XMFLOAT3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z) ;
+	Protocol::Vector3 size = m_Owner->PosInfo->size();
+	SetBoxPosAndSize(Vec3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z), Vec3(size.x(), size.y(), size.z()));
+	//m_BoundingBox.Center = XMFLOAT3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z) ;
+
 	g_Room->GetLevelCollision()->AddCollider(this, m_Channel);
 }

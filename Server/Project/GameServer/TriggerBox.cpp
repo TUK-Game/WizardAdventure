@@ -50,9 +50,20 @@ void CTriggerBox::Update(float deltaTime)
 void CTriggerBox::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
 	//std::cout << "트리거 박스 발동\n";
+	/*for (const auto& monster : m_AreaMonsters)
+	{
+		monster->SetIsActive(true);
+	}
+	g_Room->HandleOpenGate(m_GateInfo);
+	g_Room->RemoveObject((uint32)EObject_Type::TRIGGER, ObjectInfo->object_id());*/
+}
+
+void CTriggerBox::CollisionEnd(CBoxCollider* src, CBoxCollider* dest)
+{
 	for (const auto& monster : m_AreaMonsters)
 	{
 		monster->SetIsActive(true);
 	}
+	g_Room->HandleOpenGate(m_GateInfo);
 	g_Room->RemoveObject((uint32)EObject_Type::TRIGGER, ObjectInfo->object_id());
 }

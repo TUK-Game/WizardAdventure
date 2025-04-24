@@ -104,8 +104,11 @@ bool CLevelCollision::CollisionWithWall(CBoxCollider* collider)
 
 			const std::vector<WorldTriangle>& triangles = src->GetWorldTriangle();
 
-			if (!MeshBoxCheck(triangles, dest->GetBoundingBox()))
-				continue;
+			if (!triangles.empty())
+			{
+				if (!MeshBoxCheck(triangles, dest->GetBoundingBox()))
+					continue;
+			}
 
 			src->CallCollisionBegin(dest);
 			dest->CallCollisionBegin(src);
