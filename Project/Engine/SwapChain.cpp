@@ -14,7 +14,6 @@ int CSwapChain::Init(const WindowInfo& info, ComPtr<ID3D12Device> device, ComPtr
 {
 	if (FAILED(CreateSwapChain(info, dxgi, cmdQueue)))
 		return E_FAIL;
-
 	return S_OK;
 }
 

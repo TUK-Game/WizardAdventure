@@ -133,6 +133,7 @@
     <ClCompile Include="TriggerBox.cpp">
       <Filter>01. Game\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="MonsterArea.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -213,6 +214,7 @@
     <ClInclude Include="TriggerBox.h">
       <Filter>01. Game\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterArea.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\protoc-21.12-win64\bin\GenPackets.bat">

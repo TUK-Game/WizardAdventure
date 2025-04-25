@@ -65,6 +65,7 @@ void CLevel_1::Init()
 	this->GetLayer(10)->SetName(L"Map");
 	this->GetLayer(11)->SetName(L"Monster");	
 	this->GetLayer(12)->SetName(L"Projectile");	
+	this->GetLayer(12)->SetName(L"Gate");	
 
 	CAssetManager::GetInst()->LoadSound("BGM", "Play", false, "e.mp3");
 	CAssetManager::GetInst()->SetVolume("BGM", 30);

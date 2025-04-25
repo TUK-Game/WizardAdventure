@@ -166,6 +166,7 @@
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MonsterAI.cpp" />
+    <ClCompile Include="MonsterArea.cpp" />
     <ClCompile Include="MonsterCollider.cpp" />
     <ClCompile Include="ObjectUtil.cpp" />
     <ClCompile Include="pch.cpp">
@@ -203,6 +204,7 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="MonsterAI.h" />
+    <ClInclude Include="MonsterArea.h" />
     <ClInclude Include="MonsterCollider.h" />
     <ClInclude Include="ObjectUtil.h" />
     <ClInclude Include="pch.h" />

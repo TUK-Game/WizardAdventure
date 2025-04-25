@@ -24,6 +24,7 @@ CCollisionManager::~CCollisionManager()
 void CCollisionManager::Init()
 {
 	CreateProfile("Wall", ECollision_Channel::Wall, true);
+	CreateProfile("Gate", ECollision_Channel::GATE, true);
 	CreateProfile("Player", ECollision_Channel::Player, true);
 	CreateProfile("Monster", ECollision_Channel::Monster, true);
 	CreateProfile("Projectile", ECollision_Channel::Projectile, true);
@@ -36,6 +37,8 @@ void CCollisionManager::Init()
 	SetCollisionInteraction("Projectile", ECollision_Channel::Projectile, ECollision_Interaction::Ignore);
 
 	SetCollisionInteraction("Wall", ECollision_Channel::Wall, ECollision_Interaction::Ignore);
+
+	SetCollisionInteraction("Gate", ECollision_Channel::Wall, ECollision_Interaction::Ignore);
 }
 
 bool CCollisionManager::CreateProfile(const std::string& name, ECollision_Channel channel, bool enable, ECollision_Interaction baseInteraction)

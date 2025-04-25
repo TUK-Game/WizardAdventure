@@ -4,6 +4,7 @@
 #include "Room.h"
 #include "LevelCollision.h"
 #include "Monster.h"
+#include "MonsterArea.h"
 
 CTriggerBox::CTriggerBox()
 {
@@ -60,10 +61,13 @@ void CTriggerBox::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 
 void CTriggerBox::CollisionEnd(CBoxCollider* src, CBoxCollider* dest)
 {
+	CMonsterArea* area = new CMonsterArea();
 	for (const auto& monster : m_AreaMonsters)
 	{
 		monster->SetIsActive(true);
+		area->PushMonsterId(monster->MonsterInfo->object_id());
 	}
+	g_Room->GetAreas().push_back(area);
 	g_Room->HandleOpenGate(m_GateInfo);
 	g_Room->RemoveObject((uint32)EObject_Type::TRIGGER, ObjectInfo->object_id());
 }

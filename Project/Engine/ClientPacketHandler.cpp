@@ -213,7 +213,6 @@ bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt
 bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO& pkt)
 {
 	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
-	std::vector<CGameObject*> monsters = level->GetLayer(11)->GetParentObjects();
 	auto& monsterMap = level->GetLayer(11)->GetMonsterMap();
 
 	for (int i = 0; i < pkt.monster_info_size(); ++i)
@@ -371,19 +370,41 @@ bool Handle_S_GATE_OPNE(CPacketSessionRef& session, Protocol::S_GATE_OPNE& pkt)
 		const auto& posInfo = info.pos_info().position();
 		const auto& sizeInfo = info.pos_info().size();
 		const auto& rotInfo = info.pos_info().rotation();
-		object->SetName(L"Gate" + i);
+		object->m_ObjectId = info.object_id();
+		std::wstring name = std::to_wstring(info.object_id());
+		object->SetName(name);
 		object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
 		object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 		object->GetTransform()->SetRelativePosition(posInfo.x(), posInfo.y(), posInfo.z());
 		object->GetTransform()->SetRelativeScale(sizeInfo.x(), sizeInfo.y(), sizeInfo.z());
 		object->GetTransform()->SetRelativeRotation(rotInfo.x(), rotInfo.y(), rotInfo.z());
 
-		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(object, 12, false);
+		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(object, 13, false);
 	}
 	return true;
 }
 
 bool Handle_S_GATE_CLOSE(CPacketSessionRef& session, Protocol::S_GATE_CLOSE& pkt)
 {
+	const std::vector<CGameObject*>& objects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(13)->GetParentObjects();
+	for (int i = 0; i < pkt.cloase_objects_size(); ++i)
+	{
+		std::wstring name = std::to_wstring(pkt.cloase_objects(i).object_id());
+		auto iter = std::find_if(objects.begin(), objects.end(), [&](const auto& obj) {
+			return obj->GetName() == name;
+		});
+		
+		if (iter != objects.end())
+		{
+			CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(13)->SafeRemoveGameObject(*iter);
+			std::cout << "없애다\n";
+		}
+		else
+		{
+			std::cout << "이미 없다\n";
+		}
+	}
+
+
 	return true;
 }

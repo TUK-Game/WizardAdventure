@@ -35,6 +35,7 @@ enum class ECollision_Channel
 	Projectile,
 	NPC,
 	TRIGGER,
+	GATE,
 	Max
 };
 
@@ -51,6 +52,7 @@ enum class EObject_Type
 	Projectile,
 	NPC,
 	TRIGGER,
+	Gate,
 	Max
 };
 
