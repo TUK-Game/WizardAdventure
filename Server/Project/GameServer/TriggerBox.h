@@ -5,6 +5,7 @@ struct GateInfo
 {
 	Vec3 GatePos;
 	Vec3 GateSize;
+	Vec3 GateDir;
 	float GateYRot = 0.f;
 };
 
@@ -19,7 +20,7 @@ public:
 
 	void SetTriggerBox(const Vec3& pos, const Vec3& size);
 	void SetArea(const Vec3& center, const Vec3& size) { m_AreaCenter = center; m_AreaSize = size; }
-	void PushGateInfo(const Vec3& center, const Vec3& size, float yRot) { m_GateInfo.emplace_back(GateInfo(center, size, yRot)); }
+	void PushGateInfo(const Vec3& center, const Vec3& size, const Vec3& dir, float yRot) { m_GateInfo.emplace_back(GateInfo(center, size, dir, yRot)); }
 
 	bool IsMonsterInArea(const Vec3& pos);
 

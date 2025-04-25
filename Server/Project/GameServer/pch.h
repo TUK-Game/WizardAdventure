@@ -35,7 +35,6 @@ enum class ECollision_Channel
 	Projectile,
 	NPC,
 	TRIGGER,
-	GATE,
 	Max
 };
 

@@ -55,8 +55,8 @@ void CRoom::Init()
 	CTriggerBoxRef box = CObjectUtil::CreateObject<CTriggerBox>();
 	box->SetTriggerBox(Vec3(4850, 0.f, 3875.f), Vec3(100.f, 100.f, 850.f));
 	box->SetArea(Vec3(3810.f, 0.f, 4350.f), Vec3(2080.f, 100.f, 1100.f));
-	box->PushGateInfo(Vec3(5000.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 1000.f), 0.f);
-	box->PushGateInfo(Vec3(2750.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 600.f), 0.f);
+	box->PushGateInfo(Vec3(5000.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 1000.f), Vec3(-1.f, 0.f, 0.f), 0.f);
+	box->PushGateInfo(Vec3(2750.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 600.f), Vec3(1.f, 0.f, 0.f), 0.f);
 	AddObject((uint32)EObject_Type::TRIGGER, box);
 }
 
@@ -159,11 +159,20 @@ void CRoom::UpdateAreas()
 
 		if (monstersId.empty())
 		{
+			std::unordered_map<uint64, CGameObjectRef> walls = GetLayerObjects((int)EObject_Type::Wall);
+
 			auto& gateIds = m_Areas[i]->GetGatesId();
 			Protocol::S_GATE_CLOSE pkt;
 
+			auto& colliders = GetLevelCollision()->GetLayerCollider((uint32)ECollision_Channel::Wall);
+
 			for (uint32 gateid : gateIds)
 			{
+				CGameObjectRef object = GetLayerObject((uint32)EObject_Type::Wall, gateid);
+				CBoxCollider* box = object->GetCollider();
+
+				colliders.erase(std::remove(colliders.begin(), colliders.end(), box), colliders.end());
+
 				Protocol::ObjectInfo* info = pkt.add_cloase_objects();
 				info->set_object_id(gateid);
 				RemoveObject((int)EObject_Type::Monster, gateid);
@@ -314,6 +323,8 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 	moveAmount.y = 0;
 	moveAmount.z /= static_cast<float>(step);
 
+	const auto& dir = player->GetDir();
+
 	for (int i = 1; i <= step; ++i)
 	{
 		nowPos.x += moveAmount.x;
@@ -327,7 +338,6 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 		if (m_LevelCollision->CollisionWithWall(box) || m_LevelCollision->CollisionWithPlayer(box))
 		{
-			Protocol::Vector3& dir = player->GetDir();
 			nowPos.x -= moveAmount.x;
 			nowPos.z -= moveAmount.z;
 
@@ -364,6 +374,7 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 	if (auto session = player->GetSession())
 		session->Send(sendBuffer);
 
+	player->GetCollider()->SetGateDir(Vec3(dir.x(), dir.y(), dir.z()));
 	return true;
 }
 
@@ -608,10 +619,11 @@ bool CRoom::HandleOpenGate(const std::vector<GateInfo>& posInfo)
 		objectPosInfo->mutable_size()->set_y(posInfo[i].GateSize.y);
 		objectPosInfo->mutable_size()->set_z(posInfo[i].GateSize.z);
 
-		object->GetCollider()->SetCollisionProfile("Gate");
+		object->GetCollider()->SetCollisionProfile("Wall");
 		object->GetCollider()->SetBoxInfo(posInfo[i].GatePos, posInfo[i].GateSize, Vec3(0.f, posInfo[i].GateYRot, 0.f));
-		GetLevelCollision()->AddCollider(object->GetCollider(), ECollision_Channel::GATE);
-		AddObject((uint32)EObject_Type::Gate, object);
+		object->GetCollider()->SetGateDir(posInfo[i].GateDir);
+		GetLevelCollision()->AddCollider(object->GetCollider(), ECollision_Channel::Wall);
+		AddObject((uint32)EObject_Type::Wall, object);
 
 		Protocol::ObjectInfo* info = pkt.add_open_objects();
 		info->CopyFrom(*object->ObjectInfo);

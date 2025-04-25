@@ -150,7 +150,6 @@ bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PRO
 	projectile->SetCollisionBoxInfo(Vec3(info.spawn_pos().x(), info.spawn_pos().y(), info.spawn_pos().z()), state.Size, Vec3(0.f, 0.f, 0.f));
 	projectile->m_meshType = pkt.mesh();
 	g_Room->DoAsync(&CRoom::HandleSpawnProjectile, projectile);
-	std::cout << "¹ß»ç!" << info.player_id() << "°¡ ½ô\n";
 	return true;
 }
 
