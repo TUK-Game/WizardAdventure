@@ -82,11 +82,10 @@ void CServerSession::OnActPlayer()
 {
 	CTransform* transform = m_OwnPlayer->GetTransform();
 
-	Vec3 pos = Vec3(0.f, 0.f, 0.f); 
 	Vec3 rot = transform->GetRelativeRotation();
 	Vec3 dir = m_OwnPlayer->GetCurrentMoveDir();
 
-	m_OwnPlayer->m_Amount = pos; 
+	m_OwnPlayer->m_Amount = Vec3(0.f, 0.f, 0.f); 
 
 	Protocol::C_MOVE pkt;
 	auto* moveInfo = pkt.mutable_player_move_info();
@@ -95,7 +94,6 @@ void CServerSession::OnActPlayer()
 	moveInfo->set_player_id(m_Id);
 	posInfo->set_state(m_OwnPlayer->GetStateForProtocol());
 	
-	ProtoToVector3(pos, posInfo->mutable_position());
 	ProtoToVector3(rot, posInfo->mutable_rotation());
 	ProtoToVector3(dir, pkt.mutable_dir());
 
@@ -181,7 +179,9 @@ void CServerSession::MoveSkill(CSkillObject* object)
 		info->set_state(Protocol::COLLISION);
 	}
 	else
+	{
 		info->set_state(Protocol::MOVE_STATE);
+	}
 
 	auto* posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
 	auto* scaleInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_size();

@@ -20,6 +20,7 @@
 #include "ParticleSystemManager.h"
 #include "MeshRenderer.h"
 #include "AssetManager.h"
+#include "EffectManager.h"
 
 #include "TestWidget.h"
 #include "MapPlayerWidget.h"
@@ -259,6 +260,7 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	if ((pkt.mutable_projectile_info()->state()) == Protocol::COLLISION)
 	{
 		CFireBall* ball = dynamic_cast<CFireBall*>(map[id]);
+		Vec3 pos = ball->GetTransform()->GetRelativePosition();
 		if (ball)
 		{
 			if (ball->GetFireParticleObject())
@@ -266,8 +268,20 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 				CParticleSystemManager::GetInst()->Return(ball->GetFireParticleObject());
 				ball->SetParticleObject(nullptr);
 			}
+			if (ball->GetSmokeParticleObject())
+			{
+				CParticleSystemManager::GetInst()->Return(ball->GetSmokeParticleObject());
+				ball->SetSmokeParticleObject(nullptr);
+			}
+
+			//if (ball->GetIsBoom())
+			{
+				CEffectManager::GetInst()->SpawnRadialSmoke(pos);
+				CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
+				CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
+				CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
+			}
 		}
-		std::cout << "»èÁ¦\n";
 
 		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->SafeRemoveGameObject(map[id]);
 		map.erase(id);
@@ -312,7 +326,7 @@ bool Handle_S_UPDATE_PLAYER(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYE
 
 	const auto& player = CLevelManager::GetInst()->GetPlayer(id);
 	player->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
-	player->SetProtocolStateForClient(state);
+	//player->SetProtocolStateForClient(state);
 
 	const auto& stats = info.player_ablity();
 	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp());

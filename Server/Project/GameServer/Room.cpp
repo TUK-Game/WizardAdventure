@@ -385,10 +385,10 @@ bool CRoom::UPdatePlayer(CPlayerRef player, float deltaTime)
 	info->mutable_player_ablity()->set_maxhp(ablity->maxHp);
 
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
-	Broadcast(sendBuffer, player->PlayerInfo->player_id());
+	Broadcast(sendBuffer, -1);
 
-	if (auto session = player->GetSession())
-		session->Send(sendBuffer);
+	//if (auto session = player->GetSession())
+	//	session->Send(sendBuffer);
 
 	return true;
 }
