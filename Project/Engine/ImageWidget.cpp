@@ -3,6 +3,7 @@
 #include "AssetManager.h"
 #include "RenderComponent.h"
 #include "MeshRenderer.h"
+#include "Transform.h"
 
 CImageWidget::CImageWidget()
 {
@@ -25,3 +26,11 @@ void CImageWidget::SetTexture(const std::wstring& name)
 	GetMeshRenderer()->SetMaterial(material);
 }
 
+bool CImageWidget::Init()
+{
+	AddComponent(new CMeshRenderer);
+	AddComponent(new CTransform);
+	GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
+
+	return true;
+}

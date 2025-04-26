@@ -197,6 +197,10 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"MenuBTN_Hover", tex);
 
 	tex = new CTexture;
+	tex->Init(path / L"SkillWidget.png");
+	AddAsset(L"SkillWidgetTexture", tex);
+
+	tex = new CTexture;
 	tex->Init(path / L"Spark.png");
 	AddAsset(L"Spark", tex);
 
