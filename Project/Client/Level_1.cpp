@@ -12,7 +12,6 @@
 #include <Engine/LevelManager.h>
 #include <Engine/Layer.h>
 #include <Engine/MeshData.h>
-#include <Engine/UIButton.h>
 #include <Engine/Player.h>
 #include <Engine/PlayerScript.h>
 #include <Engine/Flag.h>
@@ -23,7 +22,6 @@
 #include <Engine/Device.h>
 #include <Engine/RenderTargetGroup.h>
 #include <Engine/SubLevel.h>
-#include <Engine/BoxCollider.h>
 #include <Engine/PlayWidgetWindow.h>
 #include <Engine/Animator.h>
 #include <Engine/TestWidget.h>
@@ -32,7 +30,6 @@
 #include <Engine/AnimatedBillboardEffect.h>
 #include <Engine/EffectManager.h>
 
-#include <Engine/TestWidget.h>
 #include <Engine/Engine.h>
 CLevel_1::CLevel_1()
 {
@@ -220,8 +217,8 @@ void CLevel_1::Init()
 
 #pragma region Widget
 
-	CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"fuck2");
-	CreateWidgetWindow<CTextWindow>(EWIDGETWINDOW_TYPE::TEXT_WINDOW, L"fuck");
+	CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"GamePlayWidget");
+	CreateWidgetWindow<CTextWindow>(EWIDGETWINDOW_TYPE::TEXT_WINDOW, L"TextWindow");
 
 #pragma endregion
 

@@ -21,7 +21,9 @@ public:
 	Vec3 GetMapCenter() { return m_MapCenter; }
 	Vec2 GetMapMaxToCamera() { return m_MapMax; }
 	Vec2 GetMapMinToCamera() { return m_MapMin; }
+	EWIDGETWINDOW_TYPE GetWidgetWindowType() { return m_WindowType; }
 
+	void SetWidgetWindowType(EWIDGETWINDOW_TYPE type) { m_WindowType = type; }
 
 	virtual void Deregister();
 
@@ -92,6 +94,7 @@ protected:
 	Vec3																		m_MapCenter;
 	Vec2																		m_MapMax;
 	Vec2																		m_MapMin;
+	EWIDGETWINDOW_TYPE															m_WindowType = EWIDGETWINDOW_TYPE::END;
 public:
 	std::shared_ptr<CSubLevel> m_SubLevel;
 };

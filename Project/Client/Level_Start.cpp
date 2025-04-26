@@ -78,7 +78,6 @@ void CLevel_Start::Init()
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
 	this->AddGameObject(camera, 0, false);
 
-
 	// Main Texture
 	CGameObject* ui = new CGameObject;
 	ui->SetName(L"MainTexture");
@@ -96,8 +95,6 @@ void CLevel_Start::Init()
 	this->AddGameObject(ui, 4, false);
 
 	CreateWidgetWindow<CStartLevelWidgetWindow>(EWIDGETWINDOW_TYPE::START_WINDOW, L"StartWindow");
-
-
 }
 
 void CLevel_Start::Begin()

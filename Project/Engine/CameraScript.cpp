@@ -56,14 +56,17 @@ void CCameraScript::Update()
 	}
 	if (KEY_DOWN(EKey::M))
 	{
-		const auto window = CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::MAP_WINDOW);
+		CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
+		const auto window = level->FindWidgetWindow(EWIDGETWINDOW_TYPE::MAP_WINDOW);
 		if (window->GetEnable())
 		{
 			window->SetEnable(false);
+			level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::END);
 		}
 		else
 		{
 			window->SetEnable(true);
+			level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::MAP_WINDOW);
 		}
 	/*	CWidget* widget = CLevelManager::GetInst()->GetCurrentLevel()->FindWidget(L"MiniMap");
 		if(widget->GetEnable())
