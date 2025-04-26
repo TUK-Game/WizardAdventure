@@ -29,7 +29,7 @@ void CImageWidget::SetTexture(const std::wstring& name)
 bool CImageWidget::Init()
 {
 	AddComponent(new CMeshRenderer);
-	AddComponent(new CTransform);
+	AddComponent(new CTransform);	
 	GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 
 	return true;

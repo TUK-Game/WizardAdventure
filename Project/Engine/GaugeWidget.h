@@ -7,6 +7,8 @@ class CGaugeWidget :
 public:
 	void SetGaugeScale(float scale) { m_GaugeScale = scale; }
 	void SetStartX(float x) { m_StartX = x; }
+	void SetMaxGauge(float x) { m_MaxGauge = x; }
+	void SetGauge(float x) { m_Gauge = x; }
 
 public:
 	virtual bool Init() override;

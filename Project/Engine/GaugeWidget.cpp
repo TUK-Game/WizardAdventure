@@ -19,22 +19,22 @@ bool CGaugeWidget::Init()
 
 void CGaugeWidget::Update()
 {
-    //if (m_Gauge > 0)
-    //{
-    //    m_Gauge -= DELTA_TIME * 5;
-    //    float HPPercentage = m_Gauge / m_MaxGauge;
+    if (m_Gauge > 0)
+    {
+        //m_Gauge -= DELTA_TIME * 5;
+        float HPPercentage = m_Gauge / m_MaxGauge;
 
-    //    float OriginalWidth = m_GaugeScale;
+        float OriginalWidth = m_GaugeScale;
 
-    //    float NewWidth = OriginalWidth * HPPercentage;
+        float NewWidth = OriginalWidth * HPPercentage;
 
-    //    float OffsetX = -(OriginalWidth - NewWidth) / 2.0f;
+        float OffsetX = -(OriginalWidth - NewWidth) / 2.0f;
 
-    //    Vec3 pos = GetTransform()->GetRelativePosition();
-    //    Vec3 scale = GetTransform()->GetRelativeScale();
-    //    scale.x = NewWidth;
-    //    pos.x = OffsetX + m_StartX;
-    //    GetTransform()->SetRelativePosition(pos);
-    //    GetTransform()->SetRelativeScale(scale);
-    //}
+        Vec3 pos = GetTransform()->GetRelativePosition();
+        Vec3 scale = GetTransform()->GetRelativeScale();
+        scale.x = NewWidth;
+        pos.x = OffsetX + m_StartX;
+        GetTransform()->SetRelativePosition(pos);
+        GetTransform()->SetRelativeScale(scale);
+    }
 }

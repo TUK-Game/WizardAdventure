@@ -638,6 +638,9 @@
     <ClInclude Include="ButtonWidget.h">
       <Filter>07. UI\01. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="HpBar.h">
+      <Filter>07. UI\01. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -980,6 +983,9 @@
       <Filter>01. Manager\17. Effect\AnimatedBillboard</Filter>
     </ClCompile>
     <ClCompile Include="ButtonWidget.cpp">
+      <Filter>07. UI\01. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="HpBar.cpp">
       <Filter>07. UI\01. Widget</Filter>
     </ClCompile>
   </ItemGroup>

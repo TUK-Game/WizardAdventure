@@ -1,12 +1,11 @@
 #include "pch.h"
 #include "PlayWidgetWindow.h"
-#include "GaugeWidget.h"
 #include "MeshRenderer.h"
 #include "AssetManager.h"
 #include "Transform.h"
 #include "ImageWidget.h"
 #include "SkillWidget.h"
-
+#include "HpBar.h"
 
 CPlayWidgetWindow::CPlayWidgetWindow()
 {
@@ -37,12 +36,12 @@ bool CPlayWidgetWindow::Init()
 	}
 
 	{
-		CGaugeWidget* widget = CreateWidget<CGaugeWidget>(L"HPBar");
+		CHpBar* widget = CreateWidget<CHpBar>(L"HPBar");
 		widget->SetTexture(L"Kita");
 		widget->GetTransform()->SetRelativePosition(-0.748f, -0.925f, 1.f);
 		widget->GetTransform()->SetRelativeScale(0.287f, 0.04f, 0.2f);
-		widget->SetGaugeScale(0.4f);
-		widget->SetStartX(-0.65f);
+		widget->SetGaugeScale(0.287f);
+		widget->SetStartX(-0.748f);
 
 	}
 
@@ -51,18 +50,44 @@ bool CPlayWidgetWindow::Init()
 		widget->SetTexture(L"Ryo");
 		widget->GetTransform()->SetRelativePosition(-0.767f, -0.972f, 1.f);
 		widget->GetTransform()->SetRelativeScale(0.248f, 0.035f, 0.2f);
-		widget->SetGaugeScale(0.4f);
-		widget->SetStartX(-0.65f);
+		widget->SetGaugeScale(0.248f);
+		widget->SetStartX(-0.767f);
 
 	}
 
 	{
-		CSkillWidget* SkillWidget = CreateWidget<CSkillWidget>(L"Skill");
-		SkillWidget->SetTexture(L"Fireball");
+		CSkillWidget* SkillWidget = CreateWidget<CSkillWidget>(L"Skill4");
+		//SkillWidget->SetTexture(L"Fireball");
 		SkillWidget->GetTransform()->SetRelativePosition(-0.665f, -0.815f, 1.f);
 		SkillWidget->GetTransform()->SetRelativeScale(0.053f, 0.086f, 0.2f);
 		SkillWidget->SetOriginCoolTime(100.f);
 		SkillWidget->SetCoolTime(100.f);
 	}
 	return true;
+}
+
+void CPlayWidgetWindow::SetSkill(int idx, const std::wstring& textureName, float coolTime)
+{
+	std::wstring name = L"Skill" + std::to_wstring(idx);
+	CSkillWidget* widget = dynamic_cast<CSkillWidget*>(FindWidget(name));
+	if (widget)
+	{
+		widget->SetTexture(textureName);
+		widget->SetOriginCoolTime(coolTime);
+		widget->SetCoolTime(0.f);
+	}
+}
+
+void CPlayWidgetWindow::SetGauge(const std::wstring& name, int gauge, bool bMax)
+{
+	CGaugeWidget* widget = dynamic_cast<CGaugeWidget*>(FindWidget(name));
+	if (bMax)
+	{
+		widget->SetMaxGauge(gauge);
+	}
+	widget->SetGauge(gauge);
+}
+
+void CPlayWidgetWindow::SetMaxHp(int maxHp)
+{
 }

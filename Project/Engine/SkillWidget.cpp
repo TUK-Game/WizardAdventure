@@ -8,22 +8,21 @@
 
 void CSkillWidget::SetTexture(const std::wstring& name)
 {
-	CMaterial* material = new CMaterial;
 	CTexture* texture = CAssetManager::GetInst()->FindAsset<CTexture>(name);
-
 	CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"SkillUI");
-	material->SetTexture(0, texture);
-	material->SetGraphicsShader(shader);
-
-	GetMeshRenderer()->SetMaterial(material);
+	GetMeshRenderer()->GetMaterial()->SetTexture(0, texture);
+	GetMeshRenderer()->GetMaterial()->SetGraphicsShader(shader);
 }
 
 bool CSkillWidget::Init()
 {
+	CMaterial* material = new CMaterial;
+
 	m_OwnerPlayer = CLevelManager::GetInst()->GetOwnPlayer();
 	AddComponent(new CMeshRenderer);
 	AddComponent(new CTransform);
 	GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
+	GetMeshRenderer()->SetMaterial(material);
 
 	return true;
 }
@@ -32,10 +31,14 @@ void CSkillWidget::Update()
 {
 	// temp
 	// 나중에 스킬 생기면 수정
-	if (m_CoolTime >= 0.f)
+	CMaterial* material = GetMeshRenderer()->GetMaterial();
+	if (material)
 	{
-		m_CoolTime -= DELTA_TIME;
-	}
+		if (m_CoolTime >= 0.f)
+		{
+			m_CoolTime -= DELTA_TIME;
+		}
 
-	GetMeshRenderer()->GetMaterial()->SetFloat(0, m_CoolTime / m_OriginCoolTime);
+		material->SetFloat(0, m_CoolTime / m_OriginCoolTime);
+	}
 }

@@ -24,6 +24,7 @@
 
 #include "TestWidget.h"
 #include "MapPlayerWidget.h"
+#include "PlayWidgetWindow.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -69,11 +70,12 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	CNetworkManager::GetInst()->s_GameSession->SetOwnPlayer(player);
 	CNetworkManager::GetInst()->s_GameSession->SetClientID(id);
 
-	const auto& window = CLevelManager::GetInst()->GetCurrentLevel()->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow");
-	if (window)
+	const auto& mapwindow = CLevelManager::GetInst()->GetCurrentLevel()->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow");
+	CPlayWidgetWindow* gamewindow = dynamic_cast<CPlayWidgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::GAME_WINDOW));
+	if (mapwindow)
 	{
-		window->AddPlayer(player, id);
-		window->SetEnable(false);
+		mapwindow->AddPlayer(player, id);
+		mapwindow->SetEnable(false);
 	}
 
 	Protocol::C_ENTER_GAME_SUCCESS GSpkt;
@@ -83,6 +85,8 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_FIRE);
 		player->InitStats(100, 100, 30, 300.f);
+		gamewindow->SetSkill(4, L"Fireball", 10);
+		gamewindow->SetGauge(L"HPBar", 500, true);
 	}
 	break;
 	case EPlayerAttribute::Water:
