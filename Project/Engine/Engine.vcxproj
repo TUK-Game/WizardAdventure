@@ -186,6 +186,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BoxCollider.h" />
+    <ClInclude Include="ButtonWidget.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraScript.h" />
     <ClInclude Include="ClientPacketHandler.h" />
@@ -353,6 +354,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
+    <ClCompile Include="ButtonWidget.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraScript.cpp" />
     <ClCompile Include="ClientPacketHandler.cpp" />

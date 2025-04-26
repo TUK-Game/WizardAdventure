@@ -22,7 +22,10 @@
     <Filter Include="01. Manager">
       <UniqueIdentifier>{0a2212d7-6c57-4c2f-88ad-c3a0cbdc0e2a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02, Level">
+    <Filter Include="03. WidgetWindow">
+      <UniqueIdentifier>{6e6843c4-8ebd-4cba-9b26-cfffbdfc88fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Level">
       <UniqueIdentifier>{89e96f3c-af9c-44cc-bfba-1a75be3ed7f1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -49,10 +52,13 @@
       <Filter>01. Manager</Filter>
     </ClInclude>
     <ClInclude Include="Level_1.h">
-      <Filter>02, Level</Filter>
+      <Filter>02. Level</Filter>
     </ClInclude>
     <ClInclude Include="Level_Start.h">
-      <Filter>02, Level</Filter>
+      <Filter>02. Level</Filter>
+    </ClInclude>
+    <ClInclude Include="StartLevelWidgetWindow.h">
+      <Filter>03. WidgetWindow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -66,10 +72,13 @@
       <Filter>01. Manager</Filter>
     </ClCompile>
     <ClCompile Include="Level_1.cpp">
-      <Filter>02, Level</Filter>
+      <Filter>02. Level</Filter>
     </ClCompile>
     <ClCompile Include="Level_Start.cpp">
-      <Filter>02, Level</Filter>
+      <Filter>02. Level</Filter>
+    </ClCompile>
+    <ClCompile Include="StartLevelWidgetWindow.cpp">
+      <Filter>03. WidgetWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

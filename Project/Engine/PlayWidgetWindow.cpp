@@ -7,6 +7,7 @@
 #include "ImageWidget.h"
 #include "SkillWidget.h"
 
+
 CPlayWidgetWindow::CPlayWidgetWindow()
 {
 }

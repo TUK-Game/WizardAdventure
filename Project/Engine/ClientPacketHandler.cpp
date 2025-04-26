@@ -378,7 +378,7 @@ bool Handle_S_GATE_OPNE(CPacketSessionRef& session, Protocol::S_GATE_OPNE& pkt)
 		object->GetTransform()->SetRelativePosition(posInfo.x(), posInfo.y(), posInfo.z());
 		object->GetTransform()->SetRelativeScale(sizeInfo.x(), sizeInfo.y(), sizeInfo.z());
 		object->GetTransform()->SetRelativeRotation(rotInfo.x(), rotInfo.y(), rotInfo.z());
-
+			
 		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(object, 13, false);
 	}
 	return true;

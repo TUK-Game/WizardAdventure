@@ -29,7 +29,7 @@
 #include <Engine/Animator.h>
 #include <Engine/TestWidget.h>
 #include <Engine/TextWindow.h>
-
+#include "StartLevelWidgetWindow.h"
 CLevel_Start::CLevel_Start()
 {
 	CLevelManager::GetInst()->SetLevel(this);
@@ -95,82 +95,15 @@ void CLevel_Start::Init()
 	ui->GetMeshRenderer()->SetMaterial(material);
 	this->AddGameObject(ui, 4, false);
 
-	// Start Button
-	ui = new CGameObject;
-	ui->SetName(L"StartBTN");
-	ui->AddComponent(new CTransform);
-	ui->AddComponent(new CMeshRenderer);
-	ui->AddComponent(new CUIButton);
-	ui->GetTransform()->SetRelativeScale(Vec3(0.25f, 0.2f, 1.f));
-	ui->GetTransform()->SetRelativePosition(Vec3(0.75f, -0.25f, 0.f));
-	ui->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
-	material = new CMaterial;
-	shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
-	material->SetGraphicsShader(shader);
-	ui->GetMeshRenderer()->SetMaterial(material);
-	ui->GetUIButton()->SetBTNTextures(
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"StartBTN"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"StartBTN_Hover"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"StartBTN_Pressed")
-	);
-	ui->GetUIButton()->SetOnClick([]() {
-		CLevelManager::GetInst()->ChangeLevel(new CLevel_1);
-		});
-	this->AddGameObject(ui, 4, false);
+	CreateWidgetWindow<CStartLevelWidgetWindow>(EWIDGETWINDOW_TYPE::START_WINDOW, L"StartWindow");
 
-	// Menu Button
-	ui = new CGameObject;
-	ui->SetName(L"MenuBTN");
-	ui->AddComponent(new CTransform);
-	ui->AddComponent(new CMeshRenderer);
-	ui->AddComponent(new CUIButton);
-	ui->GetTransform()->SetRelativeScale(Vec3(0.25f, 0.2f, 1.f));
-	ui->GetTransform()->SetRelativePosition(Vec3(0.75f, -0.5f, 0.f));
-	ui->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
-	material = new CMaterial;
-	shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
-	material->SetGraphicsShader(shader);
-	ui->GetMeshRenderer()->SetMaterial(material);
-	ui->GetUIButton()->SetBTNTextures(
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Hover"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Pressed")
-	);
-	this->AddGameObject(ui, 4, false);
-
-	// Exit Button
-	ui = new CGameObject;
-	ui->SetName(L"ExitBTN");
-	ui->AddComponent(new CTransform);
-	ui->AddComponent(new CMeshRenderer);
-	ui->AddComponent(new CUIButton);
-	ui->GetTransform()->SetRelativeScale(Vec3(0.25f, 0.2f, 1.f));
-	ui->GetTransform()->SetRelativePosition(Vec3(0.75f, -0.75f, 0.f));
-	ui->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
-	material = new CMaterial;
-	shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
-	material->SetGraphicsShader(shader);
-	ui->GetMeshRenderer()->SetMaterial(material);
-	ui->GetUIButton()->SetBTNTextures(
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"ExitBTN"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"ExitBTN_Hover"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"ExitBTN_Pressed")
-	);
-	ui->GetUIButton()->SetOnClick([]() {
-		 PostQuitMessage(0);
-		});
-	this->AddGameObject(ui, 4, false);
 
 }
 
 void CLevel_Start::Begin()
 {
 	CLevel::Begin();
-	this->Update();
-	this->FinalUpdate();
-	CDevice::GetInst()->RenderBegin();
-	CDevice::GetInst()->RenderEnd();
-}
+}	
 
 void CLevel_Start::Update()
 {

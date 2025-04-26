@@ -6,7 +6,7 @@ class CImageWidget :
 {
 	friend class CWidgetWindow;
 
-protected:
+public:
     CImageWidget();
     virtual ~CImageWidget();
 
