@@ -74,7 +74,6 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 
 	const auto& mapwindow = level->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow", player);
 	CPlayWidgetWindow* gamewindow = level->CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"GamePlayWidget", player);
-	//CPlayWidgetWindow* gamewindow = dynamic_cast<CPlayWidgetWindow*>(level->FindWidgetWindow(EWIDGETWINDOW_TYPE::GAME_WINDOW));
 	if (mapwindow)
 	{
 		mapwindow->SetOwnerPlayer(player);
@@ -93,8 +92,14 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_FIRE);
 		player->InitStats(100, 100, 30, 300.f);
-		gamewindow->SetSkill(4, L"Fireball", 10);
+		// 임시적으로 넣어둠 원래는 게임 진행하면서 스킬 획득
+		gamewindow->SetSkill(1, L"FireShot", 10);
+		gamewindow->SetSkill(2, L"FireRain", 10);
+		gamewindow->SetSkill(3, L"FireballExplosion", 10);
+		gamewindow->SetSkill(4, L"FireTower", 10);
+		gamewindow->SetSkill(5, L"Fireball", 10);
 		gamewindow->SetGauge(L"HPBar", 100, true);
+		gamewindow->SetGauge(L"SignautreGage", 0, false);
 	}
 	break;
 	case EPlayerAttribute::Water:

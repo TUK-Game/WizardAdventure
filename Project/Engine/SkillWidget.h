@@ -5,6 +5,7 @@ class CSkillWidget :
 {
 public:
 	virtual void SetTexture(const std::wstring& name);
+	virtual void SetMesh(const std::wstring& name);
 	void SetCoolTime(float coolTime) { m_CoolTime = coolTime; }
 	void SetOriginCoolTime(float OriginCool) { m_OriginCoolTime = OriginCool; }
 

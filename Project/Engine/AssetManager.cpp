@@ -153,10 +153,6 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"Lava_Normal", tex);
 
 	tex = new CTexture;
-	tex->Init(path / L"Fireball.png");
-	AddAsset(L"Fireball", tex);
-
-	tex = new CTexture;
 	tex->Init(path / L"Start.png");
 	AddAsset(L"Start", tex);
 
@@ -223,6 +219,29 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"SmokeSheet.png");
 	AddAsset(L"SmokeSheet", tex);
+
+	// skill
+	{
+		tex = new CTexture;
+		tex->Init(path / L"Skill\\Fire\\Fireball.png");
+		AddAsset(L"Fireball", tex);
+
+		tex = new CTexture;
+		tex->Init(path / L"Skill\\Fire\\FireballExplosion.png");
+		AddAsset(L"FireballExplosion", tex);
+
+		tex = new CTexture;
+		tex->Init(path / L"Skill\\Fire\\FireRain.png");
+		AddAsset(L"FireRain", tex);
+
+		tex = new CTexture;
+		tex->Init(path / L"Skill\\Fire\\FireShot.png");
+		AddAsset(L"FireShot", tex);
+
+		tex = new CTexture;
+		tex->Init(path / L"Skill\\Fire\\FireTower.png");
+		AddAsset(L"FireTower", tex);
+	}
 	return S_OK;
 }
 

@@ -21,7 +21,19 @@ CPlayWidgetWindow::~CPlayWidgetWindow()
 // SigantureGate : pos: -0.767, -0.972, 1
 //				   scale: 0.248, 0.035, 0.2
 
+// Skill1 : pos: -0.867, -0.815, 1
+//			scale: 0.04, 0.07, 0.2
+
+// Skill2 : pos: -0.8, -0.815, 1
+//			scale: 0.04, 0.07, 0.2
+
+// Skill3 : pos: -0.735, -0.815, 1
+//			scale: 0.053, 0.086, 0.2
+
 // Skill4 : pos: -0.665, -0.815, 1
+//			scale: 0.053, 0.086, 0.2
+
+// Skill5 : pos: -0.595, -0.815, 1
 //			scale: 0.053, 0.086, 0.2
 
 bool CPlayWidgetWindow::Init(CPlayer* player)
@@ -29,7 +41,7 @@ bool CPlayWidgetWindow::Init(CPlayer* player)
 	CWidgetWindow::Init(player);
 	
 	{
-		CImageWidget* SkillWidget = CreateWidget<CImageWidget>(L"SkillWidget4", player);
+		CImageWidget* SkillWidget = CreateWidget<CImageWidget>(L"SkillWidget", player);
 		SkillWidget->SetTexture(L"SkillWidgetTexture");
 		SkillWidget->GetTransform()->SetRelativePosition(-0.75f, -0.875f, 1.f);
 		SkillWidget->GetTransform()->SetRelativeScale(0.5f, 0.25f, 0.2f);
@@ -56,9 +68,35 @@ bool CPlayWidgetWindow::Init(CPlayer* player)
 	}
 
 	{
-		CSkillWidget* SkillWidget = CreateWidget<CSkillWidget>(L"Skill4", player);
+		CSkillWidget* SkillWidget = CreateWidget<CSkillWidget>(L"Skill1", player);
+		SkillWidget->GetTransform()->SetRelativePosition(-0.8f, -0.815f, 1.f);
+		SkillWidget->GetTransform()->SetRelativeScale(0.04f, 0.07f, 0.2f);
+		SkillWidget->SetOriginCoolTime(100.f);
+		SkillWidget->SetCoolTime(100.f);
+
+		SkillWidget = CreateWidget<CSkillWidget>(L"Skill2", player);
+		SkillWidget->GetTransform()->SetRelativePosition(-0.867f, -0.815f, 1.f);
+		SkillWidget->GetTransform()->SetRelativeScale(0.04f, 0.07f, 0.2f);
+		SkillWidget->SetOriginCoolTime(100.f);
+		SkillWidget->SetCoolTime(100.f);
+
+		SkillWidget = CreateWidget<CSkillWidget>(L"Skill3", player);
+		//SkillWidget->SetTexture(L"Fireball");
+		SkillWidget->GetTransform()->SetRelativePosition(-0.735f, -0.815f, 1.f);
+		SkillWidget->GetTransform()->SetRelativeScale(0.053f, 0.086f, 0.2f);
+		SkillWidget->SetOriginCoolTime(100.f);
+		SkillWidget->SetCoolTime(100.f);
+
+		SkillWidget = CreateWidget<CSkillWidget>(L"Skill4", player);
 		//SkillWidget->SetTexture(L"Fireball");
 		SkillWidget->GetTransform()->SetRelativePosition(-0.665f, -0.815f, 1.f);
+		SkillWidget->GetTransform()->SetRelativeScale(0.053f, 0.086f, 0.2f);
+		SkillWidget->SetOriginCoolTime(100.f);
+		SkillWidget->SetCoolTime(100.f);
+
+		SkillWidget = CreateWidget<CSkillWidget>(L"Skill5", player);
+		//SkillWidget->SetTexture(L"Fireball");
+		SkillWidget->GetTransform()->SetRelativePosition(-0.595f, -0.815f, 1.f);
 		SkillWidget->GetTransform()->SetRelativeScale(0.053f, 0.086f, 0.2f);
 		SkillWidget->SetOriginCoolTime(100.f);
 		SkillWidget->SetCoolTime(100.f);
