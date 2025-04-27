@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "CreatureCollider.h"
 #include "Room.h"
+#include "Monster.h"
+
 CPlayer::CPlayer()
 {
 	m_bPlayer = true;
@@ -52,7 +54,8 @@ void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
 	if (dest->GetProfile()->channel == ECollision_Channel::Monster)
 	{
-		std::cout << "몬스터와\n";
+		CMonster* monster = (dynamic_cast<CMonster*>(dest->GetOwner()));
+		GetAblity()->currentHp -= monster->GetAblity()->attack;
 	}
 
 }
