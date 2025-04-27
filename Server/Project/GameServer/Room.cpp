@@ -392,7 +392,7 @@ bool CRoom::UPdatePlayer(CPlayerRef player, float deltaTime)
 	{
 		nowPos.y += moveAmount.y;
 
-		ToProtoVector3(&protoNow, nowPos);
+		ToProtoVector3(&protoNow, nowPos);	
 
 		player->GetCollider()->Update();
 		auto box = player->GetCollider();

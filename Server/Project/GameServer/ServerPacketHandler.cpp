@@ -125,10 +125,6 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 	{
 		g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
 	}
-	else
-	{
-		//g_Room->DoAsync(&CRoom::UPdatePlayer, player);
-	}
 	return true;
 }
 

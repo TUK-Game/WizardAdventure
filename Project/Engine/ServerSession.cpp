@@ -72,7 +72,7 @@ void CServerSession::OnMovePlayer()
 	ProtoToVector3(pos, posInfo->mutable_position());
 	ProtoToVector3(rot, posInfo->mutable_rotation());
 	ProtoToVector3(dir, pkt.mutable_dir());
-
+		
 	pkt.set_ismove(true);
 
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);

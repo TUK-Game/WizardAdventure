@@ -51,12 +51,12 @@ void CFireBall::FinalUpdate()
 	if (m_bOwn)
 	{
 		m_ElapsedTime += DELTA_TIME;
-		if (m_ElapsedTime >= m_Duration) {
+		if (m_ElapsedTime >= m_Duration && !m_bDelete) {
 			SpawnDeleteEffect();
 			m_bDelete = true;
 		}
 
-		if (pos.y < -20.f) {
+		if (pos.y < -20.f && !m_bDelete) {
 			if (m_FireParticle) {
 				CParticleSystemManager::GetInst()->Return(m_FireParticle);
 				m_FireParticle = nullptr;
@@ -117,6 +117,7 @@ void CFireBall::SpawnDeleteEffect()
 		CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
 		CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
 		CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
+		std::cout << "터지는 효과 발동\n";
 		break;
 	}
 }
