@@ -139,6 +139,7 @@ PROTOBUF_CONSTEXPR C_MOVE::C_MOVE(
     /*decltype(_impl_.player_move_info_)*/nullptr
   , /*decltype(_impl_.dir_)*/nullptr
   , /*decltype(_impl_.mesh_)*/0
+  , /*decltype(_impl_.ismove_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct C_MOVEDefaultTypeInternal {
   PROTOBUF_CONSTEXPR C_MOVEDefaultTypeInternal()
@@ -384,6 +385,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   PROTOBUF_FIELD_OFFSET(::Protocol::C_MOVE, _impl_.player_move_info_),
   PROTOBUF_FIELD_OFFSET(::Protocol::C_MOVE, _impl_.dir_),
   PROTOBUF_FIELD_OFFSET(::Protocol::C_MOVE, _impl_.mesh_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_MOVE, _impl_.ismove_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_MOVE_PROJECTILE, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -480,18 +482,18 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 48, -1, -1, sizeof(::Protocol::S_SPAWN_PROJECTILE_SUCESSE)},
   { 57, -1, -1, sizeof(::Protocol::S_LEAVE_GAME)},
   { 63, -1, -1, sizeof(::Protocol::C_MOVE)},
-  { 72, -1, -1, sizeof(::Protocol::C_MOVE_PROJECTILE)},
-  { 79, -1, -1, sizeof(::Protocol::S_MOVE)},
-  { 86, -1, -1, sizeof(::Protocol::S_UPDATE_PLAYER)},
-  { 93, -1, -1, sizeof(::Protocol::S_MONSTER_INFO)},
-  { 100, -1, -1, sizeof(::Protocol::S_PROJECTILE_INFO)},
-  { 107, -1, -1, sizeof(::Protocol::S_SPAWN)},
-  { 114, -1, -1, sizeof(::Protocol::S_SPAWN_NEW_PLAYER)},
-  { 121, -1, -1, sizeof(::Protocol::S_SPAWN_EXISTING_PLAYER)},
-  { 128, -1, -1, sizeof(::Protocol::S_DESPAWN_PLAYER)},
-  { 135, -1, -1, sizeof(::Protocol::S_DESPAWN)},
-  { 142, -1, -1, sizeof(::Protocol::S_GATE_OPNE)},
-  { 149, -1, -1, sizeof(::Protocol::S_GATE_CLOSE)},
+  { 73, -1, -1, sizeof(::Protocol::C_MOVE_PROJECTILE)},
+  { 80, -1, -1, sizeof(::Protocol::S_MOVE)},
+  { 87, -1, -1, sizeof(::Protocol::S_UPDATE_PLAYER)},
+  { 94, -1, -1, sizeof(::Protocol::S_MONSTER_INFO)},
+  { 101, -1, -1, sizeof(::Protocol::S_PROJECTILE_INFO)},
+  { 108, -1, -1, sizeof(::Protocol::S_SPAWN)},
+  { 115, -1, -1, sizeof(::Protocol::S_SPAWN_NEW_PLAYER)},
+  { 122, -1, -1, sizeof(::Protocol::S_SPAWN_EXISTING_PLAYER)},
+  { 129, -1, -1, sizeof(::Protocol::S_DESPAWN_PLAYER)},
+  { 136, -1, -1, sizeof(::Protocol::S_DESPAWN)},
+  { 143, -1, -1, sizeof(::Protocol::S_GATE_OPNE)},
+  { 150, -1, -1, sizeof(::Protocol::S_GATE_CLOSE)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -532,28 +534,29 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "\n\032S_SPAWN_PROJECTILE_SUCESSE\022\025\n\rprojecti"
   "le_id\030\001 \001(\004\022\037\n\004size\030\002 \001(\0132\021.Protocol.Vec"
   "tor3\022!\n\004mesh\030\003 \001(\0162\023.Protocol.SkillMesh\""
-  "\016\n\014S_LEAVE_GAME\"\177\n\006C_MOVE\0222\n\020player_move"
-  "_info\030\001 \001(\0132\030.Protocol.PlayerMoveInfo\022\036\n"
-  "\003dir\030\002 \001(\0132\021.Protocol.Vector3\022!\n\004mesh\030\003 "
-  "\001(\0162\023.Protocol.SkillMesh\"F\n\021C_MOVE_PROJE"
-  "CTILE\0221\n\017projectile_info\030\001 \001(\0132\030.Protoco"
-  "l.ProjectileInfo\"<\n\006S_MOVE\0222\n\020player_mov"
-  "e_info\030\001 \001(\0132\030.Protocol.PlayerMoveInfo\"I"
-  "\n\017S_UPDATE_PLAYER\0226\n\022player_update_info\030"
-  "\001 \001(\0132\032.Protocol.PlayerUpdateInfo\"=\n\016S_M"
-  "ONSTER_INFO\022+\n\014monster_info\030\001 \003(\0132\025.Prot"
-  "ocol.MonsterInfo\"F\n\021S_PROJECTILE_INFO\0221\n"
-  "\017projectile_info\030\001 \001(\0132\030.Protocol.Projec"
-  "tileInfo\"0\n\007S_SPAWN\022%\n\007objects\030\001 \003(\0132\024.P"
-  "rotocol.ObjectInfo\":\n\022S_SPAWN_NEW_PLAYER"
-  "\022$\n\006player\030\001 \001(\0132\024.Protocol.PlayerInfo\"\?"
-  "\n\027S_SPAWN_EXISTING_PLAYER\022$\n\006player\030\001 \003("
-  "\0132\024.Protocol.PlayerInfo\"&\n\020S_DESPAWN_PLA"
-  "YER\022\022\n\nplayer_ids\030\001 \001(\004\"\037\n\tS_DESPAWN\022\022\n\n"
-  "object_ids\030\001 \003(\004\"9\n\013S_GATE_OPNE\022*\n\014open_"
-  "objects\030\001 \003(\0132\024.Protocol.ObjectInfo\"<\n\014S"
-  "_GATE_CLOSE\022,\n\016cloase_objects\030\001 \003(\0132\024.Pr"
-  "otocol.ObjectInfob\006proto3"
+  "\016\n\014S_LEAVE_GAME\"\217\001\n\006C_MOVE\0222\n\020player_mov"
+  "e_info\030\001 \001(\0132\030.Protocol.PlayerMoveInfo\022\036"
+  "\n\003dir\030\002 \001(\0132\021.Protocol.Vector3\022!\n\004mesh\030\003"
+  " \001(\0162\023.Protocol.SkillMesh\022\016\n\006IsMove\030\004 \001("
+  "\010\"F\n\021C_MOVE_PROJECTILE\0221\n\017projectile_inf"
+  "o\030\001 \001(\0132\030.Protocol.ProjectileInfo\"<\n\006S_M"
+  "OVE\0222\n\020player_move_info\030\001 \001(\0132\030.Protocol"
+  ".PlayerMoveInfo\"I\n\017S_UPDATE_PLAYER\0226\n\022pl"
+  "ayer_update_info\030\001 \001(\0132\032.Protocol.Player"
+  "UpdateInfo\"=\n\016S_MONSTER_INFO\022+\n\014monster_"
+  "info\030\001 \003(\0132\025.Protocol.MonsterInfo\"F\n\021S_P"
+  "ROJECTILE_INFO\0221\n\017projectile_info\030\001 \001(\0132"
+  "\030.Protocol.ProjectileInfo\"0\n\007S_SPAWN\022%\n\007"
+  "objects\030\001 \003(\0132\024.Protocol.ObjectInfo\":\n\022S"
+  "_SPAWN_NEW_PLAYER\022$\n\006player\030\001 \001(\0132\024.Prot"
+  "ocol.PlayerInfo\"\?\n\027S_SPAWN_EXISTING_PLAY"
+  "ER\022$\n\006player\030\001 \003(\0132\024.Protocol.PlayerInfo"
+  "\"&\n\020S_DESPAWN_PLAYER\022\022\n\nplayer_ids\030\001 \001(\004"
+  "\"\037\n\tS_DESPAWN\022\022\n\nobject_ids\030\001 \003(\004\"9\n\013S_G"
+  "ATE_OPNE\022*\n\014open_objects\030\001 \003(\0132\024.Protoco"
+  "l.ObjectInfo\"<\n\014S_GATE_CLOSE\022,\n\016cloase_o"
+  "bjects\030\001 \003(\0132\024.Protocol.ObjectInfob\006prot"
+  "o3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_deps[2] = {
   &::descriptor_table_Enum_2eproto,
@@ -561,7 +564,7 @@ static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_de
 };
 static ::_pbi::once_flag descriptor_table_Protocol_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
-    false, false, 1345, descriptor_table_protodef_Protocol_2eproto,
+    false, false, 1362, descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
     &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 22,
     schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
@@ -1878,6 +1881,7 @@ C_MOVE::C_MOVE(const C_MOVE& from)
       decltype(_impl_.player_move_info_){nullptr}
     , decltype(_impl_.dir_){nullptr}
     , decltype(_impl_.mesh_){}
+    , decltype(_impl_.ismove_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -1887,7 +1891,9 @@ C_MOVE::C_MOVE(const C_MOVE& from)
   if (from._internal_has_dir()) {
     _this->_impl_.dir_ = new ::Protocol::Vector3(*from._impl_.dir_);
   }
-  _this->_impl_.mesh_ = from._impl_.mesh_;
+  ::memcpy(&_impl_.mesh_, &from._impl_.mesh_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.ismove_) -
+    reinterpret_cast<char*>(&_impl_.mesh_)) + sizeof(_impl_.ismove_));
   // @@protoc_insertion_point(copy_constructor:Protocol.C_MOVE)
 }
 
@@ -1899,6 +1905,7 @@ inline void C_MOVE::SharedCtor(
       decltype(_impl_.player_move_info_){nullptr}
     , decltype(_impl_.dir_){nullptr}
     , decltype(_impl_.mesh_){0}
+    , decltype(_impl_.ismove_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -1936,7 +1943,9 @@ void C_MOVE::Clear() {
     delete _impl_.dir_;
   }
   _impl_.dir_ = nullptr;
-  _impl_.mesh_ = 0;
+  ::memset(&_impl_.mesh_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.ismove_) -
+      reinterpret_cast<char*>(&_impl_.mesh_)) + sizeof(_impl_.ismove_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1968,6 +1977,14 @@ const char* C_MOVE::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
           uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_mesh(static_cast<::Protocol::SkillMesh>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // bool IsMove = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.ismove_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -2021,6 +2038,12 @@ uint8_t* C_MOVE::_InternalSerialize(
       3, this->_internal_mesh(), target);
   }
 
+  // bool IsMove = 4;
+  if (this->_internal_ismove() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(4, this->_internal_ismove(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2057,6 +2080,11 @@ size_t C_MOVE::ByteSizeLong() const {
       ::_pbi::WireFormatLite::EnumSize(this->_internal_mesh());
   }
 
+  // bool IsMove = 4;
+  if (this->_internal_ismove() != 0) {
+    total_size += 1 + 1;
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -2086,6 +2114,9 @@ void C_MOVE::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBU
   if (from._internal_mesh() != 0) {
     _this->_internal_set_mesh(from._internal_mesh());
   }
+  if (from._internal_ismove() != 0) {
+    _this->_internal_set_ismove(from._internal_ismove());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2104,8 +2135,8 @@ void C_MOVE::InternalSwap(C_MOVE* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(C_MOVE, _impl_.mesh_)
-      + sizeof(C_MOVE::_impl_.mesh_)
+      PROTOBUF_FIELD_OFFSET(C_MOVE, _impl_.ismove_)
+      + sizeof(C_MOVE::_impl_.ismove_)
       - PROTOBUF_FIELD_OFFSET(C_MOVE, _impl_.player_move_info_)>(
           reinterpret_cast<char*>(&_impl_.player_move_info_),
           reinterpret_cast<char*>(&other->_impl_.player_move_info_));

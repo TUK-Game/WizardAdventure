@@ -1559,6 +1559,7 @@ class C_MOVE final :
     kPlayerMoveInfoFieldNumber = 1,
     kDirFieldNumber = 2,
     kMeshFieldNumber = 3,
+    kIsMoveFieldNumber = 4,
   };
   // .Protocol.PlayerMoveInfo player_move_info = 1;
   bool has_player_move_info() const;
@@ -1605,6 +1606,15 @@ class C_MOVE final :
   void _internal_set_mesh(::Protocol::SkillMesh value);
   public:
 
+  // bool IsMove = 4;
+  void clear_ismove();
+  bool ismove() const;
+  void set_ismove(bool value);
+  private:
+  bool _internal_ismove() const;
+  void _internal_set_ismove(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.C_MOVE)
  private:
   class _Internal;
@@ -1616,6 +1626,7 @@ class C_MOVE final :
     ::Protocol::PlayerMoveInfo* player_move_info_;
     ::Protocol::Vector3* dir_;
     int mesh_;
+    bool ismove_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4176,6 +4187,26 @@ inline void C_MOVE::_internal_set_mesh(::Protocol::SkillMesh value) {
 inline void C_MOVE::set_mesh(::Protocol::SkillMesh value) {
   _internal_set_mesh(value);
   // @@protoc_insertion_point(field_set:Protocol.C_MOVE.mesh)
+}
+
+// bool IsMove = 4;
+inline void C_MOVE::clear_ismove() {
+  _impl_.ismove_ = false;
+}
+inline bool C_MOVE::_internal_ismove() const {
+  return _impl_.ismove_;
+}
+inline bool C_MOVE::ismove() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_MOVE.IsMove)
+  return _internal_ismove();
+}
+inline void C_MOVE::_internal_set_ismove(bool value) {
+  
+  _impl_.ismove_ = value;
+}
+inline void C_MOVE::set_ismove(bool value) {
+  _internal_set_ismove(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_MOVE.IsMove)
 }
 
 // -------------------------------------------------------------------

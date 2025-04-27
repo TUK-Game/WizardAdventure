@@ -327,6 +327,9 @@ bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 	Protocol::MoveState state = pkt.player_move_info().pos_info().state();
 	CLevelManager::GetInst()->GetPlayer(id)->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
 	//CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(rotation.x(), rotation.y(), rotation.z());
+
+	std::cout << "Move위치: " << position.x() << " " << position.y() << " " << position.x() << '\n';
+
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
 	return true;
 }
@@ -343,6 +346,8 @@ bool Handle_S_UPDATE_PLAYER(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYE
 	const auto& player = CLevelManager::GetInst()->GetPlayer(id);
 	player->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
 	//player->SetProtocolStateForClient(state);
+
+	std::cout << "Update위치: " << position.x() << " " << position.y() << " " << position.x() << '\n';
 
 	const auto& stats = info.player_ablity();
 	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp());

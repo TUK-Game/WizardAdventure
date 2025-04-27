@@ -104,6 +104,7 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 	if (player == nullptr)
 		return false;
 
+	bool IsMove = pkt.ismove();
 	const auto& pos = pkt.player_move_info().pos_info().position();
 
 	const auto& rot = pkt.player_move_info().pos_info().rotation();
@@ -120,8 +121,14 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 	player->SetDir(dir);
 	player->SetState(state);
 
-	g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
-
+	if (IsMove)
+	{
+		g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
+	}
+	else
+	{
+		//g_Room->DoAsync(&CRoom::UPdatePlayer, player);
+	}
 	return true;
 }
 

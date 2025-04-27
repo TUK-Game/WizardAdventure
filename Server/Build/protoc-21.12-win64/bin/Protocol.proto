@@ -58,6 +58,7 @@ message C_MOVE
 	PlayerMoveInfo player_move_info = 1;
 	Vector3 dir = 2;
 	SkillMesh mesh = 3;
+	bool IsMove = 4;
 }
 
 message C_MOVE_PROJECTILE
