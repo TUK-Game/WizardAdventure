@@ -15,9 +15,9 @@ CStartLevelWidgetWindow::~CStartLevelWidgetWindow()
 {
 }
 
-bool CStartLevelWidgetWindow::Init()
+bool CStartLevelWidgetWindow::Init(CPlayer* player)
 {
-	CButtonWidget* widget = CreateWidget<CButtonWidget>(L"StartBTN");
+	CButtonWidget* widget = CreateWidget<CButtonWidget>(L"StartBTN", player);
 	widget->GetTransform()->SetRelativePosition(0.75f, -0.25f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.25f, 0.2f, 1.f);
 	widget->SetFunction([]() {
@@ -30,7 +30,7 @@ bool CStartLevelWidgetWindow::Init()
 		CAssetManager::GetInst()->FindAsset<CTexture>(L"StartBTN_Pressed")
 	);
 
-	widget = CreateWidget<CButtonWidget>(L"MenuBTN");
+	widget = CreateWidget<CButtonWidget>(L"MenuBTN", player);
 	widget->GetTransform()->SetRelativePosition(0.75f, -0.5f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.25f, 0.2f, 1.f);
 	widget->SetFunction([]() {
@@ -43,7 +43,7 @@ bool CStartLevelWidgetWindow::Init()
 		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Pressed")
 	);
 
-	widget = CreateWidget<CButtonWidget>(L"ExitBTN");
+	widget = CreateWidget<CButtonWidget>(L"ExitBTN", player);
 	widget->GetTransform()->SetRelativePosition(0.75f, -0.75f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.25f, 0.2f, 1.f);
 	widget->SetFunction([]() {

@@ -13,7 +13,7 @@ public:
 public:
     virtual void SetTexture(const std::wstring& name);
     
-    virtual bool Init();
+    virtual bool Init(class CPlayer* player);
 
 public:
     virtual CImageWidget* Clone() override { return new CImageWidget(*this); }

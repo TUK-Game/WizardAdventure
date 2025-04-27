@@ -11,14 +11,13 @@ public:
 	void SetGauge(float x) { m_Gauge = x; }
 
 public:
-	virtual bool Init() override;
+	virtual bool Init(class CPlayer* player) override;
 	virtual void Update() override;
 
 public:
 	virtual CGaugeWidget* Clone() override { return new CGaugeWidget(*this); }
 
 private:
-	CGameObject* m_OwnerPlayer;
 	// temp
 	float		 m_MaxGauge = 100;
 	float		 m_Gauge = 100;

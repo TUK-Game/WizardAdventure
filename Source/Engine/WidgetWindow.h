@@ -19,6 +19,7 @@ public:
 
     void SetWindowType(EWIDGETWINDOW_TYPE type) { m_Type = type; }
     void SetZOrder(int z) { m_zOrder = z; }
+    void SetOwnerPlayer(class CPlayer* player) { m_OwnerPlayer = player; }
 
     bool CheckWidget(class CWidget* widget)
     {
@@ -32,7 +33,7 @@ public:
     }
 
 public:
-    virtual bool Init();
+    virtual bool Init(class CPlayer* player);
     virtual void Update();
     virtual void FinalUpdate();
     virtual void Render();
@@ -50,13 +51,13 @@ public:
     }
 
     template <typename T>
-    T* CreateWidget(const std::wstring& name)
+    T* CreateWidget(const std::wstring& name, class CPlayer* player)
     {
         T* widget = new T;
         widget->SetName(name);
         widget->m_owner = this;
 
-        if (!widget->Init())
+        if (!widget->Init(player))
         {
             delete (widget);
             return nullptr;
@@ -73,6 +74,7 @@ public:
 protected:
     int                               m_zOrder;
     std::vector<CSharedPtr<CWidget>>  m_vecWidget;
+    CPlayer* m_OwnerPlayer;
     EWIDGETWINDOW_TYPE                m_Type;
 };
 

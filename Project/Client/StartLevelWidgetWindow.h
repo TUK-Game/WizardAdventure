@@ -9,6 +9,6 @@ public:
 	virtual ~CStartLevelWidgetWindow();
 
 public:
-	virtual bool Init();
+	virtual bool Init(class CPlayer* player);
 };
 

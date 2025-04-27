@@ -11,7 +11,7 @@ CWidgetWindow::~CWidgetWindow()
 {
 }
 
-bool CWidgetWindow::Init()
+bool CWidgetWindow::Init(CPlayer* player)
 {
 	return true;
 }

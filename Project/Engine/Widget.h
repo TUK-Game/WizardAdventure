@@ -15,7 +15,7 @@ protected:
     virtual ~CWidget();
 
 public:
-    virtual bool Init();
+    virtual bool Init(class CPlayer* player);
     virtual void Update();
     virtual void FinalUpdate();
     virtual void Render();
@@ -23,6 +23,7 @@ public:
     virtual CWidget* Clone() override { return new CWidget(*this); }
 
 protected:
+    class CPlayer* m_OwnerPlayer;
     class CWidgetWindow* m_owner;
     bool    m_mouseHovered;
 };

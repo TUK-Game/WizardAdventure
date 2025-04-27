@@ -26,8 +26,9 @@ void CImageWidget::SetTexture(const std::wstring& name)
 	GetMeshRenderer()->SetMaterial(material);
 }
 
-bool CImageWidget::Init()
+bool CImageWidget::Init(CPlayer* player)
 {
+	CWidget::Init(player);
 	AddComponent(new CMeshRenderer);
 	AddComponent(new CTransform);	
 	GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));

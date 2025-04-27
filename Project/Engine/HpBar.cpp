@@ -6,17 +6,9 @@
 
 void CHpBar::Update()
 {
-	if (CNetworkManager::s_GameSession)
+	if (m_OwnerPlayer)
 	{
-		CPlayer* player = CNetworkManager::s_GameSession->GetOwnPlayer();
-		if (player)
-		{
-			Stats* stat = player->GetStats();
-			if(stat)
-			{
-				SetGauge(stat->currentHp);
-				CGaugeWidget::Update();
-			}
-		}
+		SetGauge(m_OwnerPlayer->GetStats()->currentHp);
+		CGaugeWidget::Update();
 	}
 }

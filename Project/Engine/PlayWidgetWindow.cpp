@@ -24,19 +24,19 @@ CPlayWidgetWindow::~CPlayWidgetWindow()
 // Skill4 : pos: -0.665, -0.815, 1
 //			scale: 0.053, 0.086, 0.2
 
-bool CPlayWidgetWindow::Init()
+bool CPlayWidgetWindow::Init(CPlayer* player)
 {
-	CWidgetWindow::Init();
+	CWidgetWindow::Init(player);
 	
 	{
-		CImageWidget* SkillWidget = CreateWidget<CImageWidget>(L"SkillWidget4");
+		CImageWidget* SkillWidget = CreateWidget<CImageWidget>(L"SkillWidget4", player);
 		SkillWidget->SetTexture(L"SkillWidgetTexture");
 		SkillWidget->GetTransform()->SetRelativePosition(-0.75f, -0.875f, 1.f);
 		SkillWidget->GetTransform()->SetRelativeScale(0.5f, 0.25f, 0.2f);
 	}
 
 	{
-		CHpBar* widget = CreateWidget<CHpBar>(L"HPBar");
+		CHpBar* widget = CreateWidget<CHpBar>(L"HPBar", player);
 		widget->SetTexture(L"Kita");
 		widget->GetTransform()->SetRelativePosition(-0.748f, -0.925f, 1.f);
 		widget->GetTransform()->SetRelativeScale(0.287f, 0.04f, 0.2f);
@@ -46,7 +46,7 @@ bool CPlayWidgetWindow::Init()
 	}
 
 	{
-		CGaugeWidget* widget = CreateWidget<CGaugeWidget>(L"SignautreGage");
+		CGaugeWidget* widget = CreateWidget<CGaugeWidget>(L"SignautreGage", player);
 		widget->SetTexture(L"Ryo");
 		widget->GetTransform()->SetRelativePosition(-0.767f, -0.972f, 1.f);
 		widget->GetTransform()->SetRelativeScale(0.248f, 0.035f, 0.2f);
@@ -56,7 +56,7 @@ bool CPlayWidgetWindow::Init()
 	}
 
 	{
-		CSkillWidget* SkillWidget = CreateWidget<CSkillWidget>(L"Skill4");
+		CSkillWidget* SkillWidget = CreateWidget<CSkillWidget>(L"Skill4", player);
 		//SkillWidget->SetTexture(L"Fireball");
 		SkillWidget->GetTransform()->SetRelativePosition(-0.665f, -0.815f, 1.f);
 		SkillWidget->GetTransform()->SetRelativeScale(0.053f, 0.086f, 0.2f);

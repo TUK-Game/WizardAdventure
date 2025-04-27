@@ -94,7 +94,7 @@ void CLevel_Start::Init()
 	ui->GetMeshRenderer()->SetMaterial(material);
 	this->AddGameObject(ui, 4, false);
 
-	CreateWidgetWindow<CStartLevelWidgetWindow>(EWIDGETWINDOW_TYPE::START_WINDOW, L"StartWindow");
+	CreateWidgetWindow<CStartLevelWidgetWindow>(EWIDGETWINDOW_TYPE::START_WINDOW, L"StartWindow", nullptr);
 }
 
 void CLevel_Start::Begin()

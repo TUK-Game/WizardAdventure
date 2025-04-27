@@ -6,9 +6,10 @@
 #include "AssetManager.h"
 #include "Engine.h"
 
-bool CGaugeWidget::Init()
+bool CGaugeWidget::Init(CPlayer* player)
 {
-	m_OwnerPlayer = CLevelManager::GetInst()->GetOwnPlayer();
+    CImageWidget::Init(player);
+
 	AddComponent(new CMeshRenderer);
 	AddComponent(new CTransform);
 	GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));

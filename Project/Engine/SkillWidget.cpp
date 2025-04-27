@@ -14,11 +14,10 @@ void CSkillWidget::SetTexture(const std::wstring& name)
 	GetMeshRenderer()->GetMaterial()->SetGraphicsShader(shader);
 }
 
-bool CSkillWidget::Init()
+bool CSkillWidget::Init(CPlayer* player)
 {
+	CImageWidget::Init(player);
 	CMaterial* material = new CMaterial;
-
-	m_OwnerPlayer = CLevelManager::GetInst()->GetOwnPlayer();
 	AddComponent(new CMeshRenderer);
 	AddComponent(new CTransform);
 	GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));

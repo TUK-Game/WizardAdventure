@@ -5,7 +5,7 @@
 #include "AssetManager.h"
 #include "UIButton.h"
 
-bool CButtonWidget::Init()
+bool CButtonWidget::Init(CPlayer* none)
 {
 	AddComponent(new CMeshRenderer);
 	AddComponent(new CTransform);

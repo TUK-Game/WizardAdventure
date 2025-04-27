@@ -13,15 +13,15 @@ CTextWindow::~CTextWindow()
 {
 }
 
-bool CTextWindow::Init()
+bool CTextWindow::Init(CPlayer* player)
 {
-	CWidgetWindow::Init();
+	CWidgetWindow::Init(player);
 		
 	m_BrushMap = CDevice::GetInst()->GetBrushMap();
 	m_FontMap = CDevice::GetInst()->GetFontMap();
 
 	{
-		CTextWidget* widget = CreateWidget<CTextWidget>(L"Test");
+		CTextWidget* widget = CreateWidget<CTextWidget>(L"Test", player);
 		widget->SetSize(100, 100);
 		widget->SetPosition(-0.8f, 0.8f);
 		widget->SetText(L"test");
@@ -30,7 +30,7 @@ bool CTextWindow::Init()
 	}
 
 	{
-		CTextWidget* widget = CreateWidget<CTextWidget>(L"Test");
+		CTextWidget* widget = CreateWidget<CTextWidget>(L"Test", player);
 		widget->SetSize(200, 200);
 		widget->SetPosition(0.5f, 0.5f);
 		widget->SetText(L"ぞしぞし");

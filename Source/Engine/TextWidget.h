@@ -20,7 +20,7 @@ public:
 	void ArrangeRect();
 
 public:
-	virtual bool Init();
+	virtual bool Init(class CPlayer* player);
 	virtual void Render();
 
 public:

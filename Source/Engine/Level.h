@@ -43,14 +43,14 @@ public:
 
 public:
 	template <typename T>
-	T* CreateWidgetWindow(EWIDGETWINDOW_TYPE type, const std::wstring& name)
+	T* CreateWidgetWindow(EWIDGETWINDOW_TYPE type, const std::wstring& name, class CPlayer* player)
 	{
 		if (m_vecWidgetWindow[(UINT)type])
 			return nullptr;
 
 		T* window = new T;
 		window->SetName(name);
-		if (!window->Init())
+		if (!window->Init(player))
 		{
 			delete (window);
 			return nullptr;

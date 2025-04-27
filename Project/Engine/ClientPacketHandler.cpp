@@ -60,22 +60,30 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 
 	CPlayer* player = new CPlayer(EPlayerAttribute::Fire, true);
 
+	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
+
 	const Protocol::Vector3& position = pkt.player().object_info().pos_info().position();
 	player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
 
-	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
+	level->AddGameObject(player, 3, false);
 	CLevelManager::GetInst()->SetOwnPlayer(player);
 	CLevelManager::GetInst()->SetPlayer(player, id);
 	CRenderManager::GetInst()->GetMainCamera()->SetTarget(player);
 	CNetworkManager::GetInst()->s_GameSession->SetOwnPlayer(player);
 	CNetworkManager::GetInst()->s_GameSession->SetClientID(id);
 
-	const auto& mapwindow = CLevelManager::GetInst()->GetCurrentLevel()->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow");
-	CPlayWidgetWindow* gamewindow = dynamic_cast<CPlayWidgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::GAME_WINDOW));
+	const auto& mapwindow = level->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow", player);
+	CPlayWidgetWindow* gamewindow = level->CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"GamePlayWidget", player);
+	//CPlayWidgetWindow* gamewindow = dynamic_cast<CPlayWidgetWindow*>(level->FindWidgetWindow(EWIDGETWINDOW_TYPE::GAME_WINDOW));
 	if (mapwindow)
 	{
+		mapwindow->SetOwnerPlayer(player);
 		mapwindow->AddPlayer(player, id);
 		mapwindow->SetEnable(false);
+	}
+	if (gamewindow)
+	{
+		gamewindow->SetOwnerPlayer(player);
 	}
 
 	Protocol::C_ENTER_GAME_SUCCESS GSpkt;
@@ -86,7 +94,7 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_FIRE);
 		player->InitStats(100, 100, 30, 300.f);
 		gamewindow->SetSkill(4, L"Fireball", 10);
-		gamewindow->SetGauge(L"HPBar", 500, true);
+		gamewindow->SetGauge(L"HPBar", 100, true);
 	}
 	break;
 	case EPlayerAttribute::Water:

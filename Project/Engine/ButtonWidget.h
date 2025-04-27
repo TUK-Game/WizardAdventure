@@ -12,7 +12,7 @@ public:
 	virtual ~CButtonWidget();
 
 public:
-	virtual bool Init() override;
+	virtual bool Init(class CPlayer* none) override;
 	virtual void Update() override;
 
 public:
