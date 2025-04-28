@@ -190,6 +190,7 @@ void CCamera::SortObject()
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
 			if (!vecObjects[j]->GetEnable()) continue;
+
 			if ((vecObjects[j]->GetRenderComponent() == nullptr
 				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
 				&& vecObjects[j]->GetParticleSystem() == nullptr)
@@ -260,6 +261,8 @@ void CCamera::SortShadowObject()
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
+			if (!vecObjects[j]->GetEnable()) continue;
+
 			if ((vecObjects[j]->GetRenderComponent() == nullptr
 				|| vecObjects[j]->GetRenderComponent()->GetMesh() == nullptr)
 				&& vecObjects[j]->GetParticleSystem() == nullptr)

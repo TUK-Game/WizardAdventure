@@ -52,7 +52,7 @@ public:
 private:
 	std::shared_ptr<CStructuredBuffer>	m_ParticleBuffer;
 	std::shared_ptr<CStructuredBuffer>	m_ComputeSharedBuffer;	
-	UINT32							m_MaxParticle = 1000;
+	UINT32							m_MaxParticle = 100;
 
 	CMaterial*						m_ComputeMaterial;
 	CMaterial*						m_GraphicsMaterial;

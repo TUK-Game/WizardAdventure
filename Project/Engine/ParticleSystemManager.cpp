@@ -24,7 +24,7 @@ void CParticleSystemManager::Init(int poolSize, CLevel* level)
 		obj->AddComponent(new CTransform);
 		obj->SetEnable(false); 
 
-		level->AddGameObject(obj, 2 , false);
+		level->AddGameObject(obj, 13 , false);
 		m_Pool.push_back(obj);
 	}
 }

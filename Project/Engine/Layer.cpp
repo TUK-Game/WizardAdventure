@@ -140,6 +140,7 @@ void CLayer::FinalUpdate()
 {
 	for (auto& object : m_vecParentObjects)
 	{
+		if (!object->GetEnable()) continue;
 		object->FinalUpdate();
 	}
 	FlushPendingObjects();

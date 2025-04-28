@@ -114,7 +114,7 @@ CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, 
 
     if (isNew)
     {
-        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(effect, 2, false);
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(effect, 13, false);
     }
 
     m_pendingEnable.push_back(effect);
@@ -155,7 +155,7 @@ CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, 
 
     if (isNew)
     {
-        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(effect, 2, false);
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(effect, 13, false);
     }
 
     m_pendingEnable.push_back(effect);
@@ -197,7 +197,7 @@ CAnimatedBillboardEffect* CEffectManager::SpawnEffect(const std::wstring& name, 
 
     if (isNew)
     {
-        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(effect, 2, false);
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(effect, 13, false);
     }
 
     m_pendingEnable.push_back(effect);
