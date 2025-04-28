@@ -193,6 +193,46 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"MenuBTN_Hover", tex);
 
 	tex = new CTexture;
+	tex->Init(path / L"Character\\FireMage.png");
+	AddAsset(L"FireMage", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Character\\FireMage_Pressed.png");
+	AddAsset(L"FireMage_Pressed", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Character\\FireMage_Hover.png");
+	AddAsset(L"FireMage_Hover", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Character\\IceMage.png");
+	AddAsset(L"IceMage", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Character\\IceMage_Pressed.png");
+	AddAsset(L"IceMage_Pressed", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Character\\IceMage_Hover.png");
+	AddAsset(L"IceMage_Hover", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Character\\LightningMage.png");
+	AddAsset(L"LightningMage", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Character\\LightningMage_Pressed.png");
+	AddAsset(L"LightningMage_Pressed", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Character\\LightningMage_Hover.png");
+	AddAsset(L"LightningMage_Hover", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Character\\SelectBackground.png");
+	AddAsset(L"SelectBackground", tex);
+
+	tex = new CTexture;
 	tex->Init(path / L"SkillWidget.png");
 	AddAsset(L"SkillWidgetTexture", tex);
 

@@ -5,7 +5,7 @@
 #include <Engine/AssetManager.h>
 #include <Engine/Transform.h>
 #include <Engine/LevelManager.h>
-#include "Level_1.h"
+#include "Level_Select.h"
 
 CStartLevelWidgetWindow::CStartLevelWidgetWindow()
 {
@@ -21,7 +21,7 @@ bool CStartLevelWidgetWindow::Init(CPlayer* player)
 	widget->GetTransform()->SetRelativePosition(0.75f, -0.25f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.25f, 0.2f, 1.f);
 	widget->SetFunction([]() {
-		CLevelManager::GetInst()->ChangeLevel(new CLevel_1);
+		CLevelManager::GetInst()->ChangeLevel(new CLevel_Select);
 		});
 
 	widget->SetButtonTexture(

@@ -60,6 +60,12 @@
     <ClInclude Include="StartLevelWidgetWindow.h">
       <Filter>03. WidgetWindow</Filter>
     </ClInclude>
+    <ClInclude Include="Level_Select.h">
+      <Filter>02. Level</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectLevelWidgetWindow.h">
+      <Filter>03. WidgetWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -78,6 +84,12 @@
       <Filter>02. Level</Filter>
     </ClCompile>
     <ClCompile Include="StartLevelWidgetWindow.cpp">
+      <Filter>03. WidgetWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Level_Select.cpp">
+      <Filter>02. Level</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectLevelWidgetWindow.cpp">
       <Filter>03. WidgetWindow</Filter>
     </ClCompile>
   </ItemGroup>
