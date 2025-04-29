@@ -260,6 +260,17 @@ int CAssetManager::LoadTexture()
 	tex->Init(path / L"SmokeSheet.png");
 	AddAsset(L"SmokeSheet", tex);
 
+	tex = new CTexture;
+	tex->Init(path / L"Red.jpg");
+	AddAsset(L"Red", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Blue.jpg");
+	AddAsset(L"Blue", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"WallMark.png");
+	AddAsset(L"WallMark", tex);
 	// skill
 	{
 		tex = new CTexture;
@@ -275,7 +286,7 @@ int CAssetManager::LoadTexture()
 		AddAsset(L"FireRain", tex);
 
 		tex = new CTexture;
-		tex->Init(path / L"Skill\\Fire\\FireShot.png");
+		tex->Init(path / L"Skill\\Fire\\FireShot_Circle.png");
 		AddAsset(L"FireShot", tex);
 
 		tex = new CTexture;
