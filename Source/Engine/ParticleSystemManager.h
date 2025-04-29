@@ -2,12 +2,7 @@
 
 class CLevel;
 class CGameObject;
-
-struct ReturnRequest
-{
-	CGameObject* obj;
-	float remainingTime;
-};
+class CParticleSystem;
 
 class CParticleSystemManager
 	: public CSingleton<CParticleSystemManager>
@@ -15,16 +10,18 @@ class CParticleSystemManager
 	DECLARE_SINGLETON(CParticleSystemManager)
 
 public:
+    void Init(CLevel* level);
+    int AddEmitter(const std::wstring& name, const Vec3& pos);
+    void UpdateEmitterPos(const std::wstring& name, int emitterID, const Vec3& newPos);
+    void RemoveEmitter(const std::wstring& name, int emitterID);
+    void Update(float deltaTime);
+    void Clear();
 
-	void Init(int poolSize, CLevel* level);
-	void Update(float deltaTime);
-	CGameObject* Request();
-	void RequestExplodeAt(Vec3 pos);
-	void Return(CGameObject* ps);
-	void Clear();
 private:
-	std::vector<CGameObject*> m_Pool;
-	std::vector<ReturnRequest> m_ReturnQueue;
+    std::unordered_map<std::wstring, CGameObject*> m_ParticleObjects;
+
+    CParticleSystem* m_ParticleSystem = nullptr;
+    CGameObject* m_ParticleObject = nullptr;
 
 };
 

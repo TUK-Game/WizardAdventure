@@ -11,9 +11,17 @@ struct Particle
     float3  worldDir;
     float   lifeTime;
     int     alive;
+    int     emitterID;
     float3  padding;
 };
 
+struct Emitter
+{
+    float3 basePos;
+    float isAlive;
+};
+
+StructuredBuffer<Emitter> g_emitters : register(t6);
 StructuredBuffer<Particle> g_data : register(t9);
 
 struct VS_IN
@@ -136,13 +144,15 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
     int maxCount = int_0;
     int addCount = int_1;
     int frameNumber = int_2;
+    int emitterCount = int_3;
     float deltaTime = vec2_1.x;
     float accTime = vec2_1.y;
     float minLifeTime = vec4_0.x;
     float maxLifeTime = vec4_0.y;
     float minSpeed = vec4_0.z;
     float maxSpeed = vec4_0.w;
-    float3 basePos = vec4_1.xyz;
+    // float3 basePos = vec4_1.xyz;
+
 
     g_shared[0].addCount = addCount;
     GroupMemoryBarrierWithGroupSync();
@@ -187,6 +197,14 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
             float3 dir = (noise - 0.5f) * 2.f;
 
             g_particle[threadIndex.x].worldDir = normalize(dir);
+            
+            
+            int emitterIdx = threadIndex.x % emitterCount;
+
+            g_particle[threadIndex.x].emitterID = emitterIdx;
+            
+            float3 basePos = g_emitters[g_particle[threadIndex.x].emitterID].basePos;
+
             //g_particle[threadIndex.x].worldPos = (noise.xyz - 0.5f) * 25;
             g_particle[threadIndex.x].worldPos = basePos + (noise.xyz - 0.5f) * 25;
             g_particle[threadIndex.x].lifeTime = ((maxLifeTime - minLifeTime) * noise.x) + minLifeTime;

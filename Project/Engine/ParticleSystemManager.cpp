@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ParticleSystemManager.h"
-#include "Level.h"
 #include "GameObject.h"
+#include "Level.h"
 #include "ParticleSystem.h"
 #include "Transform.h"
 
@@ -13,88 +13,89 @@ CParticleSystemManager::~CParticleSystemManager()
 {
 }
 
-
-void CParticleSystemManager::Init(int poolSize, CLevel* level)
+void CParticleSystemManager::Init(CLevel* level)
 {
-	for (int i = 0; i < poolSize; ++i)
-	{
-		auto obj = new CGameObject();
+    // smoke
+    CGameObject* obj = new CGameObject();
+    CParticleSystem* ps = new CParticleSystem();
 
-		obj->AddComponent(new CParticleSystem);
-		obj->AddComponent(new CTransform);
-		obj->SetEnable(false); 
+    ps->SetTexture(L"Smoke");
 
-		level->AddGameObject(obj, 13 , false);
-		m_Pool.push_back(obj);
-	}
+    obj->AddComponent(ps);
+    obj->AddComponent(new CTransform());
+    obj->SetName(L"SmokeParticle"); 
+
+    level->AddGameObject(obj, 13, false);
+
+    m_ParticleObjects.insert({ L"Smoke", obj});
+
+    // spark
+    obj = new CGameObject();
+    ps = new CParticleSystem();
+
+    obj->AddComponent(ps);
+    obj->AddComponent(new CTransform());
+    obj->SetName(L"SparkParticle");
+
+    level->AddGameObject(obj, 13, false);
+
+    m_ParticleObjects.insert({L"Spark", obj });
+
+}
+
+int CParticleSystemManager::AddEmitter(const std::wstring& name, const Vec3& pos)
+{
+    auto it = m_ParticleObjects.find(name);
+    if (it == m_ParticleObjects.end())
+        return -1;
+
+    CGameObject* obj = it->second;
+    CParticleSystem* ps = obj->GetParticleSystem();
+    if (!ps)
+        return -1;
+
+    return ps->AddEmitter(pos);
+}
+
+void CParticleSystemManager::UpdateEmitterPos(const std::wstring& name, int emitterID, const Vec3& newPos)
+{
+    auto it = m_ParticleObjects.find(name);
+    if (it == m_ParticleObjects.end())
+        return;
+
+    CGameObject* obj = it->second;
+    CParticleSystem* ps = obj->GetParticleSystem();
+    if (!ps)
+        return;
+
+    ps->UpdateEmitterPos(emitterID, newPos);
+}
+
+void CParticleSystemManager::RemoveEmitter(const std::wstring& name, int emitterID)
+{
+    auto it = m_ParticleObjects.find(name);
+    if (it == m_ParticleObjects.end())
+        return;
+
+    CGameObject* obj = it->second;
+    CParticleSystem* ps = obj->GetParticleSystem();
+    if (!ps)
+        return;
+
+    ps->RemoveEmitter(emitterID);
 }
 
 void CParticleSystemManager::Update(float deltaTime)
 {
-	//std::cout << m_ReturnQueue.size() << std::endl;
-	for (auto it = m_ReturnQueue.begin(); it != m_ReturnQueue.end();)
-	{
-		it->remainingTime -= deltaTime;
-		if (it->remainingTime <= 0.f)
-		{
-			it->obj->SetEnable(false);
-			it->obj->GetParticleSystem()->SetAvailable(true);
-
-			it = m_ReturnQueue.erase(it);
-		}
-		else
-		{
-			++it;
-		}
-	}
-}
-
-CGameObject* CParticleSystemManager::Request()
-{
-	for (auto obj : m_Pool)
-	{
-		if (obj->GetParticleSystem()->IsAvailable())
-		{
-			obj->GetParticleSystem()->SetEmit(true);
-			obj->GetParticleSystem()->SetAvailable(false);
-			obj->SetEnable(true);
-			return obj;
-		}
-	}
-	return nullptr;
-}
-
-void CParticleSystemManager::RequestExplodeAt(Vec3 pos)
-{
-	for (auto obj : m_Pool)
-	{
-		if (obj->GetParticleSystem()->IsAvailable())
-		{
-			obj->GetParticleSystem()->ExplodeAt(pos);
-			obj->GetParticleSystem()->SetAvailable(false);
-			obj->SetEnable(true);
-			return;
-		}
-	}
-}
-
-void CParticleSystemManager::Return(CGameObject* obj)
-{
-	obj->GetParticleSystem()->SetEmit(false);
-	obj->GetParticleSystem()->SetBasePos(Vec3(0.f, 0.f, 0.f));
-	m_ReturnQueue.push_back({ obj, 1.0f }); 
+   
 }
 
 void CParticleSystemManager::Clear()
 {
-	for (auto obj : m_Pool)
-	{
-		if (obj)
-		{
-			delete obj;
-			obj = nullptr;
-		}
-	}
-
-	m_Pool.clear();
+    for (auto& [name, obj] : m_ParticleObjects)
+    {
+        if (obj)
+            delete obj;
+    }
+    m_ParticleObjects.clear();
 }

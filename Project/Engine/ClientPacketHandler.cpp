@@ -259,11 +259,11 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 		CFireBall* ball = dynamic_cast<CFireBall*>(map[id]);
 		if (ball)
 		{
-			if (ball->GetFireParticleObject())
+		/*	if (ball->GetFireParticleObject())
 			{
 				CParticleSystemManager::GetInst()->Return(ball->GetFireParticleObject());
 				ball->SetParticleObject(nullptr);
-			}
+			}*/
 		}
 		std::cout << "»èÁ¦\n";
 

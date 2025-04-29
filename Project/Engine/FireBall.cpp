@@ -27,9 +27,7 @@ CFireBall::CFireBall()
     AddComponent(new CRigidBody());
 
     // AddComponent(new CCollider());      
-    m_FireParticle = CParticleSystemManager::GetInst()->Request();
-    if (m_FireParticle)
-        m_FireParticle->GetParticleSystem()->SetTexture(L"Spark");
+    m_FireParticleId = CParticleSystemManager::GetInst()->AddEmitter(L"Spark", GetTransform()->GetRelativePosition());
 }
 
 void CFireBall::Update()
@@ -41,10 +39,10 @@ void CFireBall::Update()
 void CFireBall::FinalUpdate()
 {
     Vec3 pos = GetTransform()->GetRelativePosition();
-    if (m_FireParticle)
-        m_FireParticle->GetParticleSystem()->SetBasePos(pos);
-    if (m_SmokeParticle)
-        m_SmokeParticle->GetParticleSystem()->SetBasePos(pos);
+    if (0 <= m_FireParticleId)
+        CParticleSystemManager::GetInst()->UpdateEmitterPos(L"Spark", m_FireParticleId, pos);
+    if (0 <= m_SmokeParticleId)
+        CParticleSystemManager::GetInst()->UpdateEmitterPos(L"Smoke", m_SmokeParticleId, pos);
 
     CGameObject::FinalUpdate();
 
@@ -52,6 +50,10 @@ void CFireBall::FinalUpdate()
     {
         m_ElapsedTime += DELTA_TIME;
         if (m_ElapsedTime >= m_Duration) {
+            if (0 <= m_FireParticleId) {
+                CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", m_FireParticleId);
+                m_FireParticleId = -1;
+            }
             SpawnDeleteEffect();
             m_bDelete = true;
         }
@@ -60,13 +62,13 @@ void CFireBall::FinalUpdate()
 
     // 원래 충돌처리로 해야함
     if (pos.y < -20.f) {
-        if (m_FireParticle) {
-            CParticleSystemManager::GetInst()->Return(m_FireParticle);
-            m_FireParticle = nullptr;
+        if (0 <= m_FireParticleId){
+            CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", m_FireParticleId);
+            m_FireParticleId = -1;
         }
-        if (m_SmokeParticle) {
-            CParticleSystemManager::GetInst()->Return(m_SmokeParticle);
-            m_SmokeParticle = nullptr;
+        if (0 <= m_SmokeParticleId) {
+            CParticleSystemManager::GetInst()->RemoveEmitter(L"Smoke", m_SmokeParticleId);
+            m_FireParticleId = -1;
         }
         CEffectManager::GetInst()->SpawnRadialSmoke(pos);
         CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
@@ -85,10 +87,7 @@ void CFireBall::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
 
 void CFireBall::UseSmokeTrail()
 {
-    m_SmokeParticle = CParticleSystemManager::GetInst()->Request();
-    if (m_SmokeParticle)
-        m_SmokeParticle->GetParticleSystem()->SetTexture(L"Smoke");
-
+    m_SmokeParticleId = CParticleSystemManager::GetInst()->AddEmitter(L"Smoke", GetTransform()->GetRelativePosition());
 }
 
 void CFireBall::UpdateByMode()

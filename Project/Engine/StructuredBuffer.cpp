@@ -79,6 +79,54 @@ void CStructuredBuffer::Init(UINT32 elementSize, UINT32 elementCount, void* init
 	}
 }
 
+void CStructuredBuffer::UpdateData(void* srcData, UINT32 elementCount)
+{
+	if (nullptr == srcData || 0 == elementCount)
+		return;
+
+	UINT64 bufferSize = static_cast<UINT64>(m_ElementSize) * elementCount;
+
+	// 임시로 Upload Heap에 올린다
+	ComPtr<ID3D12Resource> uploadBuffer = nullptr;
+	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize, D3D12_RESOURCE_FLAG_NONE);
+	D3D12_HEAP_PROPERTIES heapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+
+	DEVICE->CreateCommittedResource(
+		&heapProperties,
+		D3D12_HEAP_FLAG_NONE,
+		&desc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&uploadBuffer));
+
+	// Upload Heap에 복사
+	UINT8* dataBegin = nullptr;
+	D3D12_RANGE readRange{ 0, 0 };
+	uploadBuffer->Map(0, &readRange, reinterpret_cast<void**>(&dataBegin));
+	memcpy(dataBegin, srcData, bufferSize);
+	uploadBuffer->Unmap(0, nullptr);
+
+	// ResourceBarrier: COMMON -> COPY_DEST
+	{
+		D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			m_Buffer.Get(), m_ResourceState, D3D12_RESOURCE_STATE_COPY_DEST);
+		RESOURCE_CMD_LIST->ResourceBarrier(1, &barrier);
+	}
+
+	// GPU Default Heap에 복사
+	RESOURCE_CMD_LIST->CopyBufferRegion(m_Buffer.Get(), 0, uploadBuffer.Get(), 0, bufferSize);
+
+	// ResourceBarrier: COPY_DEST -> COMMON
+	{
+		D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			m_Buffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, m_ResourceState);
+		RESOURCE_CMD_LIST->ResourceBarrier(1, &barrier);
+	}
+
+	// 커맨드 플러시 (즉시 반영)
+	CDevice::GetInst()->GetCmdQueue()->FlushResourceCommandQueue();
+}
+
 void CStructuredBuffer::PushGraphicsData(SRV_REGISTER reg)
 {
 	CDevice::GetInst()->GetGraphicsDescHeap()->SetSRV(m_SrvHeapBegin, reg);

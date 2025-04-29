@@ -8,6 +8,8 @@ public:
 
 	void Init(UINT32 elementSize, UINT32 elementCount, void* initialData = nullptr);
 
+	void UpdateData(void* srcData, UINT32 elementCount);
+
 	void PushGraphicsData(SRV_REGISTER reg);
 	void PushComputeSRVData(SRV_REGISTER reg);
 	void PushComputeUAVData(UAV_REGISTER reg);

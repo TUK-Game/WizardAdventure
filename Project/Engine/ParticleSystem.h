@@ -11,14 +11,21 @@ struct ParticleInfo
 	float	curTime;
 	Vec3	worldDir;
 	float	lifeTime;
-	INT32	alive;
-	INT32	padding[3];
+	int	alive;
+	int emitterID;
+	int	padding[3];
+};
+
+struct EmitterInfo
+{
+	Vec3 basePos;
+	float isAlive; 
 };
 
 struct ComputeSharedInfo
 {
-	INT32 addCount;
-	INT32 padding[3];
+	int addCount;
+	float padding[3];
 };
 
 class CParticleSystem : public CComponent
@@ -29,7 +36,7 @@ public:
 	virtual ~CParticleSystem();
 
 public:
-	void SetGarpchisMaterial(CMaterial* material) { m_GraphicsMaterial = material; }
+	void SetGraphicsMaterial(CMaterial* material) { m_GraphicsMaterial = material; }
 	void SetComputeMaterial(CMaterial* material) { m_ComputeMaterial = material; }
 	void SetTexture(class CTexture* texture);
 	void SetTexture(const std::wstring& name);
@@ -39,7 +46,11 @@ public:
 	bool IsAvailable() const { return m_bAvailable; }
 	void SetAvailable(bool value) { m_bAvailable = value; }
 
-	void ExplodeAt(const Vec3& pos);
+
+	int AddEmitter(const Vec3& basePos);
+	void UpdateEmitterPos(int emitterID, const Vec3& newPos);
+	void RemoveEmitter(int emitterID);
+	void ClearEmitters();
 
 public:
 
@@ -50,9 +61,16 @@ public:
 	virtual CParticleSystem* Clone() override { return new CParticleSystem(*this); }
 
 private:
+	void InitBuffers(UINT32 maxParticle, UINT32 maxEmitter);
+
+private:
 	std::shared_ptr<CStructuredBuffer>	m_ParticleBuffer;
+	std::shared_ptr<CStructuredBuffer>	m_EmitterBuffer;
 	std::shared_ptr<CStructuredBuffer>	m_ComputeSharedBuffer;	
-	UINT32							m_MaxParticle = 100;
+	UINT32							m_MaxParticle = 1000;
+	UINT32							m_MaxEmitter = 50;
+
+	std::vector<EmitterInfo>		m_Emitters;
 
 	CMaterial*						m_ComputeMaterial;
 	CMaterial*						m_GraphicsMaterial;
@@ -71,7 +89,6 @@ private:
 	float				m_EndScale = 5.f;
 
 	bool				m_bEmit = true;
-	bool				m_bExplosionMode = false;
 	bool				m_bAvailable = true;
 
 	float				m_ExplosionDuration = 0.5f; 
