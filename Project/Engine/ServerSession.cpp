@@ -55,6 +55,13 @@ void CServerSession::OnSend(int32 len)
 	//std::cout << "OnSend len - " << len << std::endl;
 }
 
+void CServerSession::SelectMageAttribute()
+{
+	Protocol::C_ENTER_GAME enterPkt;
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(enterPkt);
+	Send(sendBuffer);
+}
+
 void CServerSession::OnMovePlayer()
 {
 	CTransform* transform = m_OwnPlayer->GetTransform();

@@ -39,10 +39,12 @@ bool Handle_S_LOGIN(CPacketSessionRef& session, Protocol::S_LOGIN& pkt)
 	{
 		std::cout << "로그인 성공!" << std::endl;
 		// 입장
+#ifndef AUTO_SERVER_CONNECT
 		Protocol::C_ENTER_GAME enterPkt;
-
+		
 		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterPkt);
 		session->Send(sendBuffer);
+#endif
 		return true;
 	}
 
@@ -69,6 +71,9 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	CLevelManager::GetInst()->SetOwnPlayer(player);
 	CLevelManager::GetInst()->SetPlayer(player, id);
 	CRenderManager::GetInst()->GetMainCamera()->SetTarget(player);
+	CRenderManager::GetInst()->GetMainCamera()->SetCameraType(ECamera_Type::Fixed);
+
+		
 	CNetworkManager::GetInst()->s_GameSession->SetOwnPlayer(player);
 	CNetworkManager::GetInst()->s_GameSession->SetClientID(id);
 
@@ -93,11 +98,11 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_FIRE);
 		player->InitStats(100, 100, 30, 300.f);
 		// 임시적으로 넣어둠 원래는 게임 진행하면서 스킬 획득
-		gamewindow->SetSkill(1, L"FireShot", 10);
+	/*	gamewindow->SetSkill(1, L"FireShot", 10);
 		gamewindow->SetSkill(2, L"FireRain", 10);
 		gamewindow->SetSkill(3, L"FireballExplosion", 10);
 		gamewindow->SetSkill(4, L"FireTower", 10);
-		gamewindow->SetSkill(5, L"Fireball", 10);
+		gamewindow->SetSkill(5, L"Fireball", 10);*/
 		gamewindow->SetGauge(L"HPBar", 100, true);
 		gamewindow->SetGauge(L"SignautreGage", 0, false);
 	}
@@ -105,13 +110,13 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	case EPlayerAttribute::Water:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_ICE);
-		//player->InitStats(100, 100, 30, 300.f);
+		player->InitStats(100, 100, 30, 300.f);
 	}
 	break;
 	case EPlayerAttribute::Electric:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
-		//player->InitStats(100, 100, 30, 300.f);
+		player->InitStats(100, 100, 30, 300.f);
 	}
 	break;
 	}

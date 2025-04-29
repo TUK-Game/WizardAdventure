@@ -10,4 +10,5 @@ public:
 
 public:
 	virtual bool Init(class CPlayer* player);
+	virtual void Update() override;
 };

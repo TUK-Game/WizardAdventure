@@ -52,7 +52,6 @@ void CCameraScript::Update()
 		GetOwner()->GetCamera()->SetFOV(75.f);
 		GetOwner()->GetCamera()->SetFar(5000.f);
 		GetTransform()->SetRelativeRotation(49.f, -34.f, 0.f);
-		m_TargetTransform = GetOwner()->GetCamera()->GetTarget()->GetTransform();	
 	}
 	if (KEY_DOWN(EKey::M))
 	{
@@ -73,6 +72,11 @@ void CCameraScript::Update()
 			widget->SetEnable(false);
 		else
 			widget->SetEnable(true);*/
+	}
+
+	if (GetOwner()->GetCamera()->GetTarget())
+	{
+		m_TargetTransform = GetOwner()->GetCamera()->GetTarget()->GetTransform();
 	}
 
 	if (GetOwner()->GetCamera()->GetCameraType() == ECamera_Type::Fixed)
@@ -131,6 +135,9 @@ void CCameraScript::FreeMove()
 
 void CCameraScript::FixedMove()
 {
-	Vec3 pos = m_TargetTransform->GetRelativePosition();
-	GetTransform()->SetRelativePosition(pos + m_Offset);
+	if (GetOwner()->GetCamera()->GetTarget())
+	{
+		Vec3 pos = m_TargetTransform->GetRelativePosition();
+		GetTransform()->SetRelativePosition(pos + m_Offset);
+	}
 }

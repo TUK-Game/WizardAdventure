@@ -74,11 +74,14 @@ private:\
 
 #define READY_IMGUI
 
+//#define AUTO_SERVER_CONNECT
+
 //#define DEBUG_SOLOPLAY
 
 #define MAX_OBJECTS_SUBLEVEL 200
 
 #define MAX_PLAYERS 4
+
 
 /*----------
 	Random

@@ -29,7 +29,8 @@
 #include <Engine/ParticleSystemManager.h>
 #include <Engine/AnimatedBillboardEffect.h>
 #include <Engine/EffectManager.h>
-
+#include <Engine/NetworkManager.h>
+#include <Engine/ServerSession.h>
 #include <Engine/Engine.h>
 CLevel_1::CLevel_1()
 {
@@ -269,6 +270,10 @@ void CLevel_1::Init()
 		this->AddGameObject(effect, 2, false);
 	}
 #pragma endregion
+
+#ifdef AUTO_SERVER_CONNECT
+	CNetworkManager::GetInst()->s_GameSession->SelectMageAttribute();
+#endif
 }
 
 void CLevel_1::Begin()

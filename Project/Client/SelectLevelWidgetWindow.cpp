@@ -5,6 +5,8 @@
 #include <Engine/AssetManager.h>
 #include <Engine/Transform.h>
 #include <Engine/LevelManager.h>
+#include <Engine/NetworkManager.h>
+#include <Engine/ServerSession.h>
 #include "Level_1.h"
 
 CSelectLevelWidgetWindow::CSelectLevelWidgetWindow()
@@ -22,6 +24,7 @@ bool CSelectLevelWidgetWindow::Init(CPlayer* player)
 	widget->GetTransform()->SetRelativeScale(0.55f, 1.3f, 1.f);
 	widget->SetFunction([]() {
 		CLevelManager::GetInst()->ChangeLevel(new CLevel_1);
+		std::cout << "hi";
 		});
 
 	widget->SetButtonTexture(
@@ -57,4 +60,9 @@ bool CSelectLevelWidgetWindow::Init(CPlayer* player)
 	);
 
 	return true;
+}
+
+void CSelectLevelWidgetWindow::Update()
+{
+	CWidgetWindow::Update();
 }
