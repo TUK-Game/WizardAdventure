@@ -55,9 +55,27 @@ void CServerSession::OnSend(int32 len)
 	//std::cout << "OnSend len - " << len << std::endl;
 }
 
-void CServerSession::SelectMageAttribute()
+void CServerSession::SelectMageAttribute(EPlayerAttribute attribute)
 {
 	Protocol::C_ENTER_GAME enterPkt;
+	switch (attribute)
+	{
+	case EPlayerAttribute::Fire:
+	{
+		enterPkt.set_player_type(Protocol::PLAYER_TYPE_FIRE);
+	}
+	break;
+	case EPlayerAttribute::Ice:
+	{
+		enterPkt.set_player_type(Protocol::PLAYER_TYPE_ICE);
+	}
+	break;
+	case EPlayerAttribute::Electric:
+	{
+		enterPkt.set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
+	}
+	break;
+	}
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(enterPkt);
 	Send(sendBuffer);
 }

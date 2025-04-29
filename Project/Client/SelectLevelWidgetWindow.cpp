@@ -23,8 +23,7 @@ bool CSelectLevelWidgetWindow::Init(CPlayer* player)
 	widget->GetTransform()->SetRelativePosition(-0.658, -0.2f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.55f, 1.3f, 1.f);
 	widget->SetFunction([]() {
-		CLevelManager::GetInst()->ChangeLevel(new CLevel_1);
-		std::cout << "hi";
+		CLevelManager::GetInst()->ChangeLevel(new CLevel_1(EPlayerAttribute::Fire));
 		});
 
 	widget->SetButtonTexture(
@@ -37,7 +36,7 @@ bool CSelectLevelWidgetWindow::Init(CPlayer* player)
 	widget->GetTransform()->SetRelativePosition(-0.058, -0.2f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.55f, 1.3f, 1.f);
 	widget->SetFunction([]() {
-		CLevelManager::GetInst()->ChangeLevel(new CLevel_1);
+		CLevelManager::GetInst()->ChangeLevel(new CLevel_1(EPlayerAttribute::Ice));
 		});
 
 	widget->SetButtonTexture(
@@ -50,7 +49,7 @@ bool CSelectLevelWidgetWindow::Init(CPlayer* player)
 	widget->GetTransform()->SetRelativePosition(0.542, -0.2f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.55f, 1.3f, 1.f);
 	widget->SetFunction([]() {
-		CLevelManager::GetInst()->ChangeLevel(new CLevel_1);
+		CLevelManager::GetInst()->ChangeLevel(new CLevel_1(EPlayerAttribute::Electric));
 		});
 
 	widget->SetButtonTexture(

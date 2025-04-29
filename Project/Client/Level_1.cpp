@@ -37,9 +37,20 @@ CLevel_1::CLevel_1()
 	//CLevelManager::GetInst()->SetLevel(this);
 }
 
+CLevel_1::CLevel_1(EPlayerAttribute attribute)
+	: m_Attribute(attribute)
+{
+	//CLevelManager::GetInst()->SetLevel(this);
+}
+
 CLevel_1::~CLevel_1()
 {
 	delete m_MiniMapBackground;
+}
+
+void CLevel_1::SelectMage(EPlayerAttribute attribute)
+{
+
 }
 
 void CLevel_1::Init()
@@ -272,7 +283,7 @@ void CLevel_1::Init()
 #pragma endregion
 
 #ifdef AUTO_SERVER_CONNECT
-	CNetworkManager::GetInst()->s_GameSession->SelectMageAttribute();
+	CNetworkManager::GetInst()->s_GameSession->SelectMageAttribute(m_Attribute);
 #endif
 }
 

@@ -27,6 +27,10 @@ public:
 	virtual ~CMeshData();
 
 public:
+	std::vector<MeshRenderInfo>& GetMeshrenderInfos() { return _meshRenders; }
+	MeshRenderInfo& GetMeshrenderInfo(int idx) { return _meshRenders[idx]; }
+
+public:
 	static CMeshData* LoadFromJHD(const std::wstring& path, const std::wstring& texturePath);
 
 	virtual void Load(const std::wstring& path);

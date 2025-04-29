@@ -410,9 +410,10 @@ class S_LOGIN final :
 // -------------------------------------------------------------------
 
 class C_ENTER_GAME final :
-    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:Protocol.C_ENTER_GAME) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_ENTER_GAME) */ {
  public:
   inline C_ENTER_GAME() : C_ENTER_GAME(nullptr) {}
+  ~C_ENTER_GAME() override;
   explicit PROTOBUF_CONSTEXPR C_ENTER_GAME(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
   C_ENTER_GAME(const C_ENTER_GAME& from);
@@ -485,15 +486,29 @@ class C_ENTER_GAME final :
   C_ENTER_GAME* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
     return CreateMaybeMessage<C_ENTER_GAME>(arena);
   }
-  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
-  inline void CopyFrom(const C_ENTER_GAME& from) {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(*this, from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const C_ENTER_GAME& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const C_ENTER_GAME& from) {
+    C_ENTER_GAME::MergeImpl(*this, from);
   }
-  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
-  void MergeFrom(const C_ENTER_GAME& from) {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(*this, from);
-  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
   public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_ENTER_GAME* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
@@ -514,6 +529,18 @@ class C_ENTER_GAME final :
 
   // accessors -------------------------------------------------------
 
+  enum : int {
+    kPlayerTypeFieldNumber = 1,
+  };
+  // .Protocol.PlayerType player_type = 1;
+  void clear_player_type();
+  ::Protocol::PlayerType player_type() const;
+  void set_player_type(::Protocol::PlayerType value);
+  private:
+  ::Protocol::PlayerType _internal_player_type() const;
+  void _internal_set_player_type(::Protocol::PlayerType value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.C_ENTER_GAME)
  private:
   class _Internal;
@@ -522,7 +549,10 @@ class C_ENTER_GAME final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    int player_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
+  union { Impl_ _impl_; };
   friend struct ::TableStruct_Protocol_2eproto;
 };
 // -------------------------------------------------------------------
@@ -3550,6 +3580,26 @@ inline void S_LOGIN::set_success(bool value) {
 // -------------------------------------------------------------------
 
 // C_ENTER_GAME
+
+// .Protocol.PlayerType player_type = 1;
+inline void C_ENTER_GAME::clear_player_type() {
+  _impl_.player_type_ = 0;
+}
+inline ::Protocol::PlayerType C_ENTER_GAME::_internal_player_type() const {
+  return static_cast< ::Protocol::PlayerType >(_impl_.player_type_);
+}
+inline ::Protocol::PlayerType C_ENTER_GAME::player_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_ENTER_GAME.player_type)
+  return _internal_player_type();
+}
+inline void C_ENTER_GAME::_internal_set_player_type(::Protocol::PlayerType value) {
+  
+  _impl_.player_type_ = value;
+}
+inline void C_ENTER_GAME::set_player_type(::Protocol::PlayerType value) {
+  _internal_set_player_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_ENTER_GAME.player_type)
+}
 
 // -------------------------------------------------------------------
 

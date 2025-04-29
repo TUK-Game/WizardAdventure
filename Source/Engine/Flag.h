@@ -151,7 +151,7 @@ enum class EState_Type
 enum class EPlayerAttribute
 {
 	Fire,  
-	Water,  
+	Ice,  
 	Electric 
 };
 

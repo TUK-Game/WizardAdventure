@@ -282,6 +282,25 @@ int CAssetManager::LoadTexture()
 		tex->Init(path / L"Skill\\Fire\\FireTower.png");
 		AddAsset(L"FireTower", tex);
 	}
+
+	// Mage Texture
+	{
+		tex = new CTexture;
+		tex->Init(path / L"JHD\\Mage.fbm\\Body_Purple.png");
+		AddAsset(L"Body_Purple", tex);
+
+		tex = new CTexture;
+		tex->Init(path / L"JHD\\Mage.fbm\\Body_Sky.png");
+		AddAsset(L"Body_Sky", tex);
+
+		tex = new CTexture;
+		tex->Init(path / L"JHD\\Mage.fbm\\Body_Yellow.png");
+		AddAsset(L"Body_Yellow", tex);
+
+		tex = new CTexture;
+		tex->Init(path / L"JHD\\Mage.fbm\\Body_Normal.png");
+		AddAsset(L"Body_Normal", tex);
+	}
 	return S_OK;
 }
 
@@ -351,6 +370,23 @@ int CAssetManager::LoadMaterial()
 	material->SetTexture(1, FindAsset<CTexture>(L"Lava_Normal"));
 	AddAsset(L"Lava", material);
 
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Body_Purple"));
+	material->SetTexture(1, FindAsset<CTexture>(L"Body_Normal"));
+	AddAsset(L"Body_Purple", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Body_Sky"));
+	material->SetTexture(1, FindAsset<CTexture>(L"Body_Normal"));
+	AddAsset(L"Body_Sky", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Body_Yellow"));
+	material->SetTexture(1, FindAsset<CTexture>(L"Body_Normal"));
+	AddAsset(L"Body_Yellow", material);
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Particle"));
@@ -422,6 +458,15 @@ int CAssetManager::LoadMeshData()
 {
 	CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Mage.jhd");
 	AddAsset(L"Mage", data);
+
+	data = LoadJHDForAnotherColor(L"../../Content/Texture/JHD/Mage.jhd", L"Body_Purple", 0);
+	AddAsset(L"PurpleMage", data);
+
+	data = LoadJHDForAnotherColor(L"../../Content/Texture/JHD/Mage.jhd", L"Body_Sky", 0);
+	AddAsset(L"SkyMage", data);
+
+	data = LoadJHDForAnotherColor(L"../../Content/Texture/JHD/Mage.jhd", L"Body_Yellow", 0);
+	AddAsset(L"YellowMage", data);
 
 	data= CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Crab.jhd", L"Crab");
 	AddAsset(L"Crab", data);
@@ -590,6 +635,26 @@ CMeshData* CAssetManager::LoadJHD(const std::wstring& path, const std::wstring& 
 	AddAsset(key, meshData);
 
 	return meshData;
+}
+
+CMeshData* CAssetManager::LoadJHDForAnotherColor(const std::wstring& path, const std::wstring& materialName, int idx)
+{
+	std::wstring key = path + materialName;
+
+	CMeshData* meshData = FindAsset<CMeshData>(path);
+	if (meshData)
+	{
+		CMeshData* newMeshData = meshData->Clone();
+		auto& info = newMeshData->GetMeshrenderInfo(idx);
+
+		info.materials[0] = CAssetManager::GetInst()->FindAsset<CMaterial>(materialName);
+
+		newMeshData->SetName(key);
+		AddAsset(key, newMeshData);
+
+		return newMeshData;
+	}
+	return nullptr;
 }
 
 int CAssetManager::CreatePointMesh()

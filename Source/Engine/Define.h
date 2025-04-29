@@ -74,7 +74,7 @@ private:\
 
 #define READY_IMGUI
 
-//#define AUTO_SERVER_CONNECT
+#define AUTO_SERVER_CONNECT
 
 //#define DEBUG_SOLOPLAY
 

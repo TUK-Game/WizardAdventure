@@ -60,7 +60,26 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	// 플레이어 생성
 	UINT64 id = pkt.player().player_id();
 
-	CPlayer* player = new CPlayer(EPlayerAttribute::Fire, true);
+	CPlayer* player{ nullptr };
+
+	switch (pkt.player().player_type())
+	{
+	case Protocol::PLAYER_TYPE_FIRE:
+	{
+		player = new CPlayer(EPlayerAttribute::Fire, true);
+	}
+	break;
+	case Protocol::PLAYER_TYPE_ICE:
+	{
+		player = new CPlayer(EPlayerAttribute::Ice, true);
+	}
+	break;
+	case Protocol::PLAYER_TYPE_LIGHTNING:
+	{
+		player = new CPlayer(EPlayerAttribute::Electric, true);
+	}
+	break;
+	}
 
 	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
 
@@ -107,7 +126,7 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 		gamewindow->SetGauge(L"SignautreGage", 0, false);
 	}
 	break;
-	case EPlayerAttribute::Water:
+	case EPlayerAttribute::Ice:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_ICE);
 		player->InitStats(100, 100, 30, 300.f);
@@ -182,7 +201,26 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 	// 1. 입장한 플레이어 받기
 	const Protocol::PlayerInfo& info = pkt.player();
 
-	CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+	CPlayer* player{nullptr};
+
+	switch (pkt.player().player_type())
+	{
+	case Protocol::PLAYER_TYPE_FIRE:
+	{
+		player = new CPlayer(EPlayerAttribute::Fire);
+	}
+	break;
+	case Protocol::PLAYER_TYPE_ICE:
+	{
+		player = new CPlayer(EPlayerAttribute::Ice);
+	}
+	break;
+	case Protocol::PLAYER_TYPE_LIGHTNING:
+	{
+		player = new CPlayer(EPlayerAttribute::Electric);
+	}
+	break;
+	}
 
 	const Protocol::Vector3& position = pkt.player().object_info().pos_info().position();
 	player->SetName(L"Player" + std::to_wstring(info.player_id()));
@@ -207,7 +245,27 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 	{
 		const Protocol::PlayerInfo& info = pkt.player(i);
 
-		CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+		CPlayer* player{ nullptr };
+
+		switch (info.player_type())
+		{
+		case Protocol::PLAYER_TYPE_FIRE:
+		{
+			player = new CPlayer(EPlayerAttribute::Fire);
+		}
+		break;
+		case Protocol::PLAYER_TYPE_ICE:
+		{
+			player = new CPlayer(EPlayerAttribute::Ice);
+		}
+		break;
+		case Protocol::PLAYER_TYPE_LIGHTNING:
+		{
+			player = new CPlayer(EPlayerAttribute::Electric);
+		}
+		break;
+		}
+
 
 		const Protocol::Vector3& position = info.object_info().pos_info().position();
 		player->SetName(L"Player" + std::to_wstring(info.player_id()));

@@ -16,6 +16,7 @@ message S_LOGIN
 
 message C_ENTER_GAME
 {
+	PlayerType player_type = 1;
 }
 
 message C_ENTER_GAME_SUCCESS

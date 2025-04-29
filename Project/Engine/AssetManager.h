@@ -31,6 +31,7 @@ public:
 	CSharedPtr<T> FindAsset(const std::wstring& key);
 
 	class CMeshData* LoadJHD(const std::wstring& path, const std::wstring& texturePath = L"");
+	class CMeshData* LoadJHDForAnotherColor(const std::wstring& path, const std::wstring& materialName, int idx);
 
 	CTexture* CreateTexture(const std::wstring& name, DXGI_FORMAT format, UINT32 width, UINT32 height,
 		const D3D12_HEAP_PROPERTIES& heapProperty, D3D12_HEAP_FLAGS heapFlags,

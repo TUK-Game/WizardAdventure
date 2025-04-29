@@ -22,7 +22,7 @@ public:
 	virtual void OnSend(int32 len) override;
 
 public:
-	void SelectMageAttribute();
+	void SelectMageAttribute(EPlayerAttribute attribute);
 
 	void OnMovePlayer();
 	void OnActPlayer();

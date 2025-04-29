@@ -200,6 +200,27 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 	position->set_z(1127.f);
 
 	newPlayer->PlayerInfo->mutable_object_info()->mutable_pos_info()->set_allocated_position(position);
+
+	switch (newPlayer->GetAttribution())
+	{
+	case EAttribution::FIRE:
+	{
+		newPlayer->PlayerInfo->set_player_type(Protocol::PLAYER_TYPE_FIRE);
+	}
+	break;
+	case EAttribution::ICE:
+	{
+		newPlayer->PlayerInfo->set_player_type(Protocol::PLAYER_TYPE_ICE);
+	}
+	break;
+	case EAttribution::LIGHTNING:
+	{
+		newPlayer->PlayerInfo->set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
+	}
+	break;
+	}
+
+
 	newPlayer->GetCollider()->SetCollisionProfile("Player");
 	newPlayer->GetCollider()->SetBoxInfo(Vec3(11240.f, 20.f, 1127.f), Vec3(120.f, 200.f, 64.f), Vec3(0.f, 0.f, 0.f), Vec3(0.f, 100.f, 0.f));
 
