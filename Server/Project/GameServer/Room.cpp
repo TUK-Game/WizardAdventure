@@ -66,6 +66,23 @@ void CRoom::Init()
 		CSavePositionBoxRef box = CObjectUtil::CreateObject<CSavePositionBox>();
 		box->SetTriggerBox(Vec3(4850, 0.f, 3875.f), Vec3(100.f, 100.f, 850.f));
 		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CSavePositionBox>();
+		box->SetTriggerBox(Vec3(10500.f, 0.f, 3850.f), Vec3(100.f, 100.f, 700.f));
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CSavePositionBox>();
+		box->SetTriggerBox(Vec3(8500, 0.f, 4000.f), Vec3(100.f, 100.f, 1050.f));
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CSavePositionBox>();
+		box->SetTriggerBox(Vec3(1170, 0.f, 3950.f), Vec3(100.f, 100.f, 300.f));
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CSavePositionBox>();
+		box->SetTriggerBox(Vec3(-1325.f, 0.f, 11700.f), Vec3(300.f, 100.f, 100.f));
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
 	}
 }
 
