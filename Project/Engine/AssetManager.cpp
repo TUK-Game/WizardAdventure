@@ -268,9 +268,6 @@ int CAssetManager::LoadTexture()
 	tex->Init(path / L"Blue.jpg");
 	AddAsset(L"Blue", tex);
 
-	tex = new CTexture;
-	tex->Init(path / L"WallMark.png");
-	AddAsset(L"WallMark", tex);
 	// skill
 	{
 		tex = new CTexture;
