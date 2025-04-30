@@ -57,4 +57,5 @@ enum SkillMesh
 	FIRE_PILLAR = 1;
 	FIRE_CIRCLE = 2;
 	FIRE_SWORD = 3;
+	FIRE_TOWER = 4;
 }

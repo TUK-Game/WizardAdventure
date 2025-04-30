@@ -215,12 +215,13 @@ enum SkillMesh : int {
   FIRE_PILLAR = 1,
   FIRE_CIRCLE = 2,
   FIRE_SWORD = 3,
+  FIRE_TOWER = 4,
   SkillMesh_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   SkillMesh_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool SkillMesh_IsValid(int value);
 constexpr SkillMesh SkillMesh_MIN = FIRE_BALL;
-constexpr SkillMesh SkillMesh_MAX = FIRE_SWORD;
+constexpr SkillMesh SkillMesh_MAX = FIRE_TOWER;
 constexpr int SkillMesh_ARRAYSIZE = SkillMesh_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SkillMesh_descriptor();

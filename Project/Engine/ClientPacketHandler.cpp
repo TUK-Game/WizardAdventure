@@ -339,30 +339,14 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	if ((pkt.mutable_projectile_info()->state()) == Protocol::COLLISION)
 	{
 		CFireBall* ball = dynamic_cast<CFireBall*>(map[id]);
-		Vec3 pos = ball->GetTransform()->GetRelativePosition();
 		if (ball)
 		{
-		/*	if (ball->GetFireParticleObject())
-			{
-				CParticleSystemManager::GetInst()->Return(ball->GetFireParticleObject());
-				ball->SetParticleObject(nullptr);
-			}*/
-			// }
-			// if (ball->GetSmokeParticleObject())
-			// {
-			// 	CParticleSystemManager::GetInst()->Return(ball->GetSmokeParticleObject());
-			// 	ball->SetSmokeParticleObject(nullptr);
-			// }
+			Vec3 pos = ball->GetTransform()->GetRelativePosition();
 			int fireParticleid = ball->GetFireParticleId();
 			if (0 <= fireParticleid) {
 				CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", fireParticleid);
 				ball->SetFireParticleId(-1);
 			}
-			//if (0 <= m_SmokeParticleId) {
-			//	CParticleSystemManager::GetInst()->RemoveEmitter(L"Smoke", m_SmokeParticleId);
-			//	m_SmokeParticleId = -1;
-			//}
-			//if (ball->GetIsBoom())
 			{
 				CEffectManager::GetInst()->SpawnRadialSmoke(pos);
 				CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
