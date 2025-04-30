@@ -8,7 +8,7 @@
 #include "ObjectUtil.h"
 #include "LevelCollision.h"
 #include "Monster.h"
-#include "TriggerBox.h"
+#include "MonsterTriggerBox.h"
 
 #include <iostream>
 #include <fstream>
@@ -84,6 +84,9 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 			triangles.push_back({ worldVertices[indices[i]], worldVertices[indices[i + 1]], worldVertices[indices[i + 2]] });
 		}
 
+		if (pos[1] <= -200.f)
+			continue;
+
 		CGameObjectRef object = CObjectUtil::CreateObject();
 		object->m_Triangles = triangles;
 		object->GetCollider()->SetBoxInfo(Vec3(pos[0], pos[1], pos[2]), Vec3(size[0] * scale[0], size[1] * scale[1], size[2] * scale[2]), Vec3(rot[0], rot[1], rot[2]));
@@ -130,7 +133,10 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 
 		for (const auto& box : mo)
 		{
-			CTriggerBoxRef trigger = dynamic_pointer_cast<CTriggerBox>(box.second);
+			CMonseterTriggerBoxRef trigger = dynamic_pointer_cast<CMonseterTriggerBox>(box.second);
+			if (!trigger)
+				continue;
+
 			if (trigger->IsMonsterInArea(Vec3(pos[0], pos[1], pos[2])))
 			{
 				trigger->AddMonster(object);

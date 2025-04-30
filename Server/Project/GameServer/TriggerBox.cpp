@@ -3,8 +3,6 @@
 #include "BoxCollider.h"
 #include "Room.h"
 #include "LevelCollision.h"
-#include "Monster.h"
-#include "MonsterArea.h"
 
 CTriggerBox::CTriggerBox()
 {
@@ -21,11 +19,6 @@ CTriggerBox::~CTriggerBox()
 {
 }
 
-void CTriggerBox::Init()
-{
-
-}
-
 void CTriggerBox::SetTriggerBox(const Vec3& pos, const Vec3& size)
 {
 	ObjectInfo->mutable_pos_info()->mutable_position()->set_x(pos.x);
@@ -35,14 +28,6 @@ void CTriggerBox::SetTriggerBox(const Vec3& pos, const Vec3& size)
 	m_BoxCollider->SetBoxInfo(pos, size, Vec3(0.f, 0.f, 0.f));
 }
 
-bool CTriggerBox::IsMonsterInArea(const Vec3& pos)
-{
-	Vec3 min = m_AreaCenter - (m_AreaSize * 0.5f);
-	Vec3 max = m_AreaCenter + (m_AreaSize * 0.5f);
-
-	return (pos.x >= min.x && pos.x <= max.x && pos.z >= min.z && pos.z <= max.z);
-}
-
 void CTriggerBox::Update(float deltaTime)
 {
 	g_Room->GetLevelCollision()->AddCollider(m_BoxCollider, ECollision_Channel::TRIGGER);
@@ -50,24 +35,8 @@ void CTriggerBox::Update(float deltaTime)
 
 void CTriggerBox::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
-	//std::cout << "트리거 박스 발동\n";
-	/*for (const auto& monster : m_AreaMonsters)
-	{
-		monster->SetIsActive(true);
-	}
-	g_Room->HandleOpenGate(m_GateInfo);
-	g_Room->RemoveObject((uint32)EObject_Type::TRIGGER, ObjectInfo->object_id());*/
 }
 
 void CTriggerBox::CollisionEnd(CBoxCollider* src, CBoxCollider* dest)
 {
-	CMonsterArea* area = new CMonsterArea();
-	for (const auto& monster : m_AreaMonsters)
-	{
-		monster->SetIsActive(true);
-		area->PushMonsterId(monster->MonsterInfo->object_id());
-	}
-	g_Room->GetAreas().push_back(area);
-	g_Room->HandleOpenGate(m_GateInfo);
-	g_Room->RemoveObject((uint32)EObject_Type::TRIGGER, ObjectInfo->object_id());
 }

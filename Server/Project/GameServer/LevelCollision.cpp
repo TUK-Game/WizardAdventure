@@ -97,7 +97,6 @@ bool CLevelCollision::CollisionWithWall(CBoxCollider* collider)
 		for (size_t i = 0; i < size; ++i)
 		{
 			CBoxCollider* src = m_vecCollider[(int)ECollision_Channel::Wall][i];
-
 			// 충돌 체크
 			if (!src->Collision(dest))
 				continue;

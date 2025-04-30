@@ -181,6 +181,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Room.cpp" />
+    <ClCompile Include="SavePositionBox.cpp" />
     <ClCompile Include="ServerPacketHandler.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="Struct.pb.cc">
@@ -188,6 +189,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="MonsterTriggerBox.cpp" />
     <ClCompile Include="TriggerBox.cpp" />
     <ClCompile Include="Util.cpp" />
   </ItemGroup>
@@ -213,10 +215,12 @@
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="Protocol.pb.h" />
     <ClInclude Include="Room.h" />
+    <ClInclude Include="SavePositionBox.h" />
     <ClInclude Include="ServerPacketHandler.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Struct.pb.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="MonsterTriggerBox.h" />
     <ClInclude Include="TriggerBox.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
