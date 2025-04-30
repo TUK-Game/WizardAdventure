@@ -14,6 +14,9 @@
 #include "NetworkManager.h"
 #include "ServerSession.h"
 #include "SkillDamage.h"
+#include "FireCircle.h"  
+#include "Player.h"
+
 
 CFireTower::CFireTower()
 {
@@ -33,6 +36,18 @@ CFireTower::CFireTower()
     }
     // AddComponent(new CCollider());      
     
+}
+
+void CFireTower::Init(CGameObject* owner)
+{
+    Vec3 centerPos = GetTransform()->GetRelativePosition();
+
+    m_FireCircle = new CFireCircle;
+    m_FireCircle->GetTransform()->SetRelativePosition(centerPos);
+    m_FireCircle->SetCaster(dynamic_cast<CPlayer*>(owner));
+
+    CNetworkManager::GetInst()->s_GameSession->SpawnSkill(m_FireCircle);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(m_FireCircle, 12, false);
 }
 
 void CFireTower::Update()
@@ -64,6 +79,8 @@ void CFireTower::FinalUpdate()
                 m_FireEffect = nullptr; 
             }
             m_bDelete = true;
+            if (m_FireCircle)
+                m_FireCircle->m_bDelete = true;
         }
     }
 }
@@ -82,6 +99,12 @@ void CFireTower::UpdateScaleLerp()
     float t = m_ElapsedTime / m_ScaleDuration;
     t = std::clamp(t, 0.f, 1.f);
     GetTransform()->SetRelativeScale(1.f, t, 1.f);
+
+    if (m_FireCircle)
+    {
+        Vec3 circleScale(t * m_AttackRange * 2, t * m_AttackRange * 2, t * 200.f);
+        m_FireCircle->GetTransform()->SetRelativeScale(circleScale);
+    }
 }
 
 void CFireTower::TryAttack()
@@ -124,7 +147,7 @@ void CFireTower::FireAtEnemy(CGameObject* enemy)
     Vec3 velocity = fireDir * 3000.f;
     fireBall->GetRigidBody()->SetVelocity(velocity);
 
-    fireBall->SetDamage(SkillDamage::FireTower/* * fireBall->GetCaster()->GetStats()->attack*/);
+    fireBall->SetDamage(m_Damage);
     fireBall->SetEnable(false);
     fireBall->SetCollisionExplosion(true);
     fireBall->SetMode(EFireBallMode::Default);

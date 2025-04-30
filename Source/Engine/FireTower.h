@@ -1,7 +1,9 @@
 #pragma once
 #include "SkillObject.h"
 #include "AnimatedBillboardEffect.h"
+#include "FireCircle.h"
 #define FIRETOWER_ATTACK_RANGE 700
+
 
 class CFireTower :
     public CSkillObject
@@ -16,14 +18,17 @@ public:
     void TryAttack();
     void FireAtEnemy(CGameObject* enemy); // 적을 향해 파이어볼 발사
 
+    void Init(CGameObject* owner);
     virtual void Update();
     virtual void FinalUpdate();
 
 private:
+    CAnimatedBillboardEffect* m_FireEffect = nullptr;
+    CFireCircle* m_FireCircle = nullptr;
+
     float m_Duration = 6.f;
     float m_ScaleDuration = 6.f;
     float m_ElapsedTime = 0.f;
-    CAnimatedBillboardEffect* m_FireEffect = nullptr;
     bool m_bFinishScale = false;
 
     bool m_bCanAttack = false;
