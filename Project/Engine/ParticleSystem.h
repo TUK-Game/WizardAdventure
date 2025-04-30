@@ -40,11 +40,8 @@ public:
 	void SetComputeMaterial(CMaterial* material) { m_ComputeMaterial = material; }
 	void SetTexture(class CTexture* texture);
 	void SetTexture(const std::wstring& name);
-	void SetBasePos(const Vec3 pos) { m_BasePos = pos; }
 	void SetEmit(bool value) { m_bEmit = value; }
 	bool IsEmitting() const { return m_bEmit; }
-	bool IsAvailable() const { return m_bAvailable; }
-	void SetAvailable(bool value) { m_bAvailable = value; }
 
 
 	int AddEmitter(const Vec3& basePos);
@@ -77,7 +74,6 @@ private:
 	CMesh*							m_Mesh;
 
 
-	Vec3				m_BasePos{};
 	float				m_CreateInterval = 0.005f;
 	float				m_AccTime = 0.f;
 
@@ -89,8 +85,5 @@ private:
 	float				m_EndScale = 5.f;
 
 	bool				m_bEmit = true;
-	bool				m_bAvailable = true;
 
-	float				m_ExplosionDuration = 0.5f; 
-	float				m_ExplosionElapsed = 0.f;  
 };

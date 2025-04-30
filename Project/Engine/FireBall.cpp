@@ -62,6 +62,10 @@ void CFireBall::FinalUpdate()
 
     // 원래 충돌처리로 해야함
     if (pos.y < -20.f) {
+        m_bDelete = true;
+
+        if (m_Mode != EFireBallMode::Meteor)
+            return;
         if (0 <= m_FireParticleId){
             CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", m_FireParticleId);
             m_FireParticleId = -1;
@@ -74,7 +78,6 @@ void CFireBall::FinalUpdate()
         CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
         CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
         CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
-        m_bDelete = true;
     }
 
 

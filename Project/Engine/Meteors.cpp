@@ -66,6 +66,7 @@ void CMeteors::SpawnMeteor()
     meteor->SetCaster(GetCaster());
     meteor->SetDamage(SkillDamage::Meteor * m_Caster->GetStats()->attack);
     meteor->UseSmokeTrail();
+    meteor->SetMode(EFireBallMode::Meteor);
     meteor->SetEnable(false);
 
     CRigidBody* rigidbody = meteor->GetRigidBody();

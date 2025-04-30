@@ -127,12 +127,12 @@ void CLevel_1::Init()
 	CLevelManager::GetInst()->SetOwnPlayer(player);
 #endif // DEBUG_SOLOPLAY
 
-	//{
-		//CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
-		//std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
-		//CMonster* monster = new CMonster();
-		//this->AddGameObject(monster, 11, false);
-	//}
+	{
+		CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
+		std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
+		CMonster* monster = new CMonster();
+		this->AddGameObject(monster, 11, false);
+	}
 
 //
 //

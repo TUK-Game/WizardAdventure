@@ -133,6 +133,7 @@ void CSkillManager::SpawnFireTowerAtMouse(float duration)
 
     CFireCircle* fireCircle = new CFireCircle;
     fireCircle->GetTransform()->SetRelativePosition(centerPos);
+    fireCircle->GetTransform()->SetRelativeScale(FIRETOWER_ATTACK_RANGE * 2, FIRETOWER_ATTACK_RANGE * 2, 200.f);
     fireCircle->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireCircle);
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireCircle, 12, false);
@@ -145,7 +146,7 @@ void CSkillManager::SpawnFireTowerAtMouse(float duration)
     tower->GetTransform()->SetRelativePosition(centerPos);
     tower->SetScaleDuration(duration);
     tower->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
-    tower->SetDamage(SkillDamage::Pillar * tower->GetCaster()->GetStats()->attack);
+    tower->SetDamage(SkillDamage::FireTower * tower->GetCaster()->GetStats()->attack);
     tower->SetEnable(false);
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(tower);
