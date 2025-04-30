@@ -17,19 +17,18 @@ public:
     void SetDirection(const Vec3& dir) { m_Direction = dir; }
     void SetSpeed(float speed) { m_Speed = speed; }
     void SetDuration(float duration) { m_Duration = duration; }
-    void SetParticleObject(CGameObject* object) { m_FireParticle = object; }
-    void SetSmokeParticleObject(CGameObject* object) { m_SmokeParticle = object; }
     void UseSmokeTrail();
     void SpawnDeleteEffect();
         
-    
+    void SetFireParticleId(int id) { m_FireParticleId = id; }
+    void SetSmokeParticleId(int id) { m_SmokeParticleId = id; }
     void SetMode(EFireBallMode mode) { m_Mode = mode; }
     EFireBallMode GetMode() const { return m_Mode; }
     void SetStartScale(const Vec3& scale) { m_StartScale = scale; }
     void SetEndScale(const Vec3& scale) { m_EndScale = scale; }
 
-    CGameObject* GetFireParticleObject() { return m_FireParticle; }
-    CGameObject* GetSmokeParticleObject() { return m_SmokeParticle; }
+    int GetFireParticleId() { return m_FireParticleId; }
+    int GetSmokeParticleId() { return m_SmokeParticleId; }
     bool GetIsBoom() { return m_bIsFireBallBoom; }
 
     void UpdateByMode();

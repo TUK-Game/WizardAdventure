@@ -26,8 +26,8 @@ CFireBall::CFireBall()
 	GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Lava"));
 	AddComponent(new CRigidBody());
 
-    // AddComponent(new CCollider());      
-    m_FireParticleId = CParticleSystemManager::GetInst()->AddEmitter(L"Spark", GetTransform()->GetRelativePosition());
+	// AddComponent(new CCollider());      
+	m_FireParticleId = CParticleSystemManager::GetInst()->AddEmitter(L"Spark", GetTransform()->GetRelativePosition());
 }
 
 void CFireBall::Update()
@@ -38,61 +38,44 @@ void CFireBall::Update()
 
 void CFireBall::FinalUpdate()
 {
-    Vec3 pos = GetTransform()->GetRelativePosition();
-    if (0 <= m_FireParticleId)
-        CParticleSystemManager::GetInst()->UpdateEmitterPos(L"Spark", m_FireParticleId, pos);
-    if (0 <= m_SmokeParticleId)
-        CParticleSystemManager::GetInst()->UpdateEmitterPos(L"Smoke", m_SmokeParticleId, pos);
+	Vec3 pos = GetTransform()->GetRelativePosition();
+	if (0 <= m_FireParticleId)
+		CParticleSystemManager::GetInst()->UpdateEmitterPos(L"Spark", m_FireParticleId, pos);
+	if (0 <= m_SmokeParticleId)
+		CParticleSystemManager::GetInst()->UpdateEmitterPos(L"Smoke", m_SmokeParticleId, pos);
 
 	CGameObject::FinalUpdate();
 
-    if (m_bOwn)
-    {
-        m_ElapsedTime += DELTA_TIME;
-        if (m_ElapsedTime >= m_Duration) {
-            if (0 <= m_FireParticleId) {
-                CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", m_FireParticleId);
-                m_FireParticleId = -1;
-            }
-            SpawnDeleteEffect();
-            m_bDelete = true;
-        }
-    }
+	if (m_bOwn)
+	{
+		m_ElapsedTime += DELTA_TIME;
+		if (m_ElapsedTime >= m_Duration) {
+			if (0 <= m_FireParticleId) {
+				CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", m_FireParticleId);
+				m_FireParticleId = -1;
+			}
+			SpawnDeleteEffect();
+			m_bDelete = true;
+		}
 
-
-    if (pos.y < -20.f && !m_bDelete) {
-        m_bDelete = true;
-
-        if (m_Mode != EFireBallMode::Meteor)
-            return;
-        if (0 <= m_FireParticleId){
-            CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", m_FireParticleId);
-            m_FireParticleId = -1;
-        }
-        if (0 <= m_SmokeParticleId) {
-            CParticleSystemManager::GetInst()->RemoveEmitter(L"Smoke", m_SmokeParticleId);
-            m_FireParticleId = -1;
-        }
-        CEffectManager::GetInst()->SpawnRadialSmoke(pos);
-        CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
-        CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
-        CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
-    }
 
 		if (pos.y < -20.f && !m_bDelete) {
-			if (m_FireParticle) {
-				CParticleSystemManager::GetInst()->Return(m_FireParticle);
-				m_FireParticle = nullptr;
+			m_bDelete = true;
+
+			if (m_Mode != EFireBallMode::Meteor)
+				return;
+			if (0 <= m_FireParticleId) {
+				CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", m_FireParticleId);
+				m_FireParticleId = -1;
 			}
-			if (m_SmokeParticle) {
-				CParticleSystemManager::GetInst()->Return(m_SmokeParticle);
-				m_SmokeParticle = nullptr;
+			if (0 <= m_SmokeParticleId) {
+				CParticleSystemManager::GetInst()->RemoveEmitter(L"Smoke", m_SmokeParticleId);
+				m_SmokeParticleId = -1;
 			}
-			CEffectManager::GetInst()->SpawnRadialSmoke(pos);
+	/*		CEffectManager::GetInst()->SpawnRadialSmoke(pos);
 			CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
 			CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
-			CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
-			m_bDelete = true;
+			CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);*/
 		}
 	}
 
@@ -105,7 +88,7 @@ void CFireBall::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
 
 void CFireBall::UseSmokeTrail()
 {
-    m_SmokeParticleId = CParticleSystemManager::GetInst()->AddEmitter(L"Smoke", GetTransform()->GetRelativePosition());
+	m_SmokeParticleId = CParticleSystemManager::GetInst()->AddEmitter(L"Smoke", GetTransform()->GetRelativePosition());
 }
 
 void CFireBall::UpdateByMode()

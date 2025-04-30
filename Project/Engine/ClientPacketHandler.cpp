@@ -116,7 +116,7 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_FIRE);
 		player->InitStats(100, 100, 30, 300.f);
-		// �ӽ������� �־�� ������ ���� �����ϸ鼭 ��ų ȹ��
+		// temp
 		gamewindow->SetSkill(1, L"FireShot", 10);
 		gamewindow->SetSkill(2, L"FireRain", 10);
 		gamewindow->SetSkill(3, L"FireballExplosion", 10);
@@ -353,7 +353,15 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 			// 	CParticleSystemManager::GetInst()->Return(ball->GetSmokeParticleObject());
 			// 	ball->SetSmokeParticleObject(nullptr);
 			// }
-
+			int fireParticleid = ball->GetFireParticleId();
+			if (0 <= fireParticleid) {
+				CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", fireParticleid);
+				ball->SetFireParticleId(-1);
+			}
+			//if (0 <= m_SmokeParticleId) {
+			//	CParticleSystemManager::GetInst()->RemoveEmitter(L"Smoke", m_SmokeParticleId);
+			//	m_SmokeParticleId = -1;
+			//}
 			//if (ball->GetIsBoom())
 			{
 				CEffectManager::GetInst()->SpawnRadialSmoke(pos);
