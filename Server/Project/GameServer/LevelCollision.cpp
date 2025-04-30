@@ -104,14 +104,33 @@ bool CLevelCollision::CollisionWithWall(CBoxCollider* collider)
 
 			const std::vector<WorldTriangle>& triangles = src->GetWorldTriangle();
 
-			if (!MeshBoxCheck(triangles, dest->GetBoundingBox()))
-				continue;
+			if (!triangles.empty())
+			{
+				if (!MeshBoxCheck(triangles, dest->GetBoundingBox()))
+					continue;
+			}
+			else
+			{
+				Vec3 gateDir = src->GetGateDir();
+				Vec3 absDir = Vec3(abs(gateDir.x), abs(gateDir.y), abs(gateDir.z));
+
+				Vec3 player = dest->GetGateDir() * absDir * -1;
+
+				player.Normalize();
+
+				float dot = player.Dot(gateDir);
+				if (dot > 0.f)
+					return false;
+				else
+					return true;
+			}
 
 			src->CallCollisionBegin(dest);
 			dest->CallCollisionBegin(src);
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -219,6 +238,7 @@ bool CLevelCollision::IntersectTriangleWithBoundingBox(const WorldTriangle& tri,
 
 	return true; // Ãæµ¹
 }
+
 void CLevelCollision::ProjectTriangle(const Vec3& axis, const Vec3& v0, const Vec3& v1, const Vec3& v2, float& outMin, float& outMax)
 {
 	float p0 = axis.Dot(v0);

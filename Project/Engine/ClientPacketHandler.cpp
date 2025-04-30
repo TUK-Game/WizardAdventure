@@ -18,9 +18,13 @@
 #include "FireTower.h"
 #include "FireCircle.h"
 #include "ParticleSystemManager.h"
+#include "MeshRenderer.h"
+#include "AssetManager.h"
+#include "EffectManager.h"
 
 #include "TestWidget.h"
 #include "MapPlayerWidget.h"
+#include "PlayWidgetWindow.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -33,16 +37,18 @@ bool Handle_S_LOGIN(CPacketSessionRef& session, Protocol::S_LOGIN& pkt)
 {
 	if (pkt.success())
 	{
-		std::cout << "·Î±×ÀÎ ¼º°ø!" << std::endl;
-		// ÀÔÀå
+		std::cout << "ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!" << std::endl;
+		// ï¿½ï¿½ï¿½ï¿½
+#ifndef AUTO_SERVER_CONNECT
 		Protocol::C_ENTER_GAME enterPkt;
-
+		
 		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterPkt);
 		session->Send(sendBuffer);
+#endif
 		return true;
 	}
 
-	std::cout << "·Î±×ÀÎ ½ÇÆÐ!" << std::endl;
+	std::cout << "ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!" << std::endl;
 	exit(0);
 
 	return false;
@@ -50,27 +56,57 @@ bool Handle_S_LOGIN(CPacketSessionRef& session, Protocol::S_LOGIN& pkt)
 
 bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt)
 {
-	std::cout << "µîÀå" << std::endl;
-	// ÇÃ·¹ÀÌ¾î »ý¼º
+	std::cout << "ï¿½ï¿½ï¿½ï¿½" << std::endl;
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UINT64 id = pkt.player().player_id();
 
-	CPlayer* player = new CPlayer(EPlayerAttribute::Fire, true);
+	CPlayer* player{ nullptr };
+
+	switch (pkt.player().player_type())
+	{
+	case Protocol::PLAYER_TYPE_FIRE:
+	{
+		player = new CPlayer(EPlayerAttribute::Fire, true);
+	}
+	break;
+	case Protocol::PLAYER_TYPE_ICE:
+	{
+		player = new CPlayer(EPlayerAttribute::Ice, true);
+	}
+	break;
+	case Protocol::PLAYER_TYPE_LIGHTNING:
+	{
+		player = new CPlayer(EPlayerAttribute::Electric, true);
+	}
+	break;
+	}
+
+	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
 
 	const Protocol::Vector3& position = pkt.player().object_info().pos_info().position();
 	player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
 
-	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
+	level->AddGameObject(player, 3, false);
 	CLevelManager::GetInst()->SetOwnPlayer(player);
 	CLevelManager::GetInst()->SetPlayer(player, id);
 	CRenderManager::GetInst()->GetMainCamera()->SetTarget(player);
+	CRenderManager::GetInst()->GetMainCamera()->SetCameraType(ECamera_Type::Fixed);
+
+		
 	CNetworkManager::GetInst()->s_GameSession->SetOwnPlayer(player);
 	CNetworkManager::GetInst()->s_GameSession->SetClientID(id);
 
-	const auto& window = CLevelManager::GetInst()->GetCurrentLevel()->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow");
-	if (window)
+	const auto& mapwindow = level->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow", player);
+	CPlayWidgetWindow* gamewindow = level->CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"GamePlayWidget", player);
+	if (mapwindow)
 	{
-		window->AddPlayer(player, id);
-		window->SetEnable(false);
+		mapwindow->SetOwnerPlayer(player);
+		mapwindow->AddPlayer(player, id);
+		mapwindow->SetEnable(false);
+	}
+	if (gamewindow)
+	{
+		gamewindow->SetOwnerPlayer(player);
 	}
 
 	Protocol::C_ENTER_GAME_SUCCESS GSpkt;
@@ -80,18 +116,26 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_FIRE);
 		player->InitStats(100, 100, 30, 300.f);
+		// ï¿½Ó½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸é¼­ ï¿½ï¿½Å³ È¹ï¿½ï¿½
+		gamewindow->SetSkill(1, L"FireShot", 10);
+		gamewindow->SetSkill(2, L"FireRain", 10);
+		gamewindow->SetSkill(3, L"FireballExplosion", 10);
+		gamewindow->SetSkill(4, L"FireTower", 10);
+		gamewindow->SetSkill(5, L"Fireball", 10);
+		gamewindow->SetGauge(L"HPBar", 100, true);
+		gamewindow->SetGauge(L"SignautreGage", 0, false);
 	}
 	break;
-	case EPlayerAttribute::Water:
+	case EPlayerAttribute::Ice:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_ICE);
-		//player->InitStats(100, 100, 30, 300.f);
+		player->InitStats(100, 100, 30, 300.f);
 	}
 	break;
 	case EPlayerAttribute::Electric:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
-		//player->InitStats(100, 100, 30, 300.f);
+		player->InitStats(100, 100, 30, 300.f);
 	}
 	break;
 	}
@@ -154,10 +198,29 @@ bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_S
 
 bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW_PLAYER& pkt)
 {
-	// 1. ÀÔÀåÇÑ ÇÃ·¹ÀÌ¾î ¹Þ±â
+	// 1. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Þ±ï¿½
 	const Protocol::PlayerInfo& info = pkt.player();
 
-	CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+	CPlayer* player{nullptr};
+
+	switch (pkt.player().player_type())
+	{
+	case Protocol::PLAYER_TYPE_FIRE:
+	{
+		player = new CPlayer(EPlayerAttribute::Fire);
+	}
+	break;
+	case Protocol::PLAYER_TYPE_ICE:
+	{
+		player = new CPlayer(EPlayerAttribute::Ice);
+	}
+	break;
+	case Protocol::PLAYER_TYPE_LIGHTNING:
+	{
+		player = new CPlayer(EPlayerAttribute::Electric);
+	}
+	break;
+	}
 
 	const Protocol::Vector3& position = pkt.player().object_info().pos_info().position();
 	player->SetName(L"Player" + std::to_wstring(info.player_id()));
@@ -175,14 +238,34 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 
 bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_EXISTING_PLAYER& pkt)
 {
-	// 2. Ã³À½ ÀÔÀåÇÒ ‹š ÀÌ¹Ì ÀÖ´Â ÇÃ·¹ÀÌ¾î ¹Þ±â
+	// 2. Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½Ö´ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Þ±ï¿½
 	int playerNum = pkt.player_size();
-	std::cout << "ÇöÀç ¼ö: " << playerNum << std::endl;
+	std::cout << "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½: " << playerNum << std::endl;
 	for (int i = 0; i < playerNum; ++i)
 	{
 		const Protocol::PlayerInfo& info = pkt.player(i);
 
-		CPlayer* player = new CPlayer(EPlayerAttribute::Fire);
+		CPlayer* player{ nullptr };
+
+		switch (info.player_type())
+		{
+		case Protocol::PLAYER_TYPE_FIRE:
+		{
+			player = new CPlayer(EPlayerAttribute::Fire);
+		}
+		break;
+		case Protocol::PLAYER_TYPE_ICE:
+		{
+			player = new CPlayer(EPlayerAttribute::Ice);
+		}
+		break;
+		case Protocol::PLAYER_TYPE_LIGHTNING:
+		{
+			player = new CPlayer(EPlayerAttribute::Electric);
+		}
+		break;
+		}
+
 
 		const Protocol::Vector3& position = info.object_info().pos_info().position();
 		player->SetName(L"Player" + std::to_wstring(info.player_id()));
@@ -203,14 +286,13 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 
 bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt)
 {
-	std::cout << "======================ÅðÀå======================" << std::endl;
+	std::cout << "======================ï¿½ï¿½ï¿½ï¿½======================" << std::endl;
 	return true;
 }
 
 bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO& pkt)
 {
 	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
-	std::vector<CGameObject*> monsters = level->GetLayer(11)->GetParentObjects();
 	auto& monsterMap = level->GetLayer(11)->GetMonsterMap();
 
 	for (int i = 0; i < pkt.monster_info_size(); ++i)
@@ -239,7 +321,7 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 			continue;
 		}
 
-		// ¸ó½ºÅÍ Á¤º¸ °»½Å
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		monster->SetTarget(Vec3(pos.x(), pos.y(), pos.z()), Vec3(rot.x(), rot.y(), rot.z()));
 		monster->SetProtocolStateForClientMonster(state);
 		monster->SetStats(info.monster_ablity().maxhp(), info.monster_ablity().hp());
@@ -257,6 +339,7 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	if ((pkt.mutable_projectile_info()->state()) == Protocol::COLLISION)
 	{
 		CFireBall* ball = dynamic_cast<CFireBall*>(map[id]);
+		Vec3 pos = ball->GetTransform()->GetRelativePosition();
 		if (ball)
 		{
 		/*	if (ball->GetFireParticleObject())
@@ -264,8 +347,21 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 				CParticleSystemManager::GetInst()->Return(ball->GetFireParticleObject());
 				ball->SetParticleObject(nullptr);
 			}*/
+			// }
+			// if (ball->GetSmokeParticleObject())
+			// {
+			// 	CParticleSystemManager::GetInst()->Return(ball->GetSmokeParticleObject());
+			// 	ball->SetSmokeParticleObject(nullptr);
+			// }
+
+			//if (ball->GetIsBoom())
+			{
+				CEffectManager::GetInst()->SpawnRadialSmoke(pos);
+				CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
+				CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
+				CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
+			}
 		}
-		std::cout << "»èÁ¦\n";
 
 		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->SafeRemoveGameObject(map[id]);
 		map.erase(id);
@@ -273,11 +369,13 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	else
 	{
 		const auto& pos = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
+		const auto& scale = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_size();
 		const auto& rot = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_rotation();
 		auto& object = map[id];
 		if (object)
 		{
 			object->GetTransform()->SetRelativePosition(Vec3(pos->x(), pos->y(), pos->z()));
+			object->GetTransform()->SetRelativeScale(Vec3(scale->x(), scale->y(), scale->z()));
 			object->GetTransform()->SetRelativeRotation(Vec3(rot->x(), rot->y(), rot->z()));
 		}
 	}
@@ -292,7 +390,7 @@ bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 	const Protocol::Vector3& rotation = pkt.player_move_info().pos_info().rotation();
 	Protocol::MoveState state = pkt.player_move_info().pos_info().state();
 	CLevelManager::GetInst()->GetPlayer(id)->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
-	//CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(rotation.x(), rotation.y(), rotation.z());
+
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
 	return true;
 }
@@ -317,9 +415,9 @@ bool Handle_S_UPDATE_PLAYER(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYE
 
 bool Handle_S_DESPAWN_PLAYER(CPacketSessionRef& session, Protocol::S_DESPAWN_PLAYER& pkt)
 {
-	// ÅðÀåÇÑ ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ »èÁ¦
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UINT64 id = pkt.player_ids();
-	std::cout << id << "¹ø ÇÃ·¹ÀÌ¾î°¡ ÅðÀåÇßÀ½" << std::endl;
+	std::cout << id << "ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << std::endl;
 
 	auto player = CLevelManager::GetInst()->GetPlayer(id);
 	if (player)
@@ -338,5 +436,56 @@ bool Handle_S_SPAWN(CPacketSessionRef& session, Protocol::S_SPAWN& pkt)
 
 bool Handle_S_DESPAWN(CPacketSessionRef& session, Protocol::S_DESPAWN& pkt)
 {
+	return true;
+}
+
+bool Handle_S_GATE_OPNE(CPacketSessionRef& session, Protocol::S_GATE_OPNE& pkt)
+{
+	for (int i = 0; i < pkt.open_objects_size(); ++i)
+	{
+		const auto& info = pkt.open_objects(i);
+
+		CGameObject* object = new CGameObject;
+		object->AddComponent(new CTransform);
+		object->AddComponent(new CMeshRenderer);
+		const auto& posInfo = info.pos_info().position();
+		const auto& sizeInfo = info.pos_info().size();
+		const auto& rotInfo = info.pos_info().rotation();
+		object->m_ObjectId = info.object_id();
+		std::wstring name = std::to_wstring(info.object_id());
+		object->SetName(name);
+		object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
+		object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+		object->GetTransform()->SetRelativePosition(posInfo.x(), posInfo.y(), posInfo.z());
+		object->GetTransform()->SetRelativeScale(sizeInfo.x(), sizeInfo.y(), sizeInfo.z());
+		object->GetTransform()->SetRelativeRotation(rotInfo.x(), rotInfo.y(), rotInfo.z());
+			
+		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(object, 13, false);
+	}
+	return true;
+}
+
+bool Handle_S_GATE_CLOSE(CPacketSessionRef& session, Protocol::S_GATE_CLOSE& pkt)
+{
+	const std::vector<CGameObject*>& objects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(13)->GetParentObjects();
+	for (int i = 0; i < pkt.cloase_objects_size(); ++i)
+	{
+		std::wstring name = std::to_wstring(pkt.cloase_objects(i).object_id());
+		auto iter = std::find_if(objects.begin(), objects.end(), [&](const auto& obj) {
+			return obj->GetName() == name;
+		});
+		
+		if (iter != objects.end())
+		{
+			CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(13)->SafeRemoveGameObject(*iter);
+			std::cout << "ï¿½ï¿½ï¿½Ö´ï¿½\n";
+		}
+		else
+		{
+			std::cout << "ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½\n";
+		}
+	}
+
+
 	return true;
 }

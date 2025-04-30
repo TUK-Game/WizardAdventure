@@ -22,9 +22,6 @@ bool CMapPlayerWidget::InitPlayer(CPlayer* player, int idx)
 	m_MapMax = CLevelManager::GetInst()->GetCurrentLevel()->GetMapMaxToCamera();
 	m_MapMin = CLevelManager::GetInst()->GetCurrentLevel()->GetMapMinToCamera();
 
-	AddComponent(new CMeshRenderer);
-	AddComponent(new CTransform);
-
 	switch (idx)
 	{
 	case 0:

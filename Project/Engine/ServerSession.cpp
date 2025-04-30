@@ -55,6 +55,31 @@ void CServerSession::OnSend(int32 len)
 	//std::cout << "OnSend len - " << len << std::endl;
 }
 
+void CServerSession::SelectMageAttribute(EPlayerAttribute attribute)
+{
+	Protocol::C_ENTER_GAME enterPkt;
+	switch (attribute)
+	{
+	case EPlayerAttribute::Fire:
+	{
+		enterPkt.set_player_type(Protocol::PLAYER_TYPE_FIRE);
+	}
+	break;
+	case EPlayerAttribute::Ice:
+	{
+		enterPkt.set_player_type(Protocol::PLAYER_TYPE_ICE);
+	}
+	break;
+	case EPlayerAttribute::Electric:
+	{
+		enterPkt.set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
+	}
+	break;
+	}
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(enterPkt);
+	Send(sendBuffer);
+}
+
 void CServerSession::OnMovePlayer()
 {
 	CTransform* transform = m_OwnPlayer->GetTransform();
@@ -72,6 +97,8 @@ void CServerSession::OnMovePlayer()
 	ProtoToVector3(pos, posInfo->mutable_position());
 	ProtoToVector3(rot, posInfo->mutable_rotation());
 	ProtoToVector3(dir, pkt.mutable_dir());
+		
+	pkt.set_ismove(true);
 
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(sendBuffer);
@@ -82,11 +109,10 @@ void CServerSession::OnActPlayer()
 {
 	CTransform* transform = m_OwnPlayer->GetTransform();
 
-	Vec3 pos = Vec3(0.f, 0.f, 0.f); 
 	Vec3 rot = transform->GetRelativeRotation();
 	Vec3 dir = m_OwnPlayer->GetCurrentMoveDir();
 
-	m_OwnPlayer->m_Amount = pos; 
+	m_OwnPlayer->m_Amount = Vec3(0.f, 0.f, 0.f); 
 
 	Protocol::C_MOVE pkt;
 	auto* moveInfo = pkt.mutable_player_move_info();
@@ -95,10 +121,10 @@ void CServerSession::OnActPlayer()
 	moveInfo->set_player_id(m_Id);
 	posInfo->set_state(m_OwnPlayer->GetStateForProtocol());
 	
-	ProtoToVector3(pos, posInfo->mutable_position());
 	ProtoToVector3(rot, posInfo->mutable_rotation());
 	ProtoToVector3(dir, pkt.mutable_dir());
 
+	pkt.set_ismove(false);
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(sendBuffer);
 
@@ -170,6 +196,7 @@ void CServerSession::MoveSkill(CSkillObject* object)
 {
 	CTransform* transform = object->GetTransform();
 	const Vec3& pos = transform->GetRelativePosition();
+	const Vec3& scale = transform->GetRelativeScale();
 	const Vec3& rot = transform->GetRelativeRotation();
 	Protocol::C_MOVE_PROJECTILE pkt;
 	auto* info = pkt.mutable_projectile_info();
@@ -180,13 +207,20 @@ void CServerSession::MoveSkill(CSkillObject* object)
 		info->set_state(Protocol::COLLISION);
 	}
 	else
+	{
 		info->set_state(Protocol::MOVE_STATE);
+	}
 
 	auto* posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
+	auto* scaleInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_size();
 	auto* rotInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_rotation();
 	posInfo->set_x(pos.x);
 	posInfo->set_y(pos.y);
 	posInfo->set_z(pos.z);
+
+	scaleInfo->set_x(scale.x);
+	scaleInfo->set_y(scale.y);
+	scaleInfo->set_z(scale.z);
 
 	rotInfo->set_x(rot.x);
 	rotInfo->set_y(rot.y);

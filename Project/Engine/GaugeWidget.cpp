@@ -6,22 +6,17 @@
 #include "AssetManager.h"
 #include "Engine.h"
 
-bool CGaugeWidget::Init()
+bool CGaugeWidget::Init(CPlayer* player)
 {
-	m_OwnerPlayer = CLevelManager::GetInst()->GetOwnPlayer();
-	AddComponent(new CMeshRenderer);
-	AddComponent(new CTransform);
-	GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
-
-		
+    CImageWidget::Init(player);
 	return true;
 }
 
 void CGaugeWidget::Update()
 {
-    if (m_Gauge > 0)
+    if (m_Gauge >= 0)
     {
-        m_Gauge -= DELTA_TIME * 5;
+        //m_Gauge -= DELTA_TIME * 5;
         float HPPercentage = m_Gauge / m_MaxGauge;
 
         float OriginalWidth = m_GaugeScale;

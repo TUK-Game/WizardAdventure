@@ -394,8 +394,9 @@ class PosInfo final :
   enum : int {
     kPositionFieldNumber = 2,
     kRotationFieldNumber = 3,
+    kSizeFieldNumber = 4,
     kObjectIdFieldNumber = 1,
-    kStateFieldNumber = 4,
+    kStateFieldNumber = 5,
   };
   // .Protocol.Vector3 Position = 2;
   bool has_position() const;
@@ -433,6 +434,24 @@ class PosInfo final :
       ::Protocol::Vector3* rotation);
   ::Protocol::Vector3* unsafe_arena_release_rotation();
 
+  // .Protocol.Vector3 Size = 4;
+  bool has_size() const;
+  private:
+  bool _internal_has_size() const;
+  public:
+  void clear_size();
+  const ::Protocol::Vector3& size() const;
+  PROTOBUF_NODISCARD ::Protocol::Vector3* release_size();
+  ::Protocol::Vector3* mutable_size();
+  void set_allocated_size(::Protocol::Vector3* size);
+  private:
+  const ::Protocol::Vector3& _internal_size() const;
+  ::Protocol::Vector3* _internal_mutable_size();
+  public:
+  void unsafe_arena_set_allocated_size(
+      ::Protocol::Vector3* size);
+  ::Protocol::Vector3* unsafe_arena_release_size();
+
   // uint64 object_id = 1;
   void clear_object_id();
   uint64_t object_id() const;
@@ -442,7 +461,7 @@ class PosInfo final :
   void _internal_set_object_id(uint64_t value);
   public:
 
-  // .Protocol.MoveState state = 4;
+  // .Protocol.MoveState state = 5;
   void clear_state();
   ::Protocol::MoveState state() const;
   void set_state(::Protocol::MoveState value);
@@ -461,6 +480,7 @@ class PosInfo final :
   struct Impl_ {
     ::Protocol::Vector3* position_;
     ::Protocol::Vector3* rotation_;
+    ::Protocol::Vector3* size_;
     uint64_t object_id_;
     int state_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -2628,7 +2648,97 @@ inline void PosInfo::set_allocated_rotation(::Protocol::Vector3* rotation) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.PosInfo.Rotation)
 }
 
-// .Protocol.MoveState state = 4;
+// .Protocol.Vector3 Size = 4;
+inline bool PosInfo::_internal_has_size() const {
+  return this != internal_default_instance() && _impl_.size_ != nullptr;
+}
+inline bool PosInfo::has_size() const {
+  return _internal_has_size();
+}
+inline void PosInfo::clear_size() {
+  if (GetArenaForAllocation() == nullptr && _impl_.size_ != nullptr) {
+    delete _impl_.size_;
+  }
+  _impl_.size_ = nullptr;
+}
+inline const ::Protocol::Vector3& PosInfo::_internal_size() const {
+  const ::Protocol::Vector3* p = _impl_.size_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vector3&>(
+      ::Protocol::_Vector3_default_instance_);
+}
+inline const ::Protocol::Vector3& PosInfo::size() const {
+  // @@protoc_insertion_point(field_get:Protocol.PosInfo.Size)
+  return _internal_size();
+}
+inline void PosInfo::unsafe_arena_set_allocated_size(
+    ::Protocol::Vector3* size) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.size_);
+  }
+  _impl_.size_ = size;
+  if (size) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.PosInfo.Size)
+}
+inline ::Protocol::Vector3* PosInfo::release_size() {
+  
+  ::Protocol::Vector3* temp = _impl_.size_;
+  _impl_.size_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vector3* PosInfo::unsafe_arena_release_size() {
+  // @@protoc_insertion_point(field_release:Protocol.PosInfo.Size)
+  
+  ::Protocol::Vector3* temp = _impl_.size_;
+  _impl_.size_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vector3* PosInfo::_internal_mutable_size() {
+  
+  if (_impl_.size_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vector3>(GetArenaForAllocation());
+    _impl_.size_ = p;
+  }
+  return _impl_.size_;
+}
+inline ::Protocol::Vector3* PosInfo::mutable_size() {
+  ::Protocol::Vector3* _msg = _internal_mutable_size();
+  // @@protoc_insertion_point(field_mutable:Protocol.PosInfo.Size)
+  return _msg;
+}
+inline void PosInfo::set_allocated_size(::Protocol::Vector3* size) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.size_;
+  }
+  if (size) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(size);
+    if (message_arena != submessage_arena) {
+      size = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, size, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.size_ = size;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.PosInfo.Size)
+}
+
+// .Protocol.MoveState state = 5;
 inline void PosInfo::clear_state() {
   _impl_.state_ = 0;
 }

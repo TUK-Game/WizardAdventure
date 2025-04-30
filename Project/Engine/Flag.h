@@ -73,6 +73,8 @@ enum class EWidgetComponent_Type
 
 enum class EWIDGETWINDOW_TYPE
 {
+	START_WINDOW,
+
 	GAME_WINDOW,
 	MAP_WINDOW,
 
@@ -149,7 +151,7 @@ enum class EState_Type
 enum class EPlayerAttribute
 {
 	Fire,  
-	Water,  
+	Ice,  
 	Electric 
 };
 

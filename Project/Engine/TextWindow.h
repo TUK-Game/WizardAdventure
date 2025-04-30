@@ -8,7 +8,7 @@ public:
 	virtual ~CTextWindow();
 
 public:
-	virtual bool Init();
+	virtual bool Init(class CPlayer* player);
 
 protected:
 	std::unordered_map<std::wstring, ID2D1SolidColorBrush*> m_BrushMap;

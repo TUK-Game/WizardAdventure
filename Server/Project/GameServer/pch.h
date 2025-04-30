@@ -51,6 +51,7 @@ enum class EObject_Type
 	Projectile,
 	NPC,
 	TRIGGER,
+	Gate,
 	Max
 };
 

@@ -15,8 +15,9 @@ CWidget::~CWidget()
 {
 }
 
-bool CWidget::Init()
+bool CWidget::Init(CPlayer* player)
 {
+	m_OwnerPlayer = player;
 	return true;
 }
 

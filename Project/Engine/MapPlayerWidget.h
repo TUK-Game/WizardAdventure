@@ -12,7 +12,6 @@ public:
 	virtual void Update() override;
 
 public:
-
 	bool InitPlayer(class CPlayer* player, int idx);
 	void ConvertPositionToMap();
 

@@ -6,12 +6,14 @@ class CImageWidget :
 {
 	friend class CWidgetWindow;
 
-protected:
+public:
     CImageWidget();
     virtual ~CImageWidget();
 
 public:
     virtual void SetTexture(const std::wstring& name);
+    
+    virtual bool Init(class CPlayer* player);
 
 public:
     virtual CImageWidget* Clone() override { return new CImageWidget(*this); }

@@ -51,8 +51,20 @@ int CClientManager::Init(HINSTANCE instance)
     if (FAILED(InitEngine()))
         return E_FAIL;
 
-    std::cout << "====== 서버 연동(Key 0) ======" << std::endl;
+    std::cout << "====== 서버 연동(NUMPAD 0) ======" << std::endl;
     std::cout << std::endl;
+
+
+#ifdef AUTO_SERVER_CONNECT
+    std::cout << "====== 서버 연동 자동 ======" << std::endl;
+    std::cout << std::endl;
+
+    if (CEngine::GetInst()->GetNetworkType() == ENetwork_Type::Offline)
+    {
+        CEngine::GetInst()->SetNetworkType(ENetwork_Type::Online);
+        CNetworkManager::GetInst()->Init();
+    }
+#endif
 
     return S_OK;
 }
@@ -72,7 +84,7 @@ LRESULT CClientManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         {
         case VK_NUMPAD0:
         {
-#ifndef DEBUG_SOLOPLAY
+#ifndef AUTO_SERVER_CONNECT
             if (CEngine::GetInst()->GetNetworkType() == ENetwork_Type::Offline)
             {
                 CEngine::GetInst()->SetNetworkType(ENetwork_Type::Online);

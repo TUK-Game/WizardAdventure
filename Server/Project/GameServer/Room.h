@@ -20,11 +20,14 @@ public:
 
 	void UpdateMonster();
 	void UpdateProjectile();
+	void UpdateAreas();
 public:
 	class CLevelCollision* GetLevelCollision() { return m_LevelCollision; }
 	std::unordered_map<uint64, CGameObjectRef>& GetLayerObjects(uint32 layer) { return m_mapObject[layer]; }
 	CGameObjectRef GetLayerObject(uint32 layer, uint64 id) { return m_mapObject[layer][id]; }
 	std::array<CPlayerRef, MAX_PLAYERS>& GetPlayers() { return m_Players; }
+	std::vector<class CMonsterArea*>& GetAreas() { return m_Areas; }
+
 public:
 	bool HandleEnterPlayer(CPlayerRef player);
 	bool HandlePlayerInit(CPlayerRef player);
@@ -42,6 +45,8 @@ public:
 
 	bool RemoveObject(uint32 layer, uint64 id);
 
+	bool HandleOpenGate(const std::vector<struct GateInfo>& posInfo);
+
 private:
 	bool AddPlayer(CPlayerRef player);
 	bool RemovePlayer(uint64 playerId);
@@ -57,6 +62,7 @@ private:
 	std::array<std::unordered_map<uint64, CGameObjectRef>, (int)EObject_Type::Max> m_mapObject;
 	std::vector<std::pair<uint32, uint64>> m_deleteObjects;
 	std::array<CPlayerRef, MAX_PLAYERS> m_Players;
+	std::vector<CMonsterArea*> m_Areas;
 
 	class CLevelCollision* m_LevelCollision;
 	float m_DeltaTime = 0.f;

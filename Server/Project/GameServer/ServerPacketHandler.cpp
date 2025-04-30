@@ -33,23 +33,8 @@ bool Handle_C_ENTER_GAME(CPacketSessionRef& session, Protocol::C_ENTER_GAME& pkt
 {
 	// 플레이어 생성
 	CPlayerRef player = CObjectUtil::CreatePlayer(static_pointer_cast<CGameSession>(session));
+	const auto type = pkt.player_type();
 
-	// 방에 입장
-	g_Room->DoAsync(&CRoom::HandleEnterPlayer, player);
-
-	return true;
-}
-
-bool Handle_C_ENTER_GAME_SUCCESS(CPacketSessionRef& session, Protocol::C_ENTER_GAME_SUCCESS& pkt)
-{
-	// 속성별 능력치 초기화 및 클라에 전송 -> 전송은 클라가 첨에 값 넣고 중력검사 떄 같이 보내서 동기화하면 ㄱㅊ할 듯
-	uint32 id = pkt.mutable_player()->player_id();
-	auto gameSession = static_pointer_cast<CGameSession>(session);
-	CPlayerRef player = gameSession->Player.load();
-	if (player == nullptr)
-		return false;
-	
-	const auto type = pkt.mutable_player()->player_type();
 	switch (type)
 	{
 	case Protocol::PLAYER_TYPE_FIRE:
@@ -61,19 +46,30 @@ bool Handle_C_ENTER_GAME_SUCCESS(CPacketSessionRef& session, Protocol::C_ENTER_G
 	case Protocol::PLAYER_TYPE_ICE:
 	{
 		player->SetAttribute(EAttribution::ICE);
-		//player->SetAblity(30, 100, 30, 300.f);
+		player->SetAblity(30, 100, 30, 300.f);
 	}
 	break;
 	case Protocol::PLAYER_TYPE_LIGHTNING:
 	{
 		player->SetAttribute(EAttribution::LIGHTNING);
-		//player->SetAblity(30, 100, 30, 300.f);
+		player->SetAblity(30, 100, 30, 300.f);
 	}
 	break;
-	default:
-		break;
 	}
 
+	// 방에 입장
+	g_Room->DoAsync(&CRoom::HandleEnterPlayer, player);
+
+	return true;
+}
+
+bool Handle_C_ENTER_GAME_SUCCESS(CPacketSessionRef& session, Protocol::C_ENTER_GAME_SUCCESS& pkt)
+{
+	uint32 id = pkt.mutable_player()->player_id();
+	auto gameSession = static_pointer_cast<CGameSession>(session);
+	CPlayerRef player = gameSession->Player.load();
+	if (player == nullptr)
+		return false;
 
 	return true;
 }
@@ -104,6 +100,7 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 	if (player == nullptr)
 		return false;
 
+	bool IsMove = pkt.ismove();
 	const auto& pos = pkt.player_move_info().pos_info().position();
 
 	const auto& rot = pkt.player_move_info().pos_info().rotation();
@@ -120,8 +117,10 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 	player->SetDir(dir);
 	player->SetState(state);
 
-	g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
-
+	if (IsMove)
+	{
+		g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
+	}
 	return true;
 }
 
@@ -150,7 +149,6 @@ bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PRO
 	projectile->SetCollisionBoxInfo(Vec3(info.spawn_pos().x(), info.spawn_pos().y(), info.spawn_pos().z()), state.Size, Vec3(0.f, 0.f, 0.f));
 	projectile->m_meshType = pkt.mesh();
 	g_Room->DoAsync(&CRoom::HandleSpawnProjectile, projectile);
-	std::cout << "발사!" << info.player_id() << "가 쏨\n";
 	return true;
 }
 
@@ -164,15 +162,21 @@ bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJE
 	if (object == nullptr)
 		return true;
 	const auto& posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->position();
+	const auto& scaleInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->size();
 	const auto& rotInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->rotation();
 	const auto state = pkt.projectile_info().state();
 	
 	auto* pos = object->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+	auto* scale = object->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_size();
 	auto* rot = object->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation();
 	pos->set_x(posInfo.x());
 	pos->set_y(posInfo.y());
 	pos->set_z(posInfo.z());
-	
+
+	scale->set_x(scaleInfo.x());
+	scale->set_y(scaleInfo.y());
+	scale->set_z(scaleInfo.z());
+
 	rot->set_x(rotInfo.x());
 	rot->set_y(rotInfo.y());
 	rot->set_z(rotInfo.z());
@@ -180,12 +184,6 @@ bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJE
 	if(object->ProjectileInfo->state() != Protocol::COLLISION)
 	{
 		object->ProjectileInfo->set_state(state);
-		if (state == Protocol::COLLISION)
-		{
-			std::cout << "터져옴\n";
-		}
-		else
-			std::cout << "잘옴\n";
 	}
 	
 	g_Room->DoAsync(&CRoom::HandleMoveProjectile, object);

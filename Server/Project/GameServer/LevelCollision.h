@@ -6,6 +6,9 @@ public:
 	~CLevelCollision();
 
 public:
+	std::vector<class CBoxCollider*>& GetLayerCollider(uint32 layer) { return m_vecCollider[layer]; }
+
+public:
 	void AddCollider(class CBoxCollider* collider, ECollision_Channel channel);
 	void Collision();
 	bool CollisionWithWall(CBoxCollider* collider);

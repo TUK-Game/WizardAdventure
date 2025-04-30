@@ -29,7 +29,26 @@ CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
 {
     CreateStateManager();
 
-    CMeshData* data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Mage");
+    CMeshData* data = nullptr; 
+    switch (attribute)
+    {
+    case EPlayerAttribute::Fire:
+    {
+        data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"PurpleMage");
+    }
+    break;
+    case EPlayerAttribute::Ice:
+    {
+        data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"SkyMage");
+    }
+    break;
+    case EPlayerAttribute::Electric:
+    {
+        data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"YellowMage");
+    }
+    break;
+    }
+
     std::vector<CGameObject*> obj = data->Instantiate(ECollision_Channel::Player);
 
    SetName(L"Mage");

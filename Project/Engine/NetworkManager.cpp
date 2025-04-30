@@ -33,10 +33,15 @@ bool CNetworkManager::Init()
 	std::cout << "input : ";
 
 	std::wstring serverIpAddress;
+
+#ifndef  AUTO_SERVER_CONNECT
 	std::wcin >> serverIpAddress;
 
 	if (serverIpAddress.size() == 1 && serverIpAddress[0] == '0')
 		serverIpAddress = L"127.0.0.1";
+#else
+	serverIpAddress = L"127.0.0.1";
+#endif
 
 	CClientServiceRef service = std::make_shared<CClientService>(
 		CNetAddress(serverIpAddress.c_str(), 6767),

@@ -133,6 +133,9 @@
     <ClCompile Include="TriggerBox.cpp">
       <Filter>01. Game\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="MonsterArea.cpp">
+      <Filter>01. Game\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -211,6 +214,9 @@
       <Filter>01. Game\GameObject\Creature\Projectile</Filter>
     </ClInclude>
     <ClInclude Include="TriggerBox.h">
+      <Filter>01. Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterArea.h">
       <Filter>01. Game\GameObject</Filter>
     </ClInclude>
   </ItemGroup>

@@ -44,8 +44,8 @@ void CSkillManager::UseSkill(int skillIndex, float duration)
             CastMeteor();
         break;
 
-    case EPlayerAttribute::Water:
-        if (skillIndex == 0) std::cout << "Water Jet (Q)!" << std::endl;
+    case EPlayerAttribute::Ice:
+        if (skillIndex == 0) std::cout << "Ice Jet (Q)!" << std::endl;
         if (skillIndex == 1) std::cout << "Ice Shield (E)!" << std::endl;
         if (skillIndex == 2) std::cout << "Tsunami (R)!" << std::endl;
         if (skillIndex == 3) std::cout << "(LButton)!" << std::endl;

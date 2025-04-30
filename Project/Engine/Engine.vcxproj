@@ -186,6 +186,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BoxCollider.h" />
+    <ClInclude Include="ButtonWidget.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraScript.h" />
     <ClInclude Include="ClientPacketHandler.h" />
@@ -201,6 +202,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="EffectManager.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Enum.pb.h" />
+    <ClInclude Include="HpBar.h" />
     <ClInclude Include="ParticleSystemManager.h" />
     <ClInclude Include="SkillDamage.h" />
     <ClInclude Include="SkillObject.h" />
@@ -353,6 +355,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
+    <ClCompile Include="ButtonWidget.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraScript.cpp" />
     <ClCompile Include="ClientPacketHandler.cpp" />
@@ -371,6 +374,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="HpBar.cpp" />
     <ClCompile Include="ParticleSystemManager.cpp" />
     <ClCompile Include="SkillObject.cpp" />
     <ClCompile Include="FireBall.cpp" />

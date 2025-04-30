@@ -9,7 +9,7 @@
 #include "Projectile.h"
 #include "ProjectilePool.h"
 #include "TriggerBox.h"
-
+#include "MonsterArea.h"
 
 CRoomRef g_Room = std::make_shared<CRoom>();
 
@@ -46,13 +46,17 @@ CRoomRef CRoom::GetRoomRef()
 
 void CRoom::Init()
 {
-	CTriggerBoxRef box = CObjectUtil::CreateObject<CTriggerBox>();
-	box->SetTriggerBox(Vec3(8700.f, 0.f, 3840.f), Vec3(100.f, 100.f, 1200.f));
-	AddObject((uint32)EObject_Type::TRIGGER, box);
+	//CTriggerBoxRef box = CObjectUtil::CreateObject<CTriggerBox>();
+	//box->SetTriggerBox(Vec3(8700.f, 0.f, 3840.f), Vec3(100.f, 100.f, 1200.f));
+	////box->SetArea(Vec3(3810.f, 0.f, 4350.f), Vec3(2080.f, 100.f, 1100.f));
+	////box->PushGatePosInfo({ Vec3(4850.f, 0.f, 3875.f), Vec3(200.f, 200.f, 850.f) });
+	//AddObject((uint32)EObject_Type::TRIGGER, box);
 
-	box = CObjectUtil::CreateObject<CTriggerBox>();
+	CTriggerBoxRef box = CObjectUtil::CreateObject<CTriggerBox>();
 	box->SetTriggerBox(Vec3(4850, 0.f, 3875.f), Vec3(100.f, 100.f, 850.f));
 	box->SetArea(Vec3(3810.f, 0.f, 4350.f), Vec3(2080.f, 100.f, 1100.f));
+	box->PushGateInfo(Vec3(5000.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 1000.f), Vec3(-1.f, 0.f, 0.f), 0.f);
+	box->PushGateInfo(Vec3(2750.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 600.f), Vec3(1.f, 0.f, 0.f), 0.f);
 	AddObject((uint32)EObject_Type::TRIGGER, box);
 }
 
@@ -97,6 +101,7 @@ void CRoom::Update()
 void CRoom::UpdateClients()
 {
 	UpdateMonster();
+	UpdateAreas();
 }
 
 void CRoom::UpdateMonster()
@@ -143,6 +148,43 @@ void CRoom::UpdateProjectile()
 {
 }
 
+void CRoom::UpdateAreas()
+{
+	std::unordered_map<uint64, CGameObjectRef> monsters = GetLayerObjects((int)EObject_Type::Monster);
+	for (int i = m_Areas.size() - 1; i >= 0; --i)
+	{
+		auto& monstersId = m_Areas[i]->GetMonstersId();
+		monstersId.erase(std::remove_if(monstersId.begin(), monstersId.end(),
+				[&](uint32 id) { return monsters.find(id) == monsters.end(); }), monstersId.end());
+
+		if (monstersId.empty())
+		{
+			std::unordered_map<uint64, CGameObjectRef> walls = GetLayerObjects((int)EObject_Type::Wall);
+
+			auto& gateIds = m_Areas[i]->GetGatesId();
+			Protocol::S_GATE_CLOSE pkt;
+
+			auto& colliders = GetLevelCollision()->GetLayerCollider((uint32)ECollision_Channel::Wall);
+
+			for (uint32 gateid : gateIds)
+			{
+				CGameObjectRef object = GetLayerObject((uint32)EObject_Type::Wall, gateid);
+				CBoxCollider* box = object->GetCollider();
+
+				colliders.erase(std::remove(colliders.begin(), colliders.end(), box), colliders.end());
+
+				Protocol::ObjectInfo* info = pkt.add_cloase_objects();
+				info->set_object_id(gateid);
+				RemoveObject((int)EObject_Type::Monster, gateid);
+			}
+			CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+			Broadcast(sendBuffer, -1);
+
+			m_Areas.erase(m_Areas.begin() + i);
+		}
+	}
+}
+
 bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 {
 	bool success = AddPlayer(newPlayer);
@@ -158,6 +200,27 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 	position->set_z(1127.f);
 
 	newPlayer->PlayerInfo->mutable_object_info()->mutable_pos_info()->set_allocated_position(position);
+
+	switch (newPlayer->GetAttribution())
+	{
+	case EAttribution::FIRE:
+	{
+		newPlayer->PlayerInfo->set_player_type(Protocol::PLAYER_TYPE_FIRE);
+	}
+	break;
+	case EAttribution::ICE:
+	{
+		newPlayer->PlayerInfo->set_player_type(Protocol::PLAYER_TYPE_ICE);
+	}
+	break;
+	case EAttribution::LIGHTNING:
+	{
+		newPlayer->PlayerInfo->set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
+	}
+	break;
+	}
+
+
 	newPlayer->GetCollider()->SetCollisionProfile("Player");
 	newPlayer->GetCollider()->SetBoxInfo(Vec3(11240.f, 20.f, 1127.f), Vec3(120.f, 200.f, 64.f), Vec3(0.f, 0.f, 0.f), Vec3(0.f, 100.f, 0.f));
 
@@ -281,6 +344,8 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 	moveAmount.y = 0;
 	moveAmount.z /= static_cast<float>(step);
 
+	const auto& dir = player->GetDir();
+
 	for (int i = 1; i <= step; ++i)
 	{
 		nowPos.x += moveAmount.x;
@@ -294,7 +359,6 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 		if (m_LevelCollision->CollisionWithWall(box) || m_LevelCollision->CollisionWithPlayer(box))
 		{
-			Protocol::Vector3& dir = player->GetDir();
 			nowPos.x -= moveAmount.x;
 			nowPos.z -= moveAmount.z;
 
@@ -331,6 +395,7 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 	if (auto session = player->GetSession())
 		session->Send(sendBuffer);
 
+	player->GetCollider()->SetGateDir(Vec3(dir.x(), dir.y(), dir.z()));
 	return true;
 }
 
@@ -348,7 +413,7 @@ bool CRoom::UPdatePlayer(CPlayerRef player, float deltaTime)
 	{
 		nowPos.y += moveAmount.y;
 
-		ToProtoVector3(&protoNow, nowPos);
+		ToProtoVector3(&protoNow, nowPos);	
 
 		player->GetCollider()->Update();
 		auto box = player->GetCollider();
@@ -381,10 +446,10 @@ bool CRoom::UPdatePlayer(CPlayerRef player, float deltaTime)
 	info->mutable_player_ablity()->set_maxhp(ablity->maxHp);
 
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
-	Broadcast(sendBuffer, player->PlayerInfo->player_id());
+	Broadcast(sendBuffer, -1);
 
-	if (auto session = player->GetSession())
-		session->Send(sendBuffer);
+	//if (auto session = player->GetSession())
+	//	session->Send(sendBuffer);
 
 	return true;
 }
@@ -449,6 +514,7 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 		}
 
 		const auto& rot = projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->rotation();
+		const auto& scale = projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->size();
 		auto* info = pkt.mutable_projectile_info();
 		info->set_projectile_id(projectile->ProjectileInfo->projectile_id());
 		info->set_state(projectile->ProjectileInfo->state());
@@ -457,6 +523,10 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 		posInfo->mutable_position()->set_x(nowPos.x);
 		posInfo->mutable_position()->set_y(nowPos.y);
 		posInfo->mutable_position()->set_z(nowPos.z);
+
+		posInfo->mutable_size()->set_x(scale.x());
+		posInfo->mutable_size()->set_y(scale.y());
+		posInfo->mutable_size()->set_z(scale.z());
 
 		posInfo->mutable_rotation()->set_x(rot.x());
 		posInfo->mutable_rotation()->set_y(rot.y());
@@ -547,6 +617,42 @@ bool CRoom::RemoveLast()
 bool CRoom::RemoveObject(uint32 layer, uint64 id)
 {
 	m_deleteObjects.push_back({ layer, id });
+
+	return true;
+}
+
+bool CRoom::HandleOpenGate(const std::vector<GateInfo>& posInfo)
+{
+	Protocol::S_GATE_OPNE pkt;
+
+	for (int i = 0; i < posInfo.size(); ++i)
+	{
+		CGameObjectRef object = CObjectUtil::CreateObject<CGameObject>();
+		const auto& objectPosInfo = object->ObjectInfo->mutable_pos_info();
+
+		objectPosInfo->mutable_position()->set_x(posInfo[i].GatePos.x);
+		objectPosInfo->mutable_position()->set_y(posInfo[i].GatePos.y);
+		objectPosInfo->mutable_position()->set_z(posInfo[i].GatePos.z);
+
+		objectPosInfo->mutable_rotation()->set_y(posInfo[i].GateYRot);
+
+		objectPosInfo->mutable_size()->set_x(posInfo[i].GateSize.x);
+		objectPosInfo->mutable_size()->set_y(posInfo[i].GateSize.y);
+		objectPosInfo->mutable_size()->set_z(posInfo[i].GateSize.z);
+
+		object->GetCollider()->SetCollisionProfile("Wall");
+		object->GetCollider()->SetBoxInfo(posInfo[i].GatePos, posInfo[i].GateSize, Vec3(0.f, posInfo[i].GateYRot, 0.f));
+		object->GetCollider()->SetGateDir(posInfo[i].GateDir);
+		GetLevelCollision()->AddCollider(object->GetCollider(), ECollision_Channel::Wall);
+		AddObject((uint32)EObject_Type::Wall, object);
+
+		Protocol::ObjectInfo* info = pkt.add_open_objects();
+		info->CopyFrom(*object->ObjectInfo);
+
+		m_Areas[m_Areas.size() - 1]->PushGateId(object->ObjectInfo->object_id());
+	}
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	Broadcast(sendBuffer, -1);
 
 	return true;
 }

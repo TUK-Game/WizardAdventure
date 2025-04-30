@@ -12,7 +12,6 @@
 #include <Engine/LevelManager.h>
 #include <Engine/Layer.h>
 #include <Engine/MeshData.h>
-#include <Engine/UIButton.h>
 #include <Engine/Player.h>
 #include <Engine/PlayerScript.h>
 #include <Engine/Flag.h>
@@ -23,7 +22,6 @@
 #include <Engine/Device.h>
 #include <Engine/RenderTargetGroup.h>
 #include <Engine/SubLevel.h>
-#include <Engine/BoxCollider.h>
 #include <Engine/PlayWidgetWindow.h>
 #include <Engine/Animator.h>
 #include <Engine/TestWidget.h>
@@ -31,10 +29,16 @@
 #include <Engine/ParticleSystemManager.h>
 #include <Engine/AnimatedBillboardEffect.h>
 #include <Engine/EffectManager.h>
-
-#include <Engine/TestWidget.h>
+#include <Engine/NetworkManager.h>
+#include <Engine/ServerSession.h>
 #include <Engine/Engine.h>
 CLevel_1::CLevel_1()
+{
+	//CLevelManager::GetInst()->SetLevel(this);
+}
+
+CLevel_1::CLevel_1(EPlayerAttribute attribute)
+	: m_Attribute(attribute)
 {
 	//CLevelManager::GetInst()->SetLevel(this);
 }
@@ -42,6 +46,11 @@ CLevel_1::CLevel_1()
 CLevel_1::~CLevel_1()
 {
 	delete m_MiniMapBackground;
+}
+
+void CLevel_1::SelectMage(EPlayerAttribute attribute)
+{
+
 }
 
 void CLevel_1::Init()
@@ -66,6 +75,7 @@ void CLevel_1::Init()
 	this->GetLayer(11)->SetName(L"Monster");	
 	this->GetLayer(12)->SetName(L"Projectile");	
 	this->GetLayer(13)->SetName(L"Effect");
+	this->GetLayer(12)->SetName(L"Gate");	
 
 	CAssetManager::GetInst()->LoadSound("BGM", "Play", false, "e.mp3");
 	CAssetManager::GetInst()->SetVolume("BGM", 30);
@@ -127,12 +137,13 @@ void CLevel_1::Init()
 	CLevelManager::GetInst()->SetOwnPlayer(player);
 #endif // DEBUG_SOLOPLAY
 
-	{
-		CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
-		std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
-		CMonster* monster = new CMonster();
-		this->AddGameObject(monster, 11, false);
-	}
+	//{
+	//	CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
+	//	std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
+	//	CMonster* monster = new CMonster();
+	//	monster->GetTransform()->SetRelativePosition(11000, 20, 3500);
+	//	this->AddGameObject(monster, 11, false);
+	//}
 
 //
 //
@@ -220,8 +231,8 @@ void CLevel_1::Init()
 
 #pragma region Widget
 
-	CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"fuck2");
-	CreateWidgetWindow<CTextWindow>(EWIDGETWINDOW_TYPE::TEXT_WINDOW, L"fuck");
+	//CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"GamePlayWidget");
+	CreateWidgetWindow<CTextWindow>(EWIDGETWINDOW_TYPE::TEXT_WINDOW, L"TextWindow", nullptr);
 
 #pragma endregion
 
@@ -271,6 +282,10 @@ void CLevel_1::Init()
 		this->AddGameObject(effect, 2, false);
 	}
 #pragma endregion
+
+#ifdef AUTO_SERVER_CONNECT
+	CNetworkManager::GetInst()->s_GameSession->SelectMageAttribute(m_Attribute);
+#endif
 }
 
 void CLevel_1::Begin()

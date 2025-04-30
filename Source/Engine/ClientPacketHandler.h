@@ -27,6 +27,8 @@ enum : uint16
 	PKT_S_SPAWN_EXISTING_PLAYER = 1017,
 	PKT_S_DESPAWN_PLAYER = 1018,
 	PKT_S_DESPAWN = 1019,
+	PKT_S_GATE_OPNE = 1020,
+	PKT_S_GATE_CLOSE = 1021,
 };
 
 // ===== Process Packet =====
@@ -44,6 +46,8 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_EXISTING_PLAYER& pkt);
 bool Handle_S_DESPAWN_PLAYER(CPacketSessionRef& session, Protocol::S_DESPAWN_PLAYER& pkt);
 bool Handle_S_DESPAWN(CPacketSessionRef& session, Protocol::S_DESPAWN& pkt);
+bool Handle_S_GATE_OPNE(CPacketSessionRef& session, Protocol::S_GATE_OPNE& pkt);
+bool Handle_S_GATE_CLOSE(CPacketSessionRef& session, Protocol::S_GATE_CLOSE& pkt);
 
 class ClientPacketHandler
 {
@@ -65,6 +69,8 @@ public:
 		g_PacketHandler[PKT_S_SPAWN_EXISTING_PLAYER] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_SPAWN_EXISTING_PLAYER>(Handle_S_SPAWN_EXISTING_PLAYER, session, buffer, len); };
 		g_PacketHandler[PKT_S_DESPAWN_PLAYER] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_DESPAWN_PLAYER>(Handle_S_DESPAWN_PLAYER, session, buffer, len); };
 		g_PacketHandler[PKT_S_DESPAWN] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_DESPAWN>(Handle_S_DESPAWN, session, buffer, len); };
+		g_PacketHandler[PKT_S_GATE_OPNE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_GATE_OPNE>(Handle_S_GATE_OPNE, session, buffer, len); };
+		g_PacketHandler[PKT_S_GATE_CLOSE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_GATE_CLOSE>(Handle_S_GATE_CLOSE, session, buffer, len); };
 	}
 
 	static bool HandlePacket(CPacketSessionRef& session, BYTE* buffer, int32 len)

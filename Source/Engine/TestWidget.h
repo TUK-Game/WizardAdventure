@@ -8,7 +8,7 @@ public:
     virtual ~TestWidget();
 
 public:
-    virtual bool Init();
+    virtual bool Init(class CPlayer* player);
     void AddPlayer(class CPlayer* player, int idx);
 };
 

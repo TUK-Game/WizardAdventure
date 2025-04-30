@@ -35,8 +35,9 @@ void CTextWidget::ArrangeRect()
 	m_Rect.top = m_Position.y + (m_Size.y / 2);
 }
 
-bool CTextWidget::Init()
+bool CTextWidget::Init(CPlayer* player)
 {
+	CWidget::Init(player);
 	m_d2dDeviceContext = CDevice::GetInst()->m_d2dDeviceContext.Get();
 	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 

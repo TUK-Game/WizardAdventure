@@ -11,6 +11,7 @@ class CLevelManager
 
 public:
 	CLevel* GetCurrentLevel()	{ return m_CurLevel; }
+	CLevel* GetNextLevel()	{ return m_NextLevel; }
 	void SetLevel(CLevel* level) { m_CurLevel = level; }
 
 public:

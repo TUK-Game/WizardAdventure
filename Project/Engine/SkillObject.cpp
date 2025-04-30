@@ -21,7 +21,7 @@ void CSkillObject::SetCaster(CPlayer* caster)
 void CSkillObject::Update()
 {
     CGameObject::Update();
-    if(m_bOwn)
+    if (m_bOwn)
     {
         CNetworkManager::GetInst()->s_GameSession->MoveSkill(this);
     }
