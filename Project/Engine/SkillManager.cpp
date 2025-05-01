@@ -183,7 +183,7 @@ void CSkillManager::FireSwordSpreadShot(float duration)
         sword->SetWaitTimeForTranslate(duration);
         float rotateDuration = duration * 4.f;
         float rotateDurationDivideByCount = rotateDuration / static_cast<float>(count);
-        sword->SetWaitTimeForRotate(rotateDurationDivideByCount * i);
+        sword->SetWaitTimeForRotate(rotateDurationDivideByCount * i + 0.3f);
         sword->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
         sword->SetDamage(Skill::FireSword.damage * sword->GetCaster()->GetStats()->attack);
         sword->SetEnable(false);

@@ -9,6 +9,8 @@
 #include "Layer.h"
 #include "LevelManager.h"
 #include "Engine.h"
+#include "ParticleSystem.h"
+#include "ParticleSystemManager.h"
 
 CFireSword::CFireSword()
 {
@@ -28,6 +30,8 @@ CFireSword::CFireSword()
         AddChild(o);
     }
     // AddComponent(new CCollider());      
+
+
 }
 
 void CFireSword::Update()
@@ -58,6 +62,7 @@ void CFireSword::Update()
                 Vec3 targetDir = m_TargetPos - pos;
                 targetDir.Normalize();
                 m_Direction = targetDir;
+
             }
             return;
         }
@@ -77,6 +82,8 @@ void CFireSword::Update()
             {
                 m_ReadyToFire = true;
                 m_Elapsed = 0.f;
+                m_FireParticleId = CParticleSystemManager::GetInst()->AddEmitter(L"Spark", GetTransform()->GetRelativePosition());
+
             }
             return;
         }
@@ -89,12 +96,21 @@ void CFireSword::Update()
 
 void CFireSword::FinalUpdate()
 {
+    Vec3 pos = GetTransform()->GetRelativePosition();
+    if (0 <= m_FireParticleId)
+        CParticleSystemManager::GetInst()->UpdateEmitterPos(L"Spark", m_FireParticleId, pos);
+
     CGameObject::FinalUpdate();
     if (m_bOwn)
     {
         Vec3 pos = GetTransform()->GetRelativePosition();
         if (pos.y < -200.f) // 충돌시 삭제로 변경해야함
         {
+            if (0 <= m_FireParticleId)
+            {
+                CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", m_FireParticleId);
+                m_FireParticleId = -1;
+            }
             //m_bDelete = true;
             //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
         }

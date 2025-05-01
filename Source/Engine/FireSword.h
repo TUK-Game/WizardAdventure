@@ -19,6 +19,8 @@ public:
     virtual void FinalUpdate();
 
 private:
+    int m_FireParticleId = -1;
+
     Vec3 m_Direction;
     Vec3 m_ReadyDirection;
     Vec3 m_TargetPos;
