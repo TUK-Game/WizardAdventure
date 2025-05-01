@@ -18,11 +18,11 @@ void CPlayerKnockbackState::Enter(CGameObject* entity)
 
     m_KnockbackDir = -player->GetCurrentMoveDir();
     m_Elapsed = 0.f;
-
     std::vector<CGameObject*> objs = player->GetChild();
     for (const auto o : objs) {
-        if (o->GetAnimator())
-            o->GetAnimator()->Play(L"KNOCKBACK"); 
+        CAnimator* ani = o->GetAnimator();
+        ani->Play(L"KNOCKBACK"); 
+        m_Duration = ani->GetDuration();
     }
 }
 

@@ -647,6 +647,9 @@
     <ClInclude Include="PlayerKnockbackState.h">
       <Filter>06. State\PlayerState\Damage</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerDeathState.h">
+      <Filter>06. State\PlayerState\Damage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -995,6 +998,9 @@
       <Filter>07. UI\01. Widget</Filter>
     </ClCompile>
     <ClCompile Include="PlayerKnockbackState.cpp">
+      <Filter>06. State\PlayerState\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDeathState.cpp">
       <Filter>06. State\PlayerState\Damage</Filter>
     </ClCompile>
   </ItemGroup>
