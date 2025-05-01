@@ -10,6 +10,7 @@ public:
     void SetCaster(CPlayer* caster);
     void SetCollisionExplosion(bool b) { m_bCollisionExplosion = b; }
     void SetIsSpawnParticle(bool b) { m_bSpawnParticle = b; }
+    void SetSkillType(SKILL type) { m_type = type; }
 
     bool GetCollisionExplosion() { return m_bCollisionExplosion; }
     bool GetIsSpawnParticle() { return m_bSpawnParticle; }

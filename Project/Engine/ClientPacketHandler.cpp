@@ -170,7 +170,27 @@ bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_S
 		{
 			CFireBall* magic = new CFireBall();
 			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			magic->SetMode(EFireBallMode::Default);
 			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_BALL_EXPLOSION:
+		{
+			CFireBall* magic = new CFireBall();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			magic->SetMode(EFireBallMode::QSkill);
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_METEOR:
+		{
+			CFireBall* magic = new CFireBall();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			magic->SetMode(EFireBallMode::Meteor);
+			map[id] = magic;
+			magic->UseSmokeTrail();
 			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
 		}
 		break;
@@ -339,24 +359,6 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	if ((pkt.mutable_projectile_info()->state()) == Protocol::COLLISION)
 	{
 		map[id]->OffParticles();
-		CFireBall* ball = dynamic_cast<CFireBall*>(map[id]);
-		if (ball)
-		{
-			Vec3 pos = ball->GetTransform()->GetRelativePosition();
-			int fireParticleid = ball->GetFireParticleId();
-			if (0 <= fireParticleid) 
-			{
-				CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", fireParticleid);
-				ball->SetFireParticleId(-1);
-			}
-			{
-				CEffectManager::GetInst()->SpawnRadialSmoke(pos);
-				CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
-				CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
-				CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
-			}
-		}
-
 		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->SafeRemoveGameObject(map[id]);
 		map.erase(id);
 	}
@@ -367,15 +369,15 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	}
 	else
 	{
-		const auto& pos = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
-		const auto& scale = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_size();
-		const auto& rot = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_rotation();
+		const auto& pos = pkt.projectile_info().object_info().pos_info().position();
+		const auto& scale = pkt.projectile_info().object_info().pos_info().size();
+		const auto& rot = pkt.projectile_info().object_info().pos_info().rotation();
 		auto& object = map[id];
 		if (object)
 		{
-			object->GetTransform()->SetRelativePosition(Vec3(pos->x(), pos->y(), pos->z()));
-			object->GetTransform()->SetRelativeScale(Vec3(scale->x(), scale->y(), scale->z()));
-			object->GetTransform()->SetRelativeRotation(Vec3(rot->x(), rot->y(), rot->z()));
+			object->GetTransform()->SetRelativePosition(Vec3(pos.x(), pos.y(), pos.z()));
+			object->GetTransform()->SetRelativeScale(Vec3(scale.x(), scale.y(), scale.z()));
+			object->GetTransform()->SetRelativeRotation(Vec3(rot.x(), rot.y(), rot.z()));
 		}
 	}
 	return true;

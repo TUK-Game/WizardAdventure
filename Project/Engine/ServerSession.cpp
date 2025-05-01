@@ -156,10 +156,19 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 
 	switch (object->GetSkillType())
 	{
-	case SKILL::FIRE_BALL:
 	case SKILL::FIRE_METEORS:
 	{
+		pkt.set_mesh(Protocol::FIRE_METEOR);
+	}
+	break;
+	case SKILL::FIRE_BALL:
+	{
 		pkt.set_mesh(Protocol::FIRE_BALL);
+	}
+	break;
+	case SKILL::FIRE_BALL_EXPLOSION:
+	{
+		pkt.set_mesh(Protocol::FIRE_BALL_EXPLOSION);
 	}
 	break;
 	case SKILL::FIRE_CIRCLE:

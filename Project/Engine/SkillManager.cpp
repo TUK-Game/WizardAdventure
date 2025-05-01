@@ -111,6 +111,7 @@ void CSkillManager::CastFireballTowardQ(float duration)
 
     fireBall->SetDuration(duration);
     fireBall->SetMode(EFireBallMode::QSkill);
+    fireBall->SetSkillType(SKILL::FIRE_BALL_EXPLOSION);
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
     fireBall->SetDamage(SkillDamage::FireBallQ * fireBall->GetCaster()->GetStats()->attack);
     fireBall->SetEnable(false);
