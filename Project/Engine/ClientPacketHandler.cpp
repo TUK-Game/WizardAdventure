@@ -338,12 +338,14 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 
 	if ((pkt.mutable_projectile_info()->state()) == Protocol::COLLISION)
 	{
+		map[id]->OffParticles();
 		CFireBall* ball = dynamic_cast<CFireBall*>(map[id]);
 		if (ball)
 		{
 			Vec3 pos = ball->GetTransform()->GetRelativePosition();
 			int fireParticleid = ball->GetFireParticleId();
-			if (0 <= fireParticleid) {
+			if (0 <= fireParticleid) 
+			{
 				CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", fireParticleid);
 				ball->SetFireParticleId(-1);
 			}
@@ -357,6 +359,11 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 
 		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->SafeRemoveGameObject(map[id]);
 		map.erase(id);
+	}
+	else if (pkt.projectile_info().state() == Protocol::SPAWN_PARTICLE)
+	{
+		map[id]->ShowParticles();
+		map[id]->SetIsSpawnParticle(false);
 	}
 	else
 	{

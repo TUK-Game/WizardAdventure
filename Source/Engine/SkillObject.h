@@ -9,8 +9,10 @@ public:
     void SetDamage(int dmg) { m_Damage = dmg; }
     void SetCaster(CPlayer* caster);
     void SetCollisionExplosion(bool b) { m_bCollisionExplosion = b; }
+    void SetIsSpawnParticle(bool b) { m_bSpawnParticle = b; }
 
     bool GetCollisionExplosion() { return m_bCollisionExplosion; }
+    bool GetIsSpawnParticle() { return m_bSpawnParticle; }
     int GetDamage() const { return m_Damage; }
     CPlayer* GetCaster() const { return m_Caster; }
     SKILL GetSkillType() const { return m_type; }
@@ -20,6 +22,8 @@ public:
 
     virtual void OnHit(CGameObject* target); 
     virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
+    virtual void ShowParticles() {}
+    virtual void OffParticles() {};
 
     UINT64 m_ProjectileId{};
     bool m_bDelete{ false };
@@ -29,4 +33,5 @@ protected:
     SKILL m_type = SKILL::MAX;
     bool m_bOwn = { false };
     bool m_bCollisionExplosion{ false };
+    bool m_bSpawnParticle{ false };
 };

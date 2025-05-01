@@ -49,6 +49,7 @@ enum ProjectileState
 {
 	MOVE_STATE = 0;
 	COLLISION = 1;
+	SPAWN_PARTICLE = 2;
 }
 
 enum SkillMesh

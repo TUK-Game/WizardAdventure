@@ -74,10 +74,10 @@ void CFireTower::FinalUpdate()
 	{
 		m_ElapsedTime += DELTA_TIME;
 		if (m_ElapsedTime >= m_Duration) {
-			if (m_FireEffect) {
+			/*if (m_FireEffect) {
 				m_FireEffect->SetEnable(false);
 				m_FireEffect = nullptr;
-			}
+			}*/
 
 			m_bDelete = true;
 			if (m_FireCircle)
@@ -86,15 +86,29 @@ void CFireTower::FinalUpdate()
 	}
 }
 
+void CFireTower::ShowParticles()
+{
+	auto pos = GetTransform()->GetRelativePosition();
+	pos += Vec3(0.f, 250.f, 0.f);
+	m_FireEffect = CEffectManager::GetInst()->SpawnEffect(L"fire", pos);
+}
+
+void CFireTower::OffParticles()
+{
+	if (m_FireEffect) 
+	{
+		m_FireEffect->SetEnable(false);
+		m_FireEffect = nullptr;
+	}
+}
+
 void CFireTower::UpdateScaleLerp()
 {
 	if (m_ElapsedTime >= m_ScaleDuration) {
 		m_bFinishScale = true;
 		m_bCanAttack = true; // attack on
-
-		auto pos = GetTransform()->GetRelativePosition();
-		pos += Vec3(0.f, 250.f, 0.f);
-		m_FireEffect = CEffectManager::GetInst()->SpawnEffect(L"fire", pos);
+		//ShowParticles();
+		m_bSpawnParticle = true;
 		return;
 	}
 

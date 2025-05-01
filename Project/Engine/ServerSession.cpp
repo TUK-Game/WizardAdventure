@@ -206,6 +206,10 @@ void CServerSession::MoveSkill(CSkillObject* object)
 	{
 		info->set_state(Protocol::COLLISION);
 	}
+	else if (object->GetIsSpawnParticle())
+	{
+		info->set_state(Protocol::SPAWN_PARTICLE);
+	}
 	else
 	{
 		info->set_state(Protocol::MOVE_STATE);
