@@ -15,7 +15,6 @@
 #include "Engine.h"
 #include "SkillManager.h"
 #include <iostream>
-#include "Engine.h"
 #include "MeshData.h"
 #include "AssetManager.h"
 #include "BoxCollider.h"
@@ -24,6 +23,12 @@
 #include "MeshRenderer.h"
 #include "NetworkManager.h"
 #include "ServerSession.h"
+#include "NPC.h"
+#include "LevelManager.h"
+#include "Level.h"
+#include "RenderManager.h"
+#include "Camera.h"
+#include "CameraScript.h"
 //#include <Engine/Engine.h>
 
 CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
@@ -243,6 +248,44 @@ void CPlayer::InitStats(int maxHp, int hp, int attack, float speed)
     m_Stats->currentHp = hp;
     m_Stats->attack = attack;
     m_Stats->moveSpeed = speed;
+}
+
+void CPlayer::DetectNPC()
+{
+    CGameObject* camera = CRenderManager::GetInst()->GetMainCamera()->GetOwner();
+    if (ECamera_Type::Fixed !=  camera->GetCamera()->GetCameraType())
+        return;
+
+    CNPC* npc = CLevelManager::GetInst()->GetCurrentLevel()->DetectNPC(this);
+
+    if (nullptr == npc)
+        return;
+
+    npc->Interation();
+    
+    const auto& script = dynamic_cast<CCameraScript*>(camera->GetScript());
+
+    if (script)
+    {
+        Vec3 rot;
+        CTransform* transform = camera->GetTransform();
+        script->SetInteractionZoomTarget(npc->InteractionCameraPos(rot));
+        script->SetInteractionStartPos(transform->GetRelativePosition());
+        script->SetInteractionDir(transform->GetRelativeRotation(), rot);
+        camera->GetCamera()->SetCameraType(ECamera_Type::Interaction_Start);
+    }
+
+    return;
+}
+
+void CPlayer::FinishShopping()
+{
+    CGameObject* camera = CRenderManager::GetInst()->GetMainCamera()->GetOwner();
+    if(ECamera_Type::Interaction == camera->GetCamera()->GetCameraType())
+    {
+        camera->GetCamera()->SetCameraType(ECamera_Type::Interaction_End);
+        camera->GetCamera()->CheckLayer(LAYER_PLAYER);
+    }
 }
 
 void CPlayer::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)

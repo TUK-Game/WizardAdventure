@@ -11,7 +11,7 @@ void CNPCTalkState::Enter(CGameObject* entity)
 		if (o->GetAnimator())
 		{
 			CAnimator* ani = o->GetAnimator();
-			ani->Play(L"IDLE");
+			ani->Play(L"TALK");
 			m_Duration = ani->GetDuration();
 		}
 	}

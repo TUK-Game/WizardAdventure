@@ -11,7 +11,7 @@ void CNPCBuyState::Enter(CGameObject* entity)
 		if (o->GetAnimator())
 		{
 			CAnimator* ani = o->GetAnimator();
-			ani->Play(L"IDLE");
+			ani->Play(L"BUYMOTION");
 			m_Duration = ani->GetDuration();
 		}
 	}

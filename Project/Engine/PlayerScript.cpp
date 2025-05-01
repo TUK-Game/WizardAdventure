@@ -58,6 +58,14 @@ void CPlayerScript::Update()
     {
         stateManager->HandleEvent(player, "Attack_R");
     }
+    if (KEY_DOWN(EKey::F))
+    {
+        player->DetectNPC();
+    }
+    if (KEY_DOWN(EKey::G))
+    {
+        player->FinishShopping();
+    }
 
     // temp ----------------------------------------------------------------------------
     if (KEY_DOWN(EKey::Z))

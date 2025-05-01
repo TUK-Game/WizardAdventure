@@ -85,3 +85,23 @@ void CNPC::CreateStateManager()
 	m_StateManager->SetTransition(EState_Type::Buy, "FinishStore", EState_Type::Idle);
 
 }
+
+Vec3 CNPC::InteractionCameraPos(Vec3& rot)
+{
+	Vec3 pos = GetTransform()->GetRelativePosition();
+	Vec3 front = GetTransform()->GetWorldDir(EDir::Front);
+	Vec3 right = GetTransform()->GetWorldDir(EDir::Right);
+	front.Normalize();
+	right.Normalize();
+
+	rot = GetTransform()->GetRelativeRotation();
+
+	Vec3 newPos = pos - front * 500 - right * 200;
+
+	return newPos;
+}
+
+void CNPC::Interation()
+{
+	m_StateManager->HandleEvent(this, "Talk");
+}

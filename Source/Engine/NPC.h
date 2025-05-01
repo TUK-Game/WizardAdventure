@@ -13,5 +13,8 @@ public:
     virtual void Render();
 
     void CreateStateManager();
+    Vec3 InteractionCameraPos(Vec3& rot);
+public:
+    virtual void Interation();
 };
 

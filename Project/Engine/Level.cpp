@@ -6,6 +6,8 @@
 #include "SubLevel.h"
 #include "AssetManager.h"
 #include "WidgetWindow.h"
+#include "NPC.h"
+#include "Transform.h"
 
 CLevel::CLevel()
 	: m_Layer{}
@@ -139,6 +141,24 @@ void CLevel::RemoveGameObjectInLevel(CGameObject* object)
 	{
 		m_Layer[layerNum]->RemoveGameObjectInLevel(object);
 	}
+}
+
+CNPC* CLevel::DetectNPC(CGameObject* player)
+{
+	const auto& objects = GetLayer(LAYER_NPC)->GetParentObjects();
+
+	Vec3 pos = player->GetTransform()->GetRelativePosition();
+	for (auto& npc : objects)
+	{
+		float distance = (npc->GetTransform()->GetRelativePosition() - pos).Length();
+		if (distance < INTERATION_DISTANCE)
+		{
+			CNPC* n = dynamic_cast<CNPC*>(npc);
+			if (n)
+				return n;
+		}
+	}
+	return nullptr;
 }
 
 void CLevel::End()

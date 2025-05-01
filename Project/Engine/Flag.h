@@ -105,6 +105,9 @@ enum class ECamera_Type
 {
 	Free,
 	Fixed,
+	Interaction_Start,
+	Interaction,
+	Interaction_End,
 };
 
 // πÊ«‚

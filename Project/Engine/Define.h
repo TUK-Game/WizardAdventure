@@ -82,6 +82,7 @@ private:\
 
 #define MAX_PLAYERS 4
 
+#define INTERATION_DISTANCE 200
 
 /*----------
 	Random
