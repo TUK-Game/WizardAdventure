@@ -9,6 +9,8 @@
 #include "Layer.h"
 #include "LevelManager.h"
 #include "Engine.h"
+#include "ParticleSystem.h"
+#include "ParticleSystemManager.h"
 
 CFireSword::CFireSword()
 {
@@ -28,6 +30,8 @@ CFireSword::CFireSword()
         AddChild(o);
     }
     // AddComponent(new CCollider());      
+
+
 }
 
 void CFireSword::Update()
@@ -36,18 +40,19 @@ void CFireSword::Update()
     {
         Vec3 pos = GetTransform()->GetRelativePosition();
 
+        float t = 0.f;
+
         if (!m_ReadyToRotate)
         {
             m_Elapsed += DELTA_TIME;
-            float t = m_Elapsed / m_TranslateWaitTime;
-            t = std::clamp(t, 0.0f, 1.0f);
+            t = std::clamp(m_Elapsed / m_TranslateWaitTime, 0.0f, 1.0f);
 
             for (auto obj : GetChild())
             {
                 obj->GetTransform()->SetRelativeScale(t, t, t);
             }
 
-            float readySpeed = m_Speed * ((1.0f - t) / 1.0f);
+            float readySpeed = m_Speed * (1.0f - t);
             pos += m_ReadyDirection * readySpeed * DELTA_TIME;
             GetTransform()->SetRelativePosition(pos);
 
@@ -55,20 +60,18 @@ void CFireSword::Update()
             {
                 m_ReadyToRotate = true;
                 m_Elapsed = 0.f;
+
                 Vec3 targetDir = m_TargetPos - pos;
                 targetDir.Normalize();
                 m_Direction = targetDir;
             }
-            return;
         }
 
         if (m_ReadyToRotate && !m_ReadyToFire)
         {
             m_Elapsed += DELTA_TIME;
-            float t = m_Elapsed / m_RotateWaitTime;
-            t = std::clamp(t, 0.0f, 1.0f);
+            t = std::clamp(m_Elapsed / m_RotateWaitTime, 0.0f, 1.0f);
 
-            // 보간된 방향o
             Vec3 blendedDirection = DirectX::SimpleMath::Vector3::Lerp(m_ReadyDirection, m_Direction, t);
             blendedDirection.Normalize();
             GetTransform()->LookAt(blendedDirection);
@@ -77,18 +80,27 @@ void CFireSword::Update()
             {
                 m_ReadyToFire = true;
                 m_Elapsed = 0.f;
+
+                m_FireParticleId = CParticleSystemManager::GetInst()->AddEmitter(L"Spark", GetTransform()->GetRelativePosition());
             }
-            return;
         }
 
-        pos += m_Direction * m_Speed * DELTA_TIME;
-        GetTransform()->SetRelativePosition(pos);
+        if (m_ReadyToFire)
+        {
+            pos += m_Direction * m_Speed * DELTA_TIME;
+            GetTransform()->SetRelativePosition(pos);
+        }
     }
+
     CSkillObject::Update();
 }
 
 void CFireSword::FinalUpdate()
 {
+    Vec3 pos = GetTransform()->GetRelativePosition();
+    if (0 <= m_FireParticleId)
+        CParticleSystemManager::GetInst()->UpdateEmitterPos(L"Spark", m_FireParticleId, pos);
+
     CGameObject::FinalUpdate();
     if (m_bOwn)
     {
@@ -96,6 +108,12 @@ void CFireSword::FinalUpdate()
         if (pos.y < -200.f) // 충돌시 삭제로 변경해야함
         {
             m_bDelete = true;
+            if (0 <= m_FireParticleId)
+            {
+                CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", m_FireParticleId);
+                m_FireParticleId = -1;
+            }
+            //m_bDelete = true;
             //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
         }
     }
