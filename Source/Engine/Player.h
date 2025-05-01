@@ -27,6 +27,7 @@ public:
     Vec3 GetCurrentMoveDir() { return m_currentMoveDir; }
     EPlayerAttribute GetAttribute() const { return m_Attribute; }
     Stats* GetStats() const { return m_Stats; }
+    CSkillManager* GetSkillManager() const { return m_SkillManager; }
 
     void InitStats(int maxHp, int hp, int attack, float speed);
 

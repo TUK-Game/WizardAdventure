@@ -29,38 +29,54 @@ void CSkillManager::UseSkill(int skillIndex, float duration)
     if (m_Owner != player)
         return;
 
-    switch (m_Attribute)
-    {
-    case EPlayerAttribute::Fire:
-        if (skillIndex == 0)
-            CastFireballTowardQ(duration);
-        if (skillIndex == 1)
-            SpawnFireTowerAtMouse(duration);
-        if (skillIndex == 2)
-            FireSwordSpreadShot(duration);
-        if (skillIndex == 3) 
-            CastFireballTowardMouse();
-        if (skillIndex == 4)
-            CastMeteor();
-        break;
+    if (skillIndex < 0 || skillIndex >= m_SkillSlots.size())
+        return;
 
-    case EPlayerAttribute::Ice:
-        if (skillIndex == 0) std::cout << "Ice Jet (Q)!" << std::endl;
-        if (skillIndex == 1) std::cout << "Ice Shield (E)!" << std::endl;
-        if (skillIndex == 2) std::cout << "Tsunami (R)!" << std::endl;
-        if (skillIndex == 3) std::cout << "(LButton)!" << std::endl;
-        if (skillIndex == 4) std::cout << "(RButton)!" << std::endl;
-        break;
+    ESkillType skill = m_SkillSlots[skillIndex];
+    if (skill == ESkillType::None)
+        return;
 
-    case EPlayerAttribute::Electric:
-        if (skillIndex == 0) std::cout << "Thunderbolt (Q)!" << std::endl;
-        if (skillIndex == 1) std::cout << "Lightning Shield (E)!" << std::endl;
-        if (skillIndex == 2) std::cout << "Storm Burst (R)!" << std::endl;
-        if (skillIndex == 3) std::cout << "(LButton)!" << std::endl;
-        if (skillIndex == 4) std::cout << "(RButton)!" << std::endl;
+
+    switch (skill) {
+    case ESkillType::FireBallTowardQ:
+        CastFireballTowardQ(duration);
+        break;
+    case ESkillType::FireTower:
+        SpawnFireTowerAtMouse(duration);
+        break;
+    case ESkillType::FireSwordSpread:
+        FireSwordSpreadShot(duration);
+        break;
+    case ESkillType::FireBallTowardMouse:
+        CastFireballTowardMouse();
+        break;
+    case ESkillType::Meteor:
+        CastMeteor();
+        break;
+    default:
         break;
     }
+ 
 }
+
+void CSkillManager::LearnSkill(int slotIndex, ESkillType skill) {
+    if (slotIndex < 0 || slotIndex >= m_SkillSlots.size())
+        return;
+    m_SkillSlots[slotIndex] = skill;
+}
+
+void CSkillManager::ForgetSkill(int slotIndex) {
+    if (slotIndex < 0 || slotIndex >= m_SkillSlots.size())
+        return;
+    m_SkillSlots[slotIndex] = ESkillType::None;
+}
+
+ESkillType CSkillManager::GetEquippedSkill(int slotIndex) const {
+    if (slotIndex < 0 || slotIndex >= m_SkillSlots.size())
+        return ESkillType::None;
+    return m_SkillSlots[slotIndex];
+}
+
 
 void CSkillManager::CastFireballTowardMouse()
 {
