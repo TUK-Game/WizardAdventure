@@ -18,6 +18,8 @@ public:
     virtual void Update();
     virtual void FinalUpdate();
 
+    virtual void ShowParticles();
+    virtual void OffParticles();
 private:
     int m_FireParticleId = -1;
 
