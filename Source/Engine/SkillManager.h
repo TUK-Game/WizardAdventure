@@ -20,6 +20,8 @@ public:
     void ForgetSkill(int slotIndex);
     ESkillType GetEquippedSkill(int slotIndex) const;
     void UpdateCooldowns(float deltaTime);
+    const std::array<float, 5>& GetSkillCooldowns() const { return m_SkillCooldowns; }
+    float GetSkillCooldown(int slotIndex) const;
 
 private:
     void CastFireballTowardMouse();

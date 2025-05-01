@@ -25,6 +25,7 @@
 #include "TestWidget.h"
 #include "MapPlayerWidget.h"
 #include "PlayWidgetWindow.h"
+#include "SkillInfo.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -115,11 +116,12 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_FIRE);
 		player->InitStats(100, 100, 30, 300.f);
 		// temp
-		gamewindow->SetSkill(1, L"FireShot", 10);
-		gamewindow->SetSkill(2, L"FireRain", 10);
-		gamewindow->SetSkill(3, L"FireballExplosion", 10);
-		gamewindow->SetSkill(4, L"FireTower", 10);
-		gamewindow->SetSkill(5, L"Fireball", 10);
+
+		gamewindow->SetSkill(1, L"FireShot", Skill::FireSword.cooldown, ESkillSlot::R);
+		gamewindow->SetSkill(2, L"FireRain", Skill::Meteor.cooldown, ESkillSlot::RButton);
+		gamewindow->SetSkill(3, L"FireballExplosion", Skill::FireBallQ.cooldown, ESkillSlot::Q);
+		gamewindow->SetSkill(4, L"FireTower", Skill::FireTower.cooldown, ESkillSlot::E);
+		gamewindow->SetSkill(5, L"Fireball", Skill::FireBall.cooldown, ESkillSlot::LButton);
 		gamewindow->SetGauge(L"HPBar", 100, true);
 		gamewindow->SetGauge(L"SignautreGage", 0, false);
 	}

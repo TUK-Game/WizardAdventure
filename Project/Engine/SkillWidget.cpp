@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "AssetManager.h"
 #include "Engine.h"
+#include "Player.h"
 
 void CSkillWidget::SetTexture(const std::wstring& name)
 {
@@ -33,14 +34,11 @@ void CSkillWidget::Update()
 {
 	// temp
 	// 나중에 스킬 생기면 수정
+
 	CMaterial* material = GetMeshRenderer()->GetMaterial();
 	if (material)
 	{
-		if (m_CoolTime >= 0.f)
-		{
-			m_CoolTime -= DELTA_TIME;
-		}
-
-		material->SetFloat(0, m_CoolTime / m_OriginCoolTime);
+		float cooldown = m_OwnerPlayer->GetSkillManager()->GetSkillCooldown(m_slot);
+		material->SetFloat(0, cooldown / m_OriginCoolTime);
 	}
 }

@@ -101,6 +101,14 @@ void CSkillManager::UpdateCooldowns(float deltaTime) {
     }
 }
 
+float CSkillManager::GetSkillCooldown(int slotIndex) const
+{
+    if (slotIndex < 0 || slotIndex >= m_SkillCooldowns.size())
+        return 0.f;
+
+    return m_SkillCooldowns[slotIndex];
+}
+
 void CSkillManager::CastFireballTowardMouse()
 {
     CGameObject* player = m_Owner; 

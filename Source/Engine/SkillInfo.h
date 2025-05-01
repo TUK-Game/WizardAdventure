@@ -14,3 +14,13 @@ namespace Skill
     constexpr SkillInfo FireSword = { 0.9f, 8.0f };
     constexpr SkillInfo FireTower = { 0.8f, 10.0f };
 }
+
+// 0 = Q, 1 = E, 2 = R, 3 = LB, 4 = RB
+enum ESkillSlot
+{
+    Q = 0, 
+    E = 1, 
+    R = 2, 
+    LButton = 3,
+    RButton = 4
+};

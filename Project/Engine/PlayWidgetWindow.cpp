@@ -6,6 +6,8 @@
 #include "ImageWidget.h"
 #include "SkillWidget.h"
 #include "HpBar.h"
+#include "Player.h"
+
 
 CPlayWidgetWindow::CPlayWidgetWindow()
 {
@@ -68,6 +70,7 @@ bool CPlayWidgetWindow::Init(CPlayer* player)
 	}
 
 	{
+		
 		CSkillWidget* SkillWidget = CreateWidget<CSkillWidget>(L"Skill1", player);
 		SkillWidget->GetTransform()->SetRelativePosition(-0.73f, -0.722f, 1.f);
 		SkillWidget->GetTransform()->SetRelativeScale(0.088f, 0.135f, 0.2f);
@@ -104,7 +107,7 @@ bool CPlayWidgetWindow::Init(CPlayer* player)
 	return true;
 }
 
-void CPlayWidgetWindow::SetSkill(int idx, const std::wstring& textureName, float coolTime)
+void CPlayWidgetWindow::SetSkill(int idx, const std::wstring& textureName, float coolTime, ESkillSlot slot)
 {
 	std::wstring name = L"Skill" + std::to_wstring(idx);
 	CSkillWidget* widget = dynamic_cast<CSkillWidget*>(FindWidget(name));
@@ -113,6 +116,7 @@ void CPlayWidgetWindow::SetSkill(int idx, const std::wstring& textureName, float
 		widget->SetTexture(textureName);
 		widget->SetOriginCoolTime(coolTime);
 		widget->SetCoolTime(0.f);
+		widget->SetSlot(slot);
 	}
 }
 
