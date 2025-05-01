@@ -19,6 +19,7 @@ public:
     void LearnSkill(int slotIndex, ESkillType skill);
     void ForgetSkill(int slotIndex);
     ESkillType GetEquippedSkill(int slotIndex) const;
+    void UpdateCooldowns(float deltaTime);
 
 private:
     void CastFireballTowardMouse();
@@ -36,6 +37,7 @@ private:
 
 private:
     std::array<ESkillType, 5> m_SkillSlots = { ESkillType::None, ESkillType::None, ESkillType::None, ESkillType::None, ESkillType::None };
+    std::array<float, 5> m_SkillCooldowns = { 0.f, 0.f, 0.f, 0.f, 0.f }; 
     EPlayerAttribute m_Attribute;
     CGameObject* m_Owner;
 };

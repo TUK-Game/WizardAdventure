@@ -120,6 +120,8 @@ void CPlayer::Update()
     if (m_StateManager) {
         m_StateManager->Update(this, time);
     }
+    m_SkillManager->UpdateCooldowns(time);
+
 #ifndef DEBUG_SOLOPLAY
     m_Interpolator->Update(time);
     GetTransform()->SetRelativePosition((m_Interpolator->GetInterpolatedPos()));

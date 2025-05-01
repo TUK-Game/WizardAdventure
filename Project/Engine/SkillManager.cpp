@@ -19,6 +19,7 @@
 #include "ParticleSystem.h"
 #include "ServerSession.h"
 #include "NetworkManager.h"
+#include "StateManager.h"
 
 CSkillManager::CSkillManager(EPlayerAttribute attribute, CGameObject* owner)
     : m_Attribute(attribute), m_Owner(owner) {}
@@ -29,9 +30,18 @@ void CSkillManager::UseSkill(int skillIndex, float duration)
     if (m_Owner != player)
         return;
 
+    // skill index check
     if (skillIndex < 0 || skillIndex >= m_SkillSlots.size())
         return;
 
+    // cooldown check
+    if (m_SkillCooldowns[skillIndex] > 0.f) {
+        std::cout << "Skill is on cooldown: " << m_SkillCooldowns[skillIndex] << "s left\n";
+        player->GetStateManager()->HandleEvent(player, "EndAttack");
+        return;
+    }
+
+    // skill learn check
     ESkillType skill = m_SkillSlots[skillIndex];
     if (skill == ESkillType::None)
         return;
@@ -40,18 +50,23 @@ void CSkillManager::UseSkill(int skillIndex, float duration)
     switch (skill) {
     case ESkillType::FireBallTowardQ:
         CastFireballTowardQ(duration);
+        m_SkillCooldowns[skillIndex] = Skill::FireBallQ.cooldown;
         break;
     case ESkillType::FireTower:
         SpawnFireTowerAtMouse(duration);
+        m_SkillCooldowns[skillIndex] = Skill::FireTower.cooldown;
         break;
     case ESkillType::FireSwordSpread:
         FireSwordSpreadShot(duration);
+        m_SkillCooldowns[skillIndex] = Skill::FireSword.cooldown;
         break;
     case ESkillType::FireBallTowardMouse:
         CastFireballTowardMouse();
+        m_SkillCooldowns[skillIndex] = Skill::FireBall.cooldown;
         break;
     case ESkillType::Meteor:
         CastMeteor();
+        m_SkillCooldowns[skillIndex] = Skill::Meteor.cooldown;
         break;
     default:
         break;
@@ -77,6 +92,14 @@ ESkillType CSkillManager::GetEquippedSkill(int slotIndex) const {
     return m_SkillSlots[slotIndex];
 }
 
+void CSkillManager::UpdateCooldowns(float deltaTime) {
+    for (float& time : m_SkillCooldowns) {
+        if (time > 0.f) {
+            time -= deltaTime;
+            if (time < 0.f) time = 0.f;
+        }
+    }
+}
 
 void CSkillManager::CastFireballTowardMouse()
 {
