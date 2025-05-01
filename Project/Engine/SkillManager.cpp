@@ -73,7 +73,8 @@ void CSkillManager::CastFireballTowardMouse()
     SetLookRotationY(fireDir);
 
     CFireBall* fireBall = new CFireBall();
-    fireBall->GetTransform()->SetRelativePosition(spawnPos);
+    Vec3 offset = fireDir * 50.f + Vec3(0.f, 130.f, 0.f);
+    fireBall->GetTransform()->SetRelativePosition(spawnPos + offset);
     fireBall->SetDirection(fireDir);
     fireDir.Normalize();
     Vec3 velocity = fireDir * 3000.f;
@@ -101,7 +102,7 @@ void CSkillManager::CastFireballTowardQ(float duration)
 
     CFireBall* fireBall = new CFireBall();
     fireDir.Normalize();
-    Vec3 offset = fireDir * 100.f;
+    Vec3 offset = fireDir * 100.f + Vec3(0.f, 130.f, 0.f);
     fireBall->GetTransform()->SetRelativePosition(spawnPos + offset);
     Vec3 startScale = Vec3(120.f, 120.f, 120.f);
     Vec3 endScale = Vec3(30.f, 30.f, 30.f);
