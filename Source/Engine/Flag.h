@@ -146,6 +146,9 @@ enum class EState_Type
 	Hit,
 	Death,
 	Knockback,
+	Talk,
+	Buy,
+
 	END
 };
 

@@ -63,7 +63,7 @@ void CLevel_Start::Init()
 		c->GetCamera()->CheckLayerClear(); // �� ����
 		c->GetCamera()->CheckLayer(4); // UI�� ����
 		c->GetTransform()->SetRelativePosition(Vec3(0.f, 0.f, 0.f));
-		this->AddGameObject(c, 0, false);
+		this->AddGameObject(c, LAYER_CAMERA, false);
 	}
 #pragma endregion
 
@@ -76,7 +76,7 @@ void CLevel_Start::Init()
 	camera->GetCamera()->CheckLayerAll();
 	camera->GetCamera()->CheckLayer(4);
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
-	this->AddGameObject(camera, 0, false);
+	this->AddGameObject(camera, LAYER_CAMERA, false);
 
 	// Main Texture
 	CGameObject* ui = new CGameObject;
@@ -92,7 +92,7 @@ void CLevel_Start::Init()
 	material->SetTexture(0, texture);
 	material->SetGraphicsShader(shader);
 	ui->GetMeshRenderer()->SetMaterial(material);
-	this->AddGameObject(ui, 4, false);
+	this->AddGameObject(ui, LAYER_UI, false);
 
 	CreateWidgetWindow<CStartLevelWidgetWindow>(EWIDGETWINDOW_TYPE::START_WINDOW, L"StartWindow", nullptr);
 }

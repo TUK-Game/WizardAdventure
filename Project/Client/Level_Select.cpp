@@ -34,7 +34,7 @@ void CLevel_Select::Init()
 	c->GetCamera()->CheckLayerClear(); 
 	c->GetCamera()->CheckLayer(4); 
 	c->GetTransform()->SetRelativePosition(Vec3(0.f, 0.f, 0.f));
-	this->AddGameObject(c, 0, false);
+	this->AddGameObject(c, LAYER_CAMERA, false);
 
 	CGameObject* camera = new CGameObject;
 	camera->SetName(L"MainCamera");
@@ -45,7 +45,7 @@ void CLevel_Select::Init()
 	camera->GetCamera()->CheckLayerAll();
 	camera->GetCamera()->CheckLayer(4);
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
-	this->AddGameObject(camera, 0, false);
+	this->AddGameObject(camera, LAYER_CAMERA, false);
 
 	CGameObject* ui = new CGameObject;
 	ui->SetName(L"SelectBackground");
@@ -60,7 +60,7 @@ void CLevel_Select::Init()
 	material->SetTexture(0, texture);
 	material->SetGraphicsShader(shader);
 	ui->GetMeshRenderer()->SetMaterial(material);
-	this->AddGameObject(ui, 4, false);
+	this->AddGameObject(ui, LAYER_UI, false);
 
 	CreateWidgetWindow<CSelectLevelWidgetWindow>(EWIDGETWINDOW_TYPE::START_WINDOW, L"SelectWindow", nullptr);
 }

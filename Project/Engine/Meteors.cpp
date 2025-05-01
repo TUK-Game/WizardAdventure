@@ -77,5 +77,5 @@ void CMeteors::SpawnMeteor()
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(meteor);
 
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteor, 12, false);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteor, LAYER_PROJECTILE, false);
 }

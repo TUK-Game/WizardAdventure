@@ -243,6 +243,12 @@
     <Filter Include="06. State\PlayerState\Damage">
       <UniqueIdentifier>{963d2a4c-3e03-491a-9695-0d178e8c8c8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. GameObject\NPC">
+      <UniqueIdentifier>{538213cd-0ecd-4a79-84ac-2ce94dacab50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. State\NPCState">
+      <UniqueIdentifier>{4df9c637-9ef7-4910-8b7f-cb8f6a5d5738}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -650,6 +656,18 @@
     <ClInclude Include="PlayerDeathState.h">
       <Filter>06. State\PlayerState\Damage</Filter>
     </ClInclude>
+    <ClInclude Include="NPCIdleState.h">
+      <Filter>06. State\NPCState</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>03. GameObject\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCTalkState.h">
+      <Filter>06. State\NPCState</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCBuyState.h">
+      <Filter>06. State\NPCState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1002,6 +1020,18 @@
     </ClCompile>
     <ClCompile Include="PlayerDeathState.cpp">
       <Filter>06. State\PlayerState\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCIdleState.cpp">
+      <Filter>06. State\NPCState</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>03. GameObject\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCTalkState.cpp">
+      <Filter>06. State\NPCState</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCBuyState.cpp">
+      <Filter>06. State\NPCState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

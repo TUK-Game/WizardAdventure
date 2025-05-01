@@ -32,6 +32,8 @@
 #include <Engine/NetworkManager.h>
 #include <Engine/ServerSession.h>
 #include <Engine/Engine.h>
+#include <Engine/NPC.h>
+
 CLevel_1::CLevel_1()
 {
 	//CLevelManager::GetInst()->SetLevel(this);
@@ -76,6 +78,7 @@ void CLevel_1::Init()
 	this->GetLayer(12)->SetName(L"Projectile");	
 	this->GetLayer(13)->SetName(L"Effect");
 	this->GetLayer(12)->SetName(L"Gate");	
+	this->GetLayer(15)->SetName(L"NPC");	
 
 	CAssetManager::GetInst()->LoadSound("BGM", "Play", false, "e.mp3");
 	CAssetManager::GetInst()->SetVolume("BGM", 30);
@@ -100,7 +103,7 @@ void CLevel_1::Init()
 		c->GetCamera()->CheckLayerClear(); // �� ����
 		c->GetCamera()->CheckLayer(4); // UI�� ����
 		c->GetTransform()->SetRelativePosition(Vec3(0.f, 0.f, 0.f));
-		this->AddGameObject(c, 0, false);
+		this->AddGameObject(c, LAYER_CAMERA, false);
 	}
 #pragma endregion
 
@@ -110,7 +113,7 @@ void CLevel_1::Init()
 	skybox->AddComponent(new CMeshRenderer);
 	skybox->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
 	skybox->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Skybox"));
-	this->AddGameObject(skybox, 1, false);
+	this->AddGameObject(skybox, LAYER_BACKGROUND, false);
 
 
 	// directional light
@@ -128,7 +131,7 @@ void CLevel_1::Init()
 		light->GetLight()->GetShadowCamera()->GetCamera()->SetFar(1000000);
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
-		this->AddGameObject(light, 4, false);
+		this->AddGameObject(light, LAYER_LIGHT, false);
 	}
 
 #ifdef DEBUG_SOLOPLAY
@@ -137,13 +140,11 @@ void CLevel_1::Init()
 	CLevelManager::GetInst()->SetOwnPlayer(player);
 #endif // DEBUG_SOLOPLAY
 
-	//{
-	//	CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
-	//	std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
-	//	CMonster* monster = new CMonster();
-	//	monster->GetTransform()->SetRelativePosition(11000, 20, 3500);
-	//	this->AddGameObject(monster, 11, false);
-	//}
+	{
+		CNPC* npc = new CNPC();
+		npc->GetTransform()->SetRelativePosition(11000, 20, 3500);
+		this->AddGameObject(npc, LAYER_NPC, false);
+	}
 
 //
 //
@@ -164,7 +165,7 @@ void CLevel_1::Init()
 		//o->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
 		o->SetCheckFrustum(true);
 		o->SetInstancing(true);
-		this->AddGameObject(o, 10, false);
+		this->AddGameObject(o, LAYER_MAP, false);
 
 #ifdef COLLISION_MESH_DRAW
 		CCollisionObject* co = new CCollisionObject();
@@ -196,7 +197,7 @@ void CLevel_1::Init()
 	camera->GetCamera()->CheckLayerAll();
 	camera->GetCamera()->CheckLayer(4);
 	camera->GetTransform()->SetRelativePosition(0.f, 0.f, 0.f);
-	this->AddGameObject(camera, 15, false);
+	this->AddGameObject(camera, LAYER_CAMERA, false);
 
 #pragma region UI MAP
 
@@ -217,7 +218,7 @@ void CLevel_1::Init()
 	mapCamera->GetCamera()->SetFar(100000);
 	mapCamera->GetTransform()->SetRelativePosition(centerX, camHeight, centerZ);
 	mapCamera->GetTransform()->SetRelativeRotation(90.f, 0.f, 0.f);
-	this->AddGameObject(mapCamera, 0, false);
+	this->AddGameObject(mapCamera, LAYER_CAMERA, false);
 
 	float aspect = (float)(CEngine::GetInst()->GetWindowInfo().Width) / (float)(CEngine::GetInst()->GetWindowInfo().Height);   
 	float fovrad = XMConvertToRadians(fov);
@@ -256,7 +257,7 @@ void CLevel_1::Init()
 		material->SetTexture(0, texture);
 		material->SetGraphicsShader(shader);
 		obj->GetMeshRenderer()->SetMaterial(material);
-		this->AddGameObject(obj, 4, false);
+		this->AddGameObject(obj, LAYER_UI, false);
 	}
 
 #pragma endregion
@@ -279,7 +280,7 @@ void CLevel_1::Init()
 
 		effect->Init(desc);
 		effect->GetTransform()->SetRelativePosition({ 0.f, 0.f, 0.f });
-		this->AddGameObject(effect, 2, false);
+		this->AddGameObject(effect, LAYER_EFFECT, false);
 	}
 #pragma endregion
 

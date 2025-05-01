@@ -492,6 +492,9 @@ int CAssetManager::LoadMeshData()
 	data= CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Crab.jhd", L"Crab");
 	AddAsset(L"Crab", data);
 
+	data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/StoreNPC.jhd");
+	AddAsset(L"StoreNPC", data);
+
 	data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/SwordLava.jhd", L"SwordLava");
 	AddAsset(L"SwordLava", data);
 

@@ -84,7 +84,7 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	const Protocol::Vector3& position = pkt.player().object_info().pos_info().position();
 	player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
 
-	level->AddGameObject(player, 3, false);
+	level->AddGameObject(player, LAYER_PLAYER, false);
 	CLevelManager::GetInst()->SetOwnPlayer(player);
 	CLevelManager::GetInst()->SetPlayer(player, id);
 	CRenderManager::GetInst()->GetMainCamera()->SetTarget(player);
@@ -172,7 +172,7 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 	const Protocol::Vector3& position = pkt.player().object_info().pos_info().position();
 	player->SetName(L"Player" + std::to_wstring(info.player_id()));
 	player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
-	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
+	CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, LAYER_PLAYER, false);
 	CLevelManager::GetInst()->SetPlayer(player, info.player_id());
 
 	const auto& window = CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::MAP_WINDOW);
@@ -218,7 +218,7 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 		player->SetName(L"Player" + std::to_wstring(info.player_id()));
 		player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
 
-		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, 3, false);
+		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, LAYER_PLAYER, false);
 		CLevelManager::GetInst()->SetPlayer(player, info.player_id());
 
 		const auto& window = CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::MAP_WINDOW);
@@ -240,7 +240,7 @@ bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt
 bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO& pkt)
 {
 	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
-	auto& monsterMap = level->GetLayer(11)->GetMonsterMap();
+	auto& monsterMap = level->GetLayer(LAYER_MONSTER)->GetMonsterMap();
 
 	for (int i = 0; i < pkt.monster_info_size(); ++i)
 	{
@@ -253,7 +253,7 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		{
 			monster = new CMonster();
 			monsterMap[objectId] = monster;
-			level->SafeAddGameObject(monster, 11, false);
+			level->SafeAddGameObject(monster, LAYER_MONSTER, false);
 		}
 
 		const Protocol::PosInfo& posInfo = info.object_info().pos_info();
@@ -263,7 +263,7 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 
 		if (state == Protocol::MOVE_STATE_NONE)
 		{
-			level->GetLayer(11)->SafeRemoveGameObject(monsterMap[objectId]);
+			level->GetLayer(LAYER_MONSTER)->SafeRemoveGameObject(monsterMap[objectId]);
 			monsterMap.erase(objectId);
 			continue;
 		}
@@ -279,7 +279,7 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_SPAWN_PROJECTILE_SUCESSE& pkt)
 {
 	UINT64 id = pkt.projectile_id();
-	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
+	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_PROJECTILE)->GetProjectileMap();
 	if (map.find(id) != map.end())
 	{
 		std::cout << "생성\n";
@@ -295,7 +295,7 @@ bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_S
 			CFireCircle* magic = new CFireCircle();
 			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
 			map[id] = magic;
-			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, LAYER_PROJECTILE, false);
 		}
 		break;
 		case Protocol::FIRE_BALL:
@@ -304,7 +304,7 @@ bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_S
 			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
 			magic->SetMode(EFireBallMode::Default);
 			map[id] = magic;
-			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, LAYER_PROJECTILE, false);
 		}
 		break;
 		case Protocol::FIRE_BALL_EXPLOSION:
@@ -313,7 +313,7 @@ bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_S
 			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
 			magic->SetMode(EFireBallMode::QSkill);
 			map[id] = magic;
-			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, LAYER_PROJECTILE, false);
 		}
 		break;
 		case Protocol::FIRE_METEOR:
@@ -323,7 +323,7 @@ bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_S
 			magic->SetMode(EFireBallMode::Meteor);
 			map[id] = magic;
 			magic->UseSmokeTrail();
-			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, LAYER_PROJECTILE, false);
 		}
 		break;
 		case Protocol::FIRE_PILLAR:
@@ -331,7 +331,7 @@ bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_S
 			CFireTower* magic = new CFireTower();
 			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
 			map[id] = magic;
-			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, LAYER_PROJECTILE, false);
 		}
 		break;
 		case Protocol::FIRE_SWORD:
@@ -339,7 +339,7 @@ bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_S
 			CFireSword* magic = new CFireSword();
 			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
 			map[id] = magic;
-			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, LAYER_PROJECTILE, false);
 		}
 		break;
 		}
@@ -350,7 +350,7 @@ bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_S
 
 bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE_INFO& pkt)
 {
-	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
+	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_PROJECTILE)->GetProjectileMap();
 	UINT64 id = pkt.projectile_info().projectile_id();
 	if (map.find(id) == map.end())
 		return false;
@@ -358,7 +358,7 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	if ((pkt.mutable_projectile_info()->state()) == Protocol::COLLISION)
 	{
 		map[id]->OffParticles();
-		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->SafeRemoveGameObject(map[id]);
+		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_PROJECTILE)->SafeRemoveGameObject(map[id]);
 		map.erase(id);
 	}
 	else if (pkt.projectile_info().state() == Protocol::SPAWN_PARTICLE)
@@ -460,14 +460,14 @@ bool Handle_S_GATE_OPNE(CPacketSessionRef& session, Protocol::S_GATE_OPNE& pkt)
 		object->GetTransform()->SetRelativeScale(sizeInfo.x(), sizeInfo.y(), sizeInfo.z());
 		object->GetTransform()->SetRelativeRotation(rotInfo.x(), rotInfo.y(), rotInfo.z());
 			
-		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(object, 13, false);
+		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(object, LAYER_GATE, false);
 	}
 	return true;
 }
 
 bool Handle_S_GATE_CLOSE(CPacketSessionRef& session, Protocol::S_GATE_CLOSE& pkt)
 {
-	const std::vector<CGameObject*>& objects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(13)->GetParentObjects();
+	const std::vector<CGameObject*>& objects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_GATE)->GetParentObjects();
 	for (int i = 0; i < pkt.cloase_objects_size(); ++i)
 	{
 		std::wstring name = std::to_wstring(pkt.cloase_objects(i).object_id());
@@ -477,12 +477,7 @@ bool Handle_S_GATE_CLOSE(CPacketSessionRef& session, Protocol::S_GATE_CLOSE& pkt
 		
 		if (iter != objects.end())
 		{
-			CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(13)->SafeRemoveGameObject(*iter);
-			std::cout << "���ִ�\n";
-		}
-		else
-		{
-			std::cout << "�̹� ����\n";
+			CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_GATE)->SafeRemoveGameObject(*iter);
 		}
 	}
 

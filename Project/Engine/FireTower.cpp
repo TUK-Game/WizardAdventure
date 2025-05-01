@@ -47,7 +47,7 @@ void CFireTower::Init(CGameObject* owner)
 	m_FireCircle->SetCaster(dynamic_cast<CPlayer*>(owner));
 
 	CNetworkManager::GetInst()->s_GameSession->SpawnSkill(m_FireCircle);
-	CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(m_FireCircle, 12, false);
+	CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(m_FireCircle, LAYER_PROJECTILE, false);
 }
 
 void CFireTower::Update()
@@ -128,7 +128,7 @@ void CFireTower::TryAttack()
 
 	Vec3 myPos = GetTransform()->GetWorldPosition();
 
-	auto& enemies = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(11)->GetObjects();
+	auto& enemies = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_MONSTER)->GetObjects();
 	for (auto enemy : enemies)
 	{
 		Vec3 enemyPos = enemy->GetTransform()->GetRelativePosition();
@@ -169,5 +169,5 @@ void CFireTower::FireAtEnemy(CGameObject* enemy)
 
 	CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
 
-	CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 12, false);
+	CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, LAYER_PROJECTILE, false);
 }

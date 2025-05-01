@@ -181,7 +181,7 @@ void CCamera::SortObject()
 			continue;
 
 		std::vector<CGameObject*> vecObjects;
-		if (i == 10)
+		if (i == LAYER_MAP)
 		{
 			std::shared_ptr<CSubLevel> level = pCurLevel->m_SubLevel;
 			if (level)
@@ -249,11 +249,11 @@ void CCamera::SortShadowObject()
 		if (!(m_LayerCheck & (1 << i)))
 			continue;
 
-		if (i == 4)
+		if (i == LAYER_UI)
 			continue;
 
 		std::vector<CGameObject*> vecObjects;
-		/*if (i == 10)
+		/*if (i == LAYER_MAP)
 		{
 			std::shared_ptr<CSubLevel> level = pCurLevel->m_SubLevel;
 			if (level)

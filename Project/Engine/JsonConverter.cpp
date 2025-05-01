@@ -77,6 +77,7 @@ void CJsonConverter::SaveMapCollision(const std::wstring& fileName)
     file << map.dump(4);
 
     SaveMonster(fileName);
+    SaveNPC(fileName);
 }
 
 void CJsonConverter::SaveMonster(const std::wstring& fileName)
@@ -84,9 +85,50 @@ void CJsonConverter::SaveMonster(const std::wstring& fileName)
     auto path = CPathManager::GetInst()->FindPath(JSON_PATH);
     CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
     
-    std::vector<CGameObject*> objects = level->GetLayer(11)->GetParentObjects(); // monster layer
+    std::vector<CGameObject*> objects = level->GetLayer(LAYER_MONSTER)->GetParentObjects(); // monster layer
 
     std::ofstream file{ path / (fileName + L"_Monster.json") };
+
+    json map = json::array();
+    std::unordered_map<std::string, bool> um;
+    for (auto object : objects)
+    {
+        json obj;
+        CTransform* transform = object->GetTransform();
+        CBaseCollider* collider = object->GetCollider();
+        Vec3 pos = transform->GetRelativePosition();
+        Vec3 rot = transform->GetRelativeRotation();
+        Vec3 scale = transform->GetRelativeScale();
+        std::string name = ws2s(object->GetName());
+        name.erase(std::find(name.begin(), name.end(), '\0'), name.end());
+
+        obj["name"] = name;
+        obj["position"] = { pos.x, pos.y, pos.z };
+        obj["rotation"] = { rot.x, rot.y, rot.z };
+        obj["scale"] = { scale.x, scale.y, scale.z };
+        obj["size"] = { collider->size.x, collider->size.y, collider->size.z };
+
+        if (um[name])
+        {
+            map.push_back(obj);
+            continue;
+        }
+
+        um[name] = true;
+        map.push_back(obj);
+    }
+
+    file << map.dump(4);
+}
+
+void CJsonConverter::SaveNPC(const std::wstring& fileName)
+{
+    auto path = CPathManager::GetInst()->FindPath(JSON_PATH);
+    CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
+
+    std::vector<CGameObject*> objects = level->GetLayer(LAYER_NPC)->GetParentObjects(); // NPC layer
+
+    std::ofstream file{ path / (fileName + L"_NPC.json") };
 
     json map = json::array();
     std::unordered_map<std::string, bool> um;
@@ -122,7 +164,3 @@ void CJsonConverter::SaveMonster(const std::wstring& fileName)
     std::cout << "JSON작성완료" << std::endl;
 }
 
-void CJsonConverter::Save(std::ofstream& file, const std::vector<CGameObject*>& objects)
-{
-   
-}

@@ -133,7 +133,7 @@ void CImGuiManager::DrawLevelWindow()
 	{
 
 		std::vector<CGameObject*> gameObjects;
-		if (j == 10)
+		if (j == LAYER_MAP)
 		{
 			auto subLevel = CLevelManager::GetInst()->GetCurrentLevel()->m_SubLevel;
 			if (subLevel)

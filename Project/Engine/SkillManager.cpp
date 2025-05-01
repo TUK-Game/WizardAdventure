@@ -87,7 +87,7 @@ void CSkillManager::CastFireballTowardMouse()
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
 
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 12, false);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, LAYER_PROJECTILE, false);
 }
 
 void CSkillManager::CastFireballTowardQ(float duration)
@@ -126,7 +126,7 @@ void CSkillManager::CastFireballTowardQ(float duration)
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
 
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, 12, false);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, LAYER_PROJECTILE, false);
 }
 
 void CSkillManager::SpawnFireTowerAtMouse(float duration)
@@ -147,7 +147,7 @@ void CSkillManager::SpawnFireTowerAtMouse(float duration)
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(tower);
 
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(tower, 12, false);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(tower, LAYER_PROJECTILE, false);
 
 }
 
@@ -190,7 +190,7 @@ void CSkillManager::FireSwordSpreadShot(float duration)
         sword->SetCollisionExplosion(true);
         CNetworkManager::GetInst()->s_GameSession->SpawnSkill(sword);
 
-        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(sword, 12, false);
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(sword, LAYER_PROJECTILE, false);
     }
 
 }
@@ -203,7 +203,7 @@ void CSkillManager::CastMeteor()
     meteors->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
 
 
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteors, 12, false);
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(meteors, LAYER_PROJECTILE, false);
 }
 
 Vec3 CSkillManager::CalculateMouseDirectionFromPlayerTopView(const Vec3& fromPos)
