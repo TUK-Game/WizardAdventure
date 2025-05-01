@@ -74,14 +74,7 @@ void CFireTower::FinalUpdate()
 	{
 		m_ElapsedTime += DELTA_TIME;
 		if (m_ElapsedTime >= m_Duration) {
-			/*if (m_FireEffect) {
-				m_FireEffect->SetEnable(false);
-				m_FireEffect = nullptr;
-			}*/
-
 			m_bDelete = true;
-			if (m_FireCircle)
-				m_FireCircle->m_bDelete = true;
 		}
 	}
 }
@@ -100,6 +93,11 @@ void CFireTower::OffParticles()
 		m_FireEffect->SetEnable(false);
 		m_FireEffect = nullptr;
 	}
+
+	if (m_FireCircle)
+	{
+		m_FireCircle->m_bDelete = true;
+	}
 }
 
 void CFireTower::UpdateScaleLerp()
@@ -107,7 +105,6 @@ void CFireTower::UpdateScaleLerp()
 	if (m_ElapsedTime >= m_ScaleDuration) {
 		m_bFinishScale = true;
 		m_bCanAttack = true; // attack on
-		//ShowParticles();
 		m_bSpawnParticle = true;
 		return;
 	}
@@ -119,8 +116,8 @@ void CFireTower::UpdateScaleLerp()
 	if (m_FireCircle)
 	{
 		Vec3 circleScale(t * m_AttackRange * 2, t * m_AttackRange * 2, t * 200.f);
-		std::cout << circleScale.x << " " << circleScale.y << " " << circleScale.z << "\n";
 		m_FireCircle->GetTransform()->SetRelativeScale(circleScale);
+		m_FireCircle->Update();
 	}
 }
 

@@ -56,8 +56,6 @@ bool Handle_S_LOGIN(CPacketSessionRef& session, Protocol::S_LOGIN& pkt)
 
 bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt)
 {
-	std::cout << "����" << std::endl;
-	// �÷��̾� ����
 	UINT64 id = pkt.player().player_id();
 
 	CPlayer* player{ nullptr };
@@ -142,77 +140,6 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 
 	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(GSpkt);
 	session->Send(sendBuffer);
-	return true;
-}
-
-bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_SPAWN_PROJECTILE_SUCESSE& pkt)
-{
-	UINT64 id = pkt.projectile_id();
-	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
-	if (map.find(id) != map.end())
-	{
-		map[id]->SetEnable(true);
-	}
-	else
-	{
-		const auto& size = pkt.mutable_size();
-		switch (pkt.mesh())
-		{
-		case Protocol::FIRE_CIRCLE:
-		{
-			CFireCircle* magic = new CFireCircle();
-			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
-			map[id] = magic;
-			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
-		}
-		break;
-		case Protocol::FIRE_BALL:
-		{
-			CFireBall* magic = new CFireBall();
-			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
-			magic->SetMode(EFireBallMode::Default);
-			map[id] = magic;
-			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
-		}
-		break;
-		case Protocol::FIRE_BALL_EXPLOSION:
-		{
-			CFireBall* magic = new CFireBall();
-			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
-			magic->SetMode(EFireBallMode::QSkill);
-			map[id] = magic;
-			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
-		}
-		break;
-		case Protocol::FIRE_METEOR:
-		{
-			CFireBall* magic = new CFireBall();
-			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
-			magic->SetMode(EFireBallMode::Meteor);
-			map[id] = magic;
-			magic->UseSmokeTrail();
-			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
-		}
-		break;
-		case Protocol::FIRE_PILLAR:
-		{
-			CFireTower* magic = new CFireTower();
-			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
-			map[id] = magic;
-			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
-		}
-		break;
-		case Protocol::FIRE_SWORD:
-		{
-			CFireSword* magic = new CFireSword();
-			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
-			map[id] = magic;
-			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
-		}
-		break;
-		}
-		
-	}
 	return true;
 }
 
@@ -345,6 +272,78 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		monster->SetTarget(Vec3(pos.x(), pos.y(), pos.z()), Vec3(rot.x(), rot.y(), rot.z()));
 		monster->SetProtocolStateForClientMonster(state);
 		monster->SetStats(info.monster_ablity().maxhp(), info.monster_ablity().hp());
+	}
+	return true;
+}
+
+bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_SPAWN_PROJECTILE_SUCESSE& pkt)
+{
+	UINT64 id = pkt.projectile_id();
+	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
+	if (map.find(id) != map.end())
+	{
+		std::cout << "생성\n";
+		map[id]->SetEnable(true);
+	}
+	else
+	{
+		const auto& size = pkt.mutable_size();
+		switch (pkt.mesh())
+		{
+		case Protocol::FIRE_CIRCLE:
+		{
+			CFireCircle* magic = new CFireCircle();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_BALL:
+		{
+			CFireBall* magic = new CFireBall();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			magic->SetMode(EFireBallMode::Default);
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_BALL_EXPLOSION:
+		{
+			CFireBall* magic = new CFireBall();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			magic->SetMode(EFireBallMode::QSkill);
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_METEOR:
+		{
+			CFireBall* magic = new CFireBall();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			magic->SetMode(EFireBallMode::Meteor);
+			map[id] = magic;
+			magic->UseSmokeTrail();
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_PILLAR:
+		{
+			CFireTower* magic = new CFireTower();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		case Protocol::FIRE_SWORD:
+		{
+			CFireSword* magic = new CFireSword();
+			magic->GetTransform()->SetRelativeScale(Vec3(size->x(), size->y(), size->z()));
+			map[id] = magic;
+			CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(magic, 12, false);
+		}
+		break;
+		}
+
 	}
 	return true;
 }

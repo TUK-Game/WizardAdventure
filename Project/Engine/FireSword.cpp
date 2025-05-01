@@ -95,7 +95,7 @@ void CFireSword::FinalUpdate()
         Vec3 pos = GetTransform()->GetRelativePosition();
         if (pos.y < -200.f) // 충돌시 삭제로 변경해야함
         {
-            //m_bDelete = true;
+            m_bDelete = true;
             //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
         }
     }
