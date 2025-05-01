@@ -45,14 +45,16 @@ const char descriptor_table_protodef_Enum_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "\n\022MOVE_STATE_SKILL_Q\020\005\022\026\n\022MOVE_STATE_SKI"
   "LL_E\020\006\022\026\n\022MOVE_STATE_SKILL_R\020\007\022\034\n\030MOVE_S"
   "TATE_SKILL_MOUSE_R\020\010\022\034\n\030MOVE_STATE_SKILL"
-  "_MOUSE_L\020\t*0\n\017ProjectileState\022\016\n\nMOVE_ST"
-  "ATE\020\000\022\r\n\tCOLLISION\020\001*L\n\tSkillMesh\022\r\n\tFIR"
-  "E_BALL\020\000\022\017\n\013FIRE_PILLAR\020\001\022\017\n\013FIRE_CIRCLE"
-  "\020\002\022\016\n\nFIRE_SWORD\020\003b\006proto3"
+  "_MOUSE_L\020\t*D\n\017ProjectileState\022\016\n\nMOVE_ST"
+  "ATE\020\000\022\r\n\tCOLLISION\020\001\022\022\n\016SPAWN_PARTICLE\020\002"
+  "*\206\001\n\tSkillMesh\022\r\n\tFIRE_BALL\020\000\022\017\n\013FIRE_PI"
+  "LLAR\020\001\022\017\n\013FIRE_CIRCLE\020\002\022\016\n\nFIRE_SWORD\020\003\022"
+  "\016\n\nFIRE_TOWER\020\004\022\017\n\013FIRE_METEOR\020\005\022\027\n\023FIRE"
+  "_BALL_EXPLOSION\020\006b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Enum_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto = {
-    false, false, 786, descriptor_table_protodef_Enum_2eproto,
+    false, false, 865, descriptor_table_protodef_Enum_2eproto,
     "Enum.proto",
     &descriptor_table_Enum_2eproto_once, nullptr, 0, 0,
     schemas, file_default_instances, TableStruct_Enum_2eproto::offsets,
@@ -157,6 +159,7 @@ bool ProjectileState_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
+    case 2:
       return true;
     default:
       return false;
@@ -173,6 +176,9 @@ bool SkillMesh_IsValid(int value) {
     case 1:
     case 2:
     case 3:
+    case 4:
+    case 5:
+    case 6:
       return true;
     default:
       return false;

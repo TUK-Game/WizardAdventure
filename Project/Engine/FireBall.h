@@ -39,6 +39,9 @@ public:
 
     virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
 
+    virtual void ShowParticles();
+    virtual void OffParticles();
+
 private:
     int m_FireParticleId = -1;
     int m_SmokeParticleId = -1;

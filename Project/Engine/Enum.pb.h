@@ -188,12 +188,13 @@ inline bool MoveState_Parse(
 enum ProjectileState : int {
   MOVE_STATE = 0,
   COLLISION = 1,
+  SPAWN_PARTICLE = 2,
   ProjectileState_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   ProjectileState_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool ProjectileState_IsValid(int value);
 constexpr ProjectileState ProjectileState_MIN = MOVE_STATE;
-constexpr ProjectileState ProjectileState_MAX = COLLISION;
+constexpr ProjectileState ProjectileState_MAX = SPAWN_PARTICLE;
 constexpr int ProjectileState_ARRAYSIZE = ProjectileState_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ProjectileState_descriptor();
@@ -215,12 +216,15 @@ enum SkillMesh : int {
   FIRE_PILLAR = 1,
   FIRE_CIRCLE = 2,
   FIRE_SWORD = 3,
+  FIRE_TOWER = 4,
+  FIRE_METEOR = 5,
+  FIRE_BALL_EXPLOSION = 6,
   SkillMesh_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   SkillMesh_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool SkillMesh_IsValid(int value);
 constexpr SkillMesh SkillMesh_MIN = FIRE_BALL;
-constexpr SkillMesh SkillMesh_MAX = FIRE_SWORD;
+constexpr SkillMesh SkillMesh_MAX = FIRE_BALL_EXPLOSION;
 constexpr int SkillMesh_ARRAYSIZE = SkillMesh_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SkillMesh_descriptor();

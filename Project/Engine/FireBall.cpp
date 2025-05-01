@@ -32,7 +32,10 @@ CFireBall::CFireBall()
 
 void CFireBall::Update()
 {
-	UpdateByMode();
+	if(m_bOwn)
+	{
+		UpdateByMode();
+	}
 	CSkillObject::Update();
 }
 
@@ -49,33 +52,16 @@ void CFireBall::FinalUpdate()
 	if (m_bOwn)
 	{
 		m_ElapsedTime += DELTA_TIME;
-		if (m_ElapsedTime >= m_Duration) {
-			if (0 <= m_FireParticleId) {
-				CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", m_FireParticleId);
-				m_FireParticleId = -1;
-			}
-			SpawnDeleteEffect();
+		if (m_ElapsedTime >= m_Duration)
+		{
 			m_bDelete = true;
 		}
 
 
-		if (pos.y < -20.f && !m_bDelete) {
-			m_bDelete = true;
-
-			if (m_Mode != EFireBallMode::Meteor)
-				return;
-			if (0 <= m_FireParticleId) {
-				CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", m_FireParticleId);
-				m_FireParticleId = -1;
-			}
-			if (0 <= m_SmokeParticleId) {
-				CParticleSystemManager::GetInst()->RemoveEmitter(L"Smoke", m_SmokeParticleId);
-				m_SmokeParticleId = -1;
-			}
-	/*		CEffectManager::GetInst()->SpawnRadialSmoke(pos);
-			CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
-			CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
-			CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);*/
+		if (pos.y < -20.f && !m_bDelete)
+		{
+			if(EFireBallMode::Meteor == m_Mode)
+				m_bDelete = true;
 		}
 	}
 
@@ -84,6 +70,51 @@ void CFireBall::FinalUpdate()
 void CFireBall::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
 {
 	CSkillObject::CollisionBegin(src, dest);
+}
+
+void CFireBall::ShowParticles()
+{
+
+}
+
+void CFireBall::OffParticles()
+{
+	Vec3 pos = GetTransform()->GetRelativePosition();
+
+	if (0 <= m_FireParticleId)
+	{
+		CParticleSystemManager::GetInst()->RemoveEmitter(L"Spark", m_FireParticleId);
+		m_FireParticleId = -1;
+	}
+
+	switch (m_Mode) {
+	case EFireBallMode::Default:
+	{
+	}
+	break;
+	case EFireBallMode::QSkill:
+	{
+		CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
+		CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
+		CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
+		std::cout << "ss\n";
+	}
+	break;
+	case EFireBallMode::Meteor:
+	{
+		if (0 <= m_SmokeParticleId)
+		{
+			CParticleSystemManager::GetInst()->RemoveEmitter(L"Smoke", m_SmokeParticleId);
+			m_SmokeParticleId = -1;
+		}
+
+		CEffectManager::GetInst()->SpawnRadialSmoke(pos);
+		CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
+		CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
+		CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
+	}
+	break;
+	}
 }
 
 void CFireBall::UseSmokeTrail()
@@ -106,23 +137,7 @@ void CFireBall::UpdateByMode()
 
 void CFireBall::SpawnDeleteEffect()
 {
-	Vec3 pos = GetTransform()->GetRelativePosition();
-	switch (m_Mode) {
-	case EFireBallMode::Default:
-		break;
-	case EFireBallMode::QSkill:
-		CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
-		CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
-		CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
-		break;
-	case EFireBallMode::Meteor:
-		CEffectManager::GetInst()->SpawnRadialSmoke(pos);
-		CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
-		CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
-		CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
-		std::cout << "������ ȿ�� �ߵ�\n";
-		break;
-	}
+
 }
 
 

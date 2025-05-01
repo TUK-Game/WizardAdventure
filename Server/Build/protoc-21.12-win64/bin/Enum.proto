@@ -49,6 +49,7 @@ enum ProjectileState
 {
 	MOVE_STATE = 0;
 	COLLISION = 1;
+	SPAWN_PARTICLE = 2;
 }
 
 enum SkillMesh
@@ -57,4 +58,7 @@ enum SkillMesh
 	FIRE_PILLAR = 1;
 	FIRE_CIRCLE = 2;
 	FIRE_SWORD = 3;
+	FIRE_TOWER = 4;
+	FIRE_METEOR = 5;
+	FIRE_BALL_EXPLOSION = 6;
 }

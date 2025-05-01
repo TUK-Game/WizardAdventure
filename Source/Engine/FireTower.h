@@ -21,6 +21,8 @@ public:
     void Init(CGameObject* owner);
     virtual void Update();
     virtual void FinalUpdate();
+    virtual void ShowParticles();
+    virtual void OffParticles();
 
 private:
     CAnimatedBillboardEffect* m_FireEffect = nullptr;

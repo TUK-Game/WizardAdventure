@@ -52,6 +52,9 @@
     <Filter Include="01. Game\GameObject\Creature\Projectile">
       <UniqueIdentifier>{f53452d4-605a-472b-8a38-c5b6fb9c98e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Game\GameObject\Trigger">
+      <UniqueIdentifier>{6a3d6627-ce11-4b85-b8c9-591775b4f4a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Util.cpp">
@@ -130,11 +133,17 @@
     <ClCompile Include="ProjectilePool.cpp">
       <Filter>01. Game\GameObject\Creature\Projectile</Filter>
     </ClCompile>
-    <ClCompile Include="TriggerBox.cpp">
-      <Filter>01. Game\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="MonsterArea.cpp">
       <Filter>01. Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterTriggerBox.cpp">
+      <Filter>01. Game\GameObject\Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="TriggerBox.cpp">
+      <Filter>01. Game\GameObject\Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="SavePositionBox.cpp">
+      <Filter>01. Game\GameObject\Trigger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -213,11 +222,17 @@
     <ClInclude Include="ProjectilePool.h">
       <Filter>01. Game\GameObject\Creature\Projectile</Filter>
     </ClInclude>
-    <ClInclude Include="TriggerBox.h">
-      <Filter>01. Game\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="MonsterArea.h">
       <Filter>01. Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterTriggerBox.h">
+      <Filter>01. Game\GameObject\Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggerBox.h">
+      <Filter>01. Game\GameObject\Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="SavePositionBox.h">
+      <Filter>01. Game\GameObject\Trigger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

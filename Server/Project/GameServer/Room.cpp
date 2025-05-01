@@ -8,8 +8,9 @@
 #include "BoxCollider.h"
 #include "Projectile.h"
 #include "ProjectilePool.h"
-#include "TriggerBox.h"
+#include "MonsterTriggerBox.h"
 #include "MonsterArea.h"
+#include "SavePositionBox.h"
 
 CRoomRef g_Room = std::make_shared<CRoom>();
 
@@ -46,18 +47,43 @@ CRoomRef CRoom::GetRoomRef()
 
 void CRoom::Init()
 {
-	//CTriggerBoxRef box = CObjectUtil::CreateObject<CTriggerBox>();
+	//CTriggerBoxRef box = CObjectUtil::CreateObject<CMonseterTriggerBox>();
 	//box->SetTriggerBox(Vec3(8700.f, 0.f, 3840.f), Vec3(100.f, 100.f, 1200.f));
 	////box->SetArea(Vec3(3810.f, 0.f, 4350.f), Vec3(2080.f, 100.f, 1100.f));
 	////box->PushGatePosInfo({ Vec3(4850.f, 0.f, 3875.f), Vec3(200.f, 200.f, 850.f) });
 	//AddObject((uint32)EObject_Type::TRIGGER, box);
 
-	CTriggerBoxRef box = CObjectUtil::CreateObject<CTriggerBox>();
-	box->SetTriggerBox(Vec3(4850, 0.f, 3875.f), Vec3(100.f, 100.f, 850.f));
-	box->SetArea(Vec3(3810.f, 0.f, 4350.f), Vec3(2080.f, 100.f, 1100.f));
-	box->PushGateInfo(Vec3(5000.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 1000.f), Vec3(-1.f, 0.f, 0.f), 0.f);
-	box->PushGateInfo(Vec3(2750.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 600.f), Vec3(1.f, 0.f, 0.f), 0.f);
-	AddObject((uint32)EObject_Type::TRIGGER, box);
+	{
+		CMonseterTriggerBoxRef box = CObjectUtil::CreateObject<CMonseterTriggerBox>();
+		box->SetTriggerBox(Vec3(4850, 0.f, 3875.f), Vec3(100.f, 100.f, 850.f));
+		box->SetArea(Vec3(3810.f, 0.f, 4350.f), Vec3(2080.f, 100.f, 1100.f));
+		box->PushGateInfo(Vec3(5000.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 1000.f), Vec3(-1.f, 0.f, 0.f), 0.f);
+		box->PushGateInfo(Vec3(2750.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 600.f), Vec3(1.f, 0.f, 0.f), 0.f);
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+	}
+
+	{
+		CSavePositionBoxRef box = CObjectUtil::CreateObject<CSavePositionBox>();
+		box->SetTriggerBox(Vec3(4850, 0.f, 3875.f), Vec3(100.f, 100.f, 850.f));
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CSavePositionBox>();
+		box->SetTriggerBox(Vec3(10500.f, 0.f, 3850.f), Vec3(100.f, 100.f, 700.f));
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CSavePositionBox>();
+		box->SetTriggerBox(Vec3(8500, 0.f, 4000.f), Vec3(100.f, 100.f, 1050.f));
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CSavePositionBox>();
+		box->SetTriggerBox(Vec3(1170, 0.f, 3950.f), Vec3(100.f, 100.f, 300.f));
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CSavePositionBox>();
+		box->SetTriggerBox(Vec3(-1325.f, 0.f, 11700.f), Vec3(300.f, 100.f, 100.f));
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+	}
 }
 
 void CRoom::Update()

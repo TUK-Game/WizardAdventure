@@ -66,6 +66,7 @@ void CMeteors::SpawnMeteor()
     meteor->SetCaster(GetCaster());
     meteor->SetDamage(Skill::Meteor.damage * m_Caster->GetStats()->attack);
     meteor->UseSmokeTrail();
+    meteor->SetSkillType(SKILL::FIRE_METEORS);
     meteor->SetMode(EFireBallMode::Meteor);
     meteor->SetEnable(false);
 

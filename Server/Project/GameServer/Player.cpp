@@ -48,6 +48,16 @@ void CPlayer::Update(float deltaTime)
 		}
 		g_Room->HandleMovePlayer(m_Session.lock()->Player);
 	}
+	else
+	{
+		if (PlayerInfo->object_info().pos_info().position().y() <= -200.f)
+		{
+			const auto& pos = PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+			pos->set_x(m_SafePos.x);
+			pos->set_y(m_SafePos.y);
+			pos->set_z(m_SafePos.z);
+		}
+	}
 }
 
 void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)

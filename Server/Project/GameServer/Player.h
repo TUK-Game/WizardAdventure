@@ -26,11 +26,13 @@ public:
 	Protocol::MoveState GetState() { return m_State; }
 	Protocol::Vector3& GetDir() { return m_Dir; }
 	EAttribution GetAttribution() { return m_attribution; }
+	Vec3 GetSafePosition() { return m_SafePos; }
 
 	void SetState(Protocol::MoveState state) { m_State = state; }
 	void SetAblity(int maxHp, int currentHp, int attack, float speed) { Ablity{ maxHp, currentHp, attack, speed }; }
 	void SetDir(const Protocol::Vector3& dir) { m_Dir = dir; }
 	void SetAttribute(const EAttribution attri) { m_attribution = attri; }
+	void SetSafePosition(const Vec3& pos) { m_SafePos = pos; }
 public:
 	Protocol::PlayerInfo* PlayerInfo;
 
@@ -50,6 +52,7 @@ private:
 	std::weak_ptr<CGameSession>	m_Session;
 	Protocol::MoveState m_State;
 	Protocol::Vector3 m_Dir;
+	Vector3 m_SafePos;
 
 	EAttribution m_attribution = EAttribution::FIRE;
 
