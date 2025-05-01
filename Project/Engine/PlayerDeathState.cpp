@@ -30,6 +30,7 @@ void CPlayerDeathState::Update(CGameObject* entity, float deltaTime)
 
     if (m_ElapsedTime >= m_DeathDuration)
     {
+        // temp
         entity->GetStateManager()->HandleEvent(entity, "EndDeath");
     }
 }

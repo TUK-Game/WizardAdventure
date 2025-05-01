@@ -18,7 +18,7 @@ void CPlayerAttackRState::Enter(CGameObject* entity)
     }
     m_ElapsedTime = 0.f;
     CPlayer* player = dynamic_cast<CPlayer*>(entity);
-    player->Attack(2);
+    player->Attack(2, m_AttackDuration * .2f);
 }
 
 void CPlayerAttackRState::Update(CGameObject* entity, float deltaTime)

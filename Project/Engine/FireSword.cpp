@@ -32,7 +32,6 @@ CFireSword::CFireSword()
 
 void CFireSword::Update()
 {
-    CSkillObject::Update();
     if (m_bOwn)
     {
         Vec3 pos = GetTransform()->GetRelativePosition();
@@ -85,6 +84,7 @@ void CFireSword::Update()
         pos += m_Direction * m_Speed * DELTA_TIME;
         GetTransform()->SetRelativePosition(pos);
     }
+    CSkillObject::Update();
 }
 
 void CFireSword::FinalUpdate()
@@ -95,7 +95,7 @@ void CFireSword::FinalUpdate()
         Vec3 pos = GetTransform()->GetRelativePosition();
         if (pos.y < -200.f) // 충돌시 삭제로 변경해야함
         {
-            m_bDelete = true;
+            //m_bDelete = true;
             //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
         }
     }

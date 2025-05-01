@@ -12,7 +12,7 @@ private:
     void CastFireballTowardQ(float duration);
     void CastMeteor();
     void SpawnFireTowerAtMouse(float duration);
-    void FireSwordSpreadShot();
+    void FireSwordSpreadShot(float duration);
 
 
 private:

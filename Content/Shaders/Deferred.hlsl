@@ -92,6 +92,13 @@ PS_OUT PS_Main(VS_OUT input)
          viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
      }
 
+    if (tex_on_2)
+    {
+        float4 emissiveColor = tex_2.Sample(sam_0, input.uv);
+        color.rgb += emissiveColor.rgb; 
+    }
+    
+    
     output.position = float4(input.viewPos.xyz, 0.f);
     output.normal = float4(viewNormal.xyz, 0.f);
     //if (input.worldPos.y < -10.f)

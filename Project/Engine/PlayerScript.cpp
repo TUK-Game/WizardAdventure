@@ -14,6 +14,15 @@ void CPlayerScript::Update()
     CStateManager* stateManager = player->GetStateManager();
     if (!stateManager) return;
 
+    if (stateManager->GetCurrentStateType() == EState_Type::Death)
+        return;
+
+    if (player->GetStats()->currentHp <= 0)
+    {
+        stateManager->HandleEvent(player, "Death");
+        return;
+    }
+
     Vec3 moveDir(0, 0, 0);
     if (KEY_PUSH(EKey::W))    moveDir.z += 1;
     if (KEY_PUSH(EKey::S))  moveDir.z -= 1;

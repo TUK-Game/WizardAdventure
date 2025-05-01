@@ -37,7 +37,7 @@ void CSkillManager::UseSkill(int skillIndex, float duration)
         if (skillIndex == 1)
             SpawnFireTowerAtMouse(duration);
         if (skillIndex == 2)
-            FireSwordSpreadShot();
+            FireSwordSpreadShot(duration);
         if (skillIndex == 3) 
             CastFireballTowardMouse();
         if (skillIndex == 4)
@@ -150,7 +150,7 @@ void CSkillManager::SpawnFireTowerAtMouse(float duration)
 
 }
 
-void CSkillManager::FireSwordSpreadShot()
+void CSkillManager::FireSwordSpreadShot(float duration)
 {
     if (!m_Owner) return;
 
@@ -178,9 +178,11 @@ void CSkillManager::FireSwordSpreadShot()
 
         sword->SetReadyDirection(readyDir);
         sword->SetTargetPos(targetPos);
-        sword->SetSpeed(800.f);              
-        sword->SetWaitTimeForTranslate(1.5f);     
-        sword->SetWaitTimeForRotate(1.f);
+        sword->SetSpeed(3000.f);              
+        sword->SetWaitTimeForTranslate(duration);
+        float rotateDuration = duration * 4.f;
+        float rotateDurationDivideByCount = rotateDuration / static_cast<float>(count);
+        sword->SetWaitTimeForRotate(rotateDurationDivideByCount * i);
         sword->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
         sword->SetDamage(Skill::FireSword.damage * sword->GetCaster()->GetStats()->attack);
         sword->SetEnable(false);
