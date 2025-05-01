@@ -13,7 +13,7 @@
 #include "FireBall.h"
 #include "NetworkManager.h"
 #include "ServerSession.h"
-#include "SkillDamage.h"
+#include "SkillInfo.h"
 #include "FireCircle.h"  
 #include "Player.h"
 

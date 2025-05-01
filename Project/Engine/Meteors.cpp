@@ -9,7 +9,7 @@
 #include "Layer.h"
 #include "LevelManager.h"
 #include "Engine.h"
-#include "SkillDamage.h"
+#include "SkillInfo.h"
 #include "ServerSession.h"
 #include "NetworkManager.h"
 #include "Player.h"
@@ -64,7 +64,7 @@ void CMeteors::SpawnMeteor()
     meteor->GetTransform()->SetRelativeScale(scale, scale, scale);
     meteor->SetDuration(5.5f);
     meteor->SetCaster(GetCaster());
-    meteor->SetDamage(SkillDamage::Meteor * m_Caster->GetStats()->attack);
+    meteor->SetDamage(Skill::Meteor.damage * m_Caster->GetStats()->attack);
     meteor->UseSmokeTrail();
     meteor->SetMode(EFireBallMode::Meteor);
     meteor->SetEnable(false);

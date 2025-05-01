@@ -49,4 +49,8 @@ void CPlayerScript::Update()
     {
         stateManager->HandleEvent(player, "Attack_R");
     }
+    if (KEY_DOWN(EKey::Z))
+    {
+        stateManager->HandleEvent(player, "Knockback");
+    }
 }

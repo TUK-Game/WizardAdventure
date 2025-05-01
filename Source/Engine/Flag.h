@@ -145,6 +145,7 @@ enum class EState_Type
 	Chase,
 	Hit,
 	Death,
+	Knockback,
 	END
 };
 

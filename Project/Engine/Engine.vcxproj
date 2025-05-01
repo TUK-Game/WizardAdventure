@@ -204,7 +204,8 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="Enum.pb.h" />
     <ClInclude Include="HpBar.h" />
     <ClInclude Include="ParticleSystemManager.h" />
-    <ClInclude Include="SkillDamage.h" />
+    <ClInclude Include="PlayerKnockbackState.h" />
+    <ClInclude Include="SkillInfo.h" />
     <ClInclude Include="SkillObject.h" />
     <ClInclude Include="FireBall.h" />
     <ClInclude Include="FireCircle.h" />
@@ -376,6 +377,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     </ClCompile>
     <ClCompile Include="HpBar.cpp" />
     <ClCompile Include="ParticleSystemManager.cpp" />
+    <ClCompile Include="PlayerKnockbackState.cpp" />
     <ClCompile Include="SkillObject.cpp" />
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="FireCircle.cpp" />

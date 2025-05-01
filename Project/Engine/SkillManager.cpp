@@ -14,7 +14,7 @@
 #include "RigidBody.h"
 #include "Player.h"
 #include "Camera.h"
-#include "SkillDamage.h"
+#include "SkillInfo.h"
 #include "ParticleSystemManager.h"
 #include "ParticleSystem.h"
 #include "ServerSession.h"
@@ -80,7 +80,7 @@ void CSkillManager::CastFireballTowardMouse()
     fireBall->GetRigidBody()->SetVelocity(velocity);
 
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
-    fireBall->SetDamage(SkillDamage::FireBall * fireBall->GetCaster()->GetStats()->attack);
+    fireBall->SetDamage(Skill::FireBall.damage * fireBall->GetCaster()->GetStats()->attack);
     fireBall->SetEnable(false);
     fireBall->SetCollisionExplosion(true);
 
@@ -112,7 +112,7 @@ void CSkillManager::CastFireballTowardQ(float duration)
     fireBall->SetDuration(duration);
     fireBall->SetMode(EFireBallMode::QSkill);
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
-    fireBall->SetDamage(SkillDamage::FireBallQ * fireBall->GetCaster()->GetStats()->attack);
+    fireBall->SetDamage(Skill::FireBallQ.damage * fireBall->GetCaster()->GetStats()->attack);
     fireBall->SetEnable(false);
     fireBall->SetCollisionExplosion(true);
 
@@ -140,7 +140,7 @@ void CSkillManager::SpawnFireTowerAtMouse(float duration)
     tower->SetScaleDuration(duration);
     tower->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
     tower->Init(m_Owner); 
-    tower->SetDamage(SkillDamage::FireTower * tower->GetCaster()->GetStats()->attack);
+    tower->SetDamage(Skill::FireTower.damage * tower->GetCaster()->GetStats()->attack);
     tower->SetEnable(false);
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(tower);
@@ -181,7 +181,7 @@ void CSkillManager::FireSwordSpreadShot()
         sword->SetWaitTimeForTranslate(1.5f);     
         sword->SetWaitTimeForRotate(1.f);
         sword->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
-        sword->SetDamage(SkillDamage::FireSword * sword->GetCaster()->GetStats()->attack);
+        sword->SetDamage(Skill::FireSword.damage * sword->GetCaster()->GetStats()->attack);
         sword->SetEnable(false);
         sword->SetCollisionExplosion(true);
         CNetworkManager::GetInst()->s_GameSession->SpawnSkill(sword);

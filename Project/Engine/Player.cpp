@@ -9,6 +9,7 @@
 #include "PlayerAttackEState.h"
 #include "PlayerAttackLButtonState.h"
 #include "PlayerAttackRButtonState.h"
+#include "PlayerKnockbackState.h"
 #include "Transform.h"
 #include "Engine.h"
 #include "SkillManager.h"
@@ -143,7 +144,9 @@ void CPlayer::CreateStateManager()
     m_StateManager->AddState(new CPlayerAttackEState);
     m_StateManager->AddState(new CPlayerAttackLButtonState);
     m_StateManager->AddState(new CPlayerAttackRButtonState);
+    m_StateManager->AddState(new CPlayerKnockbackState);
 
+    // idle -> others
     m_StateManager->SetTransition(EState_Type::Idle, "Move", EState_Type::Run);
     m_StateManager->SetTransition(EState_Type::Idle, "Dash", EState_Type::Dash);
     m_StateManager->SetTransition(EState_Type::Idle, "Attack_Q", EState_Type::Attack_Q);
@@ -151,8 +154,9 @@ void CPlayer::CreateStateManager()
     m_StateManager->SetTransition(EState_Type::Idle, "Attack_E", EState_Type::Attack_E);
     m_StateManager->SetTransition(EState_Type::Idle, "Attack_LButton", EState_Type::Attack_LButton);
     m_StateManager->SetTransition(EState_Type::Idle, "Attack_RButton", EState_Type::Attack_RButton);
-
-
+    m_StateManager->SetTransition(EState_Type::Idle, "Knockback", EState_Type::Knockback);
+    
+    // run -> others
     m_StateManager->SetTransition(EState_Type::Run, "Stop", EState_Type::Idle);
     m_StateManager->SetTransition(EState_Type::Run, "Dash", EState_Type::Dash);
     m_StateManager->SetTransition(EState_Type::Run, "Attack_Q", EState_Type::Attack_Q);
@@ -160,14 +164,28 @@ void CPlayer::CreateStateManager()
     m_StateManager->SetTransition(EState_Type::Run, "Attack_E", EState_Type::Attack_E);
     m_StateManager->SetTransition(EState_Type::Run, "Attack_LButton", EState_Type::Attack_LButton);
     m_StateManager->SetTransition(EState_Type::Run, "Attack_RButton", EState_Type::Attack_RButton);
+    m_StateManager->SetTransition(EState_Type::Run, "Knockback", EState_Type::Knockback);
 
+    // dash -> run
     m_StateManager->SetTransition(EState_Type::Dash, "EndDash", EState_Type::Run);
 
+    // knockback -> idle
+    m_StateManager->SetTransition(EState_Type::Knockback, "EndKnockback", EState_Type::Idle);
+
+    // attack -> idle
     m_StateManager->SetTransition(EState_Type::Attack_Q, "EndAttack", EState_Type::Idle);
     m_StateManager->SetTransition(EState_Type::Attack_R, "EndAttack", EState_Type::Idle);
     m_StateManager->SetTransition(EState_Type::Attack_E, "EndAttack", EState_Type::Idle);
     m_StateManager->SetTransition(EState_Type::Attack_LButton, "EndAttack", EState_Type::Idle);
     m_StateManager->SetTransition(EState_Type::Attack_RButton, "EndAttack", EState_Type::Idle);
+
+    // attack -> knockback
+    m_StateManager->SetTransition(EState_Type::Attack_Q, "Knockback", EState_Type::Knockback);
+    m_StateManager->SetTransition(EState_Type::Attack_R, "Knockback", EState_Type::Knockback);
+    m_StateManager->SetTransition(EState_Type::Attack_E, "Knockback", EState_Type::Knockback);
+    m_StateManager->SetTransition(EState_Type::Attack_LButton, "Knockback", EState_Type::Knockback);
+    m_StateManager->SetTransition(EState_Type::Attack_RButton, "Knockback", EState_Type::Knockback);
+
 }
 
 void CPlayer::Move(Vec3 moveDir, bool shouldRotate)

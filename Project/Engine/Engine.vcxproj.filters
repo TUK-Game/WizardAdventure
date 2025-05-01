@@ -240,6 +240,9 @@
     <Filter Include="01. Manager\17. Effect\AnimatedBillboard">
       <UniqueIdentifier>{bcc0beca-9ae0-4c65-a4e8-43603875f1e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. State\PlayerState\Damage">
+      <UniqueIdentifier>{963d2a4c-3e03-491a-9695-0d178e8c8c8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -623,7 +626,7 @@
     <ClInclude Include="SkillObject.h">
       <Filter>03. GameObject\Player\Skill</Filter>
     </ClInclude>
-    <ClInclude Include="SkillDamage.h">
+    <ClInclude Include="SkillInfo.h">
       <Filter>03. GameObject\Player\Skill</Filter>
     </ClInclude>
     <ClInclude Include="ParticleSystemManager.h">
@@ -640,6 +643,9 @@
     </ClInclude>
     <ClInclude Include="HpBar.h">
       <Filter>07. UI\01. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerKnockbackState.h">
+      <Filter>06. State\PlayerState\Damage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -987,6 +993,9 @@
     </ClCompile>
     <ClCompile Include="HpBar.cpp">
       <Filter>07. UI\01. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerKnockbackState.cpp">
+      <Filter>06. State\PlayerState\Damage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
