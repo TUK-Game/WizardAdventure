@@ -61,7 +61,7 @@ void CLevel::Update()
 
 	for (auto& widget : m_vecWidgetWindow)
 	{
-		if(widget)
+		if(widget && widget->GetEnable())
 			widget->Update();
 	}
 }

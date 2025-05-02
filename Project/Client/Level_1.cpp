@@ -33,6 +33,7 @@
 #include <Engine/ServerSession.h>
 #include <Engine/Engine.h>
 #include <Engine/NPC.h>
+#include "StoreWidgetWindow.h"
 
 CLevel_1::CLevel_1()
 {
@@ -143,6 +144,7 @@ void CLevel_1::Init()
 	{
 		CNPC* npc = new CNPC();
 		npc->GetTransform()->SetRelativePosition(11000, 20, 3500);
+		npc->SetWidgetWindowType(EWIDGETWINDOW_TYPE::STORE_WINDOW);
 		this->AddGameObject(npc, LAYER_NPC, false);
 	}
 
@@ -234,7 +236,8 @@ void CLevel_1::Init()
 
 	//CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"GamePlayWidget");
 	CreateWidgetWindow<CTextWindow>(EWIDGETWINDOW_TYPE::TEXT_WINDOW, L"TextWindow", nullptr);
-
+	const auto& win = CreateWidgetWindow<CStoreWidgetWindow>(EWIDGETWINDOW_TYPE::STORE_WINDOW, L"StoreWindow", nullptr);
+	win->SetEnable(false);
 #pragma endregion
 
 

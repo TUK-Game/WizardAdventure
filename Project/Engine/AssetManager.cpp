@@ -276,6 +276,13 @@ int CAssetManager::LoadTexture()
 	tex->Init(path / L"Blue.jpg");
 	AddAsset(L"Blue", tex);
 
+	// Item
+	{
+		tex = new CTexture;
+		tex->Init(path / L"ShopBackGround.png");
+		AddAsset(L"ShopBackGround", tex);
+	}
+
 	// skill
 	{
 		tex = new CTexture;

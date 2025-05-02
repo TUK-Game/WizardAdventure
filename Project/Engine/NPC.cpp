@@ -11,6 +11,8 @@
 #include "NPCBuyState.h"
 #include "NPCIdleState.h"
 #include "NPCTalkState.h"
+#include "LevelManager.h"
+#include "Level.h"
 
 CNPC::CNPC()
 {
@@ -104,4 +106,14 @@ Vec3 CNPC::InteractionCameraPos(Vec3& rot)
 void CNPC::Interation()
 {
 	m_StateManager->HandleEvent(this, "Talk");
+	ShowWidgetWindow();
+}
+
+void CNPC::ShowWidgetWindow()
+{
+	const auto& window = CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(m_WindowType);
+	if (window)
+	{
+		window->SetEnable(true);
+	}
 }
