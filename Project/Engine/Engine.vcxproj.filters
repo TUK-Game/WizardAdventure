@@ -668,6 +668,9 @@
     <ClInclude Include="NPCBuyState.h">
       <Filter>06. State\NPCState</Filter>
     </ClInclude>
+    <ClInclude Include="StoreWidgetWindow.h">
+      <Filter>07. UI\02. WidgetWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1032,6 +1035,9 @@
     </ClCompile>
     <ClCompile Include="NPCBuyState.cpp">
       <Filter>06. State\NPCState</Filter>
+    </ClCompile>
+    <ClCompile Include="StoreWidgetWindow.cpp">
+      <Filter>07. UI\02. WidgetWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

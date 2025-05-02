@@ -30,6 +30,7 @@ public:
 
 public:
 	bool HandleEnterPlayer(CPlayerRef player);
+	bool HandleSpawnNPC(CPlayerRef player);
 	bool HandlePlayerInit(CPlayerRef player);
 	bool HandleLeavePlayer(CPlayerRef player);
 

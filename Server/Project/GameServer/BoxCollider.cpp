@@ -129,7 +129,7 @@ void CBoxCollider::SetBoxHeight(float height)
 
 void CBoxCollider::Update()
 {
-	if (m_Channel == ECollision_Channel::Wall)
+	if (m_Channel == ECollision_Channel::Wall || m_Channel == ECollision_Channel::NPC)
 		return;
 
 	Protocol::Vector3 pos = m_Owner->PosInfo->position();

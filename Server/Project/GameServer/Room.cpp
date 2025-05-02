@@ -11,6 +11,7 @@
 #include "MonsterTriggerBox.h"
 #include "MonsterArea.h"
 #include "SavePositionBox.h"
+#include "NPC.h"
 
 CRoomRef g_Room = std::make_shared<CRoom>();
 
@@ -342,6 +343,46 @@ bool CRoom::HandleEnterPlayer(CPlayerRef player)
 	return EnterRoom(player, true);
 }
 
+bool CRoom::HandleSpawnNPC(CPlayerRef player)
+{
+	std::unordered_map<uint64, CGameObjectRef> npcs = GetLayerObjects((int)EObject_Type::NPC);
+
+	Protocol::S_SPAWN_NPC pkt;
+
+	for (const auto& pair : npcs)
+	{
+		CNPC* npc = (CNPC*)(pair.second.get());
+		std::cout << "º¸³»´Ù\n";
+		if (!npc)
+			continue;
+
+		Protocol::NpcInfo* info = pkt.add_npc_info();
+
+		info->set_object_id(npc->ObjectInfo->object_id());
+
+		const Protocol::PosInfo& srcPosInfo = npc->ObjectInfo->pos_info();
+
+		Protocol::PosInfo* destPosInfo = info->mutable_object_info()->mutable_pos_info();
+
+		Protocol::Vector3* pos = destPosInfo->mutable_position();
+		pos->set_x(srcPosInfo.position().x());
+		pos->set_y(srcPosInfo.position().y());
+		pos->set_z(srcPosInfo.position().z());
+
+		Protocol::Vector3* rot = destPosInfo->mutable_rotation();
+		rot->set_x(srcPosInfo.rotation().x());
+		rot->set_y(srcPosInfo.rotation().y());
+		rot->set_z(srcPosInfo.rotation().z());
+
+		destPosInfo->set_state(npc->ObjectInfo->pos_info().state());
+	}
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	if (auto session = player->GetSession())
+		session->Send(sendBuffer);
+
+	return true;
+}
+
 bool CRoom::HandlePlayerInit(CPlayerRef player)
 {
 	
@@ -383,7 +424,8 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 		const auto& box = player->GetCollider();
 		box->Update();
 
-		if (m_LevelCollision->CollisionWithWall(box) || m_LevelCollision->CollisionWithPlayer(box))
+		if (m_LevelCollision->CollisionWithWall(box) || m_LevelCollision->CollisionWithOnlyChannel(ECollision_Channel::Player, box)
+			|| m_LevelCollision->CollisionWithOnlyChannel(ECollision_Channel::NPC, box))
 		{
 			nowPos.x -= moveAmount.x;
 			nowPos.z -= moveAmount.z;

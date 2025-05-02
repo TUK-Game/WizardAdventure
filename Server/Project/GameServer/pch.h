@@ -78,6 +78,7 @@ USING_SHARED_PTR(CCollisionManager);
 USING_SHARED_PTR(CProjectile);
 USING_SHARED_PTR(CMonseterTriggerBox);
 USING_SHARED_PTR(CSavePositionBox);
+USING_SHARED_PTR(CNPC);
 
 #define SEND_PACKET(pkt)													\
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);	\

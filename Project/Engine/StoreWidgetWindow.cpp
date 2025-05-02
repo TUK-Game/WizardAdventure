@@ -1,11 +1,11 @@
 #include "pch.h"
 #include "StoreWidgetWindow.h"
-#include <Engine/ButtonWidget.h>
-#include <Engine/ImageWidget.h>
-#include <Engine/Transform.h>
-#include <Engine/RenderManager.h>
-#include <Engine/Camera.h>
-#include <Engine/AssetManager.h>
+#include "ButtonWidget.h"
+#include "ImageWidget.h"
+#include "Transform.h"
+#include "RenderManager.h"
+#include "Camera.h"
+#include "AssetManager.h"
 
 CStoreWidgetWindow::CStoreWidgetWindow()
 {

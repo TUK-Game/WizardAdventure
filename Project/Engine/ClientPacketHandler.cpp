@@ -21,10 +21,12 @@
 #include "MeshRenderer.h"
 #include "AssetManager.h"
 #include "EffectManager.h"
+#include "NPC.h"
 
 #include "TestWidget.h"
 #include "MapPlayerWidget.h"
 #include "PlayWidgetWindow.h"
+#include "StoreWidgetWindow.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -481,6 +483,34 @@ bool Handle_S_GATE_CLOSE(CPacketSessionRef& session, Protocol::S_GATE_CLOSE& pkt
 		}
 	}
 
+
+	return true;
+}
+
+bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
+{
+	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
+	const auto& win = level->CreateWidgetWindow<CStoreWidgetWindow>(EWIDGETWINDOW_TYPE::STORE_WINDOW, L"StoreWindow", nullptr);
+	win->SetEnable(false);
+
+	for (int i = 0; i < pkt.npc_info_size(); ++i)
+	{
+		const Protocol::NpcInfo& info = pkt.npc_info(i);
+
+		CNPC* npc = new CNPC;
+		const auto& posInfo = info.object_info().pos_info().position();
+		const auto& sizeInfo = info.object_info().pos_info().size();
+		const auto& rotInfo = info.object_info().pos_info().rotation();
+		npc->m_ObjectId = info.object_id();
+		std::wstring name = std::to_wstring(info.object_id());
+		npc->SetName(name);
+		npc->GetTransform()->SetRelativePosition(posInfo.x(), posInfo.y(), posInfo.z());
+		npc->GetTransform()->SetRelativeRotation(rotInfo.x(), rotInfo.y(), rotInfo.z());
+		npc->SetWidgetWindowType(EWIDGETWINDOW_TYPE::STORE_WINDOW);
+		npc->Begin();
+		std::cout << "받다\n";
+		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(npc, LAYER_NPC, false);
+	}
 
 	return true;
 }

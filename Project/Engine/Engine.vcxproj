@@ -290,6 +290,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
+    <ClInclude Include="StoreWidgetWindow.h" />
     <ClInclude Include="Struct.pb.h" />
     <ClInclude Include="StructuredBuffer.h" />
     <ClInclude Include="SubLevel.h" />
@@ -462,6 +463,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="StoreWidgetWindow.cpp" />
     <ClCompile Include="Struct.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>

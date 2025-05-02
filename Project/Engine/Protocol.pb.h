@@ -108,6 +108,9 @@ extern S_SPAWN_EXISTING_PLAYERDefaultTypeInternal _S_SPAWN_EXISTING_PLAYER_defau
 class S_SPAWN_NEW_PLAYER;
 struct S_SPAWN_NEW_PLAYERDefaultTypeInternal;
 extern S_SPAWN_NEW_PLAYERDefaultTypeInternal _S_SPAWN_NEW_PLAYER_default_instance_;
+class S_SPAWN_NPC;
+struct S_SPAWN_NPCDefaultTypeInternal;
+extern S_SPAWN_NPCDefaultTypeInternal _S_SPAWN_NPC_default_instance_;
 class S_SPAWN_PROJECTILE_SUCESSE;
 struct S_SPAWN_PROJECTILE_SUCESSEDefaultTypeInternal;
 extern S_SPAWN_PROJECTILE_SUCESSEDefaultTypeInternal _S_SPAWN_PROJECTILE_SUCESSE_default_instance_;
@@ -136,6 +139,7 @@ template<> ::Protocol::S_PROJECTILE_INFO* Arena::CreateMaybeMessage<::Protocol::
 template<> ::Protocol::S_SPAWN* Arena::CreateMaybeMessage<::Protocol::S_SPAWN>(Arena*);
 template<> ::Protocol::S_SPAWN_EXISTING_PLAYER* Arena::CreateMaybeMessage<::Protocol::S_SPAWN_EXISTING_PLAYER>(Arena*);
 template<> ::Protocol::S_SPAWN_NEW_PLAYER* Arena::CreateMaybeMessage<::Protocol::S_SPAWN_NEW_PLAYER>(Arena*);
+template<> ::Protocol::S_SPAWN_NPC* Arena::CreateMaybeMessage<::Protocol::S_SPAWN_NPC>(Arena*);
 template<> ::Protocol::S_SPAWN_PROJECTILE_SUCESSE* Arena::CreateMaybeMessage<::Protocol::S_SPAWN_PROJECTILE_SUCESSE>(Arena*);
 template<> ::Protocol::S_UPDATE_PLAYER* Arena::CreateMaybeMessage<::Protocol::S_UPDATE_PLAYER>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -3542,6 +3546,163 @@ class S_GATE_CLOSE final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_Protocol_2eproto;
 };
+// -------------------------------------------------------------------
+
+class S_SPAWN_NPC final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_SPAWN_NPC) */ {
+ public:
+  inline S_SPAWN_NPC() : S_SPAWN_NPC(nullptr) {}
+  ~S_SPAWN_NPC() override;
+  explicit PROTOBUF_CONSTEXPR S_SPAWN_NPC(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_SPAWN_NPC(const S_SPAWN_NPC& from);
+  S_SPAWN_NPC(S_SPAWN_NPC&& from) noexcept
+    : S_SPAWN_NPC() {
+    *this = ::std::move(from);
+  }
+
+  inline S_SPAWN_NPC& operator=(const S_SPAWN_NPC& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_SPAWN_NPC& operator=(S_SPAWN_NPC&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_SPAWN_NPC& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_SPAWN_NPC* internal_default_instance() {
+    return reinterpret_cast<const S_SPAWN_NPC*>(
+               &_S_SPAWN_NPC_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    22;
+
+  friend void swap(S_SPAWN_NPC& a, S_SPAWN_NPC& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_SPAWN_NPC* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_SPAWN_NPC* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S_SPAWN_NPC* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S_SPAWN_NPC>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S_SPAWN_NPC& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const S_SPAWN_NPC& from) {
+    S_SPAWN_NPC::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_SPAWN_NPC* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_SPAWN_NPC";
+  }
+  protected:
+  explicit S_SPAWN_NPC(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kNpcInfoFieldNumber = 1,
+  };
+  // repeated .Protocol.NpcInfo npc_info = 1;
+  int npc_info_size() const;
+  private:
+  int _internal_npc_info_size() const;
+  public:
+  void clear_npc_info();
+  ::Protocol::NpcInfo* mutable_npc_info(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::NpcInfo >*
+      mutable_npc_info();
+  private:
+  const ::Protocol::NpcInfo& _internal_npc_info(int index) const;
+  ::Protocol::NpcInfo* _internal_add_npc_info();
+  public:
+  const ::Protocol::NpcInfo& npc_info(int index) const;
+  ::Protocol::NpcInfo* add_npc_info();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::NpcInfo >&
+      npc_info() const;
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_SPAWN_NPC)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::NpcInfo > npc_info_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
 // ===================================================================
 
 
@@ -4984,9 +5145,52 @@ S_GATE_CLOSE::cloase_objects() const {
   return _impl_.cloase_objects_;
 }
 
+// -------------------------------------------------------------------
+
+// S_SPAWN_NPC
+
+// repeated .Protocol.NpcInfo npc_info = 1;
+inline int S_SPAWN_NPC::_internal_npc_info_size() const {
+  return _impl_.npc_info_.size();
+}
+inline int S_SPAWN_NPC::npc_info_size() const {
+  return _internal_npc_info_size();
+}
+inline ::Protocol::NpcInfo* S_SPAWN_NPC::mutable_npc_info(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_SPAWN_NPC.npc_info)
+  return _impl_.npc_info_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::NpcInfo >*
+S_SPAWN_NPC::mutable_npc_info() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.S_SPAWN_NPC.npc_info)
+  return &_impl_.npc_info_;
+}
+inline const ::Protocol::NpcInfo& S_SPAWN_NPC::_internal_npc_info(int index) const {
+  return _impl_.npc_info_.Get(index);
+}
+inline const ::Protocol::NpcInfo& S_SPAWN_NPC::npc_info(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.S_SPAWN_NPC.npc_info)
+  return _internal_npc_info(index);
+}
+inline ::Protocol::NpcInfo* S_SPAWN_NPC::_internal_add_npc_info() {
+  return _impl_.npc_info_.Add();
+}
+inline ::Protocol::NpcInfo* S_SPAWN_NPC::add_npc_info() {
+  ::Protocol::NpcInfo* _add = _internal_add_npc_info();
+  // @@protoc_insertion_point(field_add:Protocol.S_SPAWN_NPC.npc_info)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::NpcInfo >&
+S_SPAWN_NPC::npc_info() const {
+  // @@protoc_insertion_point(field_list:Protocol.S_SPAWN_NPC.npc_info)
+  return _impl_.npc_info_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

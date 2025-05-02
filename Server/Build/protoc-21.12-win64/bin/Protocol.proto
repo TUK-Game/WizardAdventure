@@ -124,3 +124,8 @@ message S_GATE_CLOSE
 	repeated ObjectInfo cloase_objects = 1;
 }
 
+message S_SPAWN_NPC
+{
+	repeated NpcInfo npc_info = 1;
+}
+

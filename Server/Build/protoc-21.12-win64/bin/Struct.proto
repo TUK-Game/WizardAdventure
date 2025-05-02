@@ -96,3 +96,10 @@ message ProjectileInfo
 	ProjectileState state = 2;
 	ObjectInfo object_info = 3;
 }
+
+message NpcInfo
+{
+	uint32 object_id = 1;
+	ObjectInfo object_info = 2;
+	// item정보들 추가
+}

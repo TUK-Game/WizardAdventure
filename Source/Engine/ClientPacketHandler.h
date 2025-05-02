@@ -29,6 +29,7 @@ enum : uint16
 	PKT_S_DESPAWN = 1019,
 	PKT_S_GATE_OPNE = 1020,
 	PKT_S_GATE_CLOSE = 1021,
+	PKT_S_SPAWN_NPC = 1022,
 };
 
 // ===== Process Packet =====
@@ -48,6 +49,7 @@ bool Handle_S_DESPAWN_PLAYER(CPacketSessionRef& session, Protocol::S_DESPAWN_PLA
 bool Handle_S_DESPAWN(CPacketSessionRef& session, Protocol::S_DESPAWN& pkt);
 bool Handle_S_GATE_OPNE(CPacketSessionRef& session, Protocol::S_GATE_OPNE& pkt);
 bool Handle_S_GATE_CLOSE(CPacketSessionRef& session, Protocol::S_GATE_CLOSE& pkt);
+bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt);
 
 class ClientPacketHandler
 {
@@ -71,6 +73,7 @@ public:
 		g_PacketHandler[PKT_S_DESPAWN] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_DESPAWN>(Handle_S_DESPAWN, session, buffer, len); };
 		g_PacketHandler[PKT_S_GATE_OPNE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_GATE_OPNE>(Handle_S_GATE_OPNE, session, buffer, len); };
 		g_PacketHandler[PKT_S_GATE_CLOSE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_GATE_CLOSE>(Handle_S_GATE_CLOSE, session, buffer, len); };
+		g_PacketHandler[PKT_S_SPAWN_NPC] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_SPAWN_NPC>(Handle_S_SPAWN_NPC, session, buffer, len); };
 	}
 
 	static bool HandlePacket(CPacketSessionRef& session, BYTE* buffer, int32 len)

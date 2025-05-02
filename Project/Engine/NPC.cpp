@@ -20,8 +20,7 @@ CNPC::CNPC()
 	std::vector<CGameObject*> obj = data->Instantiate(ECollision_Channel::Player); // temp
 
 	CreateStateManager();
-	//AddComponent(new CMonsterAI);
-	SetName(L"Crab");
+	SetName(L"NPC");
 	AddComponent(new CTransform);
 	AddComponent(new CBoxCollider);
 	GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player")); // temp

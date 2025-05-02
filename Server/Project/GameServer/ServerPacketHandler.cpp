@@ -71,6 +71,7 @@ bool Handle_C_ENTER_GAME_SUCCESS(CPacketSessionRef& session, Protocol::C_ENTER_G
 	if (player == nullptr)
 		return false;
 
+	g_Room->DoAsync(&CRoom::HandleSpawnNPC, player);
 	return true;
 }
 

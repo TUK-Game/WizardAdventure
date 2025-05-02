@@ -9,6 +9,7 @@
 #include "LevelCollision.h"
 #include "Monster.h"
 #include "MonsterTriggerBox.h"
+#include "NPC.h"
 
 #include <iostream>
 #include <fstream>
@@ -96,6 +97,7 @@ void CJsonLoader::LoadMap(const std::wstring& fileName, CRoomRef room)
 		room->AddObject((uint32)EObject_Type::Wall, object);
 	}
 	LoadMonster(fileName, room);
+	LoadNPC(fileName, room);
 }
 
 void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
@@ -144,14 +146,42 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 		}
 
 		//room->AddObject((uint32)EObject_Type::Monster, object);
-		break;
+		//break;
 	}
 
 
 	std::cout << "Json read완료" << std::endl;
 }
 
-void CJsonLoader::Load(std::ifstream& file, CRoomRef room, ECollision_Channel channel)
+void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 {
-	
+	std::wstring path = L"..\\..\\..\\Content\\Json\\" + fileName + L"_NPC.json";
+
+	std::ifstream file{ path.c_str() };
+
+	if (!file.is_open())
+	{
+		std::cout << "파일이 없습니다." << std::endl;
+		return;
+	}
+
+	json map;
+
+	file >> map;
+
+	for (const auto& obj : map)
+	{
+		std::string name = obj["name"];
+		std::vector<float> pos = obj["position"];
+		std::vector<float> rot = obj["rotation"];
+		std::vector<float> scale = obj["scale"];
+		std::vector<float> size = obj["size"];
+
+		CNPCRef object = CObjectUtil::CreateObject<CNPC>();
+		object->GetCollider()->SetBoxInfo(Vec3(pos[0], pos[1], pos[2]), Vec3(size[0], size[1], size[2]), Vec3(rot[0], rot[1], rot[2]), Vec3(0, 100, 0));
+		object->GetCollider()->SetCollisionProfile("NPC");
+		object->ObjectInfo->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
+		room->GetLevelCollision()->AddCollider(object->GetCollider(), ECollision_Channel::NPC);
+		room->AddObject((uint32)EObject_Type::NPC, object);
+	}
 }
