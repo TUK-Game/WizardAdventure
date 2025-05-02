@@ -84,6 +84,7 @@ void CNPC::CreateStateManager()
 	m_StateManager->SetTransition(EState_Type::Talk, "Finish", EState_Type::Idle);
 
 	m_StateManager->SetTransition(EState_Type::Buy, "FinishStore", EState_Type::Idle);
+	m_StateManager->SetTransition(EState_Type::Buy, "Continue", EState_Type::Talk);
 
 }
 
@@ -106,6 +107,11 @@ void CNPC::Interation()
 {
 	m_StateManager->HandleEvent(this, "Talk");
 	ShowWidgetWindow();
+}
+
+void CNPC::SuccessInteration()
+{
+	m_StateManager->HandleEvent(this, "Buy");
 }
 
 void CNPC::ShowWidgetWindow()

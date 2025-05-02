@@ -20,11 +20,7 @@ void CNPCTalkState::Enter(CGameObject* entity)
 
 void CNPCTalkState::Update(CGameObject* entity, float deltaTime)
 {
-	m_ElapsedTime += deltaTime;
-	if (m_ElapsedTime > m_Duration)
-	{
-		entity->GetStateManager()->HandleEvent(entity, "Buy");
-	}
+
 }
 
 void CNPCTalkState::Exit(CGameObject* entity)

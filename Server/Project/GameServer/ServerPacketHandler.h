@@ -32,6 +32,7 @@ enum : uint16
 	PKT_S_SPAWN_NPC = 1022,
 	PKT_C_BUY_ITEM = 1023,
 	PKT_S_UPDATE_ITEM = 1024,
+	PKT_S_BUY_ITEM = 1025,
 };
 
 // ===== Process Packet =====
@@ -84,6 +85,7 @@ public:
 	static CSendBufferRef MakeSendBuffer(Protocol::S_GATE_CLOSE& pkt) { return MakeSendBuffer(pkt, PKT_S_GATE_CLOSE); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_SPAWN_NPC& pkt) { return MakeSendBuffer(pkt, PKT_S_SPAWN_NPC); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_UPDATE_ITEM& pkt) { return MakeSendBuffer(pkt, PKT_S_UPDATE_ITEM); }
+	static CSendBufferRef MakeSendBuffer(Protocol::S_BUY_ITEM& pkt) { return MakeSendBuffer(pkt, PKT_S_BUY_ITEM); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>

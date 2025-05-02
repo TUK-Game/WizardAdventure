@@ -139,3 +139,8 @@ message S_UPDATE_ITEM
 	uint32 npc_id = 1;
 	repeated ItemInfo item_info = 2;
 }
+
+message S_BUY_ITEM
+{
+	bool is_success = 1;
+}

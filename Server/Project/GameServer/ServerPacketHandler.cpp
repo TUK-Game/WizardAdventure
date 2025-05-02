@@ -194,8 +194,13 @@ bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJE
 
 bool Handle_C_BUY_ITEM(CPacketSessionRef& session, Protocol::C_BUY_ITEM& pkt)
 {
+	auto gameSession = static_pointer_cast<CGameSession>(session);
+	CPlayerRef player = gameSession->Player.load();
+	if (player == nullptr)
+		return false;
+
 	const auto& item = g_ItemManager->FindItem(pkt.item_id());
-	g_Room->DoAsync(&CRoom::HandleBuyItem, item);
+	g_Room->DoAsync(&CRoom::HandleBuyItem, player, item);
 	return true;
 }
 

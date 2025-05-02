@@ -3,6 +3,7 @@
 #include "CreatureCollider.h"
 #include "Room.h"
 #include "Monster.h"
+#include "Item.h"
 
 CPlayer::CPlayer()
 {
@@ -20,6 +21,19 @@ CPlayer::CPlayer()
 CPlayer::~CPlayer()
 {
 	delete PlayerInfo;
+}
+
+bool CPlayer::BuyItem(CItemRef item)
+{
+	auto iter = std::find_if(m_Items.begin(), m_Items.end(), [&](CItemRef tem) {
+		return tem->GetItemInfo().id == item->GetItemInfo().id;
+		});
+
+	if (iter != m_Items.end())
+		return false;
+
+	m_Items.emplace_back(item);
+	return true;
 }
 
 void CPlayer::Update(float deltaTime)

@@ -561,7 +561,20 @@ bool Handle_S_UPDATE_ITEM(CPacketSessionRef& session, Protocol::S_UPDATE_ITEM& p
 			widget->SetEnable(!info.is_sell());
 		}
 	}
-	std::cout << "삼\n";
 
+	return true;
+}
+
+bool Handle_S_BUY_ITEM(CPacketSessionRef& session, Protocol::S_BUY_ITEM& pkt)
+{
+	if (pkt.is_success())
+	{
+		const auto& objects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_NPC)->GetParentObjects();
+		CNPC* npc = dynamic_cast<CNPC*>(objects[0]);
+		if (npc)
+		{
+			npc->SuccessInteration();
+		}
+	}
 	return true;
 }

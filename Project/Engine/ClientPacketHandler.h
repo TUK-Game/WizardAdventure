@@ -32,6 +32,7 @@ enum : uint16
 	PKT_S_SPAWN_NPC = 1022,
 	PKT_C_BUY_ITEM = 1023,
 	PKT_S_UPDATE_ITEM = 1024,
+	PKT_S_BUY_ITEM = 1025,
 };
 
 // ===== Process Packet =====
@@ -53,6 +54,7 @@ bool Handle_S_GATE_OPNE(CPacketSessionRef& session, Protocol::S_GATE_OPNE& pkt);
 bool Handle_S_GATE_CLOSE(CPacketSessionRef& session, Protocol::S_GATE_CLOSE& pkt);
 bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt);
 bool Handle_S_UPDATE_ITEM(CPacketSessionRef& session, Protocol::S_UPDATE_ITEM& pkt);
+bool Handle_S_BUY_ITEM(CPacketSessionRef& session, Protocol::S_BUY_ITEM& pkt);
 
 class ClientPacketHandler
 {
@@ -78,6 +80,7 @@ public:
 		g_PacketHandler[PKT_S_GATE_CLOSE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_GATE_CLOSE>(Handle_S_GATE_CLOSE, session, buffer, len); };
 		g_PacketHandler[PKT_S_SPAWN_NPC] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_SPAWN_NPC>(Handle_S_SPAWN_NPC, session, buffer, len); };
 		g_PacketHandler[PKT_S_UPDATE_ITEM] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_UPDATE_ITEM>(Handle_S_UPDATE_ITEM, session, buffer, len); };
+		g_PacketHandler[PKT_S_BUY_ITEM] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_BUY_ITEM>(Handle_S_BUY_ITEM, session, buffer, len); };
 	}
 
 	static bool HandlePacket(CPacketSessionRef& session, BYTE* buffer, int32 len)

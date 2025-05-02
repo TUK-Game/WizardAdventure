@@ -616,7 +616,7 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 	return true;
 }
 
-bool CRoom::HandleBuyItem(CItemRef item)
+bool CRoom::HandleBuyItem(CPlayerRef player, CItemRef item)
 {
 	std::unordered_map<uint64, CGameObjectRef> npcs = GetLayerObjects((int)EObject_Type::NPC);
 	// npc가 한명이여서 지금은 이렇게 진행, 여러명일 경우 패킷으로 역할 구분해야
@@ -634,12 +634,33 @@ bool CRoom::HandleBuyItem(CItemRef item)
 
 		if (iter != itemList.end())
 		{
-			(*iter)->GetItemInfo().bSell = true;
+			if (player->BuyItem(item))
+			{
+				// 성공메시지 전달
+				IsBuyItem(player, true);
+				(*iter)->GetItemInfo().bSell = true;
+			}
+			else
+			{
+				// 실패메시지 전달
+				IsBuyItem(player, false);
+			}
 		}
 		UpdateItem(npc->ObjectInfo->object_id());
 	}
 
 
+	return true;
+}
+
+bool CRoom::IsBuyItem(CPlayerRef player, bool isBuy)
+{
+	Protocol::S_BUY_ITEM pkt;
+	pkt.set_is_success(isBuy);
+
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	if (auto session = player->GetSession())
+		session->Send(sendBuffer);
 	return true;
 }
 

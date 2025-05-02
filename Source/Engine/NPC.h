@@ -18,8 +18,10 @@ public:
 public:
     void CreateStateManager();
     Vec3 InteractionCameraPos(Vec3& rot);
+
 public:
     virtual void Interation();
+    virtual void SuccessInteration();
     virtual void ShowWidgetWindow();
 
 protected:
