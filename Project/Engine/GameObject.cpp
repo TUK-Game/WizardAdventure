@@ -258,12 +258,20 @@ void CGameObject::SetProtocolStateForClientMonster(Protocol::MoveState state)
 	case Protocol::MOVE_STATE_SKILL_Q:
 		m_StateManager->HandleEvent(this, "Attack");
 		break;
+		// temp ------------------------------------------------
 	case Protocol::MOVE_STATE_SKILL_E:
+		std::cout << "Damaged!!!" << std::endl;
+		m_StateManager->HandleEvent(this, "Damaged");
 		break;
 	case Protocol::MOVE_STATE_SKILL_R:
+		std::cout << "EndDamaged!!!" << std::endl;
+		m_StateManager->HandleEvent(this, "EndDamaged");
 		break;
 	case Protocol::MOVE_STATE_SKILL_MOUSE_R:
+		std::cout << "Death!!!" << std::endl;
+		m_StateManager->HandleEvent(this, "Death");
 		break;
+		// temp ------------------------------------------------
 	case Protocol::MOVE_STATE_SKILL_MOUSE_L:
 		break;
 	}

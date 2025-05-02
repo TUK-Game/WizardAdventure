@@ -243,6 +243,9 @@
     <Filter Include="06. State\PlayerState\Damage">
       <UniqueIdentifier>{963d2a4c-3e03-491a-9695-0d178e8c8c8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. State\MonsterState\Damage">
+      <UniqueIdentifier>{1f2fd04e-4d68-49c2-8847-b5c2a4d3103d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -650,6 +653,12 @@
     <ClInclude Include="PlayerDeathState.h">
       <Filter>06. State\PlayerState\Damage</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterDeathState.h">
+      <Filter>06. State\MonsterState\Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterDamagedState.h">
+      <Filter>06. State\MonsterState\Damage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1002,6 +1011,12 @@
     </ClCompile>
     <ClCompile Include="PlayerDeathState.cpp">
       <Filter>06. State\PlayerState\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterDeathState.cpp">
+      <Filter>06. State\MonsterState\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterDamagedState.cpp">
+      <Filter>06. State\MonsterState\Damage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

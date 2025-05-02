@@ -146,6 +146,7 @@ enum class EState_Type
 	Hit,
 	Death,
 	Knockback,
+	Damaged,
 	END
 };
 

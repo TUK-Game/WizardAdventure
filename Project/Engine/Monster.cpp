@@ -4,6 +4,8 @@
 #include "MonsterIdleState.h"
 #include "MonsterChaseState.h"
 #include "MonsterAttackState.h"
+#include "MonsterDamagedState.h"
+#include "MonsterDeathState.h"
 #include "Transform.h"
 #include "Engine.h"
 #include "MonsterAI.h"
@@ -93,15 +95,29 @@ void CMonster::CreateStateManager()
 	m_StateManager->AddState(new CMonsterIdleState);
 	m_StateManager->AddState(new CMonsterChaseState);
 	m_StateManager->AddState(new CMonsterAttackState);
+	m_StateManager->AddState(new CMonsterDamagedState);
+	m_StateManager->AddState(new CMonsterDeathState);
 
-
+	// idle -> others
 	m_StateManager->SetTransition(EState_Type::Idle, "Chase", EState_Type::Chase);
 	m_StateManager->SetTransition(EState_Type::Idle, "Attack", EState_Type::Attack);
+	m_StateManager->SetTransition(EState_Type::Idle, "Damaged", EState_Type::Damaged);
+	m_StateManager->SetTransition(EState_Type::Idle, "Death", EState_Type::Death);
 
+	// damaged -> others
+	m_StateManager->SetTransition(EState_Type::Damaged, "EndDamaged", EState_Type::Idle);
+	m_StateManager->SetTransition(EState_Type::Damaged, "Death", EState_Type::Death);
+
+	// chase -> others
 	m_StateManager->SetTransition(EState_Type::Chase, "Attack", EState_Type::Attack);
 	m_StateManager->SetTransition(EState_Type::Chase, "Idle", EState_Type::Idle);
+	m_StateManager->SetTransition(EState_Type::Chase, "Damaged", EState_Type::Damaged);
+	m_StateManager->SetTransition(EState_Type::Chase, "Death", EState_Type::Death);
 
+	// attack -> others
 	m_StateManager->SetTransition(EState_Type::Attack, "Idle", EState_Type::Idle);
+	m_StateManager->SetTransition(EState_Type::Attack, "Damaged", EState_Type::Damaged);
+	m_StateManager->SetTransition(EState_Type::Attack, "Death", EState_Type::Death);
 
 }
 

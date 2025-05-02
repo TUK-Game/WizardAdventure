@@ -119,6 +119,33 @@ void CMonsterAI::UpdateAI(float deltaTime)
         m_TargetAngle = angle + 180.f;
     }
 
+    // temp -----------------------------------------------------------------
+    if (m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_E)        // damaged
+    {
+        m_DamagedTime += deltaTime;
+        if (m_DamagedTime >= m_DamagedDuration)
+        {
+            m_DamagedTime = 0.f;
+            m_Owner->SetState(Protocol::MOVE_STATE_SKILL_R);        // endDamaged
+        }
+        return;
+    }
+    
+    if (m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_MOUSE_R)  // death
+    {
+        m_DeathTime += deltaTime;
+        if (m_DeathTime >= m_DeathDuration)
+        {
+            m_DeathTime = 0.f;
+            // destroy
+            m_Owner->SetState(Protocol::MOVE_STATE_NONE);
+            g_Room->RemoveObject((uint32)EObject_Type::Monster, m_Owner->MonsterInfo->object_id());
+        }
+        return;
+    }
+    // temp -----------------------------------------------------------------
+
+
     float distance = (targetPosition - myPosition).Length();
 
     if ((distance <= m_AttackRange && IsFacingTarget(20.f)) || m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_Q)

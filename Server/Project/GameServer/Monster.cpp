@@ -50,11 +50,13 @@ void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 		if (GetAblity()->currentHp > 0)
 		{
 			Damaged((dynamic_cast<CProjectile*>(dest->GetOwner()))->GetAttack());
+			m_State = Protocol::MOVE_STATE_SKILL_E;			// damage state
 			if (GetAblity()->currentHp <= 0)
 			{
-				std::cout << "Á×À½\n";
-				m_State = Protocol::MOVE_STATE_NONE;
-				g_Room->RemoveObject((uint32)EObject_Type::Monster, MonsterInfo->object_id());
+				std::cout << "Á×À½ »óÅÂ\n";
+				m_State = Protocol::MOVE_STATE_SKILL_MOUSE_R;		// death state
+				//m_State = Protocol::MOVE_STATE_NONE;
+				//g_Room->RemoveObject((uint32)EObject_Type::Monster, MonsterInfo->object_id());
 			}
 		}
 	}
