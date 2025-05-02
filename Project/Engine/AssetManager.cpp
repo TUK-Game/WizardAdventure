@@ -281,22 +281,6 @@ int CAssetManager::LoadTexture()
 		tex = new CTexture;
 		tex->Init(path / L"ShopBackGround.png");
 		AddAsset(L"ShopBackGround", tex);
-
-		tex = new CTexture;
-		tex->Init(path / L"Item\\Fairy\\머리띠.png");
-		AddAsset(L"머리띠", tex);
-
-		tex = new CTexture;
-		tex->Init(path / L"Item\\Fairy\\반지.png");
-		AddAsset(L"반지", tex);
-
-		tex = new CTexture;
-		tex->Init(path / L"Item\\Fairy\\큰반지.png");
-		AddAsset(L"큰반지", tex);
-
-		tex = new CTexture;
-		tex->Init(path / L"Item\\Fairy\\펜던트.png");
-		AddAsset(L"펜던트", tex);
 	}
 
 	// skill

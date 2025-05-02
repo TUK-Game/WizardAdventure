@@ -25,6 +25,7 @@
 #include "ItemManager.h"
 #include "Item.h"
 #include "ButtonWidget.h"
+#include "PathManager.h"
 
 #include "TestWidget.h"
 #include "MapPlayerWidget.h"
@@ -514,21 +515,32 @@ bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
 		{
 			uint32 id = info.item_id(j);
 			const auto& item = CItemManager::GetInst()->FindItem(id);
+
+			std::wstring itemName = item->GetItemInfo().name;
+			CTexture* texture = CAssetManager::GetInst()->FindAsset<CTexture>(itemName);
+			if (!texture)
+			{
+				auto path = CPathManager::GetInst()->FindPath(TEXTURE_PATH);
+				std::wstring fullPath = path / (L"Item\\" + itemName + L".png");
+				texture = new CTexture;
+				texture->Init(fullPath);
+				CAssetManager::GetInst()->AddAsset(itemName, texture);
+			}
+
 			npc->PushItem(item);
 
 			CButtonWidget* widget = dynamic_cast<CButtonWidget*>(win->FindWidget(L"Item" + std::to_wstring(j + 1)));
 			if(widget)
 			{
 				widget->SetButtonTexture(
-					CAssetManager::GetInst()->FindAsset<CTexture>(item->GetItemInfo().name),
-					CAssetManager::GetInst()->FindAsset<CTexture>(item->GetItemInfo().name),
-					CAssetManager::GetInst()->FindAsset<CTexture>(item->GetItemInfo().name)
+					CAssetManager::GetInst()->FindAsset<CTexture>(itemName),
+					CAssetManager::GetInst()->FindAsset<CTexture>(itemName),
+					CAssetManager::GetInst()->FindAsset<CTexture>(itemName)
 				);
 			}
 		}
 
 		npc->Begin();
-		std::cout << "받다\n";
 		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(npc, LAYER_NPC, false);
 	}
 
