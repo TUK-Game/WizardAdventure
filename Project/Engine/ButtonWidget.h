@@ -19,6 +19,6 @@ public:
 	void SetFunction(std::function<void()> func);
 	void SetButtonTexture(CTexture* defaultTex, CTexture* hoverTex, CTexture* pressedTex);
 public:
-	virtual CImageWidget* Clone() override { return new CImageWidget(*this); }
+	virtual CButtonWidget* Clone() override { return new CButtonWidget(*this); }
 };
 

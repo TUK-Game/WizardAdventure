@@ -683,6 +683,9 @@
     <ClInclude Include="Item.h">
       <Filter>03. GameObject\Item</Filter>
     </ClInclude>
+    <ClInclude Include="ItemButtonWidget.h">
+      <Filter>07. UI\01. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1056,6 +1059,9 @@
     </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>03. GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemButtonWidget.cpp">
+      <Filter>07. UI\01. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

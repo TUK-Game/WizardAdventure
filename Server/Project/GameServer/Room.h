@@ -40,6 +40,9 @@ public:
 	bool HandleSpawnProjectile(CProjectileRef projectile);
 	bool HandleMoveProjectile(CProjectileRef projectile);
 
+	bool HandleBuyItem(CItemRef item);
+	bool UpdateItem(uint32 npcId);
+
 	bool AddObject(uint32 layer, CGameObjectRef object);
 	bool AddMonster(CMonsterRef object);
 	bool AddProjectile(CProjectileRef object);

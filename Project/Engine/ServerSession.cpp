@@ -201,6 +201,16 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 	Send(sendBuffer);
 }
 
+void CServerSession::BuyItem(uint32 itemId)
+{
+	Protocol::C_BUY_ITEM pkt;
+
+	pkt.set_item_id(itemId);
+
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
+}
+
 void CServerSession::MoveSkill(CSkillObject* object)
 {
 	CTransform* transform = object->GetTransform();

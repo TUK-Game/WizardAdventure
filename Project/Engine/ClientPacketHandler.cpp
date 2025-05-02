@@ -24,7 +24,7 @@
 #include "NPC.h"
 #include "ItemManager.h"
 #include "Item.h"
-#include "ButtonWidget.h"
+#include "ItemButtonWidget.h"
 #include "PathManager.h"
 
 #include "TestWidget.h"
@@ -527,11 +527,10 @@ bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
 				CAssetManager::GetInst()->AddAsset(itemName, texture);
 			}
 
-			npc->PushItem(item);
-
-			CButtonWidget* widget = dynamic_cast<CButtonWidget*>(win->FindWidget(L"Item" + std::to_wstring(j + 1)));
+			CItemButtonWidget* widget = dynamic_cast<CItemButtonWidget*>(win->FindWidget(L"Item" + std::to_wstring(j + 1)));
 			if(widget)
 			{
+				widget->SetItemId(id);
 				widget->SetButtonTexture(
 					CAssetManager::GetInst()->FindAsset<CTexture>(itemName),
 					CAssetManager::GetInst()->FindAsset<CTexture>(itemName),
@@ -543,6 +542,26 @@ bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
 		npc->Begin();
 		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(npc, LAYER_NPC, false);
 	}
+
+	return true;
+}
+
+bool Handle_S_UPDATE_ITEM(CPacketSessionRef& session, Protocol::S_UPDATE_ITEM& pkt)
+{
+	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
+	const auto& win = level->FindWidgetWindow(EWIDGETWINDOW_TYPE::STORE_WINDOW);
+
+	for (int i = 0; i < pkt.item_info_size(); ++i)
+	{
+		const Protocol::ItemInfo& info = pkt.item_info(i);
+
+		CItemButtonWidget* widget = dynamic_cast<CItemButtonWidget*>(win->FindWidget(L"Item" + std::to_wstring(i + 1)));
+		if (widget && widget->GetEnable())
+		{
+			widget->SetEnable(!info.is_sell());
+		}
+	}
+	std::cout << "삼\n";
 
 	return true;
 }

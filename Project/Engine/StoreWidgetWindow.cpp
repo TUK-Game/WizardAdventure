@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "StoreWidgetWindow.h"
-#include "ButtonWidget.h"
+#include "ItemButtonWidget.h"
 #include "ImageWidget.h"
 #include "Transform.h"
 #include "RenderManager.h"
 #include "Camera.h"
 #include "AssetManager.h"
+#include "NetworkManager.h"
+#include "ServerSession.h"
 
 CStoreWidgetWindow::CStoreWidgetWindow()
 {
@@ -24,31 +26,32 @@ bool CStoreWidgetWindow::Init(CPlayer* player)
 	backgroundWidget->GetTransform()->SetRelativePosition(-0.4f, 0.f, 0.f);
 	backgroundWidget->GetTransform()->SetRelativeScale(1.2f, 2.f, 0.2f);
 
-	CButtonWidget* widget = CreateWidget<CButtonWidget>(L"Item1", player);
+	CItemButtonWidget* widget = CreateWidget<CItemButtonWidget>(L"Item1", player);
 	widget->GetTransform()->SetRelativePosition(-0.65f, 0.6f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	widget->SetFunction([]() {
+	widget->SetFunction([widget]() {
+		CNetworkManager::GetInst()->s_GameSession->BuyItem(widget->GetItemId());
 		});
 
-	widget = CreateWidget<CButtonWidget>(L"Item2", player);
+	widget = CreateWidget<CItemButtonWidget>(L"Item2", player);
 	widget->GetTransform()->SetRelativePosition(-0.25f, 0.6f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	widget->SetFunction([]() {
-		std::cout << "난 메뉴야\n";
+	widget->SetFunction([widget]() {
+		CNetworkManager::GetInst()->s_GameSession->BuyItem(widget->GetItemId());
 		});
 
-	widget = CreateWidget<CButtonWidget>(L"Item3", player);
+	widget = CreateWidget<CItemButtonWidget>(L"Item3", player);
 	widget->GetTransform()->SetRelativePosition(-0.25f, 0.1f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	widget->SetFunction([]() {
-		std::cout << "난 메뉴야\n";
+	widget->SetFunction([widget]() {
+		CNetworkManager::GetInst()->s_GameSession->BuyItem(widget->GetItemId());
 		});
 
-	widget = CreateWidget<CButtonWidget>(L"Item4", player);
+	widget = CreateWidget<CItemButtonWidget>(L"Item4", player);
 	widget->GetTransform()->SetRelativePosition(-0.65f, 0.1f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	widget->SetFunction([]() {
-		std::cout << "난 메뉴야\n";
+	widget->SetFunction([widget]() {
+		CNetworkManager::GetInst()->s_GameSession->BuyItem(widget->GetItemId());
 		});
 
 	return true;

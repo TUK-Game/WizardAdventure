@@ -103,3 +103,9 @@ message NpcInfo
 	ObjectInfo object_info = 2;
 	repeated uint32 item_id = 3;
 }
+
+message ItemInfo
+{
+	uint32 item_id = 1;
+	bool is_sell = 2;
+}

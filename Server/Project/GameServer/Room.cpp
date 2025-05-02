@@ -616,6 +616,58 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 	return true;
 }
 
+bool CRoom::HandleBuyItem(CItemRef item)
+{
+	std::unordered_map<uint64, CGameObjectRef> npcs = GetLayerObjects((int)EObject_Type::NPC);
+	// npc가 한명이여서 지금은 이렇게 진행, 여러명일 경우 패킷으로 역할 구분해야
+	for (const auto& pair : npcs)
+	{
+		CNPC* npc = (CNPC*)(pair.second.get());
+		if (!npc)
+			continue;
+
+		auto& itemList = npc->GetItemList();
+
+		auto iter = find_if(itemList.begin(), itemList.end(), [&](CItemRef tem) {
+			return tem->GetItemInfo().id == item->GetItemInfo().id;
+			});
+
+		if (iter != itemList.end())
+		{
+			(*iter)->GetItemInfo().bSell = true;
+		}
+		UpdateItem(npc->ObjectInfo->object_id());
+	}
+
+
+	return true;
+}
+
+bool CRoom::UpdateItem(uint32 npcId)
+{
+	std::unordered_map<uint64, CGameObjectRef> npcs = GetLayerObjects((int)EObject_Type::NPC);
+	Protocol::S_UPDATE_ITEM pkt;
+	pkt.set_npc_id(npcId);
+	for (const auto& pair : npcs)
+	{
+		CNPC* npc = (CNPC*)(pair.second.get());
+		if (!npc)
+			continue;
+
+		const auto& itemList = npc->GetItemList();
+		for (const auto& item : itemList)
+		{
+			Protocol::ItemInfo* info = pkt.add_item_info();
+			info->set_is_sell(item->GetItemInfo().bSell);
+			info->set_item_id(item->GetItemInfo().id);
+		}
+	}
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	Broadcast(sendBuffer, -1);
+
+	return true;
+}
+
 bool CRoom::AddPlayer(CPlayerRef player)
 {
 	if (m_Players[player->PlayerInfo->player_id()])

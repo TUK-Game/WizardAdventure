@@ -9,6 +9,7 @@ struct ItemInfo
 	std::wstring part;
 	int price;
 	std::wstring rank;
+	bool bSell = false;
 };
 
 class CItem

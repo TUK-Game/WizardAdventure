@@ -204,6 +204,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="Enum.pb.h" />
     <ClInclude Include="HpBar.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemButtonWidget.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="NPCBuyState.h" />
@@ -385,6 +386,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     </ClCompile>
     <ClCompile Include="HpBar.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemButtonWidget.cpp" />
     <ClCompile Include="ItemManager.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="NPCBuyState.cpp" />

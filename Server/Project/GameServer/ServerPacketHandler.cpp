@@ -7,6 +7,7 @@
 #include "GameSession.h"
 #include "Projectile.h"
 #include "ProjectilePool.h"
+#include "ItemManager.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -190,3 +191,11 @@ bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJE
 	g_Room->DoAsync(&CRoom::HandleMoveProjectile, object);
 	return true;
 }
+
+bool Handle_C_BUY_ITEM(CPacketSessionRef& session, Protocol::C_BUY_ITEM& pkt)
+{
+	const auto& item = g_ItemManager->FindItem(pkt.item_id());
+	g_Room->DoAsync(&CRoom::HandleBuyItem, item);
+	return true;
+}
+
