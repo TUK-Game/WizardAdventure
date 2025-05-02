@@ -12,6 +12,7 @@
 #include "MonsterArea.h"
 #include "SavePositionBox.h"
 #include "NPC.h"
+#include "Item.h"
 
 CRoomRef g_Room = std::make_shared<CRoom>();
 
@@ -375,6 +376,12 @@ bool CRoom::HandleSpawnNPC(CPlayerRef player)
 		rot->set_z(srcPosInfo.rotation().z());
 
 		destPosInfo->set_state(npc->ObjectInfo->pos_info().state());
+
+		const auto& itemList = npc->GetItemList();
+		for (const auto& item : itemList)
+		{
+			info->add_item_id(item->GetItemInfo().id);
+		}
 	}
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	if (auto session = player->GetSession())

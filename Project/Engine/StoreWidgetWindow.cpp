@@ -28,14 +28,7 @@ bool CStoreWidgetWindow::Init(CPlayer* player)
 	widget->GetTransform()->SetRelativePosition(-0.65f, 0.6f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
 	widget->SetFunction([]() {
-		std::cout << "난 메뉴야\n";
 		});
-
-	widget->SetButtonTexture(
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"Fireball"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Hover"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Pressed")
-	);
 
 	widget = CreateWidget<CButtonWidget>(L"Item2", player);
 	widget->GetTransform()->SetRelativePosition(-0.25f, 0.6f, 1.f);
@@ -44,12 +37,6 @@ bool CStoreWidgetWindow::Init(CPlayer* player)
 		std::cout << "난 메뉴야\n";
 		});
 
-	widget->SetButtonTexture(
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"Fireball"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Hover"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Pressed")
-	);
-
 	widget = CreateWidget<CButtonWidget>(L"Item3", player);
 	widget->GetTransform()->SetRelativePosition(-0.25f, 0.1f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
@@ -57,24 +44,12 @@ bool CStoreWidgetWindow::Init(CPlayer* player)
 		std::cout << "난 메뉴야\n";
 		});
 
-	widget->SetButtonTexture(
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"Fireball"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Hover"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Pressed")
-	);
-
 	widget = CreateWidget<CButtonWidget>(L"Item4", player);
 	widget->GetTransform()->SetRelativePosition(-0.65f, 0.1f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
 	widget->SetFunction([]() {
 		std::cout << "난 메뉴야\n";
 		});
-
-	widget->SetButtonTexture(
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"Fireball"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Hover"),
-		CAssetManager::GetInst()->FindAsset<CTexture>(L"MenuBTN_Pressed")
-	);
 
 	return true;
 }

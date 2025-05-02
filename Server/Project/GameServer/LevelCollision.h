@@ -12,8 +12,6 @@ public:
 	void AddCollider(class CBoxCollider* collider, ECollision_Channel channel);
 	void Collision();
 	bool CollisionWithWall(CBoxCollider* collider);
-	bool CollisionWithPlayer(CBoxCollider* collider);
-	bool CollisionWithNPC(CBoxCollider* collider);
 	bool CollisionWithOnlyChannel(ECollision_Channel channel, CBoxCollider* collider);
 	bool MeshBoxCheck(const std::vector<WorldTriangle>& triangles, const BoundingOrientedBox& box);
 	bool IntersectTriangleWithBoundingBox(const WorldTriangle& tri, const BoundingOrientedBox& box);

@@ -2500,9 +2500,32 @@ class NpcInfo final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kItemIdFieldNumber = 3,
     kObjectInfoFieldNumber = 2,
     kObjectIdFieldNumber = 1,
   };
+  // repeated uint32 item_id = 3;
+  int item_id_size() const;
+  private:
+  int _internal_item_id_size() const;
+  public:
+  void clear_item_id();
+  private:
+  uint32_t _internal_item_id(int index) const;
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >&
+      _internal_item_id() const;
+  void _internal_add_item_id(uint32_t value);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
+      _internal_mutable_item_id();
+  public:
+  uint32_t item_id(int index) const;
+  void set_item_id(int index, uint32_t value);
+  void add_item_id(uint32_t value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >&
+      item_id() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
+      mutable_item_id();
+
   // .Protocol.ObjectInfo object_info = 2;
   bool has_object_info() const;
   private:
@@ -2538,6 +2561,8 @@ class NpcInfo final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t > item_id_;
+    mutable std::atomic<int> _item_id_cached_byte_size_;
     ::Protocol::ObjectInfo* object_info_;
     uint32_t object_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -4662,6 +4687,53 @@ inline void NpcInfo::set_allocated_object_info(::Protocol::ObjectInfo* object_in
   }
   _impl_.object_info_ = object_info;
   // @@protoc_insertion_point(field_set_allocated:Protocol.NpcInfo.object_info)
+}
+
+// repeated uint32 item_id = 3;
+inline int NpcInfo::_internal_item_id_size() const {
+  return _impl_.item_id_.size();
+}
+inline int NpcInfo::item_id_size() const {
+  return _internal_item_id_size();
+}
+inline void NpcInfo::clear_item_id() {
+  _impl_.item_id_.Clear();
+}
+inline uint32_t NpcInfo::_internal_item_id(int index) const {
+  return _impl_.item_id_.Get(index);
+}
+inline uint32_t NpcInfo::item_id(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.NpcInfo.item_id)
+  return _internal_item_id(index);
+}
+inline void NpcInfo::set_item_id(int index, uint32_t value) {
+  _impl_.item_id_.Set(index, value);
+  // @@protoc_insertion_point(field_set:Protocol.NpcInfo.item_id)
+}
+inline void NpcInfo::_internal_add_item_id(uint32_t value) {
+  _impl_.item_id_.Add(value);
+}
+inline void NpcInfo::add_item_id(uint32_t value) {
+  _internal_add_item_id(value);
+  // @@protoc_insertion_point(field_add:Protocol.NpcInfo.item_id)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >&
+NpcInfo::_internal_item_id() const {
+  return _impl_.item_id_;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >&
+NpcInfo::item_id() const {
+  // @@protoc_insertion_point(field_list:Protocol.NpcInfo.item_id)
+  return _internal_item_id();
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
+NpcInfo::_internal_mutable_item_id() {
+  return &_impl_.item_id_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
+NpcInfo::mutable_item_id() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.NpcInfo.item_id)
+  return _internal_mutable_item_id();
 }
 
 #ifdef __GNUC__

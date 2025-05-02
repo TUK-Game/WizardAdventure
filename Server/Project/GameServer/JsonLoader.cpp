@@ -10,6 +10,8 @@
 #include "Monster.h"
 #include "MonsterTriggerBox.h"
 #include "NPC.h"
+#include "Item.h"
+#include "ItemManager.h"
 
 #include <iostream>
 #include <fstream>
@@ -155,6 +157,8 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 
 void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 {
+	std::default_random_engine dre;
+	std::uniform_int_distribution uid{10001, 10004};
 	std::wstring path = L"..\\..\\..\\Content\\Json\\" + fileName + L"_NPC.json";
 
 	std::ifstream file{ path.c_str() };
@@ -168,7 +172,7 @@ void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 	json map;
 
 	file >> map;
-
+	
 	for (const auto& obj : map)
 	{
 		std::string name = obj["name"];
@@ -181,7 +185,54 @@ void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 		object->GetCollider()->SetBoxInfo(Vec3(pos[0], pos[1], pos[2]), Vec3(size[0], size[1], size[2]), Vec3(rot[0], rot[1], rot[2]), Vec3(0, 100, 0));
 		object->GetCollider()->SetCollisionProfile("NPC");
 		object->ObjectInfo->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
+
+		auto& itemList = object->GetItemList();
+		while (itemList.size() < 4)
+		{
+			uint32 itemId = uid(dre);
+			auto iter = std::find_if(itemList.begin(), itemList.end(), [&](const CItemRef item) {
+				return itemId == item->GetItemInfo().id;
+				});
+
+			if (iter != itemList.end())
+				continue;
+
+			const auto& item = g_ItemManager->FindItem(itemId);
+			itemList.emplace_back(item);
+		}
+
 		room->GetLevelCollision()->AddCollider(object->GetCollider(), ECollision_Channel::NPC);
 		room->AddObject((uint32)EObject_Type::NPC, object);
+	}
+}
+
+void CJsonLoader::LoadItem(const std::wstring& fileName, std::unordered_map<uint32, CItemRef>& itemMap)
+{
+	std::wstring path = L"..\\..\\..\\Content\\Json\\" + fileName + L".json";
+
+	std::ifstream file{ path.c_str() };
+
+	if (!file.is_open())
+	{
+		std::cout << "파일이 없습니다." << std::endl;
+		return;
+	}
+
+	json map;
+
+	file >> map;
+
+	for (const auto& item : map)
+	{
+		std::wstring name = s2ws(item["Name"]);
+		std::wstring description = s2ws(item["Description"]);
+		std::wstring part = s2ws(item["Where"]);
+		std::wstring rank = s2ws(item["Rank"]);
+		uint32 id = std::stoi(s2ws(item["Id"]));
+		float amount = item["Amount"];
+		uint32 price = item["Price"];
+
+		CItemRef item = std::make_shared<CItem>(ItemInfo(id, name, description, amount, part, price, rank));
+		itemMap[id] = item;
 	}
 }

@@ -249,6 +249,12 @@
     <Filter Include="06. State\NPCState">
       <UniqueIdentifier>{4df9c637-9ef7-4910-8b7f-cb8f6a5d5738}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Manager\18. Item">
+      <UniqueIdentifier>{23befaea-9aa8-48fd-8bb5-2adec6e04f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\Item">
+      <UniqueIdentifier>{b596fad6-33f1-46cd-8f7c-503e556a248a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -671,6 +677,12 @@
     <ClInclude Include="StoreWidgetWindow.h">
       <Filter>07. UI\02. WidgetWindow</Filter>
     </ClInclude>
+    <ClInclude Include="ItemManager.h">
+      <Filter>01. Manager\18. Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>03. GameObject\Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1038,6 +1050,12 @@
     </ClCompile>
     <ClCompile Include="StoreWidgetWindow.cpp">
       <Filter>07. UI\02. WidgetWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemManager.cpp">
+      <Filter>01. Manager\18. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>03. GameObject\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

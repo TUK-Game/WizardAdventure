@@ -22,6 +22,9 @@
 #include "AssetManager.h"
 #include "EffectManager.h"
 #include "NPC.h"
+#include "ItemManager.h"
+#include "Item.h"
+#include "ButtonWidget.h"
 
 #include "TestWidget.h"
 #include "MapPlayerWidget.h"
@@ -496,7 +499,6 @@ bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
 	for (int i = 0; i < pkt.npc_info_size(); ++i)
 	{
 		const Protocol::NpcInfo& info = pkt.npc_info(i);
-
 		CNPC* npc = new CNPC;
 		const auto& posInfo = info.object_info().pos_info().position();
 		const auto& sizeInfo = info.object_info().pos_info().size();
@@ -507,6 +509,24 @@ bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
 		npc->GetTransform()->SetRelativePosition(posInfo.x(), posInfo.y(), posInfo.z());
 		npc->GetTransform()->SetRelativeRotation(rotInfo.x(), rotInfo.y(), rotInfo.z());
 		npc->SetWidgetWindowType(EWIDGETWINDOW_TYPE::STORE_WINDOW);
+
+		for (int j = 0; j < info.item_id_size(); ++j)
+		{
+			uint32 id = info.item_id(j);
+			const auto& item = CItemManager::GetInst()->FindItem(id);
+			npc->PushItem(item);
+
+			CButtonWidget* widget = dynamic_cast<CButtonWidget*>(win->FindWidget(L"Item" + std::to_wstring(j + 1)));
+			if(widget)
+			{
+				widget->SetButtonTexture(
+					CAssetManager::GetInst()->FindAsset<CTexture>(item->GetItemInfo().name),
+					CAssetManager::GetInst()->FindAsset<CTexture>(item->GetItemInfo().name),
+					CAssetManager::GetInst()->FindAsset<CTexture>(item->GetItemInfo().name)
+				);
+			}
+		}
+
 		npc->Begin();
 		std::cout << "받다\n";
 		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(npc, LAYER_NPC, false);

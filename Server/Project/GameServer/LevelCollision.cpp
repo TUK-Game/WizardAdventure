@@ -133,48 +133,6 @@ bool CLevelCollision::CollisionWithWall(CBoxCollider* collider)
 	return false;
 }
 
-bool CLevelCollision::CollisionWithPlayer(CBoxCollider* collider)
-{
-	size_t size = m_vecCollider[(int)ECollision_Channel::Player].size();
-	if (size > 1)
-	{
-		CBoxCollider* dest = collider;
-		for (size_t i = 0; i < size; ++i)
-		{
-			CBoxCollider* src = m_vecCollider[(int)ECollision_Channel::Player][i];
-
-			if (dest == src)
-				continue;
-
-			// 面倒 眉农
-			if (src->Collision(dest))
-				return true;
-		}
-	}
-	return false;
-}
-
-bool CLevelCollision::CollisionWithNPC(CBoxCollider* collider)
-{
-	size_t size = m_vecCollider[(int)ECollision_Channel::NPC].size();
-	if (size > 1)
-	{
-		CBoxCollider* dest = collider;
-		for (size_t i = 0; i < size; ++i)
-		{
-			CBoxCollider* src = m_vecCollider[(int)ECollision_Channel::NPC][i];
-
-			if (dest == src)
-				continue;
-
-			// 面倒 眉农
-			if (src->Collision(dest))
-				return true;
-		}
-	}
-	return false;
-}
-
 bool CLevelCollision::CollisionWithOnlyChannel(ECollision_Channel channel, CBoxCollider* collider)
 {
 	size_t size = m_vecCollider[(int)channel].size();

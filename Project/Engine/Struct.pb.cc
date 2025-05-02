@@ -212,7 +212,9 @@ struct ProjectileInfoDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ProjectileInfoDefaultTypeInternal _ProjectileInfo_default_instance_;
 PROTOBUF_CONSTEXPR NpcInfo::NpcInfo(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.object_info_)*/nullptr
+    /*decltype(_impl_.item_id_)*/{}
+  , /*decltype(_impl_._item_id_cached_byte_size_)*/{0}
+  , /*decltype(_impl_.object_info_)*/nullptr
   , /*decltype(_impl_.object_id_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct NpcInfoDefaultTypeInternal {
@@ -355,6 +357,7 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::NpcInfo, _impl_.object_id_),
   PROTOBUF_FIELD_OFFSET(::Protocol::NpcInfo, _impl_.object_info_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::NpcInfo, _impl_.item_id_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::Vector3)},
@@ -426,16 +429,17 @@ const char descriptor_table_protodef_Struct_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "ionExplosion\030\t \001(\010\"|\n\016ProjectileInfo\022\025\n\r"
   "Projectile_id\030\001 \001(\004\022(\n\005state\030\002 \001(\0162\031.Pro"
   "tocol.ProjectileState\022)\n\013object_info\030\003 \001"
-  "(\0132\024.Protocol.ObjectInfo\"G\n\007NpcInfo\022\021\n\to"
+  "(\0132\024.Protocol.ObjectInfo\"X\n\007NpcInfo\022\021\n\to"
   "bject_id\030\001 \001(\r\022)\n\013object_info\030\002 \001(\0132\024.Pr"
-  "otocol.ObjectInfob\006proto3"
+  "otocol.ObjectInfo\022\017\n\007item_id\030\003 \003(\rb\006prot"
+  "o3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Struct_2eproto_deps[1] = {
   &::descriptor_table_Enum_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_Struct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Struct_2eproto = {
-    false, false, 1585, descriptor_table_protodef_Struct_2eproto,
+    false, false, 1602, descriptor_table_protodef_Struct_2eproto,
     "Struct.proto",
     &descriptor_table_Struct_2eproto_once, descriptor_table_Struct_2eproto_deps, 1, 13,
     schemas, file_default_instances, TableStruct_Struct_2eproto::offsets,
@@ -3856,7 +3860,9 @@ NpcInfo::NpcInfo(const NpcInfo& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   NpcInfo* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.object_info_){nullptr}
+      decltype(_impl_.item_id_){from._impl_.item_id_}
+    , /*decltype(_impl_._item_id_cached_byte_size_)*/{0}
+    , decltype(_impl_.object_info_){nullptr}
     , decltype(_impl_.object_id_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -3873,7 +3879,9 @@ inline void NpcInfo::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.object_info_){nullptr}
+      decltype(_impl_.item_id_){arena}
+    , /*decltype(_impl_._item_id_cached_byte_size_)*/{0}
+    , decltype(_impl_.object_info_){nullptr}
     , decltype(_impl_.object_id_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -3890,6 +3898,7 @@ NpcInfo::~NpcInfo() {
 
 inline void NpcInfo::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.item_id_.~RepeatedField();
   if (this != internal_default_instance()) delete _impl_.object_info_;
 }
 
@@ -3903,6 +3912,7 @@ void NpcInfo::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _impl_.item_id_.Clear();
   if (GetArenaForAllocation() == nullptr && _impl_.object_info_ != nullptr) {
     delete _impl_.object_info_;
   }
@@ -3929,6 +3939,17 @@ const char* NpcInfo::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) 
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_object_info(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated uint32 item_id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedUInt32Parser(_internal_mutable_item_id(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 24) {
+          _internal_add_item_id(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -3975,6 +3996,15 @@ uint8_t* NpcInfo::_InternalSerialize(
         _Internal::object_info(this).GetCachedSize(), target, stream);
   }
 
+  // repeated uint32 item_id = 3;
+  {
+    int byte_size = _impl_._item_id_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteUInt32Packed(
+          3, _internal_item_id(), byte_size, target);
+    }
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3990,6 +4020,20 @@ size_t NpcInfo::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // repeated uint32 item_id = 3;
+  {
+    size_t data_size = ::_pbi::WireFormatLite::
+      UInt32Size(this->_impl_.item_id_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::_pbi::WireFormatLite::Int32Size(static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::_pbi::ToCachedSize(data_size);
+    _impl_._item_id_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
 
   // .Protocol.ObjectInfo object_info = 2;
   if (this->_internal_has_object_info()) {
@@ -4021,6 +4065,7 @@ void NpcInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOB
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  _this->_impl_.item_id_.MergeFrom(from._impl_.item_id_);
   if (from._internal_has_object_info()) {
     _this->_internal_mutable_object_info()->::Protocol::ObjectInfo::MergeFrom(
         from._internal_object_info());
@@ -4045,6 +4090,7 @@ bool NpcInfo::IsInitialized() const {
 void NpcInfo::InternalSwap(NpcInfo* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.item_id_.InternalSwap(&other->_impl_.item_id_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(NpcInfo, _impl_.object_id_)
       + sizeof(NpcInfo::_impl_.object_id_)
