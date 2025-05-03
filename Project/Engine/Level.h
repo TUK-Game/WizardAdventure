@@ -23,6 +23,7 @@ public:
 	Vec2 GetMapMinToCamera() { return m_MapMin; }
 	EWIDGETWINDOW_TYPE GetWidgetWindowType() { return m_WindowType; }
 
+
 	void SetWidgetWindowType(EWIDGETWINDOW_TYPE type) { m_WindowType = type; }
 
 	virtual void Deregister();
@@ -40,6 +41,8 @@ public:
 
 	void RemoveGameObject(CGameObject* object);
 	void RemoveGameObjectInLevel(CGameObject* object);
+
+	CGameObject* FindObjectByName(const std::wstring& name);
 
 public:
 	template <typename T>

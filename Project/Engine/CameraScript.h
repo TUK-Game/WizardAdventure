@@ -19,6 +19,7 @@ public:
 private:
     void FreeMove();
     void FixedMove();
+    void UpdateDirectionalLight();
 
 public:
 

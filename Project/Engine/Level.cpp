@@ -141,6 +141,23 @@ void CLevel::RemoveGameObjectInLevel(CGameObject* object)
 	}
 }
 
+CGameObject* CLevel::FindObjectByName(const std::wstring& name)
+{
+	for (int i = 0; i < MAX_LAYER; ++i)
+	{
+		if (!m_Layer[i]) continue;
+
+		const auto& objects = m_Layer[i]->GetObjects();
+		for (CGameObject* obj : objects)
+		{
+			if (obj && obj->GetName() == name)
+				return obj;
+		}
+	}
+
+	return nullptr;
+}
+
 void CLevel::End()
 {
 	for (int i = 0; i < MAX_LAYER; ++i)

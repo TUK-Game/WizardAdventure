@@ -131,6 +131,7 @@ void CLevel_1::Init()
 		this->AddGameObject(light, 4, false);
 	}
 
+	
 #ifdef DEBUG_SOLOPLAY
 	CPlayer* player = new CPlayer(EPlayerAttribute::Fire, true);
 	this->AddGameObject(player, 3, false);

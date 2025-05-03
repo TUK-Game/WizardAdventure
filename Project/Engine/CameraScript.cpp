@@ -11,6 +11,7 @@
 #include "MeshRenderer.h"
 #include "Logger.h"
 #include "ImageWidget.h"
+#include "Light.h"
 
 CCameraScript::CCameraScript()
 	: m_Speed(1000.f)
@@ -139,5 +140,35 @@ void CCameraScript::FixedMove()
 	{
 		Vec3 pos = m_TargetTransform->GetRelativePosition();
 		GetTransform()->SetRelativePosition(pos + m_Offset);
+
+		//UpdateDirectionalLight();
 	}
+}
+
+void CCameraScript::UpdateDirectionalLight()
+{
+	if (!m_TargetTransform)
+		return;
+
+	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
+	CGameObject* lightObj = level->FindObjectByName(L"DirectionalLight");
+
+	if (!lightObj || !lightObj->GetLight())
+		return;
+
+	Vec3 cameraPos = GetTransform()->GetRelativePosition();
+	Vec3 targetPos = m_TargetTransform->GetRelativePosition();
+
+	// 타겟 기준으로 카메라 위치의 대칭점 계산
+	Vec3 mirroredLightPos;
+	mirroredLightPos.x = targetPos.x * 2.f - cameraPos.x;
+	mirroredLightPos.z = targetPos.z * 2.f - cameraPos.z;
+	mirroredLightPos.y = lightObj->GetTransform()->GetRelativePosition().y;
+
+	lightObj->GetTransform()->SetRelativePosition(mirroredLightPos);
+
+	// 타겟을 향한 방향 벡터 계산 및 적용
+	Vec3 lightDir = targetPos - mirroredLightPos;
+	lightDir.Normalize();
+	lightObj->GetLight()->SetLightDirection(lightDir);
 }
