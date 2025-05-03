@@ -5,6 +5,7 @@
 #include "MonsterChaseState.h"
 #include "MonsterAttackState.h"
 #include "MonsterDamagedState.h"
+#include "MonsterSpawnState.h"
 #include "MonsterDeathState.h"
 #include "Transform.h"
 #include "Engine.h"
@@ -60,7 +61,7 @@ CMonster::~CMonster()
 void CMonster::Begin()
 {
 	CGameObject::Begin();
-	m_StateManager->ChangeState(this, EState_Type::Idle);
+	m_StateManager->ChangeState(this, EState_Type::Spawn);
 	m_Interpolator->SetTarget(GetTransform()->GetRelativePosition(), GetTransform()->GetRelativeRotation());
 }
 
@@ -97,6 +98,10 @@ void CMonster::CreateStateManager()
 	m_StateManager->AddState(new CMonsterAttackState);
 	m_StateManager->AddState(new CMonsterDamagedState);
 	m_StateManager->AddState(new CMonsterDeathState);
+	m_StateManager->AddState(new CMonsterSpawnState);
+
+	// spawn -> idle
+	m_StateManager->SetTransition(EState_Type::Spawn, "Idle", EState_Type::Idle);
 
 	// idle -> others
 	m_StateManager->SetTransition(EState_Type::Idle, "Chase", EState_Type::Chase);

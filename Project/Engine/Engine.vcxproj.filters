@@ -659,6 +659,9 @@
     <ClInclude Include="MonsterDamagedState.h">
       <Filter>06. State\MonsterState\Damage</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterSpawnState.h">
+      <Filter>06. State\MonsterState\Move</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1017,6 +1020,9 @@
     </ClCompile>
     <ClCompile Include="MonsterDamagedState.cpp">
       <Filter>06. State\MonsterState\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterSpawnState.cpp">
+      <Filter>06. State\MonsterState\Move</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

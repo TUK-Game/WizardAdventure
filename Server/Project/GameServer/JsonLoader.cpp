@@ -128,7 +128,7 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 		object->GetCollider()->SetBoxInfo(Vec3(pos[0], pos[1], pos[2]), Vec3(size[0], size[1], size[2]), Vec3(rot[0], rot[1], rot[2]), Vec3(0, 100, 0));
 		object->GetCollider()->SetCollisionProfile("Monster");
 		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
-		object->SetState(Protocol::MOVE_STATE_IDLE);
+		object->SetState(Protocol::MOVE_STATE_SKILL_MOUSE_L);	// spawn
 		room->AddMonster(object);
 
 		for (const auto& box : mo)

@@ -147,6 +147,7 @@ enum class EState_Type
 	Death,
 	Knockback,
 	Damaged,
+	Spawn,
 	END
 };
 
