@@ -167,7 +167,7 @@ void CCameraScript::MoveToTarget()
 	float t = std::clamp(m_ElapsedTime / m_MoveDuration, 0.f, 1.f);
 
 	Vec3 newPos = Vec3::Lerp(m_InteractionStartPos, m_InteractionZoomTarget, t);
-	newPos.y = max(newPos.y, 200.f);
+	newPos.y = max(newPos.y, 0.f);
 	GetOwner()->GetTransform()->SetRelativePosition(newPos);
 
 	Vec3 newrot = Vec3::Lerp(m_InteractionStartDir, m_InteractionZoomDir, t);

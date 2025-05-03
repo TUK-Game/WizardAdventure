@@ -16,6 +16,7 @@ public:
 	virtual void Update() override;
 
 public:
+	void SetOutHover(std::function<void()> func);
 	void SetOnHover(std::function<void()> func);
 	void SetOnClick(std::function<void()> func);
 	void SetButtonTexture(CTexture* defaultTex, CTexture* hoverTex, CTexture* pressedTex);

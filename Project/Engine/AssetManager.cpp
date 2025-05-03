@@ -281,6 +281,10 @@ int CAssetManager::LoadTexture()
 		tex = new CTexture;
 		tex->Init(path / L"ShopBackGround.png");
 		AddAsset(L"ShopBackGround", tex);
+
+		tex = new CTexture;
+		tex->Init(path / L"uiPopup.png");
+		AddAsset(L"Popup", tex);
 	}
 
 	// skill

@@ -12,7 +12,7 @@ public:
 
 public:
 	void SetBasicInfo(const std::wstring& text, const std::wstring& fontName, const std::wstring& colorName, const Vec2& pos, const Vec2& size);
-	void SetText(const std::wstring& text) {}
+	void SetText(const std::wstring& text) { m_Text = text;	 }
 
 public:
 	virtual bool Init(class CPlayer* player) override;

@@ -23,6 +23,11 @@ void CButtonWidget::Update()
 	CImageWidget::Update();
 }
 
+void CButtonWidget::SetOutHover(std::function<void()> func)
+{
+	GetUIButton()->SetOutHover(func);
+}
+
 void CButtonWidget::SetOnHover(std::function<void()> func)
 {
 	GetUIButton()->SetOnHover(func);

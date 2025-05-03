@@ -524,6 +524,7 @@ bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
 			if(widget)
 			{
 				widget->SetItemId(id);
+				widget->SetItem(item);
 				widget->SetButtonTexture(
 					CAssetManager::GetInst()->FindAsset<CTexture>(itemName),
 					CAssetManager::GetInst()->FindAsset<CTexture>(itemName),

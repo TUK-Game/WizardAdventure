@@ -103,11 +103,6 @@ bool CPlayWidgetWindow::Init(CPlayer* player)
 		SkillWidget->SetCoolTime(100.f);
 	}
 
-	// temp
-	CTextWidget* w = CreateWidget<CTextWidget>(L"test123", player);
-	w->GetTransform()->SetRelativePosition(0, -0.5, 0);
-	w->GetTransform()->SetRelativeScale(1, 1, 1);
-	w->SetBasicInfo(L"hiiii", L"궁서체", L"Black", Vec2(0, 0), Vec2(1000, 1000));
 
 	return true;
 }

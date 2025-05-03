@@ -51,6 +51,9 @@ void CUIButton::Update()
             m_bIsHovered = false;
             m_bIsPressed = false;
             UpdateTextureByState();
+
+            if (outHover)
+                outHover();
         }
     }
 
@@ -68,6 +71,11 @@ void CUIButton::SetOnClick(std::function<void()> func)
 void CUIButton::SetOnHover(std::function<void()> func)
 {
     onHover = func;
+}
+
+void CUIButton::SetOutHover(std::function<void()> func)
+{
+    outHover = func;
 }
 
 void CUIButton::SetBTNTextures(CTexture* defaultTex, CTexture* hoverTex, CTexture* pressedTex)

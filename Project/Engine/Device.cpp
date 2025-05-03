@@ -262,7 +262,7 @@ void CDevice::AddFont()
 
 void CDevice::AddColor()
 {
-	std::vector<std::wstring> vec{ L"Red", L"Green", L"Blue", L"Black"};
+	std::vector<std::wstring> vec{ L"Red", L"Green", L"Blue", L"Black", L"Yellow", L"White"};
 	for (const auto& name : vec)
 	{
 		AddColorMachine(name);
