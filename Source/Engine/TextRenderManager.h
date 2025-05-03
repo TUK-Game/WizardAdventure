@@ -30,6 +30,9 @@ class CTextRenderManager :
 	DECLARE_SINGLETON(CTextRenderManager)
 
 public:
+	Vec2 GetScreenSize() { return m_ScreenSize; }
+
+public:
 	bool Init();
 	void RenderText();
 	void RequestTextRender(const std::wstring& text, const std::wstring& fontName, const std::wstring& colorName, const Vec2& pos, const Vec2& size);

@@ -686,6 +686,9 @@
     <ClInclude Include="TextRenderManager.h">
       <Filter>01. Manager\19. TextRenderManager</Filter>
     </ClInclude>
+    <ClInclude Include="TextWidget.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1059,6 +1062,9 @@
     </ClCompile>
     <ClCompile Include="TextRenderManager.cpp">
       <Filter>01. Manager\19. TextRenderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextWidget.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

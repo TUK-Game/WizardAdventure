@@ -21,7 +21,7 @@ bool CStartLevelWidgetWindow::Init(CPlayer* player)
 	CButtonWidget* widget = CreateWidget<CButtonWidget>(L"StartBTN", player);
 	widget->GetTransform()->SetRelativePosition(0.75f, -0.25f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.25f, 0.2f, 1.f);
-	widget->SetFunction([]() {
+	widget->SetOnClick([]() {
 #ifdef AUTO_SERVER_CONNECT
 		CLevelManager::GetInst()->ChangeLevel(new CLevel_Select);
 #else
@@ -38,7 +38,7 @@ bool CStartLevelWidgetWindow::Init(CPlayer* player)
 	widget = CreateWidget<CButtonWidget>(L"MenuBTN", player);
 	widget->GetTransform()->SetRelativePosition(0.75f, -0.5f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.25f, 0.2f, 1.f);
-	widget->SetFunction([]() {
+	widget->SetOnClick([]() {
 		std::cout << "난 메뉴야\n";
 		});
 
@@ -51,7 +51,7 @@ bool CStartLevelWidgetWindow::Init(CPlayer* player)
 	widget = CreateWidget<CButtonWidget>(L"ExitBTN", player);
 	widget->GetTransform()->SetRelativePosition(0.75f, -0.75f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.25f, 0.2f, 1.f);
-	widget->SetFunction([]() {
+	widget->SetOnClick([]() {
 		PostQuitMessage(0);
 		});
 

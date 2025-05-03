@@ -42,3 +42,4 @@ void CTextRenderManager::RequestTextRender(const std::wstring& text, const std::
 
     m_Requests.emplace_back(TextRenderRequest(text, pos, size, font, brush, m_ScreenSize));
 }
+
