@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "StoreWidgetWindow.h"
 #include "ItemButtonWidget.h"
 #include "ImageWidget.h"
@@ -33,71 +33,49 @@ bool CStoreWidgetWindow::Init(CPlayer* player)
 	backgroundWidget->GetTransform()->SetRelativePosition(0.55f, -0.5f, 0.f);
 	backgroundWidget->GetTransform()->SetRelativeScale(0.8f, 0.8f, 0.2f);
 
+	backgroundWidget = CreateWidget<CImageWidget>(L"NameUI", player);
+	backgroundWidget->SetTexture(L"NameUI");
+	backgroundWidget->GetTransform()->SetRelativePosition(0.55f, -0.5f, 0.f);
+	backgroundWidget->GetTransform()->SetRelativeScale(0.8f, 0.8f, 0.2f);
+
+
 	CTextWidget* name = CreateWidget<CTextWidget>(L"Text", player);
 	name->GetTransform()->SetRelativePosition(-0.2f, -0.8f, 0.f);
-	//name->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
-	name->SetBasicInfo(L"", L"�ü�ü", L"Yellow", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+	name->SetBasicInfo(L"", L"맑은 고딕_30", L"Yellow", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
 	name->SetEnable(false);
+
+	CTextWidget* description = CreateWidget<CTextWidget>(L"Description", player);
+	description->GetTransform()->SetRelativePosition(-0.2f, -1.f, 0.f);
+	description->SetBasicInfo(L"", L"맑은 고딕_20", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+	description->SetEnable(false);
+
+	CTextWidget* price = CreateWidget<CTextWidget>(L"Gold", player);
+	price->GetTransform()->SetRelativePosition(0.f, -0.8f, 0.f);
+	price->SetBasicInfo(L"", L"맑은 고딕_30", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+	price->SetEnable(false);
+
+	m_Tooltip.SetToolTip(name, description, price);
 
 	CItemButtonWidget* widget = CreateWidget<CItemButtonWidget>(L"Item1", player);
 	widget->GetTransform()->SetRelativePosition(-0.65f, 0.6f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	widget->SetOutHover([name]() {
-		name->SetEnable(false);
-		});
-	widget->SetOnHover([widget, name]() {
-		name->SetEnable(true);
-		name->SetText(widget->GetItem()->GetItemInfo().name);
-		std::cout << ws2s(widget->GetItem()->GetItemInfo().name) << '\n';
-		});
-	widget->SetOnClick([widget]() {
-		CNetworkManager::GetInst()->s_GameSession->BuyItem(widget->GetItemId());
-		});
+	SetEvent(widget, &m_Tooltip);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Item2", player);
 	widget->GetTransform()->SetRelativePosition(-0.25f, 0.6f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	widget->SetOutHover([name]() {
-		name->SetEnable(false);
-		});
-	widget->SetOnHover([widget, name]() {
-		name->SetEnable(true);
-		name->SetText(widget->GetItem()->GetItemInfo().name);
-		std::cout << ws2s(widget->GetItem()->GetItemInfo().name) << '\n';
-		});
-	widget->SetOnClick([widget]() {
-		CNetworkManager::GetInst()->s_GameSession->BuyItem(widget->GetItemId());
-		});
+	SetEvent(widget, &m_Tooltip);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Item3", player);
 	widget->GetTransform()->SetRelativePosition(-0.25f, 0.1f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	widget->SetOutHover([name]() {
-		name->SetEnable(false);
-		});
-	widget->SetOnHover([widget, name]() {
-		name->SetEnable(true);
-		name->SetText(widget->GetItem()->GetItemInfo().name);
-		std::cout << ws2s(widget->GetItem()->GetItemInfo().name) << '\n';
-		});
-	widget->SetOnClick([widget]() {
-		CNetworkManager::GetInst()->s_GameSession->BuyItem(widget->GetItemId());
-		});
+	SetEvent(widget, &m_Tooltip);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Item4", player);
 	widget->GetTransform()->SetRelativePosition(-0.65f, 0.1f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	widget->SetOutHover([name]() {
-		name->SetEnable(false);
-		});
-	widget->SetOnHover([widget, name]() {
-		name->SetEnable(true);
-		name->SetText(widget->GetItem()->GetItemInfo().name);
-		std::cout << ws2s(widget->GetItem()->GetItemInfo().name) << '\n';
-		});
-	widget->SetOnClick([widget]() {
-		CNetworkManager::GetInst()->s_GameSession->BuyItem(widget->GetItemId());
-		});
+	SetEvent(widget, &m_Tooltip);
+
 
 	return true;
 }
@@ -119,6 +97,34 @@ void CStoreWidgetWindow::Render()
 	else if (ECamera_Type::Interaction != type)
 		return;
 
-	
+
 	CWidgetWindow::Render();
+}
+
+void CStoreWidgetWindow::SetEvent(CItemButtonWidget* widget, ItemTooltip* tooltip)
+{
+	widget->SetOutHover([=]() {
+		tooltip->Hide();
+		});
+	widget->SetOnHover([=]() {
+		tooltip->Show(widget->GetItem()->GetItemInfo());
+		});
+	widget->SetOnClick([=]() {
+		CNetworkManager::GetInst()->s_GameSession->BuyItem(widget->GetItemId());
+		tooltip->Hide();
+		});
+}
+
+void ItemTooltip::Hide()
+{
+	if (m_Name) m_Name->SetEnable(false);
+	if (m_Description) m_Description->SetEnable(false);
+	if (m_Price) m_Price->SetEnable(false);
+}
+
+void ItemTooltip::Show(const ItemInfo& info)
+{
+	if (m_Name) { m_Name->SetEnable(true); m_Name->SetText(info.name); }
+	if (m_Description) { m_Description->SetEnable(true); m_Description->SetText(info.description); }
+	if (m_Price) { m_Price->SetEnable(true); m_Price->SetText(L"(" + std::to_wstring(info.price) + L"G)"); }
 }

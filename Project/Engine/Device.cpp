@@ -253,10 +253,14 @@ void CDevice::Create2DDevice()
 
 void CDevice::AddFont()
 {
-	std::vector<std::wstring> vec{ L"Arial", L"궁서체", L"바탕" };
+	std::vector<std::wstring> vec{ L"Arial", L"궁서체", L"바탕", L"맑은 고딕"};
+	std::vector<float> vecSize{ 10, 20, 30, 40, 50 };
 	for (const auto& name : vec)
 	{
-		AddFontMachine(name);
+		for (float size : vecSize)
+		{
+			AddFontMachine(name, size);
+		}
 	}
 }
 
@@ -292,12 +296,12 @@ void CDevice::AddColorMachine(const std::wstring& name)
 	m_BrushMap[name] = d2dbrText;
 }
 
-void CDevice::AddFontMachine(const std::wstring& name)
+void CDevice::AddFontMachine(const std::wstring& name, float size)
 {
 	IDWriteTextFormat*	 dwFont = NULL;
 
-	HRESULT hResult = m_WriteFactory->CreateTextFormat(name.c_str(), NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL, 48.0f, L"en-US", &dwFont);
+	HRESULT hResult = m_WriteFactory->CreateTextFormat(name.c_str(), NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL, size, L"en-US", &dwFont);
 	hResult = dwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	hResult = dwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	m_FontMap[name] = dwFont;
+	m_FontMap[name + L"_" + std::to_wstring((int)size)] = dwFont;
 }

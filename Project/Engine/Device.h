@@ -44,7 +44,7 @@ private:
 	void AddFont();
 	void AddColor();
 	void AddColorMachine(const std::wstring& name);
-	void AddFontMachine(const std::wstring& name);
+	void AddFontMachine(const std::wstring& name, float size);
 private:
 	D3D12_VIEWPORT	m_Viewport;
 	

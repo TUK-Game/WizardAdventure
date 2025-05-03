@@ -285,6 +285,10 @@ int CAssetManager::LoadTexture()
 		tex = new CTexture;
 		tex->Init(path / L"uiPopup.png");
 		AddAsset(L"Popup", tex);
+
+		tex = new CTexture;
+		tex->Init(path / L"uiName.png");
+		AddAsset(L"NameUI", tex);
 	}
 
 	// skill

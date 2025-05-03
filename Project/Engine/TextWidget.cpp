@@ -37,4 +37,5 @@ void CTextWidget::UpdateTextPosition()
 	m_Pos = Vec2(parentPos.x, parentPos.y);
 	m_Pos.x += parentSize.x / 2.f;
 	m_Pos.y += parentSize.y / 2.f;
+
 }
