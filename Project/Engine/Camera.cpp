@@ -147,14 +147,13 @@ void CCamera::RenderUI()
 		{
 			if (EWIDGETWINDOW_TYPE::END != pCurLevel->GetWidgetWindowType())
 			{
-				if (window && window->GetWindowType() == pCurLevel->GetWidgetWindowType() && window->GetEnable()
-					&& EWIDGETWINDOW_TYPE::TEXT_WINDOW != window->GetWindowType())
+				if (window && window->GetWindowType() == pCurLevel->GetWidgetWindowType() && window->GetEnable())
 				{
 					window->Render();
 					break;
 				}
 			}
-			else if (window && EWIDGETWINDOW_TYPE::TEXT_WINDOW != window->GetWindowType() && window->GetEnable())
+			else if (window && window->GetEnable())
 			{
 				window->Render();
 			}

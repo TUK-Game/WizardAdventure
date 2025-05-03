@@ -5,6 +5,7 @@
 #include "LevelManager.h"
 #include "Level.h"
 #include "WidgetWindow.h"
+#include "TextRenderManager.h"
 
 // ************************
 // GraphicsCommandQueue
@@ -121,19 +122,16 @@ void CGraphicsCommandQueue::RenderEnd()
 
 	// 텍스트 렌더링
 	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
-	if (level && (EWIDGETWINDOW_TYPE::TEXT_WINDOW == level->GetWidgetWindowType() || EWIDGETWINDOW_TYPE::END == level->GetWidgetWindowType()))
+	if (level && EWIDGETWINDOW_TYPE::END == level->GetWidgetWindowType())
 	{
 		CDevice::GetInst()->m_d2dDeviceContext->SetTarget(CDevice::GetInst()->m_d2dRenderTargets[CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex()].Get());
 		ID3D11Resource* ppd3dResources[] = { CDevice::GetInst()->m_d3d11WrappedBackBuffers[CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex()].Get() };
 		CDevice::GetInst()->m_d3d11On12Device->AcquireWrappedResources(ppd3dResources, _countof(ppd3dResources));
 
 		CDevice::GetInst()->m_d2dDeviceContext->BeginDraw();
+			
+		CTextRenderManager::GetInst()->RenderText();
 
-		auto window = level->GetWidgetWindow(EWIDGETWINDOW_TYPE::TEXT_WINDOW);
-		if (window)
-		{
-			window->Render();
-		}
 		CDevice::GetInst()->m_d2dDeviceContext->EndDraw();
 		CDevice::GetInst()->m_d3d11On12Device->ReleaseWrappedResources(ppd3dResources, _countof(ppd3dResources));
 		CDevice::GetInst()->m_DeviceContext->Flush();

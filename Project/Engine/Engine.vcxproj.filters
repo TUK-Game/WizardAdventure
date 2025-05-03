@@ -255,6 +255,9 @@
     <Filter Include="03. GameObject\Item">
       <UniqueIdentifier>{b596fad6-33f1-46cd-8f7c-503e556a248a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Manager\19. TextRenderManager">
+      <UniqueIdentifier>{563a3ad3-6bc0-4fe4-9c5d-7f693ca8f28c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -614,14 +617,8 @@
     <ClInclude Include="GaugeWidget.h">
       <Filter>07. UI\01. Widget</Filter>
     </ClInclude>
-    <ClInclude Include="TextWidget.h">
-      <Filter>07. UI\01. Widget</Filter>
-    </ClInclude>
     <ClInclude Include="SkillWidget.h">
       <Filter>07. UI\01. Widget</Filter>
-    </ClInclude>
-    <ClInclude Include="TextWindow.h">
-      <Filter>07. UI\02. WidgetWindow</Filter>
     </ClInclude>
     <ClInclude Include="Meteors.h">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
@@ -685,6 +682,9 @@
     </ClInclude>
     <ClInclude Include="ItemButtonWidget.h">
       <Filter>07. UI\01. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="TextRenderManager.h">
+      <Filter>01. Manager\19. TextRenderManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -994,14 +994,8 @@
     <ClCompile Include="GaugeWidget.cpp">
       <Filter>07. UI\01. Widget</Filter>
     </ClCompile>
-    <ClCompile Include="TextWidget.cpp">
-      <Filter>07. UI\01. Widget</Filter>
-    </ClCompile>
     <ClCompile Include="SkillWidget.cpp">
       <Filter>07. UI\01. Widget</Filter>
-    </ClCompile>
-    <ClCompile Include="TextWindow.cpp">
-      <Filter>07. UI\02. WidgetWindow</Filter>
     </ClCompile>
     <ClCompile Include="Meteors.cpp">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
@@ -1062,6 +1056,9 @@
     </ClCompile>
     <ClCompile Include="ItemButtonWidget.cpp">
       <Filter>07. UI\01. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRenderManager.cpp">
+      <Filter>01. Manager\19. TextRenderManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

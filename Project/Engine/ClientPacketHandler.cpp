@@ -43,8 +43,6 @@ bool Handle_S_LOGIN(CPacketSessionRef& session, Protocol::S_LOGIN& pkt)
 {
 	if (pkt.success())
 	{
-		std::cout << "�α��� ����!" << std::endl;
-		// ����
 #ifndef AUTO_SERVER_CONNECT
 		Protocol::C_ENTER_GAME enterPkt;
 		
@@ -54,7 +52,6 @@ bool Handle_S_LOGIN(CPacketSessionRef& session, Protocol::S_LOGIN& pkt)
 		return true;
 	}
 
-	std::cout << "�α��� ����!" << std::endl;
 	exit(0);
 
 	return false;
@@ -102,6 +99,7 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 
 	const auto& mapwindow = level->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow", player);
 	CPlayWidgetWindow* gamewindow = level->CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"GamePlayWidget", player);
+
 	if (mapwindow)
 	{
 		mapwindow->SetOwnerPlayer(player);
@@ -191,9 +189,7 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 
 bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_EXISTING_PLAYER& pkt)
 {
-	// 2. ó�� ������ �� �̹� �ִ� �÷��̾� �ޱ�
 	int playerNum = pkt.player_size();
-	std::cout << "���� ��: " << playerNum << std::endl;
 	for (int i = 0; i < playerNum; ++i)
 	{
 		const Protocol::PlayerInfo& info = pkt.player(i);
@@ -239,7 +235,6 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 
 bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt)
 {
-	std::cout << "======================����======================" << std::endl;
 	return true;
 }
 
@@ -421,9 +416,7 @@ bool Handle_S_UPDATE_PLAYER(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYE
 
 bool Handle_S_DESPAWN_PLAYER(CPacketSessionRef& session, Protocol::S_DESPAWN_PLAYER& pkt)
 {
-	// ������ �÷��̾� ������ ����
 	UINT64 id = pkt.player_ids();
-	std::cout << id << "�� �÷��̾ ��������" << std::endl;
 
 	auto player = CLevelManager::GetInst()->GetPlayer(id);
 	if (player)

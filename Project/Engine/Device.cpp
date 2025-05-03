@@ -256,20 +256,20 @@ void CDevice::AddFont()
 	std::vector<std::wstring> vec{ L"Arial", L"궁서체", L"바탕" };
 	for (const auto& name : vec)
 	{
-		AddMachineFont(name);
+		AddFontMachine(name);
 	}
 }
 
 void CDevice::AddColor()
 {
-	std::vector<std::wstring> vec{ L"Red", L"Green", L"Blue" };
+	std::vector<std::wstring> vec{ L"Red", L"Green", L"Blue", L"Black"};
 	for (const auto& name : vec)
 	{
-		AddMachineColor(name);
+		AddColorMachine(name);
 	}
 }
 
-void CDevice::AddMachineColor(const std::wstring& name)
+void CDevice::AddColorMachine(const std::wstring& name)
 {
 	ID2D1SolidColorBrush* d2dbrText = NULL;
 
@@ -292,7 +292,7 @@ void CDevice::AddMachineColor(const std::wstring& name)
 	m_BrushMap[name] = d2dbrText;
 }
 
-void CDevice::AddMachineFont(const std::wstring& name)
+void CDevice::AddFontMachine(const std::wstring& name)
 {
 	IDWriteTextFormat*	 dwFont = NULL;
 

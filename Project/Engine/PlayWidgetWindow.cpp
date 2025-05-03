@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "PlayWidgetWindow.h"
 #include "MeshRenderer.h"
 #include "AssetManager.h"
@@ -6,6 +6,8 @@
 #include "ImageWidget.h"
 #include "SkillWidget.h"
 #include "HpBar.h"
+#include "TextRenderManager.h"
+#include "Player.h"
 
 CPlayWidgetWindow::CPlayWidgetWindow()
 {
@@ -81,27 +83,31 @@ bool CPlayWidgetWindow::Init(CPlayer* player)
 		SkillWidget->SetCoolTime(100.f);
 
 		SkillWidget = CreateWidget<CSkillWidget>(L"Skill3", player);
-		//SkillWidget->SetTexture(L"Fireball");
 		SkillWidget->GetTransform()->SetRelativePosition(-0.48f, -0.725f, 1.f);
 		SkillWidget->GetTransform()->SetRelativeScale(0.08f, 0.115f, 0.2f);
 		SkillWidget->SetOriginCoolTime(100.f);
 		SkillWidget->SetCoolTime(100.f);
 
 		SkillWidget = CreateWidget<CSkillWidget>(L"Skill4", player);
-		//SkillWidget->SetTexture(L"Fireball");
 		SkillWidget->GetTransform()->SetRelativePosition(-0.372f, -0.725f, 1.f);
 		SkillWidget->GetTransform()->SetRelativeScale(0.08f, 0.115f, 0.2f);
 		SkillWidget->SetOriginCoolTime(100.f);
 		SkillWidget->SetCoolTime(100.f);
 
 		SkillWidget = CreateWidget<CSkillWidget>(L"Skill5", player);
-		//SkillWidget->SetTexture(L"Fireball");
 		SkillWidget->GetTransform()->SetRelativePosition(-0.26f, -0.725f, 1.f);
 		SkillWidget->GetTransform()->SetRelativeScale(0.08f, 0.115f, 0.2f);
 		SkillWidget->SetOriginCoolTime(100.f);
 		SkillWidget->SetCoolTime(100.f);
 	}
+
 	return true;
+}
+
+void CPlayWidgetWindow::Update()
+{
+	CWidgetWindow::Update();
+	CTextRenderManager::GetInst()->RequestTextRender(std::format(L"{}", m_OwnerPlayer->GetStats()->gold), L"궁서체", L"Black", Vec2(0, 0), Vec2(1000, 1000));
 }
 
 void CPlayWidgetWindow::SetSkill(int idx, const std::wstring& textureName, float coolTime)

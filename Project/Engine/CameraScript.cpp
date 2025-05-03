@@ -73,7 +73,7 @@ void CCameraScript::Update()
 		else
 			widget->SetEnable(true);*/
 	}
-
+		
 	if (GetOwner()->GetCamera()->GetTarget())
 	{
 		m_TargetTransform = GetOwner()->GetCamera()->GetTarget()->GetTransform();

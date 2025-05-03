@@ -234,7 +234,6 @@ void CLevel_1::Init()
 #pragma region Widget
 
 	//CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"GamePlayWidget");
-	CreateWidgetWindow<CTextWindow>(EWIDGETWINDOW_TYPE::TEXT_WINDOW, L"TextWindow", nullptr);
 	//const auto& win = CreateWidgetWindow<CStoreWidgetWindow>(EWIDGETWINDOW_TYPE::STORE_WINDOW, L"StoreWindow", nullptr);
 	//win->SetEnable(false);
 #pragma endregion
