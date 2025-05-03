@@ -22,6 +22,7 @@ private:
     void FreeMove();
     void FixedMove();
     void UpdateDirectionalLight();
+
     void MoveToTarget();
     void RollBackCamera();
 public:

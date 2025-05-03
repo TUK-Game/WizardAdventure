@@ -156,6 +156,7 @@ CGameObject* CLevel::FindObjectByName(const std::wstring& name)
 				return obj;
 		}
 	}
+}
 
 CNPC* CLevel::DetectNPC(CGameObject* player)
 {
