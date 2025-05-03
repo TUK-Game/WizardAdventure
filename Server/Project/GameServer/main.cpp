@@ -9,6 +9,7 @@
 #include "JsonLoader.h"
 #include "CollisionManager.h"
 #include "ProjectilePool.h"
+#include "ItemManager.h"
 
 enum
 {
@@ -39,6 +40,7 @@ int main()
 	ipAddress = L"127.0.0.1";
 
 	ServerPacketHandler::Init();
+	g_ItemManager->Init();
 	g_CollisionManager->Init();
 	g_Room->Init();
 	CJsonLoader::LoadMap(L"Level_1", g_Room);

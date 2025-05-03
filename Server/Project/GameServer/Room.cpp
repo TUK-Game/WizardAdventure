@@ -11,6 +11,8 @@
 #include "MonsterTriggerBox.h"
 #include "MonsterArea.h"
 #include "SavePositionBox.h"
+#include "NPC.h"
+#include "Item.h"
 
 CRoomRef g_Room = std::make_shared<CRoom>();
 
@@ -342,6 +344,52 @@ bool CRoom::HandleEnterPlayer(CPlayerRef player)
 	return EnterRoom(player, true);
 }
 
+bool CRoom::HandleSpawnNPC(CPlayerRef player)
+{
+	std::unordered_map<uint64, CGameObjectRef> npcs = GetLayerObjects((int)EObject_Type::NPC);
+
+	Protocol::S_SPAWN_NPC pkt;
+
+	for (const auto& pair : npcs)
+	{
+		CNPC* npc = (CNPC*)(pair.second.get());
+		std::cout << "보내다\n";
+		if (!npc)
+			continue;
+
+		Protocol::NpcInfo* info = pkt.add_npc_info();
+
+		info->set_object_id(npc->ObjectInfo->object_id());
+
+		const Protocol::PosInfo& srcPosInfo = npc->ObjectInfo->pos_info();
+
+		Protocol::PosInfo* destPosInfo = info->mutable_object_info()->mutable_pos_info();
+
+		Protocol::Vector3* pos = destPosInfo->mutable_position();
+		pos->set_x(srcPosInfo.position().x());
+		pos->set_y(srcPosInfo.position().y());
+		pos->set_z(srcPosInfo.position().z());
+
+		Protocol::Vector3* rot = destPosInfo->mutable_rotation();
+		rot->set_x(srcPosInfo.rotation().x());
+		rot->set_y(srcPosInfo.rotation().y());
+		rot->set_z(srcPosInfo.rotation().z());
+
+		destPosInfo->set_state(npc->ObjectInfo->pos_info().state());
+
+		const auto& itemList = npc->GetItemList();
+		for (const auto& item : itemList)
+		{
+			info->add_item_id(item->GetItemInfo().id);
+		}
+	}
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	if (auto session = player->GetSession())
+		session->Send(sendBuffer);
+
+	return true;
+}
+
 bool CRoom::HandlePlayerInit(CPlayerRef player)
 {
 	
@@ -383,7 +431,8 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 		const auto& box = player->GetCollider();
 		box->Update();
 
-		if (m_LevelCollision->CollisionWithWall(box) || m_LevelCollision->CollisionWithPlayer(box))
+		if (m_LevelCollision->CollisionWithWall(box) || m_LevelCollision->CollisionWithOnlyChannel(ECollision_Channel::Player, box)
+			|| m_LevelCollision->CollisionWithOnlyChannel(ECollision_Channel::NPC, box))
 		{
 			nowPos.x -= moveAmount.x;
 			nowPos.z -= moveAmount.z;
@@ -563,6 +612,79 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 
 	//if (auto session = player->GetSession())
 	//	session->Send(sendBuffer);
+
+	return true;
+}
+
+bool CRoom::HandleBuyItem(CPlayerRef player, CItemRef item)
+{
+	std::unordered_map<uint64, CGameObjectRef> npcs = GetLayerObjects((int)EObject_Type::NPC);
+	// npc가 한명이여서 지금은 이렇게 진행, 여러명일 경우 패킷으로 역할 구분해야
+	for (const auto& pair : npcs)
+	{
+		CNPC* npc = (CNPC*)(pair.second.get());
+		if (!npc)
+			continue;
+
+		auto& itemList = npc->GetItemList();
+
+		auto iter = find_if(itemList.begin(), itemList.end(), [&](CItemRef tem) {
+			return tem->GetItemInfo().id == item->GetItemInfo().id;
+			});
+
+		if (iter != itemList.end())
+		{
+			if (player->BuyItem(item))
+			{
+				// 성공메시지 전달
+				IsBuyItem(player, true);
+				(*iter)->GetItemInfo().bSell = true;
+			}
+			else
+			{
+				// 실패메시지 전달
+				IsBuyItem(player, false);
+			}
+		}
+		UpdateItem(npc->ObjectInfo->object_id());
+	}
+
+
+	return true;
+}
+
+bool CRoom::IsBuyItem(CPlayerRef player, bool isBuy)
+{
+	Protocol::S_BUY_ITEM pkt;
+	pkt.set_is_success(isBuy);
+
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	if (auto session = player->GetSession())
+		session->Send(sendBuffer);
+	return true;
+}
+
+bool CRoom::UpdateItem(uint32 npcId)
+{
+	std::unordered_map<uint64, CGameObjectRef> npcs = GetLayerObjects((int)EObject_Type::NPC);
+	Protocol::S_UPDATE_ITEM pkt;
+	pkt.set_npc_id(npcId);
+	for (const auto& pair : npcs)
+	{
+		CNPC* npc = (CNPC*)(pair.second.get());
+		if (!npc)
+			continue;
+
+		const auto& itemList = npc->GetItemList();
+		for (const auto& item : itemList)
+		{
+			Protocol::ItemInfo* info = pkt.add_item_info();
+			info->set_is_sell(item->GetItemInfo().bSell);
+			info->set_item_id(item->GetItemInfo().id);
+		}
+	}
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	Broadcast(sendBuffer, -1);
 
 	return true;
 }

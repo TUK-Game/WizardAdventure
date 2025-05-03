@@ -25,7 +25,7 @@ void CParticleSystemManager::Init(CLevel* level)
     obj->AddComponent(new CTransform());
     obj->SetName(L"SmokeParticle"); 
 
-    level->AddGameObject(obj, 13, false);
+    level->AddGameObject(obj, LAYER_EFFECT, false);
 
     m_ParticleObjects.insert({ L"Smoke", obj});
 
@@ -37,7 +37,7 @@ void CParticleSystemManager::Init(CLevel* level)
     obj->AddComponent(new CTransform());
     obj->SetName(L"SparkParticle");
 
-    level->AddGameObject(obj, 13, false);
+    level->AddGameObject(obj, LAYER_EFFECT, false);
 
     m_ParticleObjects.insert({L"Spark", obj });
 

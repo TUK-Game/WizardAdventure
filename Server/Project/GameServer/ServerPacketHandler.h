@@ -29,6 +29,10 @@ enum : uint16
 	PKT_S_DESPAWN = 1019,
 	PKT_S_GATE_OPNE = 1020,
 	PKT_S_GATE_CLOSE = 1021,
+	PKT_S_SPAWN_NPC = 1022,
+	PKT_C_BUY_ITEM = 1023,
+	PKT_S_UPDATE_ITEM = 1024,
+	PKT_S_BUY_ITEM = 1025,
 };
 
 // ===== Process Packet =====
@@ -40,6 +44,7 @@ bool Handle_C_LEAVE_GAME(CPacketSessionRef& session, Protocol::C_LEAVE_GAME& pkt
 bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PROJECTILE& pkt);
 bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt);
 bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJECTILE& pkt);
+bool Handle_C_BUY_ITEM(CPacketSessionRef& session, Protocol::C_BUY_ITEM& pkt);
 
 class ServerPacketHandler
 {
@@ -55,6 +60,7 @@ public:
 		g_PacketHandler[PKT_C_SPAWN_PROJECTILE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_SPAWN_PROJECTILE>(Handle_C_SPAWN_PROJECTILE, session, buffer, len); };
 		g_PacketHandler[PKT_C_MOVE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_MOVE>(Handle_C_MOVE, session, buffer, len); };
 		g_PacketHandler[PKT_C_MOVE_PROJECTILE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_MOVE_PROJECTILE>(Handle_C_MOVE_PROJECTILE, session, buffer, len); };
+		g_PacketHandler[PKT_C_BUY_ITEM] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_BUY_ITEM>(Handle_C_BUY_ITEM, session, buffer, len); };
 	}
 
 	static bool HandlePacket(CPacketSessionRef& session, BYTE* buffer, int32 len)
@@ -77,6 +83,9 @@ public:
 	static CSendBufferRef MakeSendBuffer(Protocol::S_DESPAWN& pkt) { return MakeSendBuffer(pkt, PKT_S_DESPAWN); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_GATE_OPNE& pkt) { return MakeSendBuffer(pkt, PKT_S_GATE_OPNE); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_GATE_CLOSE& pkt) { return MakeSendBuffer(pkt, PKT_S_GATE_CLOSE); }
+	static CSendBufferRef MakeSendBuffer(Protocol::S_SPAWN_NPC& pkt) { return MakeSendBuffer(pkt, PKT_S_SPAWN_NPC); }
+	static CSendBufferRef MakeSendBuffer(Protocol::S_UPDATE_ITEM& pkt) { return MakeSendBuffer(pkt, PKT_S_UPDATE_ITEM); }
+	static CSendBufferRef MakeSendBuffer(Protocol::S_BUY_ITEM& pkt) { return MakeSendBuffer(pkt, PKT_S_BUY_ITEM); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>

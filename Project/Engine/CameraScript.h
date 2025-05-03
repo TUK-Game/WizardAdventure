@@ -11,7 +11,9 @@ public:
 
 public:
     void SetTransform(class CTransform* transform) { m_TargetTransform = transform; }
-
+    void SetInteractionZoomTarget(const Vec3& pos) { m_InteractionZoomTarget = pos; }
+    void SetInteractionStartPos(const Vec3& pos) { m_InteractionStartPos = pos; }
+    void SetInteractionDir(const Vec3& start, const Vec3& target) { m_InteractionStartDir = start; m_InteractionZoomDir = target; }
 public:
     virtual void Begin() override;
     virtual void Update() override;
@@ -21,6 +23,8 @@ private:
     void FixedMove();
     void UpdateDirectionalLight();
 
+    void MoveToTarget();
+    void RollBackCamera();
 public:
 
     virtual CCameraScript* Clone() override { return new CCameraScript(*this); }
@@ -30,5 +34,11 @@ private:
             
     class CTransform*     m_TargetTransform;
     Vec3                  m_Offset;
+    Vec3                  m_InteractionZoomTarget;
+    Vec3                  m_InteractionStartPos;
+    Vec3                  m_InteractionStartDir;
+    Vec3                  m_InteractionZoomDir;
+    float                 m_MoveDuration{ 1.f };
+    float                 m_ElapsedTime{};
 };
 

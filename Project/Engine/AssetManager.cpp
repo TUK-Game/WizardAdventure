@@ -276,6 +276,21 @@ int CAssetManager::LoadTexture()
 	tex->Init(path / L"Blue.jpg");
 	AddAsset(L"Blue", tex);
 
+	// Item
+	{
+		tex = new CTexture;
+		tex->Init(path / L"ShopBackGround.png");
+		AddAsset(L"ShopBackGround", tex);
+
+		tex = new CTexture;
+		tex->Init(path / L"uiPopup.png");
+		AddAsset(L"Popup", tex);
+
+		tex = new CTexture;
+		tex->Init(path / L"uiName.png");
+		AddAsset(L"NameUI", tex);
+	}
+
 	// skill
 	{
 		tex = new CTexture;
@@ -491,6 +506,9 @@ int CAssetManager::LoadMeshData()
 
 	data= CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Crab.jhd", L"Crab");
 	AddAsset(L"Crab", data);
+
+	data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/StoreNPC.jhd");
+	AddAsset(L"StoreNPC", data);
 
 	data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/SwordLava.jhd", L"SwordLava");
 	AddAsset(L"SwordLava", data);

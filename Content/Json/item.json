@@ -1,0 +1,38 @@
+﻿[
+  {
+    "Id": "10001",
+    "Name": "머리띠",
+    "Description": "머리띠임",
+    "Amount": 10.0,
+    "Where": "ATK",
+    "Price": 100.0,
+    "Rank": "N"
+  },
+  {
+    "Id": "10002",
+    "Name": "반지",
+    "Description": "반지임",
+    "Amount": 20.0,
+    "Where": "ATK",
+    "Price": 200.0,
+    "Rank": "N"
+  },
+  {
+    "Id": "10003",
+    "Name": "큰반지",
+    "Description": "큰반지임",
+    "Amount": 30.0,
+    "Where": "HP",
+    "Price": 300.0,
+    "Rank": "N"
+  },
+  {
+    "Id": "10004",
+    "Name": "펜던트",
+    "Description": "펜던트임",
+    "Amount": 40.0,
+    "Where": "ATK",
+    "Price": 400.0,
+    "Rank": "R"
+  }
+]

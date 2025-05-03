@@ -13,6 +13,7 @@
 
 // Utils
 std::wstring s2ws(const std::string& s);
+std::wstring s2wsForJson(const std::string& str);
 std::string ws2s(const std::wstring& s);
 Matrix GetMatrix(const FbxAMatrix& matrix);
 std::string Trim(const std::string& str);

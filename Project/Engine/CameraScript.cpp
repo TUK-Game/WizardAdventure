@@ -31,7 +31,7 @@ void CCameraScript::Begin()
 
 void CCameraScript::Update()
 {
-	// Ä«¸Þ¶ó ÄÄÆ÷³ÍÆ®°¡ ¾ø´Ù¸é Á¾·á
+	// Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½
 	if (!GetCamera())
 		return;
 
@@ -50,7 +50,7 @@ void CCameraScript::Update()
 	if (KEY_PUSH(EKey::Num2))
 	{
 		GetOwner()->GetCamera()->SetCameraType(ECamera_Type::Fixed);
-		GetOwner()->GetCamera()->SetFOV(75.f);
+		GetOwner()->GetCamera()->SetFOV(60.f);
 		GetOwner()->GetCamera()->SetFar(5000.f);
 		GetTransform()->SetRelativeRotation(49.f, -34.f, 0.f);
 	}
@@ -74,16 +74,34 @@ void CCameraScript::Update()
 		else
 			widget->SetEnable(true);*/
 	}
-
+		
 	if (GetOwner()->GetCamera()->GetTarget())
 	{
 		m_TargetTransform = GetOwner()->GetCamera()->GetTarget()->GetTransform();
 	}
 
-	if (GetOwner()->GetCamera()->GetCameraType() == ECamera_Type::Fixed)
+	ECamera_Type type = GetOwner()->GetCamera()->GetCameraType();
+
+	if (ECamera_Type::Fixed == type)
+	{
 		FixedMove();
-	else
+	}
+	else if(ECamera_Type::Free == type)
+	{
 		FreeMove();
+	}
+	else if(ECamera_Type::Interaction_Start == type)
+	{
+		MoveToTarget();
+	}
+	else if (ECamera_Type::Interaction == type)
+	{
+	}
+	else if (ECamera_Type::Interaction_End == type)
+	{
+		RollBackCamera();
+	}
+
 }
 
 void CCameraScript::FreeMove()
@@ -159,7 +177,6 @@ void CCameraScript::UpdateDirectionalLight()
 	Vec3 cameraPos = GetTransform()->GetRelativePosition();
 	Vec3 targetPos = m_TargetTransform->GetRelativePosition();
 
-	// Å¸°Ù ±âÁØÀ¸·Î Ä«¸Þ¶ó À§Ä¡ÀÇ ´ëÄªÁ¡ °è»ê
 	Vec3 mirroredLightPos;
 	mirroredLightPos.x = targetPos.x * 2.f - cameraPos.x;
 	mirroredLightPos.z = targetPos.z * 2.f - cameraPos.z;
@@ -167,8 +184,49 @@ void CCameraScript::UpdateDirectionalLight()
 
 	lightObj->GetTransform()->SetRelativePosition(mirroredLightPos);
 
-	// Å¸°ÙÀ» ÇâÇÑ ¹æÇâ º¤ÅÍ °è»ê ¹× Àû¿ë
 	Vec3 lightDir = targetPos - mirroredLightPos;
 	lightDir.Normalize();
 	lightObj->GetLight()->SetLightDirection(lightDir);
+}
+
+void CCameraScript::MoveToTarget()
+{
+	m_ElapsedTime += DELTA_TIME;
+
+	float t = std::clamp(m_ElapsedTime / m_MoveDuration, 0.f, 1.f);
+
+	Vec3 newPos = Vec3::Lerp(m_InteractionStartPos, m_InteractionZoomTarget, t);
+	newPos.y = max(newPos.y, 0.f);
+	GetOwner()->GetTransform()->SetRelativePosition(newPos);
+
+	Vec3 newrot = Vec3::Lerp(m_InteractionStartDir, m_InteractionZoomDir, t);
+	GetOwner()->GetTransform()->SetRelativeRotation(newrot);
+
+	if (t >= 1.0f)
+	{
+		GetOwner()->GetCamera()->SetCameraType(ECamera_Type::Interaction);
+		GetOwner()->GetCamera()->CheckLayer(LAYER_PLAYER);
+		m_ElapsedTime = 0.f;
+	}
+}
+
+void CCameraScript::RollBackCamera()
+{
+	m_ElapsedTime += DELTA_TIME;
+
+	float t = std::clamp(m_ElapsedTime / m_MoveDuration, 0.f, 1.f);
+
+	Vec3 newPos = Vec3::Lerp(m_InteractionZoomTarget, m_InteractionStartPos, t);
+	GetOwner()->GetTransform()->SetRelativePosition(newPos);
+
+	Vec3 newrot = Vec3::Lerp(m_InteractionZoomDir, m_InteractionStartDir, t);
+	GetOwner()->GetTransform()->SetRelativeRotation(newrot);
+
+	if (t >= 1.0f)
+	{
+		GetOwner()->GetTransform()->SetRelativePosition(m_InteractionStartPos);
+		GetOwner()->GetTransform()->SetRelativeRotation(m_InteractionStartDir);
+		GetOwner()->GetCamera()->SetCameraType(ECamera_Type::Fixed);
+		m_ElapsedTime = 0.f;
+	}
 }

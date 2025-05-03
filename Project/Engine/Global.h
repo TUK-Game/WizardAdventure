@@ -248,7 +248,22 @@ struct MonsterStat
 	float visionRange;
 };
 
+enum LAYER_OBJECT
+{
+	LAYER_CAMERA = 0,
+	LAYER_BACKGROUND,
 
+	LAYER_PLAYER = 3,
+	LAYER_UI,
+	LAYER_LIGHT,
+
+	LAYER_MAP = 10,
+	LAYER_MONSTER,
+	LAYER_PROJECTILE,
+	LAYER_EFFECT,
+	LAYER_GATE,
+	LAYER_NPC,
+};
 
 #include <shlobj.h>
 #include <filesystem>

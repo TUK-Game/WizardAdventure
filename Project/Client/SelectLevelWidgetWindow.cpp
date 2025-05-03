@@ -22,7 +22,7 @@ bool CSelectLevelWidgetWindow::Init(CPlayer* player)
 	CButtonWidget* widget = CreateWidget<CButtonWidget>(L"FireMage", player);
 	widget->GetTransform()->SetRelativePosition(-0.658, -0.2f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.55f, 1.3f, 1.f);
-	widget->SetFunction([]() {
+	widget->SetOnClick([]() {
 		CLevelManager::GetInst()->ChangeLevel(new CLevel_1(EPlayerAttribute::Fire));
 		});
 
@@ -35,7 +35,7 @@ bool CSelectLevelWidgetWindow::Init(CPlayer* player)
 	widget = CreateWidget<CButtonWidget>(L"IceMage", player);
 	widget->GetTransform()->SetRelativePosition(-0.058, -0.2f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.55f, 1.3f, 1.f);
-	widget->SetFunction([]() {
+	widget->SetOnClick([]() {
 		CLevelManager::GetInst()->ChangeLevel(new CLevel_1(EPlayerAttribute::Ice));
 		});
 
@@ -48,7 +48,7 @@ bool CSelectLevelWidgetWindow::Init(CPlayer* player)
 	widget = CreateWidget<CButtonWidget>(L"LightningMage", player);
 	widget->GetTransform()->SetRelativePosition(0.542, -0.2f, 0.f);
 	widget->GetTransform()->SetRelativeScale(0.55f, 1.3f, 1.f);
-	widget->SetFunction([]() {
+	widget->SetOnClick([]() {
 		CLevelManager::GetInst()->ChangeLevel(new CLevel_1(EPlayerAttribute::Electric));
 		});
 

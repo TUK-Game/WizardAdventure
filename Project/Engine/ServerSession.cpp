@@ -190,12 +190,22 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 
 	pkt.mutable_info()->set_damage(object->GetDamage());
 	
-	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(12)->GetProjectileMap();
+	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_PROJECTILE)->GetProjectileMap();
 	//if (map.find(object->m_ProjectileId) != map.end())
 	//{
 	//	map.erase(object->m_ProjectileId);
 	//}
 	map[object->m_ProjectileId] = object;
+
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
+}
+
+void CServerSession::BuyItem(uint32 itemId)
+{
+	Protocol::C_BUY_ITEM pkt;
+
+	pkt.set_item_id(itemId);
 
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(sendBuffer);

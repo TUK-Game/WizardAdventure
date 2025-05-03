@@ -23,6 +23,16 @@ void CPlayerScript::Update()
         return;
     }
 
+    if (m_bShopping)
+    {
+        if (KEY_DOWN(EKey::G))
+        {
+            m_bShopping = false;
+            player->FinishShopping();
+        }
+        return;
+    }
+
     Vec3 moveDir(0, 0, 0);
     if (KEY_PUSH(EKey::W))    moveDir.z += 1;
     if (KEY_PUSH(EKey::S))  moveDir.z -= 1;
@@ -58,6 +68,12 @@ void CPlayerScript::Update()
     {
         stateManager->HandleEvent(player, "Attack_R");
     }
+    if (KEY_DOWN(EKey::F))
+    {
+        player->DetectNPC();
+        m_bShopping = true;
+    }
+
 
     // temp ----------------------------------------------------------------------------
     if (KEY_DOWN(EKey::Z))

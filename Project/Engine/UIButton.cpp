@@ -26,8 +26,9 @@ void CUIButton::Update()
         {
             m_bIsHovered = true;
             UpdateTextureByState(); // 상태 변경 시 텍스처 갱신
+            if (onHover)
+                onHover();
         }
-
         if (isPressed && !m_bIsPressed)
         {
             m_bIsPressed = true;
@@ -50,6 +51,9 @@ void CUIButton::Update()
             m_bIsHovered = false;
             m_bIsPressed = false;
             UpdateTextureByState();
+
+            if (outHover)
+                outHover();
         }
     }
 
@@ -62,6 +66,16 @@ void CUIButton::FinalUpdate()
 void CUIButton::SetOnClick(std::function<void()> func)
 {
     onClick = func;
+}
+
+void CUIButton::SetOnHover(std::function<void()> func)
+{
+    onHover = func;
+}
+
+void CUIButton::SetOutHover(std::function<void()> func)
+{
+    outHover = func;
 }
 
 void CUIButton::SetBTNTextures(CTexture* defaultTex, CTexture* hoverTex, CTexture* pressedTex)

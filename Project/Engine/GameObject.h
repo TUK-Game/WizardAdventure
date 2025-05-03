@@ -27,6 +27,7 @@ struct Stats
     int currentHp = 100;
     int attack = 10;
     float moveSpeed = 300.f;
+    int gold = 0.f;
 
     void TakeDamage(int damage) {
         currentHp = max(currentHp - damage, 0);
@@ -171,6 +172,7 @@ public:
     CUI* GetUI()                                        { return (CUI*)GetComponent(EComponent_Type::UI); }
     CUIButton* GetUIButton()                            { return (CUIButton*)GetComponent(EComponent_Type::UIButton); }
     CMonsterAI* GetMonsterAI()                          { return (CMonsterAI*)GetComponent(EComponent_Type::MonsterAI); }
+    CScript* GetScript(int idx = 0)                     { return m_vecScript[idx]; }
     CStateManager* GetStateManager()                    { return m_StateManager; }
     bool GetInstancing()                                { return m_bInstancing; }
     bool GetCheckFrustum() { return m_CheckFrustum; }

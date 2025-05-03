@@ -12,6 +12,8 @@
 #include "CollisionManager.h"
 #include "InstancingManager.h"
 #include "NetworkManager.h"
+#include "ItemManager.h"
+#include "TextRenderManager.h"
 
 CEngine::CEngine()
     : m_NetworkType(ENetwork_Type::Offline)
@@ -54,16 +56,19 @@ int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wc
         return E_FAIL;
     CDevice::GetInst()->GetCmdQueue()->RenderEnd();
 
+    if (FAILED(CItemManager::GetInst()->Init()))
+        return E_FAIL;
+
     if (FAILED(CInputManager::GetInst()->Init()))
         return E_FAIL;
 
     if (FAILED(CCollisionManager::GetInst()->Init()))
         return E_FAIL;
 
-
-
-
     if (FAILED(CLevelManager::GetInst()->Init()))
+        return E_FAIL;
+
+    if (FAILED(CTextRenderManager::GetInst()->Init()))
         return E_FAIL;
 
 

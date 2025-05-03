@@ -147,14 +147,13 @@ void CCamera::RenderUI()
 		{
 			if (EWIDGETWINDOW_TYPE::END != pCurLevel->GetWidgetWindowType())
 			{
-				if (window && window->GetWindowType() == pCurLevel->GetWidgetWindowType() && window->GetEnable()
-					&& EWIDGETWINDOW_TYPE::TEXT_WINDOW != window->GetWindowType())
+				if (window && window->GetWindowType() == pCurLevel->GetWidgetWindowType() && window->GetEnable())
 				{
 					window->Render();
 					break;
 				}
 			}
-			else if (window && EWIDGETWINDOW_TYPE::TEXT_WINDOW != window->GetWindowType() && window->GetEnable())
+			else if (window && window->GetEnable())
 			{
 				window->Render();
 			}
@@ -181,7 +180,7 @@ void CCamera::SortObject()
 			continue;
 
 		std::vector<CGameObject*> vecObjects;
-		if (i == 10)
+		if (i == LAYER_MAP)
 		{
 			std::shared_ptr<CSubLevel> level = pCurLevel->m_SubLevel;
 			if (level)
@@ -249,11 +248,11 @@ void CCamera::SortShadowObject()
 		if (!(m_LayerCheck & (1 << i)))
 			continue;
 
-		if (i == 4)
+		if (i == LAYER_UI)
 			continue;
 
 		std::vector<CGameObject*> vecObjects;
-		/*if (i == 10)
+		/*if (i == LAYER_MAP)
 		{
 			std::shared_ptr<CSubLevel> level = pCurLevel->m_SubLevel;
 			if (level)

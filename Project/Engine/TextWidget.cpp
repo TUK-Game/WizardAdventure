@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "TextWidget.h"
-#include "AssetManager.h"
-#include "Device.h"
-#include "Engine.h"
-
+#include "TextRenderManager.h"
+#include "Transform.h"
 CTextWidget::CTextWidget()
 {
 }
@@ -12,44 +10,32 @@ CTextWidget::~CTextWidget()
 {
 }
 
-void CTextWidget::SetSize(Vec2 size)
+void CTextWidget::SetBasicInfo(const std::wstring& text, const std::wstring& fontName, const std::wstring& colorName, const Vec2& pos, const Vec2& size)
 {
-	m_Size = size;
-	ArrangeRect();
-}
-
-void CTextWidget::SetPosition(Vec2 pos)
-{
-	m_Position.x = (pos.x + 1.f) * 0.5f * m_ScreenSize.x;
-	m_Position.y = (1.f - pos.y) * 0.5f * m_ScreenSize.y;
-
-	ArrangeRect();
-}
-
-void CTextWidget::ArrangeRect()
-{
-	Vec2 pos = m_Position;
-	m_Rect.left = m_Position.x - (m_Size.x / 2);
-	m_Rect.right = m_Position.x + (m_Size.x / 2);
-	m_Rect.bottom = m_Position.y - (m_Size.y / 2);
-	m_Rect.top = m_Position.y + (m_Size.y / 2);
+	m_Text = text; m_FontName = fontName; m_ColorName = colorName; m_Pos = pos; m_Size = size;
 }
 
 bool CTextWidget::Init(CPlayer* player)
 {
 	CWidget::Init(player);
-	m_d2dDeviceContext = CDevice::GetInst()->m_d2dDeviceContext.Get();
-	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
-
-	m_ScreenSize.x = CEngine::GetInst()->GetWindowInfo().Width;
-	m_ScreenSize.y = CEngine::GetInst()->GetWindowInfo().Height;
-
+	AddComponent(new CTransform);
 	return true;
 }
 
-void CTextWidget::Render()
+void CTextWidget::Update()
 {
-	m_d2dDeviceContext->DrawTextW(m_Text.c_str(), (UINT32)m_Text.size(), m_Font, &m_Rect, m_2dbrText);
+	CWidget::Update();
+	UpdateTextPosition();
+	CTextRenderManager::GetInst()->RequestTextRender(m_Text, m_FontName, m_ColorName, m_Pos, m_Size);
 }
 
+void CTextWidget::UpdateTextPosition()
+{		
+	Vec3 parentPos = GetTransform()->GetRelativePosition();
+	Vec3 parentSize = GetTransform()->GetRelativeScale();
 
+	m_Pos = Vec2(parentPos.x, parentPos.y);
+	m_Pos.x += parentSize.x / 2.f;
+	m_Pos.y += parentSize.y / 2.f;
+
+}

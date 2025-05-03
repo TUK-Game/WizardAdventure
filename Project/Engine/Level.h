@@ -44,6 +44,7 @@ public:
 
 	CGameObject* FindObjectByName(const std::wstring& name);
 
+	class CNPC* DetectNPC(CGameObject* player);
 public:
 	template <typename T>
 	T* CreateWidgetWindow(EWIDGETWINDOW_TYPE type, const std::wstring& name, class CPlayer* player)

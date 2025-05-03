@@ -124,3 +124,23 @@ message S_GATE_CLOSE
 	repeated ObjectInfo cloase_objects = 1;
 }
 
+message S_SPAWN_NPC
+{
+	repeated NpcInfo npc_info = 1;
+}
+
+message C_BUY_ITEM
+{
+	uint32 item_id = 1;
+}
+
+message S_UPDATE_ITEM
+{
+	uint32 npc_id = 1;
+	repeated ItemInfo item_info = 2;
+}
+
+message S_BUY_ITEM
+{
+	bool is_success = 1;
+}

@@ -94,7 +94,7 @@ CGameObject* CLevelManager::Pick(INT32 x, INT32 y)
 	for (int j = 0; j < MAX_LAYER; ++j)
 	{
 		std::vector<CGameObject*> gameObjects;
-		if (j == 10)
+		if (j == LAYER_MAP)
 			m_CurLevel->m_SubLevel->PickGameObject(camera->GetFrustum(), gameObjects);
 		else
 			gameObjects = GetCurrentLevel()->GetLayer(j)->GetParentObjects();

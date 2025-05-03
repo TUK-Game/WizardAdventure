@@ -16,9 +16,11 @@ public:
 	virtual void Update() override;
 
 public:
-	void SetFunction(std::function<void()> func);
+	void SetOutHover(std::function<void()> func);
+	void SetOnHover(std::function<void()> func);
+	void SetOnClick(std::function<void()> func);
 	void SetButtonTexture(CTexture* defaultTex, CTexture* hoverTex, CTexture* pressedTex);
 public:
-	virtual CImageWidget* Clone() override { return new CImageWidget(*this); }
+	virtual CButtonWidget* Clone() override { return new CButtonWidget(*this); }
 };
 

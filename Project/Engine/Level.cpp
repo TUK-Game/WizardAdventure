@@ -6,6 +6,8 @@
 #include "SubLevel.h"
 #include "AssetManager.h"
 #include "WidgetWindow.h"
+#include "NPC.h"
+#include "Transform.h"
 
 CLevel::CLevel()
 	: m_Layer{}
@@ -59,7 +61,7 @@ void CLevel::Update()
 
 	for (auto& widget : m_vecWidgetWindow)
 	{
-		if(widget)
+		if(widget && widget->GetEnable())
 			widget->Update();
 	}
 }
@@ -101,7 +103,7 @@ void CLevel::Deregister()
 
 void CLevel::AddGameObject(CGameObject* object, int layerIndex, bool bChildMove)
 {
-	// layer°¡ ¿ÀºêÁ§Æ®¸¦ ºñÃß´Â layerÀÏ ¶§
+	// layerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ß´ï¿½ layerï¿½ï¿½ ï¿½ï¿½
 	if (layerIndex == 10)
 	{
 		bool b = m_SubLevel->AddGameObject(object, bChildMove);
@@ -155,6 +157,21 @@ CGameObject* CLevel::FindObjectByName(const std::wstring& name)
 		}
 	}
 
+CNPC* CLevel::DetectNPC(CGameObject* player)
+{
+	const auto& objects = GetLayer(LAYER_NPC)->GetParentObjects();
+
+	Vec3 pos = player->GetTransform()->GetRelativePosition();
+	for (auto& npc : objects)
+	{
+		float distance = (npc->GetTransform()->GetRelativePosition() - pos).Length();
+		if (distance < INTERATION_DISTANCE)
+		{
+			CNPC* n = dynamic_cast<CNPC*>(npc);
+			if (n)
+				return n;
+		}
+	}
 	return nullptr;
 }
 

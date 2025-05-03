@@ -66,6 +66,7 @@ struct CollisionProfile
 #define GRAVITY 98
 #define MAX_PLAYERS 4
 #define PROJECTILE_MAX_NUM 100
+#define MAX_ITEM 10
 
 USING_SHARED_PTR(CGameSession);
 USING_SHARED_PTR(CPlayer);
@@ -78,6 +79,9 @@ USING_SHARED_PTR(CCollisionManager);
 USING_SHARED_PTR(CProjectile);
 USING_SHARED_PTR(CMonseterTriggerBox);
 USING_SHARED_PTR(CSavePositionBox);
+USING_SHARED_PTR(CNPC);
+USING_SHARED_PTR(CItemManager);
+USING_SHARED_PTR(CItem);
 
 #define SEND_PACKET(pkt)													\
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);	\
@@ -97,3 +101,5 @@ struct WorldTriangle
 {
 	Vec3 a, b, c;
 };
+
+std::wstring s2ws(const std::string& str);

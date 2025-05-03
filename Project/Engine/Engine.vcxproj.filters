@@ -246,6 +246,21 @@
     <Filter Include="06. State\MonsterState\Damage">
       <UniqueIdentifier>{1f2fd04e-4d68-49c2-8847-b5c2a4d3103d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. GameObject\NPC">
+      <UniqueIdentifier>{538213cd-0ecd-4a79-84ac-2ce94dacab50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. State\NPCState">
+      <UniqueIdentifier>{4df9c637-9ef7-4910-8b7f-cb8f6a5d5738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\18. Item">
+      <UniqueIdentifier>{23befaea-9aa8-48fd-8bb5-2adec6e04f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\Item">
+      <UniqueIdentifier>{b596fad6-33f1-46cd-8f7c-503e556a248a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\19. TextRenderManager">
+      <UniqueIdentifier>{563a3ad3-6bc0-4fe4-9c5d-7f693ca8f28c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h">
@@ -605,14 +620,8 @@
     <ClInclude Include="GaugeWidget.h">
       <Filter>07. UI\01. Widget</Filter>
     </ClInclude>
-    <ClInclude Include="TextWidget.h">
-      <Filter>07. UI\01. Widget</Filter>
-    </ClInclude>
     <ClInclude Include="SkillWidget.h">
       <Filter>07. UI\01. Widget</Filter>
-    </ClInclude>
-    <ClInclude Include="TextWindow.h">
-      <Filter>07. UI\02. WidgetWindow</Filter>
     </ClInclude>
     <ClInclude Include="Meteors.h">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
@@ -661,6 +670,36 @@
     </ClInclude>
     <ClInclude Include="MonsterSpawnState.h">
       <Filter>06. State\MonsterState\Move</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCIdleState.h">
+      <Filter>06. State\NPCState</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>03. GameObject\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCTalkState.h">
+      <Filter>06. State\NPCState</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCBuyState.h">
+      <Filter>06. State\NPCState</Filter>
+    </ClInclude>
+    <ClInclude Include="StoreWidgetWindow.h">
+      <Filter>07. UI\02. WidgetWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemManager.h">
+      <Filter>01. Manager\18. Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>03. GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemButtonWidget.h">
+      <Filter>07. UI\01. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="TextRenderManager.h">
+      <Filter>01. Manager\19. TextRenderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextWidget.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -970,14 +1009,8 @@
     <ClCompile Include="GaugeWidget.cpp">
       <Filter>07. UI\01. Widget</Filter>
     </ClCompile>
-    <ClCompile Include="TextWidget.cpp">
-      <Filter>07. UI\01. Widget</Filter>
-    </ClCompile>
     <ClCompile Include="SkillWidget.cpp">
       <Filter>07. UI\01. Widget</Filter>
-    </ClCompile>
-    <ClCompile Include="TextWindow.cpp">
-      <Filter>07. UI\02. WidgetWindow</Filter>
     </ClCompile>
     <ClCompile Include="Meteors.cpp">
       <Filter>03. GameObject\Player\Skill\Fire</Filter>
@@ -1023,6 +1056,36 @@
     </ClCompile>
     <ClCompile Include="MonsterSpawnState.cpp">
       <Filter>06. State\MonsterState\Move</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCIdleState.cpp">
+      <Filter>06. State\NPCState</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>03. GameObject\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCTalkState.cpp">
+      <Filter>06. State\NPCState</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCBuyState.cpp">
+      <Filter>06. State\NPCState</Filter>
+    </ClCompile>
+    <ClCompile Include="StoreWidgetWindow.cpp">
+      <Filter>07. UI\02. WidgetWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemManager.cpp">
+      <Filter>01. Manager\18. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>03. GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemButtonWidget.cpp">
+      <Filter>07. UI\01. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRenderManager.cpp">
+      <Filter>01. Manager\19. TextRenderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextWidget.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

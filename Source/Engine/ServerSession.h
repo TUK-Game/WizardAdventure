@@ -28,6 +28,8 @@ public:
 	void OnActPlayer();
 	void MoveSkill(class CSkillObject* object);
 	void SpawnSkill(class CSkillObject* object);
+
+	void BuyItem(uint32 itemId);
 private:
 	class CPlayer* m_OwnPlayer;
 	UINT64			m_Id;

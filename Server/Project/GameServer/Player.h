@@ -33,6 +33,8 @@ public:
 	void SetDir(const Protocol::Vector3& dir) { m_Dir = dir; }
 	void SetAttribute(const EAttribution attri) { m_attribution = attri; }
 	void SetSafePosition(const Vec3& pos) { m_SafePos = pos; }
+
+	bool BuyItem(CItemRef item);
 public:
 	Protocol::PlayerInfo* PlayerInfo;
 
@@ -55,6 +57,7 @@ private:
 	Vector3 m_SafePos;
 
 	EAttribution m_attribution = EAttribution::FIRE;
+	std::vector<CItemRef> m_Items;
 
 	// temp	
 	float m_Speed = 5000.f;

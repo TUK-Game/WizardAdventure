@@ -78,7 +78,9 @@ enum class EWIDGETWINDOW_TYPE
 	GAME_WINDOW,
 	MAP_WINDOW,
 
-	TEXT_WINDOW,
+	STORE_WINDOW,
+	INVENTORY_WINDOW,
+
 	END
 };
 
@@ -105,9 +107,12 @@ enum class ECamera_Type
 {
 	Free,
 	Fixed,
+	Interaction_Start,
+	Interaction,
+	Interaction_End,
 };
 
-// ¹æÇâ
+// ï¿½ï¿½ï¿½ï¿½
 enum class EDir
 {
 	Right,
@@ -148,6 +153,9 @@ enum class EState_Type
 	Knockback,
 	Damaged,
 	Spawn,
+	Talk,
+	Buy,
+
 	END
 };
 

@@ -30,6 +30,7 @@ public:
 
 public:
 	bool HandleEnterPlayer(CPlayerRef player);
+	bool HandleSpawnNPC(CPlayerRef player);
 	bool HandlePlayerInit(CPlayerRef player);
 	bool HandleLeavePlayer(CPlayerRef player);
 
@@ -38,6 +39,10 @@ public:
 
 	bool HandleSpawnProjectile(CProjectileRef projectile);
 	bool HandleMoveProjectile(CProjectileRef projectile);
+
+	bool HandleBuyItem(CPlayerRef player, CItemRef item);
+	bool IsBuyItem(CPlayerRef player, bool isBuy);
+	bool UpdateItem(uint32 npcId);
 
 	bool AddObject(uint32 layer, CGameObjectRef object);
 	bool AddMonster(CMonsterRef object);

@@ -55,6 +55,12 @@
     <Filter Include="01. Game\GameObject\Trigger">
       <UniqueIdentifier>{6a3d6627-ce11-4b85-b8c9-591775b4f4a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Game\GameObject\Creature\03. NPC">
+      <UniqueIdentifier>{6cc38c35-ecf6-4031-be80-8c6b4777f901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Game\GameObject\Item">
+      <UniqueIdentifier>{3be9562d-3ebb-474f-b1d9-9a8c8a71f155}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Util.cpp">
@@ -145,6 +151,15 @@
     <ClCompile Include="SavePositionBox.cpp">
       <Filter>01. Game\GameObject\Trigger</Filter>
     </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>01. Game\GameObject\Creature\03. NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>01. Game\GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemManager.cpp">
+      <Filter>01. Game\GameObject\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -233,6 +248,15 @@
     </ClInclude>
     <ClInclude Include="SavePositionBox.h">
       <Filter>01. Game\GameObject\Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>01. Game\GameObject\Creature\03. NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>01. Game\GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemManager.h">
+      <Filter>01. Game\GameObject\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

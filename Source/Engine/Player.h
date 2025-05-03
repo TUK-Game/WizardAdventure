@@ -31,6 +31,8 @@ public:
 
     void InitStats(int maxHp, int hp, int attack, float speed);
 
+    void DetectNPC();
+    void FinishShopping();
 public:
     virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
     Vec3 m_Amount;

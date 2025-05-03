@@ -26,7 +26,6 @@ void CPlayerAttackEState::Enter(CGameObject* entity)
 
 void CPlayerAttackEState::Update(CGameObject* entity, float deltaTime)
 {
-
     m_ElapsedTime += deltaTime;
     if (m_ElapsedTime >= m_AttackDuration)
         entity->GetStateManager()->HandleEvent(entity, "EndAttack");

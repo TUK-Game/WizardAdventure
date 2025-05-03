@@ -81,7 +81,7 @@ void CLevelCollision::Collision()
 
 	for (int i = 0; i < (int)ECollision_Channel::Max; ++i)
 	{
-		if ((int)ECollision_Channel::Wall == i || (int)ECollision_Channel::Player == i)
+		if ((int)ECollision_Channel::Wall == i || (int)ECollision_Channel::Player == i || (int)ECollision_Channel::NPC == i)
 			continue;
 
 		m_vecCollider[i].clear();
@@ -133,15 +133,15 @@ bool CLevelCollision::CollisionWithWall(CBoxCollider* collider)
 	return false;
 }
 
-bool CLevelCollision::CollisionWithPlayer(CBoxCollider* collider)
+bool CLevelCollision::CollisionWithOnlyChannel(ECollision_Channel channel, CBoxCollider* collider)
 {
-	size_t size = m_vecCollider[(int)ECollision_Channel::Player].size();
-	if (size > 1)
+	size_t size = m_vecCollider[(int)channel].size();
+	if (size >= 1)
 	{
 		CBoxCollider* dest = collider;
 		for (size_t i = 0; i < size; ++i)
 		{
-			CBoxCollider* src = m_vecCollider[(int)ECollision_Channel::Player][i];
+			CBoxCollider* src = m_vecCollider[(int)channel][i];
 
 			if (dest == src)
 				continue;
