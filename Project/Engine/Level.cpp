@@ -166,7 +166,7 @@ CNPC* CLevel::DetectNPC(CGameObject* player)
 	for (auto& npc : objects)
 	{
 		float distance = (npc->GetTransform()->GetRelativePosition() - pos).Length();
-		if (distance < INTERATION_DISTANCE)
+		if (distance < INTERATION_DISTANCE)	
 		{
 			CNPC* n = dynamic_cast<CNPC*>(npc);
 			if (n)

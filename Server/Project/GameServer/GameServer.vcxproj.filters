@@ -160,6 +160,9 @@
     <ClCompile Include="ItemManager.cpp">
       <Filter>01. Game\GameObject\Item</Filter>
     </ClCompile>
+    <ClCompile Include="ProjectileCollider.cpp">
+      <Filter>06. Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
@@ -257,6 +260,9 @@
     </ClInclude>
     <ClInclude Include="ItemManager.h">
       <Filter>01. Game\GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileCollider.h">
+      <Filter>06. Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -23,7 +23,7 @@ public:
 	void SetCollisionBoxInfo(const Vec3& pos, const Vec3& size, const Vec3& rot);
 	void SetCollisionExplosion(bool b) { m_bCollisionExplosion = b; }
 
-	bool GetCollisionExplosino() { return m_bCollisionExplosion; }
+	bool GetCollisionExplosion() { return m_bCollisionExplosion; }
 	ProjectileState& GetStateInfo() { return m_Stats; }
 	int GetAttack() { return m_Stats.damage; }
 public:

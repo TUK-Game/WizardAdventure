@@ -69,6 +69,7 @@ void CMeteors::SpawnMeteor()
     meteor->SetSkillType(SKILL::FIRE_METEORS);
     meteor->SetMode(EFireBallMode::Meteor);
     meteor->SetEnable(false);
+    meteor->SetCollisionExplosion(true);
 
     CRigidBody* rigidbody = meteor->GetRigidBody();
     rigidbody->SetGravity(true);

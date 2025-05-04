@@ -178,6 +178,7 @@
     </ClCompile>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectileCollider.cpp" />
     <ClCompile Include="ProjectilePool.cpp" />
     <ClCompile Include="Protocol.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -218,6 +219,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectileCollider.h" />
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="Protocol.pb.h" />
     <ClInclude Include="Room.h" />

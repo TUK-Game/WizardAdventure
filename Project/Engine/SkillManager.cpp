@@ -191,6 +191,7 @@ void CSkillManager::SpawnFireTowerAtMouse(float duration)
     tower->Init(m_Owner); 
     tower->SetDamage(Skill::FireTower.damage * tower->GetCaster()->GetStats()->attack);
     tower->SetEnable(false);
+    tower->SetCollisionExplosion(false);
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(tower);
 

@@ -58,11 +58,11 @@ void CFireBall::FinalUpdate()
 		}
 
 
-		if (pos.y < -20.f && !m_bDelete)
+		/*if (pos.y < -20.f && !m_bDelete)
 		{
 			if(EFireBallMode::Meteor == m_Mode)
 				m_bDelete = true;
-		}
+		}*/
 	}
 
 }

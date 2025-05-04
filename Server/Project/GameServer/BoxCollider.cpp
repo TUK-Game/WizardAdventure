@@ -132,8 +132,8 @@ void CBoxCollider::Update()
 	if (m_Channel == ECollision_Channel::Wall || m_Channel == ECollision_Channel::NPC)
 		return;
 
-	Protocol::Vector3 pos = m_Owner->PosInfo->position();
-	Protocol::Vector3 size = m_Owner->PosInfo->size();
+	Protocol::Vector3 pos = m_Owner->ObjectInfo->pos_info().position();
+	Protocol::Vector3 size = m_Owner->ObjectInfo->pos_info().size();
 	SetBoxPosAndSize(Vec3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z), Vec3(size.x(), size.y(), size.z()));
 	//m_BoundingBox.Center = XMFLOAT3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z) ;
 

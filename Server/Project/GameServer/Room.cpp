@@ -578,14 +578,17 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 
 			projectile->GetCollider()->Update();
 
-			//if (m_LevelCollision->CollisionWithWall(projectile->GetCollider()))
-			//{
-			//	std::cout << "박음" << std::endl;
-			//	projectile->ProjectileInfo->set_state(Protocol::COLLISION);
-			//	m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
-			//	g_pool->Release(projectile);
-			//	break;
-			//}
+			if (projectile->GetCollisionExplosion())
+			{
+				//if (m_LevelCollision->CollisionWithWall(projectile->GetCollider()))
+				//{
+				//	std::cout << "박음" << std::endl;
+				//	projectile->ProjectileInfo->set_state(Protocol::COLLISION);
+				//	m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
+				//	g_pool->Release(projectile);
+				//	break;
+				//}
+			}
 		}
 
 		const auto& rot = projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->rotation();

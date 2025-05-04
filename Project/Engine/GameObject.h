@@ -176,6 +176,7 @@ public:
     CStateManager* GetStateManager()                    { return m_StateManager; }
     bool GetInstancing()                                { return m_bInstancing; }
     bool GetCheckFrustum() { return m_CheckFrustum; }
+    Vec3 GetTotalMeshSize() { return m_TotalMeshSize; }
 
     Protocol::MoveState GetStateForProtocol();
     bool IsStatic() { return m_Static; }
@@ -235,4 +236,5 @@ private:
 
 protected:
     CStateManager* m_StateManager;
+    Vec3 m_TotalMeshSize{ 1.f, 1.f, 1.f };
 };

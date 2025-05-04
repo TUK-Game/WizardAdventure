@@ -57,10 +57,10 @@ CMeshData* CMeshData::LoadFromJHD(const std::wstring& path, const std::wstring& 
 		info.translation = loader.GetMesh(i).translate;
 		info.rotation = loader.GetMesh(i).rotation;
 		info.scale = loader.GetMesh(i).scale;
-			
+
 		meshData->_meshRenders.push_back(info);
 	}
-	 
+
 	return meshData;
 }
 
@@ -83,7 +83,7 @@ std::vector<CGameObject*> CMeshData::Instantiate(ECollision_Channel channel)
 		CGameObject* gameObject = new CGameObject;
 		gameObject->AddComponent(new CTransform);
 		gameObject->GetTransform()->SetRelativePosition(info.translation.x, info.translation.y, -info.translation.z);
-		gameObject->GetTransform()->SetRelativeRotation(-info.rotation.x -90.f, -info.rotation.y, info.rotation.z);
+		gameObject->GetTransform()->SetRelativeRotation(-info.rotation.x - 90.f, -info.rotation.y, info.rotation.z);
 		gameObject->GetTransform()->SetRelativeScale(info.scale.x, info.scale.y, info.scale.z);
 		gameObject->GetTransform()->FinalUpdate();
 
@@ -91,18 +91,17 @@ std::vector<CGameObject*> CMeshData::Instantiate(ECollision_Channel channel)
 		info.mesh->SetMeshSize(Vec3(info.boundingBoxMax - info.boundingBoxMin));
 		gameObject->GetMeshRenderer()->SetMesh(info.mesh);
 
-		float posy = gameObject->GetTransform()->GetWorldPosition().y;
-		//if (gameObject->GetTransform()->GetWorldPosition().y >= -20.f)
+		gameObject->AddComponent(new CBoxCollider);
+		if (channel == ECollision_Channel::Wall)
 		{
-			if (channel == ECollision_Channel::Wall)
-			{
-				gameObject->AddComponent(new CBoxCollider);
-				gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Wall"));
-				//else if (channel == ECollision_Channel::Player)
-				//	gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
-				gameObject->GetCollider()->SetMaxMinPos(info.centerPos, info.boundingBoxMax, info.boundingBoxMin);
-			}
+			gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Wall"));
+			gameObject->GetCollider()->SetMaxMinPos(info.centerPos, info.boundingBoxMax, info.boundingBoxMin);
 		}
+		else if (channel == ECollision_Channel::Player)
+		{
+			gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
+		}
+		gameObject->GetCollider()->SetMaxMinPos(info.centerPos, info.boundingBoxMax, info.boundingBoxMin);
 
 		for (UINT32 i = 0; i < info.materials.size(); i++)
 			gameObject->GetMeshRenderer()->SetMaterial(info.materials[i], i);

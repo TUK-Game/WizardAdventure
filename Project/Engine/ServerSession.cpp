@@ -7,7 +7,8 @@
 #include "LevelManager.h"
 #include "Level.h"
 #include "Layer.h"
-
+#include "MeshRenderer.h"
+#include "Mesh.h"
 void ProtoToVector3(const Vec3& from, Protocol::Vector3* to)
 {
 	to->set_x(from.x);
@@ -134,7 +135,8 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 {
 	CTransform* transform = object->GetTransform();
 	const Vec3& pos = transform->GetRelativePosition();
-	const Vec3& size = transform->GetRelativeScale();
+	const Vec3& scale = transform->GetRelativeScale();
+	const Vec3& size = object->GetTotalMeshSize();
 	Protocol::C_SPAWN_PROJECTILE pkt;
 	auto* info = pkt.mutable_info();
 
@@ -150,9 +152,10 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 	posInfo->set_z(pos.z);
 
 	auto* sizeInfo = pkt.mutable_info()->mutable_size();
-	sizeInfo->set_x(size.x);
-	sizeInfo->set_y(size.y);
-	sizeInfo->set_z(size.z);
+	sizeInfo->set_x(size.x * scale.x);
+	sizeInfo->set_y(size.y * scale.y);
+	sizeInfo->set_z(size.z * scale.z);
+	std::cout << sizeInfo->x() << " " << sizeInfo->y() << " " << sizeInfo->z() << '\n';
 
 	switch (object->GetSkillType())
 	{
