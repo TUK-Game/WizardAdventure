@@ -25,7 +25,6 @@ public:
 
 private:
 	BoundingBox m_BoundingBox;
-	bool        m_IsFrustum = false;
 
 };
 

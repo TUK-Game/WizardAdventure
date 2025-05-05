@@ -10,7 +10,7 @@
 #include "BaseCollider.h"
 #include "BoxCollider.h"
 #include "CollisionManager.h"
-
+#include "OrientedBoxCollider.h"
 
 CMeshData::CMeshData()
 	: CAsset(EAsset_Type::FBX)
@@ -90,8 +90,7 @@ std::vector<CGameObject*> CMeshData::Instantiate(ECollision_Channel channel)
 		gameObject->AddComponent(new CMeshRenderer);
 		info.mesh->SetMeshSize(Vec3(info.boundingBoxMax - info.boundingBoxMin));
 		gameObject->GetMeshRenderer()->SetMesh(info.mesh);
-
-		gameObject->AddComponent(new CBoxCollider);
+		gameObject->AddComponent(new COrientedBoxCollider);
 		if (channel == ECollision_Channel::Wall)
 		{
 			gameObject->GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Wall"));

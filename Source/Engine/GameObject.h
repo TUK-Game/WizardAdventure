@@ -191,6 +191,7 @@ public:
     void SetProtocolStateForClient(Protocol::MoveState state);
     void SetProtocolStateForClientMonster(Protocol::MoveState state);
     virtual void SetTarget(const Vec3& pos, const Vec3& rot) {}
+    void SetTotalMeshSize(const Vec3& size) { m_TotalMeshSize = size; }
 
     int GetLayerIndex() { return m_LayerIndex; }
     std::wstring GetTag() const { return m_Tag; }
