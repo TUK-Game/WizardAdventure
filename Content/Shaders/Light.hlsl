@@ -1,8 +1,28 @@
 #ifndef _LIGHTING_HLSL_
 #define _LIGHTING_HLSL_
 
+#define CASCADE_COUNT 4
+
 #include "Params.hlsl"
 #include "Utils.hlsl"
+
+cbuffer CascadeShadowData : register(b4)
+{
+    matrix matCascadeVP[CASCADE_COUNT];
+    float splitDistances[CASCADE_COUNT];
+}
+
+int GetCascadeIndex(float viewDepth)
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        if (viewDepth < splitDistances[i])
+            return i;
+    }
+    return 3;
+}
+
+Texture2D tex_ShadowMaps[CASCADE_COUNT] : register(t8);
 
 struct VS_IN
 {
@@ -44,43 +64,67 @@ PS_OUT PS_DirLight(VS_OUT input)
 {
     PS_OUT output = (PS_OUT) 0;
 
+    //float3 viewPos = tex_0.Sample(sam_0, input.uv).xyz;
+
+    //if (viewPos.z <= 0.f)
+    //    clip(-1);
+
+    //float3 viewNormal = tex_1.Sample(sam_0, input.uv).xyz;
+
+    //LightColor color = CalculateLightColor(int_0, viewNormal, viewPos);
+
+    //if (length(color.diffuse) != 0)
+    //{
+    //    int cascadeIdx = GetCascadeIndex(viewPos.z);
+    //    matrix shadowVP = matCascadeVP[cascadeIdx];
+
+    //    float4 worldPos = mul(float4(viewPos.xyz, 1.f), matViewInv);
+    //    float4 shadowPos = mul(worldPos, shadowVP);
+    //    shadowPos.xyz /= shadowPos.w;
+
+    //    float2 shadowUV = shadowPos.xy * 0.5f + 0.5f;
+
+    //    if (all(shadowUV > 0.0f) && all(shadowUV < 1.0f))
+    //    {
+    //        float shadowDepth = tex_ShadowMaps[cascadeIdx].Sample(sam_0, shadowUV).r;
+    //        float currentDepth = shadowPos.z;
+
+    //        if (currentDepth > shadowDepth + 0.00001f)
+    //        {
+    //            color.diffuse *= 0.4f;
+    //            color.specular = 0;
+    //        }
+    //    }
+    //}
+
+    //output.diffuse = color.diffuse + color.ambient;
+    //output.specular = color.specular;
+
+    //return output;
+
+
+
     float3 viewPos = tex_0.Sample(sam_0, input.uv).xyz;
     if (viewPos.z <= 0.f)
         clip(-1);
 
-    float3 viewNormal = tex_1.Sample(sam_0, input.uv).xyz;
+    float viewDepth = viewPos.z;
 
-    LightColor color = CalculateLightColor(int_0, viewNormal, viewPos);
+    // splitDistances에 따라 색상 출력
+    float4 debugColor;
+    if (viewDepth < splitDistances[0])
+        debugColor = float4(1, 1, 1, 1); // 에러 또는 비정상
+    else if (viewDepth < splitDistances[1])
+        debugColor = float4(1, 0, 0, 1); // Cascade 0 (빨강)
+    else if (viewDepth < splitDistances[2])
+        debugColor = float4(0, 1, 0, 1); // Cascade 1 (초록)
+    else if (viewDepth < splitDistances[3])
+        debugColor = float4(0, 0, 1, 1); // Cascade 2 (파랑)
+    else
+        debugColor = float4(1, 1, 0, 1); // Cascade 3 (노랑)
 
-    // 그림자
-    if (length(color.diffuse) != 0)
-    {
-        matrix shadowCameraVP = mat_0;
-
-        float4 worldPos = mul(float4(viewPos.xyz, 1.f), matViewInv);
-        float4 shadowClipPos = mul(worldPos, shadowCameraVP);
-        float depth = shadowClipPos.z / shadowClipPos.w;
-
-        // x [-1 ~ 1] -> u [0 ~ 1]
-        // y [1 ~ -1] -> v [0 ~ 1]
-        float2 uv = shadowClipPos.xy / shadowClipPos.w;
-        uv.y = -uv.y;
-        uv = uv * 0.5 + 0.5;
-
-        if (0 < uv.x && uv.x < 1 && 0 < uv.y && uv.y < 1)
-        {
-            float shadowDepth = tex_2.Sample(sam_0, uv).x;
-            if (shadowDepth > 0 && depth > shadowDepth + 0.0000001f)
-            {
-                color.diffuse *= 0.5f;
-                color.specular = (float4) 0.f;
-            }
-        }
-    }
-
-    output.diffuse = color.diffuse + color.ambient;
-    output.specular = color.specular;
-
+    output.diffuse = debugColor;
+    output.specular = float4(0, 0, 0, 0); // 스페큘러는 안 씀
     return output;
 }
 
@@ -157,5 +201,7 @@ float4 PS_Final(VS_OUT input) : SV_Target
     output = (color * lightPower) + specular;
     return output;
 }
+
+
 
 #endif

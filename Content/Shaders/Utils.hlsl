@@ -122,4 +122,5 @@ float4 Fog(float4 cColor, float3 vPosition)
     return cColorByFog;
 }
 
+
 #endif

@@ -13,7 +13,7 @@ enum class CBV_REGISTER : unsigned char
 	b2,
 	b3,
 	b4,
-
+	b5,
 	END
 };
 
@@ -29,7 +29,8 @@ enum class SRV_REGISTER : unsigned char
 	t7,
 	t8,
 	t9,
-
+	t10,
+	t11,
 	END
 };
 

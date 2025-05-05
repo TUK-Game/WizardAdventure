@@ -123,12 +123,12 @@ void CLevel_1::Init()
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
 		light->GetTransform()->SetRelativePosition(6000.f, 10000.f, 6000.f);
-		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
+		light->GetLight()->SetLightDirection(Vec3(1.f, -1.f, 1.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
 		light->GetLight()->SetAmbient(Vec3(0.7f, 0.7f, 0.7f));
 		light->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
-		light->GetLight()->GetShadowCamera()->GetCamera()->SetFar(1000000);
+		light->GetLight()->GetShadowCamera()->GetCamera()->SetFar(10000);
 		CRenderManager::GetInst()->RegisterLight(light->GetLight());
 
 		this->AddGameObject(light, LAYER_LIGHT, false);
@@ -242,26 +242,29 @@ void CLevel_1::Init()
 
 #pragma region UI_TEST
 	{
-		CGameObject* obj = new CGameObject;
-		obj->AddComponent(new CTransform);
-		obj->AddComponent(new CMeshRenderer);
-		//obj->GetTransform()->SetRelativeScale(Vec3(160.f, 160.f, 160.f));
-		//obj->GetTransform()->SetRelativePosition(Vec3(-500.f + (i * 200), 250.f, 500.f));
-		obj->GetTransform()->SetRelativeScale(Vec3(.2f, .35f, .2f));
-		obj->GetTransform()->SetRelativePosition(Vec3(-0.8f , 0.5f, 1.0f));
-		obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
-		CMaterial* material = new CMaterial;
-		CTexture* texture;
+		for (int i = 0; i < 4; ++i)
+		{
+			CGameObject* obj = new CGameObject;
+			obj->AddComponent(new CTransform);
+			obj->AddComponent(new CMeshRenderer);
 
-		texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
-		//texture = CAssetManager::GetInst()->FindAsset<CTexture>(L"UAVTexture");
-		CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
-		material->SetTexture(0, texture);
-		material->SetGraphicsShader(shader);
-		obj->GetMeshRenderer()->SetMaterial(material);
-		this->AddGameObject(obj, LAYER_UI, false);
+			obj->GetTransform()->SetRelativeScale(Vec3(0.2f, 0.35f, 0.2f));
+			obj->GetTransform()->SetRelativePosition(Vec3(-0.9f + (i * 0.6f), 0.5f, 1.0f));
+
+			obj->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
+
+			CMaterial* material = new CMaterial;
+			CTexture* texture = CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(i);
+			CGraphicShader* shader = CAssetManager::GetInst()->FindAsset<CGraphicShader>(L"Texture");
+
+			material->SetTexture(0, texture);            
+			material->SetGraphicsShader(shader);         
+
+			obj->GetMeshRenderer()->SetMaterial(material);
+
+			this->AddGameObject(obj, LAYER_UI, false);
+		}
 	}
-
 #pragma endregion
 
 #pragma region EFFECT_TEST

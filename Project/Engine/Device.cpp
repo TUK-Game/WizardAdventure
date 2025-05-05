@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "AssetManager.h"
 #include "ImGuiManager.h"
+#include "Light.h"
 
 CDevice::CDevice()
 	: m_Viewport{}
@@ -117,19 +118,30 @@ void CDevice::CreateRenderTargetGroups()
 		m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)]->Create(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN, rtVec, dsTexture);
 	}
 
-	// Shadow Group
+	// Shadow Group for Cascade Shadow Mapping
 	{
-		std::vector<RenderTarget> rtVec(RENDER_TARGET_SHADOW_GROUP_MEMBER_COUNT);
+		const int CASCADE_COUNT = 4;
+		std::vector<RenderTarget> rtVec(CASCADE_COUNT);
 
-		rtVec[0].target = CAssetManager::GetInst()->CreateTexture(L"ShadowTarget",
-			DXGI_FORMAT_R32_FLOAT, 4096, 4096,
-			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+		for (int i = 0; i < CASCADE_COUNT; ++i)
+		{
+			std::wstring name = L"ShadowTarget_" + std::to_wstring(i);
+			rtVec[i].target = CAssetManager::GetInst()->CreateTexture(
+				name,
+				DXGI_FORMAT_R32_FLOAT, 2048, 2048,  // 적절한 해상도
+				CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+				D3D12_HEAP_FLAG_NONE,
+				D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
+			);
+		}
 
-		CTexture* shadowDepthTexture = CAssetManager::GetInst()->CreateTexture(L"ShadowDepthStencil",
-			DXGI_FORMAT_D32_FLOAT, 4096, 4096,
+		CTexture* shadowDepthTexture = CAssetManager::GetInst()->CreateTexture(
+			L"ShadowDepthStencil",
+			DXGI_FORMAT_D32_FLOAT, 2048, 2048,
 			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+			D3D12_HEAP_FLAG_NONE,
+			D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL
+		);
 
 		m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::SHADOW)] = std::make_shared<CRenderTargetGroup>();
 		m_RenderTargetGroups[static_cast<UINT8>(RENDER_TARGET_GROUP_TYPE::SHADOW)]->Create(RENDER_TARGET_GROUP_TYPE::SHADOW, rtVec, shadowDepthTexture);

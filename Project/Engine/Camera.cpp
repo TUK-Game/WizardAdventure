@@ -303,6 +303,19 @@ void CCamera::SortShadowObject()
 	}
 }
 
+void CCamera::SetOrthographicProjFromVP(const Matrix& viewProj)
+{
+	Matrix view, proj;
+	Matrix inv = viewProj.Invert();
+	Vec3 eye = inv.Translation();
+
+	view = Matrix::CreateLookAt(eye, eye + GetTransform()->GetWorldDir(EDir::Front), Vec3(0, 1, 0)); // 재구성
+	proj = viewProj * view.Invert(); // 또는 이미 알고 있다면 그대로 세팅
+
+	s_matView = view;
+	s_matProjection = proj;
+}
+
 void CCamera::PushLightData()
 {
 	LightParams lightParams = {};

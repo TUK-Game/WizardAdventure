@@ -6,6 +6,7 @@ enum class EConstantBuffer_Type : unsigned char
 	Fog,
 	Transform,
 	Material,
+	CascadeShadowData,
 
 	END
 };

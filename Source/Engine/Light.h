@@ -1,5 +1,16 @@
 #pragma once
 #include "Component.h"
+#include "Texture.h"
+
+static const int CASCADE_COUNT = 4;
+struct CascadeShadowData
+{
+	void SetMatCascadeVP(unsigned char index, Matrix& value) { matCascadeVP[index] = value; }
+	void SetSplitDistances(unsigned char index, float value) { splitDistances[index] = value; }
+
+	std::array<Matrix, CASCADE_COUNT> matCascadeVP;
+	std::array<float, CASCADE_COUNT> splitDistances;
+};
 
 class CLight :
     public CComponent
@@ -32,10 +43,23 @@ public:
 	void SetLightAngle(float angle) { m_Light.angle = angle; }
 
 	void SetLightIndex(INT8 index) { m_LightIndex = index; }
+
+private:
+	void CalcCascadeSplits(float nearZ, float farZ);
+	void UpdateCascadeShadowVP();
+	void PushCascadeData();
+	void CalcCascadeFrustumCornersAndVP(const Matrix& view, const Matrix& viewToWorld, float fov, float aspect, float nearZ, float farZ, const Vec3& lightDir);
+
+
 public:
 	virtual CLight* Clone() override { return new CLight(*this); }
 
-
+	// cascade용 ViewProjection 행렬
+	Matrix m_CascadeVP[CASCADE_COUNT];
+	Matrix m_CascadeProj[CASCADE_COUNT];
+	Matrix	m_CascadeView[CASCADE_COUNT];
+	// split 거리 (view space Z 값 기준)
+	float m_SplitDepth[CASCADE_COUNT + 1];
 
 private:
     LightInfo m_Light = {}; // 조명 데이터
@@ -43,6 +67,9 @@ private:
 	INT8				m_LightIndex = -1;
 	class CMesh*		m_VolumeMesh;
 	class CMaterial*	m_LightMaterial;
+
+	CascadeShadowData	m_CascadeShadowData;
+	std::vector<CTexture*> m_CascadeShadowTex;
 
 	CGameObject* m_ShadowCamera;
 };
