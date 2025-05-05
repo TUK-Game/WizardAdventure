@@ -107,11 +107,10 @@ void CFireSword::FinalUpdate()
 	if (m_bOwn)
 	{
 		//Vec3 pos = GetTransform()->GetRelativePosition();
-		//if (pos.y < -200.f) // 충돌시 삭제로 변경해야함
-		//{
-		//	m_bDelete = true;
-		//	std::cout << "DELETE\n";
-		//}
+		if (pos.y < -1000.f) // 충돌시 삭제로 변경해야함
+		{
+			m_bDelete = true;
+		}
 	}
 }
 
