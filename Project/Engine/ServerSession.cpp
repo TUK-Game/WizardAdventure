@@ -152,10 +152,14 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 	posInfo->set_z(pos.z);
 
 	auto* sizeInfo = pkt.mutable_info()->mutable_size();
-	sizeInfo->set_x(size.x * scale.x);
-	sizeInfo->set_y(size.y * scale.y);
-	sizeInfo->set_z(size.z * scale.z);
-	std::cout << sizeInfo->x() << " " << sizeInfo->y() << " " << sizeInfo->z() << '\n';
+	sizeInfo->set_x(scale.x);
+	sizeInfo->set_y(scale.y);
+	sizeInfo->set_z(scale.z);
+
+	pkt.mutable_size()->set_x(size.x);
+	pkt.mutable_size()->set_y(size.y);
+	pkt.mutable_size()->set_z(size.z);
+
 
 	switch (object->GetSkillType())
 	{
@@ -194,10 +198,6 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 	pkt.mutable_info()->set_damage(object->GetDamage());
 	
 	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_PROJECTILE)->GetProjectileMap();
-	//if (map.find(object->m_ProjectileId) != map.end())
-	//{
-	//	map.erase(object->m_ProjectileId);
-	//}
 	map[object->m_ProjectileId] = object;
 
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);

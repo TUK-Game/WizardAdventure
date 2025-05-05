@@ -99,6 +99,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR C_SPAWN_PROJECTILE::C_SPAWN_PROJECTILE(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.info_)*/nullptr
+  , /*decltype(_impl_.size_)*/nullptr
   , /*decltype(_impl_.mesh_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct C_SPAWN_PROJECTILEDefaultTypeInternal {
@@ -417,6 +418,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_SPAWN_PROJECTILE, _impl_.info_),
   PROTOBUF_FIELD_OFFSET(::Protocol::C_SPAWN_PROJECTILE, _impl_.mesh_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_SPAWN_PROJECTILE, _impl_.size_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_SPAWN_PROJECTILE_SUCESSE, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -564,25 +566,25 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 27, -1, -1, sizeof(::Protocol::S_ENTER_GAME)},
   { 35, -1, -1, sizeof(::Protocol::C_LEAVE_GAME)},
   { 41, -1, -1, sizeof(::Protocol::C_SPAWN_PROJECTILE)},
-  { 49, -1, -1, sizeof(::Protocol::S_SPAWN_PROJECTILE_SUCESSE)},
-  { 58, -1, -1, sizeof(::Protocol::S_LEAVE_GAME)},
-  { 64, -1, -1, sizeof(::Protocol::C_MOVE)},
-  { 74, -1, -1, sizeof(::Protocol::C_MOVE_PROJECTILE)},
-  { 81, -1, -1, sizeof(::Protocol::S_MOVE)},
-  { 88, -1, -1, sizeof(::Protocol::S_UPDATE_PLAYER)},
-  { 95, -1, -1, sizeof(::Protocol::S_MONSTER_INFO)},
-  { 102, -1, -1, sizeof(::Protocol::S_PROJECTILE_INFO)},
-  { 109, -1, -1, sizeof(::Protocol::S_SPAWN)},
-  { 116, -1, -1, sizeof(::Protocol::S_SPAWN_NEW_PLAYER)},
-  { 123, -1, -1, sizeof(::Protocol::S_SPAWN_EXISTING_PLAYER)},
-  { 130, -1, -1, sizeof(::Protocol::S_DESPAWN_PLAYER)},
-  { 137, -1, -1, sizeof(::Protocol::S_DESPAWN)},
-  { 144, -1, -1, sizeof(::Protocol::S_GATE_OPNE)},
-  { 151, -1, -1, sizeof(::Protocol::S_GATE_CLOSE)},
-  { 158, -1, -1, sizeof(::Protocol::S_SPAWN_NPC)},
-  { 165, -1, -1, sizeof(::Protocol::C_BUY_ITEM)},
-  { 172, -1, -1, sizeof(::Protocol::S_UPDATE_ITEM)},
-  { 180, -1, -1, sizeof(::Protocol::S_BUY_ITEM)},
+  { 50, -1, -1, sizeof(::Protocol::S_SPAWN_PROJECTILE_SUCESSE)},
+  { 59, -1, -1, sizeof(::Protocol::S_LEAVE_GAME)},
+  { 65, -1, -1, sizeof(::Protocol::C_MOVE)},
+  { 75, -1, -1, sizeof(::Protocol::C_MOVE_PROJECTILE)},
+  { 82, -1, -1, sizeof(::Protocol::S_MOVE)},
+  { 89, -1, -1, sizeof(::Protocol::S_UPDATE_PLAYER)},
+  { 96, -1, -1, sizeof(::Protocol::S_MONSTER_INFO)},
+  { 103, -1, -1, sizeof(::Protocol::S_PROJECTILE_INFO)},
+  { 110, -1, -1, sizeof(::Protocol::S_SPAWN)},
+  { 117, -1, -1, sizeof(::Protocol::S_SPAWN_NEW_PLAYER)},
+  { 124, -1, -1, sizeof(::Protocol::S_SPAWN_EXISTING_PLAYER)},
+  { 131, -1, -1, sizeof(::Protocol::S_DESPAWN_PLAYER)},
+  { 138, -1, -1, sizeof(::Protocol::S_DESPAWN)},
+  { 145, -1, -1, sizeof(::Protocol::S_GATE_OPNE)},
+  { 152, -1, -1, sizeof(::Protocol::S_GATE_CLOSE)},
+  { 159, -1, -1, sizeof(::Protocol::S_SPAWN_NPC)},
+  { 166, -1, -1, sizeof(::Protocol::C_BUY_ITEM)},
+  { 173, -1, -1, sizeof(::Protocol::S_UPDATE_ITEM)},
+  { 181, -1, -1, sizeof(::Protocol::S_BUY_ITEM)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -622,39 +624,40 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "R_GAME_SUCCESS\022$\n\006player\030\001 \001(\0132\024.Protoco"
   "l.PlayerInfo\"E\n\014S_ENTER_GAME\022\017\n\007success\030"
   "\001 \001(\010\022$\n\006player\030\002 \001(\0132\024.Protocol.PlayerI"
-  "nfo\"\016\n\014C_LEAVE_GAME\"d\n\022C_SPAWN_PROJECTIL"
-  "E\022+\n\004info\030\001 \001(\0132\035.Protocol.ProjectileBas"
-  "icInfo\022!\n\004mesh\030\002 \001(\0162\023.Protocol.SkillMes"
-  "h\"w\n\032S_SPAWN_PROJECTILE_SUCESSE\022\025\n\rproje"
-  "ctile_id\030\001 \001(\004\022\037\n\004size\030\002 \001(\0132\021.Protocol."
-  "Vector3\022!\n\004mesh\030\003 \001(\0162\023.Protocol.SkillMe"
-  "sh\"\016\n\014S_LEAVE_GAME\"\217\001\n\006C_MOVE\0222\n\020player_"
-  "move_info\030\001 \001(\0132\030.Protocol.PlayerMoveInf"
-  "o\022\036\n\003dir\030\002 \001(\0132\021.Protocol.Vector3\022!\n\004mes"
-  "h\030\003 \001(\0162\023.Protocol.SkillMesh\022\016\n\006IsMove\030\004"
-  " \001(\010\"F\n\021C_MOVE_PROJECTILE\0221\n\017projectile_"
-  "info\030\001 \001(\0132\030.Protocol.ProjectileInfo\"<\n\006"
-  "S_MOVE\0222\n\020player_move_info\030\001 \001(\0132\030.Proto"
-  "col.PlayerMoveInfo\"I\n\017S_UPDATE_PLAYER\0226\n"
-  "\022player_update_info\030\001 \001(\0132\032.Protocol.Pla"
-  "yerUpdateInfo\"=\n\016S_MONSTER_INFO\022+\n\014monst"
-  "er_info\030\001 \003(\0132\025.Protocol.MonsterInfo\"F\n\021"
-  "S_PROJECTILE_INFO\0221\n\017projectile_info\030\001 \001"
-  "(\0132\030.Protocol.ProjectileInfo\"0\n\007S_SPAWN\022"
-  "%\n\007objects\030\001 \003(\0132\024.Protocol.ObjectInfo\":"
-  "\n\022S_SPAWN_NEW_PLAYER\022$\n\006player\030\001 \001(\0132\024.P"
-  "rotocol.PlayerInfo\"\?\n\027S_SPAWN_EXISTING_P"
-  "LAYER\022$\n\006player\030\001 \003(\0132\024.Protocol.PlayerI"
-  "nfo\"&\n\020S_DESPAWN_PLAYER\022\022\n\nplayer_ids\030\001 "
-  "\001(\004\"\037\n\tS_DESPAWN\022\022\n\nobject_ids\030\001 \003(\004\"9\n\013"
-  "S_GATE_OPNE\022*\n\014open_objects\030\001 \003(\0132\024.Prot"
-  "ocol.ObjectInfo\"<\n\014S_GATE_CLOSE\022,\n\016cloas"
-  "e_objects\030\001 \003(\0132\024.Protocol.ObjectInfo\"2\n"
-  "\013S_SPAWN_NPC\022#\n\010npc_info\030\001 \003(\0132\021.Protoco"
-  "l.NpcInfo\"\035\n\nC_BUY_ITEM\022\017\n\007item_id\030\001 \001(\r"
-  "\"F\n\rS_UPDATE_ITEM\022\016\n\006npc_id\030\001 \001(\r\022%\n\tite"
-  "m_info\030\002 \003(\0132\022.Protocol.ItemInfo\" \n\nS_BU"
-  "Y_ITEM\022\022\n\nis_success\030\001 \001(\010b\006proto3"
+  "nfo\"\016\n\014C_LEAVE_GAME\"\205\001\n\022C_SPAWN_PROJECTI"
+  "LE\022+\n\004info\030\001 \001(\0132\035.Protocol.ProjectileBa"
+  "sicInfo\022!\n\004mesh\030\002 \001(\0162\023.Protocol.SkillMe"
+  "sh\022\037\n\004size\030\003 \001(\0132\021.Protocol.Vector3\"w\n\032S"
+  "_SPAWN_PROJECTILE_SUCESSE\022\025\n\rprojectile_"
+  "id\030\001 \001(\004\022\037\n\004size\030\002 \001(\0132\021.Protocol.Vector"
+  "3\022!\n\004mesh\030\003 \001(\0162\023.Protocol.SkillMesh\"\016\n\014"
+  "S_LEAVE_GAME\"\217\001\n\006C_MOVE\0222\n\020player_move_i"
+  "nfo\030\001 \001(\0132\030.Protocol.PlayerMoveInfo\022\036\n\003d"
+  "ir\030\002 \001(\0132\021.Protocol.Vector3\022!\n\004mesh\030\003 \001("
+  "\0162\023.Protocol.SkillMesh\022\016\n\006IsMove\030\004 \001(\010\"F"
+  "\n\021C_MOVE_PROJECTILE\0221\n\017projectile_info\030\001"
+  " \001(\0132\030.Protocol.ProjectileInfo\"<\n\006S_MOVE"
+  "\0222\n\020player_move_info\030\001 \001(\0132\030.Protocol.Pl"
+  "ayerMoveInfo\"I\n\017S_UPDATE_PLAYER\0226\n\022playe"
+  "r_update_info\030\001 \001(\0132\032.Protocol.PlayerUpd"
+  "ateInfo\"=\n\016S_MONSTER_INFO\022+\n\014monster_inf"
+  "o\030\001 \003(\0132\025.Protocol.MonsterInfo\"F\n\021S_PROJ"
+  "ECTILE_INFO\0221\n\017projectile_info\030\001 \001(\0132\030.P"
+  "rotocol.ProjectileInfo\"0\n\007S_SPAWN\022%\n\007obj"
+  "ects\030\001 \003(\0132\024.Protocol.ObjectInfo\":\n\022S_SP"
+  "AWN_NEW_PLAYER\022$\n\006player\030\001 \001(\0132\024.Protoco"
+  "l.PlayerInfo\"\?\n\027S_SPAWN_EXISTING_PLAYER\022"
+  "$\n\006player\030\001 \003(\0132\024.Protocol.PlayerInfo\"&\n"
+  "\020S_DESPAWN_PLAYER\022\022\n\nplayer_ids\030\001 \001(\004\"\037\n"
+  "\tS_DESPAWN\022\022\n\nobject_ids\030\001 \003(\004\"9\n\013S_GATE"
+  "_OPNE\022*\n\014open_objects\030\001 \003(\0132\024.Protocol.O"
+  "bjectInfo\"<\n\014S_GATE_CLOSE\022,\n\016cloase_obje"
+  "cts\030\001 \003(\0132\024.Protocol.ObjectInfo\"2\n\013S_SPA"
+  "WN_NPC\022#\n\010npc_info\030\001 \003(\0132\021.Protocol.NpcI"
+  "nfo\"\035\n\nC_BUY_ITEM\022\017\n\007item_id\030\001 \001(\r\"F\n\rS_"
+  "UPDATE_ITEM\022\016\n\006npc_id\030\001 \001(\r\022%\n\titem_info"
+  "\030\002 \003(\0132\022.Protocol.ItemInfo\" \n\nS_BUY_ITEM"
+  "\022\022\n\nis_success\030\001 \001(\010b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_deps[2] = {
   &::descriptor_table_Enum_2eproto,
@@ -662,7 +665,7 @@ static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_de
 };
 static ::_pbi::once_flag descriptor_table_Protocol_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
-    false, false, 1594, descriptor_table_protodef_Protocol_2eproto,
+    false, false, 1628, descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
     &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 26,
     schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
@@ -1550,17 +1553,28 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C_LEAVE_GAME::GetClassData() c
 class C_SPAWN_PROJECTILE::_Internal {
  public:
   static const ::Protocol::ProjectileBasicInfo& info(const C_SPAWN_PROJECTILE* msg);
+  static const ::Protocol::Vector3& size(const C_SPAWN_PROJECTILE* msg);
 };
 
 const ::Protocol::ProjectileBasicInfo&
 C_SPAWN_PROJECTILE::_Internal::info(const C_SPAWN_PROJECTILE* msg) {
   return *msg->_impl_.info_;
 }
+const ::Protocol::Vector3&
+C_SPAWN_PROJECTILE::_Internal::size(const C_SPAWN_PROJECTILE* msg) {
+  return *msg->_impl_.size_;
+}
 void C_SPAWN_PROJECTILE::clear_info() {
   if (GetArenaForAllocation() == nullptr && _impl_.info_ != nullptr) {
     delete _impl_.info_;
   }
   _impl_.info_ = nullptr;
+}
+void C_SPAWN_PROJECTILE::clear_size() {
+  if (GetArenaForAllocation() == nullptr && _impl_.size_ != nullptr) {
+    delete _impl_.size_;
+  }
+  _impl_.size_ = nullptr;
 }
 C_SPAWN_PROJECTILE::C_SPAWN_PROJECTILE(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -1573,12 +1587,16 @@ C_SPAWN_PROJECTILE::C_SPAWN_PROJECTILE(const C_SPAWN_PROJECTILE& from)
   C_SPAWN_PROJECTILE* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.info_){nullptr}
+    , decltype(_impl_.size_){nullptr}
     , decltype(_impl_.mesh_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   if (from._internal_has_info()) {
     _this->_impl_.info_ = new ::Protocol::ProjectileBasicInfo(*from._impl_.info_);
+  }
+  if (from._internal_has_size()) {
+    _this->_impl_.size_ = new ::Protocol::Vector3(*from._impl_.size_);
   }
   _this->_impl_.mesh_ = from._impl_.mesh_;
   // @@protoc_insertion_point(copy_constructor:Protocol.C_SPAWN_PROJECTILE)
@@ -1590,6 +1608,7 @@ inline void C_SPAWN_PROJECTILE::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.info_){nullptr}
+    , decltype(_impl_.size_){nullptr}
     , decltype(_impl_.mesh_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -1607,6 +1626,7 @@ C_SPAWN_PROJECTILE::~C_SPAWN_PROJECTILE() {
 inline void C_SPAWN_PROJECTILE::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.info_;
+  if (this != internal_default_instance()) delete _impl_.size_;
 }
 
 void C_SPAWN_PROJECTILE::SetCachedSize(int size) const {
@@ -1623,6 +1643,10 @@ void C_SPAWN_PROJECTILE::Clear() {
     delete _impl_.info_;
   }
   _impl_.info_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.size_ != nullptr) {
+    delete _impl_.size_;
+  }
+  _impl_.size_ = nullptr;
   _impl_.mesh_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -1647,6 +1671,14 @@ const char* C_SPAWN_PROJECTILE::_InternalParse(const char* ptr, ::_pbi::ParseCon
           uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_mesh(static_cast<::Protocol::SkillMesh>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.Vector3 size = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr = ctx->ParseMessage(_internal_mutable_size(), ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -1693,6 +1725,13 @@ uint8_t* C_SPAWN_PROJECTILE::_InternalSerialize(
       2, this->_internal_mesh(), target);
   }
 
+  // .Protocol.Vector3 size = 3;
+  if (this->_internal_has_size()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(3, _Internal::size(this),
+        _Internal::size(this).GetCachedSize(), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1714,6 +1753,13 @@ size_t C_SPAWN_PROJECTILE::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *_impl_.info_);
+  }
+
+  // .Protocol.Vector3 size = 3;
+  if (this->_internal_has_size()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.size_);
   }
 
   // .Protocol.SkillMesh mesh = 2;
@@ -1743,6 +1789,10 @@ void C_SPAWN_PROJECTILE::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, con
   if (from._internal_has_info()) {
     _this->_internal_mutable_info()->::Protocol::ProjectileBasicInfo::MergeFrom(
         from._internal_info());
+  }
+  if (from._internal_has_size()) {
+    _this->_internal_mutable_size()->::Protocol::Vector3::MergeFrom(
+        from._internal_size());
   }
   if (from._internal_mesh() != 0) {
     _this->_internal_set_mesh(from._internal_mesh());

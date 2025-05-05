@@ -1138,6 +1138,7 @@ class C_SPAWN_PROJECTILE final :
 
   enum : int {
     kInfoFieldNumber = 1,
+    kSizeFieldNumber = 3,
     kMeshFieldNumber = 2,
   };
   // .Protocol.ProjectileBasicInfo info = 1;
@@ -1158,6 +1159,24 @@ class C_SPAWN_PROJECTILE final :
       ::Protocol::ProjectileBasicInfo* info);
   ::Protocol::ProjectileBasicInfo* unsafe_arena_release_info();
 
+  // .Protocol.Vector3 size = 3;
+  bool has_size() const;
+  private:
+  bool _internal_has_size() const;
+  public:
+  void clear_size();
+  const ::Protocol::Vector3& size() const;
+  PROTOBUF_NODISCARD ::Protocol::Vector3* release_size();
+  ::Protocol::Vector3* mutable_size();
+  void set_allocated_size(::Protocol::Vector3* size);
+  private:
+  const ::Protocol::Vector3& _internal_size() const;
+  ::Protocol::Vector3* _internal_mutable_size();
+  public:
+  void unsafe_arena_set_allocated_size(
+      ::Protocol::Vector3* size);
+  ::Protocol::Vector3* unsafe_arena_release_size();
+
   // .Protocol.SkillMesh mesh = 2;
   void clear_mesh();
   ::Protocol::SkillMesh mesh() const;
@@ -1176,6 +1195,7 @@ class C_SPAWN_PROJECTILE final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::Protocol::ProjectileBasicInfo* info_;
+    ::Protocol::Vector3* size_;
     int mesh_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -4547,6 +4567,91 @@ inline void C_SPAWN_PROJECTILE::_internal_set_mesh(::Protocol::SkillMesh value) 
 inline void C_SPAWN_PROJECTILE::set_mesh(::Protocol::SkillMesh value) {
   _internal_set_mesh(value);
   // @@protoc_insertion_point(field_set:Protocol.C_SPAWN_PROJECTILE.mesh)
+}
+
+// .Protocol.Vector3 size = 3;
+inline bool C_SPAWN_PROJECTILE::_internal_has_size() const {
+  return this != internal_default_instance() && _impl_.size_ != nullptr;
+}
+inline bool C_SPAWN_PROJECTILE::has_size() const {
+  return _internal_has_size();
+}
+inline const ::Protocol::Vector3& C_SPAWN_PROJECTILE::_internal_size() const {
+  const ::Protocol::Vector3* p = _impl_.size_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vector3&>(
+      ::Protocol::_Vector3_default_instance_);
+}
+inline const ::Protocol::Vector3& C_SPAWN_PROJECTILE::size() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_SPAWN_PROJECTILE.size)
+  return _internal_size();
+}
+inline void C_SPAWN_PROJECTILE::unsafe_arena_set_allocated_size(
+    ::Protocol::Vector3* size) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.size_);
+  }
+  _impl_.size_ = size;
+  if (size) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.C_SPAWN_PROJECTILE.size)
+}
+inline ::Protocol::Vector3* C_SPAWN_PROJECTILE::release_size() {
+  
+  ::Protocol::Vector3* temp = _impl_.size_;
+  _impl_.size_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vector3* C_SPAWN_PROJECTILE::unsafe_arena_release_size() {
+  // @@protoc_insertion_point(field_release:Protocol.C_SPAWN_PROJECTILE.size)
+  
+  ::Protocol::Vector3* temp = _impl_.size_;
+  _impl_.size_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vector3* C_SPAWN_PROJECTILE::_internal_mutable_size() {
+  
+  if (_impl_.size_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vector3>(GetArenaForAllocation());
+    _impl_.size_ = p;
+  }
+  return _impl_.size_;
+}
+inline ::Protocol::Vector3* C_SPAWN_PROJECTILE::mutable_size() {
+  ::Protocol::Vector3* _msg = _internal_mutable_size();
+  // @@protoc_insertion_point(field_mutable:Protocol.C_SPAWN_PROJECTILE.size)
+  return _msg;
+}
+inline void C_SPAWN_PROJECTILE::set_allocated_size(::Protocol::Vector3* size) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.size_);
+  }
+  if (size) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(size));
+    if (message_arena != submessage_arena) {
+      size = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, size, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.size_ = size;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_SPAWN_PROJECTILE.size)
 }
 
 // -------------------------------------------------------------------

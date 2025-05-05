@@ -206,6 +206,7 @@ void CSkillManager::FireSwordSpreadShot(float duration)
     const int count = 8;
     const float radius = 80.f;
     Vec3 center = m_Owner->GetTransform()->GetRelativePosition();
+    center.y += 100.f;
     Vec3 targetPos = GetMouseGroundPoint();
     Vec3 lookDir = targetPos - center;
     lookDir.Normalize();

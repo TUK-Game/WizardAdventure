@@ -580,14 +580,18 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 
 			if (projectile->GetCollisionExplosion())
 			{
-				//if (m_LevelCollision->CollisionWithWall(projectile->GetCollider()))
-				//{
-				//	std::cout << "¹ÚÀ½" << std::endl;
-				//	projectile->ProjectileInfo->set_state(Protocol::COLLISION);
-				//	m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
-				//	g_pool->Release(projectile);
-				//	break;
-				//}
+				if (m_LevelCollision->CollisionWithWall(projectile->GetCollider()))
+				{
+					projectile->ProjectileInfo->set_state(Protocol::COLLISION);
+					std::cout << projectile->ProjectileInfo->object_info().pos_info().object_id() << ": " << projectile->GetMeshSize().x << " " << projectile->GetMeshSize().y << " " << projectile->GetMeshSize().z << "\n";
+					std::cout << projectile->ProjectileInfo->object_info().pos_info().size().x() << " " << projectile->ProjectileInfo->object_info().pos_info().size().y() << " " << projectile->ProjectileInfo->object_info().pos_info().size().z() << "\n";
+					std::cout << projectile->GetCollider()->GetBoundingBox().Center.x << " " << projectile->GetCollider()->GetBoundingBox().Center.y << " " << projectile->GetCollider()->GetBoundingBox().Center.z << "\n";
+					std::cout << projectile->GetCollider()->GetBoundingBox().Extents.x << " " << projectile->GetCollider()->GetBoundingBox().Extents.y << " " << projectile->GetCollider()->GetBoundingBox().Extents.z << "\n";
+
+					m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
+					g_pool->Release(projectile);
+					break;
+				}
 			}
 		}
 

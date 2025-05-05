@@ -14,6 +14,9 @@ public:
 public:
 	std::shared_ptr<CRoom> GetRoom() const	{ return m_Room.load().lock(); }
 	CBoxCollider* GetCollider() const { return m_BoxCollider; }
+	Vec3 GetMeshSize() { return m_MeshSize; }
+
+	void SetMeshSize(const Vec3& size) { m_MeshSize = size; }
 
 	bool IsPlayer() const	{ return m_bPlayer; }
 
@@ -37,5 +40,6 @@ protected:
 protected:
 	bool	m_bPlayer;
 	CBoxCollider* m_BoxCollider;
+	Vec3 m_MeshSize{};
 };
 

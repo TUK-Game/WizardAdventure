@@ -10,6 +10,7 @@ struct ProjectileState
 	float ElapsedTime{};
 	int damage{};
 };
+class CProjectileCollider;
 
 class CProjectile : public CGameObject
 {
@@ -22,7 +23,9 @@ public:
 	void SetProjectileState(const ProjectileState& state) { m_Stats = state; }
 	void SetCollisionBoxInfo(const Vec3& pos, const Vec3& size, const Vec3& rot);
 	void SetCollisionExplosion(bool b) { m_bCollisionExplosion = b; }
+	void SetMeshSize(const Vec3& size) { m_MeshSize = size; }
 
+	Vec3 GetMeshSize() { return m_MeshSize; }
 	bool GetCollisionExplosion() { return m_bCollisionExplosion; }
 	ProjectileState& GetStateInfo() { return m_Stats; }
 	int GetAttack() { return m_Stats.damage; }
@@ -38,5 +41,6 @@ public:
 protected:
 	bool m_bCollisionExplosion{};
 	ProjectileState m_Stats{};
+	CProjectileCollider* m_box;
 };
 
