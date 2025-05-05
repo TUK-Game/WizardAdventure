@@ -8,8 +8,24 @@
 void CMonsterCollider::Update()
 {
 	Protocol::Vector3 pos = ((CMonster*)m_Owner)->MonsterInfo->object_info().pos_info().position();
+	Protocol::Vector3 rotation = ((CMonster*)m_Owner)->MonsterInfo->object_info().pos_info().rotation();
 	m_BoundingBox.Center = Vec3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z);
-	// temp
+
+    XMVECTOR rotRad = XMVectorSet(
+        XMConvertToRadians(rotation.x()),
+        XMConvertToRadians(rotation.y()),
+        XMConvertToRadians(rotation.z()),
+        0.0f
+    );
+
+    XMVECTOR quatX = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), XMVectorGetX(rotRad));
+    XMVECTOR quatY = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), XMVectorGetY(rotRad));
+    XMVECTOR quatZ = XMQuaternionRotationAxis(XMVectorSet(0, 0, 1, 0), XMVectorGetZ(rotRad));
+
+    XMVECTOR q = XMQuaternionMultiply(quatX, XMQuaternionMultiply(quatY, quatZ));
+
+    XMStoreFloat4(&m_BoundingBox.Orientation, q);
+
 	g_Room->GetLevelCollision()->AddCollider(this, m_Channel);
 }
 
@@ -17,7 +33,7 @@ void CMonsterCollider::SetBoxInfo(const Vec3& centerPos, const Vec3& size, const
 {
 	m_BoundingBox.Center = centerPos;
 
-	m_BoundingBox.Extents = Vec3(size.x / 2, size.y / 2, size.z / 2);
+	m_BoundingBox.Extents = Vec3(size.x * 0.8f, size.y * 0.8f, size.z * 0.7f);
 
     XMVECTOR rotRad = XMVectorSet(
         XMConvertToRadians(rotation.x),

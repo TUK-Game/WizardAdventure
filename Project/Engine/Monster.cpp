@@ -33,6 +33,8 @@ CMonster::CMonster()
 	AddComponent(new COrientedBoxCollider);
 	GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player")); // temp
 	GetTransform()->SetRelativePosition(11000, 20, 3500);
+
+	Vec3 ms;
 	for (auto& o : obj2)
 	{
 		std::wstring name = o->GetMeshRenderer()->GetMesh()->GetName();
@@ -40,11 +42,12 @@ CMonster::CMonster()
 		Vec3 rot = o->GetTransform()->GetRelativeRotation();
 		o->GetTransform()->SetRelativeRotation(rot);
 		//o->GetTransform()->SetRelativeScale(0.2f, 0.2f, 0.2f);
-		o->SetCheckFrustum(false);
+		o->SetCheckFrustum(true);
 		o->SetInstancing(false);
 		this->AddChild(o);
+		ms = o->GetMeshRenderer()->GetMesh()->GetMeshSize();
 	}
-	GetCollider()->SetMaxMinPos(Vec3(11000, 20, 3500), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
+	GetCollider()->SetMaxMinPos(GetTransform()->GetRelativePosition(), ms * 2, Vec3(0, 0, 0), Vec3(0, 100, 0));
 
 	m_Stats = new Stats;
 
