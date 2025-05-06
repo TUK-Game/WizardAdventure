@@ -578,14 +578,16 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 
 			projectile->GetCollider()->Update();
 
-			//if (m_LevelCollision->CollisionWithWall(projectile->GetCollider()))
-			//{
-			//	std::cout << "박음" << std::endl;
-			//	projectile->ProjectileInfo->set_state(Protocol::COLLISION);
-			//	m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
-			//	g_pool->Release(projectile);
-			//	break;
-			//}
+			if (projectile->GetCollisionExplosion())
+			{
+				if (m_LevelCollision->CollisionWithWall(projectile->GetCollider()))
+				{
+					projectile->ProjectileInfo->set_state(Protocol::COLLISION);
+					m_mapObject[(uint32)EObject_Type::Projectile].erase(projectile->ProjectileInfo->projectile_id());
+					g_pool->Release(projectile);
+					break;
+				}
+			}
 		}
 
 		const auto& rot = projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->rotation();
@@ -637,13 +639,13 @@ bool CRoom::HandleBuyItem(CPlayerRef player, CItemRef item)
 			if (player->BuyItem(item))
 			{
 				// 성공메시지 전달
-				IsBuyItem(player, true);
+				IsBuyItem(player, item, true);
 				(*iter)->GetItemInfo().bSell = true;
 			}
 			else
 			{
 				// 실패메시지 전달
-				IsBuyItem(player, false);
+				IsBuyItem(player, nullptr, false);
 			}
 		}
 		UpdateItem(npc->ObjectInfo->object_id());
@@ -653,11 +655,12 @@ bool CRoom::HandleBuyItem(CPlayerRef player, CItemRef item)
 	return true;
 }
 
-bool CRoom::IsBuyItem(CPlayerRef player, bool isBuy)
+bool CRoom::IsBuyItem(CPlayerRef player, CItemRef item, bool isBuy)
 {
 	Protocol::S_BUY_ITEM pkt;
+	pkt.set_player_id(player->PlayerInfo->player_id());
 	pkt.set_is_success(isBuy);
-
+	pkt.set_item_id(item->GetItemInfo().id);
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	if (auto session = player->GetSession())
 		session->Send(sendBuffer);

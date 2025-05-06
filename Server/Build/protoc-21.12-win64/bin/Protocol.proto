@@ -39,6 +39,7 @@ message C_SPAWN_PROJECTILE
 {
 	ProjectileBasicInfo info = 1;
 	SkillMesh mesh = 2;
+	Vector3 size = 3;
 }	
 
 message S_SPAWN_PROJECTILE_SUCESSE
@@ -142,5 +143,7 @@ message S_UPDATE_ITEM
 
 message S_BUY_ITEM
 {
-	bool is_success = 1;
+	uint32 player_id = 1;
+	bool is_success = 2;
+	uint32 item_id = 3;
 }

@@ -7,7 +7,8 @@
 #include "LevelManager.h"
 #include "Level.h"
 #include "Layer.h"
-
+#include "MeshRenderer.h"
+#include "Mesh.h"
 void ProtoToVector3(const Vec3& from, Protocol::Vector3* to)
 {
 	to->set_x(from.x);
@@ -134,7 +135,8 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 {
 	CTransform* transform = object->GetTransform();
 	const Vec3& pos = transform->GetRelativePosition();
-	const Vec3& size = transform->GetRelativeScale();
+	const Vec3& scale = transform->GetRelativeScale();
+	const Vec3& size = object->GetTotalMeshSize();
 	Protocol::C_SPAWN_PROJECTILE pkt;
 	auto* info = pkt.mutable_info();
 
@@ -150,9 +152,14 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 	posInfo->set_z(pos.z);
 
 	auto* sizeInfo = pkt.mutable_info()->mutable_size();
-	sizeInfo->set_x(size.x);
-	sizeInfo->set_y(size.y);
-	sizeInfo->set_z(size.z);
+	sizeInfo->set_x(scale.x);
+	sizeInfo->set_y(scale.y);
+	sizeInfo->set_z(scale.z);
+
+	pkt.mutable_size()->set_x(size.x);
+	pkt.mutable_size()->set_y(size.y);
+	pkt.mutable_size()->set_z(size.z);
+
 
 	switch (object->GetSkillType())
 	{
@@ -191,10 +198,6 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 	pkt.mutable_info()->set_damage(object->GetDamage());
 	
 	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_PROJECTILE)->GetProjectileMap();
-	//if (map.find(object->m_ProjectileId) != map.end())
-	//{
-	//	map.erase(object->m_ProjectileId);
-	//}
 	map[object->m_ProjectileId] = object;
 
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);

@@ -63,7 +63,7 @@ void CAssetManager::AddAsset(const std::wstring& key, CSharedPtr<CAsset> asset)
 
 	auto iter = m_mapAsset[(int)type].find(key);
 
-	if(iter != m_mapAsset[(int)type].end())
+	if (iter != m_mapAsset[(int)type].end())
 		return;
 
 	asset->m_Key = key;
@@ -83,7 +83,7 @@ int CAssetManager::LoadMesh()
 
 	if (FAILED(CreateRectangleMesh()))
 		return E_FAIL;
-	
+
 	if (FAILED(CreateCircleMesh()))
 		return E_FAIL;
 
@@ -247,7 +247,7 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"explosionSheet.png");
 	AddAsset(L"explosionSheet", tex);
-	
+
 	tex = new CTexture;
 	tex->Init(path / L"explosionSheet1.png");
 	AddAsset(L"explosionSheet1", tex);
@@ -259,7 +259,7 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"SmokeSheet.png");
 	AddAsset(L"SmokeSheet", tex);
-	
+
 	tex = new CTexture;
 	tex->Init(path / L"FireSheet.png");
 	AddAsset(L"FireSheet", tex);
@@ -283,6 +283,10 @@ int CAssetManager::LoadTexture()
 		AddAsset(L"ShopBackGround", tex);
 
 		tex = new CTexture;
+		tex->Init(path / L"Inven.png");
+		AddAsset(L"Inventory", tex);
+
+		tex = new CTexture;
 		tex->Init(path / L"uiPopup.png");
 		AddAsset(L"Popup", tex);
 
@@ -293,25 +297,25 @@ int CAssetManager::LoadTexture()
 
 	// skill
 	{
-		tex = new CTexture;
-		tex->Init(path / L"Skill\\Fire\\Fireball.png");
-		AddAsset(L"Fireball", tex);
+		//tex = new CTexture;
+		//tex->Init(path / L"Skill\\Fire\\Fireball.png");
+		//AddAsset(L"Fireball", tex);
 
-		tex = new CTexture;
-		tex->Init(path / L"Skill\\Fire\\FireballExplosion.png");
-		AddAsset(L"FireballExplosion", tex);
+		//tex = new CTexture;
+		//tex->Init(path / L"Skill\\Fire\\FireballExplosion.png");
+		//AddAsset(L"FireballExplosion", tex);
 
-		tex = new CTexture;
-		tex->Init(path / L"Skill\\Fire\\FireRain.png");
-		AddAsset(L"FireRain", tex);
+		//tex = new CTexture;
+		//tex->Init(path / L"Skill\\Fire\\FireRain.png");
+		//AddAsset(L"FireRain", tex);
 
-		tex = new CTexture;
-		tex->Init(path / L"Skill\\Fire\\FireShot_Circle.png");
-		AddAsset(L"FireShot", tex);
+		//tex = new CTexture;
+		//tex->Init(path / L"Skill\\Fire\\FireShot_Circle.png");
+		//AddAsset(L"FireShot", tex);
 
-		tex = new CTexture;
-		tex->Init(path / L"Skill\\Fire\\FireTower.png");
-		AddAsset(L"FireTower", tex);
+		//tex = new CTexture;
+		//tex->Init(path / L"Skill\\Fire\\FireTower.png");
+		//AddAsset(L"FireTower", tex);
 	}
 
 	// Mage Texture
@@ -504,7 +508,7 @@ int CAssetManager::LoadMeshData()
 	data = LoadJHDForAnotherColor(L"../../Content/Texture/JHD/Mage.jhd", L"Body_Yellow", 0);
 	AddAsset(L"YellowMage", data);
 
-	data= CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Crab.jhd", L"Crab");
+	data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/Crab.jhd", L"Crab");
 	AddAsset(L"Crab", data);
 
 	data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/StoreNPC.jhd");
@@ -517,7 +521,7 @@ int CAssetManager::LoadMeshData()
 	////CMeshData* data = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/wizard.jhd", L"wizard");
 
 	CMeshData* data1 = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/level_1.jhd", L"map");
-	AddAsset(L"level_1", data1);	
+	AddAsset(L"level_1", data1);
 
 	CMeshData* data2 = CAssetManager::GetInst()->LoadJHD(L"../../Content/Texture/JHD/FireTower.jhd", L"FireTower");
 	AddAsset(L"FireTower", data2);
@@ -541,7 +545,7 @@ int CAssetManager::LoadGraphicShader()
 
 	shader = new CGraphicShader;
 	name = L"Deferred.hlsl";
-	LoadShader(shader, name, {SHADER_TYPE::DEFERRED, RASTERIZER_TYPE::WIREFRAME });
+	LoadShader(shader, name, { SHADER_TYPE::DEFERRED, RASTERIZER_TYPE::WIREFRAME });
 	AddAsset(L"DebugCollision", shader);
 
 	shader = new CGraphicShader;
@@ -566,23 +570,23 @@ int CAssetManager::LoadGraphicShader()
 
 	shader = new CGraphicShader;
 	name = L"particle.hlsl";
-	LoadShader(shader, name, {SHADER_TYPE::PARTICLE, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND, D3D_PRIMITIVE_TOPOLOGY_POINTLIST},
+	LoadShader(shader, name, { SHADER_TYPE::PARTICLE, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND, D3D_PRIMITIVE_TOPOLOGY_POINTLIST },
 		"VS_Main", "PS_Main", "GS_Main");
 	AddAsset(L"Particle", shader);
 
 	shader = new CGraphicShader;
 	name = L"Forward.hlsl";
-	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND}, "VS_Tex", "PS_Tex");
+	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND }, "VS_Tex", "PS_Tex");
 	AddAsset(L"Texture", shader);
 
 	shader = new CGraphicShader;
-	name = L"Forward.hlsl"; 
-	LoadShader(shader, name,{SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND}, "VS_TexWorld", "PS_TexWorld");
+	name = L"Forward.hlsl";
+	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND }, "VS_TexWorld", "PS_TexWorld");
 	AddAsset(L"Texture_World", shader);
 
 	shader = new CGraphicShader;
 	name = L"Forward.hlsl";
-	LoadShader(shader, name,{ SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND, D3D_PRIMITIVE_TOPOLOGY_POINTLIST },"VS_BillboardAnimated", "PS_BillboardAnimated","GS_BillboardAnimated");
+	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND, D3D_PRIMITIVE_TOPOLOGY_POINTLIST }, "VS_BillboardAnimated", "PS_BillboardAnimated", "GS_BillboardAnimated");
 	AddAsset(L"BillboardAnimated", shader);
 
 	shader = new CGraphicShader;
@@ -614,7 +618,7 @@ int CAssetManager::LoadGraphicShader()
 	{
 		shader = new CGraphicShader;
 		name = L"Shadow.hlsl";
-		LoadShader(shader, name, { SHADER_TYPE::SHADOW, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::LESS}, "VS_MAIN", "PS_MAIN");
+		LoadShader(shader, name, { SHADER_TYPE::SHADOW, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::LESS }, "VS_MAIN", "PS_MAIN");
 		AddAsset(L"Shadow", shader);
 	}
 
@@ -632,12 +636,12 @@ int CAssetManager::LoadComputeShader()
 {
 	CComputeShader* shader = new CComputeShader;
 	std::wstring name = L"Compute.hlsl";
-	LoadShader(shader, name, {SHADER_TYPE::COMPUTE}, "", "", "", "CS_Main");
+	LoadShader(shader, name, { SHADER_TYPE::COMPUTE }, "", "", "", "CS_Main");
 	AddAsset(L"Compute", shader);
 
 	shader = new CComputeShader;
 	name = L"particle.hlsl";
-	LoadShader(shader, name, {SHADER_TYPE::COMPUTE}, "", "", "", "CS_Main");
+	LoadShader(shader, name, { SHADER_TYPE::COMPUTE }, "", "", "", "CS_Main");
 	AddAsset(L"ComputeParticle", shader);
 
 	shader = new CComputeShader;
@@ -648,7 +652,7 @@ int CAssetManager::LoadComputeShader()
 	return S_OK;
 }
 
-int CAssetManager::LoadShader(CShader* shader, std::wstring& shaderName, ShaderInfo info, 
+int CAssetManager::LoadShader(CShader* shader, std::wstring& shaderName, ShaderInfo info,
 	const std::string& vs, const std::string& ps, const std::string& gs, const std::string& cs) const
 {
 	auto path = CPathManager::GetInst()->FindPath(HLSL_PATH);
@@ -1009,6 +1013,89 @@ CTexture* CAssetManager::CreateTextureFromResource(const std::wstring& name, Com
 	return texture;
 }
 
+std::wstring CAssetManager::ConvertSkillToTextureName(ESkillType type)
+{
+	CTexture* tex;
+	switch (type)
+	{
+	case ESkillType::FireBallTowardMouse:
+	{
+		tex = FindAsset<CTexture>(L"FireShot");
+		if (!tex)
+		{
+			MakeSkillTexture(tex, EPlayerAttribute::Fire, L"FireShot");
+		}
+	}
+	return L"FireShot";
+	case ESkillType::Meteor:
+	{
+		tex = FindAsset<CTexture>(L"FireRain");
+		if (!tex)
+		{
+			MakeSkillTexture(tex, EPlayerAttribute::Fire, L"FireRain");
+		}
+	}
+	return L"FireRain";
+	case ESkillType::FireBallTowardQ:
+	{
+		tex = FindAsset<CTexture>(L"FireballExplosion");
+		if (!tex)
+		{
+			MakeSkillTexture(tex, EPlayerAttribute::Fire, L"FireballExplosion");
+		}
+	}
+	return L"FireballExplosion";
+	case ESkillType::FireTower:
+	{
+		tex = FindAsset<CTexture>(L"FireTower");
+		if (!tex)
+		{
+			MakeSkillTexture(tex, EPlayerAttribute::Fire, L"FireTower");
+		}
+	}
+	return L"FireTower";
+	case ESkillType::FireSwordSpread:
+	{
+		tex = FindAsset<CTexture>(L"Fireball");
+		if (!tex)
+		{
+			MakeSkillTexture(tex, EPlayerAttribute::Fire, L"Fireball");
+		}
+	}
+	return  L"Fireball";
+	}
+
+	return L"";
+}
+
+void CAssetManager::MakeSkillTexture(CTexture* tex, EPlayerAttribute attribute, const std::wstring& name)
+{
+	auto path = CPathManager::GetInst()->FindPath(TEXTURE_PATH);
+	std::wstring p;
+	switch (attribute)
+	{
+	case EPlayerAttribute::Fire:
+	{
+		p = L"Skill\\Fire\\" + name + L".png";
+	}
+	break;
+	case EPlayerAttribute::Ice:
+	{
+		p = L"Skill\\Ice\\" + name + L".png";
+	}
+	break;
+	case EPlayerAttribute::Electric:
+	{
+		p = L"Skill\\Electric\\" + name + L".png";
+	}
+	break;
+	}
+
+	std::wstring fullPath = path / p;
+	tex = new CTexture;
+	tex->Init(fullPath);
+	CAssetManager::GetInst()->AddAsset(name, tex);
+}
 
 bool CAssetManager::CreateSoundChannel(const std::string& name)
 {

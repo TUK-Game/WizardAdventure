@@ -1,6 +1,18 @@
 #pragma once
 #include "ButtonWidget.h"
 
+class CTextWidget;
+struct ItemTooltip
+{
+	void Hide();
+	void Show(const struct ItemInfo& info);
+	void SetToolTip(CTextWidget* name, CTextWidget* description, CTextWidget* gold) { m_Name = name, m_Description = description; m_Price = gold; }
+
+	CTextWidget* m_Name{};
+	CTextWidget* m_Description{};
+	CTextWidget* m_Price{};
+};
+
 class CItemButtonWidget 
 	: public CButtonWidget
 {

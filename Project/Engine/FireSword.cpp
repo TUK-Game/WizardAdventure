@@ -28,6 +28,7 @@ CFireSword::CFireSword()
 		o->SetCheckFrustum(true);
 		o->SetInstancing(false);
 		AddChild(o);
+		m_TotalMeshSize = o->GetMeshRenderer()->GetMesh()->GetMeshSize();
 	}
 	// AddComponent(new CCollider());      
 
@@ -105,11 +106,10 @@ void CFireSword::FinalUpdate()
 	CGameObject::FinalUpdate();
 	if (m_bOwn)
 	{
-		Vec3 pos = GetTransform()->GetRelativePosition();
-		if (pos.y < -200.f) // 충돌시 삭제로 변경해야함
+		//Vec3 pos = GetTransform()->GetRelativePosition();
+		if (pos.y < -1000.f) // 충돌시 삭제로 변경해야함
 		{
 			m_bDelete = true;
-			std::cout << "DELETE\n";
 		}
 	}
 }

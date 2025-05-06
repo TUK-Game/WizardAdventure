@@ -45,6 +45,7 @@ void CFireTower::Init(CGameObject* owner)
 	m_FireCircle = new CFireCircle;
 	m_FireCircle->GetTransform()->SetRelativePosition(centerPos);
 	m_FireCircle->SetCaster(dynamic_cast<CPlayer*>(owner));
+	m_FireCircle->SetCollisionExplosion(false);
 
 	CNetworkManager::GetInst()->s_GameSession->SpawnSkill(m_FireCircle);
 	CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(m_FireCircle, LAYER_PROJECTILE, false);

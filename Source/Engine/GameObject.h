@@ -176,6 +176,7 @@ public:
     CStateManager* GetStateManager()                    { return m_StateManager; }
     bool GetInstancing()                                { return m_bInstancing; }
     bool GetCheckFrustum() { return m_CheckFrustum; }
+    Vec3 GetTotalMeshSize() { return m_TotalMeshSize; }
 
     Protocol::MoveState GetStateForProtocol();
     bool IsStatic() { return m_Static; }
@@ -190,6 +191,7 @@ public:
     void SetProtocolStateForClient(Protocol::MoveState state);
     void SetProtocolStateForClientMonster(Protocol::MoveState state);
     virtual void SetTarget(const Vec3& pos, const Vec3& rot) {}
+    void SetTotalMeshSize(const Vec3& size) { m_TotalMeshSize = size; }
 
     int GetLayerIndex() { return m_LayerIndex; }
     std::wstring GetTag() const { return m_Tag; }
@@ -235,4 +237,5 @@ private:
 
 protected:
     CStateManager* m_StateManager;
+    Vec3 m_TotalMeshSize{ 1.f, 1.f, 1.f };
 };

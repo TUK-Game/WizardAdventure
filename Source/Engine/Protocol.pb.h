@@ -1138,6 +1138,7 @@ class C_SPAWN_PROJECTILE final :
 
   enum : int {
     kInfoFieldNumber = 1,
+    kSizeFieldNumber = 3,
     kMeshFieldNumber = 2,
   };
   // .Protocol.ProjectileBasicInfo info = 1;
@@ -1158,6 +1159,24 @@ class C_SPAWN_PROJECTILE final :
       ::Protocol::ProjectileBasicInfo* info);
   ::Protocol::ProjectileBasicInfo* unsafe_arena_release_info();
 
+  // .Protocol.Vector3 size = 3;
+  bool has_size() const;
+  private:
+  bool _internal_has_size() const;
+  public:
+  void clear_size();
+  const ::Protocol::Vector3& size() const;
+  PROTOBUF_NODISCARD ::Protocol::Vector3* release_size();
+  ::Protocol::Vector3* mutable_size();
+  void set_allocated_size(::Protocol::Vector3* size);
+  private:
+  const ::Protocol::Vector3& _internal_size() const;
+  ::Protocol::Vector3* _internal_mutable_size();
+  public:
+  void unsafe_arena_set_allocated_size(
+      ::Protocol::Vector3* size);
+  ::Protocol::Vector3* unsafe_arena_release_size();
+
   // .Protocol.SkillMesh mesh = 2;
   void clear_mesh();
   ::Protocol::SkillMesh mesh() const;
@@ -1176,6 +1195,7 @@ class C_SPAWN_PROJECTILE final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::Protocol::ProjectileBasicInfo* info_;
+    ::Protocol::Vector3* size_;
     int mesh_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -4154,15 +4174,35 @@ class S_BUY_ITEM final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kIsSuccessFieldNumber = 1,
+    kPlayerIdFieldNumber = 1,
+    kIsSuccessFieldNumber = 2,
+    kItemIdFieldNumber = 3,
   };
-  // bool is_success = 1;
+  // uint32 player_id = 1;
+  void clear_player_id();
+  uint32_t player_id() const;
+  void set_player_id(uint32_t value);
+  private:
+  uint32_t _internal_player_id() const;
+  void _internal_set_player_id(uint32_t value);
+  public:
+
+  // bool is_success = 2;
   void clear_is_success();
   bool is_success() const;
   void set_is_success(bool value);
   private:
   bool _internal_is_success() const;
   void _internal_set_is_success(bool value);
+  public:
+
+  // uint32 item_id = 3;
+  void clear_item_id();
+  uint32_t item_id() const;
+  void set_item_id(uint32_t value);
+  private:
+  uint32_t _internal_item_id() const;
+  void _internal_set_item_id(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.S_BUY_ITEM)
@@ -4173,7 +4213,9 @@ class S_BUY_ITEM final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    uint32_t player_id_;
     bool is_success_;
+    uint32_t item_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4547,6 +4589,91 @@ inline void C_SPAWN_PROJECTILE::_internal_set_mesh(::Protocol::SkillMesh value) 
 inline void C_SPAWN_PROJECTILE::set_mesh(::Protocol::SkillMesh value) {
   _internal_set_mesh(value);
   // @@protoc_insertion_point(field_set:Protocol.C_SPAWN_PROJECTILE.mesh)
+}
+
+// .Protocol.Vector3 size = 3;
+inline bool C_SPAWN_PROJECTILE::_internal_has_size() const {
+  return this != internal_default_instance() && _impl_.size_ != nullptr;
+}
+inline bool C_SPAWN_PROJECTILE::has_size() const {
+  return _internal_has_size();
+}
+inline const ::Protocol::Vector3& C_SPAWN_PROJECTILE::_internal_size() const {
+  const ::Protocol::Vector3* p = _impl_.size_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vector3&>(
+      ::Protocol::_Vector3_default_instance_);
+}
+inline const ::Protocol::Vector3& C_SPAWN_PROJECTILE::size() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_SPAWN_PROJECTILE.size)
+  return _internal_size();
+}
+inline void C_SPAWN_PROJECTILE::unsafe_arena_set_allocated_size(
+    ::Protocol::Vector3* size) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.size_);
+  }
+  _impl_.size_ = size;
+  if (size) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.C_SPAWN_PROJECTILE.size)
+}
+inline ::Protocol::Vector3* C_SPAWN_PROJECTILE::release_size() {
+  
+  ::Protocol::Vector3* temp = _impl_.size_;
+  _impl_.size_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vector3* C_SPAWN_PROJECTILE::unsafe_arena_release_size() {
+  // @@protoc_insertion_point(field_release:Protocol.C_SPAWN_PROJECTILE.size)
+  
+  ::Protocol::Vector3* temp = _impl_.size_;
+  _impl_.size_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vector3* C_SPAWN_PROJECTILE::_internal_mutable_size() {
+  
+  if (_impl_.size_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vector3>(GetArenaForAllocation());
+    _impl_.size_ = p;
+  }
+  return _impl_.size_;
+}
+inline ::Protocol::Vector3* C_SPAWN_PROJECTILE::mutable_size() {
+  ::Protocol::Vector3* _msg = _internal_mutable_size();
+  // @@protoc_insertion_point(field_mutable:Protocol.C_SPAWN_PROJECTILE.size)
+  return _msg;
+}
+inline void C_SPAWN_PROJECTILE::set_allocated_size(::Protocol::Vector3* size) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.size_);
+  }
+  if (size) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(size));
+    if (message_arena != submessage_arena) {
+      size = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, size, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.size_ = size;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_SPAWN_PROJECTILE.size)
 }
 
 // -------------------------------------------------------------------
@@ -5751,7 +5878,27 @@ S_UPDATE_ITEM::item_info() const {
 
 // S_BUY_ITEM
 
-// bool is_success = 1;
+// uint32 player_id = 1;
+inline void S_BUY_ITEM::clear_player_id() {
+  _impl_.player_id_ = 0u;
+}
+inline uint32_t S_BUY_ITEM::_internal_player_id() const {
+  return _impl_.player_id_;
+}
+inline uint32_t S_BUY_ITEM::player_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_BUY_ITEM.player_id)
+  return _internal_player_id();
+}
+inline void S_BUY_ITEM::_internal_set_player_id(uint32_t value) {
+  
+  _impl_.player_id_ = value;
+}
+inline void S_BUY_ITEM::set_player_id(uint32_t value) {
+  _internal_set_player_id(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_BUY_ITEM.player_id)
+}
+
+// bool is_success = 2;
 inline void S_BUY_ITEM::clear_is_success() {
   _impl_.is_success_ = false;
 }
@@ -5769,6 +5916,26 @@ inline void S_BUY_ITEM::_internal_set_is_success(bool value) {
 inline void S_BUY_ITEM::set_is_success(bool value) {
   _internal_set_is_success(value);
   // @@protoc_insertion_point(field_set:Protocol.S_BUY_ITEM.is_success)
+}
+
+// uint32 item_id = 3;
+inline void S_BUY_ITEM::clear_item_id() {
+  _impl_.item_id_ = 0u;
+}
+inline uint32_t S_BUY_ITEM::_internal_item_id() const {
+  return _impl_.item_id_;
+}
+inline uint32_t S_BUY_ITEM::item_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_BUY_ITEM.item_id)
+  return _internal_item_id();
+}
+inline void S_BUY_ITEM::_internal_set_item_id(uint32_t value) {
+  
+  _impl_.item_id_ = value;
+}
+inline void S_BUY_ITEM::set_item_id(uint32_t value) {
+  _internal_set_item_id(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_BUY_ITEM.item_id)
 }
 
 #ifdef __GNUC__

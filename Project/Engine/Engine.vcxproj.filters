@@ -701,6 +701,9 @@
     <ClInclude Include="TextWidget.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryWIdgetWindow.h">
+      <Filter>07. UI\02. WidgetWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1086,6 +1089,9 @@
     </ClCompile>
     <ClCompile Include="TextWidget.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="InventoryWIdgetWindow.cpp">
+      <Filter>07. UI\02. WidgetWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -54,26 +54,7 @@ void CCameraScript::Update()
 		GetOwner()->GetCamera()->SetFar(5000.f);
 		GetTransform()->SetRelativeRotation(49.f, -34.f, 0.f);
 	}
-	if (KEY_DOWN(EKey::M))
-	{
-		CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
-		const auto window = level->FindWidgetWindow(EWIDGETWINDOW_TYPE::MAP_WINDOW);
-		if (window->GetEnable())
-		{
-			window->SetEnable(false);
-			level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::END);
-		}
-		else
-		{
-			window->SetEnable(true);
-			level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::MAP_WINDOW);
-		}
-	/*	CWidget* widget = CLevelManager::GetInst()->GetCurrentLevel()->FindWidget(L"MiniMap");
-		if(widget->GetEnable())
-			widget->SetEnable(false);
-		else
-			widget->SetEnable(true);*/
-	}
+	
 		
 	if (GetOwner()->GetCamera()->GetTarget())
 	{

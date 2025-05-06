@@ -65,7 +65,7 @@ struct CollisionProfile
 
 #define GRAVITY 98
 #define MAX_PLAYERS 4
-#define PROJECTILE_MAX_NUM 100
+#define PROJECTILE_MAX_NUM 1000
 #define MAX_ITEM 10
 
 USING_SHARED_PTR(CGameSession);

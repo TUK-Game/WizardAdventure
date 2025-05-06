@@ -20,6 +20,7 @@
 #include "ServerSession.h"
 #include "NetworkManager.h"
 #include "StateManager.h"
+#include "InventoryWIdgetWindow.h"
 
 CSkillManager::CSkillManager(EPlayerAttribute attribute, CGameObject* owner)
     : m_Attribute(attribute), m_Owner(owner) {}
@@ -78,6 +79,12 @@ void CSkillManager::LearnSkill(int slotIndex, ESkillType skill) {
     if (slotIndex < 0 || slotIndex >= m_SkillSlots.size())
         return;
     m_SkillSlots[slotIndex] = skill;
+
+    CInventoryWIdgetWindow* window = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
+    if (window)
+    {
+        window->SetSkill(slotIndex, skill);
+    }
 }
 
 void CSkillManager::ForgetSkill(int slotIndex) {
@@ -191,6 +198,7 @@ void CSkillManager::SpawnFireTowerAtMouse(float duration)
     tower->Init(m_Owner); 
     tower->SetDamage(Skill::FireTower.damage * tower->GetCaster()->GetStats()->attack);
     tower->SetEnable(false);
+    tower->SetCollisionExplosion(false);
 
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(tower);
 
@@ -205,6 +213,7 @@ void CSkillManager::FireSwordSpreadShot(float duration)
     const int count = 8;
     const float radius = 80.f;
     Vec3 center = m_Owner->GetTransform()->GetRelativePosition();
+    center.y += 100.f;
     Vec3 targetPos = GetMouseGroundPoint();
     Vec3 lookDir = targetPos - center;
     lookDir.Normalize();

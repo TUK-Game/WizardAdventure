@@ -1,24 +1,16 @@
 #pragma once
 #include "WidgetWindow.h"
+#include "SkillInfo.h"
 
-class CTextWidget;
-
-
-class CStoreWidgetWindow :
+class CInventoryWIdgetWindow :
 	public CWidgetWindow
 {
 public:
-	CStoreWidgetWindow();
-	virtual ~CStoreWidgetWindow();
-
-public:
 	virtual bool Init(class CPlayer* player);
-	virtual void Update();
-	virtual void Render();
 
-public:
+	void UpdateInventory();
 	void SetEvent(class CItemButtonWidget* widget, struct ItemTooltip* tooltip);
-
+	void SetSkill(int slotIndex, ESkillType type);
 private:
 	std::shared_ptr<struct ItemTooltip> m_Tooltip;
 };

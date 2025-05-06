@@ -140,15 +140,18 @@ bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PRO
 	state.ElapsedTime = info.duration();
 	state.damage = info.damage();
 
-
 	projectile->SetProjectileState(state);
 	projectile->ProjectileInfo->set_projectile_id(info.new_projectile_id());
 	projectile->SetCollisionExplosion(pkt.info().bcollisionexplosion());
 	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(info.spawn_pos().x());
 	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(info.spawn_pos().y());
 	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(info.spawn_pos().z());
+	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_size()->set_x(info.size().x());
+	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_size()->set_y(info.size().y());
+	projectile->ProjectileInfo->mutable_object_info()->mutable_pos_info()->mutable_size()->set_z(info.size().z());
 	projectile->ProjectileInfo->set_state(Protocol::MOVE_STATE);
-	projectile->SetCollisionBoxInfo(Vec3(info.spawn_pos().x(), info.spawn_pos().y(), info.spawn_pos().z()), state.Size, Vec3(0.f, 0.f, 0.f));
+	projectile->SetMeshSize(Vec3(pkt.size().x(), pkt.size().y(), pkt.size().z()));
+	projectile->SetCollisionBoxInfo(Vec3(info.spawn_pos().x(), info.spawn_pos().y(), info.spawn_pos().z()), state.Size * projectile->GetMeshSize(), Vec3(0.f, 0.f, 0.f));
 	projectile->m_meshType = pkt.mesh();
 	g_Room->DoAsync(&CRoom::HandleSpawnProjectile, projectile);
 	return true;

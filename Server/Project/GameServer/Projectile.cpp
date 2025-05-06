@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Projectile.h"
 #include "BoxCollider.h"
+#include "ProjectileCollider.h"
 
 CProjectile::CProjectile()
 {
@@ -11,7 +12,7 @@ CProjectile::CProjectile()
 	ObjectInfo->set_allocated_pos_info(PosInfo);
 	ProjectileInfo->set_allocated_object_info(ObjectInfo);
 
-	m_BoxCollider = new CBoxCollider;
+	m_BoxCollider = new CProjectileCollider;
 	m_BoxCollider->SetOwner(this);
 	m_BoxCollider->SetCollisionProfile("Projectile");
 }
@@ -37,5 +38,6 @@ void CProjectile::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 	if(m_bCollisionExplosion)
 	{
 		ProjectileInfo->set_state(Protocol::COLLISION);
+		std::cout << "Ãæµ¹\n";
 	}
 }

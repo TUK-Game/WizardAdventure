@@ -39,6 +39,8 @@ public:
 
 	CTexture* CreateTextureFromResource(const std::wstring& name, ComPtr<ID3D12Resource> tex2D);
 
+	std::wstring ConvertSkillToTextureName(ESkillType type);
+	void MakeSkillTexture(CTexture* tex, EPlayerAttribute attribute, const std::wstring& name);
 public:	// ============================ Sound ================================
 	bool CreateSoundChannel(const std::string& name);
 	bool LoadSound(const std::string& groupName, const std::string& name, bool loop, const char* fileName, const std::wstring& pathName = SOUND_PATH);

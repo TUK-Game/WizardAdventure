@@ -43,12 +43,6 @@ CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
     case EPlayerAttribute::Fire:
     {
         data = CAssetManager::GetInst()->FindAsset<CMeshData>(L"PurpleMage");
-
-        m_SkillManager->LearnSkill(ESkillSlot::Q, ESkillType::FireBallTowardQ);
-        m_SkillManager->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
-        m_SkillManager->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
-        m_SkillManager->LearnSkill(ESkillSlot::LButton, ESkillType::FireBallTowardMouse);
-        m_SkillManager->LearnSkill(ESkillSlot::RButton, ESkillType::Meteor);
     }
     break;
     case EPlayerAttribute::Ice:

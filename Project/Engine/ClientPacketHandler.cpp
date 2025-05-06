@@ -32,6 +32,7 @@
 #include "PlayWidgetWindow.h"
 #include "SkillInfo.h"
 #include "StoreWidgetWindow.h"
+#include "InventoryWIdgetWindow.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -100,6 +101,7 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 
 	const auto& mapwindow = level->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow", player);
 	CPlayWidgetWindow* gamewindow = level->CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"GamePlayWidget", player);
+	const auto& inventorywindow = level->CreateWidgetWindow<CInventoryWIdgetWindow>(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW, L"InventoryWidget", player);
 
 	if (mapwindow)
 	{
@@ -111,6 +113,10 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	{
 		gamewindow->SetOwnerPlayer(player);
 	}
+	if (inventorywindow)
+	{
+		inventorywindow->SetEnable(false);
+	}
 
 	Protocol::C_ENTER_GAME_SUCCESS GSpkt;
 	switch (player->GetAttribute())
@@ -121,13 +127,20 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 		player->InitStats(100, 100, 30, 300.f);
 		// temp
 
-		gamewindow->SetSkill(1, L"FireShot", Skill::FireSword.cooldown, ESkillSlot::R);
-		gamewindow->SetSkill(2, L"FireRain", Skill::Meteor.cooldown, ESkillSlot::RButton);
-		gamewindow->SetSkill(3, L"FireballExplosion", Skill::FireBallQ.cooldown, ESkillSlot::Q);
-		gamewindow->SetSkill(4, L"FireTower", Skill::FireTower.cooldown, ESkillSlot::E);
-		gamewindow->SetSkill(5, L"Fireball", Skill::FireBall.cooldown, ESkillSlot::LButton);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, ESkillType::FireBallTowardMouse);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, ESkillType::Meteor);
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::Q, ESkillType::FireBallTowardQ);
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
+
+		gamewindow->SetSkill(ESkillType::FireBallTowardMouse, Skill::FireBall.cooldown, ESkillSlot::LButton);
+		gamewindow->SetSkill(ESkillType::Meteor, Skill::Meteor.cooldown, ESkillSlot::RButton);
+		//gamewindow->SetSkill(ESkillType::FireBallTowardQ, Skill::FireBallQ.cooldown, ESkillSlot::Q);
+		//gamewindow->SetSkill(ESkillType::FireTower, Skill::FireTower.cooldown, ESkillSlot::E);
+		//gamewindow->SetSkill(ESkillType::FireSwordSpread, Skill::FireSword.cooldown, ESkillSlot::R);
 		gamewindow->SetGauge(L"HPBar", 100, true);
 		gamewindow->SetGauge(L"SignautreGage", 0, false);
+
 	}
 	break;
 	case EPlayerAttribute::Ice:
@@ -366,8 +379,11 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	}
 	else if (pkt.projectile_info().state() == Protocol::SPAWN_PARTICLE)
 	{
-		map[id]->ShowParticles();
-		map[id]->SetIsSpawnParticle(false);
+		if(map[id]->GetIsSpawnParticle())
+		{
+			map[id]->ShowParticles();
+			map[id]->SetIsSpawnParticle(false);
+		}
 	}
 	else
 	{
@@ -565,11 +581,22 @@ bool Handle_S_BUY_ITEM(CPacketSessionRef& session, Protocol::S_BUY_ITEM& pkt)
 {
 	if (pkt.is_success())
 	{
+		UINT32 playerId = pkt.player_id();
+		UINT32 itemId = pkt.item_id();
+
 		const auto& objects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_NPC)->GetParentObjects();
 		CNPC* npc = dynamic_cast<CNPC*>(objects[0]);
 		if (npc)
 		{
 			npc->SuccessInteration();
+		}
+		const auto& item = CItemManager::GetInst()->FindItem(itemId);
+		CPlayer* player = dynamic_cast<CPlayer*>(CLevelManager::GetInst()->GetPlayer(playerId));
+		CInventoryWIdgetWindow* inven = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
+		if(item && player && inven)
+		{
+			player->AddItem(item);
+			inven->UpdateInventory();
 		}
 	}
 	return true;
