@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "AssetManager.h"
 #include "PathManager.h"
+#include "TextWidget.h"
 
 bool CInventoryWIdgetWindow::Init(CPlayer* player)
 {
@@ -44,6 +45,17 @@ bool CInventoryWIdgetWindow::Init(CPlayer* player)
 	skillWidget->GetTransform()->SetRelativeScale(0.135f, 0.143f, 1.f);
 	skillWidget->SetEnable(false);
 
+	CTextWidget* name = CreateWidget<CTextWidget>(L"IText", player);
+	name->GetTransform()->SetRelativePosition(-0.2f, -0.8f, 1.f);
+	name->SetBasicInfo(L"", L"¸¼Àº °íµñ_30", L"Yellow", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+	name->SetEnable(false);
+
+	CTextWidget* description = CreateWidget<CTextWidget>(L"IDescription", player);
+	description->GetTransform()->SetRelativePosition(-0.2f, -1.f, 1.f);
+	description->SetBasicInfo(L"", L"¸¼Àº °íµñ_20", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+	description->SetEnable(false);
+
+	m_Tooltip->SetToolTip(name, description, nullptr);
 
 	CItemButtonWidget* widget = CreateWidget<CItemButtonWidget>(L"Inven1", player);
 	widget->GetTransform()->SetRelativePosition(-0.823f, -0.235f, 1.f);
@@ -110,7 +122,6 @@ void CInventoryWIdgetWindow::UpdateInventory()
 			widget->SetEnable(true);
 		}
 	}
-
 }
 
 void CInventoryWIdgetWindow::SetEvent(CItemButtonWidget* widget, ItemTooltip* tooltip)
