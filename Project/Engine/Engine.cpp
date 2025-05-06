@@ -14,6 +14,7 @@
 #include "NetworkManager.h"
 #include "ItemManager.h"
 #include "TextRenderManager.h"
+#include "SkillDataManager.h"
 
 CEngine::CEngine()
     : m_NetworkType(ENetwork_Type::Offline)
@@ -57,6 +58,9 @@ int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wc
     CDevice::GetInst()->GetCmdQueue()->RenderEnd();
 
     if (FAILED(CItemManager::GetInst()->Init()))
+        return E_FAIL;
+
+    if (FAILED(CSkillDataManager::GetInst()->Init()))
         return E_FAIL;
 
     if (FAILED(CInputManager::GetInst()->Init()))

@@ -8,12 +8,13 @@
 #include "AssetManager.h"
 #include "PathManager.h"
 #include "TextWidget.h"
+#include "ToolTip.h"
 
 bool CInventoryWIdgetWindow::Init(CPlayer* player)
 {
 	CWidgetWindow::Init(player);
 
-	m_Tooltip = std::make_shared<ItemTooltip>();
+	m_Tooltip = std::make_shared<CToolTip>();
 
 	CImageWidget* backgroundWidget = CreateWidget<CImageWidget>(L"Inventory", player);
 	backgroundWidget->SetTexture(L"Inventory");
@@ -139,7 +140,7 @@ void CInventoryWIdgetWindow::UpdateInventory()
 	}
 }
 
-void CInventoryWIdgetWindow::SetEvent(CItemButtonWidget* widget, ItemTooltip* tooltip, CImageWidget* pannel)
+void CInventoryWIdgetWindow::SetEvent(CItemButtonWidget* widget, CToolTip* tooltip, CImageWidget* pannel)
 {
 	widget->SetOutHover([=]() {
 		tooltip->Hide();

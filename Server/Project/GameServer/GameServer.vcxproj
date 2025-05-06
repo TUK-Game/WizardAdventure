@@ -188,6 +188,8 @@
     <ClCompile Include="SavePositionBox.cpp" />
     <ClCompile Include="ServerPacketHandler.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
+    <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="SkillManager.cpp" />
     <ClCompile Include="Struct.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -226,6 +228,8 @@
     <ClInclude Include="SavePositionBox.h" />
     <ClInclude Include="ServerPacketHandler.h" />
     <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="Skill.h" />
+    <ClInclude Include="SkillManager.h" />
     <ClInclude Include="Struct.pb.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="MonsterTriggerBox.h" />

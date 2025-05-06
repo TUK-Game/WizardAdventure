@@ -13,6 +13,7 @@
 #include "SavePositionBox.h"
 #include "NPC.h"
 #include "Item.h"
+#include "Skill.h"
 
 CRoomRef g_Room = std::make_shared<CRoom>();
 
@@ -353,7 +354,6 @@ bool CRoom::HandleSpawnNPC(CPlayerRef player)
 	for (const auto& pair : npcs)
 	{
 		CNPC* npc = (CNPC*)(pair.second.get());
-		std::cout << "보내다\n";
 		if (!npc)
 			continue;
 
@@ -382,7 +382,13 @@ bool CRoom::HandleSpawnNPC(CPlayerRef player)
 		{
 			info->add_item_id(item->GetItemInfo().id);
 		}
-	}
+
+		const auto& skillList = npc->GetSkillList();
+		for (const auto& skill : skillList)
+		{
+			info->add_skill_id(skill->GetSkillInfo().id);
+		}
+	}	
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	if (auto session = player->GetSession())
 		session->Send(sendBuffer);
@@ -655,6 +661,56 @@ bool CRoom::HandleBuyItem(CPlayerRef player, CItemRef item)
 	return true;
 }
 
+bool CRoom::HandleBuySkill(CPlayerRef player, CSkillRef skill)
+{
+	std::unordered_map<uint64, CGameObjectRef> npcs = GetLayerObjects((int)EObject_Type::NPC);
+	// npc가 한명이여서 지금은 이렇게 진행, 여러명일 경우 패킷으로 역할 구분해야
+	for (const auto& pair : npcs)
+	{
+		CNPC* npc = (CNPC*)(pair.second.get());
+		if (!npc)
+			continue;
+
+		auto& skillList = npc->GetSkillList();
+
+		auto iter = find_if(skillList.begin(), skillList.end(), [&](CSkillRef s) {
+			return s->GetSkillInfo().id == skill->GetSkillInfo().id;
+			});
+
+		if (iter != skillList.end())
+		{
+			if (player->BuySkill(skill))
+			{
+				// 성공메시지 전달
+				IsBuySkill(player, skill, true);
+				(*iter)->GetSkillInfo().bSell = true;
+			}
+			else
+			{
+				// 실패메시지 전달
+				IsBuyItem(player, nullptr, false);
+			}
+		}
+		UpdateItem(npc->ObjectInfo->object_id());
+	}
+
+
+	return true;
+}
+
+bool CRoom::IsBuySkill(CPlayerRef player, CSkillRef skill, bool isBuy)
+{
+	Protocol::S_BUY_SKILL pkt;
+	pkt.set_player_id(player->PlayerInfo->player_id());
+	pkt.set_is_success(isBuy);
+	pkt.set_skill_id(skill->GetSkillInfo().id);
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	if (auto session = player->GetSession())
+		session->Send(sendBuffer);
+	return true;
+	return true;
+}
+
 bool CRoom::IsBuyItem(CPlayerRef player, CItemRef item, bool isBuy)
 {
 	Protocol::S_BUY_ITEM pkt;
@@ -684,6 +740,14 @@ bool CRoom::UpdateItem(uint32 npcId)
 			Protocol::ItemInfo* info = pkt.add_item_info();
 			info->set_is_sell(item->GetItemInfo().bSell);
 			info->set_item_id(item->GetItemInfo().id);
+		}
+
+		const auto& skillList = npc->GetSkillList();
+		for (const auto& skill : skillList)
+		{
+			Protocol::SkillInfo* info = pkt.add_skill_info();
+			info->set_is_sell(skill->GetSkillInfo().bSell);
+			info->set_skill_id(skill->GetSkillInfo().id);
 		}
 	}
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);

@@ -1056,13 +1056,13 @@ std::wstring CAssetManager::ConvertSkillToTextureName(ESkillType type)
 	return L"FireTower";
 	case ESkillType::FireSwordSpread:
 	{
-		tex = FindAsset<CTexture>(L"Fireball");
+		tex = FindAsset<CTexture>(L"FireSwords");
 		if (!tex)
 		{
-			MakeSkillTexture(tex, EPlayerAttribute::Fire, L"Fireball");
+			MakeSkillTexture(tex, EPlayerAttribute::Fire, L"FireSwords");
 		}
 	}
-	return  L"Fireball";
+	return  L"FireSwords";
 	}
 
 	return L"";

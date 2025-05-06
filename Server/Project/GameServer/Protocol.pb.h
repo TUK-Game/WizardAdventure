@@ -51,6 +51,9 @@ namespace Protocol {
 class C_BUY_ITEM;
 struct C_BUY_ITEMDefaultTypeInternal;
 extern C_BUY_ITEMDefaultTypeInternal _C_BUY_ITEM_default_instance_;
+class C_BUY_SKILL;
+struct C_BUY_SKILLDefaultTypeInternal;
+extern C_BUY_SKILLDefaultTypeInternal _C_BUY_SKILL_default_instance_;
 class C_ENTER_GAME;
 struct C_ENTER_GAMEDefaultTypeInternal;
 extern C_ENTER_GAMEDefaultTypeInternal _C_ENTER_GAME_default_instance_;
@@ -75,6 +78,9 @@ extern C_SPAWN_PROJECTILEDefaultTypeInternal _C_SPAWN_PROJECTILE_default_instanc
 class S_BUY_ITEM;
 struct S_BUY_ITEMDefaultTypeInternal;
 extern S_BUY_ITEMDefaultTypeInternal _S_BUY_ITEM_default_instance_;
+class S_BUY_SKILL;
+struct S_BUY_SKILLDefaultTypeInternal;
+extern S_BUY_SKILLDefaultTypeInternal _S_BUY_SKILL_default_instance_;
 class S_DESPAWN;
 struct S_DESPAWNDefaultTypeInternal;
 extern S_DESPAWNDefaultTypeInternal _S_DESPAWN_default_instance_;
@@ -129,6 +135,7 @@ extern S_UPDATE_PLAYERDefaultTypeInternal _S_UPDATE_PLAYER_default_instance_;
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Protocol::C_BUY_ITEM* Arena::CreateMaybeMessage<::Protocol::C_BUY_ITEM>(Arena*);
+template<> ::Protocol::C_BUY_SKILL* Arena::CreateMaybeMessage<::Protocol::C_BUY_SKILL>(Arena*);
 template<> ::Protocol::C_ENTER_GAME* Arena::CreateMaybeMessage<::Protocol::C_ENTER_GAME>(Arena*);
 template<> ::Protocol::C_ENTER_GAME_SUCCESS* Arena::CreateMaybeMessage<::Protocol::C_ENTER_GAME_SUCCESS>(Arena*);
 template<> ::Protocol::C_LEAVE_GAME* Arena::CreateMaybeMessage<::Protocol::C_LEAVE_GAME>(Arena*);
@@ -137,6 +144,7 @@ template<> ::Protocol::C_MOVE* Arena::CreateMaybeMessage<::Protocol::C_MOVE>(Are
 template<> ::Protocol::C_MOVE_PROJECTILE* Arena::CreateMaybeMessage<::Protocol::C_MOVE_PROJECTILE>(Arena*);
 template<> ::Protocol::C_SPAWN_PROJECTILE* Arena::CreateMaybeMessage<::Protocol::C_SPAWN_PROJECTILE>(Arena*);
 template<> ::Protocol::S_BUY_ITEM* Arena::CreateMaybeMessage<::Protocol::S_BUY_ITEM>(Arena*);
+template<> ::Protocol::S_BUY_SKILL* Arena::CreateMaybeMessage<::Protocol::S_BUY_SKILL>(Arena*);
 template<> ::Protocol::S_DESPAWN* Arena::CreateMaybeMessage<::Protocol::S_DESPAWN>(Arena*);
 template<> ::Protocol::S_DESPAWN_PLAYER* Arena::CreateMaybeMessage<::Protocol::S_DESPAWN_PLAYER>(Arena*);
 template<> ::Protocol::S_ENTER_GAME* Arena::CreateMaybeMessage<::Protocol::S_ENTER_GAME>(Arena*);
@@ -3885,6 +3893,154 @@ class C_BUY_ITEM final :
 };
 // -------------------------------------------------------------------
 
+class C_BUY_SKILL final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_BUY_SKILL) */ {
+ public:
+  inline C_BUY_SKILL() : C_BUY_SKILL(nullptr) {}
+  ~C_BUY_SKILL() override;
+  explicit PROTOBUF_CONSTEXPR C_BUY_SKILL(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_BUY_SKILL(const C_BUY_SKILL& from);
+  C_BUY_SKILL(C_BUY_SKILL&& from) noexcept
+    : C_BUY_SKILL() {
+    *this = ::std::move(from);
+  }
+
+  inline C_BUY_SKILL& operator=(const C_BUY_SKILL& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_BUY_SKILL& operator=(C_BUY_SKILL&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_BUY_SKILL& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_BUY_SKILL* internal_default_instance() {
+    return reinterpret_cast<const C_BUY_SKILL*>(
+               &_C_BUY_SKILL_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    24;
+
+  friend void swap(C_BUY_SKILL& a, C_BUY_SKILL& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_BUY_SKILL* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_BUY_SKILL* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C_BUY_SKILL* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C_BUY_SKILL>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const C_BUY_SKILL& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const C_BUY_SKILL& from) {
+    C_BUY_SKILL::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_BUY_SKILL* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_BUY_SKILL";
+  }
+  protected:
+  explicit C_BUY_SKILL(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSkillIdFieldNumber = 1,
+  };
+  // uint32 skill_id = 1;
+  void clear_skill_id();
+  uint32_t skill_id() const;
+  void set_skill_id(uint32_t value);
+  private:
+  uint32_t _internal_skill_id() const;
+  void _internal_set_skill_id(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_BUY_SKILL)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t skill_id_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class S_UPDATE_ITEM final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_UPDATE_ITEM) */ {
  public:
@@ -3933,7 +4089,7 @@ class S_UPDATE_ITEM final :
                &_S_UPDATE_ITEM_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    25;
 
   friend void swap(S_UPDATE_ITEM& a, S_UPDATE_ITEM& b) {
     a.Swap(&b);
@@ -4007,6 +4163,7 @@ class S_UPDATE_ITEM final :
 
   enum : int {
     kItemInfoFieldNumber = 2,
+    kSkillInfoFieldNumber = 3,
     kNpcIdFieldNumber = 1,
   };
   // repeated .Protocol.ItemInfo item_info = 2;
@@ -4027,6 +4184,24 @@ class S_UPDATE_ITEM final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ItemInfo >&
       item_info() const;
 
+  // repeated .Protocol.SkillInfo skill_info = 3;
+  int skill_info_size() const;
+  private:
+  int _internal_skill_info_size() const;
+  public:
+  void clear_skill_info();
+  ::Protocol::SkillInfo* mutable_skill_info(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::SkillInfo >*
+      mutable_skill_info();
+  private:
+  const ::Protocol::SkillInfo& _internal_skill_info(int index) const;
+  ::Protocol::SkillInfo* _internal_add_skill_info();
+  public:
+  const ::Protocol::SkillInfo& skill_info(int index) const;
+  ::Protocol::SkillInfo* add_skill_info();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::SkillInfo >&
+      skill_info() const;
+
   // uint32 npc_id = 1;
   void clear_npc_id();
   uint32_t npc_id() const;
@@ -4045,6 +4220,7 @@ class S_UPDATE_ITEM final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ItemInfo > item_info_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::SkillInfo > skill_info_;
     uint32_t npc_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -4101,7 +4277,7 @@ class S_BUY_ITEM final :
                &_S_BUY_ITEM_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    26;
 
   friend void swap(S_BUY_ITEM& a, S_BUY_ITEM& b) {
     a.Swap(&b);
@@ -4216,6 +4392,176 @@ class S_BUY_ITEM final :
     uint32_t player_id_;
     bool is_success_;
     uint32_t item_id_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S_BUY_SKILL final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_BUY_SKILL) */ {
+ public:
+  inline S_BUY_SKILL() : S_BUY_SKILL(nullptr) {}
+  ~S_BUY_SKILL() override;
+  explicit PROTOBUF_CONSTEXPR S_BUY_SKILL(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_BUY_SKILL(const S_BUY_SKILL& from);
+  S_BUY_SKILL(S_BUY_SKILL&& from) noexcept
+    : S_BUY_SKILL() {
+    *this = ::std::move(from);
+  }
+
+  inline S_BUY_SKILL& operator=(const S_BUY_SKILL& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_BUY_SKILL& operator=(S_BUY_SKILL&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_BUY_SKILL& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_BUY_SKILL* internal_default_instance() {
+    return reinterpret_cast<const S_BUY_SKILL*>(
+               &_S_BUY_SKILL_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    27;
+
+  friend void swap(S_BUY_SKILL& a, S_BUY_SKILL& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_BUY_SKILL* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_BUY_SKILL* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S_BUY_SKILL* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S_BUY_SKILL>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S_BUY_SKILL& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const S_BUY_SKILL& from) {
+    S_BUY_SKILL::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_BUY_SKILL* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_BUY_SKILL";
+  }
+  protected:
+  explicit S_BUY_SKILL(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayerIdFieldNumber = 1,
+    kIsSuccessFieldNumber = 2,
+    kSkillIdFieldNumber = 3,
+  };
+  // uint32 player_id = 1;
+  void clear_player_id();
+  uint32_t player_id() const;
+  void set_player_id(uint32_t value);
+  private:
+  uint32_t _internal_player_id() const;
+  void _internal_set_player_id(uint32_t value);
+  public:
+
+  // bool is_success = 2;
+  void clear_is_success();
+  bool is_success() const;
+  void set_is_success(bool value);
+  private:
+  bool _internal_is_success() const;
+  void _internal_set_is_success(bool value);
+  public:
+
+  // uint32 skill_id = 3;
+  void clear_skill_id();
+  uint32_t skill_id() const;
+  void set_skill_id(uint32_t value);
+  private:
+  uint32_t _internal_skill_id() const;
+  void _internal_set_skill_id(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_BUY_SKILL)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t player_id_;
+    bool is_success_;
+    uint32_t skill_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -5815,6 +6161,30 @@ inline void C_BUY_ITEM::set_item_id(uint32_t value) {
 
 // -------------------------------------------------------------------
 
+// C_BUY_SKILL
+
+// uint32 skill_id = 1;
+inline void C_BUY_SKILL::clear_skill_id() {
+  _impl_.skill_id_ = 0u;
+}
+inline uint32_t C_BUY_SKILL::_internal_skill_id() const {
+  return _impl_.skill_id_;
+}
+inline uint32_t C_BUY_SKILL::skill_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_BUY_SKILL.skill_id)
+  return _internal_skill_id();
+}
+inline void C_BUY_SKILL::_internal_set_skill_id(uint32_t value) {
+  
+  _impl_.skill_id_ = value;
+}
+inline void C_BUY_SKILL::set_skill_id(uint32_t value) {
+  _internal_set_skill_id(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_BUY_SKILL.skill_id)
+}
+
+// -------------------------------------------------------------------
+
 // S_UPDATE_ITEM
 
 // uint32 npc_id = 1;
@@ -5872,6 +6242,43 @@ inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ItemInfo >&
 S_UPDATE_ITEM::item_info() const {
   // @@protoc_insertion_point(field_list:Protocol.S_UPDATE_ITEM.item_info)
   return _impl_.item_info_;
+}
+
+// repeated .Protocol.SkillInfo skill_info = 3;
+inline int S_UPDATE_ITEM::_internal_skill_info_size() const {
+  return _impl_.skill_info_.size();
+}
+inline int S_UPDATE_ITEM::skill_info_size() const {
+  return _internal_skill_info_size();
+}
+inline ::Protocol::SkillInfo* S_UPDATE_ITEM::mutable_skill_info(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_UPDATE_ITEM.skill_info)
+  return _impl_.skill_info_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::SkillInfo >*
+S_UPDATE_ITEM::mutable_skill_info() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.S_UPDATE_ITEM.skill_info)
+  return &_impl_.skill_info_;
+}
+inline const ::Protocol::SkillInfo& S_UPDATE_ITEM::_internal_skill_info(int index) const {
+  return _impl_.skill_info_.Get(index);
+}
+inline const ::Protocol::SkillInfo& S_UPDATE_ITEM::skill_info(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.S_UPDATE_ITEM.skill_info)
+  return _internal_skill_info(index);
+}
+inline ::Protocol::SkillInfo* S_UPDATE_ITEM::_internal_add_skill_info() {
+  return _impl_.skill_info_.Add();
+}
+inline ::Protocol::SkillInfo* S_UPDATE_ITEM::add_skill_info() {
+  ::Protocol::SkillInfo* _add = _internal_add_skill_info();
+  // @@protoc_insertion_point(field_add:Protocol.S_UPDATE_ITEM.skill_info)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::SkillInfo >&
+S_UPDATE_ITEM::skill_info() const {
+  // @@protoc_insertion_point(field_list:Protocol.S_UPDATE_ITEM.skill_info)
+  return _impl_.skill_info_;
 }
 
 // -------------------------------------------------------------------
@@ -5938,9 +6345,77 @@ inline void S_BUY_ITEM::set_item_id(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.S_BUY_ITEM.item_id)
 }
 
+// -------------------------------------------------------------------
+
+// S_BUY_SKILL
+
+// uint32 player_id = 1;
+inline void S_BUY_SKILL::clear_player_id() {
+  _impl_.player_id_ = 0u;
+}
+inline uint32_t S_BUY_SKILL::_internal_player_id() const {
+  return _impl_.player_id_;
+}
+inline uint32_t S_BUY_SKILL::player_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_BUY_SKILL.player_id)
+  return _internal_player_id();
+}
+inline void S_BUY_SKILL::_internal_set_player_id(uint32_t value) {
+  
+  _impl_.player_id_ = value;
+}
+inline void S_BUY_SKILL::set_player_id(uint32_t value) {
+  _internal_set_player_id(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_BUY_SKILL.player_id)
+}
+
+// bool is_success = 2;
+inline void S_BUY_SKILL::clear_is_success() {
+  _impl_.is_success_ = false;
+}
+inline bool S_BUY_SKILL::_internal_is_success() const {
+  return _impl_.is_success_;
+}
+inline bool S_BUY_SKILL::is_success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_BUY_SKILL.is_success)
+  return _internal_is_success();
+}
+inline void S_BUY_SKILL::_internal_set_is_success(bool value) {
+  
+  _impl_.is_success_ = value;
+}
+inline void S_BUY_SKILL::set_is_success(bool value) {
+  _internal_set_is_success(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_BUY_SKILL.is_success)
+}
+
+// uint32 skill_id = 3;
+inline void S_BUY_SKILL::clear_skill_id() {
+  _impl_.skill_id_ = 0u;
+}
+inline uint32_t S_BUY_SKILL::_internal_skill_id() const {
+  return _impl_.skill_id_;
+}
+inline uint32_t S_BUY_SKILL::skill_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_BUY_SKILL.skill_id)
+  return _internal_skill_id();
+}
+inline void S_BUY_SKILL::_internal_set_skill_id(uint32_t value) {
+  
+  _impl_.skill_id_ = value;
+}
+inline void S_BUY_SKILL::set_skill_id(uint32_t value) {
+  _internal_set_skill_id(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_BUY_SKILL.skill_id)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

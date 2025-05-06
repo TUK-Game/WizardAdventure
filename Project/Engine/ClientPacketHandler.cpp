@@ -26,7 +26,10 @@
 #include "Item.h"
 #include "ItemButtonWidget.h"
 #include "PathManager.h"
+#include "SkillDataManager.h"
+#include "SkillData.h"
 
+#include "SkillButtonWidget.h"
 #include "TestWidget.h"
 #include "MapPlayerWidget.h"
 #include "PlayWidgetWindow.h"
@@ -134,15 +137,15 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 
 		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, ESkillType::FireBallTowardMouse);
 		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, ESkillType::Meteor);
-		//player->GetSkillManager()->LearnSkill(ESkillSlot::Q, ESkillType::FireBallTowardQ);
-		//player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
-		//player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::Q, ESkillType::FireBallTowardQ);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
 
 		gamewindow->SetSkill(ESkillType::FireBallTowardMouse, Skill::FireBall.cooldown, ESkillSlot::LButton);
 		gamewindow->SetSkill(ESkillType::Meteor, Skill::Meteor.cooldown, ESkillSlot::RButton);
-		//gamewindow->SetSkill(ESkillType::FireBallTowardQ, Skill::FireBallQ.cooldown, ESkillSlot::Q);
-		//gamewindow->SetSkill(ESkillType::FireTower, Skill::FireTower.cooldown, ESkillSlot::E);
-		//gamewindow->SetSkill(ESkillType::FireSwordSpread, Skill::FireSword.cooldown, ESkillSlot::R);
+		gamewindow->SetSkill(ESkillType::FireBallTowardQ, Skill::FireBallQ.cooldown, ESkillSlot::Q);
+		gamewindow->SetSkill(ESkillType::FireTower, Skill::FireTower.cooldown, ESkillSlot::E);
+		gamewindow->SetSkill(ESkillType::FireSwordSpread, Skill::FireSword.cooldown, ESkillSlot::R);
 		gamewindow->SetGauge(L"HPBar", 100, true);
 		gamewindow->SetGauge(L"SignautreGage", 0, false);
 
@@ -556,6 +559,27 @@ bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
 			}
 		}
 
+		for (int j = 0; j < info.skill_id_size(); ++j)
+		{
+			uint32 id = info.skill_id(j);
+			const auto& skill = CSkillDataManager::GetInst()->FindSkill(id);
+
+			std::wstring skillName = skill->GetSkillInfo().name;
+			CTexture* texture = CAssetManager::GetInst()->FindAsset<CTexture>(skillName);
+
+			CSkillButtonWidget* widget = dynamic_cast<CSkillButtonWidget*>(win->FindWidget(L"NewSkill" + std::to_wstring(j + 1)));
+			if (widget)
+			{
+				widget->SetSkillId(id);
+				widget->SetSkill(skill);
+				widget->SetButtonTexture(
+					CAssetManager::GetInst()->FindAsset<CTexture>(skillName),
+					CAssetManager::GetInst()->FindAsset<CTexture>(skillName),
+					CAssetManager::GetInst()->FindAsset<CTexture>(skillName)
+				);
+			}
+		}
+
 		npc->Begin();
 		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(npc, LAYER_NPC, false);
 	}
@@ -579,6 +603,16 @@ bool Handle_S_UPDATE_ITEM(CPacketSessionRef& session, Protocol::S_UPDATE_ITEM& p
 		}
 	}
 
+	for (int i = 0; i < pkt.skill_info_size(); ++i)
+	{
+		const Protocol::SkillInfo& info = pkt.skill_info(i);
+
+		CSkillButtonWidget* widget = dynamic_cast<CSkillButtonWidget*>(win->FindWidget(L"NewSkill" + std::to_wstring(i + 1)));
+		if (widget && widget->GetEnable())
+		{
+			widget->SetEnable(!info.is_sell());
+		}
+	}
 	return true;
 }
 
@@ -605,4 +639,29 @@ bool Handle_S_BUY_ITEM(CPacketSessionRef& session, Protocol::S_BUY_ITEM& pkt)
 		}
 	}
 	return true;
+}
+
+bool Handle_S_BUY_SKILL(CPacketSessionRef& session, Protocol::S_BUY_SKILL& pkt)
+{
+	if (pkt.is_success())
+	{
+		UINT32 playerId = pkt.player_id();
+		UINT32 skillId = pkt.skill_id();
+
+		const auto& objects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_NPC)->GetParentObjects();
+		CNPC* npc = dynamic_cast<CNPC*>(objects[0]);
+		if (npc)
+		{
+			npc->SuccessInteration();
+		}
+		const auto& skill = CSkillDataManager::GetInst()->FindSkill(skillId);
+		CPlayer* player = dynamic_cast<CPlayer*>(CLevelManager::GetInst()->GetPlayer(playerId));
+		CInventoryWIdgetWindow* inven = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
+		if (skill && player && inven)
+		{
+			//player->AddItem(item);
+			inven->UpdateInventory();
+		}
+	}
+	return true; 
 }

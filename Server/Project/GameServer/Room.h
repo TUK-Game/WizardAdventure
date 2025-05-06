@@ -44,6 +44,9 @@ public:
 	bool IsBuyItem(CPlayerRef player, CItemRef item, bool isBuy);
 	bool UpdateItem(uint32 npcId);
 
+	bool HandleBuySkill(CPlayerRef player, CSkillRef skill);
+	bool IsBuySkill(CPlayerRef player, CSkillRef skill, bool isBuy);
+
 	bool AddObject(uint32 layer, CGameObjectRef object);
 	bool AddMonster(CMonsterRef object);
 	bool AddProjectile(CProjectileRef object);

@@ -35,6 +35,7 @@ public:
 	void SetSafePosition(const Vec3& pos) { m_SafePos = pos; }
 
 	bool BuyItem(CItemRef item);
+	bool BuySkill(CSkillRef skill);
 public:
 	Protocol::PlayerInfo* PlayerInfo;
 
@@ -58,6 +59,7 @@ private:
 
 	EAttribution m_attribution = EAttribution::FIRE;
 	std::vector<CItemRef> m_Items;
+	std::vector<CSkillRef> m_Skills;
 
 	// temp	
 	float m_Speed = 5000.f;

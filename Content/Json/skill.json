@@ -1,0 +1,52 @@
+﻿[
+  {
+    "Id": "20001",
+    "Name": "FireShot",
+    "Description": "파이어볼을 날림",
+    "DamageRatio": 0.7,
+    "Attribute": "Fire",
+    "Price": 1000.0,
+    "Type": "LB",
+    "CoolTime": 0.0
+  },
+  {
+    "Id": "20002",
+    "Name": "FireRain",
+    "Description": "메테오",
+    "DamageRatio": 2.5,
+    "Attribute": "Fire",
+    "Price": 2000.0,
+    "Type": "RB",
+    "CoolTime": 0.0
+  },
+  {
+    "Id": "30001",
+    "Name": "FireballExplosion",
+    "Description": "터지는 파이어볼",
+    "DamageRatio": 2.0,
+    "Attribute": "Fire",
+    "Price": 1500.0,
+    "Type": "Key",
+    "CoolTime": 3.0
+  },
+  {
+    "Id": "30002",
+    "Name": "FireTower",
+    "Description": "파이어볼 날리는 포탑 소환",
+    "DamageRatio": 0.9,
+    "Attribute": "Fire",
+    "Price": 1500.0,
+    "Type": "Key",
+    "CoolTime": 8.0
+  },
+  {
+    "Id": "30003",
+    "Name": "FireSwords",
+    "Description": "지정한 위치로 검 발사",
+    "DamageRatio": 0.8,
+    "Attribute": "Fire",
+    "Price": 1500.0,
+    "Type": "Key",
+    "CoolTime": 10.0
+  }
+]
