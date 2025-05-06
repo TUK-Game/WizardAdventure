@@ -132,13 +132,11 @@ void CPlayerScript::Update()
 			const auto window = level->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW);
 			if (!window->GetEnable())
 			{
-				window->SetEnable(true);
 				player->MoveToInventoryView();
 				level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW);
 			}
 		}
 	}
-
 
 	// temp ----------------------------------------------------------------------------
 	if (KEY_DOWN(EKey::Z))

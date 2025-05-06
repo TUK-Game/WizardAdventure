@@ -102,7 +102,12 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	const auto& mapwindow = level->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow", player);
 	CPlayWidgetWindow* gamewindow = level->CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"GamePlayWidget", player);
 	const auto& inventorywindow = level->CreateWidgetWindow<CInventoryWIdgetWindow>(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW, L"InventoryWidget", player);
+	const auto& storewindow = level->CreateWidgetWindow<CStoreWidgetWindow>(EWIDGETWINDOW_TYPE::STORE_WINDOW, L"StoreWindow", nullptr);
 
+	if (storewindow)
+	{
+		storewindow->SetEnable(false);
+	}
 	if (mapwindow)
 	{
 		mapwindow->SetOwnerPlayer(player);
@@ -505,7 +510,7 @@ bool Handle_S_GATE_CLOSE(CPacketSessionRef& session, Protocol::S_GATE_CLOSE& pkt
 bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
 {
 	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
-	const auto& win = level->CreateWidgetWindow<CStoreWidgetWindow>(EWIDGETWINDOW_TYPE::STORE_WINDOW, L"StoreWindow", nullptr);
+	const auto& win = level->FindWidgetWindow(EWIDGETWINDOW_TYPE::STORE_WINDOW);
 	win->SetEnable(false);
 
 	for (int i = 0; i < pkt.npc_info_size(); ++i)

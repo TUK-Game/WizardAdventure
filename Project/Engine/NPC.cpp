@@ -91,7 +91,7 @@ void CNPC::CreateStateManager()
 void CNPC::Interation()
 {
 	m_StateManager->HandleEvent(this, "Talk");
-	ShowWidgetWindow();
+	//ShowWidgetWindow();
 }
 
 void CNPC::SuccessInteration()

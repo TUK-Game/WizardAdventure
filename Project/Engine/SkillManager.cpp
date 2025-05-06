@@ -21,6 +21,7 @@
 #include "NetworkManager.h"
 #include "StateManager.h"
 #include "InventoryWIdgetWindow.h"
+#include "StoreWidgetWindow.h"
 
 CSkillManager::CSkillManager(EPlayerAttribute attribute, CGameObject* owner)
     : m_Attribute(attribute), m_Owner(owner) {}
@@ -80,10 +81,20 @@ void CSkillManager::LearnSkill(int slotIndex, ESkillType skill) {
         return;
     m_SkillSlots[slotIndex] = skill;
 
-    CInventoryWIdgetWindow* window = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
-    if (window)
     {
-        window->SetSkill(slotIndex, skill);
+        CInventoryWIdgetWindow* window = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
+        if (window)
+        {
+            window->SetSkill(slotIndex, skill);
+        }
+    }
+
+    {
+        CStoreWidgetWindow* window = dynamic_cast<CStoreWidgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::STORE_WINDOW));
+        if (window)
+        {
+            window->UpdateSkill(slotIndex, skill);
+        }
     }
 }
 

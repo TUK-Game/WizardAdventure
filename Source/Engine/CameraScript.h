@@ -25,7 +25,7 @@ private:
     void FixedMove();
     void UpdateDirectionalLight();
 
-    void MoveToTarget(bool isLayerCheck, float maxHeight = 0.f);
+    void MoveToTarget(bool isLayerCheck, float maxHeight = 0.f, EWIDGETWINDOW_TYPE windowtype = EWIDGETWINDOW_TYPE::END);
     void RollBackCamera();
 public:
 

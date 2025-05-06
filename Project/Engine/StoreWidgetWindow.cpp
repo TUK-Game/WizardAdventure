@@ -10,6 +10,7 @@
 #include "ServerSession.h"
 #include "TextWidget.h"
 #include "Item.h"
+#include "ButtonWidget.h"
 
 CStoreWidgetWindow::CStoreWidgetWindow()
 {
@@ -54,25 +55,69 @@ bool CStoreWidgetWindow::Init(CPlayer* player)
 	m_Tooltip->SetToolTip(name, description, price);
 
 	CItemButtonWidget* widget = CreateWidget<CItemButtonWidget>(L"Item1", player);
-	widget->GetTransform()->SetRelativePosition(-0.65f, 0.6f, 1.f);
-	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
+	widget->GetTransform()->SetRelativePosition(-0.827f, 0.6f, 1.f);
+	widget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	SetItemButtonEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Item2", player);
-	widget->GetTransform()->SetRelativePosition(-0.25f, 0.6f, 1.f);
-	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
+	widget->GetTransform()->SetRelativePosition(-0.555f, 0.6f, 1.f);
+	widget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	SetItemButtonEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Item3", player);
-	widget->GetTransform()->SetRelativePosition(-0.25f, 0.1f, 1.f);
-	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
+	widget->GetTransform()->SetRelativePosition(-0.283f, 0.6f, 1.f);
+	widget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	SetItemButtonEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Item4", player);
-	widget->GetTransform()->SetRelativePosition(-0.65f, 0.1f, 1.f);
-	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
+	widget->GetTransform()->SetRelativePosition(-0.011f, 0.6f, 1.f);
+	widget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	SetItemButtonEvent(widget, m_Tooltip.get(), backgroundWidget);
 
+	widget = CreateWidget<CItemButtonWidget>(L"Item5", player);
+	widget->GetTransform()->SetRelativePosition(-0.827f, 0.3f, 1.f);
+	widget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	SetItemButtonEvent(widget, m_Tooltip.get(), backgroundWidget);
+
+	widget = CreateWidget<CItemButtonWidget>(L"Item6", player);
+	widget->GetTransform()->SetRelativePosition(-0.555f, 0.3f, 1.f);
+	widget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	SetItemButtonEvent(widget, m_Tooltip.get(), backgroundWidget);
+
+	widget = CreateWidget<CItemButtonWidget>(L"Item7", player);
+	widget->GetTransform()->SetRelativePosition(-0.283f, 0.3f, 1.f);
+	widget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	SetItemButtonEvent(widget, m_Tooltip.get(), backgroundWidget);
+
+	widget = CreateWidget<CItemButtonWidget>(L"Item8", player);
+	widget->GetTransform()->SetRelativePosition(-0.011f, 0.3f, 1.f);
+	widget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	SetItemButtonEvent(widget, m_Tooltip.get(), backgroundWidget);
+
+	CButtonWidget* skillWidget = CreateWidget<CButtonWidget>(L"SSkill1", player);
+	skillWidget->GetTransform()->SetRelativePosition(-0.011f, 0.3f, 1.f);
+	skillWidget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	skillWidget->SetEnable(false);
+
+	skillWidget = CreateWidget<CButtonWidget>(L"SSkill2", player);
+	skillWidget->GetTransform()->SetRelativePosition(-0.011f, 0.3f, 1.f);
+	skillWidget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	skillWidget->SetEnable(false);
+
+	skillWidget = CreateWidget<CButtonWidget>(L"SSkill3", player);
+	skillWidget->GetTransform()->SetRelativePosition(-0.011f, 0.3f, 1.f);
+	skillWidget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	skillWidget->SetEnable(false);
+
+	skillWidget = CreateWidget<CButtonWidget>(L"SSkill4", player);
+	skillWidget->GetTransform()->SetRelativePosition(-0.011f, 0.3f, 1.f);
+	skillWidget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	skillWidget->SetEnable(false);
+
+	skillWidget = CreateWidget<CButtonWidget>(L"SSkill5", player);
+	skillWidget->GetTransform()->SetRelativePosition(-0.011f, 0.3f, 1.f);
+	skillWidget->GetTransform()->SetRelativeScale(0.145f, 0.15f, 1.f);
+	skillWidget->SetEnable(false);
 
 	return true;
 }
@@ -98,7 +143,7 @@ void CStoreWidgetWindow::Render()
 	CWidgetWindow::Render();
 }
 
-void CStoreWidgetWindow::SetEvent(CItemButtonWidget* widget, ItemTooltip* tooltip, CImageWidget* pannel)
+void CStoreWidgetWindow::SetItemButtonEvent(CItemButtonWidget* widget, ItemTooltip* tooltip, CImageWidget* pannel)
 {
 	widget->SetOutHover([=]() {
 		tooltip->Hide();
@@ -115,3 +160,10 @@ void CStoreWidgetWindow::SetEvent(CItemButtonWidget* widget, ItemTooltip* toolti
 		});
 }
 
+void CStoreWidgetWindow::UpdateSkill(int slotIndex, ESkillType type)
+{
+	CButtonWidget* widget = dynamic_cast<CButtonWidget*>(FindWidget(L"SSkill" + std::to_wstring(slotIndex + 1)));
+	const std::wstring& skillName = CAssetManager::GetInst()->ConvertSkillToTextureName(type);
+	widget->SetTexture(skillName);
+	widget->SetEnable(true);
+}

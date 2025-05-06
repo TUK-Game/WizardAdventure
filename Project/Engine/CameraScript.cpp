@@ -96,11 +96,11 @@ void CCameraScript::Update()
 	}
 	else if (ECamera_Type::Inventory_Interaction_Start == type)
 	{
-		MoveToTarget(false, 300.f);
+		MoveToTarget(false, 300.f, EWIDGETWINDOW_TYPE::INVENTORY_WINDOW);
 	}
 	else if (ECamera_Type::Interaction_Start == type)
 	{
-		MoveToTarget(true);
+		MoveToTarget(true, 0.f, EWIDGETWINDOW_TYPE::STORE_WINDOW);
 	}
 	else if (ECamera_Type::Interaction == type)
 	{
@@ -198,7 +198,7 @@ void CCameraScript::UpdateDirectionalLight()
 	lightObj->GetLight()->SetLightDirection(lightDir);
 }
 
-void CCameraScript::MoveToTarget(bool isLayerCheck, float maxHeight)
+void CCameraScript::MoveToTarget(bool isLayerCheck, float maxHeight, EWIDGETWINDOW_TYPE windowtype)
 {
 	m_ElapsedTime += DELTA_TIME;
 
@@ -219,6 +219,17 @@ void CCameraScript::MoveToTarget(bool isLayerCheck, float maxHeight)
 		{
 			GetOwner()->GetCamera()->CheckLayer(LAYER_PLAYER);
 		}
+
+		CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
+		if (level->GetWidgetWindowType() == windowtype)
+		{
+			const auto window = level->FindWidgetWindow(windowtype);
+			if (!window->GetEnable())
+			{
+				window->SetEnable(true);
+				level->SetWidgetWindowType(windowtype);
+			}
+		}
 	}
 }
 
@@ -230,7 +241,6 @@ void CCameraScript::RollBackCamera()
 
 	Vec3 newPos = Vec3::Lerp(m_InteractionZoomTarget, m_InteractionStartPos, t);
 	GetOwner()->GetTransform()->SetRelativePosition(newPos);
-
 
 	Vec3 newrot = LerpAngles(m_InteractionZoomDir, m_InteractionStartDir, t);
 	GetOwner()->GetTransform()->SetRelativeRotation(newrot);

@@ -16,8 +16,10 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+
 public:
-	void SetEvent(class CItemButtonWidget* widget, struct ItemTooltip* tooltip, class CImageWidget* pannel);
+	void SetItemButtonEvent(class CItemButtonWidget* widget, struct ItemTooltip* tooltip, class CImageWidget* pannel);
+	void UpdateSkill(int slotIndex, ESkillType type);
 
 private:
 	std::shared_ptr<struct ItemTooltip> m_Tooltip;

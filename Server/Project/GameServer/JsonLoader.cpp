@@ -155,10 +155,11 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 	std::cout << "Json read¿Ï·á" << std::endl;
 }
 
+#define MAX_ITEMS_NUMBER 10012
 void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 {
 	std::default_random_engine dre;
-	std::uniform_int_distribution uid{10001, 10004};
+	std::uniform_int_distribution uid{10001, MAX_ITEMS_NUMBER };
 	std::wstring path = L"..\\..\\..\\Content\\Json\\" + fileName + L"_NPC.json";
 
 	std::ifstream file{ path.c_str() };
@@ -187,7 +188,7 @@ void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 		object->ObjectInfo->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
 
 		auto& itemList = object->GetItemList();
-		while (itemList.size() < 4)
+		while (itemList.size() < 8)
 		{
 			uint32 itemId = uid(dre);
 			auto iter = std::find_if(itemList.begin(), itemList.end(), [&](const CItemRef item) {
@@ -199,7 +200,7 @@ void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 
 			const auto& item = g_ItemManager->FindItem(itemId);
 			itemList.emplace_back(item);
-		}
+		}	
 
 		room->GetLevelCollision()->AddCollider(object->GetCollider(), ECollision_Channel::NPC);
 		room->AddObject((uint32)EObject_Type::NPC, object);
