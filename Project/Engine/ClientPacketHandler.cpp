@@ -129,15 +129,15 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 
 		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, ESkillType::FireBallTowardMouse);
 		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, ESkillType::Meteor);
-		//player->GetSkillManager()->LearnSkill(ESkillSlot::Q, ESkillType::FireBallTowardQ);
-		//player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
-		//player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::Q, ESkillType::FireBallTowardQ);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
 
 		gamewindow->SetSkill(ESkillType::FireBallTowardMouse, Skill::FireBall.cooldown, ESkillSlot::LButton);
 		gamewindow->SetSkill(ESkillType::Meteor, Skill::Meteor.cooldown, ESkillSlot::RButton);
-		//gamewindow->SetSkill(ESkillType::FireBallTowardQ, Skill::FireBallQ.cooldown, ESkillSlot::Q);
-		//gamewindow->SetSkill(ESkillType::FireTower, Skill::FireTower.cooldown, ESkillSlot::E);
-		//gamewindow->SetSkill(ESkillType::FireSwordSpread, Skill::FireSword.cooldown, ESkillSlot::R);
+		gamewindow->SetSkill(ESkillType::FireBallTowardQ, Skill::FireBallQ.cooldown, ESkillSlot::Q);
+		gamewindow->SetSkill(ESkillType::FireTower, Skill::FireTower.cooldown, ESkillSlot::E);
+		gamewindow->SetSkill(ESkillType::FireSwordSpread, Skill::FireSword.cooldown, ESkillSlot::R);
 		gamewindow->SetGauge(L"HPBar", 100, true);
 		gamewindow->SetGauge(L"SignautreGage", 0, false);
 

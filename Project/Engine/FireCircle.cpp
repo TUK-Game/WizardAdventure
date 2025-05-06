@@ -35,4 +35,5 @@ void CFireCircle::FinalUpdate()
             //CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
         }
     }
+    GetMeshRenderer()->GetMaterial()->SetVec4(0, Vec4(1.f, 0.5f, 0.5f, 1.f));
 }

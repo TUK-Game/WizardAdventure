@@ -146,13 +146,17 @@ VS_TEX_OUT_WORLD VS_TexWorld(VS_TEX_IN input)
     return output;
 }
 
-float4 PS_TexWorld(VS_TEX_OUT_WORLD input) : SV_Target
+float4 PS_TexWorld_Tinted(VS_TEX_OUT_WORLD input) : SV_Target
 {
     float4 color = float4(1.f, 1.f, 1.f, 1.f);
 
     if (tex_on_0)
         color = tex_0.Sample(sam_0, input.uv);
-
+    // vec4_0¿Ã 0,0,0,0¿Ã æ∆¥œ∏È ∞ˆ«ÿ¡‹
+    if (any(vec4_0 != float4(0.f, 0.f, 0.f, 0.f)))
+    {
+        color *= vec4_0;
+    }    
     return color;
 }
 

@@ -382,7 +382,7 @@ int CAssetManager::LoadMaterial()
 	AddAsset(L"Start", material);
 
 	material = new CMaterial;
-	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Texture_World"));
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Texture_World_Tinted"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Circle"));
 	AddAsset(L"Circle", material);
 
@@ -581,8 +581,8 @@ int CAssetManager::LoadGraphicShader()
 
 	shader = new CGraphicShader;
 	name = L"Forward.hlsl";
-	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND }, "VS_TexWorld", "PS_TexWorld");
-	AddAsset(L"Texture_World", shader);
+	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND }, "VS_TexWorld", "PS_TexWorld_Tinted");
+	AddAsset(L"Texture_World_Tinted", shader);
 
 	shader = new CGraphicShader;
 	name = L"Forward.hlsl";
