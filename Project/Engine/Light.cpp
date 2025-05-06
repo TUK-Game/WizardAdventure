@@ -53,7 +53,6 @@ void CLight::Render()
 		m_CascadeShadowTex.clear();
 		for (int i = 0; i < CASCADE_COUNT; ++i)
 		{
-			std::wstring name = L"ShadowTarget_" + std::to_wstring(i);
 			m_CascadeShadowTex.push_back(CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(i));
 			m_CascadeShadowData.SetSplitDistances(i, m_SplitDepth[i + 1]);
 			m_CascadeShadowData.SetMatCascadeVP(i, m_CascadeVP[i]);
@@ -68,6 +67,14 @@ void CLight::Render()
 
 
 	m_LightMaterial->SetInt(0, m_LightIndex);
+	m_LightMaterial->SetFloat(0, m_SplitDepth[1]);
+	m_LightMaterial->SetFloat(1, m_SplitDepth[2]);
+	m_LightMaterial->SetFloat(2, m_SplitDepth[3]);
+	m_LightMaterial->SetFloat(3, m_SplitDepth[4]);
+	m_LightMaterial->SetMatrix(0, m_CascadeVP[0]);
+	m_LightMaterial->SetMatrix(1, m_CascadeVP[1]);
+	m_LightMaterial->SetMatrix(2, m_CascadeVP[2]);
+	m_LightMaterial->SetMatrix(3, m_CascadeVP[3]);
 	m_LightMaterial->GraphicsBinding();
 
 	m_VolumeMesh->Render();	
@@ -76,7 +83,7 @@ void CLight::Render()
 void CLight::PushCascadeData()
 {
 	// CBV 업로드
-	//CONST_BUFFER(EConstantBuffer_Type::CascadeShadowData)->SetGlobalData(&m_CascadeShadowData, sizeof(m_CascadeShadowData), 4);
+	CONST_BUFFER(EConstantBuffer_Type::CascadeShadowData)->SetGlobalData(&m_CascadeShadowData, sizeof(m_CascadeShadowData), 2);
 
 	// SRV 업로드
 	for (size_t i = 0; i < m_CascadeShadowTex.size(); i++)
@@ -87,7 +94,6 @@ void CLight::PushCascadeData()
 		SRV_REGISTER reg = SRV_REGISTER(static_cast<char>(SRV_REGISTER::t8) + i);
 		CDevice::GetInst()->GetGraphicsDescHeap()->SetSRV(m_CascadeShadowTex[i]->GetSRVCpuHandle(), reg);
 	}
-
 }
 
 void CLight::RenderShadow()
@@ -132,9 +138,9 @@ void CLight::SetLightType(LIGHT_TYPE type)
 		m_VolumeMesh = CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle");
 		m_LightMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"DirLight");
 		m_ShadowCamera->GetCamera()->SetScale(1.f);
-		m_ShadowCamera->GetCamera()->SetFar(10000.f);
-		m_ShadowCamera->GetCamera()->SetWidth(4096);
-		m_ShadowCamera->GetCamera()->SetHeight(4096);
+		m_ShadowCamera->GetCamera()->SetFar(5000.f);
+		m_ShadowCamera->GetCamera()->SetWidth(2048);
+		m_ShadowCamera->GetCamera()->SetHeight(2048);
 		break;
 	case LIGHT_TYPE::POINT_LIGHT:
 		m_VolumeMesh = CAssetManager::GetInst()->FindAsset<CMesh>(L"Sphere");
@@ -148,15 +154,6 @@ void CLight::SetLightType(LIGHT_TYPE type)
 	}
 }
 
-void CLight::CalcCascadeSplits(float nearZ, float farZ)
-{
-	m_SplitDepth[0] = 1.f;      
-	m_SplitDepth[1] = 500.f;     
-	m_SplitDepth[2] = 1000.f;  
-	m_SplitDepth[3] = 2000.f;   
-	m_SplitDepth[4] = 5000.f;   
-}
-
 void CLight::UpdateCascadeShadowVP()
 {
 	if (static_cast<LIGHT_TYPE>(m_Light.lightType) != LIGHT_TYPE::DIRECTIONAL_LIGHT)
@@ -168,95 +165,76 @@ void CLight::UpdateCascadeShadowVP()
 	CCamera* mainCam = CRenderManager::GetInst()->GetMainCamera();
 	const Matrix view = mainCam->GetViewMat();
 	const Matrix proj = mainCam->GetProjMat();
-	const Matrix viewToWorld = view.Invert();
-
-	const float nearZ = mainCam->GetNear();
 	const float farZ = mainCam->GetFar();
-	const float fov = mainCam->GetFOV();
-	const float aspect = mainCam->GetAspectRatio();
+	const Matrix viewProj = view * proj;
+	const Matrix invViewProj = viewProj.Invert();
 
-	CalcCascadeSplits(nearZ, farZ);
-	CalcCascadeFrustumCornersAndVP(view, viewToWorld, fov, aspect, nearZ, farZ, lightDir);
-}
+	// NDC 공간에서의 프러스텀 정점
+	Vec3 FrustumCorners[8] = {
+		Vec3(-1.0f,  1.0f, 0.0f), // Near Top Left
+		Vec3(1.0f,  1.0f, 0.0f), // Near Top Right
+		Vec3(1.0f, -1.0f, 0.0f), // Near Bottom Right
+		Vec3(-1.0f, -1.0f, 0.0f), // Near Bottom Left
+		Vec3(-1.0f,  1.0f, 1.0f), // Far Top Left
+		Vec3(1.0f,  1.0f, 1.0f), // Far Top Right
+		Vec3(1.0f, -1.0f, 1.0f), // Far Bottom Right
+		Vec3(-1.0f, -1.0f, 1.0f)  // Far Bottom Left
+	};
+	
+	// NDC -> World
+	for (auto& v : FrustumCorners)
+		v = Vec3::Transform(v, invViewProj);
 
-void CLight::CalcCascadeFrustumCornersAndVP(const Matrix& view, const Matrix& viewToWorld, float fov, float aspect, float nearZ, float farZ, const Vec3& lightDir)
-{
-	// View Space Frustum 8 corners
-	std::vector<Vec3> frustumCornersVS;
-	frustumCornersVS.reserve(8);
 
-	float tanFov = tanf(fov * 0.5f);
-	float yLenNear = nearZ * tanFov;
-	float xLenNear = yLenNear * aspect;
-	float yLenFar = farZ * tanFov;
-	float xLenFar = yLenFar * aspect;
-
-	// Near plane
-	for (int y = -1; y <= 1; y += 2)
+	constexpr float cascadeSplits[5] = { 0.0f, 0.1f, 0.2f, 0.4f, 1.0f };
+	for (int i = 0; i < 5; ++i) 
 	{
-		for (int x = -1; x <= 1; x += 2)
-		{
-			frustumCornersVS.emplace_back(x * xLenNear, y * yLenNear, nearZ);
-		}
-	}
+		m_SplitDepth[i] = farZ * cascadeSplits[i];
 
-	// Far plane
-	for (int y = -1; y <= 1; y += 2)
-	{
-		for (int x = -1; x <= 1; x += 2)
-		{
-			frustumCornersVS.emplace_back(x * xLenFar, y * yLenFar, farZ);
-		}
 	}
-
-	// 각 Cascade에 대해 처리
 	for (int i = 0; i < CASCADE_COUNT; ++i)
 	{
-		float splitNear = m_SplitDepth[i];
-		float splitFar = m_SplitDepth[i + 1];
 
-		std::vector<Vec3> cornersWS;
-		cornersWS.reserve(8);
+		Vec3 tFrustum[8];
+		for (int j = 0; j < 8; ++j)
+			tFrustum[j] = FrustumCorners[j];
 
+		// 프러스텀 계산
 		for (int j = 0; j < 4; ++j)
 		{
-			float lerpNear = (splitNear - nearZ) / (farZ - nearZ);
-			float lerpFar = (splitFar - nearZ) / (farZ - nearZ);
+			// 앞 -> 뒤 벡터
+			Vec3 v = (tFrustum[j + 4] - tFrustum[j]);
+			
+			Vec3 n = v * cascadeSplits[i];
+			Vec3 f = v * cascadeSplits[i+1];
 
-			Vec3 nearCorner = Vec3::Lerp(frustumCornersVS[j], frustumCornersVS[j + 4], lerpNear);
-			Vec3 farCorner = Vec3::Lerp(frustumCornersVS[j], frustumCornersVS[j + 4], lerpFar);
+			tFrustum[j + 4] = tFrustum[j] + f;
+			tFrustum[j] = tFrustum[j] + n;
 
-			Vec4 ncWS = XMVector4Transform(Vec4(nearCorner.x, nearCorner.y, nearCorner.z, 1.0f), viewToWorld);
-			Vec4 fcWS = XMVector4Transform(Vec4(farCorner.x, farCorner.y, farCorner.z, 1.0f), viewToWorld);
-
-			cornersWS.emplace_back(ncWS.x, ncWS.y, ncWS.z);
-			cornersWS.emplace_back(fcWS.x, fcWS.y, fcWS.z);
 		}
 
-		// AABB
-		Vec3 minCorner = cornersWS[0];
-		Vec3 maxCorner = cornersWS[0];
-		for (size_t j = 1; j < cornersWS.size(); ++j)
-		{
-			minCorner = Vec3::Min(minCorner, cornersWS[j]);
-			maxCorner = Vec3::Max(maxCorner, cornersWS[j]);
-		}
+		// 바운딩 구 중심 계산
+		Vec3 center{};
+		for (const auto& v : tFrustum)
+			center += v;
+		center = center / 8.f;
 
-		Vec3 center = (minCorner + maxCorner) * 0.5f;
-		float radius = (maxCorner - minCorner).Length() * 0.5f;
-		radius = max(radius, 50.f); // 안전 여유
+		// 바운딩 구 반지름 계산
+		float radius{};
+		for (const auto& v : tFrustum)
+			radius = max(radius, (v - center).Length());
 
-		float minRadius = 1000.f * (i+1);
-		radius = min(minRadius, radius);
 
-		Vec3 eye = center - lightDir * radius;
-		Vec3 up(0.f, 1.f, 0.f);
+		float value{ min(5000.0f, radius * 2.5f) };
+		Vec3 shadowLightPos = center + (lightDir * value);
 
-		Matrix lightView = XMMatrixLookAtLH(eye, center, up);
-		Matrix lightProj = XMMatrixOrthographicLH(radius * 2.f, radius * 2.f, 0.0f, 5000.f);
+		Matrix lightViewMatrix, lightProjMatrix;
+		Vec3 up{ 0.0f, 1.0f, 0.0f };
+		lightViewMatrix = XMMatrixLookAtLH(shadowLightPos, center, up);
+		lightProjMatrix = XMMatrixOrthographicLH(radius * 2.0f, radius * 2.0f, 0.0f, 5000.0f);
 
-		m_CascadeView[i] = lightView;
-		m_CascadeProj[i] = lightProj;
-		m_CascadeVP[i] = lightProj * lightView;
+		m_CascadeView[i] = lightViewMatrix;
+		m_CascadeProj[i] = lightProjMatrix;
+		m_CascadeVP[i] = lightProjMatrix * lightViewMatrix;
 	}
 }

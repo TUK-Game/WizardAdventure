@@ -59,7 +59,7 @@ void CGraphicsDescriptorHeap::CommitTable()
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_DescHeap->GetGPUDescriptorHandleForHeapStart();
 	handle.ptr += m_CurrentGroupIndex * m_GroupSize;
-	GRAPHICS_CMD_LIST->SetGraphicsRootDescriptorTable(2, handle);
+	GRAPHICS_CMD_LIST->SetGraphicsRootDescriptorTable(3, handle);
 
 	m_CurrentGroupIndex++;
 }
@@ -79,7 +79,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE CGraphicsDescriptorHeap::GetCPUHandle(unsigned char 
 	assert(reg > 0);
 	D3D12_CPU_DESCRIPTOR_HANDLE handle = m_DescHeap->GetCPUDescriptorHandleForHeapStart();
 	handle.ptr += m_CurrentGroupIndex * m_GroupSize;
-	handle.ptr += (reg - 2) * m_HandleSize;
+	handle.ptr += (reg - 3) * m_HandleSize;
 	return handle;
 }
 

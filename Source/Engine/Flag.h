@@ -13,7 +13,6 @@ enum class CBV_REGISTER : unsigned char
 	b2,
 	b3,
 	b4,
-	b5,
 	END
 };
 

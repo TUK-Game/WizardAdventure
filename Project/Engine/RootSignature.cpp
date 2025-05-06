@@ -27,22 +27,31 @@ int CRootSignature::CreateGraphicsRootSignature()
 	m_SamplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
 	CD3DX12_DESCRIPTOR_RANGE ranges[] =
 	{
-		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, CBV_REGISTER_COUNT - 2, 2), // b2~b4
+		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 2, 3), // b3~b4
 		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, SRV_REGISTER_COUNT, 0), // t0~t4
 	};
 
-	CD3DX12_ROOT_PARAMETER param[3] = {};
+	CD3DX12_ROOT_PARAMETER param[4] = {};
 	param[0].InitAsConstantBufferView(static_cast<UINT32>(CBV_REGISTER::b0)); // 전역 b0
 	param[1].InitAsConstantBufferView(static_cast<UINT32>(CBV_REGISTER::b1)); // 전역 b1
-	param[2].InitAsDescriptorTable(_countof(ranges), ranges);
+	param[2].InitAsConstantBufferView(static_cast<UINT32>(CBV_REGISTER::b2)); // 전역 b2
+	param[3].InitAsDescriptorTable(_countof(ranges), ranges);
 
 	D3D12_ROOT_SIGNATURE_DESC sigDesc = CD3DX12_ROOT_SIGNATURE_DESC(_countof(param), param, 1, &m_SamplerDesc);
 	sigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT; // 입력 조립기 단계
 
 	ComPtr<ID3DBlob> blobSignature;
 	ComPtr<ID3DBlob> blobError;
-	::D3D12SerializeRootSignature(&sigDesc, D3D_ROOT_SIGNATURE_VERSION_1, &blobSignature, &blobError);
-
+	HRESULT hr = D3D12SerializeRootSignature(&sigDesc, D3D_ROOT_SIGNATURE_VERSION_1, &blobSignature, &blobError);
+	if (FAILED(hr))
+	{
+		if (blobError)
+		{
+			::OutputDebugStringA((char*)blobError->GetBufferPointer()); // 에러 메시지 출력
+			std::cerr << (char*)blobError->GetBufferPointer() << std::endl;
+		}
+		return E_FAIL;
+	}
 	if (FAILED(DEVICE->CreateRootSignature(0, blobSignature->GetBufferPointer(), blobSignature->GetBufferSize(), IID_PPV_ARGS(&m_GraphicsRootSignature))))
 		return E_FAIL;
 

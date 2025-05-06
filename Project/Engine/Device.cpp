@@ -55,8 +55,9 @@ int CDevice::Init()
 	// 사용할 수에 맞게 레지스터 개수 생성 ex) 렌더링 오브젝트 2개면 각 2개씩
 	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(LightParams), 1);
 	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(FogParams), 1);
-	CreateConstantBuffer(CBV_REGISTER::b2, sizeof(TransformParams), 400000);
-	CreateConstantBuffer(CBV_REGISTER::b3, sizeof(MaterialParams), 400000);
+	CreateConstantBuffer(CBV_REGISTER::b2, sizeof(CascadeShadowData), 1);
+	CreateConstantBuffer(CBV_REGISTER::b3, sizeof(TransformParams), 400000);
+	CreateConstantBuffer(CBV_REGISTER::b4, sizeof(MaterialParams), 400000);
 
 	CreateRenderTargetGroups();
 #ifdef READY_IMGUI

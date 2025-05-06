@@ -4,9 +4,9 @@ enum class EConstantBuffer_Type : unsigned char
 {
 	Global, 
 	Fog,
+	CascadeShadowData,
 	Transform,
 	Material,
-	CascadeShadowData,
 
 	END
 };
