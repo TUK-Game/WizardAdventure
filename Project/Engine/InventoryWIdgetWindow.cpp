@@ -33,9 +33,7 @@ bool CInventoryWIdgetWindow::Init(CPlayer* player)
 
 	info = CreateWidget<CTextWidget>(L"IAttack", player);
 	info->GetTransform()->SetRelativePosition(-0.95f, -0.1f, 1.f);
-	info->SetBasicInfo(std::format(L"공격력: {}                   골드: {}",
-		stats->maxHp, stats->currentHp, stats->attack, stats->gold), L"맑은 고딕_30", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
-
+	info->SetBasicInfo(std::format(L"공격력: {}                   골드: {}", stats->maxHp, stats->currentHp, stats->attack, stats->gold), L"맑은 고딕_30", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
 
 	CImageWidget* skillWidget = CreateWidget<CImageWidget>(L"ISkill1", player);
 	skillWidget->GetTransform()->SetRelativePosition(-0.878f, 0.075f, 1.f);
@@ -131,7 +129,7 @@ void CInventoryWIdgetWindow::UpdateInventory()
 			CTexture* texture = CAssetManager::GetInst()->FindAsset<CTexture>(itemName);
 			widget->SetItemId(items[i]->GetItemInfo().id);
 			widget->SetItem(items[i]);
-			widget->SetButtonTexture(	
+			widget->SetButtonTexture(
 				texture,
 				texture,
 				texture

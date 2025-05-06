@@ -79,7 +79,7 @@ void CGameObject::Begin()
 		m_vecChild[i]->Begin();
 	}
 }
- 
+
 void CGameObject::Update()
 {
 	for (int i = 0; i < (int)EComponent_Type::END; ++i)
@@ -134,7 +134,7 @@ void CGameObject::FinalUpdate()
 
 	for (size_t i = 0; i < m_vecChild.size(); ++i)
 	{
-		if(m_vecChild[i]->GetTransform())
+		if (m_vecChild[i]->GetTransform())
 			m_vecChild[i]->SetParentTransform(GetTransform());
 
 		m_vecChild[i]->FinalUpdate();
@@ -204,7 +204,7 @@ void CGameObject::SetParentTransform(CTransform* transform)
 void CGameObject::SetProtocolStateForClient(Protocol::MoveState state)
 {
 	switch (state)
-	{	
+	{
 	case Protocol::MOVE_STATE_NONE:
 		break;
 	case Protocol::MOVE_STATE_IDLE:
@@ -371,6 +371,23 @@ void CGameObject::RemoveFromParent()
 		m_Parent->RemoveChild(this);
 		m_Parent = nullptr;
 	}
+}
+
+Vec3 CGameObject::InteractionCameraPos(Vec3& rot, const Vec3& offset)
+{
+	Vec3 pos = GetTransform()->GetRelativePosition();
+	Vec3 front = GetTransform()->GetWorldDir(EDir::Front);
+	Vec3 right = GetTransform()->GetWorldDir(EDir::Right);
+	Vec3 up = GetTransform()->GetWorldDir(EDir::Up);
+	front.Normalize();
+	right.Normalize();
+	up.Normalize();
+
+	rot = GetTransform()->GetRelativeRotation();
+
+	Vec3 newPos = pos - front * offset.z - right * offset.x - up * offset.y;
+
+	return newPos;
 }
 
 void CGameObject::Destroy()

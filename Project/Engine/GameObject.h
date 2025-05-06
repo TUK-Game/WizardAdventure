@@ -204,6 +204,7 @@ public:
     void RemoveFromParent();
 
 
+    Vec3 InteractionCameraPos(Vec3& rot, const Vec3& offset);
 
     virtual void Destroy();
     

@@ -34,7 +34,9 @@ public:
     void InitStats(int maxHp, int hp, int attack, float speed);
 
     void DetectNPC();
-    void FinishShopping();
+    void MoveToInventoryView();
+    void MoveCamera(CGameObject* camera, CGameObject* target, ECamera_Type type, const Vec3& offset);
+    void FinishInteraction(bool isLayerCheck);
 public:
     virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
     Vec3 m_Amount;

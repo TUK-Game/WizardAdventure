@@ -29,7 +29,7 @@ void CPlayerScript::Update()
         if (KEY_DOWN(EKey::G))
         {
             m_bShopping = false;
-            player->FinishShopping();
+            player->FinishInteraction(true);
         }
         return;
     }
@@ -71,37 +71,49 @@ void CPlayerScript::Update()
     }
     if (KEY_DOWN(EKey::F))
     {
-        player->DetectNPC();
-        m_bShopping = true;
+        CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
+        if (level->GetWidgetWindowType() == EWIDGETWINDOW_TYPE::END)
+        {
+            player->DetectNPC();
+            m_bShopping = true;
+        }
     }
     if (KEY_DOWN(EKey::M))
     {
         CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
-        const auto window = level->FindWidgetWindow(EWIDGETWINDOW_TYPE::MAP_WINDOW);
-        if (window->GetEnable())
+        if (level->GetWidgetWindowType() == EWIDGETWINDOW_TYPE::END || level->GetWidgetWindowType() == EWIDGETWINDOW_TYPE::MAP_WINDOW)
         {
-            window->SetEnable(false);
-            level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::END);
-        }
-        else
-        {
-            window->SetEnable(true);
-            level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::MAP_WINDOW);
+            const auto window = level->FindWidgetWindow(EWIDGETWINDOW_TYPE::MAP_WINDOW);
+            if (window->GetEnable())
+            {
+                window->SetEnable(false);
+                level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::END);
+            }
+            else
+            {
+                window->SetEnable(true);
+                level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::MAP_WINDOW);
+            }
         }
     }
     if (KEY_DOWN(EKey::Tab))
     {
         CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
-        const auto window = level->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW);
-        if (window->GetEnable())
+        if (level->GetWidgetWindowType() == EWIDGETWINDOW_TYPE::END || level->GetWidgetWindowType() == EWIDGETWINDOW_TYPE::INVENTORY_WINDOW)
         {
-            window->SetEnable(false);
-            level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::END);
-        }
-        else
-        {
-            window->SetEnable(true);
-            level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW);
+            const auto window = level->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW);
+            if (window->GetEnable())
+            {
+                window->SetEnable(false);
+                player->FinishInteraction(false);
+                level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::END);
+            }
+            else
+            {
+                window->SetEnable(true);
+                player->MoveToInventoryView();
+                level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW);
+            }
         }
     }
 

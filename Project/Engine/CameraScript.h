@@ -22,8 +22,10 @@ private:
     void FreeMove();
     void FixedMove();
     void UpdateDirectionalLight();
+    void UpdateInteractionPosition();
 
-    void MoveToTarget();
+    void MoveToTarget(bool isLayerCheck, float maxHeight = 0.f);
+    void MoveToTargetAll(float maxHeight);
     void RollBackCamera();
 public:
 

@@ -265,29 +265,45 @@ void CPlayer::DetectNPC()
         return;
 
     npc->Interation();
-    
-    const auto& script = dynamic_cast<CCameraScript*>(camera->GetScript());
-
-    if (script)
-    {
-        Vec3 rot;
-        CTransform* transform = camera->GetTransform();
-        script->SetInteractionZoomTarget(npc->InteractionCameraPos(rot));
-        script->SetInteractionStartPos(transform->GetRelativePosition());
-        script->SetInteractionDir(transform->GetRelativeRotation(), rot);
-        camera->GetCamera()->SetCameraType(ECamera_Type::Interaction_Start);
-    }
+    MoveCamera(camera, npc, ECamera_Type::Interaction_Start, Vec3(200.f, 0.f, 500.f));
 
     return;
 }
 
-void CPlayer::FinishShopping()
+void CPlayer::MoveToInventoryView()
+{
+    CGameObject* camera = CRenderManager::GetInst()->GetMainCamera()->GetOwner();
+    if (ECamera_Type::Fixed != camera->GetCamera()->GetCameraType())
+        return;
+
+    MoveCamera(camera, this, ECamera_Type::Inventory_Interaction_Start, Vec3(200.f, 0.f, 500.f));
+}
+
+void CPlayer::MoveCamera(CGameObject* camera, CGameObject* target, ECamera_Type type, const Vec3& offset)
+{
+    const auto& script = dynamic_cast<CCameraScript*>(camera->GetScript());
+        
+    if (script)
+    {
+        Vec3 rot;
+        CTransform* transform = camera->GetTransform();
+        script->SetInteractionZoomTarget(target->InteractionCameraPos(rot, offset));
+        script->SetInteractionStartPos(transform->GetRelativePosition());
+        script->SetInteractionDir(transform->GetRelativeRotation(), rot);
+        camera->GetCamera()->SetCameraType(type);
+    }
+}
+
+void CPlayer::FinishInteraction(bool isLayerCheck)
 {
     CGameObject* camera = CRenderManager::GetInst()->GetMainCamera()->GetOwner();
     if(ECamera_Type::Interaction == camera->GetCamera()->GetCameraType())
     {
         camera->GetCamera()->SetCameraType(ECamera_Type::Interaction_End);
-        camera->GetCamera()->CheckLayer(LAYER_PLAYER);
+        if(isLayerCheck)
+        {
+            camera->GetCamera()->CheckLayer(LAYER_PLAYER);
+        }
     }
 }
 
