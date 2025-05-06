@@ -127,6 +127,21 @@ float CSkillManager::GetSkillCooldown(int slotIndex) const
     return m_SkillCooldowns[slotIndex];
 }
 
+ESkillType CSkillManager::ConvertSkillNameToType(const std::wstring& name)
+{
+    if (name == L"FireShot")
+        return ESkillType::FireBallTowardMouse;
+    if (name == L"FireRain")
+        return ESkillType::Meteor;
+    if (name == L"FireballExplosion")
+        return ESkillType::FireBallTowardQ;
+    if (name == L"FireTower")
+        return ESkillType::FireTower;
+    if (name == L"FireSwords")
+        return ESkillType::FireSwordSpread;
+
+}
+
 void CSkillManager::CastFireballTowardMouse()
 {
     CGameObject* player = m_Owner; 

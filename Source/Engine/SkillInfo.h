@@ -22,4 +22,5 @@ enum ESkillSlot
     Q,
     E,
     R,
+    END
 };

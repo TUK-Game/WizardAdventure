@@ -49,6 +49,8 @@ int CAssetManager::Init()
 	if (!m_soundManager->Init())
 		return E_FAIL;
 
+	InitSkillTexture();
+
 	return S_OK;
 }
 
@@ -1013,7 +1015,7 @@ CTexture* CAssetManager::CreateTextureFromResource(const std::wstring& name, Com
 	return texture;
 }
 
-std::wstring CAssetManager::ConvertSkillToTextureName(ESkillType type)
+void CAssetManager::ConvertSkillToTexture(ESkillType type)
 {
 	CTexture* tex;
 	switch (type)
@@ -1026,7 +1028,7 @@ std::wstring CAssetManager::ConvertSkillToTextureName(ESkillType type)
 			MakeSkillTexture(tex, EPlayerAttribute::Fire, L"FireShot");
 		}
 	}
-	return L"FireShot";
+	return;
 	case ESkillType::Meteor:
 	{
 		tex = FindAsset<CTexture>(L"FireRain");
@@ -1035,7 +1037,7 @@ std::wstring CAssetManager::ConvertSkillToTextureName(ESkillType type)
 			MakeSkillTexture(tex, EPlayerAttribute::Fire, L"FireRain");
 		}
 	}
-	return L"FireRain";
+	return;
 	case ESkillType::FireBallTowardQ:
 	{
 		tex = FindAsset<CTexture>(L"FireballExplosion");
@@ -1044,7 +1046,7 @@ std::wstring CAssetManager::ConvertSkillToTextureName(ESkillType type)
 			MakeSkillTexture(tex, EPlayerAttribute::Fire, L"FireballExplosion");
 		}
 	}
-	return L"FireballExplosion";
+	return;
 	case ESkillType::FireTower:
 	{
 		tex = FindAsset<CTexture>(L"FireTower");
@@ -1053,7 +1055,7 @@ std::wstring CAssetManager::ConvertSkillToTextureName(ESkillType type)
 			MakeSkillTexture(tex, EPlayerAttribute::Fire, L"FireTower");
 		}
 	}
-	return L"FireTower";
+	return;
 	case ESkillType::FireSwordSpread:
 	{
 		tex = FindAsset<CTexture>(L"FireSwords");
@@ -1062,10 +1064,37 @@ std::wstring CAssetManager::ConvertSkillToTextureName(ESkillType type)
 			MakeSkillTexture(tex, EPlayerAttribute::Fire, L"FireSwords");
 		}
 	}
-	return  L"FireSwords";
+	return;
+	}
+
+	return;
+}
+
+std::wstring CAssetManager::ConvertSkillToTextureName(ESkillType type)
+{
+	switch (type)
+	{
+	case ESkillType::FireBallTowardMouse:
+		return L"FireShot";
+	case ESkillType::Meteor:
+		return L"FireRain";
+	case ESkillType::FireBallTowardQ:
+		return L"FireballExplosion";
+	case ESkillType::FireTower:
+		return L"FireTower";
+	case ESkillType::FireSwordSpread:
+		return L"FireSwords";
 	}
 
 	return L"";
+}
+
+void CAssetManager::InitSkillTexture()
+{
+	for (int i = 1; i < static_cast<int>(ESkillType::END); ++i)
+	{
+		ConvertSkillToTexture(static_cast<ESkillType>(i));
+	}
 }
 
 void CAssetManager::MakeSkillTexture(CTexture* tex, EPlayerAttribute attribute, const std::wstring& name)

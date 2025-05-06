@@ -23,6 +23,7 @@ public:
     virtual void SetTarget(const Vec3& pos, const Vec3& rot) { m_Interpolator->SetTarget(pos, rot); }
     void SetStats(int maxHp, int hp) { m_Stats->maxHp = maxHp; m_Stats->currentHp = hp; }
     void AddItem(std::shared_ptr<class CItem> item) { m_Items.emplace_back(item); }
+    void AddSkill(std::shared_ptr<class CSkillData> skill);
     void CreateStateManager();
 
     Vec3 GetCurrentMoveDir() { return m_currentMoveDir; }

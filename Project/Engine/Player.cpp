@@ -30,6 +30,7 @@
 #include "RenderManager.h"
 #include "Camera.h"
 #include "CameraScript.h"
+#include "SkillData.h"
 //#include <Engine/Engine.h>
 
 CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
@@ -139,6 +140,15 @@ void CPlayer::FinalUpdate()
 void CPlayer::Render()
 {
     CGameObject::Render();
+}
+
+void CPlayer::AddSkill(std::shared_ptr<CSkillData> skill)
+{
+    const auto& skillManager = GetSkillManager();
+    ESkillSlot slot = skillManager->GetNextSlot();
+    assert(slot != ESkillSlot::END);
+    skillManager->LearnSkill(slot, GetSkillManager()->ConvertSkillNameToType(skill->GetSkillInfo().name));
+    skillManager->SetNextSlot();
 }
 
 void CPlayer::CreateStateManager()

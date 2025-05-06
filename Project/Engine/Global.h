@@ -273,6 +273,8 @@ enum class ESkillType {
 	FireTower,
 	FireSwordSpread,
 	// Ice, Electric 스킬도 여기에 추가 
+
+	END
 };
 
 

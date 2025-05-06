@@ -14,7 +14,11 @@ public:
     void UpdateCooldowns(float deltaTime);
     const std::array<float, 5>& GetSkillCooldowns() const { return m_SkillCooldowns; }
     float GetSkillCooldown(int slotIndex) const;
+    ESkillSlot GetNextSlot() { return m_NextSlot; }
 
+    void SetNextSlot() { m_NextSlot = static_cast<ESkillSlot>(static_cast<int>(m_NextSlot) + 1); }
+
+    ESkillType ConvertSkillNameToType(const std::wstring& name);
 private:
     void CastFireballTowardMouse();
     void CastFireballTowardQ(float duration);
@@ -34,5 +38,6 @@ private:
     std::array<float, 5> m_SkillCooldowns = { 0.f, 0.f, 0.f, 0.f, 0.f }; 
     EPlayerAttribute m_Attribute;
     CGameObject* m_Owner;
+    ESkillSlot m_NextSlot = ESkillSlot::Q;
 };
 
