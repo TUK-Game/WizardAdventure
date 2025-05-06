@@ -387,6 +387,11 @@ int CAssetManager::LoadMaterial()
 	AddAsset(L"Circle", material);
 
 	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Tex_World_Billboard"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Red"));
+	AddAsset(L"HPBar", material);
+
+	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Skybox"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Skybox"));
 	AddAsset(L"Skybox", material);
@@ -583,6 +588,11 @@ int CAssetManager::LoadGraphicShader()
 	name = L"Forward.hlsl";
 	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND }, "VS_TexWorld", "PS_TexWorld_Tinted");
 	AddAsset(L"Texture_World_Tinted", shader);
+
+	shader = new CGraphicShader;
+	name = L"Forward.hlsl";
+	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND, D3D_PRIMITIVE_TOPOLOGY_POINTLIST }, "VS_TexWorld_Billboard", "PS_TexWorld_Billboard", "GS_TexWorld_Billboard");
+	AddAsset(L"Tex_World_Billboard", shader);
 
 	shader = new CGraphicShader;
 	name = L"Forward.hlsl";

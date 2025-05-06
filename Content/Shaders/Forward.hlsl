@@ -161,6 +161,7 @@ float4 PS_TexWorld_Tinted(VS_TEX_OUT_WORLD input) : SV_Target
 }
 
 
+
 // [BillboardAnimated Shader]
 // Topology: POINTLIST
 // g_tex_0 : Output Texture
@@ -249,5 +250,68 @@ float4 PS_BillboardAnimated(PS_IN input) : SV_Target
     color.a *= alpha;
 
     return color;
+}
+
+
+// [Billboard]
+VS_BILLBOARD_OUT VS_TexWorld_Billboard(VS_BILLBOARD_IN input)
+{
+    VS_BILLBOARD_OUT output = (VS_BILLBOARD_OUT)0;
+    output.worldPos = mul(float4(input.pos, 1.f), matWorld).xyz;
+    return output;
+}
+
+[maxvertexcount(6)]
+void GS_TexWorld_Billboard(point VS_BILLBOARD_OUT input[1], inout TriangleStream<PS_IN> triStream)
+{
+    float3 center = input[0].worldPos;
+
+    float3 look = normalize(center - cameraPosition);
+    float3 up = float3(0, 1, 0);
+    float3 right = normalize(cross(up, look));
+    float3 trueUp = cross(look, right);
+    float halfWidth = 100.f;
+    float halfHeight = 10.f;
+
+    float3 corners[4] =
+    {
+        center + (-right * halfWidth - trueUp * halfHeight), // 0: bottom left
+        center + (-right * halfWidth + trueUp * halfHeight), // 1: top left
+        center + (right * halfWidth + trueUp * halfHeight), // 2: top right
+        center + (right * halfWidth - trueUp * halfHeight)  // 3: bottom right
+    };
+
+
+    float2 uvs[4] = {
+        float2(0, 1), // 0
+        float2(0, 0), // 1
+        float2(1, 0), // 2
+        float2(1, 1)  // 3
+    };
+
+    int indices[6] = { 0, 1, 2, 0, 2, 3 };
+
+    for (int i = 0; i < 6; ++i)
+    {
+        int idx = indices[i];
+        PS_IN o;
+        o.pos = mul(float4(corners[idx], 1.0f), mul(matView, matProjection));
+        o.uv = uvs[idx];
+        triStream.Append(o);
+    }
+}
+
+float4 PS_TexWorld_Billboard(PS_IN input) : SV_Target
+{
+    float4 texColor = tex_0.Sample(sam_0, input.uv);
+    float hpRatio = saturate(float_0);
+
+    // 오른쪽 잘라내기 (마스킹)
+    if (input.uv.x > hpRatio)
+    {
+        texColor = float4(0.0, 0.0, 0.0, texColor.a); // 검은색으로 덮기 (알파 유지)
+    }
+
+    return texColor;
 }
 #endif

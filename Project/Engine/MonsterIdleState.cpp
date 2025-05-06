@@ -11,7 +11,9 @@ void CMonsterIdleState::Enter(CGameObject* entity)
 #endif
 	std::vector<CGameObject*> objs = entity->GetChild();
 	for (const auto o : objs) {
-		o->GetAnimator()->Play(L"MONSTERIDLE");
+		auto ani = o->GetAnimator();
+		if (ani)
+			ani->Play(L"MONSTERIDLE");
 	}
 
 }

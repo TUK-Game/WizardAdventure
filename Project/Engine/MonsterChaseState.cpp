@@ -13,7 +13,9 @@ void CMonsterChaseState::Enter(CGameObject* entity)
 #endif
 	std::vector<CGameObject*> objs = entity->GetChild();
 	for (const auto o : objs) {
-		o->GetAnimator()->Play(L"MONSTERWALK");
+		auto ani = o->GetAnimator();
+		if (ani)
+			ani->Play(L"MONSTERWALK");
 	}
 }
 

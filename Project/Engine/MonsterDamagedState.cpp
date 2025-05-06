@@ -12,9 +12,11 @@ void CMonsterDamagedState::Enter(CGameObject* entity)
 #endif
 	std::vector<CGameObject*> objs = entity->GetChild();
 	for (const auto o : objs) {
-		o->GetAnimator()->Play(L"MONSTERHITTED");
-		m_DamagedDuration = o->GetAnimator()->GetDuration();
-
+		auto ani = o->GetAnimator();
+		if (ani) {
+			ani->Play(L"MONSTERHITTED");
+			m_DamagedDuration = ani->GetDuration();
+		}
 	}
 
 }

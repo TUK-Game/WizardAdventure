@@ -11,8 +11,13 @@ void CMonsterDeathState::Enter(CGameObject* entity)
 #endif
 	std::vector<CGameObject*> objs = entity->GetChild();
 	for (const auto o : objs) {
-		o->GetAnimator()->Play(L"MONSTERDIE");
-		m_DeathDuration = o->GetAnimator()->GetDuration();
+
+		auto ani = o->GetAnimator();
+		if (ani) {
+			ani->Play(L"MONSTERDIE");
+			m_DeathDuration = ani->GetDuration();
+		}
+		
 	}
 
 }

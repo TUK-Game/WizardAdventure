@@ -11,7 +11,9 @@ void CMonsterSpawnState::Enter(CGameObject* entity)
 #endif
 	std::vector<CGameObject*> objs = entity->GetChild();
 	for (const auto o : objs) {
-		o->GetAnimator()->Play(L"MOSNTERSPAWN");
+		auto ani = o->GetAnimator();
+		if (ani)
+			ani->Play(L"MOSNTERSPAWN");
 	}
 }
 
@@ -24,4 +26,7 @@ void CMonsterSpawnState::Exit(CGameObject* entity)
 #ifdef _DEBUG
 	std::cout << "Exiting Spawn State" << std::endl;
 #endif
+
+
+
 }

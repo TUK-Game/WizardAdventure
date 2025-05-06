@@ -15,9 +15,12 @@ void CMonsterAttackState::Enter(CGameObject* entity)
 #endif
     std::vector<CGameObject*> objs = entity->GetChild();
     for (const auto o : objs) {
-        CAnimator* ani = o->GetAnimator();
-        ani->Play(L"MONSTERATTACK1");
-        m_AttackDuration = ani->GetDuration();
+        auto ani = o->GetAnimator();
+        if (ani) {
+            ani->Play(L"MONSTERATTACK1");
+            m_AttackDuration = ani->GetDuration();
+        }
+
 
     }
     m_ElapsedTime = 0.f;

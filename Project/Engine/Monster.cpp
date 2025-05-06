@@ -17,6 +17,7 @@
 #include "AssetManager.h"
 #include "MeshRenderer.h"
 #include "OrientedBoxCollider.h"
+#include "MonsterHPBar.h"
 
 #include <iostream>
 
@@ -51,6 +52,11 @@ CMonster::CMonster()
 
 	m_Stats = new Stats;
 
+	// hpbar
+	CMonsterHPBar* hpBar = new CMonsterHPBar();
+	hpBar->SetOffsetY(450.f);
+	AddChild(hpBar);
+
 	Begin();	
 }
 
@@ -67,6 +73,7 @@ void CMonster::Begin()
 	CGameObject::Begin();
 	m_StateManager->ChangeState(this, EState_Type::Spawn);
 	m_Interpolator->SetTarget(GetTransform()->GetRelativePosition(), GetTransform()->GetRelativeRotation());
+	
 }
 
 void CMonster::Update()

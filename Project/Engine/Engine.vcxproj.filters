@@ -707,6 +707,9 @@
     <ClInclude Include="AttackRangeCircle.h">
       <Filter>03. GameObject\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterHPBar.h">
+      <Filter>03. GameObject\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1097,6 +1100,9 @@
       <Filter>07. UI\02. WidgetWindow</Filter>
     </ClCompile>
     <ClCompile Include="AttackRangeCircle.cpp">
+      <Filter>03. GameObject\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterHPBar.cpp">
       <Filter>03. GameObject\Monster</Filter>
     </ClCompile>
   </ItemGroup>
