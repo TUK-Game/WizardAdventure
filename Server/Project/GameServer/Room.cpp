@@ -639,13 +639,13 @@ bool CRoom::HandleBuyItem(CPlayerRef player, CItemRef item)
 			if (player->BuyItem(item))
 			{
 				// 성공메시지 전달
-				IsBuyItem(player, true);
+				IsBuyItem(player, item, true);
 				(*iter)->GetItemInfo().bSell = true;
 			}
 			else
 			{
 				// 실패메시지 전달
-				IsBuyItem(player, false);
+				IsBuyItem(player, nullptr, false);
 			}
 		}
 		UpdateItem(npc->ObjectInfo->object_id());
@@ -655,11 +655,12 @@ bool CRoom::HandleBuyItem(CPlayerRef player, CItemRef item)
 	return true;
 }
 
-bool CRoom::IsBuyItem(CPlayerRef player, bool isBuy)
+bool CRoom::IsBuyItem(CPlayerRef player, CItemRef item, bool isBuy)
 {
 	Protocol::S_BUY_ITEM pkt;
+	pkt.set_player_id(player->PlayerInfo->player_id());
 	pkt.set_is_success(isBuy);
-
+	pkt.set_item_id(item->GetItemInfo().id);
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	if (auto session = player->GetSession())
 		session->Send(sendBuffer);

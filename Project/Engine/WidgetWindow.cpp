@@ -13,6 +13,7 @@ CWidgetWindow::~CWidgetWindow()
 
 bool CWidgetWindow::Init(CPlayer* player)
 {
+	m_OwnerPlayer = player;
 	return true;
 }
 

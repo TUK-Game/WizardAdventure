@@ -23,6 +23,8 @@ bool CStoreWidgetWindow::Init(CPlayer* player)
 {
 	CWidgetWindow::Init(player);
 
+	m_Tooltip = std::make_shared<ItemTooltip>();
+
 	CImageWidget* backgroundWidget = CreateWidget<CImageWidget>(L"backgroundWidget", player);
 	backgroundWidget->SetTexture(L"ShopBackGround");
 	backgroundWidget->GetTransform()->SetRelativePosition(-0.4f, 0.f, 0.f);
@@ -54,27 +56,27 @@ bool CStoreWidgetWindow::Init(CPlayer* player)
 	price->SetBasicInfo(L"", L"맑은 고딕_30", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
 	price->SetEnable(false);
 
-	m_Tooltip.SetToolTip(name, description, price);
+	m_Tooltip->SetToolTip(name, description, price);
 
 	CItemButtonWidget* widget = CreateWidget<CItemButtonWidget>(L"Item1", player);
 	widget->GetTransform()->SetRelativePosition(-0.65f, 0.6f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	SetEvent(widget, &m_Tooltip);
+	SetEvent(widget, m_Tooltip.get());
 
 	widget = CreateWidget<CItemButtonWidget>(L"Item2", player);
 	widget->GetTransform()->SetRelativePosition(-0.25f, 0.6f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	SetEvent(widget, &m_Tooltip);
+	SetEvent(widget, m_Tooltip.get());
 
 	widget = CreateWidget<CItemButtonWidget>(L"Item3", player);
 	widget->GetTransform()->SetRelativePosition(-0.25f, 0.1f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	SetEvent(widget, &m_Tooltip);
+	SetEvent(widget, m_Tooltip.get());
 
 	widget = CreateWidget<CItemButtonWidget>(L"Item4", player);
 	widget->GetTransform()->SetRelativePosition(-0.65f, 0.1f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	SetEvent(widget, &m_Tooltip);
+	SetEvent(widget, m_Tooltip.get());
 
 
 	return true;
@@ -115,16 +117,3 @@ void CStoreWidgetWindow::SetEvent(CItemButtonWidget* widget, ItemTooltip* toolti
 		});
 }
 
-void ItemTooltip::Hide()
-{
-	if (m_Name) m_Name->SetEnable(false);
-	if (m_Description) m_Description->SetEnable(false);
-	if (m_Price) m_Price->SetEnable(false);
-}
-
-void ItemTooltip::Show(const ItemInfo& info)
-{
-	if (m_Name) { m_Name->SetEnable(true); m_Name->SetText(info.name); }
-	if (m_Description) { m_Description->SetEnable(true); m_Description->SetText(info.description); }
-	if (m_Price) { m_Price->SetEnable(true); m_Price->SetText(L"(" + std::to_wstring(info.price) + L"G)"); }
-}

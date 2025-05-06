@@ -32,6 +32,7 @@
 #include "PlayWidgetWindow.h"
 #include "SkillInfo.h"
 #include "StoreWidgetWindow.h"
+#include "InventoryWIdgetWindow.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -100,6 +101,7 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 
 	const auto& mapwindow = level->CreateWidgetWindow<TestWidget>(EWIDGETWINDOW_TYPE::MAP_WINDOW, L"MapWindow", player);
 	CPlayWidgetWindow* gamewindow = level->CreateWidgetWindow<CPlayWidgetWindow>(EWIDGETWINDOW_TYPE::GAME_WINDOW, L"GamePlayWidget", player);
+	const auto& inventorywindow = level->CreateWidgetWindow<CInventoryWIdgetWindow>(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW, L"InventoryWidget", player);
 
 	if (mapwindow)
 	{
@@ -110,6 +112,10 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	if (gamewindow)
 	{
 		gamewindow->SetOwnerPlayer(player);
+	}
+	if (inventorywindow)
+	{
+		inventorywindow->SetEnable(false);
 	}
 
 	Protocol::C_ENTER_GAME_SUCCESS GSpkt;
@@ -568,11 +574,22 @@ bool Handle_S_BUY_ITEM(CPacketSessionRef& session, Protocol::S_BUY_ITEM& pkt)
 {
 	if (pkt.is_success())
 	{
+		UINT32 playerId = pkt.player_id();
+		UINT32 itemId = pkt.item_id();
+
 		const auto& objects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_NPC)->GetParentObjects();
 		CNPC* npc = dynamic_cast<CNPC*>(objects[0]);
 		if (npc)
 		{
 			npc->SuccessInteration();
+		}
+		const auto& item = CItemManager::GetInst()->FindItem(itemId);
+		CPlayer* player = dynamic_cast<CPlayer*>(CLevelManager::GetInst()->GetPlayer(playerId));
+		CInventoryWIdgetWindow* inven = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
+		if(item && player && inven)
+		{
+			player->AddItem(item);
+			inven->UpdateInventory();
 		}
 	}
 	return true;

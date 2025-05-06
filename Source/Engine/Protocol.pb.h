@@ -4174,15 +4174,35 @@ class S_BUY_ITEM final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kIsSuccessFieldNumber = 1,
+    kPlayerIdFieldNumber = 1,
+    kIsSuccessFieldNumber = 2,
+    kItemIdFieldNumber = 3,
   };
-  // bool is_success = 1;
+  // uint32 player_id = 1;
+  void clear_player_id();
+  uint32_t player_id() const;
+  void set_player_id(uint32_t value);
+  private:
+  uint32_t _internal_player_id() const;
+  void _internal_set_player_id(uint32_t value);
+  public:
+
+  // bool is_success = 2;
   void clear_is_success();
   bool is_success() const;
   void set_is_success(bool value);
   private:
   bool _internal_is_success() const;
   void _internal_set_is_success(bool value);
+  public:
+
+  // uint32 item_id = 3;
+  void clear_item_id();
+  uint32_t item_id() const;
+  void set_item_id(uint32_t value);
+  private:
+  uint32_t _internal_item_id() const;
+  void _internal_set_item_id(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.S_BUY_ITEM)
@@ -4193,7 +4213,9 @@ class S_BUY_ITEM final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    uint32_t player_id_;
     bool is_success_;
+    uint32_t item_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -5856,7 +5878,27 @@ S_UPDATE_ITEM::item_info() const {
 
 // S_BUY_ITEM
 
-// bool is_success = 1;
+// uint32 player_id = 1;
+inline void S_BUY_ITEM::clear_player_id() {
+  _impl_.player_id_ = 0u;
+}
+inline uint32_t S_BUY_ITEM::_internal_player_id() const {
+  return _impl_.player_id_;
+}
+inline uint32_t S_BUY_ITEM::player_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_BUY_ITEM.player_id)
+  return _internal_player_id();
+}
+inline void S_BUY_ITEM::_internal_set_player_id(uint32_t value) {
+  
+  _impl_.player_id_ = value;
+}
+inline void S_BUY_ITEM::set_player_id(uint32_t value) {
+  _internal_set_player_id(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_BUY_ITEM.player_id)
+}
+
+// bool is_success = 2;
 inline void S_BUY_ITEM::clear_is_success() {
   _impl_.is_success_ = false;
 }
@@ -5874,6 +5916,26 @@ inline void S_BUY_ITEM::_internal_set_is_success(bool value) {
 inline void S_BUY_ITEM::set_is_success(bool value) {
   _internal_set_is_success(value);
   // @@protoc_insertion_point(field_set:Protocol.S_BUY_ITEM.is_success)
+}
+
+// uint32 item_id = 3;
+inline void S_BUY_ITEM::clear_item_id() {
+  _impl_.item_id_ = 0u;
+}
+inline uint32_t S_BUY_ITEM::_internal_item_id() const {
+  return _impl_.item_id_;
+}
+inline uint32_t S_BUY_ITEM::item_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_BUY_ITEM.item_id)
+  return _internal_item_id();
+}
+inline void S_BUY_ITEM::_internal_set_item_id(uint32_t value) {
+  
+  _impl_.item_id_ = value;
+}
+inline void S_BUY_ITEM::set_item_id(uint32_t value) {
+  _internal_set_item_id(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_BUY_ITEM.item_id)
 }
 
 #ifdef __GNUC__

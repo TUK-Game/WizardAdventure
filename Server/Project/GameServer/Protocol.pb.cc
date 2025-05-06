@@ -352,7 +352,9 @@ struct S_UPDATE_ITEMDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S_UPDATE_ITEMDefaultTypeInternal _S_UPDATE_ITEM_default_instance_;
 PROTOBUF_CONSTEXPR S_BUY_ITEM::S_BUY_ITEM(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.is_success_)*/false
+    /*decltype(_impl_.player_id_)*/0u
+  , /*decltype(_impl_.is_success_)*/false
+  , /*decltype(_impl_.item_id_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct S_BUY_ITEMDefaultTypeInternal {
   PROTOBUF_CONSTEXPR S_BUY_ITEMDefaultTypeInternal()
@@ -556,7 +558,9 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_BUY_ITEM, _impl_.player_id_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_BUY_ITEM, _impl_.is_success_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_BUY_ITEM, _impl_.item_id_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::C_LOGIN)},
@@ -656,8 +660,9 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "WN_NPC\022#\n\010npc_info\030\001 \003(\0132\021.Protocol.NpcI"
   "nfo\"\035\n\nC_BUY_ITEM\022\017\n\007item_id\030\001 \001(\r\"F\n\rS_"
   "UPDATE_ITEM\022\016\n\006npc_id\030\001 \001(\r\022%\n\titem_info"
-  "\030\002 \003(\0132\022.Protocol.ItemInfo\" \n\nS_BUY_ITEM"
-  "\022\022\n\nis_success\030\001 \001(\010b\006proto3"
+  "\030\002 \003(\0132\022.Protocol.ItemInfo\"D\n\nS_BUY_ITEM"
+  "\022\021\n\tplayer_id\030\001 \001(\r\022\022\n\nis_success\030\002 \001(\010\022"
+  "\017\n\007item_id\030\003 \001(\rb\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_deps[2] = {
   &::descriptor_table_Enum_2eproto,
@@ -665,7 +670,7 @@ static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_de
 };
 static ::_pbi::once_flag descriptor_table_Protocol_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
-    false, false, 1628, descriptor_table_protodef_Protocol_2eproto,
+    false, false, 1664, descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
     &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 26,
     schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
@@ -5340,11 +5345,15 @@ S_BUY_ITEM::S_BUY_ITEM(const S_BUY_ITEM& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   S_BUY_ITEM* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.is_success_){}
+      decltype(_impl_.player_id_){}
+    , decltype(_impl_.is_success_){}
+    , decltype(_impl_.item_id_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _this->_impl_.is_success_ = from._impl_.is_success_;
+  ::memcpy(&_impl_.player_id_, &from._impl_.player_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.item_id_) -
+    reinterpret_cast<char*>(&_impl_.player_id_)) + sizeof(_impl_.item_id_));
   // @@protoc_insertion_point(copy_constructor:Protocol.S_BUY_ITEM)
 }
 
@@ -5353,7 +5362,9 @@ inline void S_BUY_ITEM::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.is_success_){false}
+      decltype(_impl_.player_id_){0u}
+    , decltype(_impl_.is_success_){false}
+    , decltype(_impl_.item_id_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -5381,7 +5392,9 @@ void S_BUY_ITEM::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.is_success_ = false;
+  ::memset(&_impl_.player_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.item_id_) -
+      reinterpret_cast<char*>(&_impl_.player_id_)) + sizeof(_impl_.item_id_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -5391,10 +5404,26 @@ const char* S_BUY_ITEM::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // bool is_success = 1;
+      // uint32 player_id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.player_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool is_success = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           _impl_.is_success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 item_id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.item_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -5428,10 +5457,22 @@ uint8_t* S_BUY_ITEM::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bool is_success = 1;
+  // uint32 player_id = 1;
+  if (this->_internal_player_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_player_id(), target);
+  }
+
+  // bool is_success = 2;
   if (this->_internal_is_success() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_is_success(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(2, this->_internal_is_success(), target);
+  }
+
+  // uint32 item_id = 3;
+  if (this->_internal_item_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_item_id(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -5450,9 +5491,19 @@ size_t S_BUY_ITEM::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // bool is_success = 1;
+  // uint32 player_id = 1;
+  if (this->_internal_player_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_player_id());
+  }
+
+  // bool is_success = 2;
   if (this->_internal_is_success() != 0) {
     total_size += 1 + 1;
+  }
+
+  // uint32 item_id = 3;
+  if (this->_internal_item_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_item_id());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -5473,8 +5524,14 @@ void S_BUY_ITEM::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PRO
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from._internal_player_id() != 0) {
+    _this->_internal_set_player_id(from._internal_player_id());
+  }
   if (from._internal_is_success() != 0) {
     _this->_internal_set_is_success(from._internal_is_success());
+  }
+  if (from._internal_item_id() != 0) {
+    _this->_internal_set_item_id(from._internal_item_id());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -5493,7 +5550,12 @@ bool S_BUY_ITEM::IsInitialized() const {
 void S_BUY_ITEM::InternalSwap(S_BUY_ITEM* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_.is_success_, other->_impl_.is_success_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(S_BUY_ITEM, _impl_.item_id_)
+      + sizeof(S_BUY_ITEM::_impl_.item_id_)
+      - PROTOBUF_FIELD_OFFSET(S_BUY_ITEM, _impl_.player_id_)>(
+          reinterpret_cast<char*>(&_impl_.player_id_),
+          reinterpret_cast<char*>(&other->_impl_.player_id_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata S_BUY_ITEM::GetMetadata() const {

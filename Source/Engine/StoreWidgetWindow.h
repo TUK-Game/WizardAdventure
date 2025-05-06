@@ -2,16 +2,6 @@
 #include "WidgetWindow.h"
 
 class CTextWidget;
-struct ItemTooltip
-{
-	void Hide();
-	void Show(const struct ItemInfo& info);
-	void SetToolTip(CTextWidget* name, CTextWidget* description, CTextWidget* gold) { m_Name = name, m_Description = description; m_Price = gold; }
-
-	CTextWidget* m_Name{};
-	CTextWidget* m_Description{};
-	CTextWidget* m_Price{};
-};
 
 
 class CStoreWidgetWindow :
@@ -27,9 +17,9 @@ public:
 	virtual void Render();
 
 public:
-	void SetEvent(class CItemButtonWidget* widget, ItemTooltip* tooltip);
+	void SetEvent(class CItemButtonWidget* widget, struct ItemTooltip* tooltip);
 
 private:
-	ItemTooltip m_Tooltip;
+	std::shared_ptr<struct ItemTooltip> m_Tooltip;
 };
 
