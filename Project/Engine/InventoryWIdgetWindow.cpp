@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "InventoryWIdgetWindow.h"
 #include "ImageWidget.h"
 #include "Transform.h"
@@ -25,6 +25,17 @@ bool CInventoryWIdgetWindow::Init(CPlayer* player)
 	backgroundWidget->GetTransform()->SetRelativePosition(0.55f, -0.5f, 0.f);
 	backgroundWidget->GetTransform()->SetRelativeScale(0.8f, 0.8f, 0.2f);
 	backgroundWidget->SetEnable(false);
+
+	Stats* stats = player->GetStats();
+	CTextWidget* info = CreateWidget<CTextWidget>(L"IHp", player);
+	info->GetTransform()->SetRelativePosition(-0.9f, 0.1f, 1.f);
+	info->SetBasicInfo(std::format(L"ìµœëŒ€ ì²´ë ¥: {}                í˜„ì¬ ì²´ë ¥: {}", stats->maxHp, stats->currentHp), L"ë§‘ì€ ê³ ë”•_30", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+
+	info = CreateWidget<CTextWidget>(L"IAttack", player);
+	info->GetTransform()->SetRelativePosition(-0.95f, -0.1f, 1.f);
+	info->SetBasicInfo(std::format(L"ê³µê²©ë ¥: {}                   ê³¨ë“œ: {}",
+		stats->maxHp, stats->currentHp, stats->attack, stats->gold), L"ë§‘ì€ ê³ ë”•_30", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+
 
 	CImageWidget* skillWidget = CreateWidget<CImageWidget>(L"ISkill1", player);
 	skillWidget->GetTransform()->SetRelativePosition(-0.878f, 0.075f, 1.f);
@@ -53,12 +64,12 @@ bool CInventoryWIdgetWindow::Init(CPlayer* player)
 
 	CTextWidget* name = CreateWidget<CTextWidget>(L"IText", player);
 	name->GetTransform()->SetRelativePosition(-0.2f, -0.8f, 1.f);
-	name->SetBasicInfo(L"", L"¸¼Àº °íµñ_30", L"Yellow", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+	name->SetBasicInfo(L"", L"ë§‘ì€ ê³ ë”•_30", L"Yellow", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
 	name->SetEnable(false);
 
 	CTextWidget* description = CreateWidget<CTextWidget>(L"IDescription", player);
 	description->GetTransform()->SetRelativePosition(-0.2f, -1.f, 1.f);
-	description->SetBasicInfo(L"", L"¸¼Àº °íµñ_20", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+	description->SetBasicInfo(L"", L"ë§‘ì€ ê³ ë”•_20", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
 	description->SetEnable(false);
 
 	m_Tooltip->SetToolTip(name, description, nullptr);
