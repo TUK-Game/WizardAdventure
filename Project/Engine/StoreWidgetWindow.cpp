@@ -34,12 +34,7 @@ bool CStoreWidgetWindow::Init(CPlayer* player)
 	backgroundWidget->SetTexture(L"Popup");
 	backgroundWidget->GetTransform()->SetRelativePosition(0.55f, -0.5f, 0.f);
 	backgroundWidget->GetTransform()->SetRelativeScale(0.8f, 0.8f, 0.2f);
-
-	backgroundWidget = CreateWidget<CImageWidget>(L"NameUI", player);
-	backgroundWidget->SetTexture(L"NameUI");
-	backgroundWidget->GetTransform()->SetRelativePosition(0.55f, -0.5f, 0.f);
-	backgroundWidget->GetTransform()->SetRelativeScale(0.8f, 0.8f, 0.2f);
-
+	backgroundWidget->SetEnable(false);
 
 	CTextWidget* name = CreateWidget<CTextWidget>(L"Text", player);
 	name->GetTransform()->SetRelativePosition(-0.2f, -0.8f, 0.f);
@@ -61,22 +56,22 @@ bool CStoreWidgetWindow::Init(CPlayer* player)
 	CItemButtonWidget* widget = CreateWidget<CItemButtonWidget>(L"Item1", player);
 	widget->GetTransform()->SetRelativePosition(-0.65f, 0.6f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	SetEvent(widget, m_Tooltip.get());
+	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Item2", player);
 	widget->GetTransform()->SetRelativePosition(-0.25f, 0.6f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	SetEvent(widget, m_Tooltip.get());
+	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Item3", player);
 	widget->GetTransform()->SetRelativePosition(-0.25f, 0.1f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	SetEvent(widget, m_Tooltip.get());
+	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Item4", player);
 	widget->GetTransform()->SetRelativePosition(-0.65f, 0.1f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.2f, 0.3f, 1.f);
-	SetEvent(widget, m_Tooltip.get());
+	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 
 	return true;
@@ -103,17 +98,20 @@ void CStoreWidgetWindow::Render()
 	CWidgetWindow::Render();
 }
 
-void CStoreWidgetWindow::SetEvent(CItemButtonWidget* widget, ItemTooltip* tooltip)
+void CStoreWidgetWindow::SetEvent(CItemButtonWidget* widget, ItemTooltip* tooltip, CImageWidget* pannel)
 {
 	widget->SetOutHover([=]() {
 		tooltip->Hide();
+		pannel->SetEnable(false);
 		});
 	widget->SetOnHover([=]() {
 		tooltip->Show(widget->GetItem()->GetItemInfo());
+		pannel->SetEnable(true);
 		});
 	widget->SetOnClick([=]() {
 		CNetworkManager::GetInst()->s_GameSession->BuyItem(widget->GetItemId());
 		tooltip->Hide();
+		pannel->SetEnable(false);
 		});
 }
 

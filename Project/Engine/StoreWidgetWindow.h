@@ -17,7 +17,7 @@ public:
 	virtual void Render();
 
 public:
-	void SetEvent(class CItemButtonWidget* widget, struct ItemTooltip* tooltip);
+	void SetEvent(class CItemButtonWidget* widget, struct ItemTooltip* tooltip, class CImageWidget* pannel);
 
 private:
 	std::shared_ptr<struct ItemTooltip> m_Tooltip;

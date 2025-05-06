@@ -9,7 +9,7 @@ public:
 	virtual bool Init(class CPlayer* player);
 
 	void UpdateInventory();
-	void SetEvent(class CItemButtonWidget* widget, struct ItemTooltip* tooltip);
+	void SetEvent(class CItemButtonWidget* widget, struct ItemTooltip* tooltip, class CImageWidget* pannel);
 	void SetSkill(int slotIndex, ESkillType type);
 private:
 	std::shared_ptr<struct ItemTooltip> m_Tooltip;
