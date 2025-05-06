@@ -3,6 +3,7 @@
 #include "Transform.h"
 #include "Camera.h"
 #include "AssetManager.h"
+#include "RenderManager.h"
 
 CLight::CLight() : CComponent(EComponent_Type::Light)
 {
@@ -68,6 +69,7 @@ void CLight::Render()
 void CLight::RenderShadow()
 {
 	m_ShadowCamera->GetCamera()->SortShadowObject();
+	UpdateShadowVP();
 	m_ShadowCamera->GetCamera()->RenderShadow();
 }
 
@@ -105,4 +107,42 @@ void CLight::SetLightType(LIGHT_TYPE type)
 		m_LightMaterial = CAssetManager::GetInst()->FindAsset<CMaterial>(L"PointLight");
 		break;
 	}
+}
+
+void CLight::UpdateShadowVP()
+{
+	if (static_cast<LIGHT_TYPE>(m_Light.lightType) != LIGHT_TYPE::DIRECTIONAL_LIGHT)
+		return;
+
+	Vec3 lightDir = -GetTransform()->GetWorldDir(EDir::Front);
+	lightDir.Normalize();
+
+	CCamera* mainCam = CRenderManager::GetInst()->GetMainCamera();
+	const Matrix view = mainCam->GetViewMat();
+	const Matrix proj = mainCam->GetProjMat();
+	const float farZ = mainCam->GetFar();
+	const Matrix viewProj = view * proj;
+	const Matrix invViewProj = viewProj.Invert();
+
+	Vec3 center{};
+
+	CGameObject* target = mainCam->GetTarget();
+	if (target)
+	{
+		Vec3 targetPos = target->GetTransform()->GetWorldPosition();
+		Vec3 viewPos = Vec3::Transform(targetPos, view);
+		center = targetPos;
+	}
+
+	float radius = 2500.f;
+
+	Vec3 shadowLightPos = center + (lightDir * radius);
+
+	Matrix lightViewMatrix, lightProjMatrix;
+	Vec3 up{ 0.0f, 1.0f, 0.0f };
+	lightViewMatrix = XMMatrixLookAtLH(shadowLightPos, center, up);
+	lightProjMatrix = XMMatrixOrthographicLH(radius * 2.0f, radius * 2.0f, 0.0f, 5000.0f);
+
+	m_ShadowCamera->GetCamera()->SetView(lightViewMatrix);
+	m_ShadowCamera->GetCamera()->SetProjection(lightProjMatrix);
 }

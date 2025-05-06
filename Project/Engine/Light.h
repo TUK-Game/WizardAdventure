@@ -35,6 +35,8 @@ public:
 public:
 	virtual CLight* Clone() override { return new CLight(*this); }
 
+private:
+	void UpdateShadowVP();
 
 
 private:

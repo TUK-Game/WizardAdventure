@@ -40,6 +40,8 @@ public:
     void SetScale(float scale)              { m_Scale = scale; }
     void SetNear(float value)               { m_Near = value; }
     void SetTarget(CGameObject* target)     { m_Target = target; }
+    void SetView(const Matrix& view)        { m_matView = view; s_matView = view; }
+    void SetProjection(const Matrix& proj)  { m_matProjection = proj; s_matProjection = proj; }
 
     void CheckLayer(UINT layerIndex)        { m_LayerCheck ^= (1 << layerIndex); }
     void CheckLayerAll()                    { m_LayerCheck = 0xffffffff; }

@@ -128,9 +128,6 @@ void CCamera::RenderForward()
 
 void CCamera::RenderShadow()
 {
-	s_matView = m_matView;
-	s_matProjection = m_matProjection;
-
 	CInstancingManager::GetInst()->Render(m_vecShadow, L"Shadow");
 
 	CInstancingManager::GetInst()->ClearBuffer();

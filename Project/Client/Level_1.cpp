@@ -123,7 +123,7 @@ void CLevel_1::Init()
 		light->AddComponent(new CTransform);
 		light->AddComponent(new CLight);
 		light->GetTransform()->SetRelativePosition(6000.f, 10000.f, 6000.f);
-		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.f));
+		light->GetLight()->SetLightDirection(Vec3(.3f, -1.f, -.3f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
 		light->GetLight()->SetAmbient(Vec3(0.7f, 0.7f, 0.7f));
