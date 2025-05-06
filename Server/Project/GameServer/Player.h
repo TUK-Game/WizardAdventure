@@ -29,7 +29,7 @@ public:
 	Vec3 GetSafePosition() { return m_SafePos; }
 
 	void SetState(Protocol::MoveState state) { m_State = state; }
-	void SetAblity(int maxHp, int currentHp, int attack, float speed) { Ablity{ maxHp, currentHp, attack, speed }; }
+	void SetAblity(int maxHp, int currentHp, int attack, float speed) { Ablity{ maxHp, currentHp, attack, speed}; }
 	void SetDir(const Protocol::Vector3& dir) { m_Dir = dir; }
 	void SetAttribute(const EAttribution attri) { m_attribution = attri; }
 	void SetSafePosition(const Vec3& pos) { m_SafePos = pos; }

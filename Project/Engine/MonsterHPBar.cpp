@@ -26,6 +26,7 @@ void CMonsterHPBar::FinalUpdate()
 {
     CGameObject::FinalUpdate();
 
+
     CGameObject* parent = GetParent();
     if (parent)
     {
@@ -34,7 +35,27 @@ void CMonsterHPBar::FinalUpdate()
         if (monster)
         {
             auto stats = monster->GetStat();
-            float hpRatio = static_cast<float>(stats->currentHp) / static_cast<float>(stats->maxHp);
+
+            int diff = stats->currentHp - stats->displayHp;
+
+            if (diff != 0)
+            {
+                if (-10 < diff && diff < 0)
+                {
+                    stats->displayHp--;
+                }
+                else if (0 < diff && diff < 10)
+                {
+                    stats->displayHp++;
+                }
+                else
+                {
+                    stats->displayHp += static_cast<int>(static_cast<float>(diff) / 10.f);
+                }
+            }
+
+
+            float hpRatio = static_cast<float>(stats->displayHp) / static_cast<float>(stats->maxHp);
             hpRatio = std::clamp(hpRatio, 0.f, 1.f);
             GetMeshRenderer()->GetMaterial()->SetFloat(0, hpRatio);
         }

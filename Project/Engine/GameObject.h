@@ -28,6 +28,7 @@ struct Stats
     int attack = 10;
     float moveSpeed = 300.f;
     int gold = 0.f;
+    int displayHp = 100;
 
     void TakeDamage(int damage) {
         currentHp = max(currentHp - damage, 0);
