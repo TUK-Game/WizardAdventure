@@ -4,7 +4,9 @@
 #include "MonsterAI.h"
 #include "Transform.h"
 #include "StateManager.h"
-
+#include "AttackRangeCircle.h"
+#include "LevelManager.h"
+#include "Level.h"
 
 void CMonsterAttackState::Enter(CGameObject* entity)
 {
@@ -19,6 +21,14 @@ void CMonsterAttackState::Enter(CGameObject* entity)
 
     }
     m_ElapsedTime = 0.f;
+
+
+    CAttackRangeCircle* attackRangeCircle = new CAttackRangeCircle;
+    Vec3 offset = -entity->GetTransform()->GetWorldDir(EDir::Front) * 400.f;
+    attackRangeCircle->GetTransform()->SetRelativePosition(entity->GetTransform()->GetRelativePosition() + offset);
+    attackRangeCircle->SetDuration(m_AttackDuration * 0.5122);    
+    attackRangeCircle->SetScaleRange(Vec3(0.1f, 0.1f, 0.1f), Vec3(300.f, 300.f, 10.f));
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(attackRangeCircle, LAYER_PROJECTILE, false);
 }
 
 void CMonsterAttackState::Update(CGameObject* entity, float deltaTime)

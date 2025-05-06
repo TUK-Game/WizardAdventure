@@ -704,6 +704,9 @@
     <ClInclude Include="InventoryWIdgetWindow.h">
       <Filter>07. UI\02. WidgetWindow</Filter>
     </ClInclude>
+    <ClInclude Include="AttackRangeCircle.h">
+      <Filter>03. GameObject\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1092,6 +1095,9 @@
     </ClCompile>
     <ClCompile Include="InventoryWIdgetWindow.cpp">
       <Filter>07. UI\02. WidgetWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackRangeCircle.cpp">
+      <Filter>03. GameObject\Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
