@@ -210,7 +210,7 @@ void CPlayer::CreateStateManager()
 
 }
 
-void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
+void CPlayer::Move(Vec3 moveDir, bool shouldRotate, float speedScale)
 {
     CTransform* transform = GetTransform();
     if (!transform) return;
@@ -219,7 +219,7 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate)
     {
         moveDir.Normalize(); 
         m_currentMoveDir = moveDir;
-        m_Amount = moveDir * m_Speed * CEngine::GetInst()->GetDeltaTime();
+        m_Amount = moveDir * m_Speed * speedScale * CEngine::GetInst()->GetDeltaTime();
         m_NextPosition = transform->GetRelativePosition() + (moveDir * m_Speed * CEngine::GetInst()->GetDeltaTime());
 #ifdef DEBUG_SOLOPLAY
         transform->SetRelativePosition(transform->GetRelativePosition() + m_Amount);

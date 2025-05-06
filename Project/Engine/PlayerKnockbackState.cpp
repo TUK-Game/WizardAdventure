@@ -33,10 +33,10 @@ void CPlayerKnockbackState::Update(CGameObject* entity, float deltaTime)
 
     m_Elapsed += deltaTime;
 
-    Vec3 knockbackMove = m_KnockbackDir * player->GetStats()->moveSpeed * 0.5f * deltaTime;
-    player->GetTransform()->SetRelativePosition(
-        player->GetTransform()->GetRelativePosition() + knockbackMove
-    );
+    Vec3 front = player->GetTransform()->GetWorldDir(EDir::Front);
+    front.Normalize();
+
+    player->Move(front, false, 0.1f);
 
     if (m_Elapsed >= m_Duration)
     {

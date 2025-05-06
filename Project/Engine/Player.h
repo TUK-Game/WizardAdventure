@@ -17,7 +17,7 @@ public:
     virtual void FinalUpdate();
     virtual void Render();
 
-    void Move(Vec3 moveDir, bool shouldRotate = true);
+    void Move(Vec3 moveDir, bool shouldRotate = true, float speedScale = 1.f);
     void Attack(int skillIndex, float duration = 0.f);
 
     virtual void SetTarget(const Vec3& pos, const Vec3& rot) { m_Interpolator->SetTarget(pos, rot); }
