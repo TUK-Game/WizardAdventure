@@ -102,14 +102,13 @@ void CLight::RenderShadow()
 	if (!rtGroup)
 		return;
 
+	m_ShadowCamera->GetCamera()->SortShadowObject();
+
 	for (int i = 0; i < CASCADE_COUNT; ++i)
 	{
 		rtGroup->OMSetRenderTargets(1, i); 
-
-
 		m_ShadowCamera->GetCamera()->SetView(m_CascadeView[i]);
 		m_ShadowCamera->GetCamera()->SetProjection(m_CascadeProj[i]);
-		m_ShadowCamera->GetCamera()->SortShadowObject(); 
 		m_ShadowCamera->GetCamera()->RenderShadow();   
 	}
 
