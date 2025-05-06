@@ -266,7 +266,6 @@ void CPlayer::DetectNPC()
 
     npc->Interation();
     MoveCamera(camera, npc, ECamera_Type::Interaction_Start, Vec3(200.f, 0.f, 500.f));
-
     return;
 }
 

@@ -22,6 +22,30 @@ CCameraScript::~CCameraScript()
 {
 }
 
+float CCameraScript::LerpAngle(float start, float end, float t)
+{
+	float delta = fmodf(end - start, 360.f);
+	if (delta > 180.f)
+	{
+		delta -= 360.f;
+	}
+	else if (delta < -180.f)
+	{
+		delta += 360.f;
+	}
+
+	return start + delta * t;
+}
+
+Vec3 CCameraScript::LerpAngles(const Vec3& start, const Vec3& end, float t)
+{
+	Vec3 result;
+	result.x = LerpAngle(start.x, end.x, t);
+	result.y = LerpAngle(start.y, end.y, t);
+	result.z = LerpAngle(start.z, end.z, t);
+	return result;
+}
+
 void CCameraScript::Begin()
 {
 	if (GetOwner()->GetCamera()->GetTarget())
@@ -174,21 +198,6 @@ void CCameraScript::UpdateDirectionalLight()
 	lightObj->GetLight()->SetLightDirection(lightDir);
 }
 
-void CCameraScript::UpdateInteractionPosition()
-{
-	Vec3 currentPos = GetOwner()->GetTransform()->GetRelativePosition();
-	Vec3 delta = currentPos - m_InteractionZoomTarget;
-
-	m_InteractionStartPos += delta;
-	m_InteractionZoomTarget = currentPos;
-	MoveToTargetAll(300.f);
-	/*Vec3 currentRot = GetOwner()->GetTransform()->GetRelativeRotation();
-	Vec3 deltaRot = currentRot - m_InteractionZoomDir;
-
-	m_InteractionStartDir += deltaRot;
-	m_InteractionZoomDir = currentRot;*/
-}
-
 void CCameraScript::MoveToTarget(bool isLayerCheck, float maxHeight)
 {
 	m_ElapsedTime += DELTA_TIME;
@@ -199,7 +208,7 @@ void CCameraScript::MoveToTarget(bool isLayerCheck, float maxHeight)
 	newPos.y = max(newPos.y, maxHeight);
 	GetOwner()->GetTransform()->SetRelativePosition(newPos);
 
-	Vec3 newrot = Vec3::Lerp(m_InteractionStartDir, m_InteractionZoomDir, t);
+	Vec3 newrot = LerpAngles(m_InteractionStartDir, m_InteractionZoomDir, t);
 	GetOwner()->GetTransform()->SetRelativeRotation(newrot);
 
 	if (t >= 1.0f)
@@ -213,18 +222,6 @@ void CCameraScript::MoveToTarget(bool isLayerCheck, float maxHeight)
 	}
 }
 
-void CCameraScript::MoveToTargetAll(float maxHeight)
-{
-	m_ElapsedTime += DELTA_TIME;
-
-	Vec3 newPos = m_InteractionZoomTarget;
-	newPos.y = max(newPos.y, maxHeight);
-	GetOwner()->GetTransform()->SetRelativePosition(newPos);
-
-	Vec3 newrot = m_InteractionZoomDir;
-	GetOwner()->GetTransform()->SetRelativeRotation(newrot);
-}
-
 void CCameraScript::RollBackCamera()
 {
 	m_ElapsedTime += DELTA_TIME;
@@ -234,7 +231,8 @@ void CCameraScript::RollBackCamera()
 	Vec3 newPos = Vec3::Lerp(m_InteractionZoomTarget, m_InteractionStartPos, t);
 	GetOwner()->GetTransform()->SetRelativePosition(newPos);
 
-	Vec3 newrot = Vec3::Lerp(m_InteractionZoomDir, m_InteractionStartDir, t);
+
+	Vec3 newrot = LerpAngles(m_InteractionZoomDir, m_InteractionStartDir, t);
 	GetOwner()->GetTransform()->SetRelativeRotation(newrot);
 
 	if (t >= 1.0f)
