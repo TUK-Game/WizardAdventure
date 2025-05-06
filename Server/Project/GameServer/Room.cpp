@@ -705,9 +705,7 @@ bool CRoom::IsBuySkill(CPlayerRef player, CSkillRef skill, bool isBuy)
 	pkt.set_is_success(isBuy);
 	pkt.set_skill_id(skill->GetSkillInfo().id);
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
-	if (auto session = player->GetSession())
-		session->Send(sendBuffer);
-	return true;
+	Broadcast(sendBuffer, -1);
 	return true;
 }
 

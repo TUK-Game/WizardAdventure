@@ -16,6 +16,7 @@ public:
     class CWidget* GetWidget(int idx) { return m_vecWidget[idx]; }
     int GetWidgetCount() const { return (int)m_vecWidget.size(); }
     EWIDGETWINDOW_TYPE GetWindowType() { return m_Type; }
+    class CPlayer* GetOwnerPlayer() { return m_OwnerPlayer; }
 
     void SetWindowType(EWIDGETWINDOW_TYPE type) { m_Type = type; }
     void SetZOrder(int z) { m_zOrder = z; }

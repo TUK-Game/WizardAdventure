@@ -172,7 +172,6 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 
 bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW_PLAYER& pkt)
 {
-	// 1. ������ �÷��̾� �ޱ�
 	const Protocol::PlayerInfo& info = pkt.player();
 
 	CPlayer* player{nullptr};
@@ -182,6 +181,13 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 	case Protocol::PLAYER_TYPE_FIRE:
 	{
 		player = new CPlayer(EPlayerAttribute::Fire);
+		player->InitStats(100, 100, 30, 300.f);
+
+		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, ESkillType::FireBallTowardMouse);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, ESkillType::Meteor);
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::Q, ESkillType::FireBallTowardQ);
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
 	}
 	break;
 	case Protocol::PLAYER_TYPE_ICE:
@@ -224,6 +230,13 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 		case Protocol::PLAYER_TYPE_FIRE:
 		{
 			player = new CPlayer(EPlayerAttribute::Fire);
+			player->InitStats(100, 100, 30, 300.f);
+
+			player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, ESkillType::FireBallTowardMouse);
+			player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, ESkillType::Meteor);
+			//player->GetSkillManager()->LearnSkill(ESkillSlot::Q, ESkillType::FireBallTowardQ);
+			//player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
+			//player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
 		}
 		break;
 		case Protocol::PLAYER_TYPE_ICE:
@@ -661,7 +674,10 @@ bool Handle_S_BUY_SKILL(CPacketSessionRef& session, Protocol::S_BUY_SKILL& pkt)
 		if (skill && player && inven && gamewindow)
 		{
 			const auto& skillManager = player->GetSkillManager();
-			gamewindow->SetSkill(skillManager->ConvertSkillNameToType(skill->GetSkillInfo().name), skill->GetSkillInfo().cooltime, player->GetSkillManager()->GetNextSlot());
+			if(gamewindow->GetOwnerPlayer() == player)
+			{
+				gamewindow->SetSkill(skillManager->ConvertSkillNameToType(skill->GetSkillInfo().name), skill->GetSkillInfo().cooltime, player->GetSkillManager()->GetNextSlot());
+			}
 			player->AddSkill(skill);
 			inven->UpdateInventory();
 		}

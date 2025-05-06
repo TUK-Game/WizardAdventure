@@ -83,7 +83,7 @@ void CSkillManager::LearnSkill(int slotIndex, ESkillType skill) {
 
     {
         CInventoryWIdgetWindow* window = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
-        if (window)
+        if (window && window->GetOwnerPlayer() == m_Owner)
         {
             window->SetSkill(slotIndex, skill);
         }
