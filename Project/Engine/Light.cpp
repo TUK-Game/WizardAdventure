@@ -33,12 +33,7 @@ void CLight::FinalUpdate()
 
 	UpdateCascadeShadowVP();
 
-	m_ShadowCamera->GetTransform()->SetRelativePosition(GetTransform()->GetRelativePosition());
-	m_ShadowCamera->GetTransform()->SetRelativeRotation(GetTransform()->GetRelativeRotation());
-	m_ShadowCamera->GetTransform()->SetRelativeScale(GetTransform()->GetRelativeScale());
-	m_ShadowCamera->GetTransform()->LookAt(Vec3(0.f, -1.f, 0.f));
 	m_ShadowCamera->FinalUpdate();
-
 }
 
 void CLight::Render()
@@ -54,6 +49,8 @@ void CLight::Render()
 		for (int i = 0; i < CASCADE_COUNT; ++i)
 		{
 			m_CascadeShadowTex.push_back(CDevice::GetInst()->GetRenderTargetGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(i));
+			
+			m_CascadeVP[i] = m_CascadeView[i] * m_CascadeProj[i];
 			m_CascadeShadowData.SetSplitDistances(i, m_SplitDepth[i + 1]);
 			m_CascadeShadowData.SetMatCascadeVP(i, m_CascadeVP[i]);
 		}
@@ -186,7 +183,7 @@ void CLight::UpdateCascadeShadowVP()
 		v = Vec3::Transform(v, invViewProj);
 
 
-	constexpr float cascadeSplits[5] = { 0.0f, 0.1f, 0.2f, 0.4f, 1.0f };
+	constexpr float cascadeSplits[5] = { 0.0f, 0.05f, 0.3f, 0.7f, 1.0f };
 	for (int i = 0; i < 5; ++i) 
 	{
 		m_SplitDepth[i] = farZ * cascadeSplits[i];
@@ -219,6 +216,17 @@ void CLight::UpdateCascadeShadowVP()
 			center += v;
 		center = center / 8.f;
 
+		CGameObject* target = mainCam->GetTarget();
+		if (target)
+		{
+			Vec3 targetPos = target->GetTransform()->GetWorldPosition();
+			Vec3 viewPos = Vec3::Transform(targetPos, view);
+			if (viewPos.z >= m_SplitDepth[i] && viewPos.z < m_SplitDepth[i + 1])
+			{
+				center = targetPos;
+			}
+		}
+
 		// 바운딩 구 반지름 계산
 		float radius{};
 		for (const auto& v : tFrustum)
@@ -235,6 +243,5 @@ void CLight::UpdateCascadeShadowVP()
 
 		m_CascadeView[i] = lightViewMatrix;
 		m_CascadeProj[i] = lightProjMatrix;
-		m_CascadeVP[i] = lightProjMatrix * lightViewMatrix;
 	}
 }

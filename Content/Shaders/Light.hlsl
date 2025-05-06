@@ -82,37 +82,37 @@ PS_OUT PS_DirLight(VS_OUT input)
 
     LightColor color = CalculateLightColor(int_0, viewNormal, viewPos);
 
-    //if (length(color.diffuse) != 0)
-    //{
-    //    int cascadeIdx = GetCascadeIndex(viewPos.z);
+    if (length(color.diffuse) != 0)
+    {
+        int cascadeIdx = GetCascadeIndex(viewPos.z);
 
-    //    matrix shadowVP =
-    //        (cascadeIdx == 0) ? mat_0 :
-    //        (cascadeIdx == 1) ? mat_1 :
-    //        (cascadeIdx == 2) ? mat_2 :
-    //        mat_3;
+        matrix shadowVP =
+            (cascadeIdx == 0) ? mat_0 :
+            (cascadeIdx == 1) ? mat_1 :
+            (cascadeIdx == 2) ? mat_2 :
+            mat_3;
 
-    //    float4 worldPos = mul(float4(viewPos.xyz, 1.f), matViewInv);
+        float4 worldPos = mul(float4(viewPos.xyz, 1.f), matViewInv);
 
-    //    float4 shadowClipPos = mul(worldPos, shadowVP);
-    //    float depth = shadowClipPos.z / shadowClipPos.w;
+        float4 shadowClipPos = mul(worldPos, shadowVP);
+        float depth = shadowClipPos.z / shadowClipPos.w;
 
-    //    // x [-1 ~ 1] -> u [0 ~ 1]
-    //    // y [1 ~ -1] -> v [0 ~ 1]
-    //    float2 uv = shadowClipPos.xy / shadowClipPos.w;
-    //    uv = float2(uv.x, -uv.y) * 0.5f + 0.5f;
+        // x [-1 ~ 1] -> u [0 ~ 1]
+        // y [1 ~ -1] -> v [0 ~ 1]
+        float2 uv = shadowClipPos.xy / shadowClipPos.w;
+        uv = float2(uv.x, -uv.y) * 0.5f + 0.5f;
 
-    //    if (0 < uv.x && uv.x < 1 && 0 < uv.y && uv.y < 1)
-    //    {
-    //        float shadowDepth = tex_ShadowMaps[cascadeIdx].Sample(sam_0, uv).x;
+        if (0 < uv.x && uv.x < 1 && 0 < uv.y && uv.y < 1)
+        {
+            float shadowDepth = tex_ShadowMaps[cascadeIdx].Sample(sam_0, uv).x;
 
-    //        if (depth > shadowDepth + 0.0005f)
-    //        {
-    //            color.diffuse *= 0.4f;
-    //            color.specular = 0;
-    //        }
-    //    }
-    //}
+            if (shadowDepth > 0 && depth > shadowDepth + 0.00000001f)
+            {
+                color.diffuse *= 0.5f;
+                color.specular = 0;
+            }
+        }
+    }
 
     output.diffuse = color.diffuse + color.ambient;
     output.specular = color.specular;
