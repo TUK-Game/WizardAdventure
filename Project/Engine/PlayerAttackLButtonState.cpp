@@ -19,9 +19,9 @@ void CPlayerAttackLButtonState::Enter(CGameObject* entity)
     m_ElapsedTime = 0.f;
     CPlayer* player = dynamic_cast<CPlayer*>(entity);
 
-    if (ESkillType::None == player->GetSkillManager()->GetEquippedSkill(3))
+    if (ESkillType::None == player->GetSkillManager()->GetEquippedSkill(ESkillSlot::LButton))
         entity->GetStateManager()->HandleEvent(entity, "EndAttack");
-    player->Attack(3);
+    player->Attack(ESkillSlot::LButton);
 }
 
 void CPlayerAttackLButtonState::Update(CGameObject* entity, float deltaTime)

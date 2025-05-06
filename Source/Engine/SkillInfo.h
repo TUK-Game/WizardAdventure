@@ -18,9 +18,9 @@ namespace Skill
 // 0 = Q, 1 = E, 2 = R, 3 = LB, 4 = RB
 enum ESkillSlot
 {
-    Q = 0, 
-    E = 1, 
-    R = 2, 
-    LButton = 3,
-    RButton = 4
+    LButton,
+    RButton,
+    Q,
+    E,
+    R,
 };

@@ -19,10 +19,10 @@ void CPlayerAttackQState::Enter(CGameObject* entity)
     m_ElapsedTime = 0.f;
     CPlayer* player = dynamic_cast<CPlayer*>(entity);
 
-    if (ESkillType::None == player->GetSkillManager()->GetEquippedSkill(0))
+    if (ESkillType::None == player->GetSkillManager()->GetEquippedSkill(ESkillSlot::Q))
         entity->GetStateManager()->HandleEvent(entity, "EndAttack");
 
-    player->Attack(0, m_AttackDuration * 0.52); // 애니메이션 52퍼센트 동작때 터지게함
+    player->Attack(ESkillSlot::Q, m_AttackDuration * 0.52); // 애니메이션 52퍼센트 동작때 터지게함
 }
 
 void CPlayerAttackQState::Update(CGameObject* entity, float deltaTime)

@@ -19,6 +19,32 @@ bool CInventoryWIdgetWindow::Init(CPlayer* player)
 	backgroundWidget->GetTransform()->SetRelativePosition(-0.4f, 0.f, 0.f);
 	backgroundWidget->GetTransform()->SetRelativeScale(1.8f, 2.1f, 0.2f);
 
+	CImageWidget* skillWidget = CreateWidget<CImageWidget>(L"ISkill1", player);
+	skillWidget->GetTransform()->SetRelativePosition(-0.878f, 0.075f, 1.f);
+	skillWidget->GetTransform()->SetRelativeScale(0.142f, 0.172f, 1.f);
+	skillWidget->SetEnable(false);
+
+	skillWidget = CreateWidget<CImageWidget>(L"ISkill2", player);
+	skillWidget->GetTransform()->SetRelativePosition(-0.647f, 0.076f, 1.f);
+	skillWidget->GetTransform()->SetRelativeScale(0.15f, 0.175f, 1.f);
+	skillWidget->SetEnable(false);
+
+	skillWidget = CreateWidget<CImageWidget>(L"ISkill3", player);
+	skillWidget->GetTransform()->SetRelativePosition(-0.417f, 0.072f, 1.f);
+	skillWidget->GetTransform()->SetRelativeScale(0.135f, 0.143f, 1.f);
+	skillWidget->SetEnable(false);
+
+	skillWidget = CreateWidget<CImageWidget>(L"ISkill4", player);
+	skillWidget->GetTransform()->SetRelativePosition(-0.213f, 0.072f, 1.f);
+	skillWidget->GetTransform()->SetRelativeScale(0.135f, 0.143f, 1.f);
+	skillWidget->SetEnable(false);
+
+	skillWidget = CreateWidget<CImageWidget>(L"ISkill5", player);
+	skillWidget->GetTransform()->SetRelativePosition(-0.01f, 0.072f, 1.f);
+	skillWidget->GetTransform()->SetRelativeScale(0.135f, 0.143f, 1.f);
+	skillWidget->SetEnable(false);
+
+
 	CItemButtonWidget* widget = CreateWidget<CItemButtonWidget>(L"Inven1", player);
 	widget->GetTransform()->SetRelativePosition(-0.823f, -0.235f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.17f, 0.2f, 1.f);
@@ -76,7 +102,7 @@ void CInventoryWIdgetWindow::UpdateInventory()
 			CTexture* texture = CAssetManager::GetInst()->FindAsset<CTexture>(itemName);
 			widget->SetItemId(items[i]->GetItemInfo().id);
 			widget->SetItem(items[i]);
-			widget->SetButtonTexture(
+			widget->SetButtonTexture(	
 				texture,
 				texture,
 				texture
@@ -100,4 +126,12 @@ void CInventoryWIdgetWindow::SetEvent(CItemButtonWidget* widget, ItemTooltip* to
 		});
 
 	widget->SetEnable(false);
+}
+
+void CInventoryWIdgetWindow::SetSkill(int slotIndex, ESkillType type)
+{
+	CImageWidget* widget = dynamic_cast<CImageWidget*>(FindWidget(L"ISkill" + std::to_wstring(slotIndex + 1)));
+	const std::wstring& skillName = CAssetManager::GetInst()->ConvertSkillToTextureName(type);
+	widget->SetTexture(skillName);
+	widget->SetEnable(true);
 }

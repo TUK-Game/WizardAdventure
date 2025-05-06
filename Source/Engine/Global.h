@@ -265,6 +265,17 @@ enum LAYER_OBJECT
 	LAYER_NPC,
 };
 
+enum class ESkillType {
+	None,
+	FireBallTowardMouse,
+	Meteor,
+	FireBallTowardQ,
+	FireTower,
+	FireSwordSpread,
+	// Ice, Electric 스킬도 여기에 추가 
+};
+
+
 #include <shlobj.h>
 #include <filesystem>
 static std::wstring GetLatestWinPixGpuCapturerPath_Cpp17()

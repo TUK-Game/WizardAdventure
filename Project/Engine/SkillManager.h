@@ -1,15 +1,7 @@
 #pragma once
 #include "GameObject.h"
+#include "SkillInfo.h"
 
-enum class ESkillType {
-    None,
-    FireBallTowardQ,
-    FireTower,
-    FireSwordSpread,
-    FireBallTowardMouse,
-    Meteor,
-    // Ice, Electric 스킬도 여기에 추가 
-};
 
 class CSkillManager
 {

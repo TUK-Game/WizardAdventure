@@ -114,16 +114,17 @@ void CPlayWidgetWindow::Update()
 	CWidgetWindow::Update();
 }
 
-void CPlayWidgetWindow::SetSkill(int idx, const std::wstring& textureName, float coolTime, ESkillSlot slot)
+void CPlayWidgetWindow::SetSkill(ESkillType type, float coolTime, ESkillSlot slot)
 {
-	std::wstring name = L"Skill" + std::to_wstring(idx);
+	std::wstring name = L"Skill" + std::to_wstring(slot + 1);
 	CSkillWidget* widget = dynamic_cast<CSkillWidget*>(FindWidget(name));
+	const std::wstring& skillName = CAssetManager::GetInst()->ConvertSkillToTextureName(type);
 	if (widget)
 	{
-		widget->SetTexture(textureName);
+		widget->SetTexture(skillName);
 		widget->SetOriginCoolTime(coolTime);
 		widget->SetCoolTime(0.f);
-		widget->SetSlot(slot);
+		widget->SetSlot(slot);	
 	}
 }
 
