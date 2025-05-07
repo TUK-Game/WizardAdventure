@@ -36,12 +36,13 @@ bool CSkillDataManager::Init()
 		std::wstring description = s2wsForJson(s["Description"]);
 		std::wstring attribute = s2wsForJson(s["Attribute"]);
 		std::wstring keytype = s2wsForJson(s["Type"]);
+		std::wstring animationName = s2wsForJson(s["AnimationName"]);
 		uint32 id = std::stoi(s2wsForJson(s["Id"]));
 		uint32 price = s["Price"];
 		float ratio = s["DamageRatio"];
 		float cooltime = s["CoolTime"];
 
-		std::shared_ptr<CSkillData> skill = std::make_shared<CSkillData>(SkillInfo(id, name, description, ratio, attribute, price, keytype, cooltime));
+		std::shared_ptr<CSkillData> skill = std::make_shared<CSkillData>(SkillInfo(id, name, description, ratio, attribute, price, keytype, cooltime, animationName));
 		m_SkillList[id] = skill;
 	}
 	return true;

@@ -7,7 +7,8 @@
     "Attribute": "Fire",
     "Price": 1000.0,
     "Type": "LB",
-    "CoolTime": 0.0
+    "CoolTime": 0.0,
+    "AnimationName": "MAGEATTACK1"
   },
   {
     "Id": "20002",
@@ -17,7 +18,8 @@
     "Attribute": "Fire",
     "Price": 2000.0,
     "Type": "RB",
-    "CoolTime": 0.0
+    "CoolTime": 0.0,
+    "AnimationName": "MAGEATTACK2"
   },
   {
     "Id": "30001",
@@ -27,7 +29,8 @@
     "Attribute": "Fire",
     "Price": 1500.0,
     "Type": "Key",
-    "CoolTime": 3.0
+    "CoolTime": 3.0,
+    "AnimationName": "MAGEATTACK5"
   },
   {
     "Id": "30002",
@@ -37,7 +40,8 @@
     "Attribute": "Fire",
     "Price": 1500.0,
     "Type": "Key",
-    "CoolTime": 8.0
+    "CoolTime": 8.0,
+    "AnimationName": "MAGEATTACK4"
   },
   {
     "Id": "30003",
@@ -47,6 +51,7 @@
     "Attribute": "Fire",
     "Price": 1500.0,
     "Type": "Key",
-    "CoolTime": 10.0
+    "CoolTime": 10.0,
+    "AnimationName": "MAGEATTACK3"
   }
 ]

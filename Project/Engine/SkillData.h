@@ -11,6 +11,7 @@ struct SkillInfo
 	int price;
 	std::wstring keyType;
 	float cooltime;
+	std::wstring animationName;
 };
 
 class CSkillData :
