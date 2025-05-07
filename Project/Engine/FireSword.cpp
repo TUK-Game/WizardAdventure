@@ -81,9 +81,7 @@ void CFireSword::Update()
 			{
 				m_ReadyToFire = true;
 				m_Elapsed = 0.f;
-
 				m_bSpawnParticle = true;
-				//m_FireParticleId = CParticleSystemManager::GetInst()->AddEmitter(L"Spark", GetTransform()->GetRelativePosition());
 			}
 		}
 
@@ -106,7 +104,6 @@ void CFireSword::FinalUpdate()
 	CGameObject::FinalUpdate();
 	if (m_bOwn)
 	{
-		//Vec3 pos = GetTransform()->GetRelativePosition();
 		if (pos.y < -1000.f) // 충돌시 삭제로 변경해야함
 		{
 			m_bDelete = true;

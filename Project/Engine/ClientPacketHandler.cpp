@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "ClientPacketHandler.h"
 #include "Protocol.pb.h"
 #include "LevelManager.h"
@@ -392,7 +392,7 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	if (map.find(id) == map.end())
 		return false;
 
-	if ((pkt.mutable_projectile_info()->state()) == Protocol::COLLISION)
+	if ((pkt.projectile_info().state()) == Protocol::COLLISION)
 	{
 		map[id]->OffParticles();
 		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_PROJECTILE)->SafeRemoveGameObject(map[id]);
@@ -400,7 +400,7 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	}
 	else if (pkt.projectile_info().state() == Protocol::SPAWN_PARTICLE)
 	{
-		if(map[id]->GetIsSpawnParticle())
+//		if(map[id]->GetIsSpawnParticle())
 		{
 			map[id]->ShowParticles();
 			map[id]->SetIsSpawnParticle(false);

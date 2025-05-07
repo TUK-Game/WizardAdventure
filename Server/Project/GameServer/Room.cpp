@@ -617,7 +617,6 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 	}
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
-
 	//if (auto session = player->GetSession())
 	//	session->Send(sendBuffer);
 
