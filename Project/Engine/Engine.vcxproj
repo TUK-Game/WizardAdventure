@@ -219,6 +219,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="ParticleSystemManager.h" />
     <ClInclude Include="PlayerDeathState.h" />
     <ClInclude Include="PlayerKnockbackState.h" />
+    <ClInclude Include="PlayerStateManager.h" />
     <ClInclude Include="SkillButtonWidget.h" />
     <ClInclude Include="SkillData.h" />
     <ClInclude Include="SkillDataManager.h" />
@@ -411,6 +412,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="ParticleSystemManager.cpp" />
     <ClCompile Include="PlayerDeathState.cpp" />
     <ClCompile Include="PlayerKnockbackState.cpp" />
+    <ClCompile Include="PlayerStateManager.cpp" />
     <ClCompile Include="SkillButtonWidget.cpp" />
     <ClCompile Include="SkillData.cpp" />
     <ClCompile Include="SkillDataManager.cpp" />

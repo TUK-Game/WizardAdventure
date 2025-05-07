@@ -171,3 +171,13 @@ enum class EMonsterType
 {
 	Slime
 };
+
+enum ESkillSlot
+{
+	LButton,
+	RButton,
+	Q,
+	E,
+	R,
+	END
+};

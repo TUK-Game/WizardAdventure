@@ -31,6 +31,7 @@
 #include "Camera.h"
 #include "CameraScript.h"
 #include "SkillData.h"
+#include "PlayerStateManager.h"
 //#include <Engine/Engine.h>
 
 CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
@@ -153,7 +154,7 @@ void CPlayer::AddSkill(std::shared_ptr<CSkillData> skill)
 
 void CPlayer::CreateStateManager()
 {
-    m_StateManager = new CStateManager();
+    m_StateManager = new CPlayerStateManager();
     m_StateManager->AddState(new CPlayerIdleState);
     m_StateManager->AddState(new CPlayerRunState);
     m_StateManager->AddState(new CPlayerDashState);
