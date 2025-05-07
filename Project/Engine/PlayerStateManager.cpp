@@ -34,7 +34,11 @@ void CPlayerStateManager::HandleEvent(CGameObject* entity, const std::string& ev
 			if (IsCoolTime(entity, nextType))
 			{
 				ChangeState(entity, nextType);
-				CNetworkManager::GetInst()->s_GameSession->OnActPlayer();
+
+				if(CNetworkManager::GetInst()->s_GameSession->GetOwnPlayer() == entity)
+				{
+					CNetworkManager::GetInst()->s_GameSession->OnActPlayer();
+				}
 			}
 		}
 	}

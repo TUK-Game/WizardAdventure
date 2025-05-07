@@ -400,11 +400,8 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 	}
 	else if (pkt.projectile_info().state() == Protocol::SPAWN_PARTICLE)
 	{
-//		if(map[id]->GetIsSpawnParticle())
-		{
-			map[id]->ShowParticles();
-			map[id]->SetIsSpawnParticle(false);
-		}
+		map[id]->ShowParticles();
+		map[id]->SetIsSpawnParticle(false);
 	}
 	else
 	{

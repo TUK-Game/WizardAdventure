@@ -506,7 +506,7 @@ bool CRoom::UPdatePlayer(CPlayerRef player, float deltaTime)
 				nowPos.y = 0.f;
 				ToProtoVector3(&protoNow, nowPos);
 			}
-			break;
+			return true;
 		}
 	}
 

@@ -19,15 +19,6 @@ void CPlayerDashState::Enter(CGameObject* entity)
 
 void CPlayerDashState::Update(CGameObject* entity, float deltaTime)
 {
-    CPlayer* player = dynamic_cast<CPlayer*>(entity);
-    //player->Move(player->GetCurrentMoveDir() * m_DashDuration * deltaTime, false);
-
-    //m_ElapsedTime += deltaTime;
-    //if (m_ElapsedTime >= m_DashDuration)
-    //{
-    //    player->GetStateManager()->HandleEvent(player, "EndDash");
-    //
-    //}
 }
 
 void CPlayerDashState::Exit(CGameObject* entity)
