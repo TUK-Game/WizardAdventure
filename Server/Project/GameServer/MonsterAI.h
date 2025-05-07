@@ -34,6 +34,9 @@ private:
     float m_DeathTime = 0.f;
     float m_DeathDuration = 3.f;
 
+    float m_DissolveTime = 0.f;
+    float m_DissolveDuration = 1.f;
+
     float m_SpawnTime = 0.f;
     float m_SpawnDuration = 3.5f;
 

@@ -156,7 +156,7 @@ enum class EState_Type
 	Spawn,
 	Talk,
 	Buy,
-
+	Dissolve,
 	END
 };
 

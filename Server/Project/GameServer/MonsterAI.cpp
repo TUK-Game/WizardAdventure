@@ -153,13 +153,23 @@ void CMonsterAI::UpdateAI(float deltaTime)
         if (m_DeathTime >= m_DeathDuration)
         {
             m_DeathTime = 0.f;
-            // destroy
+            // dissolve Start
+            m_Owner->SetState(Protocol::MOVE_STATE_DASH);
+        }
+        return;
+    }
+
+    if (m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_MOUSE_R)  // dissolve
+    {
+        m_DissolveTime += deltaTime;
+        if (m_DissolveTime >= m_DissolveDuration)
+        {
+            m_DissolveTime = 0.f;
             m_Owner->SetState(Protocol::MOVE_STATE_NONE);
             g_Room->RemoveObject((uint32)EObject_Type::Monster, m_Owner->MonsterInfo->object_id());
         }
         return;
-    }
-    // temp -----------------------------------------------------------------
+    }    // temp -----------------------------------------------------------------
 
 
     float distance = (targetPosition - myPosition).Length();

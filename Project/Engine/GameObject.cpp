@@ -251,8 +251,11 @@ void CGameObject::SetProtocolStateForClientMonster(Protocol::MoveState state)
 	case Protocol::MOVE_STATE_RUN:
 		m_StateManager->HandleEvent(this, "Chase");
 		break;
+	// temp ------------------------------------------------
 	case Protocol::MOVE_STATE_DASH:
+		m_StateManager->HandleEvent(this, "Dissolve");
 		break;
+	// temp ------------------------------------------------
 	case Protocol::MOVE_STATE_DASH_END:
 		break;
 	case Protocol::MOVE_STATE_SKILL_Q:

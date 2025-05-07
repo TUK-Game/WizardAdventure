@@ -725,6 +725,9 @@
     <ClInclude Include="ToolTip.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterDissolveState.h">
+      <Filter>06. State\MonsterState\Damage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1117,7 +1120,6 @@
     <ClCompile Include="MonsterHPBar.cpp">
       <Filter>03. GameObject\Monster</Filter>
     </ClCompile>
-
     <ClCompile Include="TextWidget.cpp">
       <Filter>07. UI\01. Widget</Filter>
     </ClCompile>
@@ -1132,6 +1134,9 @@
     </ClCompile>
     <ClCompile Include="ToolTip.cpp">
       <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterDissolveState.cpp">
+      <Filter>06. State\MonsterState\Damage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

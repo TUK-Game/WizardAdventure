@@ -314,4 +314,26 @@ float4 PS_TexWorld_Billboard(PS_IN input) : SV_Target
 
     return texColor;
 }
+
+
+// dissolve
+
+float4 PS_Dissolve(VS_OUT input) : SV_Target
+{
+    float2 uv = input.uv;
+
+    float4 baseColor = tex_0.Sample(sam_0, uv);
+    float noise = tex_1.Sample(sam_0, uv).r;
+
+    if (noise < float_0)
+    {
+        discard; // 픽셀 제거
+    }
+
+    // Dissolve 경계선 효과
+    float edge = step(noise, float_0 + 0.02) - step(noise, float_0);
+    float4 finalColor = lerp(baseColor, vec4_0, edge);
+
+    return finalColor;
+}
 #endif

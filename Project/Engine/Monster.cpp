@@ -7,6 +7,7 @@
 #include "MonsterDamagedState.h"
 #include "MonsterSpawnState.h"
 #include "MonsterDeathState.h"
+#include "MonsterDissolveState.h"
 #include "Transform.h"
 #include "Engine.h"
 #include "MonsterAI.h"
@@ -110,6 +111,7 @@ void CMonster::CreateStateManager()
 	m_StateManager->AddState(new CMonsterDamagedState);
 	m_StateManager->AddState(new CMonsterDeathState);
 	m_StateManager->AddState(new CMonsterSpawnState);
+	m_StateManager->AddState(new CMonsterDissolveState);
 
 	// spawn -> idle
 	m_StateManager->SetTransition(EState_Type::Spawn, "Idle", EState_Type::Idle);
@@ -135,6 +137,8 @@ void CMonster::CreateStateManager()
 	m_StateManager->SetTransition(EState_Type::Attack, "Damaged", EState_Type::Damaged);
 	m_StateManager->SetTransition(EState_Type::Attack, "Death", EState_Type::Death);
 
+	// death -> dissolve
+	m_StateManager->SetTransition(EState_Type::Death, "Dissolve", EState_Type::Dissolve);
 }
 
 void CMonster::ReceiveDamage(int damage)

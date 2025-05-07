@@ -207,6 +207,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="InventoryWIdgetWindow.h" />
     <ClInclude Include="MonsterDamagedState.h" />
     <ClInclude Include="MonsterDeathState.h" />
+    <ClInclude Include="MonsterDissolveState.h" />
     <ClInclude Include="MonsterHPBar.h" />
     <ClInclude Include="MonsterSpawnState.h" />
     <ClInclude Include="Item.h" />
@@ -399,6 +400,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="InventoryWIdgetWindow.cpp" />
     <ClCompile Include="MonsterDamagedState.cpp" />
     <ClCompile Include="MonsterDeathState.cpp" />
+    <ClCompile Include="MonsterDissolveState.cpp" />
     <ClCompile Include="MonsterHPBar.cpp" />
     <ClCompile Include="MonsterSpawnState.cpp" />
     <ClCompile Include="Item.cpp" />

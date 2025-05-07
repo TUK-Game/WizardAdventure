@@ -147,6 +147,10 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"Map", tex);
 
 	tex = new CTexture;
+	tex->Init(path / L"dissolve_noise.png");
+	AddAsset(L"Noise", tex);
+
+	tex = new CTexture;
 	tex->Init(path / L"Lava.png");
 	AddAsset(L"Lava", tex);
 
@@ -384,6 +388,12 @@ int CAssetManager::LoadMaterial()
 	AddAsset(L"Start", material);
 
 	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Dissolve_Forward"));
+	material->SetTexture(1, FindAsset<CTexture>(L"Noise"));     // 노이즈 텍스처
+	material->SetVec4(0, Vec4(1, 0, 0, 1)); // edgeColor
+	AddAsset(L"Dissolve_Forward", material);
+
+	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Texture_World_Tinted"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Circle"));
 	AddAsset(L"Circle", material);
@@ -574,6 +584,11 @@ int CAssetManager::LoadGraphicShader()
 	name = L"Deferred.hlsl";
 	LoadShader(shader, name, { SHADER_TYPE::DEFERRED, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND }, "VS_Main", "PS_MapBack");
 	AddAsset(L"DeferredMapBack", shader);
+
+	shader = new CGraphicShader;
+	name = L"Forward.hlsl";
+	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_BACK, DEPTH_STENCIL_TYPE::LESS, BLEND_TYPE::ALPHA_BLEND }, "VS_Main", "PS_Dissolve"); 
+	AddAsset(L"Dissolve_Forward", shader);
 
 	shader = new CGraphicShader;
 	name = L"particle.hlsl";
