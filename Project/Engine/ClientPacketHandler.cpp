@@ -135,8 +135,8 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 		player->InitStats(100, 100, 30, 300.f);
 		// temp
 
-		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, ESkillType::FireBallTowardMouse);
-		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, ESkillType::Meteor);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
+		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
 		//player->GetSkillManager()->LearnSkill(ESkillSlot::Q, ESkillType::FireBallTowardQ);
 		//player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
 		//player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
@@ -183,8 +183,8 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 		player = new CPlayer(EPlayerAttribute::Fire);
 		player->InitStats(100, 100, 30, 300.f);
 
-		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, ESkillType::FireBallTowardMouse);
-		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, ESkillType::Meteor);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
+		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
 		//player->GetSkillManager()->LearnSkill(ESkillSlot::Q, ESkillType::FireBallTowardQ);
 		//player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
 		//player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
@@ -232,8 +232,8 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 			player = new CPlayer(EPlayerAttribute::Fire);
 			player->InitStats(100, 100, 30, 300.f);
 
-			player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, ESkillType::FireBallTowardMouse);
-			player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, ESkillType::Meteor);
+			player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
+			player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
 			//player->GetSkillManager()->LearnSkill(ESkillSlot::Q, ESkillType::FireBallTowardQ);
 			//player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
 			//player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
@@ -676,7 +676,7 @@ bool Handle_S_BUY_SKILL(CPacketSessionRef& session, Protocol::S_BUY_SKILL& pkt)
 			const auto& skillManager = player->GetSkillManager();
 			if(gamewindow->GetOwnerPlayer() == player)
 			{
-				gamewindow->SetSkill(skillManager->ConvertSkillNameToType(skill->GetSkillInfo().name), skill->GetSkillInfo().cooltime, player->GetSkillManager()->GetNextSlot());
+				gamewindow->SetSkill(ConvertSkillNameToType(skill->GetSkillInfo().name), skill->GetSkillInfo().cooltime, player->GetSkillManager()->GetNextSlot());
 			}
 			player->AddSkill(skill);
 			inven->UpdateInventory();

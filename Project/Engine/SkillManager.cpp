@@ -22,6 +22,7 @@
 #include "StateManager.h"
 #include "InventoryWIdgetWindow.h"
 #include "StoreWidgetWindow.h"
+#include "SkillData.h"
 
 CSkillManager::CSkillManager(EPlayerAttribute attribute, CGameObject* owner)
     : m_Attribute(attribute), m_Owner(owner) {}
@@ -33,7 +34,7 @@ void CSkillManager::UseSkill(int skillIndex, float duration)
         return;
 
     // skill index check
-    if (skillIndex < 0 || skillIndex >= m_SkillSlots.size())
+    if (skillIndex < 0 || skillIndex >= m_SkillSlots.size() || !m_SkillSlots[skillIndex])
         return;
 
     // cooldown check
@@ -44,39 +45,34 @@ void CSkillManager::UseSkill(int skillIndex, float duration)
     }
 
     // skill learn check
-    ESkillType skill = m_SkillSlots[skillIndex];
-    if (skill == ESkillType::None)
+    std::shared_ptr<CSkillData> skill = m_SkillSlots[skillIndex];
+    if (!skill)
         return;
 
-
-    switch (skill) {
+    switch (skill->GetSkillType()) {
     case ESkillType::FireBallTowardQ:
-        CastFireballTowardQ(duration);
-        m_SkillCooldowns[skillIndex] = Skill::FireBallQ.cooldown;
+        CastFireballTowardQ(skill->GetSkillInfo().damageRatio, duration);
         break;
     case ESkillType::FireTower:
-        SpawnFireTowerAtMouse(duration);
-        m_SkillCooldowns[skillIndex] = Skill::FireTower.cooldown;
+        SpawnFireTowerAtMouse(skill->GetSkillInfo().damageRatio, duration);
         break;
     case ESkillType::FireSwordSpread:
-        FireSwordSpreadShot(duration);
-        m_SkillCooldowns[skillIndex] = Skill::FireSword.cooldown;
+        FireSwordSpreadShot(skill->GetSkillInfo().damageRatio, duration);
         break;
     case ESkillType::FireBallTowardMouse:
-        CastFireballTowardMouse();
-        m_SkillCooldowns[skillIndex] = Skill::FireBall.cooldown;
+        CastFireballTowardMouse(skill->GetSkillInfo().damageRatio);
         break;
     case ESkillType::Meteor:
-        CastMeteor();
-        m_SkillCooldowns[skillIndex] = Skill::Meteor.cooldown;
+        CastMeteor(skill->GetSkillInfo().damageRatio);
         break;
     default:
         break;
     }
+    m_SkillCooldowns[skillIndex] = skill->GetSkillInfo().cooltime;
  
 }
 
-void CSkillManager::LearnSkill(int slotIndex, ESkillType skill) {
+void CSkillManager::LearnSkill(int slotIndex, std::shared_ptr<CSkillData> skill) {
     if (slotIndex < 0 || slotIndex >= m_SkillSlots.size())
         return;
     m_SkillSlots[slotIndex] = skill;
@@ -85,7 +81,7 @@ void CSkillManager::LearnSkill(int slotIndex, ESkillType skill) {
         CInventoryWIdgetWindow* window = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
         if (window && window->GetOwnerPlayer() == m_Owner)
         {
-            window->SetSkill(slotIndex, skill);
+            window->SetSkill(slotIndex, skill->GetSkillType());
         }
     }
 
@@ -93,7 +89,7 @@ void CSkillManager::LearnSkill(int slotIndex, ESkillType skill) {
         CStoreWidgetWindow* window = dynamic_cast<CStoreWidgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::STORE_WINDOW));
         if (window)
         {
-            window->UpdateSkill(slotIndex, skill);
+            window->UpdateSkill(slotIndex, skill->GetSkillType());
         }
     }
 }
@@ -101,13 +97,13 @@ void CSkillManager::LearnSkill(int slotIndex, ESkillType skill) {
 void CSkillManager::ForgetSkill(int slotIndex) {
     if (slotIndex < 0 || slotIndex >= m_SkillSlots.size())
         return;
-    m_SkillSlots[slotIndex] = ESkillType::None;
+    m_SkillSlots[slotIndex] = nullptr;
 }
 
 ESkillType CSkillManager::GetEquippedSkill(int slotIndex) const {
-    if (slotIndex < 0 || slotIndex >= m_SkillSlots.size())
+    if (slotIndex < 0 || slotIndex >= m_SkillSlots.size() || !m_SkillSlots[slotIndex])
         return ESkillType::None;
-    return m_SkillSlots[slotIndex];
+    return m_SkillSlots[slotIndex]->GetSkillType();
 }
 
 void CSkillManager::UpdateCooldowns(float deltaTime) {
@@ -127,22 +123,7 @@ float CSkillManager::GetSkillCooldown(int slotIndex) const
     return m_SkillCooldowns[slotIndex];
 }
 
-ESkillType CSkillManager::ConvertSkillNameToType(const std::wstring& name)
-{
-    if (name == L"FireShot")
-        return ESkillType::FireBallTowardMouse;
-    if (name == L"FireRain")
-        return ESkillType::Meteor;
-    if (name == L"FireballExplosion")
-        return ESkillType::FireBallTowardQ;
-    if (name == L"FireTower")
-        return ESkillType::FireTower;
-    if (name == L"FireSwords")
-        return ESkillType::FireSwordSpread;
-
-}
-
-void CSkillManager::CastFireballTowardMouse()
+void CSkillManager::CastFireballTowardMouse(float damageRatio)
 {
     CGameObject* player = m_Owner; 
     if (!player) return;
@@ -161,7 +142,7 @@ void CSkillManager::CastFireballTowardMouse()
     fireBall->GetRigidBody()->SetVelocity(velocity);
 
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
-    fireBall->SetDamage(Skill::FireBall.damage * fireBall->GetCaster()->GetStats()->attack);
+    fireBall->SetDamage(damageRatio * fireBall->GetCaster()->GetStats()->attack);
     fireBall->SetEnable(false);
     fireBall->SetCollisionExplosion(true);
 
@@ -170,7 +151,7 @@ void CSkillManager::CastFireballTowardMouse()
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, LAYER_PROJECTILE, false);
 }
 
-void CSkillManager::CastFireballTowardQ(float duration)
+void CSkillManager::CastFireballTowardQ(float damageRatio, float duration)
 {
     CGameObject* player = m_Owner;
     if (!player) return;
@@ -194,7 +175,7 @@ void CSkillManager::CastFireballTowardQ(float duration)
     fireBall->SetMode(EFireBallMode::QSkill);
     fireBall->SetSkillType(SKILL::FIRE_BALL_EXPLOSION);
     fireBall->SetCaster(dynamic_cast<CPlayer*>(player));
-    fireBall->SetDamage(Skill::FireBallQ.damage * fireBall->GetCaster()->GetStats()->attack);
+    fireBall->SetDamage(damageRatio * fireBall->GetCaster()->GetStats()->attack);
     fireBall->SetEnable(false);
     fireBall->SetCollisionExplosion(true);
 
@@ -209,7 +190,7 @@ void CSkillManager::CastFireballTowardQ(float duration)
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, LAYER_PROJECTILE, false);
 }
 
-void CSkillManager::SpawnFireTowerAtMouse(float duration)
+void CSkillManager::SpawnFireTowerAtMouse(float damageRatio, float duration)
 {
     Vec3 centerPos = GetMouseGroundPoint();
 
@@ -222,7 +203,7 @@ void CSkillManager::SpawnFireTowerAtMouse(float duration)
     tower->SetScaleDuration(duration);
     tower->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
     tower->Init(m_Owner); 
-    tower->SetDamage(Skill::FireTower.damage * tower->GetCaster()->GetStats()->attack);
+    tower->SetDamage(damageRatio * tower->GetCaster()->GetStats()->attack);
     tower->SetEnable(false);
     tower->SetCollisionExplosion(false);
 
@@ -232,7 +213,7 @@ void CSkillManager::SpawnFireTowerAtMouse(float duration)
 
 }
 
-void CSkillManager::FireSwordSpreadShot(float duration)
+void CSkillManager::FireSwordSpreadShot(float damageRatio, float duration)
 {
     if (!m_Owner) return;
 
@@ -267,7 +248,7 @@ void CSkillManager::FireSwordSpreadShot(float duration)
         float rotateDurationDivideByCount = rotateDuration / static_cast<float>(count);
         sword->SetWaitTimeForRotate(rotateDurationDivideByCount * i + 0.3f);
         sword->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
-        sword->SetDamage(Skill::FireSword.damage * sword->GetCaster()->GetStats()->attack);
+        sword->SetDamage(damageRatio * sword->GetCaster()->GetStats()->attack);
         sword->SetEnable(false);
         sword->SetCollisionExplosion(true);
         CNetworkManager::GetInst()->s_GameSession->SpawnSkill(sword);
@@ -277,11 +258,11 @@ void CSkillManager::FireSwordSpreadShot(float duration)
 
 }
 
-void CSkillManager::CastMeteor()
+void CSkillManager::CastMeteor(float damageRatio)
 {
     Vec3 centerPos = m_Owner->GetTransform()->GetRelativePosition();
 
-    CMeteors* meteors = new CMeteors(centerPos, 25, 0.125f);
+    CMeteors* meteors = new CMeteors(centerPos, 25, 0.125f, damageRatio);
     meteors->SetCaster(dynamic_cast<CPlayer*>(m_Owner));
 
 

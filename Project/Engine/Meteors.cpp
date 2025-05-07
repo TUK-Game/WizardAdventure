@@ -13,8 +13,9 @@
 #include "ServerSession.h"
 #include "NetworkManager.h"
 #include "Player.h"
-CMeteors::CMeteors(Vec3 centerPos, int count, float interval)
-    : m_CenterPos(centerPos), m_TotalCount(count), m_Interval(interval)
+
+CMeteors::CMeteors(Vec3 centerPos, int count, float interval, float damageRatio)
+    : m_CenterPos(centerPos), m_TotalCount(count), m_Interval(interval), m_DamageRatio(damageRatio) 
 {
     m_type = SKILL::FIRE_METEORS;
     AddComponent(new CTransform());
@@ -64,7 +65,7 @@ void CMeteors::SpawnMeteor()
     meteor->GetTransform()->SetRelativeScale(scale, scale, scale);
     meteor->SetDuration(5.5f);
     meteor->SetCaster(GetCaster());
-    meteor->SetDamage(Skill::Meteor.damage * m_Caster->GetStats()->attack);
+    meteor->SetDamage(m_DamageRatio * m_Caster->GetStats()->attack);
     meteor->UseSmokeTrail();
     meteor->SetSkillType(SKILL::FIRE_METEORS);
     meteor->SetMode(EFireBallMode::Meteor);

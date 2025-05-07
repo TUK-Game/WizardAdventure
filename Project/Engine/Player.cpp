@@ -147,7 +147,7 @@ void CPlayer::AddSkill(std::shared_ptr<CSkillData> skill)
     const auto& skillManager = GetSkillManager();
     ESkillSlot slot = skillManager->GetNextSlot();
     assert(slot != ESkillSlot::END);
-    skillManager->LearnSkill(slot, GetSkillManager()->ConvertSkillNameToType(skill->GetSkillInfo().name));
+    skillManager->LearnSkill(slot, skill);
     skillManager->SetNextSlot();
 }
 

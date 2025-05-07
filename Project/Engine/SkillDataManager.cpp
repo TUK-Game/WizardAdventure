@@ -43,7 +43,9 @@ bool CSkillDataManager::Init()
 		float cooltime = s["CoolTime"];
 
 		std::shared_ptr<CSkillData> skill = std::make_shared<CSkillData>(SkillInfo(id, name, description, ratio, attribute, price, keytype, cooltime, animationName));
+		skill->SetSkillType(ConvertSkillNameToType(name));
 		m_SkillList[id] = skill;
+		m_SkillIdMap[name] = id;
 	}
 	return true;
 }

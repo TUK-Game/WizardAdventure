@@ -23,11 +23,14 @@ public:
 
 public:
 	SkillInfo& GetSkillInfo() { return m_SkillInfo; }
+	ESkillType GetSkillType() { return m_SkillType; }
 
+	void SetSkillType(ESkillType type) { m_SkillType = type; }
 public:
 	virtual CSkillData* Clone() override { return new CSkillData(*this); }
 
 private:
 	SkillInfo m_SkillInfo;
+	ESkillType m_SkillType = ESkillType::None;
 };
 
