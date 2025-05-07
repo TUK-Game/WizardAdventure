@@ -287,7 +287,8 @@ void CJsonLoader::LoadSkill(const std::wstring& fileName, std::unordered_map<uin
 		uint32 price = s["Price"];
 		float ratio = s["DamageRatio"];
 		float cooltime = s["CoolTime"];
-		
+		float explosionime = s["ExplosionTime"];
+
 		CSkillRef skill = std::make_shared<CSkill>(SkillInfo(id, name, description, ratio, attribute, price, keytype, cooltime));
 		skillMap[id] = skill;
 	}

@@ -4,25 +4,29 @@
 #include "Animator.h"
 #include "InputManager.h"
 #include "StateManager.h"
+#include "SkillData.h"
 
 void CPlayerAttackQState::Enter(CGameObject* entity)
 {
 #ifdef _DEBUG;
 	std::cout << "Entering AttackQ State" << std::endl;
 #endif
+    CPlayer* player = dynamic_cast<CPlayer*>(entity);
+    if (ESkillType::None == player->GetSkillManager()->GetEquippedSkill(ESkillSlot::Q))
+    {
+        entity->GetStateManager()->HandleEvent(entity, "EndAttack");
+        return;
+    }
+
+    const SkillInfo& skill = player->GetSkillManager()->GetSkill(ESkillSlot::Q)->GetSkillInfo();
     std::vector<CGameObject*> objs = entity->GetChild();
     for (const auto o : objs) {
         CAnimator* ani = o->GetAnimator();
-        ani->Play(L"MAGEATTACK5");
+        ani->Play(skill.animationName);
         m_AttackDuration = ani->GetDuration();
     }
+    player->Attack(ESkillSlot::Q, m_AttackDuration * skill.explosionTime);
     m_ElapsedTime = 0.f;
-    CPlayer* player = dynamic_cast<CPlayer*>(entity);
-
-    if (ESkillType::None == player->GetSkillManager()->GetEquippedSkill(ESkillSlot::Q))
-        entity->GetStateManager()->HandleEvent(entity, "EndAttack");
-
-    player->Attack(ESkillSlot::Q, m_AttackDuration * 0.52); // 애니메이션 52퍼센트 동작때 터지게함
 }
 
 void CPlayerAttackQState::Update(CGameObject* entity, float deltaTime)

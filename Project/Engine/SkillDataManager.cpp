@@ -41,8 +41,9 @@ bool CSkillDataManager::Init()
 		uint32 price = s["Price"];
 		float ratio = s["DamageRatio"];
 		float cooltime = s["CoolTime"];
+		float explosionime = s["ExplosionTime"];
 
-		std::shared_ptr<CSkillData> skill = std::make_shared<CSkillData>(SkillInfo(id, name, description, ratio, attribute, price, keytype, cooltime, animationName));
+		std::shared_ptr<CSkillData> skill = std::make_shared<CSkillData>(SkillInfo(id, name, description, ratio, attribute, price, keytype, cooltime, animationName, explosionime));
 		skill->SetSkillType(ConvertSkillNameToType(name));
 		m_SkillList[id] = skill;
 		m_SkillIdMap[name] = id;

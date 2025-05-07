@@ -15,6 +15,7 @@ public:
 	const std::array<float, 5>& GetSkillCooldowns() const { return m_SkillCooldowns; }
 	float GetSkillCooldown(int slotIndex) const;
 	ESkillSlot GetNextSlot() { return m_NextSlot; }
+	std::shared_ptr<CSkillData> GetSkill(ESkillSlot slot) { return m_SkillSlots[slot]; }
 
 	void SetNextSlot() { m_NextSlot = static_cast<ESkillSlot>(static_cast<int>(m_NextSlot) + 1); }
 private:
