@@ -9,7 +9,7 @@
 class CPlayer : public CGameObject
 {
 public:
-    CPlayer(EPlayerAttribute attribute, bool Owner = false);
+    CPlayer(EPlayerAttribute attribute, bool Owner = false, const Vec3& pos = Vec3(0.f, 0.f, 0.f));
     virtual ~CPlayer();
 
     virtual void Begin();

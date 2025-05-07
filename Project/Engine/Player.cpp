@@ -34,7 +34,7 @@
 #include "PlayerStateManager.h"
 //#include <Engine/Engine.h>
 
-CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
+CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner, const Vec3& pos)
     : m_Attribute(attribute), m_SkillManager(new CSkillManager(attribute, this)), m_Interpolator(new CInterpolator())
 {
     CreateStateManager();
@@ -65,10 +65,10 @@ CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
    AddComponent(new CTransform);
    AddComponent(new CBoxCollider);
    GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
-   GetTransform()->SetRelativePosition(11240.f, 20, 1127);
-   m_Amount = Vec3(11240.f, 20.f, 1127.f);
-   m_NextPosition = Vec3(11240.f, 20.f, 1127.f);
-   GetCollider()->SetMaxMinPos(Vec3(11240.f, 20.f, 1127.f), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
+   GetTransform()->SetRelativePosition(pos);
+   m_Amount = Vec3(pos);
+   m_NextPosition = Vec3(pos);
+   GetCollider()->SetMaxMinPos(Vec3(pos), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
    if(Owner)
        AddComponent(new CPlayerScript);
 

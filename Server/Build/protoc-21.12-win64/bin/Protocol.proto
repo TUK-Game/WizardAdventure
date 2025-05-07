@@ -73,6 +73,11 @@ message S_MOVE
 	PlayerMoveInfo player_move_info = 1;
 }
 
+message S_ACT
+{
+	PlayerMoveInfo player_move_info = 1;
+}
+
 message S_UPDATE_PLAYER
 {
 	PlayerUpdateInfo player_update_info = 1;

@@ -79,6 +79,8 @@ public:
         {
             m_PrevPos = newPos;
             m_TargetPos = newPos;
+            m_PrevRot = newRot;
+            m_TargetRot = newRot;
             m_ElapsedTime = 0.f;
             m_Duration = 0.1f;
             m_LastRecvTime = now;

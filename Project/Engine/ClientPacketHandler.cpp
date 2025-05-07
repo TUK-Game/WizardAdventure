@@ -72,17 +72,17 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	{
 	case Protocol::PLAYER_TYPE_FIRE:
 	{
-		player = new CPlayer(EPlayerAttribute::Fire, true);
+		player = new CPlayer(EPlayerAttribute::Fire, true, Vec3(11240.f, 0.f, 1127.f));
 	}
 	break;
 	case Protocol::PLAYER_TYPE_ICE:
 	{
-		player = new CPlayer(EPlayerAttribute::Ice, true);
+		player = new CPlayer(EPlayerAttribute::Ice, true, Vec3(11240.f, 0.f, 1127.f));
 	}
 	break;
 	case Protocol::PLAYER_TYPE_LIGHTNING:
 	{
-		player = new CPlayer(EPlayerAttribute::Electric, true);
+		player = new CPlayer(EPlayerAttribute::Electric, true, Vec3(11240.f, 0.f, 1127.f));
 	}
 	break;
 	}
@@ -180,7 +180,7 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 	{
 	case Protocol::PLAYER_TYPE_FIRE:
 	{
-		player = new CPlayer(EPlayerAttribute::Fire);
+		player = new CPlayer(EPlayerAttribute::Fire, false, Vec3(11240.f, 0.f, 1127.f));
 		player->InitStats(100, 100, 30, 300.f);
 
 		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
@@ -192,12 +192,12 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 	break;
 	case Protocol::PLAYER_TYPE_ICE:
 	{
-		player = new CPlayer(EPlayerAttribute::Ice);
+		player = new CPlayer(EPlayerAttribute::Ice, false, Vec3(11240.f, 0.f, 1127.f));
 	}
 	break;
 	case Protocol::PLAYER_TYPE_LIGHTNING:
 	{
-		player = new CPlayer(EPlayerAttribute::Electric);
+		player = new CPlayer(EPlayerAttribute::Electric, false, Vec3(11240.f, 0.f, 1127.f));
 	}
 	break;
 	}
@@ -224,12 +224,12 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 		const Protocol::PlayerInfo& info = pkt.player(i);
 
 		CPlayer* player{ nullptr };
-
+		const Protocol::Vector3& position = info.object_info().pos_info().position();
 		switch (info.player_type())
 		{
 		case Protocol::PLAYER_TYPE_FIRE:
 		{
-			player = new CPlayer(EPlayerAttribute::Fire);
+			player = new CPlayer(EPlayerAttribute::Fire, false, Vec3(position.x(), position.y(), position.z()));
 			player->InitStats(100, 100, 30, 300.f);
 
 			player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
@@ -241,20 +241,21 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 		break;
 		case Protocol::PLAYER_TYPE_ICE:
 		{
-			player = new CPlayer(EPlayerAttribute::Ice);
+			player = new CPlayer(EPlayerAttribute::Ice, false, Vec3(position.x(), position.y(), position.z()));
 		}
 		break;
 		case Protocol::PLAYER_TYPE_LIGHTNING:
 		{
-			player = new CPlayer(EPlayerAttribute::Electric);
+			player = new CPlayer(EPlayerAttribute::Electric, false, Vec3(position.x(), position.y(), position.z()));
 		}
 		break;
 		}
 
+		const Protocol::Vector3& rotation = info.object_info().pos_info().rotation();
 
-		const Protocol::Vector3& position = info.object_info().pos_info().position();
 		player->SetName(L"Player" + std::to_wstring(info.player_id()));
 		player->GetTransform()->SetRelativePosition(position.x(), position.y(), position.z());
+		player->GetTransform()->SetRelativeRotation(rotation.x(), rotation.y(), rotation.z());
 
 		CLevelManager::GetInst()->GetCurrentLevel()->AddGameObject(player, LAYER_PLAYER, false);
 		CLevelManager::GetInst()->SetPlayer(player, info.player_id());
@@ -420,6 +421,19 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 }
 
 bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
+{
+	UINT64 id = pkt.player_move_info().player_id();
+
+	const Protocol::Vector3& position = pkt.player_move_info().pos_info().position();
+	const Protocol::Vector3& rotation = pkt.player_move_info().pos_info().rotation();
+	Protocol::MoveState state = pkt.player_move_info().pos_info().state();
+	CLevelManager::GetInst()->GetPlayer(id)->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
+
+	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
+	return true;
+}
+
+bool Handle_S_ACT(CPacketSessionRef& session, Protocol::S_ACT& pkt)
 {
 	UINT64 id = pkt.player_move_info().player_id();
 

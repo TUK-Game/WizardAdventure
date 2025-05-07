@@ -35,6 +35,7 @@ public:
 	bool HandleLeavePlayer(CPlayerRef player);
 
 	bool HandleMovePlayer(CPlayerRef player);
+	bool HandleActPlayer(CPlayerRef player);
 	bool UPdatePlayer(CPlayerRef player, float deltaTime);
 
 	bool HandleSpawnProjectile(CProjectileRef projectile);

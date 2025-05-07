@@ -225,7 +225,7 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 
 	Protocol::Vector3* position = new Protocol::Vector3();
 	position->set_x(11240.f);
-	position->set_y(20.f);
+	position->set_y(0.f);
 	position->set_z(1127.f);
 
 	newPlayer->PlayerInfo->mutable_object_info()->mutable_pos_info()->set_allocated_position(position);
@@ -251,7 +251,7 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 
 
 	newPlayer->GetCollider()->SetCollisionProfile("Player");
-	newPlayer->GetCollider()->SetBoxInfo(Vec3(11240.f, 20.f, 1127.f), Vec3(120.f, 200.f, 64.f), Vec3(0.f, 0.f, 0.f), Vec3(0.f, 100.f, 0.f));
+	newPlayer->GetCollider()->SetBoxInfo(Vec3(11240.f, 0.f, 1127.f), Vec3(120.f, 200.f, 64.f), Vec3(0.f, 0.f, 0.f), Vec3(0.f, 100.f, 0.f));
 
 	GetLevelCollision()->AddCollider(newPlayer->GetCollider(), ECollision_Channel::Player);
 
@@ -292,7 +292,8 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 				continue;
 
 			Protocol::PlayerInfo* playerInfo = spawnPkt.add_player();
-			playerInfo->CopyFrom(*player->PlayerInfo);
+			playerInfo->CopyFrom(*(player->PlayerInfo));
+			std::cout << playerInfo->object_info().pos_info().position().x() << " " << playerInfo->object_info().pos_info().position().y() << " " << playerInfo->object_info().pos_info().position().z() << '\n';
 		}
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(spawnPkt);
@@ -464,6 +465,33 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 	auto* posInfo = moveInfo->mutable_pos_info();
 	ToProtoVector3(posInfo->mutable_position(), nowPos);
+
+	const auto& rot = player->PlayerInfo->object_info().pos_info().rotation();
+	ToProtoVector3(posInfo->mutable_rotation(), XMFLOAT3(rot.x(), rot.y(), rot.z()));
+
+	posInfo->set_state(player->GetState());
+
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
+	Broadcast(sendBuffer, player->PlayerInfo->player_id());
+
+	if (auto session = player->GetSession())
+		session->Send(sendBuffer);
+
+	player->GetCollider()->SetGateDir(Vec3(dir.x(), dir.y(), dir.z()));
+	return true;
+}
+
+bool CRoom::HandleActPlayer(CPlayerRef player)
+{
+	const auto& dir = player->GetDir();
+
+	Protocol::S_ACT movePkt;
+	auto* moveInfo = movePkt.mutable_player_move_info();
+	moveInfo->set_player_id(player->PlayerInfo->player_id());
+
+	auto* posInfo = moveInfo->mutable_pos_info();
+	const auto& pos = player->PlayerInfo->object_info().pos_info().position();
+	ToProtoVector3(posInfo->mutable_position(), XMFLOAT3(pos.x(), pos.y(), pos.z()));
 
 	const auto& rot = player->PlayerInfo->object_info().pos_info().rotation();
 	ToProtoVector3(posInfo->mutable_rotation(), XMFLOAT3(rot.x(), rot.y(), rot.z()));
