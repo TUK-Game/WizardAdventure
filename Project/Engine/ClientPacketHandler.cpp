@@ -399,11 +399,6 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_PROJECTILE)->SafeRemoveGameObject(map[id]);
 		map.erase(id);
 	}
-	else if (pkt.projectile_info().state() == Protocol::SPAWN_PARTICLE)
-	{
-		map[id]->ShowParticles();
-		map[id]->SetIsSpawnParticle(false);
-	}
 	else
 	{
 		const auto& pos = pkt.projectile_info().object_info().pos_info().position();
@@ -417,6 +412,17 @@ bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE
 			object->GetTransform()->SetRelativeRotation(Vec3(rot.x(), rot.y(), rot.z()));
 		}
 	}
+	return true;
+}
+
+bool Handle_S_PROJECTILE_EFFECT(CPacketSessionRef& session, Protocol::S_PROJECTILE_EFFECT& pkt)
+{
+	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_PROJECTILE)->GetProjectileMap();
+	UINT64 id = pkt.projectile_id();
+	if (map.find(id) == map.end())
+		return false;
+
+	map[id]->ShowParticles();
 	return true;
 }
 

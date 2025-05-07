@@ -106,7 +106,7 @@ void CFireTower::UpdateScaleLerp()
 	if (m_ElapsedTime >= m_ScaleDuration) {
 		m_bFinishScale = true;
 		m_bCanAttack = true; // attack on
-		m_bSpawnParticle = true;
+		CNetworkManager::GetInst()->s_GameSession->SpawnSkillEffect(this);
 		return;
 	}
 

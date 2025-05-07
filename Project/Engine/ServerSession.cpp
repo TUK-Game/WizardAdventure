@@ -204,22 +204,10 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 	Send(sendBuffer);
 }
 
-void CServerSession::BuyItem(uint32 itemId)
+void CServerSession::SpawnSkillEffect(CSkillObject* object)
 {
-	Protocol::C_BUY_ITEM pkt;
-
-	pkt.set_item_id(itemId);
-
-	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
-	Send(sendBuffer);
-}
-
-void CServerSession::BuySkill(uint32 skillId)
-{
-	Protocol::C_BUY_SKILL pkt;
-
-	pkt.set_skill_id(skillId);
-
+	Protocol::C_PROJECTILE_EFFECT pkt;
+	pkt.set_projectile_id(object->m_ProjectileId);
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(sendBuffer);
 }
@@ -237,10 +225,6 @@ void CServerSession::MoveSkill(CSkillObject* object)
 	if (object->m_bDelete)
 	{
 		info->set_state(Protocol::COLLISION);
-	}
-	else if (object->GetIsSpawnParticle())
-	{
-		info->set_state(Protocol::SPAWN_PARTICLE);
 	}
 	else
 	{
@@ -265,3 +249,25 @@ void CServerSession::MoveSkill(CSkillObject* object)
 	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 	Send(sendBuffer);
 }
+
+void CServerSession::BuyItem(uint32 itemId)
+{
+	Protocol::C_BUY_ITEM pkt;
+
+	pkt.set_item_id(itemId);
+
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
+}
+
+void CServerSession::BuySkill(uint32 skillId)
+{
+	Protocol::C_BUY_SKILL pkt;
+
+	pkt.set_skill_id(skillId);
+
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
+}
+
+

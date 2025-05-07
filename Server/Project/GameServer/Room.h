@@ -40,6 +40,7 @@ public:
 
 	bool HandleSpawnProjectile(CProjectileRef projectile);
 	bool HandleMoveProjectile(CProjectileRef projectile);
+	bool HandleMoveProjectileEffect(CProjectileRef projectile);
 
 	bool HandleBuyItem(CPlayerRef player, CItemRef item);
 	bool IsBuyItem(CPlayerRef player, CItemRef item, bool isBuy);

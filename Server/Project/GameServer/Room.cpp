@@ -651,6 +651,15 @@ bool CRoom::HandleMoveProjectile(CProjectileRef projectile)
 	return true;
 }
 
+bool CRoom::HandleMoveProjectileEffect(CProjectileRef projectile)
+{
+	Protocol::S_PROJECTILE_EFFECT pkt;
+	pkt.set_projectile_id(projectile->ProjectileInfo->projectile_id());
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	Broadcast(sendBuffer, -1);
+	return true;
+}
+
 bool CRoom::HandleBuyItem(CPlayerRef player, CItemRef item)
 {
 	std::unordered_map<uint64, CGameObjectRef> npcs = GetLayerObjects((int)EObject_Type::NPC);

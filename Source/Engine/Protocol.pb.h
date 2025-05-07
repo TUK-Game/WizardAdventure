@@ -72,6 +72,9 @@ extern C_MOVEDefaultTypeInternal _C_MOVE_default_instance_;
 class C_MOVE_PROJECTILE;
 struct C_MOVE_PROJECTILEDefaultTypeInternal;
 extern C_MOVE_PROJECTILEDefaultTypeInternal _C_MOVE_PROJECTILE_default_instance_;
+class C_PROJECTILE_EFFECT;
+struct C_PROJECTILE_EFFECTDefaultTypeInternal;
+extern C_PROJECTILE_EFFECTDefaultTypeInternal _C_PROJECTILE_EFFECT_default_instance_;
 class C_SPAWN_PROJECTILE;
 struct C_SPAWN_PROJECTILEDefaultTypeInternal;
 extern C_SPAWN_PROJECTILEDefaultTypeInternal _C_SPAWN_PROJECTILE_default_instance_;
@@ -111,6 +114,9 @@ extern S_MONSTER_INFODefaultTypeInternal _S_MONSTER_INFO_default_instance_;
 class S_MOVE;
 struct S_MOVEDefaultTypeInternal;
 extern S_MOVEDefaultTypeInternal _S_MOVE_default_instance_;
+class S_PROJECTILE_EFFECT;
+struct S_PROJECTILE_EFFECTDefaultTypeInternal;
+extern S_PROJECTILE_EFFECTDefaultTypeInternal _S_PROJECTILE_EFFECT_default_instance_;
 class S_PROJECTILE_INFO;
 struct S_PROJECTILE_INFODefaultTypeInternal;
 extern S_PROJECTILE_INFODefaultTypeInternal _S_PROJECTILE_INFO_default_instance_;
@@ -145,6 +151,7 @@ template<> ::Protocol::C_LEAVE_GAME* Arena::CreateMaybeMessage<::Protocol::C_LEA
 template<> ::Protocol::C_LOGIN* Arena::CreateMaybeMessage<::Protocol::C_LOGIN>(Arena*);
 template<> ::Protocol::C_MOVE* Arena::CreateMaybeMessage<::Protocol::C_MOVE>(Arena*);
 template<> ::Protocol::C_MOVE_PROJECTILE* Arena::CreateMaybeMessage<::Protocol::C_MOVE_PROJECTILE>(Arena*);
+template<> ::Protocol::C_PROJECTILE_EFFECT* Arena::CreateMaybeMessage<::Protocol::C_PROJECTILE_EFFECT>(Arena*);
 template<> ::Protocol::C_SPAWN_PROJECTILE* Arena::CreateMaybeMessage<::Protocol::C_SPAWN_PROJECTILE>(Arena*);
 template<> ::Protocol::S_ACT* Arena::CreateMaybeMessage<::Protocol::S_ACT>(Arena*);
 template<> ::Protocol::S_BUY_ITEM* Arena::CreateMaybeMessage<::Protocol::S_BUY_ITEM>(Arena*);
@@ -158,6 +165,7 @@ template<> ::Protocol::S_LEAVE_GAME* Arena::CreateMaybeMessage<::Protocol::S_LEA
 template<> ::Protocol::S_LOGIN* Arena::CreateMaybeMessage<::Protocol::S_LOGIN>(Arena*);
 template<> ::Protocol::S_MONSTER_INFO* Arena::CreateMaybeMessage<::Protocol::S_MONSTER_INFO>(Arena*);
 template<> ::Protocol::S_MOVE* Arena::CreateMaybeMessage<::Protocol::S_MOVE>(Arena*);
+template<> ::Protocol::S_PROJECTILE_EFFECT* Arena::CreateMaybeMessage<::Protocol::S_PROJECTILE_EFFECT>(Arena*);
 template<> ::Protocol::S_PROJECTILE_INFO* Arena::CreateMaybeMessage<::Protocol::S_PROJECTILE_INFO>(Arena*);
 template<> ::Protocol::S_SPAWN* Arena::CreateMaybeMessage<::Protocol::S_SPAWN>(Arena*);
 template<> ::Protocol::S_SPAWN_EXISTING_PLAYER* Arena::CreateMaybeMessage<::Protocol::S_SPAWN_EXISTING_PLAYER>(Arena*);
@@ -2654,6 +2662,302 @@ class S_PROJECTILE_INFO final :
 };
 // -------------------------------------------------------------------
 
+class S_PROJECTILE_EFFECT final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_PROJECTILE_EFFECT) */ {
+ public:
+  inline S_PROJECTILE_EFFECT() : S_PROJECTILE_EFFECT(nullptr) {}
+  ~S_PROJECTILE_EFFECT() override;
+  explicit PROTOBUF_CONSTEXPR S_PROJECTILE_EFFECT(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_PROJECTILE_EFFECT(const S_PROJECTILE_EFFECT& from);
+  S_PROJECTILE_EFFECT(S_PROJECTILE_EFFECT&& from) noexcept
+    : S_PROJECTILE_EFFECT() {
+    *this = ::std::move(from);
+  }
+
+  inline S_PROJECTILE_EFFECT& operator=(const S_PROJECTILE_EFFECT& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_PROJECTILE_EFFECT& operator=(S_PROJECTILE_EFFECT&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_PROJECTILE_EFFECT& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_PROJECTILE_EFFECT* internal_default_instance() {
+    return reinterpret_cast<const S_PROJECTILE_EFFECT*>(
+               &_S_PROJECTILE_EFFECT_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    16;
+
+  friend void swap(S_PROJECTILE_EFFECT& a, S_PROJECTILE_EFFECT& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_PROJECTILE_EFFECT* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_PROJECTILE_EFFECT* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S_PROJECTILE_EFFECT* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S_PROJECTILE_EFFECT>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S_PROJECTILE_EFFECT& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const S_PROJECTILE_EFFECT& from) {
+    S_PROJECTILE_EFFECT::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_PROJECTILE_EFFECT* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_PROJECTILE_EFFECT";
+  }
+  protected:
+  explicit S_PROJECTILE_EFFECT(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kProjectileIdFieldNumber = 1,
+  };
+  // uint32 projectile_id = 1;
+  void clear_projectile_id();
+  uint32_t projectile_id() const;
+  void set_projectile_id(uint32_t value);
+  private:
+  uint32_t _internal_projectile_id() const;
+  void _internal_set_projectile_id(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_PROJECTILE_EFFECT)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t projectile_id_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class C_PROJECTILE_EFFECT final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_PROJECTILE_EFFECT) */ {
+ public:
+  inline C_PROJECTILE_EFFECT() : C_PROJECTILE_EFFECT(nullptr) {}
+  ~C_PROJECTILE_EFFECT() override;
+  explicit PROTOBUF_CONSTEXPR C_PROJECTILE_EFFECT(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_PROJECTILE_EFFECT(const C_PROJECTILE_EFFECT& from);
+  C_PROJECTILE_EFFECT(C_PROJECTILE_EFFECT&& from) noexcept
+    : C_PROJECTILE_EFFECT() {
+    *this = ::std::move(from);
+  }
+
+  inline C_PROJECTILE_EFFECT& operator=(const C_PROJECTILE_EFFECT& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_PROJECTILE_EFFECT& operator=(C_PROJECTILE_EFFECT&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_PROJECTILE_EFFECT& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_PROJECTILE_EFFECT* internal_default_instance() {
+    return reinterpret_cast<const C_PROJECTILE_EFFECT*>(
+               &_C_PROJECTILE_EFFECT_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    17;
+
+  friend void swap(C_PROJECTILE_EFFECT& a, C_PROJECTILE_EFFECT& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_PROJECTILE_EFFECT* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_PROJECTILE_EFFECT* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C_PROJECTILE_EFFECT* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C_PROJECTILE_EFFECT>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const C_PROJECTILE_EFFECT& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const C_PROJECTILE_EFFECT& from) {
+    C_PROJECTILE_EFFECT::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_PROJECTILE_EFFECT* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_PROJECTILE_EFFECT";
+  }
+  protected:
+  explicit C_PROJECTILE_EFFECT(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kProjectileIdFieldNumber = 1,
+  };
+  // uint32 projectile_id = 1;
+  void clear_projectile_id();
+  uint32_t projectile_id() const;
+  void set_projectile_id(uint32_t value);
+  private:
+  uint32_t _internal_projectile_id() const;
+  void _internal_set_projectile_id(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_PROJECTILE_EFFECT)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t projectile_id_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class S_SPAWN final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_SPAWN) */ {
  public:
@@ -2702,7 +3006,7 @@ class S_SPAWN final :
                &_S_SPAWN_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    18;
 
   friend void swap(S_SPAWN& a, S_SPAWN& b) {
     a.Swap(&b);
@@ -2859,7 +3163,7 @@ class S_SPAWN_NEW_PLAYER final :
                &_S_SPAWN_NEW_PLAYER_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    19;
 
   friend void swap(S_SPAWN_NEW_PLAYER& a, S_SPAWN_NEW_PLAYER& b) {
     a.Swap(&b);
@@ -3016,7 +3320,7 @@ class S_SPAWN_EXISTING_PLAYER final :
                &_S_SPAWN_EXISTING_PLAYER_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    20;
 
   friend void swap(S_SPAWN_EXISTING_PLAYER& a, S_SPAWN_EXISTING_PLAYER& b) {
     a.Swap(&b);
@@ -3173,7 +3477,7 @@ class S_DESPAWN_PLAYER final :
                &_S_DESPAWN_PLAYER_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    21;
 
   friend void swap(S_DESPAWN_PLAYER& a, S_DESPAWN_PLAYER& b) {
     a.Swap(&b);
@@ -3321,7 +3625,7 @@ class S_DESPAWN final :
                &_S_DESPAWN_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    22;
 
   friend void swap(S_DESPAWN& a, S_DESPAWN& b) {
     a.Swap(&b);
@@ -3483,7 +3787,7 @@ class S_GATE_OPNE final :
                &_S_GATE_OPNE_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    23;
 
   friend void swap(S_GATE_OPNE& a, S_GATE_OPNE& b) {
     a.Swap(&b);
@@ -3640,7 +3944,7 @@ class S_GATE_CLOSE final :
                &_S_GATE_CLOSE_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    24;
 
   friend void swap(S_GATE_CLOSE& a, S_GATE_CLOSE& b) {
     a.Swap(&b);
@@ -3797,7 +4101,7 @@ class S_SPAWN_NPC final :
                &_S_SPAWN_NPC_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    25;
 
   friend void swap(S_SPAWN_NPC& a, S_SPAWN_NPC& b) {
     a.Swap(&b);
@@ -3954,7 +4258,7 @@ class C_BUY_ITEM final :
                &_C_BUY_ITEM_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    26;
 
   friend void swap(C_BUY_ITEM& a, C_BUY_ITEM& b) {
     a.Swap(&b);
@@ -4102,7 +4406,7 @@ class C_BUY_SKILL final :
                &_C_BUY_SKILL_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    27;
 
   friend void swap(C_BUY_SKILL& a, C_BUY_SKILL& b) {
     a.Swap(&b);
@@ -4250,7 +4554,7 @@ class S_UPDATE_ITEM final :
                &_S_UPDATE_ITEM_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    28;
 
   friend void swap(S_UPDATE_ITEM& a, S_UPDATE_ITEM& b) {
     a.Swap(&b);
@@ -4438,7 +4742,7 @@ class S_BUY_ITEM final :
                &_S_BUY_ITEM_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    29;
 
   friend void swap(S_BUY_ITEM& a, S_BUY_ITEM& b) {
     a.Swap(&b);
@@ -4608,7 +4912,7 @@ class S_BUY_SKILL final :
                &_S_BUY_SKILL_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    30;
 
   friend void swap(S_BUY_SKILL& a, S_BUY_SKILL& b) {
     a.Swap(&b);
@@ -6018,6 +6322,54 @@ inline void S_PROJECTILE_INFO::set_allocated_projectile_info(::Protocol::Project
 
 // -------------------------------------------------------------------
 
+// S_PROJECTILE_EFFECT
+
+// uint32 projectile_id = 1;
+inline void S_PROJECTILE_EFFECT::clear_projectile_id() {
+  _impl_.projectile_id_ = 0u;
+}
+inline uint32_t S_PROJECTILE_EFFECT::_internal_projectile_id() const {
+  return _impl_.projectile_id_;
+}
+inline uint32_t S_PROJECTILE_EFFECT::projectile_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_PROJECTILE_EFFECT.projectile_id)
+  return _internal_projectile_id();
+}
+inline void S_PROJECTILE_EFFECT::_internal_set_projectile_id(uint32_t value) {
+  
+  _impl_.projectile_id_ = value;
+}
+inline void S_PROJECTILE_EFFECT::set_projectile_id(uint32_t value) {
+  _internal_set_projectile_id(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_PROJECTILE_EFFECT.projectile_id)
+}
+
+// -------------------------------------------------------------------
+
+// C_PROJECTILE_EFFECT
+
+// uint32 projectile_id = 1;
+inline void C_PROJECTILE_EFFECT::clear_projectile_id() {
+  _impl_.projectile_id_ = 0u;
+}
+inline uint32_t C_PROJECTILE_EFFECT::_internal_projectile_id() const {
+  return _impl_.projectile_id_;
+}
+inline uint32_t C_PROJECTILE_EFFECT::projectile_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_PROJECTILE_EFFECT.projectile_id)
+  return _internal_projectile_id();
+}
+inline void C_PROJECTILE_EFFECT::_internal_set_projectile_id(uint32_t value) {
+  
+  _impl_.projectile_id_ = value;
+}
+inline void C_PROJECTILE_EFFECT::set_projectile_id(uint32_t value) {
+  _internal_set_projectile_id(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_PROJECTILE_EFFECT.projectile_id)
+}
+
+// -------------------------------------------------------------------
+
 // S_SPAWN
 
 // repeated .Protocol.ObjectInfo objects = 1;
@@ -6662,6 +7014,10 @@ inline void S_BUY_SKILL::set_skill_id(uint32_t value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -11,6 +11,8 @@
 #include "Engine.h"
 #include "ParticleSystem.h"
 #include "ParticleSystemManager.h"
+#include "NetworkManager.h"
+#include "ServerSession.h"
 
 CFireSword::CFireSword()
 {
@@ -81,7 +83,7 @@ void CFireSword::Update()
 			{
 				m_ReadyToFire = true;
 				m_Elapsed = 0.f;
-				m_bSpawnParticle = true;
+				CNetworkManager::GetInst()->s_GameSession->SpawnSkillEffect(this);
 			}
 		}
 

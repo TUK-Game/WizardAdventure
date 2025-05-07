@@ -28,6 +28,7 @@ public:
 	void OnActPlayer();
 	void MoveSkill(class CSkillObject* object);
 	void SpawnSkill(class CSkillObject* object);
+	void SpawnSkillEffect(class CSkillObject* object);
 
 	void BuyItem(uint32 itemId);
 	void BuySkill(uint32 skillId);

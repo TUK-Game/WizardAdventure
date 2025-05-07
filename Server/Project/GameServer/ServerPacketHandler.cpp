@@ -200,6 +200,18 @@ bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJE
 	return true;
 }
 
+bool Handle_C_PROJECTILE_EFFECT(CPacketSessionRef& session, Protocol::C_PROJECTILE_EFFECT& pkt)
+{
+	int projectile_id = pkt.projectile_id();
+
+	CProjectileRef object = std::dynamic_pointer_cast<CProjectile>(g_Room->GetLayerObject((uint32)EObject_Type::Projectile, projectile_id));
+	if (object == nullptr)
+		return true;
+
+	g_Room->DoAsync(&CRoom::HandleMoveProjectileEffect, object);
+	return true;
+}
+
 bool Handle_C_BUY_ITEM(CPacketSessionRef& session, Protocol::C_BUY_ITEM& pkt)
 {
 	auto gameSession = static_pointer_cast<CGameSession>(session);
