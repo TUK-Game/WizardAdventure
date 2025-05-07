@@ -30,6 +30,7 @@
 #include "RenderManager.h"
 #include "Camera.h"
 #include "CameraScript.h"
+#include "SkillData.h"
 //#include <Engine/Engine.h>
 
 CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
@@ -139,6 +140,15 @@ void CPlayer::FinalUpdate()
 void CPlayer::Render()
 {
     CGameObject::Render();
+}
+
+void CPlayer::AddSkill(std::shared_ptr<CSkillData> skill)
+{
+    const auto& skillManager = GetSkillManager();
+    ESkillSlot slot = skillManager->GetNextSlot();
+    assert(slot != ESkillSlot::END);
+    skillManager->LearnSkill(slot, skill);
+    skillManager->SetNextSlot();
 }
 
 void CPlayer::CreateStateManager()
@@ -265,29 +275,44 @@ void CPlayer::DetectNPC()
         return;
 
     npc->Interation();
-    
-    const auto& script = dynamic_cast<CCameraScript*>(camera->GetScript());
+    MoveCamera(camera, npc, ECamera_Type::Interaction_Start, Vec3(200.f, 0.f, 500.f));
+    return;
+}
 
+void CPlayer::MoveToInventoryView()
+{
+    CGameObject* camera = CRenderManager::GetInst()->GetMainCamera()->GetOwner();
+    if (ECamera_Type::Fixed != camera->GetCamera()->GetCameraType())
+        return;
+
+    MoveCamera(camera, this, ECamera_Type::Inventory_Interaction_Start, Vec3(200.f, 0.f, 500.f));
+}
+
+void CPlayer::MoveCamera(CGameObject* camera, CGameObject* target, ECamera_Type type, const Vec3& offset)
+{
+    const auto& script = dynamic_cast<CCameraScript*>(camera->GetScript());
+        
     if (script)
     {
         Vec3 rot;
         CTransform* transform = camera->GetTransform();
-        script->SetInteractionZoomTarget(npc->InteractionCameraPos(rot));
+        script->SetInteractionZoomTarget(target->InteractionCameraPos(rot, offset));
         script->SetInteractionStartPos(transform->GetRelativePosition());
         script->SetInteractionDir(transform->GetRelativeRotation(), rot);
-        camera->GetCamera()->SetCameraType(ECamera_Type::Interaction_Start);
+        camera->GetCamera()->SetCameraType(type);
     }
-
-    return;
 }
 
-void CPlayer::FinishShopping()
+void CPlayer::FinishInteraction(bool isLayerCheck)
 {
     CGameObject* camera = CRenderManager::GetInst()->GetMainCamera()->GetOwner();
     if(ECamera_Type::Interaction == camera->GetCamera()->GetCameraType())
     {
         camera->GetCamera()->SetCameraType(ECamera_Type::Interaction_End);
-        camera->GetCamera()->CheckLayer(LAYER_PLAYER);
+        if(isLayerCheck)
+        {
+            camera->GetCamera()->CheckLayer(LAYER_PLAYER);
+        }
     }
 }
 

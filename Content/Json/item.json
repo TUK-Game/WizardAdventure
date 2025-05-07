@@ -1,8 +1,8 @@
 ﻿[
   {
     "Id": "10001",
-    "Name": "머리띠",
-    "Description": "머리띠임",
+    "Name": "요정의 머리띠",
+    "Description": "요정의 머리띠임",
     "Amount": 10.0,
     "Where": "ATK",
     "Price": 100.0,
@@ -10,8 +10,8 @@
   },
   {
     "Id": "10002",
-    "Name": "반지",
-    "Description": "반지임",
+    "Name": "요정의 반지",
+    "Description": "요정의 반지임",
     "Amount": 20.0,
     "Where": "ATK",
     "Price": 200.0,
@@ -19,8 +19,8 @@
   },
   {
     "Id": "10003",
-    "Name": "큰반지",
-    "Description": "큰반지임",
+    "Name": "요정의 큰반지",
+    "Description": "요정의 큰반지임",
     "Amount": 30.0,
     "Where": "HP",
     "Price": 300.0,
@@ -28,11 +28,83 @@
   },
   {
     "Id": "10004",
-    "Name": "펜던트",
-    "Description": "펜던트임",
+    "Name": "요정의 펜던트",
+    "Description": "요정의 펜던트임",
     "Amount": 40.0,
     "Where": "ATK",
     "Price": 400.0,
+    "Rank": "R"
+  },
+  {
+    "Id": "10005",
+    "Name": "요정의 이슬",
+    "Description": "요정의 이슬임",
+    "Amount": 50.0,
+    "Where": "HP",
+    "Price": 500.0,
+    "Rank": "R"
+  },
+  {
+    "Id": "10006",
+    "Name": "깃발",
+    "Description": "깃발임",
+    "Amount": 20.0,
+    "Where": "ATK",
+    "Price": 300.0,
+    "Rank": "N"
+  },
+  {
+    "Id": "10007",
+    "Name": "팔목보호대",
+    "Description": "팔목보호대임",
+    "Amount": 30.0,
+    "Where": "HP",
+    "Price": 300.0,
+    "Rank": "N"
+  },
+  {
+    "Id": "10008",
+    "Name": "목걸이",
+    "Description": "목걸이임",
+    "Amount": 10.0,
+    "Where": "ATK",
+    "Price": 100.0,
+    "Rank": "N"
+  },
+  {
+    "Id": "10009",
+    "Name": "반지",
+    "Description": "반지임",
+    "Amount": 20.0,
+    "Where": "ATK",
+    "Price": 100.0,
+    "Rank": "N"
+  },
+  {
+    "Id": "10010",
+    "Name": "HP포션",
+    "Description": "포션임",
+    "Amount": 50.0,
+    "Where": "HEAL",
+    "Price": 200.0,
+    "Rank": "N"
+  },
+  {
+    "Id": "10011",
+    "Name": "신발",
+    "Description": "신발임",
+    "Amount": 10.0,
+    "Where": "SPEED",
+    "Price": 500.0,
+    "Rank": "R"
+  },
+  {
+    "Id": "10012",
+    "Name": "왕관",
+    "Description": "왕관임",
+    "Amount": 50.0,
+    "Where": "ATK",
+    "Price": 1000.0,
     "Rank": "R"
   }
 ]

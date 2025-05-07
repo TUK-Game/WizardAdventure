@@ -10,6 +10,7 @@
 #include "CollisionManager.h"
 #include "ProjectilePool.h"
 #include "ItemManager.h"
+#include "SkillManager.h"
 
 enum
 {
@@ -41,6 +42,7 @@ int main()
 
 	ServerPacketHandler::Init();
 	g_ItemManager->Init();
+	g_SkillManager->Init();
 	g_CollisionManager->Init();
 	g_Room->Init();
 	CJsonLoader::LoadMap(L"Level_1", g_Room);

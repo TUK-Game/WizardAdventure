@@ -4,6 +4,7 @@
 #include "Room.h"
 #include "Monster.h"
 #include "Item.h"
+#include "Skill.h"
 
 CPlayer::CPlayer()
 {
@@ -33,6 +34,19 @@ bool CPlayer::BuyItem(CItemRef item)
 		return false;
 
 	m_Items.emplace_back(item);
+	return true;
+}
+
+bool CPlayer::BuySkill(CSkillRef skill)
+{
+	auto iter = std::find_if(m_Skills.begin(), m_Skills.end(), [&](CSkillRef s) {
+		return s->GetSkillInfo().id == skill->GetSkillInfo().id;
+		});
+
+	if (iter != m_Skills.end())
+		return false;
+
+	m_Skills.emplace_back(skill);
 	return true;
 }
 

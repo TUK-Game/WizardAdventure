@@ -214,6 +214,16 @@ void CServerSession::BuyItem(uint32 itemId)
 	Send(sendBuffer);
 }
 
+void CServerSession::BuySkill(uint32 skillId)
+{
+	Protocol::C_BUY_SKILL pkt;
+
+	pkt.set_skill_id(skillId);
+
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
+}
+
 void CServerSession::MoveSkill(CSkillObject* object)
 {
 	CTransform* transform = object->GetTransform();

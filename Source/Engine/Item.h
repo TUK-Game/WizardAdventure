@@ -1,6 +1,6 @@
 #pragma once
 
-struct ItemInfo
+struct ItemInfo 
 {
 	uint32 id;
 	std::wstring name;

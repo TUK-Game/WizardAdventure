@@ -1,4 +1,4 @@
-#include "pch.h"
+Ôªø#include "pch.h"
 #include "InventoryWIdgetWindow.h"
 #include "ImageWidget.h"
 #include "Transform.h"
@@ -8,17 +8,33 @@
 #include "AssetManager.h"
 #include "PathManager.h"
 #include "TextWidget.h"
+#include "ToolTip.h"
 
 bool CInventoryWIdgetWindow::Init(CPlayer* player)
 {
 	CWidgetWindow::Init(player);
 
-	m_Tooltip = std::make_shared<ItemTooltip>();
+	m_Tooltip = std::make_shared<CToolTip>();
 
 	CImageWidget* backgroundWidget = CreateWidget<CImageWidget>(L"Inventory", player);
 	backgroundWidget->SetTexture(L"Inventory");
 	backgroundWidget->GetTransform()->SetRelativePosition(-0.4f, 0.f, 0.f);
 	backgroundWidget->GetTransform()->SetRelativeScale(1.8f, 2.1f, 0.2f);
+
+	backgroundWidget = CreateWidget<CImageWidget>(L"Popup", player);
+	backgroundWidget->SetTexture(L"Popup");
+	backgroundWidget->GetTransform()->SetRelativePosition(0.55f, -0.5f, 0.f);
+	backgroundWidget->GetTransform()->SetRelativeScale(0.8f, 0.8f, 0.2f);
+	backgroundWidget->SetEnable(false);
+
+	Stats* stats = player->GetStats();
+	CTextWidget* info = CreateWidget<CTextWidget>(L"IHp", player);
+	info->GetTransform()->SetRelativePosition(-0.9f, 0.1f, 1.f);
+	info->SetBasicInfo(std::format(L"ÏµúÎåÄ Ï≤¥Î†•: {}                ÌòÑÏû¨ Ï≤¥Î†•: {}", stats->maxHp, stats->currentHp), L"ÎßëÏùÄ Í≥†Îîï_30", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+
+	info = CreateWidget<CTextWidget>(L"IAttack", player);
+	info->GetTransform()->SetRelativePosition(-0.95f, -0.1f, 1.f);
+	info->SetBasicInfo(std::format(L"Í≥µÍ≤©Î†•: {}                   Í≥®Îìú: {}", stats->maxHp, stats->currentHp, stats->attack, stats->gold), L"ÎßëÏùÄ Í≥†Îîï_30", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
 
 	CImageWidget* skillWidget = CreateWidget<CImageWidget>(L"ISkill1", player);
 	skillWidget->GetTransform()->SetRelativePosition(-0.878f, 0.075f, 1.f);
@@ -47,12 +63,12 @@ bool CInventoryWIdgetWindow::Init(CPlayer* player)
 
 	CTextWidget* name = CreateWidget<CTextWidget>(L"IText", player);
 	name->GetTransform()->SetRelativePosition(-0.2f, -0.8f, 1.f);
-	name->SetBasicInfo(L"", L"∏º¿∫ ∞ÌµÒ_30", L"Yellow", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+	name->SetBasicInfo(L"", L"ÎßëÏùÄ Í≥†Îîï_30", L"Yellow", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
 	name->SetEnable(false);
 
 	CTextWidget* description = CreateWidget<CTextWidget>(L"IDescription", player);
 	description->GetTransform()->SetRelativePosition(-0.2f, -1.f, 1.f);
-	description->SetBasicInfo(L"", L"∏º¿∫ ∞ÌµÒ_20", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+	description->SetBasicInfo(L"", L"ÎßëÏùÄ Í≥†Îîï_20", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
 	description->SetEnable(false);
 
 	m_Tooltip->SetToolTip(name, description, nullptr);
@@ -60,42 +76,42 @@ bool CInventoryWIdgetWindow::Init(CPlayer* player)
 	CItemButtonWidget* widget = CreateWidget<CItemButtonWidget>(L"Inven1", player);
 	widget->GetTransform()->SetRelativePosition(-0.823f, -0.235f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.17f, 0.2f, 1.f);
-	SetEvent(widget, m_Tooltip.get());
+	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Inven2", player);
 	widget->GetTransform()->SetRelativePosition(-0.553f, -0.235f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.17f, 0.2f, 1.f);
-	SetEvent(widget, m_Tooltip.get());
+	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Inven3", player);
 	widget->GetTransform()->SetRelativePosition(-0.283f, -0.235f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.17f, 0.2f, 1.f);
-	SetEvent(widget, m_Tooltip.get());
+	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Inven4", player);
 	widget->GetTransform()->SetRelativePosition(-0.007f, -0.235f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.17f, 0.2f, 1.f);
-	SetEvent(widget, m_Tooltip.get());
+	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Inven5", player);
 	widget->GetTransform()->SetRelativePosition(-0.823f, -0.57f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.17f, 0.2f, 1.f);
-	SetEvent(widget, m_Tooltip.get());
+	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Inven6", player);
 	widget->GetTransform()->SetRelativePosition(-0.553f, -0.57f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.17f, 0.2f, 1.f);
-	SetEvent(widget, m_Tooltip.get());
+	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Inven7", player);
 	widget->GetTransform()->SetRelativePosition(-0.283f, -0.57f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.17f, 0.2f, 1.f);
-	SetEvent(widget, m_Tooltip.get());
+	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	widget = CreateWidget<CItemButtonWidget>(L"Inven8", player);
 	widget->GetTransform()->SetRelativePosition(-0.007f, -0.57f, 1.f);
 	widget->GetTransform()->SetRelativeScale(0.17f, 0.2f, 1.f);
-	SetEvent(widget, m_Tooltip.get());
+	SetEvent(widget, m_Tooltip.get(), backgroundWidget);
 
 	return true;
 }
@@ -114,7 +130,7 @@ void CInventoryWIdgetWindow::UpdateInventory()
 			CTexture* texture = CAssetManager::GetInst()->FindAsset<CTexture>(itemName);
 			widget->SetItemId(items[i]->GetItemInfo().id);
 			widget->SetItem(items[i]);
-			widget->SetButtonTexture(	
+			widget->SetButtonTexture(
 				texture,
 				texture,
 				texture
@@ -124,16 +140,19 @@ void CInventoryWIdgetWindow::UpdateInventory()
 	}
 }
 
-void CInventoryWIdgetWindow::SetEvent(CItemButtonWidget* widget, ItemTooltip* tooltip)
+void CInventoryWIdgetWindow::SetEvent(CItemButtonWidget* widget, CToolTip* tooltip, CImageWidget* pannel)
 {
 	widget->SetOutHover([=]() {
 		tooltip->Hide();
+		pannel->SetEnable(false);
 		});
 	widget->SetOnHover([=]() {
 		tooltip->Show(widget->GetItem()->GetItemInfo());
+		pannel->SetEnable(true);
 		});
 	widget->SetOnClick([=]() {
 		tooltip->Hide();
+		pannel->SetEnable(false);
 		});
 
 	widget->SetEnable(false);

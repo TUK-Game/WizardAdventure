@@ -273,8 +273,23 @@ enum class ESkillType {
 	FireTower,
 	FireSwordSpread,
 	// Ice, Electric 스킬도 여기에 추가 
+
+	END
 };
 
+inline ESkillType ConvertSkillNameToType(const std::wstring& name)
+{
+	if (name == L"FireShot")
+		return ESkillType::FireBallTowardMouse;
+	if (name == L"FireRain")
+		return ESkillType::Meteor;
+	if (name == L"FireballExplosion")
+		return ESkillType::FireBallTowardQ;
+	if (name == L"FireTower")
+		return ESkillType::FireTower;
+	if (name == L"FireSwords")
+		return ESkillType::FireSwordSpread;
+}
 
 #include <shlobj.h>
 #include <filesystem>

@@ -82,6 +82,8 @@ USING_SHARED_PTR(CSavePositionBox);
 USING_SHARED_PTR(CNPC);
 USING_SHARED_PTR(CItemManager);
 USING_SHARED_PTR(CItem);
+USING_SHARED_PTR(CSkillManager);
+USING_SHARED_PTR(CSkill);
 
 #define SEND_PACKET(pkt)													\
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);	\

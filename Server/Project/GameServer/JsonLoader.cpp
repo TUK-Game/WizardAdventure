@@ -12,6 +12,8 @@
 #include "NPC.h"
 #include "Item.h"
 #include "ItemManager.h"
+#include "Skill.h"
+#include "SkillManager.h"
 
 #include <iostream>
 #include <fstream>
@@ -155,10 +157,16 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 	std::cout << "Json read완료" << std::endl;
 }
 
+#define MAX_ITEMS_NUMBER 10012
+#define MAX_SKILLS_NUMBER 30003
 void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 {
+	constexpr int maxItem = 8;
+	constexpr int maxSkill = 3;
+
 	std::default_random_engine dre;
-	std::uniform_int_distribution uid{10001, 10004};
+	std::uniform_int_distribution randomItem{10001, MAX_ITEMS_NUMBER };
+	std::uniform_int_distribution randomSkill{30001, MAX_SKILLS_NUMBER };
 	std::wstring path = L"..\\..\\..\\Content\\Json\\" + fileName + L"_NPC.json";
 
 	std::ifstream file{ path.c_str() };
@@ -187,9 +195,9 @@ void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 		object->ObjectInfo->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
 
 		auto& itemList = object->GetItemList();
-		while (itemList.size() < 4)
+		while (itemList.size() < maxItem)
 		{
-			uint32 itemId = uid(dre);
+			uint32 itemId = randomItem(dre);
 			auto iter = std::find_if(itemList.begin(), itemList.end(), [&](const CItemRef item) {
 				return itemId == item->GetItemInfo().id;
 				});
@@ -199,6 +207,21 @@ void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 
 			const auto& item = g_ItemManager->FindItem(itemId);
 			itemList.emplace_back(item);
+		}	
+
+		auto& skillList = object->GetSkillList();
+		while (skillList.size() < maxSkill)
+		{
+			uint32 skillId = randomSkill(dre);
+			auto iter = std::find_if(skillList.begin(), skillList.end(), [&](const CSkillRef item) {
+				return skillId == item->GetSkillInfo().id;
+				});
+
+			if (iter != skillList.end())
+				continue;
+
+			const auto& skill = g_SkillManager->FindSkill(skillId);
+			skillList.emplace_back(skill);
 		}
 
 		room->GetLevelCollision()->AddCollider(object->GetCollider(), ECollision_Channel::NPC);
@@ -234,5 +257,38 @@ void CJsonLoader::LoadItem(const std::wstring& fileName, std::unordered_map<uint
 
 		CItemRef item = std::make_shared<CItem>(ItemInfo(id, name, description, amount, part, price, rank));
 		itemMap[id] = item;
+	}
+}
+
+void CJsonLoader::LoadSkill(const std::wstring& fileName, std::unordered_map<uint32, CSkillRef>& skillMap)
+{
+	std::wstring path = L"..\\..\\..\\Content\\Json\\" + fileName + L".json";
+
+	std::ifstream file{ path.c_str() };
+
+	if (!file.is_open())
+	{
+		std::cout << "파일이 없습니다." << std::endl;
+		return;
+	}
+
+	json map;
+
+	file >> map;
+
+	for (const auto& s : map)
+	{
+		std::wstring name = s2ws(s["Name"]);
+		std::wstring description = s2ws(s["Description"]);
+		std::wstring attribute = s2ws(s["Attribute"]);
+		std::wstring keytype = s2ws(s["Type"]);
+		std::wstring animationName = s2ws(s["AnimationName"]);
+		uint32 id = std::stoi(s2ws(s["Id"]));
+		uint32 price = s["Price"];
+		float ratio = s["DamageRatio"];
+		float cooltime = s["CoolTime"];
+		
+		CSkillRef skill = std::make_shared<CSkill>(SkillInfo(id, name, description, ratio, attribute, price, keytype, cooltime));
+		skillMap[id] = skill;
 	}
 }

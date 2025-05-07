@@ -85,6 +85,9 @@ extern ProjectileBasicInfoDefaultTypeInternal _ProjectileBasicInfo_default_insta
 class ProjectileInfo;
 struct ProjectileInfoDefaultTypeInternal;
 extern ProjectileInfoDefaultTypeInternal _ProjectileInfo_default_instance_;
+class SkillInfo;
+struct SkillInfoDefaultTypeInternal;
+extern SkillInfoDefaultTypeInternal _SkillInfo_default_instance_;
 class Vector3;
 struct Vector3DefaultTypeInternal;
 extern Vector3DefaultTypeInternal _Vector3_default_instance_;
@@ -103,6 +106,7 @@ template<> ::Protocol::PlayerUpdateInfo* Arena::CreateMaybeMessage<::Protocol::P
 template<> ::Protocol::PosInfo* Arena::CreateMaybeMessage<::Protocol::PosInfo>(Arena*);
 template<> ::Protocol::ProjectileBasicInfo* Arena::CreateMaybeMessage<::Protocol::ProjectileBasicInfo>(Arena*);
 template<> ::Protocol::ProjectileInfo* Arena::CreateMaybeMessage<::Protocol::ProjectileInfo>(Arena*);
+template<> ::Protocol::SkillInfo* Arena::CreateMaybeMessage<::Protocol::SkillInfo>(Arena*);
 template<> ::Protocol::Vector3* Arena::CreateMaybeMessage<::Protocol::Vector3>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
@@ -2505,6 +2509,7 @@ class NpcInfo final :
 
   enum : int {
     kItemIdFieldNumber = 3,
+    kSkillIdFieldNumber = 4,
     kObjectInfoFieldNumber = 2,
     kObjectIdFieldNumber = 1,
   };
@@ -2529,6 +2534,28 @@ class NpcInfo final :
       item_id() const;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
       mutable_item_id();
+
+  // repeated uint32 skill_id = 4;
+  int skill_id_size() const;
+  private:
+  int _internal_skill_id_size() const;
+  public:
+  void clear_skill_id();
+  private:
+  uint32_t _internal_skill_id(int index) const;
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >&
+      _internal_skill_id() const;
+  void _internal_add_skill_id(uint32_t value);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
+      _internal_mutable_skill_id();
+  public:
+  uint32_t skill_id(int index) const;
+  void set_skill_id(int index, uint32_t value);
+  void add_skill_id(uint32_t value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >&
+      skill_id() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
+      mutable_skill_id();
 
   // .Protocol.ObjectInfo object_info = 2;
   bool has_object_info() const;
@@ -2567,6 +2594,8 @@ class NpcInfo final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t > item_id_;
     mutable std::atomic<int> _item_id_cached_byte_size_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t > skill_id_;
+    mutable std::atomic<int> _skill_id_cached_byte_size_;
     ::Protocol::ObjectInfo* object_info_;
     uint32_t object_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -2727,6 +2756,165 @@ class ItemInfo final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     uint32_t item_id_;
+    bool is_sell_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Struct_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SkillInfo final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.SkillInfo) */ {
+ public:
+  inline SkillInfo() : SkillInfo(nullptr) {}
+  ~SkillInfo() override;
+  explicit PROTOBUF_CONSTEXPR SkillInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SkillInfo(const SkillInfo& from);
+  SkillInfo(SkillInfo&& from) noexcept
+    : SkillInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline SkillInfo& operator=(const SkillInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SkillInfo& operator=(SkillInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SkillInfo& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SkillInfo* internal_default_instance() {
+    return reinterpret_cast<const SkillInfo*>(
+               &_SkillInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    14;
+
+  friend void swap(SkillInfo& a, SkillInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SkillInfo* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SkillInfo* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SkillInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SkillInfo>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SkillInfo& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const SkillInfo& from) {
+    SkillInfo::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SkillInfo* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.SkillInfo";
+  }
+  protected:
+  explicit SkillInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSkillIdFieldNumber = 1,
+    kIsSellFieldNumber = 2,
+  };
+  // uint32 skill_id = 1;
+  void clear_skill_id();
+  uint32_t skill_id() const;
+  void set_skill_id(uint32_t value);
+  private:
+  uint32_t _internal_skill_id() const;
+  void _internal_set_skill_id(uint32_t value);
+  public:
+
+  // bool is_sell = 2;
+  void clear_is_sell();
+  bool is_sell() const;
+  void set_is_sell(bool value);
+  private:
+  bool _internal_is_sell() const;
+  void _internal_set_is_sell(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.SkillInfo)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t skill_id_;
     bool is_sell_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -4899,6 +5087,53 @@ NpcInfo::mutable_item_id() {
   return _internal_mutable_item_id();
 }
 
+// repeated uint32 skill_id = 4;
+inline int NpcInfo::_internal_skill_id_size() const {
+  return _impl_.skill_id_.size();
+}
+inline int NpcInfo::skill_id_size() const {
+  return _internal_skill_id_size();
+}
+inline void NpcInfo::clear_skill_id() {
+  _impl_.skill_id_.Clear();
+}
+inline uint32_t NpcInfo::_internal_skill_id(int index) const {
+  return _impl_.skill_id_.Get(index);
+}
+inline uint32_t NpcInfo::skill_id(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.NpcInfo.skill_id)
+  return _internal_skill_id(index);
+}
+inline void NpcInfo::set_skill_id(int index, uint32_t value) {
+  _impl_.skill_id_.Set(index, value);
+  // @@protoc_insertion_point(field_set:Protocol.NpcInfo.skill_id)
+}
+inline void NpcInfo::_internal_add_skill_id(uint32_t value) {
+  _impl_.skill_id_.Add(value);
+}
+inline void NpcInfo::add_skill_id(uint32_t value) {
+  _internal_add_skill_id(value);
+  // @@protoc_insertion_point(field_add:Protocol.NpcInfo.skill_id)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >&
+NpcInfo::_internal_skill_id() const {
+  return _impl_.skill_id_;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >&
+NpcInfo::skill_id() const {
+  // @@protoc_insertion_point(field_list:Protocol.NpcInfo.skill_id)
+  return _internal_skill_id();
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
+NpcInfo::_internal_mutable_skill_id() {
+  return &_impl_.skill_id_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
+NpcInfo::mutable_skill_id() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.NpcInfo.skill_id)
+  return _internal_mutable_skill_id();
+}
+
 // -------------------------------------------------------------------
 
 // ItemInfo
@@ -4943,9 +5178,55 @@ inline void ItemInfo::set_is_sell(bool value) {
   // @@protoc_insertion_point(field_set:Protocol.ItemInfo.is_sell)
 }
 
+// -------------------------------------------------------------------
+
+// SkillInfo
+
+// uint32 skill_id = 1;
+inline void SkillInfo::clear_skill_id() {
+  _impl_.skill_id_ = 0u;
+}
+inline uint32_t SkillInfo::_internal_skill_id() const {
+  return _impl_.skill_id_;
+}
+inline uint32_t SkillInfo::skill_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.SkillInfo.skill_id)
+  return _internal_skill_id();
+}
+inline void SkillInfo::_internal_set_skill_id(uint32_t value) {
+  
+  _impl_.skill_id_ = value;
+}
+inline void SkillInfo::set_skill_id(uint32_t value) {
+  _internal_set_skill_id(value);
+  // @@protoc_insertion_point(field_set:Protocol.SkillInfo.skill_id)
+}
+
+// bool is_sell = 2;
+inline void SkillInfo::clear_is_sell() {
+  _impl_.is_sell_ = false;
+}
+inline bool SkillInfo::_internal_is_sell() const {
+  return _impl_.is_sell_;
+}
+inline bool SkillInfo::is_sell() const {
+  // @@protoc_insertion_point(field_get:Protocol.SkillInfo.is_sell)
+  return _internal_is_sell();
+}
+inline void SkillInfo::_internal_set_is_sell(bool value) {
+  
+  _impl_.is_sell_ = value;
+}
+inline void SkillInfo::set_is_sell(bool value) {
+  _internal_set_is_sell(value);
+  // @@protoc_insertion_point(field_set:Protocol.SkillInfo.is_sell)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

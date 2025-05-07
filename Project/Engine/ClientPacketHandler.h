@@ -31,8 +31,10 @@ enum : uint16
 	PKT_S_GATE_CLOSE = 1021,
 	PKT_S_SPAWN_NPC = 1022,
 	PKT_C_BUY_ITEM = 1023,
-	PKT_S_UPDATE_ITEM = 1024,
-	PKT_S_BUY_ITEM = 1025,
+	PKT_C_BUY_SKILL = 1024,
+	PKT_S_UPDATE_ITEM = 1025,
+	PKT_S_BUY_ITEM = 1026,
+	PKT_S_BUY_SKILL = 1027,
 };
 
 // ===== Process Packet =====
@@ -55,6 +57,7 @@ bool Handle_S_GATE_CLOSE(CPacketSessionRef& session, Protocol::S_GATE_CLOSE& pkt
 bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt);
 bool Handle_S_UPDATE_ITEM(CPacketSessionRef& session, Protocol::S_UPDATE_ITEM& pkt);
 bool Handle_S_BUY_ITEM(CPacketSessionRef& session, Protocol::S_BUY_ITEM& pkt);
+bool Handle_S_BUY_SKILL(CPacketSessionRef& session, Protocol::S_BUY_SKILL& pkt);
 
 class ClientPacketHandler
 {
@@ -81,6 +84,7 @@ public:
 		g_PacketHandler[PKT_S_SPAWN_NPC] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_SPAWN_NPC>(Handle_S_SPAWN_NPC, session, buffer, len); };
 		g_PacketHandler[PKT_S_UPDATE_ITEM] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_UPDATE_ITEM>(Handle_S_UPDATE_ITEM, session, buffer, len); };
 		g_PacketHandler[PKT_S_BUY_ITEM] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_BUY_ITEM>(Handle_S_BUY_ITEM, session, buffer, len); };
+		g_PacketHandler[PKT_S_BUY_SKILL] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_BUY_SKILL>(Handle_S_BUY_SKILL, session, buffer, len); };
 	}
 
 	static bool HandlePacket(CPacketSessionRef& session, BYTE* buffer, int32 len)
@@ -96,6 +100,7 @@ public:
 	static CSendBufferRef MakeSendBuffer(Protocol::C_MOVE& pkt) { return MakeSendBuffer(pkt, PKT_C_MOVE); }
 	static CSendBufferRef MakeSendBuffer(Protocol::C_MOVE_PROJECTILE& pkt) { return MakeSendBuffer(pkt, PKT_C_MOVE_PROJECTILE); }
 	static CSendBufferRef MakeSendBuffer(Protocol::C_BUY_ITEM& pkt) { return MakeSendBuffer(pkt, PKT_C_BUY_ITEM); }
+	static CSendBufferRef MakeSendBuffer(Protocol::C_BUY_SKILL& pkt) { return MakeSendBuffer(pkt, PKT_C_BUY_SKILL); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>

@@ -8,6 +8,7 @@
 #include "Projectile.h"
 #include "ProjectilePool.h"
 #include "ItemManager.h"
+#include "SkillManager.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -207,3 +208,14 @@ bool Handle_C_BUY_ITEM(CPacketSessionRef& session, Protocol::C_BUY_ITEM& pkt)
 	return true;
 }
 
+bool Handle_C_BUY_SKILL(CPacketSessionRef& session, Protocol::C_BUY_SKILL& pkt)
+{
+	auto gameSession = static_pointer_cast<CGameSession>(session);
+	CPlayerRef player = gameSession->Player.load();
+	if (player == nullptr)
+		return false;
+
+	const auto& skill = g_SkillManager->FindSkill(pkt.skill_id());
+	g_Room->DoAsync(&CRoom::HandleBuySkill, player, skill);
+	return true;
+}

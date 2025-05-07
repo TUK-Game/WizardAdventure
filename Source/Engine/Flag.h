@@ -107,6 +107,7 @@ enum class ECamera_Type
 {
 	Free,
 	Fixed,
+	Inventory_Interaction_Start,
 	Interaction_Start,
 	Interaction,
 	Interaction_End,

@@ -15,7 +15,6 @@ namespace Skill
     constexpr SkillInfo FireTower = { 0.8f, 10.0f };
 }
 
-// 0 = Q, 1 = E, 2 = R, 3 = LB, 4 = RB
 enum ESkillSlot
 {
     LButton,
@@ -23,4 +22,5 @@ enum ESkillSlot
     Q,
     E,
     R,
+    END
 };

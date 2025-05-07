@@ -14,6 +14,8 @@ public:
     void SetInteractionZoomTarget(const Vec3& pos) { m_InteractionZoomTarget = pos; }
     void SetInteractionStartPos(const Vec3& pos) { m_InteractionStartPos = pos; }
     void SetInteractionDir(const Vec3& start, const Vec3& target) { m_InteractionStartDir = start; m_InteractionZoomDir = target; }
+    float LerpAngle(float start, float end, float t);
+    Vec3 LerpAngles(const Vec3& start, const Vec3& end, float t);
 public:
     virtual void Begin() override;
     virtual void Update() override;
@@ -23,7 +25,7 @@ private:
     void FixedMove();
     void UpdateDirectionalLight();
 
-    void MoveToTarget();
+    void MoveToTarget(bool isLayerCheck, float maxHeight = 0.f, EWIDGETWINDOW_TYPE windowtype = EWIDGETWINDOW_TYPE::END);
     void RollBackCamera();
 public:
 
