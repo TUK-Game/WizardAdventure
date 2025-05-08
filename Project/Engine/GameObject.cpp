@@ -204,6 +204,8 @@ Protocol::MoveState CGameObject::GetStateForProtocol()
 	case EState_Type::Attack_RButton:
 		return Protocol::MOVE_STATE_SKILL_MOUSE_R;
 		break;
+	case EState_Type::Knockback:
+		return Protocol::MOVE_STATE_DAMAGED;
 	case EState_Type::Chase:
 		break;
 	case EState_Type::Hit:
@@ -252,6 +254,18 @@ void CGameObject::SetProtocolStateForClient(Protocol::MoveState state)
 		break;
 	case Protocol::MOVE_STATE_SKILL_MOUSE_L:
 		m_StateManager->HandleEvent(this, "Attack_LButton");
+		break;
+	case Protocol::MOVE_STATE_DAMAGED:
+		m_StateManager->HandleEvent(this, "Knockback");
+		std::cout << "Damaged!!\n";
+		break;
+	case Protocol::MOVE_STATE_DAMAGED_END:
+		m_StateManager->HandleEvent(this, "EndKnockback");
+		std::cout << "DamagedEnd!!\n";
+		break;
+	case Protocol::MOVE_STATE_DEATH:
+		m_StateManager->HandleEvent(this, "Death");
+		std::cout << "Death!!\n";
 		break;
 	default:
 		break;

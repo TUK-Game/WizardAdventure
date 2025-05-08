@@ -164,7 +164,8 @@ void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 	constexpr int maxItem = 8;
 	constexpr int maxSkill = 3;
 
-	std::default_random_engine dre;
+	std::random_device rd;
+	std::default_random_engine dre(rd());
 	std::uniform_int_distribution randomItem{10001, MAX_ITEMS_NUMBER };
 	std::uniform_int_distribution randomSkill{30001, MAX_SKILLS_NUMBER };
 	std::wstring path = L"..\\..\\..\\Content\\Json\\" + fileName + L"_NPC.json";
@@ -255,7 +256,8 @@ void CJsonLoader::LoadItem(const std::wstring& fileName, std::unordered_map<uint
 		float amount = item["Amount"];
 		uint32 price = item["Price"];
 
-		CItemRef item = std::make_shared<CItem>(ItemInfo(id, name, description, amount, part, price, rank));
+		EITEM_PART itemPart = CItemManager::ConvertToItemPart(part);
+		CItemRef item = std::make_shared<CItem>(ItemInfo(id, name, description, amount, itemPart, price, rank));
 		itemMap[id] = item;
 	}
 }
@@ -287,7 +289,8 @@ void CJsonLoader::LoadSkill(const std::wstring& fileName, std::unordered_map<uin
 		uint32 price = s["Price"];
 		float ratio = s["DamageRatio"];
 		float cooltime = s["CoolTime"];
-		
+		float explosionime = s["ExplosionTime"];
+
 		CSkillRef skill = std::make_shared<CSkill>(SkillInfo(id, name, description, ratio, attribute, price, keytype, cooltime));
 		skillMap[id] = skill;
 	}

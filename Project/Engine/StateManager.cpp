@@ -48,9 +48,6 @@ void CStateManager::HandleEvent(CGameObject* owner, const std::string& event)
         {
             EState_Type nextType = m_TransitionTable[currentType][event];
             ChangeState(owner, nextType);
-#ifndef DEBUG_SOLOPLAY
-            CNetworkManager::GetInst()->s_GameSession->OnActPlayer();
-#endif 
         }
     }
 }

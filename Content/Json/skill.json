@@ -8,7 +8,8 @@
     "Price": 1000.0,
     "Type": "LB",
     "CoolTime": 0.0,
-    "AnimationName": "MAGEATTACK1"
+    "AnimationName": "MAGEATTACK1",
+    "ExplosionTime": 1.0
   },
   {
     "Id": "20002",
@@ -19,7 +20,8 @@
     "Price": 2000.0,
     "Type": "RB",
     "CoolTime": 0.0,
-    "AnimationName": "MAGEATTACK2"
+    "AnimationName": "MAGEATTACK2",
+    "ExplosionTime": 1.0
   },
   {
     "Id": "30001",
@@ -30,7 +32,8 @@
     "Price": 1500.0,
     "Type": "Key",
     "CoolTime": 3.0,
-    "AnimationName": "MAGEATTACK5"
+    "AnimationName": "MAGEATTACK5",
+    "ExplosionTime": 0.52
   },
   {
     "Id": "30002",
@@ -41,7 +44,8 @@
     "Price": 1500.0,
     "Type": "Key",
     "CoolTime": 8.0,
-    "AnimationName": "MAGEATTACK4"
+    "AnimationName": "MAGEATTACK4",
+    "ExplosionTime": 0.615
   },
   {
     "Id": "30003",
@@ -52,6 +56,7 @@
     "Price": 1500.0,
     "Type": "Key",
     "CoolTime": 10.0,
-    "AnimationName": "MAGEATTACK3"
+    "AnimationName": "MAGEATTACK3",
+    "ExplosionTime": 0.2
   }
 ]

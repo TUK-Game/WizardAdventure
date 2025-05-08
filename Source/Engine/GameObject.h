@@ -74,14 +74,17 @@ public:
         // 너무 멀면 보간안하고 즉시 반영 (ex: 순간이동)
         float dist = (newPos - m_PrevPos).Length();
         constexpr float MAX_ALLOWED_DIST = 300.f;
-        if (dist > MAX_ALLOWED_DIST)
+        constexpr float MIN_ALLOWED_DIST = 1.f;
+        if (dist > MAX_ALLOWED_DIST || dist < MIN_ALLOWED_DIST)
         {
             m_PrevPos = newPos;
             m_TargetPos = newPos;
+            m_PrevRot = newRot;
+            m_TargetRot = newRot;
             m_ElapsedTime = 0.f;
             m_Duration = 0.1f;
             m_LastRecvTime = now;
-            std::cout << "나텔탐\n";
+            std::cout << "보간 안함\n";
             return;
         }
 
@@ -98,7 +101,6 @@ public:
 
         m_ElapsedTime = 0.f;
         m_LastRecvTime = now;
-
     }
 
     void Update(float deltaTime)

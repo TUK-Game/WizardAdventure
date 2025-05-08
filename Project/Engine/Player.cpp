@@ -31,9 +31,10 @@
 #include "Camera.h"
 #include "CameraScript.h"
 #include "SkillData.h"
+#include "PlayerStateManager.h"
 //#include <Engine/Engine.h>
 
-CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
+CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner, const Vec3& pos)
     : m_Attribute(attribute), m_SkillManager(new CSkillManager(attribute, this)), m_Interpolator(new CInterpolator())
 {
     CreateStateManager();
@@ -64,10 +65,10 @@ CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner)
    AddComponent(new CTransform);
    AddComponent(new CBoxCollider);
    GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player"));
-   GetTransform()->SetRelativePosition(11240.f, 20, 1127);
-   m_Amount = Vec3(11240.f, 20.f, 1127.f);
-   m_NextPosition = Vec3(11240.f, 20.f, 1127.f);
-   GetCollider()->SetMaxMinPos(Vec3(11240.f, 20.f, 1127.f), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
+   GetTransform()->SetRelativePosition(pos);
+   m_Amount = Vec3(pos);
+   m_NextPosition = Vec3(pos);
+   GetCollider()->SetMaxMinPos(Vec3(pos), Vec3(100, 200, 24), Vec3(0, 0, 0), Vec3(0, 100, 0));
    if(Owner)
        AddComponent(new CPlayerScript);
 
@@ -153,7 +154,7 @@ void CPlayer::AddSkill(std::shared_ptr<CSkillData> skill)
 
 void CPlayer::CreateStateManager()
 {
-    m_StateManager = new CStateManager();
+    m_StateManager = new CPlayerStateManager();
     m_StateManager->AddState(new CPlayerIdleState);
     m_StateManager->AddState(new CPlayerRunState);
     m_StateManager->AddState(new CPlayerDashState);
@@ -263,20 +264,20 @@ void CPlayer::InitStats(int maxHp, int hp, int attack, float speed)
     m_Stats->moveSpeed = speed;
 }
 
-void CPlayer::DetectNPC()
+bool CPlayer::DetectNPC()
 {
     CGameObject* camera = CRenderManager::GetInst()->GetMainCamera()->GetOwner();
     if (ECamera_Type::Fixed !=  camera->GetCamera()->GetCameraType())
-        return;
+        return false;
 
     CNPC* npc = CLevelManager::GetInst()->GetCurrentLevel()->DetectNPC(this);
 
     if (nullptr == npc)
-        return;
-
+        return false;
+    std::cout << "NPC발견\n";
     npc->Interation();
     MoveCamera(camera, npc, ECamera_Type::Interaction_Start, Vec3(200.f, 0.f, 500.f));
-    return;
+    return true;
 }
 
 void CPlayer::MoveToInventoryView()

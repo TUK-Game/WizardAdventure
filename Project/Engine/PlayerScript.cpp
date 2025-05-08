@@ -102,8 +102,10 @@ void CPlayerScript::Update()
 		CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
 		if (level->GetWidgetWindowType() == EWIDGETWINDOW_TYPE::END)
 		{
-			level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::STORE_WINDOW);
-			player->DetectNPC();
+			if (player->DetectNPC())
+			{
+				level->SetWidgetWindowType(EWIDGETWINDOW_TYPE::STORE_WINDOW);
+			}
 		}
 	}
 	if (KEY_DOWN(EKey::M))

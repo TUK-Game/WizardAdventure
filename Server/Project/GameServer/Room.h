@@ -35,10 +35,14 @@ public:
 	bool HandleLeavePlayer(CPlayerRef player);
 
 	bool HandleMovePlayer(CPlayerRef player);
-	bool UPdatePlayer(CPlayerRef player, float deltaTime);
+	bool HandleActPlayer(CPlayerRef player);
+	bool UpdatePlayer(CPlayerRef player, float deltaTime);
+	bool UpdatePlayerAbility(CPlayerRef player);
+	bool UpdatePlayerState(CPlayerRef player);
 
 	bool HandleSpawnProjectile(CProjectileRef projectile);
 	bool HandleMoveProjectile(CProjectileRef projectile);
+	bool HandleMoveProjectileEffect(CProjectileRef projectile);
 
 	bool HandleBuyItem(CPlayerRef player, CItemRef item);
 	bool IsBuyItem(CPlayerRef player, CItemRef item, bool isBuy);

@@ -124,6 +124,10 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 	{
 		g_Room->DoAsync(&CRoom::HandleMovePlayer, player);
 	}
+	else
+	{
+		g_Room->DoAsync(&CRoom::HandleActPlayer, player);
+	}
 	return true;
 }
 
@@ -193,6 +197,18 @@ bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJE
 	}
 	
 	g_Room->DoAsync(&CRoom::HandleMoveProjectile, object);
+	return true;
+}
+
+bool Handle_C_PROJECTILE_EFFECT(CPacketSessionRef& session, Protocol::C_PROJECTILE_EFFECT& pkt)
+{
+	int projectile_id = pkt.projectile_id();
+
+	CProjectileRef object = std::dynamic_pointer_cast<CProjectile>(g_Room->GetLayerObject((uint32)EObject_Type::Projectile, projectile_id));
+	if (object == nullptr)
+		return true;
+
+	g_Room->DoAsync(&CRoom::HandleMoveProjectileEffect, object);
 	return true;
 }
 

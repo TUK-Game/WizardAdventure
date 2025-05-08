@@ -73,9 +73,26 @@ message S_MOVE
 	PlayerMoveInfo player_move_info = 1;
 }
 
+message S_ACT
+{
+	PlayerMoveInfo player_move_info = 1;
+}
+
 message S_UPDATE_PLAYER
 {
 	PlayerUpdateInfo player_update_info = 1;
+}
+
+message S_UPDATE_PLAYER_STATS
+{
+	uint32 player_id = 1;
+	PlayerAblity player_ability = 2;
+}
+
+message S_UPDATE_PLAYER_STATE
+{
+	uint32 player_id = 1;
+	MoveState state = 2;
 }
 
 // 몬스터 정보 전송
@@ -87,6 +104,16 @@ message S_MONSTER_INFO
 message S_PROJECTILE_INFO
 {	
 	ProjectileInfo projectile_info = 1;
+}
+
+message S_PROJECTILE_EFFECT
+{
+	uint32 projectile_id = 1;
+}
+
+message C_PROJECTILE_EFFECT
+{
+	uint32 projectile_id = 1;
 }
 
 // 플레이어만 스포인가 오브젝트 전체가 스폰인가?

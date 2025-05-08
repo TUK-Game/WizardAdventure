@@ -34,6 +34,8 @@ bool CPlayer::BuyItem(CItemRef item)
 		return false;
 
 	m_Items.emplace_back(item);
+	CalculateAbility(item);
+	g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
 	return true;
 }
 
@@ -47,7 +49,37 @@ bool CPlayer::BuySkill(CSkillRef skill)
 		return false;
 
 	m_Skills.emplace_back(skill);
+	g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
 	return true;
+}
+
+void CPlayer::CalculateAbility(CItemRef item)
+{
+	const auto& info = item->GetItemInfo();
+	switch (info.part)
+	{
+	case EITEM_PART::ATTACK:
+	{
+		GetAblity()->attack += info.amount;
+	}
+	break;
+	case EITEM_PART::MAXHP:
+	{
+		GetAblity()->maxHp += info.amount;
+		GetAblity()->currentHp += info.amount;
+	}
+	break;
+	case EITEM_PART::SPEED:
+	{
+		GetAblity()->moveSpeed += info.amount;
+	}
+	break;
+	case EITEM_PART::HEAL:
+	{
+		GetAblity()->currentHp = (std::min)((int)info.amount + GetAblity()->currentHp, GetAblity()->maxHp);
+	}
+	break;
+	}
 }
 
 void CPlayer::Update(float deltaTime)
@@ -57,14 +89,14 @@ void CPlayer::Update(float deltaTime)
 	{
 		float deltaTime = g_Timer->GetDeltaTime();
 		m_DashElapsedTime += deltaTime;
-		if (m_DashElapsedTime >= m_DashDurtation)
+		if (m_DashElapsedTime >= m_DashDuration)
 		{
 			m_State = Protocol::MOVE_STATE_DASH_END;
 			m_DashElapsedTime = 0;
 		}
 		else
 		{
-			float scale = m_DashDurtation * deltaTime * m_Speed;
+			float scale = m_DashDuration * deltaTime * m_Speed;
 			XMFLOAT3 scaledDir =
 			{
 				m_Dir.x() * scale,
@@ -73,6 +105,28 @@ void CPlayer::Update(float deltaTime)
 			};
 
 			ToProtoVector3(&m_NextAmount, scaledDir);
+		}
+		g_Room->HandleMovePlayer(m_Session.lock()->Player);
+	}
+	else if (m_State == Protocol::MOVE_STATE_DAMAGED)
+	{
+		float deltaTime = g_Timer->GetDeltaTime();
+		m_DamageElapsedTime += deltaTime;
+		if (m_DamageElapsedTime >= m_DamageDuration)
+		{
+			m_State = Protocol::MOVE_STATE_DAMAGED_END;
+			m_DamageElapsedTime = 0;
+		}
+		else
+		{
+			//float scale = m_DamageDuration * deltaTime * m_Speed * -1;
+			Vec3 dir{ m_Dir.x(), m_Dir.y(), m_Dir.z() };
+			dir.Normalize();
+			// 0.1 -> speedscale
+			dir *= deltaTime * m_Speed * -0.1f;
+			m_NextAmount.set_x(dir.x);
+			m_NextAmount.set_y(dir.y);
+			m_NextAmount.set_z(dir.z);
 		}
 		g_Room->HandleMovePlayer(m_Session.lock()->Player);
 	}
@@ -94,8 +148,10 @@ void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 	{
 		CMonster* monster = (dynamic_cast<CMonster*>(dest->GetOwner()));
 		GetAblity()->currentHp -= monster->GetAblity()->attack;
+		SetState(Protocol::MOVE_STATE_DAMAGED);
+		g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
+		g_Room->UpdatePlayerState(m_Session.lock()->Player);
 	}
-
 }
 
 void CPlayer::CollisionEvent(CBoxCollider* src, CBoxCollider* dest)

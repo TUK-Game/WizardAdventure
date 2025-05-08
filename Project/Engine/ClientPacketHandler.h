@@ -19,22 +19,27 @@ enum : uint16
 	PKT_C_MOVE = 1009,
 	PKT_C_MOVE_PROJECTILE = 1010,
 	PKT_S_MOVE = 1011,
-	PKT_S_UPDATE_PLAYER = 1012,
-	PKT_S_MONSTER_INFO = 1013,
-	PKT_S_PROJECTILE_INFO = 1014,
-	PKT_S_SPAWN = 1015,
-	PKT_S_SPAWN_NEW_PLAYER = 1016,
-	PKT_S_SPAWN_EXISTING_PLAYER = 1017,
-	PKT_S_DESPAWN_PLAYER = 1018,
-	PKT_S_DESPAWN = 1019,
-	PKT_S_GATE_OPNE = 1020,
-	PKT_S_GATE_CLOSE = 1021,
-	PKT_S_SPAWN_NPC = 1022,
-	PKT_C_BUY_ITEM = 1023,
-	PKT_C_BUY_SKILL = 1024,
-	PKT_S_UPDATE_ITEM = 1025,
-	PKT_S_BUY_ITEM = 1026,
-	PKT_S_BUY_SKILL = 1027,
+	PKT_S_ACT = 1012,
+	PKT_S_UPDATE_PLAYER = 1013,
+	PKT_S_UPDATE_PLAYER_STATS = 1014,
+	PKT_S_UPDATE_PLAYER_STATE = 1015,
+	PKT_S_MONSTER_INFO = 1016,
+	PKT_S_PROJECTILE_INFO = 1017,
+	PKT_S_PROJECTILE_EFFECT = 1018,
+	PKT_C_PROJECTILE_EFFECT = 1019,
+	PKT_S_SPAWN = 1020,
+	PKT_S_SPAWN_NEW_PLAYER = 1021,
+	PKT_S_SPAWN_EXISTING_PLAYER = 1022,
+	PKT_S_DESPAWN_PLAYER = 1023,
+	PKT_S_DESPAWN = 1024,
+	PKT_S_GATE_OPNE = 1025,
+	PKT_S_GATE_CLOSE = 1026,
+	PKT_S_SPAWN_NPC = 1027,
+	PKT_C_BUY_ITEM = 1028,
+	PKT_C_BUY_SKILL = 1029,
+	PKT_S_UPDATE_ITEM = 1030,
+	PKT_S_BUY_ITEM = 1031,
+	PKT_S_BUY_SKILL = 1032,
 };
 
 // ===== Process Packet =====
@@ -44,9 +49,13 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 bool Handle_S_SPAWN_PROJECTILE_SUCESSE(CPacketSessionRef& session, Protocol::S_SPAWN_PROJECTILE_SUCESSE& pkt);
 bool Handle_S_LEAVE_GAME(CPacketSessionRef& session, Protocol::S_LEAVE_GAME& pkt);
 bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt);
+bool Handle_S_ACT(CPacketSessionRef& session, Protocol::S_ACT& pkt);
 bool Handle_S_UPDATE_PLAYER(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYER& pkt);
+bool Handle_S_UPDATE_PLAYER_STATS(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYER_STATS& pkt);
+bool Handle_S_UPDATE_PLAYER_STATE(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYER_STATE& pkt);
 bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO& pkt);
 bool Handle_S_PROJECTILE_INFO(CPacketSessionRef& session, Protocol::S_PROJECTILE_INFO& pkt);
+bool Handle_S_PROJECTILE_EFFECT(CPacketSessionRef& session, Protocol::S_PROJECTILE_EFFECT& pkt);
 bool Handle_S_SPAWN(CPacketSessionRef& session, Protocol::S_SPAWN& pkt);
 bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW_PLAYER& pkt);
 bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_EXISTING_PLAYER& pkt);
@@ -71,9 +80,13 @@ public:
 		g_PacketHandler[PKT_S_SPAWN_PROJECTILE_SUCESSE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_SPAWN_PROJECTILE_SUCESSE>(Handle_S_SPAWN_PROJECTILE_SUCESSE, session, buffer, len); };
 		g_PacketHandler[PKT_S_LEAVE_GAME] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_LEAVE_GAME>(Handle_S_LEAVE_GAME, session, buffer, len); };
 		g_PacketHandler[PKT_S_MOVE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_MOVE>(Handle_S_MOVE, session, buffer, len); };
+		g_PacketHandler[PKT_S_ACT] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_ACT>(Handle_S_ACT, session, buffer, len); };
 		g_PacketHandler[PKT_S_UPDATE_PLAYER] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_UPDATE_PLAYER>(Handle_S_UPDATE_PLAYER, session, buffer, len); };
+		g_PacketHandler[PKT_S_UPDATE_PLAYER_STATS] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_UPDATE_PLAYER_STATS>(Handle_S_UPDATE_PLAYER_STATS, session, buffer, len); };
+		g_PacketHandler[PKT_S_UPDATE_PLAYER_STATE] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_UPDATE_PLAYER_STATE>(Handle_S_UPDATE_PLAYER_STATE, session, buffer, len); };
 		g_PacketHandler[PKT_S_MONSTER_INFO] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_MONSTER_INFO>(Handle_S_MONSTER_INFO, session, buffer, len); };
 		g_PacketHandler[PKT_S_PROJECTILE_INFO] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_PROJECTILE_INFO>(Handle_S_PROJECTILE_INFO, session, buffer, len); };
+		g_PacketHandler[PKT_S_PROJECTILE_EFFECT] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_PROJECTILE_EFFECT>(Handle_S_PROJECTILE_EFFECT, session, buffer, len); };
 		g_PacketHandler[PKT_S_SPAWN] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_SPAWN>(Handle_S_SPAWN, session, buffer, len); };
 		g_PacketHandler[PKT_S_SPAWN_NEW_PLAYER] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_SPAWN_NEW_PLAYER>(Handle_S_SPAWN_NEW_PLAYER, session, buffer, len); };
 		g_PacketHandler[PKT_S_SPAWN_EXISTING_PLAYER] = [](CPacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_SPAWN_EXISTING_PLAYER>(Handle_S_SPAWN_EXISTING_PLAYER, session, buffer, len); };
@@ -99,6 +112,7 @@ public:
 	static CSendBufferRef MakeSendBuffer(Protocol::C_SPAWN_PROJECTILE& pkt) { return MakeSendBuffer(pkt, PKT_C_SPAWN_PROJECTILE); }
 	static CSendBufferRef MakeSendBuffer(Protocol::C_MOVE& pkt) { return MakeSendBuffer(pkt, PKT_C_MOVE); }
 	static CSendBufferRef MakeSendBuffer(Protocol::C_MOVE_PROJECTILE& pkt) { return MakeSendBuffer(pkt, PKT_C_MOVE_PROJECTILE); }
+	static CSendBufferRef MakeSendBuffer(Protocol::C_PROJECTILE_EFFECT& pkt) { return MakeSendBuffer(pkt, PKT_C_PROJECTILE_EFFECT); }
 	static CSendBufferRef MakeSendBuffer(Protocol::C_BUY_ITEM& pkt) { return MakeSendBuffer(pkt, PKT_C_BUY_ITEM); }
 	static CSendBufferRef MakeSendBuffer(Protocol::C_BUY_SKILL& pkt) { return MakeSendBuffer(pkt, PKT_C_BUY_SKILL); }
 

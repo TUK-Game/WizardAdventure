@@ -12,6 +12,7 @@ struct SkillInfo
 	std::wstring keyType;
 	float cooltime;
 	std::wstring animationName;
+	float explosionTime;
 };
 
 class CSkillData :
