@@ -20,6 +20,8 @@ public:
 
 	INT32 GetCurrentClipIndex() { return m_ClipIndex; }
 	void Play(std::wstring animName);
+	void Pause();
+	void Resume();
 
 	void RemoveNamespace(std::wstring& str);
 public:
@@ -44,4 +46,5 @@ private:
 	CMaterial*			m_ComputeMaterial;
 	std::shared_ptr<CStructuredBuffer>	m_BoneFinalMatrix;  // 특정 프레임의 최종 행렬
 	bool							m_BoneFinalUpdated = false;
+	bool							m_bPause{};
 };

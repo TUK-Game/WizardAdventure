@@ -24,15 +24,18 @@ void CMonsterDeathState::Enter(CGameObject* entity)
 
 void CMonsterDeathState::Update(CGameObject* entity, float deltaTime)
 {
-	//m_ElapsedTime += deltaTime;
-	//if (m_ElapsedTime >= m_DeathDuration)
-	//{
-	//	// Die
-	//}
 }
 
 void CMonsterDeathState::Exit(CGameObject* entity)
 {
+	std::vector<CGameObject*> objs = entity->GetChild();
+	for (const auto o : objs) {
+
+		auto ani = o->GetAnimator();
+		if (ani) {
+			ani->Pause();
+		}
+	}
 #ifdef _DEBUG
 	std::cout << "Exiting Death State" << std::endl;
 #endif

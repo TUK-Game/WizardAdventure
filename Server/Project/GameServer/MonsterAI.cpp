@@ -150,9 +150,9 @@ void CMonsterAI::UpdateAI(float deltaTime)
     if (m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_MOUSE_R)  // death
     {
         m_DeathTime += deltaTime;
-        if (m_DeathTime >= m_DeathDuration)
+        if (m_DeathTime + 0.1f >= m_DeathDuration)
         {
-            m_DeathTime = 0.f;
+            m_DeathTime = 0.f;  
             // dissolve Start
             m_Owner->SetState(Protocol::MOVE_STATE_DASH);
         }

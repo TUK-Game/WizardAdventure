@@ -21,6 +21,9 @@ CAnimator::~CAnimator()
 
 void CAnimator::FinalUpdate()
 {
+	if (m_bPause)
+		return;
+
 	m_UpdateTime += DELTA_TIME;
 
 	const AnimClipInfo& animClip = m_AnimClipsMap[m_PlayAnimName];
@@ -86,6 +89,16 @@ void CAnimator::Play(std::wstring animName)
 	m_PlayAnimName = animName;
 	m_Duration = m_AnimClipsMap[m_PlayAnimName].duration;
 	m_UpdateTime = 0.f;
+}
+
+void CAnimator::Pause()
+{
+	m_bPause = true;
+}
+
+void CAnimator::Resume()
+{
+	m_bPause = false;
 }
 
 void CAnimator::RemoveNamespace(std::wstring& name)
