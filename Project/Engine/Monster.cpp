@@ -134,7 +134,7 @@ void CMonster::CreateStateManager()
 
 	// attack -> others
 	m_StateManager->SetTransition(EState_Type::Attack, "Idle", EState_Type::Idle);
-	m_StateManager->SetTransition(EState_Type::Attack, "Damaged", EState_Type::Damaged);
+	//m_StateManager->SetTransition(EState_Type::Attack, "Damaged", EState_Type::Damaged);
 	m_StateManager->SetTransition(EState_Type::Attack, "Death", EState_Type::Death);
 
 	// death -> dissolve

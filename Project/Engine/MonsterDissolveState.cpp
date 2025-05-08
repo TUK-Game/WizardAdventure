@@ -55,9 +55,9 @@ void CMonsterDissolveState::Update(CGameObject* entity, float deltaTime)
         }
     }
 
-    if (threshold >= 1.0f) {
+ /*   if (threshold >= 1.0f) {
         m_ElapsedTime = 0.f;
-    }
+    }*/
 
 }
 

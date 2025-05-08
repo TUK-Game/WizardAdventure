@@ -159,7 +159,7 @@ void CMonsterAI::UpdateAI(float deltaTime)
         return;
     }
 
-    if (m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_MOUSE_R)  // dissolve
+    if (m_Owner->GetState() == Protocol::MOVE_STATE_DASH)  // dissolve
     {
         m_DissolveTime += deltaTime;
         if (m_DissolveTime >= m_DissolveDuration)
