@@ -84,7 +84,6 @@ public:
             m_ElapsedTime = 0.f;
             m_Duration = 0.1f;
             m_LastRecvTime = now;
-            std::cout << "보간 안함\n";
             return;
         }
 

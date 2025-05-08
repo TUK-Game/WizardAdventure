@@ -19,34 +19,18 @@ void CPlayerScript::Update()
 	CStateManager* stateManager = player->GetStateManager();
 	if (!stateManager) return;
 
-	if (stateManager->GetCurrentStateType() == EState_Type::Death)
-		return;
+	/*if (stateManager->GetCurrentStateType() == EState_Type::Death)
+		return;*/
 
 	if (player->GetStats()->currentHp <= 0)
 	{
-		//stateManager->HandleEvent(player, "Death");
 		if (stateManager->GetCurrentStateType() != EState_Type::Death && m_BeforDeath_TargetId < 0)
 		{
-			const auto& camera = CRenderManager::GetInst()->GetMainCamera();
-			const auto& script = dynamic_cast<CCameraScript*>(camera->GetOwner()->GetScript());
-			if (script)
-			{
-				for (int i = 0; i < MAX_PLAYERS; ++i)
-				{
-					const auto& p = CLevelManager::GetInst()->GetPlayer(i);
-					if (!p)
-						continue;
-
-					if (CNetworkManager::GetInst()->s_GameSession->GetClientID() != i)
-					{
-						script->SetTransform(p->GetTransform());
-						camera->SetTarget(p);
-						m_BeforDeath_TargetId = i;
-						return;
-					}
-				}
-				std::cout << "½ÇÆÐ\n";
-			}
+			InitBeforeDeath(player);
+		}
+		else if (m_BeforDeath_TargetId >= 0)
+		{
+			KeyInputBeforeDeath(player);
 		}
 		return;
 	}
@@ -176,4 +160,75 @@ void CPlayerScript::Update()
 		stateManager->HandleEvent(player, "Death");
 	}
 	// temp ----------------------------------------------------------------------------
+}
+
+
+void CPlayerScript::InitBeforeDeath(CPlayer* player)
+{
+	const auto& camera = CRenderManager::GetInst()->GetMainCamera();
+	const auto& script = dynamic_cast<CCameraScript*>(camera->GetOwner()->GetScript());
+	if (script)
+	{
+		for (int i = 0; i < MAX_PLAYERS; ++i)
+		{
+			const auto& p = CLevelManager::GetInst()->GetPlayer(i);
+			if (!p)
+				continue;
+
+			if (CNetworkManager::GetInst()->s_GameSession->GetClientID() != i)
+			{
+				script->SetTransform(p->GetTransform());
+				camera->SetTarget(p);
+				m_BeforDeath_TargetId = i;
+				return;
+			}
+		}
+	}
+}
+
+void CPlayerScript::KeyInputBeforeDeath(CPlayer* player)
+{
+	if (KEY_DOWN(EKey::Right))
+	{
+		int nextPlayerId = m_BeforDeath_TargetId + 1;
+
+		while (nextPlayerId < MAX_PLAYERS)
+		{
+			CPlayer* p = dynamic_cast<CPlayer*>(CLevelManager::GetInst()->GetPlayer(nextPlayerId));
+			if (!p || p->GetStats()->currentHp <= 0 || CNetworkManager::GetInst()->s_GameSession->GetClientID() == nextPlayerId)
+			{
+				nextPlayerId++;
+				continue;
+			}
+			const auto& camera = CRenderManager::GetInst()->GetMainCamera();
+			const auto& script = dynamic_cast<CCameraScript*>(camera->GetOwner()->GetScript());
+
+			m_BeforDeath_TargetId = nextPlayerId;
+			script->SetTransform(p->GetTransform());
+			camera->SetTarget(p);
+			return;
+		}
+	}
+	if (KEY_DOWN(EKey::Left))
+	{
+		int nextPlayerId = m_BeforDeath_TargetId - 1;
+
+		while (nextPlayerId >= 0)
+		{
+			CPlayer* p = dynamic_cast<CPlayer*>(CLevelManager::GetInst()->GetPlayer(nextPlayerId));
+			if (!p || p->GetStats()->currentHp <= 0 || CNetworkManager::GetInst()->s_GameSession->GetClientID() == nextPlayerId)
+			{
+				nextPlayerId--;
+				continue;
+			}
+
+			const auto& camera = CRenderManager::GetInst()->GetMainCamera();
+			const auto& script = dynamic_cast<CCameraScript*>(camera->GetOwner()->GetScript());
+
+			m_BeforDeath_TargetId = nextPlayerId;
+			script->SetTransform(p->GetTransform());
+			camera->SetTarget(p);
+			return;
+		}
+	}
 }
