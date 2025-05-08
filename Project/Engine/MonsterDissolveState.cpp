@@ -19,9 +19,10 @@ void CMonsterDissolveState::Enter(CGameObject* entity)
             // µğÁ¹ºê ¼ÎÀÌ´õ ±³Ã¼
             auto renderer = o->GetMeshRenderer();
             if (renderer) {
-                auto dissolveMat = CAssetManager::GetInst()->FindAsset<CMaterial>(L"Dissolve_Forward");
+                auto dissolveMat = CAssetManager::GetInst()->FindAsset<CMaterial>(L"Dissolve");
                 if (dissolveMat) {
                     dissolveMat->SetTexture(0, renderer->GetMaterial()->GetTexture(0));
+                    dissolveMat->SetTexture(1, renderer->GetMaterial()->GetTexture(1));
                     dissolveMat->SetFloat(0, 0.0f); // threshold
                     renderer->SetMaterial(dissolveMat);
 

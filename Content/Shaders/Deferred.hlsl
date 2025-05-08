@@ -92,22 +92,52 @@ PS_OUT PS_Main(VS_OUT input)
          viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
      }
 
-    if (tex_on_2)
-    {
-        float4 emissiveColor = tex_2.Sample(sam_0, input.uv);
-        color.rgb += emissiveColor.rgb; 
-    }
-    
     
     output.position = float4(input.viewPos.xyz, 0.f);
     output.normal = float4(viewNormal.xyz, 0.f);
     //if (input.worldPos.y < -10.f)
-        color = Fog(color, input.worldPos.xyz);
+    color = Fog(color, input.worldPos.xyz);
     output.color = color;
 
     return output;
 }
 
+// dissolve
+
+PS_OUT PS_Dissolve(VS_OUT input) 
+{
+    PS_OUT output = (PS_OUT)0;
+
+    float4 baseColor = float4(1.f, 1.f, 1.f, 1.f);
+    if (tex_on_0)
+        baseColor = tex_0.Sample(sam_0, input.uv);
+
+    float noise = tex_2.Sample(sam_0, input.uv).r; // 디졸브용 노이즈
+    // 2. 디졸브 discard 처리
+    if (noise < float_0)
+        discard;
+
+    // 3. 엣지 강조 효과
+    float edge = step(noise, float_0 + 0.02) - step(noise, float_0);
+    float4 finalColor = lerp(baseColor, vec4_0, edge);
+
+    float3 viewNormal = input.viewNormal;
+    if (tex_on_1)
+    {
+        // [0,255] 범위에서 [0,1]로 변환
+        float3 tangentSpaceNormal = tex_1.Sample(sam_0, input.uv).xyz;
+        // [0,1] 범위에서 [-1,1]로 변환
+        tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
+        float3x3 matTBN = { input.viewTangent, input.viewBinormal, input.viewNormal };
+        viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
+    }
+
+    output.position = float4(input.viewPos.xyz, 0.f);
+    output.normal = float4(viewNormal.xyz, 0.f);
+    output.color = finalColor;
+
+    return output;
+}
 
 struct PS_MAPOUT
 {
