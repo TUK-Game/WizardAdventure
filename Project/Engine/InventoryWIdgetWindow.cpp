@@ -28,13 +28,13 @@ bool CInventoryWIdgetWindow::Init(CPlayer* player)
 	backgroundWidget->SetEnable(false);
 
 	Stats* stats = player->GetStats();
-	CTextWidget* info = CreateWidget<CTextWidget>(L"IHp", player);
+	CTextWidget* info = CreateWidget<CTextWidget>(L"IInfo1", player);
 	info->GetTransform()->SetRelativePosition(-0.9f, 0.1f, 1.f);
 	info->SetBasicInfo(std::format(L"최대 체력: {}                현재 체력: {}", stats->maxHp, stats->currentHp), L"맑은 고딕_30", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
 
-	info = CreateWidget<CTextWidget>(L"IAttack", player);
+	info = CreateWidget<CTextWidget>(L"IInfo2", player);
 	info->GetTransform()->SetRelativePosition(-0.95f, -0.1f, 1.f);
-	info->SetBasicInfo(std::format(L"공격력: {}                   골드: {}", stats->maxHp, stats->currentHp, stats->attack, stats->gold), L"맑은 고딕_30", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
+	info->SetBasicInfo(std::format(L"공격력: {}                   골드: {}", stats->attack, stats->gold), L"맑은 고딕_30", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
 
 	CImageWidget* skillWidget = CreateWidget<CImageWidget>(L"ISkill1", player);
 	skillWidget->GetTransform()->SetRelativePosition(-0.878f, 0.075f, 1.f);
@@ -123,7 +123,6 @@ void CInventoryWIdgetWindow::UpdateInventory()
 	{
 		std::wstring name = L"Inven" + std::to_wstring(i + 1);
 		CItemButtonWidget* widget = dynamic_cast<CItemButtonWidget*>(FindWidget(name));
-		std::cout << ws2s(name) << "\n";
 		if (widget)
 		{
 			std::wstring itemName = items[i]->GetItemInfo().name;
@@ -138,6 +137,25 @@ void CInventoryWIdgetWindow::UpdateInventory()
 			widget->SetEnable(true);
 		}
 	}
+}
+
+void CInventoryWIdgetWindow::UpdateStatsText()
+{
+	Stats* stats = m_OwnerPlayer->GetStats();
+	for (int i = 0; i < 2; ++i)
+	{
+		std::wstring name = L"IInfo" + std::to_wstring(i + 1);
+		CTextWidget* widget = dynamic_cast<CTextWidget*>(FindWidget(name));
+		if (i == 0 && widget)
+		{
+			widget->SetText(std::format(L"최대 체력: {}                현재 체력: {}", stats->maxHp, stats->currentHp));
+		}
+		else if (i == 1 && widget)
+		{
+			widget->SetText(std::format(L"공격력: {}                   골드: {}", stats->attack, stats->gold));
+		}
+	}
+	std::cout << stats->maxHp << " " << stats->currentHp << " " << stats->attack << " " << stats->gold << '\n';
 }
 
 void CInventoryWIdgetWindow::SetEvent(CItemButtonWidget* widget, CToolTip* tooltip, CImageWidget* pannel)

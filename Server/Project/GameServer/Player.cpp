@@ -34,6 +34,7 @@ bool CPlayer::BuyItem(CItemRef item)
 		return false;
 
 	m_Items.emplace_back(item);
+	g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
 	return true;
 }
 
@@ -47,6 +48,7 @@ bool CPlayer::BuySkill(CSkillRef skill)
 		return false;
 
 	m_Skills.emplace_back(skill);
+	g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
 	return true;
 }
 
@@ -94,8 +96,8 @@ void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 	{
 		CMonster* monster = (dynamic_cast<CMonster*>(dest->GetOwner()));
 		GetAblity()->currentHp -= monster->GetAblity()->attack;
+		g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
 	}
-
 }
 
 void CPlayer::CollisionEvent(CBoxCollider* src, CBoxCollider* dest)

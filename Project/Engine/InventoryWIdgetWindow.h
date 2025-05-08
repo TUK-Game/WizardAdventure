@@ -9,6 +9,7 @@ public:
 	virtual bool Init(class CPlayer* player);
 
 	void UpdateInventory();
+	void UpdateStatsText();
 	void SetEvent(class CItemButtonWidget* widget, class CToolTip* tooltip, class CImageWidget* pannel);
 	void SetSkill(int slotIndex, ESkillType type);
 private:

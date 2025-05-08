@@ -164,7 +164,8 @@ void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 	constexpr int maxItem = 8;
 	constexpr int maxSkill = 3;
 
-	std::default_random_engine dre;
+	std::random_device rd;
+	std::default_random_engine dre(rd());
 	std::uniform_int_distribution randomItem{10001, MAX_ITEMS_NUMBER };
 	std::uniform_int_distribution randomSkill{30001, MAX_SKILLS_NUMBER };
 	std::wstring path = L"..\\..\\..\\Content\\Json\\" + fileName + L"_NPC.json";

@@ -83,6 +83,12 @@ message S_UPDATE_PLAYER
 	PlayerUpdateInfo player_update_info = 1;
 }
 
+message S_UPDATE_PLAYER_STATS
+{
+	uint32 player_id = 1;
+	PlayerAblity player_ability = 2;
+}
+
 // 몬스터 정보 전송
 message S_MONSTER_INFO
 {	

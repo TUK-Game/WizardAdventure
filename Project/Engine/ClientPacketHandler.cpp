@@ -466,7 +466,23 @@ bool Handle_S_UPDATE_PLAYER(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYE
 	player->SetProtocolStateForClient(state);
 
 	const auto& stats = info.player_ablity();
-	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp());
+	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp(), stats.damage());
+	return true;
+}
+
+bool Handle_S_UPDATE_PLAYER_STATS(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYER_STATS& pkt)
+{
+	UINT64 id = pkt.player_id();
+	const auto& player = CLevelManager::GetInst()->GetPlayer(id);
+
+	const auto& stats = pkt.player_ability();
+	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp(), stats.damage());
+
+	CInventoryWIdgetWindow* inven = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
+	if (inven)
+	{
+		inven->UpdateStatsText();
+	}
 	return true;
 }
 

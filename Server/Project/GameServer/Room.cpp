@@ -112,7 +112,7 @@ void CRoom::Update()
 		if(player)
 		{
 			player->Update(m_DeltaTime);
-			UPdatePlayer(player, m_DeltaTime);
+			UpdatePlayer(player, m_DeltaTime);
 		}
 	}
 
@@ -508,7 +508,7 @@ bool CRoom::HandleActPlayer(CPlayerRef player)
 	return true;
 }
 
-bool CRoom::UPdatePlayer(CPlayerRef player, float deltaTime)
+bool CRoom::UpdatePlayer(CPlayerRef player, float deltaTime)
 {
 	int step = 1;
 	auto& protoNow = *player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
@@ -557,9 +557,19 @@ bool CRoom::UPdatePlayer(CPlayerRef player, float deltaTime)
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
 
-	//if (auto session = player->GetSession())
-	//	session->Send(sendBuffer);
+	return true;
+}
 
+bool CRoom::UpdatePlayerAbility(CPlayerRef player)
+{
+	Protocol::S_UPDATE_PLAYER_STATS pkt;
+	const auto& ablity = player->GetAblity();
+	pkt.set_player_id(player->PlayerInfo->player_id());
+	pkt.mutable_player_ability()->set_damage(ablity->attack);	
+	pkt.mutable_player_ability()->set_hp(ablity->currentHp);
+	pkt.mutable_player_ability()->set_maxhp(ablity->maxHp);
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	Broadcast(sendBuffer, -1);
 	return true;
 }
 

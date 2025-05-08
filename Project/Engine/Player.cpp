@@ -264,20 +264,20 @@ void CPlayer::InitStats(int maxHp, int hp, int attack, float speed)
     m_Stats->moveSpeed = speed;
 }
 
-void CPlayer::DetectNPC()
+bool CPlayer::DetectNPC()
 {
     CGameObject* camera = CRenderManager::GetInst()->GetMainCamera()->GetOwner();
     if (ECamera_Type::Fixed !=  camera->GetCamera()->GetCameraType())
-        return;
+        return false;
 
     CNPC* npc = CLevelManager::GetInst()->GetCurrentLevel()->DetectNPC(this);
 
     if (nullptr == npc)
-        return;
-
+        return false;
+    std::cout << "NPC발견\n";
     npc->Interation();
     MoveCamera(camera, npc, ECamera_Type::Interaction_Start, Vec3(200.f, 0.f, 500.f));
-    return;
+    return true;
 }
 
 void CPlayer::MoveToInventoryView()
