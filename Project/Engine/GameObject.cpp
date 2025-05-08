@@ -153,6 +153,25 @@ void CGameObject::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
 {
 }
 
+CGameObject* CGameObject::GetRootObject()
+{
+	CGameObject* current = this;
+	while (current->m_Parent)
+	{
+		current = current->m_Parent;
+	}
+	return current;
+}
+
+const CGameObject* CGameObject::GetRootObject() const
+{
+	const CGameObject* current = this;
+	while (current->m_Parent)
+	{
+		current = current->m_Parent;
+	}
+	return current;
+}
 
 Protocol::MoveState CGameObject::GetStateForProtocol()
 {
@@ -408,10 +427,3 @@ void CGameObject::Destroy()
 	CRef::Destroy();
 }
 
-bool CGameObject::IsInDissolveState() const
-{
-	if (m_StateManager == nullptr)
-		return false;
-
-	return m_StateManager->GetCurrentStateType() == EState_Type::Dissolve;
-}

@@ -71,31 +71,31 @@ void CMeshRenderer::RenderShadow()
 	if (GetAnimator())
 	{
 		GetAnimator()->PushData();
-		auto parent = GetOwner()->GetParent();
-		if (parent) 
+		auto root = GetOwner()->GetRootObject();
+		if (root->GetDissolve())
 		{
-			if (parent->IsInDissolveState()) 
-			{
-				CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetTexture(1, CAssetManager::GetInst()->FindAsset<CTexture>(L"Noise"));
-				CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetInt(1, 1);
-				CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetFloat(0, parent->GetThreshold());
-			}
-			else
-			{
-				CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetInt(1, 0);
-				CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetFloat(0, 0.f);
-			}
+			CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetTexture(1, CAssetManager::GetInst()->FindAsset<CTexture>(L"Noise"));
+			CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetInt(1, 1);
+			CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetFloat(0, root->GetThreshold());
+		}
+		else
+		{
+			CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetInt(1, 0);
+			CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetFloat(0, 0.f);
+
 		}
 		CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetInt(0, 0);
 		CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->GraphicsBinding();
 	}
 	else
 	{
-		if (GetOwner()->IsInDissolveState()) 
+		auto root = GetOwner()->GetRootObject();
+
+		if (root->GetDissolve())
 		{
 			CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetTexture(1, CAssetManager::GetInst()->FindAsset<CTexture>(L"Noise"));
 			CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetInt(1, 1);
-			CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetFloat(0, GetOwner()->GetThreshold());
+			CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetFloat(0, root->GetThreshold());
 		}
 		else
 		{

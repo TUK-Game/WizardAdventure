@@ -159,6 +159,8 @@ public:
 
 public:
     CGameObject* GetParent() const                      { return m_Parent; }
+    const CGameObject* GetRootObject() const;
+    CGameObject* GetRootObject();
     const std::vector<CGameObject*>& GetChild() const   { return m_vecChild; }
     CComponent* GetComponent(EComponent_Type type)      { return m_arrComponent[(int)type]; }
     CRenderComponent* GetRenderComponent()              { return m_RenderComponent; }
@@ -179,11 +181,12 @@ public:
     bool GetCheckFrustum() { return m_CheckFrustum; }
     Vec3 GetTotalMeshSize() { return m_TotalMeshSize; }
     float GetThreshold() const { return m_Threshold; }
+    bool GetDissolve() const { return m_bDissolve; }
 
     void SetThreshold(float threshold) { m_Threshold = threshold; }
     Protocol::MoveState GetStateForProtocol();
     bool IsStatic() { return m_Static; }
-    bool IsInDissolveState() const;
+    void SetDissolve(bool flag) { m_bDissolve = flag; }
     void SetStatic(bool flag) { m_Static = flag; }
     void SetCheckFrustum(bool checkFrustum) { m_CheckFrustum = checkFrustum; }
     void SetParentTransform(CTransform* transform);
@@ -242,5 +245,8 @@ private:
 protected:
     CStateManager* m_StateManager;
     Vec3 m_TotalMeshSize{ 1.f, 1.f, 1.f };
+
+    // dissolve
     float m_Threshold{};
+    bool m_bDissolve;
 };
