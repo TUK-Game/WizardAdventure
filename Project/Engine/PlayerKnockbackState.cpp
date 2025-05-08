@@ -28,7 +28,7 @@ void CPlayerKnockbackState::Enter(CGameObject* entity)
 
 void CPlayerKnockbackState::Update(CGameObject* entity, float deltaTime)
 {
-    CPlayer* player = dynamic_cast<CPlayer*>(entity);
+   /* CPlayer* player = dynamic_cast<CPlayer*>(entity);
     if (!player) return;
 
     m_Elapsed += deltaTime;
@@ -41,7 +41,7 @@ void CPlayerKnockbackState::Update(CGameObject* entity, float deltaTime)
     if (m_Elapsed >= m_Duration)
     {
         player->GetStateManager()->HandleEvent(player, "EndKnockback");
-    }
+    }*/
 }
 
 void CPlayerKnockbackState::Exit(CGameObject* entity)

@@ -50,9 +50,12 @@ public:
 
 	const float m_StepSize = 3;
 	Protocol::Vector3 m_NextAmount;	
-	float m_DashDurtation = 0.2f;
+	float m_DashDuration = 0.2f;
 	float m_DashElapsedTime = 0.f;
 private:
+	float m_DamageDuration = 1.2f;
+	float m_DamageElapsedTime = 0.f;	
+
 	std::weak_ptr<CGameSession>	m_Session;
 	Protocol::MoveState m_State;
 	Protocol::Vector3 m_Dir;

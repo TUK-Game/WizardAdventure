@@ -141,6 +141,9 @@ extern S_UPDATE_ITEMDefaultTypeInternal _S_UPDATE_ITEM_default_instance_;
 class S_UPDATE_PLAYER;
 struct S_UPDATE_PLAYERDefaultTypeInternal;
 extern S_UPDATE_PLAYERDefaultTypeInternal _S_UPDATE_PLAYER_default_instance_;
+class S_UPDATE_PLAYER_STATE;
+struct S_UPDATE_PLAYER_STATEDefaultTypeInternal;
+extern S_UPDATE_PLAYER_STATEDefaultTypeInternal _S_UPDATE_PLAYER_STATE_default_instance_;
 class S_UPDATE_PLAYER_STATS;
 struct S_UPDATE_PLAYER_STATSDefaultTypeInternal;
 extern S_UPDATE_PLAYER_STATSDefaultTypeInternal _S_UPDATE_PLAYER_STATS_default_instance_;
@@ -177,6 +180,7 @@ template<> ::Protocol::S_SPAWN_NPC* Arena::CreateMaybeMessage<::Protocol::S_SPAW
 template<> ::Protocol::S_SPAWN_PROJECTILE_SUCESSE* Arena::CreateMaybeMessage<::Protocol::S_SPAWN_PROJECTILE_SUCESSE>(Arena*);
 template<> ::Protocol::S_UPDATE_ITEM* Arena::CreateMaybeMessage<::Protocol::S_UPDATE_ITEM>(Arena*);
 template<> ::Protocol::S_UPDATE_PLAYER* Arena::CreateMaybeMessage<::Protocol::S_UPDATE_PLAYER>(Arena*);
+template<> ::Protocol::S_UPDATE_PLAYER_STATE* Arena::CreateMaybeMessage<::Protocol::S_UPDATE_PLAYER_STATE>(Arena*);
 template<> ::Protocol::S_UPDATE_PLAYER_STATS* Arena::CreateMaybeMessage<::Protocol::S_UPDATE_PLAYER_STATS>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
@@ -2520,6 +2524,165 @@ class S_UPDATE_PLAYER_STATS final :
 };
 // -------------------------------------------------------------------
 
+class S_UPDATE_PLAYER_STATE final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_UPDATE_PLAYER_STATE) */ {
+ public:
+  inline S_UPDATE_PLAYER_STATE() : S_UPDATE_PLAYER_STATE(nullptr) {}
+  ~S_UPDATE_PLAYER_STATE() override;
+  explicit PROTOBUF_CONSTEXPR S_UPDATE_PLAYER_STATE(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_UPDATE_PLAYER_STATE(const S_UPDATE_PLAYER_STATE& from);
+  S_UPDATE_PLAYER_STATE(S_UPDATE_PLAYER_STATE&& from) noexcept
+    : S_UPDATE_PLAYER_STATE() {
+    *this = ::std::move(from);
+  }
+
+  inline S_UPDATE_PLAYER_STATE& operator=(const S_UPDATE_PLAYER_STATE& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_UPDATE_PLAYER_STATE& operator=(S_UPDATE_PLAYER_STATE&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_UPDATE_PLAYER_STATE& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_UPDATE_PLAYER_STATE* internal_default_instance() {
+    return reinterpret_cast<const S_UPDATE_PLAYER_STATE*>(
+               &_S_UPDATE_PLAYER_STATE_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    15;
+
+  friend void swap(S_UPDATE_PLAYER_STATE& a, S_UPDATE_PLAYER_STATE& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_UPDATE_PLAYER_STATE* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_UPDATE_PLAYER_STATE* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S_UPDATE_PLAYER_STATE* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S_UPDATE_PLAYER_STATE>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S_UPDATE_PLAYER_STATE& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const S_UPDATE_PLAYER_STATE& from) {
+    S_UPDATE_PLAYER_STATE::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_UPDATE_PLAYER_STATE* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_UPDATE_PLAYER_STATE";
+  }
+  protected:
+  explicit S_UPDATE_PLAYER_STATE(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayerIdFieldNumber = 1,
+    kStateFieldNumber = 2,
+  };
+  // uint32 player_id = 1;
+  void clear_player_id();
+  uint32_t player_id() const;
+  void set_player_id(uint32_t value);
+  private:
+  uint32_t _internal_player_id() const;
+  void _internal_set_player_id(uint32_t value);
+  public:
+
+  // .Protocol.MoveState state = 2;
+  void clear_state();
+  ::Protocol::MoveState state() const;
+  void set_state(::Protocol::MoveState value);
+  private:
+  ::Protocol::MoveState _internal_state() const;
+  void _internal_set_state(::Protocol::MoveState value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_UPDATE_PLAYER_STATE)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t player_id_;
+    int state_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class S_MONSTER_INFO final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_MONSTER_INFO) */ {
  public:
@@ -2568,7 +2731,7 @@ class S_MONSTER_INFO final :
                &_S_MONSTER_INFO_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    16;
 
   friend void swap(S_MONSTER_INFO& a, S_MONSTER_INFO& b) {
     a.Swap(&b);
@@ -2725,7 +2888,7 @@ class S_PROJECTILE_INFO final :
                &_S_PROJECTILE_INFO_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    17;
 
   friend void swap(S_PROJECTILE_INFO& a, S_PROJECTILE_INFO& b) {
     a.Swap(&b);
@@ -2882,7 +3045,7 @@ class S_PROJECTILE_EFFECT final :
                &_S_PROJECTILE_EFFECT_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    18;
 
   friend void swap(S_PROJECTILE_EFFECT& a, S_PROJECTILE_EFFECT& b) {
     a.Swap(&b);
@@ -3030,7 +3193,7 @@ class C_PROJECTILE_EFFECT final :
                &_C_PROJECTILE_EFFECT_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    19;
 
   friend void swap(C_PROJECTILE_EFFECT& a, C_PROJECTILE_EFFECT& b) {
     a.Swap(&b);
@@ -3178,7 +3341,7 @@ class S_SPAWN final :
                &_S_SPAWN_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    20;
 
   friend void swap(S_SPAWN& a, S_SPAWN& b) {
     a.Swap(&b);
@@ -3335,7 +3498,7 @@ class S_SPAWN_NEW_PLAYER final :
                &_S_SPAWN_NEW_PLAYER_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    21;
 
   friend void swap(S_SPAWN_NEW_PLAYER& a, S_SPAWN_NEW_PLAYER& b) {
     a.Swap(&b);
@@ -3492,7 +3655,7 @@ class S_SPAWN_EXISTING_PLAYER final :
                &_S_SPAWN_EXISTING_PLAYER_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    22;
 
   friend void swap(S_SPAWN_EXISTING_PLAYER& a, S_SPAWN_EXISTING_PLAYER& b) {
     a.Swap(&b);
@@ -3649,7 +3812,7 @@ class S_DESPAWN_PLAYER final :
                &_S_DESPAWN_PLAYER_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    23;
 
   friend void swap(S_DESPAWN_PLAYER& a, S_DESPAWN_PLAYER& b) {
     a.Swap(&b);
@@ -3797,7 +3960,7 @@ class S_DESPAWN final :
                &_S_DESPAWN_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    24;
 
   friend void swap(S_DESPAWN& a, S_DESPAWN& b) {
     a.Swap(&b);
@@ -3959,7 +4122,7 @@ class S_GATE_OPNE final :
                &_S_GATE_OPNE_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    25;
 
   friend void swap(S_GATE_OPNE& a, S_GATE_OPNE& b) {
     a.Swap(&b);
@@ -4116,7 +4279,7 @@ class S_GATE_CLOSE final :
                &_S_GATE_CLOSE_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    26;
 
   friend void swap(S_GATE_CLOSE& a, S_GATE_CLOSE& b) {
     a.Swap(&b);
@@ -4273,7 +4436,7 @@ class S_SPAWN_NPC final :
                &_S_SPAWN_NPC_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    27;
 
   friend void swap(S_SPAWN_NPC& a, S_SPAWN_NPC& b) {
     a.Swap(&b);
@@ -4430,7 +4593,7 @@ class C_BUY_ITEM final :
                &_C_BUY_ITEM_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    28;
 
   friend void swap(C_BUY_ITEM& a, C_BUY_ITEM& b) {
     a.Swap(&b);
@@ -4578,7 +4741,7 @@ class C_BUY_SKILL final :
                &_C_BUY_SKILL_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    29;
 
   friend void swap(C_BUY_SKILL& a, C_BUY_SKILL& b) {
     a.Swap(&b);
@@ -4726,7 +4889,7 @@ class S_UPDATE_ITEM final :
                &_S_UPDATE_ITEM_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    30;
 
   friend void swap(S_UPDATE_ITEM& a, S_UPDATE_ITEM& b) {
     a.Swap(&b);
@@ -4914,7 +5077,7 @@ class S_BUY_ITEM final :
                &_S_BUY_ITEM_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    31;
 
   friend void swap(S_BUY_ITEM& a, S_BUY_ITEM& b) {
     a.Swap(&b);
@@ -5084,7 +5247,7 @@ class S_BUY_SKILL final :
                &_S_BUY_SKILL_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    32;
 
   friend void swap(S_BUY_SKILL& a, S_BUY_SKILL& b) {
     a.Swap(&b);
@@ -6473,6 +6636,50 @@ inline void S_UPDATE_PLAYER_STATS::set_allocated_player_ability(::Protocol::Play
 
 // -------------------------------------------------------------------
 
+// S_UPDATE_PLAYER_STATE
+
+// uint32 player_id = 1;
+inline void S_UPDATE_PLAYER_STATE::clear_player_id() {
+  _impl_.player_id_ = 0u;
+}
+inline uint32_t S_UPDATE_PLAYER_STATE::_internal_player_id() const {
+  return _impl_.player_id_;
+}
+inline uint32_t S_UPDATE_PLAYER_STATE::player_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_UPDATE_PLAYER_STATE.player_id)
+  return _internal_player_id();
+}
+inline void S_UPDATE_PLAYER_STATE::_internal_set_player_id(uint32_t value) {
+  
+  _impl_.player_id_ = value;
+}
+inline void S_UPDATE_PLAYER_STATE::set_player_id(uint32_t value) {
+  _internal_set_player_id(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_UPDATE_PLAYER_STATE.player_id)
+}
+
+// .Protocol.MoveState state = 2;
+inline void S_UPDATE_PLAYER_STATE::clear_state() {
+  _impl_.state_ = 0;
+}
+inline ::Protocol::MoveState S_UPDATE_PLAYER_STATE::_internal_state() const {
+  return static_cast< ::Protocol::MoveState >(_impl_.state_);
+}
+inline ::Protocol::MoveState S_UPDATE_PLAYER_STATE::state() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_UPDATE_PLAYER_STATE.state)
+  return _internal_state();
+}
+inline void S_UPDATE_PLAYER_STATE::_internal_set_state(::Protocol::MoveState value) {
+  
+  _impl_.state_ = value;
+}
+inline void S_UPDATE_PLAYER_STATE::set_state(::Protocol::MoveState value) {
+  _internal_set_state(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_UPDATE_PLAYER_STATE.state)
+}
+
+// -------------------------------------------------------------------
+
 // S_MONSTER_INFO
 
 // repeated .Protocol.MonsterInfo monster_info = 1;
@@ -7295,6 +7502,8 @@ inline void S_BUY_SKILL::set_skill_id(uint32_t value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

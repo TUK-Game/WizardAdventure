@@ -22,23 +22,24 @@ enum : uint16
 	PKT_S_ACT = 1012,
 	PKT_S_UPDATE_PLAYER = 1013,
 	PKT_S_UPDATE_PLAYER_STATS = 1014,
-	PKT_S_MONSTER_INFO = 1015,
-	PKT_S_PROJECTILE_INFO = 1016,
-	PKT_S_PROJECTILE_EFFECT = 1017,
-	PKT_C_PROJECTILE_EFFECT = 1018,
-	PKT_S_SPAWN = 1019,
-	PKT_S_SPAWN_NEW_PLAYER = 1020,
-	PKT_S_SPAWN_EXISTING_PLAYER = 1021,
-	PKT_S_DESPAWN_PLAYER = 1022,
-	PKT_S_DESPAWN = 1023,
-	PKT_S_GATE_OPNE = 1024,
-	PKT_S_GATE_CLOSE = 1025,
-	PKT_S_SPAWN_NPC = 1026,
-	PKT_C_BUY_ITEM = 1027,
-	PKT_C_BUY_SKILL = 1028,
-	PKT_S_UPDATE_ITEM = 1029,
-	PKT_S_BUY_ITEM = 1030,
-	PKT_S_BUY_SKILL = 1031,
+	PKT_S_UPDATE_PLAYER_STATE = 1015,
+	PKT_S_MONSTER_INFO = 1016,
+	PKT_S_PROJECTILE_INFO = 1017,
+	PKT_S_PROJECTILE_EFFECT = 1018,
+	PKT_C_PROJECTILE_EFFECT = 1019,
+	PKT_S_SPAWN = 1020,
+	PKT_S_SPAWN_NEW_PLAYER = 1021,
+	PKT_S_SPAWN_EXISTING_PLAYER = 1022,
+	PKT_S_DESPAWN_PLAYER = 1023,
+	PKT_S_DESPAWN = 1024,
+	PKT_S_GATE_OPNE = 1025,
+	PKT_S_GATE_CLOSE = 1026,
+	PKT_S_SPAWN_NPC = 1027,
+	PKT_C_BUY_ITEM = 1028,
+	PKT_C_BUY_SKILL = 1029,
+	PKT_S_UPDATE_ITEM = 1030,
+	PKT_S_BUY_ITEM = 1031,
+	PKT_S_BUY_SKILL = 1032,
 };
 
 // ===== Process Packet =====
@@ -86,6 +87,7 @@ public:
 	static CSendBufferRef MakeSendBuffer(Protocol::S_ACT& pkt) { return MakeSendBuffer(pkt, PKT_S_ACT); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_UPDATE_PLAYER& pkt) { return MakeSendBuffer(pkt, PKT_S_UPDATE_PLAYER); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_UPDATE_PLAYER_STATS& pkt) { return MakeSendBuffer(pkt, PKT_S_UPDATE_PLAYER_STATS); }
+	static CSendBufferRef MakeSendBuffer(Protocol::S_UPDATE_PLAYER_STATE& pkt) { return MakeSendBuffer(pkt, PKT_S_UPDATE_PLAYER_STATE); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_MONSTER_INFO& pkt) { return MakeSendBuffer(pkt, PKT_S_MONSTER_INFO); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_PROJECTILE_INFO& pkt) { return MakeSendBuffer(pkt, PKT_S_PROJECTILE_INFO); }
 	static CSendBufferRef MakeSendBuffer(Protocol::S_PROJECTILE_EFFECT& pkt) { return MakeSendBuffer(pkt, PKT_S_PROJECTILE_EFFECT); }

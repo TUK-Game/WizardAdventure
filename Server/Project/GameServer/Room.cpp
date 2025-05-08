@@ -446,7 +446,8 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 			XMVECTOR dirVec = XMVectorSet(dir.x(), dir.y(), dir.z(), 0.0f);
 			dirVec = XMVector3Normalize(dirVec);
-			if(player->GetState() != Protocol::MOVE_STATE_DASH && player->GetState() != Protocol::MOVE_STATE_DASH_END)
+			if(player->GetState() != Protocol::MOVE_STATE_DASH && player->GetState() != Protocol::MOVE_STATE_DASH_END &&
+				player->GetState() != Protocol::MOVE_STATE_DAMAGED && player->GetState() != Protocol::MOVE_STATE_DAMAGED_END)
 			{
 				dirVec = XMVectorScale(dirVec, -20);
 			}
@@ -548,7 +549,7 @@ bool CRoom::UpdatePlayer(CPlayerRef player, float deltaTime)
 	const auto& rot = player->PlayerInfo->object_info().pos_info().rotation();
 	ToProtoVector3(posInfo->mutable_rotation(), XMFLOAT3(rot.x(), rot.y(), rot.z()));
 
-	posInfo->set_state(player->GetState());
+	//posInfo->set_state(player->GetState());
 
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
@@ -564,6 +565,18 @@ bool CRoom::UpdatePlayerAbility(CPlayerRef player)
 	pkt.mutable_player_ability()->set_damage(ablity->attack);	
 	pkt.mutable_player_ability()->set_hp(ablity->currentHp);
 	pkt.mutable_player_ability()->set_maxhp(ablity->maxHp);
+	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+	Broadcast(sendBuffer, -1);
+	return true;
+}
+
+bool CRoom::UpdatePlayerState(CPlayerRef player)
+{
+	Protocol::S_UPDATE_PLAYER_STATE pkt;
+
+	pkt.set_player_id(player->PlayerInfo->player_id());
+	pkt.set_state(player->GetState());
+
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
 	return true;

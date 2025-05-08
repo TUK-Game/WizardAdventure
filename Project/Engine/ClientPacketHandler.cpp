@@ -464,9 +464,6 @@ bool Handle_S_UPDATE_PLAYER(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYE
 	const auto& player = CLevelManager::GetInst()->GetPlayer(id);
 	player->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
 	player->SetProtocolStateForClient(state);
-
-	const auto& stats = info.player_ablity();
-	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp(), stats.damage());
 	return true;
 }
 
@@ -485,6 +482,15 @@ bool Handle_S_UPDATE_PLAYER_STATS(CPacketSessionRef& session, Protocol::S_UPDATE
 		inven->UpdateStatsText();
 		gamewindow->SetGauge(L"HPBar", stats.maxhp(), true);
 	}
+	return true;
+}
+
+bool Handle_S_UPDATE_PLAYER_STATE(CPacketSessionRef& session, Protocol::S_UPDATE_PLAYER_STATE& pkt)
+{
+	UINT64 id = pkt.player_id();
+	const auto& player = CLevelManager::GetInst()->GetPlayer(id);
+	player->SetProtocolStateForClient(pkt.state());
+
 	return true;
 }
 

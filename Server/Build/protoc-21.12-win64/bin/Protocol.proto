@@ -89,6 +89,12 @@ message S_UPDATE_PLAYER_STATS
 	PlayerAblity player_ability = 2;
 }
 
+message S_UPDATE_PLAYER_STATE
+{
+	uint32 player_id = 1;
+	MoveState state = 2;
+}
+
 // 몬스터 정보 전송
 message S_MONSTER_INFO
 {	
