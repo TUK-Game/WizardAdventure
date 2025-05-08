@@ -549,10 +549,6 @@ bool CRoom::UpdatePlayer(CPlayerRef player, float deltaTime)
 	ToProtoVector3(posInfo->mutable_rotation(), XMFLOAT3(rot.x(), rot.y(), rot.z()));
 
 	posInfo->set_state(player->GetState());
-	const auto& ablity = player->GetAblity();
-	info->mutable_player_ablity()->set_damage(ablity->attack);
-	info->mutable_player_ablity()->set_hp(ablity->currentHp);
-	info->mutable_player_ablity()->set_maxhp(ablity->maxHp);
 
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);

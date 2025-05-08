@@ -479,9 +479,11 @@ bool Handle_S_UPDATE_PLAYER_STATS(CPacketSessionRef& session, Protocol::S_UPDATE
 	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp(), stats.damage());
 
 	CInventoryWIdgetWindow* inven = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
-	if (inven)
+	CPlayWidgetWindow* gamewindow = dynamic_cast<CPlayWidgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::GAME_WINDOW));
+	if (inven && gamewindow)
 	{
 		inven->UpdateStatsText();
+		gamewindow->SetGauge(L"HPBar", stats.maxhp(), true);
 	}
 	return true;
 }

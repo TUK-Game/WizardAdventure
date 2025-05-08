@@ -59,7 +59,6 @@ bool CPlayWidgetWindow::Init(CPlayer* player)
 		widget->GetTransform()->SetRelativeScale(0.4f, 0.025f, 0.2f);
 		widget->SetGaugeScale(0.4f);
 		widget->SetStartX(-0.547f);
-
 	}
 
 	{
@@ -135,7 +134,10 @@ void CPlayWidgetWindow::SetGauge(const std::wstring& name, int gauge, bool bMax)
 	{
 		widget->SetMaxGauge(gauge);
 	}
-	widget->SetGauge(gauge);
+	else
+	{
+		widget->SetGauge(gauge);
+	}
 }
 
 void CPlayWidgetWindow::SetMaxHp(int maxHp)

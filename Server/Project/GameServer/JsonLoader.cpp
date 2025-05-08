@@ -256,7 +256,8 @@ void CJsonLoader::LoadItem(const std::wstring& fileName, std::unordered_map<uint
 		float amount = item["Amount"];
 		uint32 price = item["Price"];
 
-		CItemRef item = std::make_shared<CItem>(ItemInfo(id, name, description, amount, part, price, rank));
+		EITEM_PART itemPart = CItemManager::ConvertToItemPart(part);
+		CItemRef item = std::make_shared<CItem>(ItemInfo(id, name, description, amount, itemPart, price, rank));
 		itemMap[id] = item;
 	}
 }

@@ -34,6 +34,7 @@ bool CPlayer::BuyItem(CItemRef item)
 		return false;
 
 	m_Items.emplace_back(item);
+	CalculateAbility(item);
 	g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
 	return true;
 }
@@ -50,6 +51,35 @@ bool CPlayer::BuySkill(CSkillRef skill)
 	m_Skills.emplace_back(skill);
 	g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
 	return true;
+}
+
+void CPlayer::CalculateAbility(CItemRef item)
+{
+	const auto& info = item->GetItemInfo();
+	switch (info.part)
+	{
+	case EITEM_PART::ATTACK:
+	{
+		GetAblity()->attack += info.amount;
+	}
+	break;
+	case EITEM_PART::MAXHP:
+	{
+		GetAblity()->maxHp += info.amount;
+		GetAblity()->currentHp += info.amount;
+	}
+	break;
+	case EITEM_PART::SPEED:
+	{
+		GetAblity()->moveSpeed += info.amount;
+	}
+	break;
+	case EITEM_PART::HEAL:
+	{
+		GetAblity()->currentHp = (std::min)((int)info.amount + GetAblity()->currentHp, GetAblity()->maxHp);
+	}
+	break;
+	}
 }
 
 void CPlayer::Update(float deltaTime)
