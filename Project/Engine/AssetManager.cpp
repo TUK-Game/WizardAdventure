@@ -275,6 +275,10 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"Circle", tex);
 
 	tex = new CTexture;
+	tex->Init(path / L"WallMark.png");
+	AddAsset(L"WallMark", tex);
+
+	tex = new CTexture;
 	tex->Init(path / L"Red.jpg");
 	AddAsset(L"Red", tex);
 
@@ -397,6 +401,11 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Texture_World_Tinted"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Circle"));
 	AddAsset(L"Circle", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Texture_World_Tinted"));
+	material->SetTexture(0, FindAsset<CTexture>(L"WallMark"));
+	AddAsset(L"WallMark", material);
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Tex_World_Billboard"));
