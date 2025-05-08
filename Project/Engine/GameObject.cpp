@@ -408,3 +408,10 @@ void CGameObject::Destroy()
 	CRef::Destroy();
 }
 
+bool CGameObject::IsInDissolveState() const
+{
+	if (m_StateManager == nullptr)
+		return false;
+
+	return m_StateManager->GetCurrentStateType() == EState_Type::Dissolve;
+}

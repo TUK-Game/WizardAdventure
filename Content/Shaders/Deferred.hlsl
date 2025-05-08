@@ -112,7 +112,9 @@ PS_OUT PS_Dissolve(VS_OUT input)
     if (tex_on_0)
         baseColor = tex_0.Sample(sam_0, input.uv);
 
+    // 1. noise
     float noise = tex_2.Sample(sam_0, input.uv).r; // 디졸브용 노이즈
+
     // 2. 디졸브 discard 처리
     if (noise < float_0)
         discard;

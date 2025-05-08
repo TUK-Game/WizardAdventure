@@ -12,7 +12,7 @@ void CMonsterDissolveState::Enter(CGameObject* entity)
 #ifdef _DEBUG
 	std::cout << "Entering Dissolve State" << std::endl;
 #endif
-
+    entity->SetThreshold(0.f);
     std::vector<CGameObject*> objs = entity->GetChild();
     for (auto o : objs) {
         if (o->GetAnimator()) {
@@ -23,7 +23,7 @@ void CMonsterDissolveState::Enter(CGameObject* entity)
                 if (dissolveMat) {
                     dissolveMat->SetTexture(0, renderer->GetMaterial()->GetTexture(0));
                     dissolveMat->SetTexture(1, renderer->GetMaterial()->GetTexture(1));
-                    dissolveMat->SetFloat(0, 0.0f); // threshold
+                    dissolveMat->SetFloat(0, entity->GetThreshold()); // threshold
                     renderer->SetMaterial(dissolveMat);
 
                 }
@@ -31,6 +31,7 @@ void CMonsterDissolveState::Enter(CGameObject* entity)
         }
     }
     m_ElapsedTime = 0.f;
+
 }
 
 void CMonsterDissolveState::Update(CGameObject* entity, float deltaTime)
@@ -39,6 +40,7 @@ void CMonsterDissolveState::Update(CGameObject* entity, float deltaTime)
 
     float threshold = m_ElapsedTime / m_DissolveDuration;
     threshold = std::clamp(threshold, 0.f, 1.f);
+    entity->SetThreshold(threshold);
 
     std::vector<CGameObject*> objs = entity->GetChild();
     for (auto o : objs) {

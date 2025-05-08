@@ -19,7 +19,7 @@ CInstancingManager::~CInstancingManager()
 
 void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects, const std::wstring& materialName)	
 {
-	// 같은 인스턴스 아이디 같는 오브젝트끼리 모으는 캐쉬
+	// 같은 인스턴스 아이디 갖는 오브젝트끼리 모으는 캐쉬
 	std::unordered_map<UINT64, std::vector<CGameObject*>> cache;
 	for (CGameObject* gameObject : gameObjects)
 	{

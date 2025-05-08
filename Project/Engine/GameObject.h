@@ -178,10 +178,12 @@ public:
     bool GetInstancing()                                { return m_bInstancing; }
     bool GetCheckFrustum() { return m_CheckFrustum; }
     Vec3 GetTotalMeshSize() { return m_TotalMeshSize; }
+    float GetThreshold() const { return m_Threshold; }
 
+    void SetThreshold(float threshold) { m_Threshold = threshold; }
     Protocol::MoveState GetStateForProtocol();
     bool IsStatic() { return m_Static; }
-
+    bool IsInDissolveState() const;
     void SetStatic(bool flag) { m_Static = flag; }
     void SetCheckFrustum(bool checkFrustum) { m_CheckFrustum = checkFrustum; }
     void SetParentTransform(CTransform* transform);
@@ -240,4 +242,5 @@ private:
 protected:
     CStateManager* m_StateManager;
     Vec3 m_TotalMeshSize{ 1.f, 1.f, 1.f };
+    float m_Threshold{};
 };
