@@ -306,7 +306,6 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 			continue;
 		}
 
-		// ���� ���� ����
 		monster->SetTarget(Vec3(pos.x(), pos.y(), pos.z()), Vec3(rot.x(), rot.y(), rot.z()));
 		monster->SetProtocolStateForClientMonster(state);
 		monster->SetStats(info.monster_ablity().maxhp(), info.monster_ablity().hp());

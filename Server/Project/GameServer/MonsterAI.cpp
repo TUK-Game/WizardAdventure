@@ -120,7 +120,7 @@ void CMonsterAI::UpdateAI(float deltaTime)
     }
 
     // temp -----------------------------------------------------------------
-    if (m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_MOUSE_L)  // spawn
+    if (m_Owner->GetState() == Protocol::MOVE_STATE_SPAWN)  // spawn
     {
         m_SpawnTime += deltaTime;
         std::cout << "µé¾î¿È" << std::endl;
@@ -136,30 +136,30 @@ void CMonsterAI::UpdateAI(float deltaTime)
         return;
     }
 
-    if (m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_E)        // damaged
+    if (m_Owner->GetState() == Protocol::MOVE_STATE_DAMAGED)        // damaged
     {
         m_DamagedTime += deltaTime;
         if (m_DamagedTime >= m_DamagedDuration)
         {
             m_DamagedTime = 0.f;
-            m_Owner->SetState(Protocol::MOVE_STATE_SKILL_R);        // endDamaged
+            m_Owner->SetState(Protocol::MOVE_STATE_DAMAGED_END);        // endDamaged
         }
         return;
     }
     
-    if (m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_MOUSE_R)  // death
+    if (m_Owner->GetState() == Protocol::MOVE_STATE_DEATH)  // death
     {
         m_DeathTime += deltaTime;
         if (m_DeathTime + 0.1f >= m_DeathDuration)
         {
             m_DeathTime = 0.f;  
             // dissolve Start
-            m_Owner->SetState(Protocol::MOVE_STATE_DASH);
+            m_Owner->SetState(Protocol::MOVE_STATE_DISSOVE);
         }
         return;
     }
 
-    if (m_Owner->GetState() == Protocol::MOVE_STATE_DASH)  // dissolve
+    if (m_Owner->GetState() == Protocol::MOVE_STATE_DISSOVE)  // dissolve
     {
         m_DissolveTime += deltaTime;
         if (m_DissolveTime >= m_DissolveDuration)

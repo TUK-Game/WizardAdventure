@@ -38,7 +38,7 @@ const char descriptor_table_protodef_Enum_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "YPE_NPC\020\003*h\n\nPlayerType\022\024\n\020PLAYER_TYPE_N"
   "ONE\020\000\022\024\n\020PLAYER_TYPE_FIRE\020\001\022\023\n\017PLAYER_TY"
   "PE_ICE\020\002\022\031\n\025PLAYER_TYPE_LIGHTNING\020\003*\'\n\013M"
-  "onsterType\022\030\n\024Monster_TYPE_Default\020\000*\305\002\n"
+  "onsterType\022\030\n\024Monster_TYPE_Default\020\000*\363\002\n"
   "\tMoveState\022\023\n\017MOVE_STATE_NONE\020\000\022\023\n\017MOVE_"
   "STATE_IDLE\020\001\022\022\n\016MOVE_STATE_RUN\020\002\022\023\n\017MOVE"
   "_STATE_DASH\020\003\022\027\n\023MOVE_STATE_DASH_END\020\004\022\026"
@@ -47,16 +47,17 @@ const char descriptor_table_protodef_Enum_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "TATE_SKILL_MOUSE_R\020\010\022\034\n\030MOVE_STATE_SKILL"
   "_MOUSE_L\020\t\022\026\n\022MOVE_STATE_DAMAGED\020\n\022\032\n\026MO"
   "VE_STATE_DAMAGED_END\020\013\022\024\n\020MOVE_STATE_DEA"
-  "TH\020\014*D\n\017ProjectileState\022\016\n\nMOVE_STATE\020\000\022"
-  "\r\n\tCOLLISION\020\001\022\022\n\016SPAWN_PARTICLE\020\002*\206\001\n\tS"
-  "killMesh\022\r\n\tFIRE_BALL\020\000\022\017\n\013FIRE_PILLAR\020\001"
-  "\022\017\n\013FIRE_CIRCLE\020\002\022\016\n\nFIRE_SWORD\020\003\022\016\n\nFIR"
-  "E_TOWER\020\004\022\017\n\013FIRE_METEOR\020\005\022\027\n\023FIRE_BALL_"
-  "EXPLOSION\020\006b\006proto3"
+  "TH\020\014\022\024\n\020MOVE_STATE_SPAWN\020\r\022\026\n\022MOVE_STATE"
+  "_DISSOVE\020\016*D\n\017ProjectileState\022\016\n\nMOVE_ST"
+  "ATE\020\000\022\r\n\tCOLLISION\020\001\022\022\n\016SPAWN_PARTICLE\020\002"
+  "*\206\001\n\tSkillMesh\022\r\n\tFIRE_BALL\020\000\022\017\n\013FIRE_PI"
+  "LLAR\020\001\022\017\n\013FIRE_CIRCLE\020\002\022\016\n\nFIRE_SWORD\020\003\022"
+  "\016\n\nFIRE_TOWER\020\004\022\017\n\013FIRE_METEOR\020\005\022\027\n\023FIRE"
+  "_BALL_EXPLOSION\020\006b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Enum_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto = {
-    false, false, 939, descriptor_table_protodef_Enum_2eproto,
+    false, false, 985, descriptor_table_protodef_Enum_2eproto,
     "Enum.proto",
     &descriptor_table_Enum_2eproto_once, nullptr, 0, 0,
     schemas, file_default_instances, TableStruct_Enum_2eproto::offsets,
@@ -150,6 +151,8 @@ bool MoveState_IsValid(int value) {
     case 10:
     case 11:
     case 12:
+    case 13:
+    case 14:
       return true;
     default:
       return false;
