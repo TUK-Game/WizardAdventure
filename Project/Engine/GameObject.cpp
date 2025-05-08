@@ -211,6 +211,7 @@ Protocol::MoveState CGameObject::GetStateForProtocol()
 	case EState_Type::Hit:
 		break;
 	case EState_Type::Death:
+		return Protocol::MOVE_STATE_DEATH;
 		break;
 	case EState_Type::END:
 		break;
@@ -257,15 +258,15 @@ void CGameObject::SetProtocolStateForClient(Protocol::MoveState state)
 		break;
 	case Protocol::MOVE_STATE_DAMAGED:
 		m_StateManager->HandleEvent(this, "Knockback");
-		std::cout << "Damaged!!\n";
 		break;
 	case Protocol::MOVE_STATE_DAMAGED_END:
 		m_StateManager->HandleEvent(this, "EndKnockback");
-		std::cout << "DamagedEnd!!\n";
 		break;
 	case Protocol::MOVE_STATE_DEATH:
 		m_StateManager->HandleEvent(this, "Death");
-		std::cout << "Death!!\n";
+		break;
+	case Protocol::MOVE_STATE_DEATH_END:
+		m_StateManager->HandleEvent(this, "EndDeath");
 		break;
 	default:
 		break;

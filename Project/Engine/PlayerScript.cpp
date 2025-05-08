@@ -8,6 +8,9 @@
 #include "LevelManager.h"
 #include "RenderManager.h"
 #include "Camera.h"
+#include "CameraScript.h"
+#include "NetworkManager.h"
+#include "ServerSession.h"
 
 void CPlayerScript::Update()
 {
@@ -21,7 +24,30 @@ void CPlayerScript::Update()
 
 	if (player->GetStats()->currentHp <= 0)
 	{
-		stateManager->HandleEvent(player, "Death");
+		//stateManager->HandleEvent(player, "Death");
+		if (stateManager->GetCurrentStateType() != EState_Type::Death && m_BeforDeath_TargetId < 0)
+		{
+			const auto& camera = CRenderManager::GetInst()->GetMainCamera();
+			const auto& script = dynamic_cast<CCameraScript*>(camera->GetOwner()->GetScript());
+			if (script)
+			{
+				for (int i = 0; i < MAX_PLAYERS; ++i)
+				{
+					const auto& p = CLevelManager::GetInst()->GetPlayer(i);
+					if (!p)
+						continue;
+
+					if (CNetworkManager::GetInst()->s_GameSession->GetClientID() != i)
+					{
+						script->SetTransform(p->GetTransform());
+						camera->SetTarget(p);
+						m_BeforDeath_TargetId = i;
+						return;
+					}
+				}
+				std::cout << "½ÇÆÐ\n";
+			}
+		}
 		return;
 	}
 

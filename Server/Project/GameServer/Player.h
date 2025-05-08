@@ -56,6 +56,9 @@ private:
 	float m_DamageDuration = 1.2f;
 	float m_DamageElapsedTime = 0.f;	
 
+	float m_DeathDuration = 2.6f;
+	float m_DeathElapsedTime = 0.f;
+
 	std::weak_ptr<CGameSession>	m_Session;
 	Protocol::MoveState m_State;
 	Protocol::Vector3 m_Dir;

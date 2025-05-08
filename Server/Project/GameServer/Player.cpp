@@ -130,6 +130,18 @@ void CPlayer::Update(float deltaTime)
 		}
 		g_Room->HandleMovePlayer(m_Session.lock()->Player);
 	}
+	else if (m_State == Protocol::MOVE_STATE_DEATH)
+	{
+		float deltaTime = g_Timer->GetDeltaTime();
+		m_DeathElapsedTime += deltaTime;
+		std::cout << "ss\n";
+		if (m_DeathElapsedTime + 0.1f >= m_DeathDuration)
+		{
+			m_State = Protocol::MOVE_STATE_DEATH_END;
+			g_Room->UpdatePlayerState(m_Session.lock()->Player);
+			m_DeathElapsedTime = 0;
+		}
+	}
 	else
 	{
 		if (PlayerInfo->object_info().pos_info().position().y() <= -200.f)
@@ -148,7 +160,14 @@ void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 	{
 		CMonster* monster = (dynamic_cast<CMonster*>(dest->GetOwner()));
 		GetAblity()->currentHp -= monster->GetAblity()->attack;
-		SetState(Protocol::MOVE_STATE_DAMAGED);
+		if(GetAblity()->currentHp <= 0)
+		{
+			SetState(Protocol::MOVE_STATE_DEATH);
+		}
+		else
+		{
+			SetState(Protocol::MOVE_STATE_DAMAGED);
+		}
 		g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
 		g_Room->UpdatePlayerState(m_Session.lock()->Player);
 	}

@@ -166,8 +166,9 @@ enum MoveState : int {
   MOVE_STATE_DAMAGED = 10,
   MOVE_STATE_DAMAGED_END = 11,
   MOVE_STATE_DEATH = 12,
-  MOVE_STATE_SPAWN = 13,
-  MOVE_STATE_DISSOVE = 14,
+  MOVE_STATE_DEATH_END = 13,
+  MOVE_STATE_SPAWN = 14,
+  MOVE_STATE_DISSOVE = 15,
   MoveState_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   MoveState_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
