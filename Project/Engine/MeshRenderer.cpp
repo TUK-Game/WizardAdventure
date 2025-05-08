@@ -71,10 +71,11 @@ void CMeshRenderer::RenderShadow()
 	if (GetAnimator())
 	{
 		GetAnimator()->PushData();
+		auto owner = GetOwner();
 		if (GetOwner()->IsInDissolveState()) {
-			GetMaterial()->SetTexture(1, CAssetManager::GetInst()->FindAsset<CTexture>(L"Noise"));
-			GetMaterial()->SetInt(1, 1);
-			GetMaterial()->SetFloat(0, GetOwner()->GetThreshold());
+			CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetTexture(1, CAssetManager::GetInst()->FindAsset<CTexture>(L"Noise"));
+			CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetInt(1, 1);
+			CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetFloat(0, GetOwner()->GetThreshold());
 		}
 		CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->SetInt(0, 0);
 		CAssetManager::GetInst()->FindAsset<CMaterial>(L"ShadowAnim")->GraphicsBinding();
@@ -82,9 +83,9 @@ void CMeshRenderer::RenderShadow()
 	else
 	{
 		if (GetOwner()->IsInDissolveState()) {
-			GetMaterial()->SetTexture(1, CAssetManager::GetInst()->FindAsset<CTexture>(L"Noise"));
-			GetMaterial()->SetInt(1, 1);
-			GetMaterial()->SetFloat(0, GetOwner()->GetThreshold());
+			CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetTexture(1, CAssetManager::GetInst()->FindAsset<CTexture>(L"Noise"));
+			CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetInt(1, 1);
+			CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetFloat(0, GetOwner()->GetThreshold());
 		}
 		CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->SetInt(0, 0);
 		CAssetManager::GetInst()->FindAsset<CMaterial>(L"Shadow")->GraphicsBinding();
