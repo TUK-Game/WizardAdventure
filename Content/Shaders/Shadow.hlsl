@@ -59,13 +59,12 @@ VS_OUT VS_MAIN(VS_IN input)
 VS_OUT VS_ANIM(VS_AIN input)
 {
     VS_OUT output = (VS_OUT) 0.f;
-
-    output.uv = input.uv; 
-
+    
     Skinning(input.pos, input.normal, input.tangent, input.weight, input.indices);
     output.pos = mul(float4(input.pos, 1.f), matWVP);
     output.clipPos = output.pos;
-
+    output.uv = input.uv;
+    
     return output;
 }
 
