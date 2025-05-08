@@ -61,8 +61,11 @@ void CFireTower::Update()
 		else
 		{
 			// 공격 가능 상태가 되었을 때만 공격 로직 수행
-			m_TimeSinceLastAttack += DELTA_TIME;
-			TryAttack();
+			if (!GetRootObject()->GetDissolve())
+			{
+				m_TimeSinceLastAttack += DELTA_TIME;
+				TryAttack();
+			}
 		}
 	}
 	CSkillObject::Update();
@@ -74,8 +77,58 @@ void CFireTower::FinalUpdate()
 	if (m_bOwn)
 	{
 		m_ElapsedTime += DELTA_TIME;
-		if (m_ElapsedTime >= m_Duration) {
-			m_bDelete = true;
+		auto root = GetRootObject();
+		std::vector<CGameObject*> objs = GetChild();
+
+		if (root->GetDissolve())
+		{
+			// dissolve
+			float threshold = m_ElapsedTime / m_DissolveDuration;
+			threshold = std::clamp(threshold, 0.f, 1.f);
+			root->SetThreshold(threshold);
+
+			for (auto o : objs) {
+				auto renderer = o->GetMeshRenderer();
+				if (renderer) {
+					auto mat = renderer->GetMaterial();
+					if (mat) {
+						mat->SetFloat(0, threshold); // MATERIAL_PARAMS의 float_0으로 전달
+					}
+				}
+			}
+
+			// circle,
+
+
+
+			// delete
+			if (m_ElapsedTime >= m_DissolveDuration) {
+				m_bDelete = true;
+			}
+			return;
+		}
+
+		if (m_ElapsedTime >= m_Duration) 
+		{
+			// dissolve로 전환
+			root->SetDissolve(true);
+			root->SetThreshold(0.f);
+			for (auto o : objs)
+			{
+				auto renderer = o->GetMeshRenderer();
+				if (renderer) {
+					auto dissolveMat = CAssetManager::GetInst()->FindAsset<CMaterial>(L"Dissolve");
+					if (dissolveMat) {
+						dissolveMat->SetTexture(0, renderer->GetMaterial()->GetTexture(0));
+						dissolveMat->SetTexture(1, renderer->GetMaterial()->GetTexture(1));
+						dissolveMat->SetFloat(0, root->GetThreshold()); // threshold
+						renderer->SetMaterial(dissolveMat);
+					}
+				}
+
+			}
+			OffParticles();
+			m_ElapsedTime = 0.f;
 		}
 	}
 }
