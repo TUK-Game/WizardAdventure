@@ -33,6 +33,10 @@ private:
     float m_ElapsedTime = 0.f;
     bool m_bFinishScale = false;
 
+    float m_DissolveDuration = 1.f;
+
+
+
     bool m_bCanAttack = false;
     float m_AttackCooldown = 1.f;    // 공격 쿨타임
     float m_TimeSinceLastAttack = 0.f;
