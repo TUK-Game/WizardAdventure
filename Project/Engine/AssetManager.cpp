@@ -147,7 +147,7 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"Map", tex);
 
 	tex = new CTexture;
-	tex->Init(path / L"noise.png");
+	tex->Init(path / L"dissolve_noise.png");
 	AddAsset(L"Noise", tex);
 
 	tex = new CTexture;
@@ -282,6 +282,10 @@ int CAssetManager::LoadTexture()
 	tex->Init(path / L"Blue.jpg");
 	AddAsset(L"Blue", tex);
 
+	tex = new CTexture;
+	tex->Init(path / L"rectWarning.png");
+	AddAsset(L"RectWarning", tex);
+
 	// Item
 	{
 		tex = new CTexture;
@@ -397,6 +401,11 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Texture_World_Tinted"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Circle"));
 	AddAsset(L"Circle", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Texture_World_Tinted"));
+	material->SetTexture(0, FindAsset<CTexture>(L"RectWarning"));
+	AddAsset(L"RectWarning", material);
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Tex_World_Billboard"));

@@ -185,6 +185,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="Asset.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AttackRangeCircle.h" />
+    <ClInclude Include="AttackRangeRect.h" />
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="ButtonWidget.h" />
@@ -376,6 +377,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="Asset.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="AttackRangeCircle.cpp" />
+    <ClCompile Include="AttackRangeRect.cpp" />
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="ButtonWidget.cpp" />

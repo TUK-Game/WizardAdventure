@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "StateManager.h"
 #include "AttackRangeCircle.h"
+#include "AttackRangeRect.h"
 #include "LevelManager.h"
 #include "Level.h"
 
@@ -32,6 +33,29 @@ void CMonsterAttackState::Enter(CGameObject* entity)
     attackRangeCircle->SetDuration(m_AttackDuration * 0.5122);    
     attackRangeCircle->SetScaleRange(Vec3(0.1f, 0.1f, 0.1f), Vec3(300.f, 300.f, 10.f));
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(attackRangeCircle, LAYER_PROJECTILE, false);
+
+
+    Vec3 front = entity->GetTransform()->GetWorldDir(EDir::Front);
+    front.Normalize();
+
+    float yaw = atan2f(front.x, front.z); // 라디안
+    float yawDegree = XMConvertToDegrees(yaw); // 디그리로 변환
+
+    CAttackRangeRect* attackRangeRect = new CAttackRangeRect;
+
+    attackRangeRect->GetTransform()->SetRelativePosition(entity->GetTransform()->GetRelativePosition());
+
+    attackRangeRect->GetTransform()->SetRelativeRotation(90.f, yawDegree, 0.f);
+
+    attackRangeRect->SetScaleRange(Vec3(100.f, 0.1f, 0.1f), Vec3(100.f, 500.f, 1.f));
+    attackRangeRect->SetDuration(m_AttackDuration * 0.8f);
+    attackRangeRect->SetInitialPosition(entity->GetTransform()->GetRelativePosition());
+
+
+    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(attackRangeRect, LAYER_PROJECTILE, false);
+
+
+
 }
 
 void CMonsterAttackState::Update(CGameObject* entity, float deltaTime)
