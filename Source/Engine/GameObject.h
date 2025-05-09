@@ -211,6 +211,7 @@ public:
     void RemoveChild(CGameObject* obj);
     void RemoveFromParent();
 
+    virtual void SetBeforeRenderPushParmater() {};
 
     Vec3 InteractionCameraPos(Vec3& rot, const Vec3& offset);
 

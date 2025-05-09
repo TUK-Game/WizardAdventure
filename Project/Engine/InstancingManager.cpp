@@ -73,6 +73,7 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects, const st
 					}
 					else
 					{
+						obj->SetBeforeRenderPushParmater();
 						obj->GetMeshRenderer()->Render();
 					}
 				}

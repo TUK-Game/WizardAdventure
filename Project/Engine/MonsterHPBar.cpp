@@ -14,6 +14,8 @@ CMonsterHPBar::CMonsterHPBar()
 
     GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Point"));
     GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"HPBar"));
+
+    SetInstancing(false);
 }
 
 void CMonsterHPBar::SetOffsetY(float offsetY)
@@ -55,9 +57,13 @@ void CMonsterHPBar::FinalUpdate()
             }
 
 
-            float hpRatio = static_cast<float>(stats->displayHp) / static_cast<float>(stats->maxHp);
-            hpRatio = std::clamp(hpRatio, 0.f, 1.f);
-            GetMeshRenderer()->GetMaterial()->SetFloat(0, hpRatio);
+            m_HpRatio = static_cast<float>(stats->displayHp) / static_cast<float>(stats->maxHp);
+            m_HpRatio = std::clamp(m_HpRatio, 0.f, 1.f);
         }
     }
+}
+
+void CMonsterHPBar::SetBeforeRenderPushParmater()
+{
+    GetMeshRenderer()->GetMaterial()->SetFloat(0, m_HpRatio);
 }
