@@ -290,6 +290,9 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		if (nullptr == monster)
 		{
 			monster = new CMonster();
+			monster->GetTransform()->SetRelativeScale(Vec3(info.object_info().pos_info().size().x(), 
+				info.object_info().pos_info().size().y(),
+				info.object_info().pos_info().size().z()));
 			monsterMap[objectId] = monster;
 			level->SafeAddGameObject(monster, LAYER_MONSTER, false);
 		}

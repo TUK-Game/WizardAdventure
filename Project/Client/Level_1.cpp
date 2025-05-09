@@ -142,6 +142,68 @@ void CLevel_1::Init()
 #endif // DEBUG_SOLOPLAY
 
 	//{
+	//	CMonster* monster = new CMonster();
+	//	monster->SetName(L"crab1");
+	//	monster->GetTransform()->SetRelativePosition(7000, -300, 3200);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//} {
+	//	CMonster* monster = new CMonster();
+	//	monster->SetName(L"crab2");
+	//	monster->GetTransform()->SetRelativePosition(7000, -300, 4500);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//} {
+	//	CMonster* monster = new CMonster();
+	//	monster->SetName(L"crab3");
+	//	monster->GetTransform()->SetRelativePosition(6675, -300, 4000);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//} {
+	//	CMonster* monster = new CMonster();
+	//	monster->SetName(L"crab4");
+	//	monster->GetTransform()->SetRelativePosition(6675, -300, 3700);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//}
+
+	//{
+	//	CMonster* monster = new CMonster();
+	//	monster->SetName(L"crab1");
+	//	monster->GetTransform()->SetRelativePosition(4000, -300 * 0.5, 3200);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//} {
+	//	CMonster* monster = new CMonster();
+	//	monster->SetName(L"crab2");
+	//	monster->GetTransform()->SetRelativePosition(4000, -300 * 0.5, 4500);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//} {
+	//	CMonster* monster = new CMonster();
+	//	monster->SetName(L"crab3");
+	//	monster->GetTransform()->SetRelativePosition(3275, -300 * 0.5, 3975);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//} {
+	//	CMonster* monster = new CMonster();
+	//	monster->SetName(L"crab4");
+	//	monster->GetTransform()->SetRelativePosition(3275, -300 * 0.5, 3675);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//}
+
+
+
+	//{
 	//	CNPC* npc = new CNPC();
 	//	npc->GetTransform()->SetRelativePosition(11000, 20, 3500);
 	//	npc->SetWidgetWindowType(EWIDGETWINDOW_TYPE::STORE_WINDOW);

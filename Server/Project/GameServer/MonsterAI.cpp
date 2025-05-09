@@ -128,7 +128,7 @@ void CMonsterAI::UpdateAI(float deltaTime)
         {
             // 현재 위치에서 y축으로 300만큼 +해야함
             Protocol::Vector3* pos = m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
-            pos->set_y(pos->y() + 300.f);
+            pos->set_y(pos->y() + 150.f);
 
             m_SpawnTime = 0.f;
             m_Owner->SetState(Protocol::MOVE_STATE_IDLE);

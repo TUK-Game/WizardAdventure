@@ -34,7 +34,6 @@ CMonster::CMonster()
 	AddComponent(new CTransform);
 	AddComponent(new COrientedBoxCollider);
 	GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player")); // temp
-	GetTransform()->SetRelativePosition(11000, 20, 3500);
 
 	Vec3 ms;
 	for (auto& o : obj2)

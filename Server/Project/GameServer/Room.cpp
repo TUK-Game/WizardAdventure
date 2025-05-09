@@ -163,6 +163,11 @@ void CRoom::UpdateMonster()
 		rot->set_y(srcPosInfo.rotation().y());
 		rot->set_z(srcPosInfo.rotation().z());
 
+		Protocol::Vector3* scale = destPosInfo->mutable_size();
+		scale->set_x(srcPosInfo.size().x());
+		scale->set_y(srcPosInfo.size().y());
+		scale->set_z(srcPosInfo.size().z());
+
 		destPosInfo->set_state(monster->GetState());
 
 		const auto& stats = monster->GetAblity();

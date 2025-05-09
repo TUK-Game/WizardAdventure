@@ -37,7 +37,6 @@ void CMonster::Update(float deltaTime)
 {
 	if (m_bActive)
 	{
-		GetAblity()->attack = 50.f;
 		CGameObject::Update(deltaTime);
 		m_Ai->Update(deltaTime);
 	}
