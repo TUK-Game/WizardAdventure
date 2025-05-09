@@ -570,6 +570,7 @@ bool CRoom::UpdatePlayerAbility(CPlayerRef player)
 	pkt.mutable_player_ability()->set_damage(ablity->attack);	
 	pkt.mutable_player_ability()->set_hp(ablity->currentHp);
 	pkt.mutable_player_ability()->set_maxhp(ablity->maxHp);
+	pkt.mutable_player_ability()->set_gold(ablity->gold);
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
 	return true;
@@ -774,7 +775,10 @@ bool CRoom::IsBuyItem(CPlayerRef player, CItemRef item, bool isBuy)
 	Protocol::S_BUY_ITEM pkt;
 	pkt.set_player_id(player->PlayerInfo->player_id());
 	pkt.set_is_success(isBuy);
-	pkt.set_item_id(item->GetItemInfo().id);
+	if(item)
+	{
+		pkt.set_item_id(item->GetItemInfo().id);
+	}
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	if (auto session = player->GetSession())
 		session->Send(sendBuffer);

@@ -33,6 +33,11 @@ bool CPlayer::BuyItem(CItemRef item)
 	if (iter != m_Items.end())
 		return false;
 
+	float price = item->GetItemInfo().price;
+	if (price > GetAblity()->gold)
+		return false;
+
+	GetAblity()->gold -= price;
 	m_Items.emplace_back(item);
 	CalculateAbility(item);
 	g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
@@ -47,6 +52,12 @@ bool CPlayer::BuySkill(CSkillRef skill)
 
 	if (iter != m_Skills.end())
 		return false;
+
+	float price = skill->GetSkillInfo().price;
+	if (price > GetAblity()->gold)
+		return false;
+
+	GetAblity()->gold -= price;
 
 	m_Skills.emplace_back(skill);
 	g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
@@ -159,6 +170,10 @@ void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 	if (dest->GetProfile()->channel == ECollision_Channel::Monster)
 	{
 		CMonster* monster = (dynamic_cast<CMonster*>(dest->GetOwner()));
+
+		if (monster->GetAblity()->currentHp <= 0)
+			return;
+
 		GetAblity()->currentHp -= monster->GetAblity()->attack;
 		if(GetAblity()->currentHp <= 0)
 		{

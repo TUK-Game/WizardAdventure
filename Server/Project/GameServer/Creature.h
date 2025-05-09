@@ -8,6 +8,7 @@ struct Ablity
 	int currentHp = 100;
 	int attack = 10;
 	float moveSpeed = 300.f;
+	int gold = 1000;
 
 	void TakeDamage(int damage) {
 		currentHp = max(currentHp - damage, 0);

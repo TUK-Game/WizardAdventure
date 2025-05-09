@@ -132,7 +132,7 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	case EPlayerAttribute::Fire:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_FIRE);
-		player->InitStats(100, 100, 30, 300.f);
+		player->InitStats(100, 100, 30, 300.f, 1000);
 		// temp
 
 		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
@@ -148,19 +148,19 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 		// gamewindow->SetSkill(ESkillType::FireSwordSpread, Skill::FireSword.cooldown, ESkillSlot::R);
 		gamewindow->SetGauge(L"HPBar", 100, true);
 		gamewindow->SetGauge(L"SignautreGage", 0, false);
-
+		gamewindow->SetGold();
 	}
 	break;
 	case EPlayerAttribute::Ice:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_ICE);
-		player->InitStats(100, 100, 30, 300.f);
+		player->InitStats(100, 100, 30, 300.f, 1000);
 	}
 	break;
 	case EPlayerAttribute::Electric:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
-		player->InitStats(100, 100, 30, 300.f);
+		player->InitStats(100, 100, 30, 300.f, 1000);
 	}
 	break;
 	}
@@ -181,7 +181,7 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 	case Protocol::PLAYER_TYPE_FIRE:
 	{
 		player = new CPlayer(EPlayerAttribute::Fire, false, Vec3(11240.f, 0.f, 1127.f));
-		player->InitStats(100, 100, 30, 300.f);
+		player->InitStats(100, 100, 30, 300.f, 1000);
 
 		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
 		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
@@ -230,7 +230,7 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 		case Protocol::PLAYER_TYPE_FIRE:
 		{
 			player = new CPlayer(EPlayerAttribute::Fire, false, Vec3(position.x(), position.y(), position.z()));
-			player->InitStats(100, 100, 30, 300.f);
+			player->InitStats(100, 100, 30, 300.f, 1000);
 
 			player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
 			player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
@@ -304,7 +304,25 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 
 		if (state == Protocol::MOVE_STATE_NONE)
 		{
-			level->GetLayer(LAYER_MONSTER)->SafeRemoveGameObject(monsterMap[objectId]);
+			/*const auto& players = CLevelManager::GetInst()->GetPlayers();
+			for (const auto& p : players)
+			{
+				if (!p) continue;
+				CPlayer* player = dynamic_cast<CPlayer*>(p);
+				player->GetStats()->gold += monster->GetStat()->gold;
+
+				if (player == CNetworkManager::GetInst()->s_GameSession->GetOwnPlayer())
+				{
+					CInventoryWIdgetWindow* inven = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
+					CPlayWidgetWindow* gamewindow = dynamic_cast<CPlayWidgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::GAME_WINDOW));
+					if (inven && gamewindow)
+					{
+						inven->UpdateStatsText();
+						gamewindow->SetGold();
+					}
+				}
+			}*/
+			level->GetLayer(LAYER_MONSTER)->SafeRemoveGameObject(monster);
 			monsterMap.erase(objectId);
 			continue;
 		}
@@ -475,7 +493,7 @@ bool Handle_S_UPDATE_PLAYER_STATS(CPacketSessionRef& session, Protocol::S_UPDATE
 	const auto& player = CLevelManager::GetInst()->GetPlayer(id);
 
 	const auto& stats = pkt.player_ability();
-	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp(), stats.damage());
+	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp(), stats.damage(), stats.gold());
 
 	CInventoryWIdgetWindow* inven = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
 	CPlayWidgetWindow* gamewindow = dynamic_cast<CPlayWidgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::GAME_WINDOW));
@@ -483,6 +501,7 @@ bool Handle_S_UPDATE_PLAYER_STATS(CPacketSessionRef& session, Protocol::S_UPDATE
 	{
 		inven->UpdateStatsText();
 		gamewindow->SetGauge(L"HPBar", stats.maxhp(), true);
+		gamewindow->SetGold();
 	}
 	return true;
 }

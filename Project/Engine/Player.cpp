@@ -258,12 +258,13 @@ void CPlayer::Attack(int skillIndex, float duration)
 
 }
 
-void CPlayer::InitStats(int maxHp, int hp, int attack, float speed)
+void CPlayer::InitStats(int maxHp, int hp, int attack, float speed, int gold)
 {
     m_Stats->maxHp = maxHp;
     m_Stats->currentHp = hp;
     m_Stats->attack = attack;
     m_Stats->moveSpeed = speed;
+    m_Stats->gold = gold;
 }
 
 bool CPlayer::DetectNPC()

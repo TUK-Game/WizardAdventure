@@ -21,7 +21,7 @@ public:
     void Attack(int skillIndex, float duration = 0.f);
 
     virtual void SetTarget(const Vec3& pos, const Vec3& rot) { m_Interpolator->SetTarget(pos, rot); }
-    void SetStats(int maxHp, int hp, float attack) { m_Stats->maxHp = maxHp; m_Stats->currentHp = hp; m_Stats->attack = attack; }
+    void SetStats(int maxHp, int hp, float attack, int gold) { m_Stats->maxHp = maxHp; m_Stats->currentHp = hp; m_Stats->attack = attack; m_Stats->gold = gold; }
     void AddItem(std::shared_ptr<class CItem> item) { m_Items.emplace_back(item); }
     void AddSkill(std::shared_ptr<class CSkillData> skill);
     void CreateStateManager();
@@ -32,7 +32,7 @@ public:
     CSkillManager* GetSkillManager() const { return m_SkillManager; }
     std::vector<std::shared_ptr<class CItem>>& GetItems() { return m_Items; }
 
-    void InitStats(int maxHp, int hp, int attack, float speed);
+    void InitStats(int maxHp, int hp, int attack, float speed, int gold);
 
     bool DetectNPC();
     void MoveToInventoryView();

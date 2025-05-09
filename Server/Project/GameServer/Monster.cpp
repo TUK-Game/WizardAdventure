@@ -5,6 +5,7 @@
 #include "MonsterCollider.h"
 #include "Room.h"
 #include "Projectile.h"
+#include "Player.h"
 
 CMonster::CMonster()
 {
@@ -44,6 +45,9 @@ void CMonster::Update(float deltaTime)
 
 void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
+	if (GetAblity()->currentHp <= 0)
+		return;
+
 	if (dest->GetProfile()->channel == ECollision_Channel::Projectile &&
 		Protocol::MOVE_STATE_NONE != m_State)
 	{
@@ -55,8 +59,13 @@ void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 			{
 				std::cout << "Á×À½ »óÅÂ\n";
 				m_State = Protocol::MOVE_STATE_DEATH;		// death state
-				//m_State = Protocol::MOVE_STATE_NONE;
-				//g_Room->RemoveObject((uint32)EObject_Type::Monster, MonsterInfo->object_id());
+
+				const auto& players = g_Room->GetPlayers();
+				for (const auto& player : players)
+				{
+					if (!player) continue;
+					player->GetAblity()->gold += GetAblity()->gold;
+				}
 			}
 		}
 	}

@@ -135,6 +135,7 @@ PROTOBUF_CONSTEXPR PlayerAblity::PlayerAblity(
   , /*decltype(_impl_.damage_)*/0u
   , /*decltype(_impl_.signaturegage_)*/0
   , /*decltype(_impl_.maxsignaturegage_)*/0
+  , /*decltype(_impl_.gold_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct PlayerAblityDefaultTypeInternal {
   PROTOBUF_CONSTEXPR PlayerAblityDefaultTypeInternal()
@@ -338,6 +339,7 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerAblity, _impl_.damage_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerAblity, _impl_.signaturegage_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerAblity, _impl_.maxsignaturegage_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::PlayerAblity, _impl_.gold_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerUpdateInfo, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -415,13 +417,13 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 48, -1, -1, sizeof(::Protocol::MonsterMoveInfo)},
   { 57, -1, -1, sizeof(::Protocol::PlayerMoveInfo)},
   { 65, -1, -1, sizeof(::Protocol::PlayerAblity)},
-  { 76, -1, -1, sizeof(::Protocol::PlayerUpdateInfo)},
-  { 85, -1, -1, sizeof(::Protocol::MonsterAblity)},
-  { 93, -1, -1, sizeof(::Protocol::ProjectileBasicInfo)},
-  { 108, -1, -1, sizeof(::Protocol::ProjectileInfo)},
-  { 117, -1, -1, sizeof(::Protocol::NpcInfo)},
-  { 127, -1, -1, sizeof(::Protocol::ItemInfo)},
-  { 135, -1, -1, sizeof(::Protocol::SkillInfo)},
+  { 77, -1, -1, sizeof(::Protocol::PlayerUpdateInfo)},
+  { 86, -1, -1, sizeof(::Protocol::MonsterAblity)},
+  { 94, -1, -1, sizeof(::Protocol::ProjectileBasicInfo)},
+  { 109, -1, -1, sizeof(::Protocol::ProjectileInfo)},
+  { 118, -1, -1, sizeof(::Protocol::NpcInfo)},
+  { 128, -1, -1, sizeof(::Protocol::ItemInfo)},
+  { 136, -1, -1, sizeof(::Protocol::SkillInfo)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -464,35 +466,36 @@ const char descriptor_table_protodef_Struct_2eproto[] PROTOBUF_SECTION_VARIABLE(
   ".Protocol.MonsterType\022#\n\010pos_info\030\003 \001(\0132"
   "\021.Protocol.PosInfo\"H\n\016PlayerMoveInfo\022\021\n\t"
   "player_id\030\001 \001(\r\022#\n\010pos_info\030\002 \001(\0132\021.Prot"
-  "ocol.PosInfo\"j\n\014PlayerAblity\022\r\n\005maxhp\030\001 "
+  "ocol.PosInfo\"x\n\014PlayerAblity\022\r\n\005maxhp\030\001 "
   "\001(\r\022\n\n\002hp\030\002 \001(\r\022\016\n\006damage\030\003 \001(\r\022\025\n\rsigna"
   "turegage\030\004 \001(\002\022\030\n\020maxsignaturegage\030\005 \001(\002"
-  "\"y\n\020PlayerUpdateInfo\022\021\n\tplayer_id\030\001 \001(\r\022"
-  "#\n\010pos_info\030\002 \001(\0132\021.Protocol.PosInfo\022-\n\r"
-  "player_ablity\030\003 \001(\0132\026.Protocol.PlayerAbl"
-  "ity\"*\n\rMonsterAblity\022\r\n\005maxhp\030\001 \001(\r\022\n\n\002h"
-  "p\030\002 \001(\r\"\370\001\n\023ProjectileBasicInfo\022\031\n\021new_p"
-  "rojectile_id\030\001 \001(\004\022\021\n\tplayer_id\030\002 \001(\r\022\020\n"
-  "\010duration\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\016\n\006damage"
-  "\030\005 \001(\r\022\036\n\003dir\030\006 \001(\0132\021.Protocol.Vector3\022\037"
-  "\n\004size\030\007 \001(\0132\021.Protocol.Vector3\022$\n\tspawn"
-  "_pos\030\010 \001(\0132\021.Protocol.Vector3\022\033\n\023bCollis"
-  "ionExplosion\030\t \001(\010\"|\n\016ProjectileInfo\022\025\n\r"
-  "Projectile_id\030\001 \001(\004\022(\n\005state\030\002 \001(\0162\031.Pro"
-  "tocol.ProjectileState\022)\n\013object_info\030\003 \001"
-  "(\0132\024.Protocol.ObjectInfo\"j\n\007NpcInfo\022\021\n\to"
-  "bject_id\030\001 \001(\r\022)\n\013object_info\030\002 \001(\0132\024.Pr"
-  "otocol.ObjectInfo\022\017\n\007item_id\030\003 \003(\r\022\020\n\010sk"
-  "ill_id\030\004 \003(\r\",\n\010ItemInfo\022\017\n\007item_id\030\001 \001("
-  "\r\022\017\n\007is_sell\030\002 \001(\010\".\n\tSkillInfo\022\020\n\010skill"
-  "_id\030\001 \001(\r\022\017\n\007is_sell\030\002 \001(\010b\006proto3"
+  "\022\014\n\004gold\030\006 \001(\r\"y\n\020PlayerUpdateInfo\022\021\n\tpl"
+  "ayer_id\030\001 \001(\r\022#\n\010pos_info\030\002 \001(\0132\021.Protoc"
+  "ol.PosInfo\022-\n\rplayer_ablity\030\003 \001(\0132\026.Prot"
+  "ocol.PlayerAblity\"*\n\rMonsterAblity\022\r\n\005ma"
+  "xhp\030\001 \001(\r\022\n\n\002hp\030\002 \001(\r\"\370\001\n\023ProjectileBasi"
+  "cInfo\022\031\n\021new_projectile_id\030\001 \001(\004\022\021\n\tplay"
+  "er_id\030\002 \001(\r\022\020\n\010duration\030\003 \001(\002\022\r\n\005speed\030\004"
+  " \001(\002\022\016\n\006damage\030\005 \001(\r\022\036\n\003dir\030\006 \001(\0132\021.Prot"
+  "ocol.Vector3\022\037\n\004size\030\007 \001(\0132\021.Protocol.Ve"
+  "ctor3\022$\n\tspawn_pos\030\010 \001(\0132\021.Protocol.Vect"
+  "or3\022\033\n\023bCollisionExplosion\030\t \001(\010\"|\n\016Proj"
+  "ectileInfo\022\025\n\rProjectile_id\030\001 \001(\004\022(\n\005sta"
+  "te\030\002 \001(\0162\031.Protocol.ProjectileState\022)\n\013o"
+  "bject_info\030\003 \001(\0132\024.Protocol.ObjectInfo\"j"
+  "\n\007NpcInfo\022\021\n\tobject_id\030\001 \001(\r\022)\n\013object_i"
+  "nfo\030\002 \001(\0132\024.Protocol.ObjectInfo\022\017\n\007item_"
+  "id\030\003 \003(\r\022\020\n\010skill_id\030\004 \003(\r\",\n\010ItemInfo\022\017"
+  "\n\007item_id\030\001 \001(\r\022\017\n\007is_sell\030\002 \001(\010\".\n\tSkil"
+  "lInfo\022\020\n\010skill_id\030\001 \001(\r\022\017\n\007is_sell\030\002 \001(\010"
+  "b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Struct_2eproto_deps[1] = {
   &::descriptor_table_Enum_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_Struct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Struct_2eproto = {
-    false, false, 1714, descriptor_table_protodef_Struct_2eproto,
+    false, false, 1728, descriptor_table_protodef_Struct_2eproto,
     "Struct.proto",
     &descriptor_table_Struct_2eproto_once, descriptor_table_Struct_2eproto_deps, 1, 15,
     schemas, file_default_instances, TableStruct_Struct_2eproto::offsets,
@@ -2421,12 +2424,13 @@ PlayerAblity::PlayerAblity(const PlayerAblity& from)
     , decltype(_impl_.damage_){}
     , decltype(_impl_.signaturegage_){}
     , decltype(_impl_.maxsignaturegage_){}
+    , decltype(_impl_.gold_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&_impl_.maxhp_, &from._impl_.maxhp_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.maxsignaturegage_) -
-    reinterpret_cast<char*>(&_impl_.maxhp_)) + sizeof(_impl_.maxsignaturegage_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.gold_) -
+    reinterpret_cast<char*>(&_impl_.maxhp_)) + sizeof(_impl_.gold_));
   // @@protoc_insertion_point(copy_constructor:Protocol.PlayerAblity)
 }
 
@@ -2440,6 +2444,7 @@ inline void PlayerAblity::SharedCtor(
     , decltype(_impl_.damage_){0u}
     , decltype(_impl_.signaturegage_){0}
     , decltype(_impl_.maxsignaturegage_){0}
+    , decltype(_impl_.gold_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -2468,8 +2473,8 @@ void PlayerAblity::Clear() {
   (void) cached_has_bits;
 
   ::memset(&_impl_.maxhp_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.maxsignaturegage_) -
-      reinterpret_cast<char*>(&_impl_.maxhp_)) + sizeof(_impl_.maxsignaturegage_));
+      reinterpret_cast<char*>(&_impl_.gold_) -
+      reinterpret_cast<char*>(&_impl_.maxhp_)) + sizeof(_impl_.gold_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2516,6 +2521,14 @@ const char* PlayerAblity::_InternalParse(const char* ptr, ::_pbi::ParseContext* 
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
           _impl_.maxsignaturegage_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 gold = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.gold_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -2586,6 +2599,12 @@ uint8_t* PlayerAblity::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_maxsignaturegage(), target);
   }
 
+  // uint32 gold = 6;
+  if (this->_internal_gold() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(6, this->_internal_gold(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2635,6 +2654,11 @@ size_t PlayerAblity::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
+  // uint32 gold = 6;
+  if (this->_internal_gold() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_gold());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -2676,6 +2700,9 @@ void PlayerAblity::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::P
   if (raw_maxsignaturegage != 0) {
     _this->_internal_set_maxsignaturegage(from._internal_maxsignaturegage());
   }
+  if (from._internal_gold() != 0) {
+    _this->_internal_set_gold(from._internal_gold());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2694,8 +2721,8 @@ void PlayerAblity::InternalSwap(PlayerAblity* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(PlayerAblity, _impl_.maxsignaturegage_)
-      + sizeof(PlayerAblity::_impl_.maxsignaturegage_)
+      PROTOBUF_FIELD_OFFSET(PlayerAblity, _impl_.gold_)
+      + sizeof(PlayerAblity::_impl_.gold_)
       - PROTOBUF_FIELD_OFFSET(PlayerAblity, _impl_.maxhp_)>(
           reinterpret_cast<char*>(&_impl_.maxhp_),
           reinterpret_cast<char*>(&other->_impl_.maxhp_));

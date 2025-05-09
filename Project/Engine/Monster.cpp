@@ -57,6 +57,9 @@ CMonster::CMonster()
 	hpBar->SetOffsetY(450.f);
 	AddChild(hpBar);
 
+	// temp
+	GetStat()->gold = 100.f;
+
 	Begin();	
 }
 
