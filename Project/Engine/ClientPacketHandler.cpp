@@ -687,12 +687,24 @@ bool Handle_S_BUY_ITEM(CPacketSessionRef& session, Protocol::S_BUY_ITEM& pkt)
 			npc->SuccessInteration();
 		}
 		const auto& item = CItemManager::GetInst()->FindItem(itemId);
+		if (item->GetItemInfo().name == L"HP포션")
+			return true;
+
 		CPlayer* player = dynamic_cast<CPlayer*>(CLevelManager::GetInst()->GetPlayer(playerId));
 		CInventoryWIdgetWindow* inven = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
 		if(item && player && inven)
 		{
 			player->AddItem(item);
 			inven->UpdateInventory();
+		}
+	}
+	else
+	{
+		const auto& objects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_NPC)->GetParentObjects();
+		CNPC* npc = dynamic_cast<CNPC*>(objects[0]);
+		if (npc)
+		{
+			npc->FailInteration();
 		}
 	}
 	return true;
@@ -724,6 +736,15 @@ bool Handle_S_BUY_SKILL(CPacketSessionRef& session, Protocol::S_BUY_SKILL& pkt)
 			}
 			player->AddSkill(skill);
 			inven->UpdateInventory();
+		}
+	}
+	else
+	{
+		const auto& objects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_NPC)->GetParentObjects();
+		CNPC* npc = dynamic_cast<CNPC*>(objects[0]);
+		if (npc)
+		{
+			npc->FailInteration();
 		}
 	}
 	return true; 

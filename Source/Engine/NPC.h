@@ -21,6 +21,7 @@ public:
 public:
     virtual void Interation();
     virtual void SuccessInteration();
+    virtual void FailInteration();
     virtual void ShowWidgetWindow();
 
 protected:

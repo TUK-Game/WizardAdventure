@@ -731,6 +731,9 @@
     <ClInclude Include="PlayerStateManager.h">
       <Filter>01. Manager\15. State</Filter>
     </ClInclude>
+    <ClInclude Include="NPCFailState.h">
+      <Filter>06. State\NPCState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1143,6 +1146,9 @@
     </ClCompile>
     <ClCompile Include="PlayerStateManager.cpp">
       <Filter>01. Manager\15. State</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCFailState.cpp">
+      <Filter>06. State\NPCState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

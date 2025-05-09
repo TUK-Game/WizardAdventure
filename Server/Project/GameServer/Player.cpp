@@ -41,15 +41,9 @@ bool CPlayer::BuyItem(CItemRef item)
 	if (CalculateAbility(item))
 	{
 		m_Items.emplace_back(item);
-		g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
-		return true;
 	}
-	else
-	{
-		g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
-		item->GetItemInfo().bSell = true;
-		return false;
-	}
+	g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
+	return true;
 }
 
 bool CPlayer::BuySkill(CSkillRef skill)

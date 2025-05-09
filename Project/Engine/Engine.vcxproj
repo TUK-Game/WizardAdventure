@@ -215,6 +215,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="NPCBuyState.h" />
+    <ClInclude Include="NPCFailState.h" />
     <ClInclude Include="NPCIdleState.h" />
     <ClInclude Include="NPCTalkState.h" />
     <ClInclude Include="ParticleSystemManager.h" />
@@ -409,6 +410,7 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="ItemManager.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="NPCBuyState.cpp" />
+    <ClCompile Include="NPCFailState.cpp" />
     <ClCompile Include="NPCIdleState.cpp" />
     <ClCompile Include="NPCTalkState.cpp" />
     <ClCompile Include="ParticleSystemManager.cpp" />

@@ -712,6 +712,7 @@ bool CRoom::HandleBuyItem(CPlayerRef player, CItemRef item)
 			else
 			{
 				// 실패메시지 전달
+				std::cout << "실패\n";
 				IsBuyItem(player, nullptr, false);
 			}
 		}
@@ -764,7 +765,10 @@ bool CRoom::IsBuySkill(CPlayerRef player, CSkillRef skill, bool isBuy)
 	Protocol::S_BUY_SKILL pkt;
 	pkt.set_player_id(player->PlayerInfo->player_id());
 	pkt.set_is_success(isBuy);
-	pkt.set_skill_id(skill->GetSkillInfo().id);
+	if(skill)
+	{
+		pkt.set_skill_id(skill->GetSkillInfo().id);
+	}
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
 	return true;

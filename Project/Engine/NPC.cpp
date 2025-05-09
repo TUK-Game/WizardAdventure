@@ -11,6 +11,7 @@
 #include "NPCBuyState.h"
 #include "NPCIdleState.h"
 #include "NPCTalkState.h"
+#include "NPCFailState.h"
 #include "LevelManager.h"
 #include "Level.h"
 
@@ -76,15 +77,22 @@ void CNPC::CreateStateManager()
 	m_StateManager->AddState(new CNPCIdleState);
 	m_StateManager->AddState(new CNPCTalkState);
 	m_StateManager->AddState(new CNPCBuyState);
+	m_StateManager->AddState(new CNPCFailState);
 
 
 	m_StateManager->SetTransition(EState_Type::Idle, "Talk", EState_Type::Talk);
 
 	m_StateManager->SetTransition(EState_Type::Talk, "Buy", EState_Type::Buy);
 	m_StateManager->SetTransition(EState_Type::Talk, "Finish", EState_Type::Idle);
+	m_StateManager->SetTransition(EState_Type::Talk, "Fail", EState_Type::Death);
 
-	m_StateManager->SetTransition(EState_Type::Buy, "FinishStore", EState_Type::Idle);
+	m_StateManager->SetTransition(EState_Type::Buy, "Finish", EState_Type::Idle);
 	m_StateManager->SetTransition(EState_Type::Buy, "Continue", EState_Type::Talk);
+	m_StateManager->SetTransition(EState_Type::Buy, "Fail", EState_Type::Death);
+
+	m_StateManager->SetTransition(EState_Type::Death, "Finish", EState_Type::Idle);
+	m_StateManager->SetTransition(EState_Type::Death, "Buy", EState_Type::Buy);
+	m_StateManager->SetTransition(EState_Type::Death, "Continue", EState_Type::Talk);
 
 }
 
@@ -97,6 +105,11 @@ void CNPC::Interation()
 void CNPC::SuccessInteration()
 {
 	m_StateManager->HandleEvent(this, "Buy");
+}
+
+void CNPC::FailInteration()
+{
+	m_StateManager->HandleEvent(this, "Fail");
 }
 
 void CNPC::ShowWidgetWindow()
