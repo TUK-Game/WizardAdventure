@@ -106,7 +106,6 @@ bool CPlayWidgetWindow::Init(CPlayer* player)
 
 	{
 		Stats* stats = player->GetStats();
-
 		CTextWidget* gold = CreateWidget<CTextWidget>(L"PGold", player);
 		gold->GetTransform()->SetRelativePosition(-0.75f, -1.42f, 1.f);
 		gold->SetBasicInfo(std::format(L"{}", stats->gold), L"맑은 고딕_20", L"Yellow", Vec2(0.f, 0.f), Vec2(500.f, 100.f));

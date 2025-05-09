@@ -304,24 +304,6 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 
 		if (state == Protocol::MOVE_STATE_NONE)
 		{
-			/*const auto& players = CLevelManager::GetInst()->GetPlayers();
-			for (const auto& p : players)
-			{
-				if (!p) continue;
-				CPlayer* player = dynamic_cast<CPlayer*>(p);
-				player->GetStats()->gold += monster->GetStat()->gold;
-
-				if (player == CNetworkManager::GetInst()->s_GameSession->GetOwnPlayer())
-				{
-					CInventoryWIdgetWindow* inven = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
-					CPlayWidgetWindow* gamewindow = dynamic_cast<CPlayWidgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::GAME_WINDOW));
-					if (inven && gamewindow)
-					{
-						inven->UpdateStatsText();
-						gamewindow->SetGold();
-					}
-				}
-			}*/
 			level->GetLayer(LAYER_MONSTER)->SafeRemoveGameObject(monster);
 			monsterMap.erase(objectId);
 			continue;

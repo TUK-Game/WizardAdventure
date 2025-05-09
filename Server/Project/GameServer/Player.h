@@ -36,7 +36,7 @@ public:
 
 	bool BuyItem(CItemRef item);
 	bool BuySkill(CSkillRef skill);
-	void CalculateAbility(CItemRef item);
+	bool CalculateAbility(CItemRef item);
 public:
 	Protocol::PlayerInfo* PlayerInfo;
 

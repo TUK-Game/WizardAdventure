@@ -38,10 +38,18 @@ bool CPlayer::BuyItem(CItemRef item)
 		return false;
 
 	GetAblity()->gold -= price;
-	m_Items.emplace_back(item);
-	CalculateAbility(item);
-	g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
-	return true;
+	if (CalculateAbility(item))
+	{
+		m_Items.emplace_back(item);
+		g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
+		return true;
+	}
+	else
+	{
+		g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
+		item->GetItemInfo().bSell = true;
+		return false;
+	}
 }
 
 bool CPlayer::BuySkill(CSkillRef skill)
@@ -64,7 +72,7 @@ bool CPlayer::BuySkill(CSkillRef skill)
 	return true;
 }
 
-void CPlayer::CalculateAbility(CItemRef item)
+bool CPlayer::CalculateAbility(CItemRef item)
 {
 	const auto& info = item->GetItemInfo();
 	switch (info.part)
@@ -88,9 +96,11 @@ void CPlayer::CalculateAbility(CItemRef item)
 	case EITEM_PART::HEAL:
 	{
 		GetAblity()->currentHp = (std::min)((int)info.amount + GetAblity()->currentHp, GetAblity()->maxHp);
+		return false;
 	}
 	break;
 	}
+	return true;
 }
 
 void CPlayer::Update(float deltaTime)
