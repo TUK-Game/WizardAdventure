@@ -127,7 +127,7 @@ void CPlayer::Update()
 #ifndef DEBUG_SOLOPLAY
     m_Interpolator->Update(time);
     GetTransform()->SetRelativePosition((m_Interpolator->GetInterpolatedPos()));
-    GetTransform()->SetRelativeRotation((m_Interpolator->GetInterpolatedRot()));
+    //GetTransform()->SetRelativeRotation((m_Interpolator->GetInterpolatedRot()));
 #endif // DEBUG_SOLOPLAY
 
     CGameObject::Update();
@@ -242,7 +242,9 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate, float speedScale)
         }
 #ifndef DEBUG_SOLOPLAY
         if(m_StateManager->GetCurrentStateType() != EState_Type::Dash)
+        {
             CNetworkManager::GetInst()->s_GameSession->OnMovePlayer();
+        }
 #endif 
     }
 }

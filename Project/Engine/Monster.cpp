@@ -72,8 +72,7 @@ void CMonster::Begin()
 {
 	CGameObject::Begin();
 	m_StateManager->ChangeState(this, EState_Type::Spawn);
-	m_Interpolator->SetTarget(GetTransform()->GetRelativePosition(), GetTransform()->GetRelativeRotation());
-	
+	//m_Interpolator->SetTarget(GetTransform()->GetRelativePosition(), GetTransform()->GetRelativeRotation());
 }
 
 void CMonster::Update()

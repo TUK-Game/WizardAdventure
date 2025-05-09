@@ -88,6 +88,9 @@ void CServerSession::OnMovePlayer()
 	Vec3 rot = transform->GetRelativeRotation();
 	Vec3 dir = transform->GetRelativeDir(EDir::Front);
 
+	//std::cout << "rot: " << rot.x << " " << rot.y << " " << rot.z << "\n";
+	//std::cout << "dir: " << dir.x << " " << dir.y << " " << dir.z << "\n\n";
+
 	Protocol::C_MOVE pkt;
 	auto* moveInfo = pkt.mutable_player_move_info();
 	auto* posInfo = moveInfo->mutable_pos_info();

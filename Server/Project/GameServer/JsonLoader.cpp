@@ -139,6 +139,9 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_size()->set_x(scale[0]); 
 		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_size()->set_y(scale[1]); 
 		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_size()->set_z(scale[2]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_x(rot[0]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_y(rot[1]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_z(rot[2]); 
 
 		object->SetState(Protocol::MOVE_STATE_SPAWN);	// spawn
 		room->AddMonster(object);
@@ -152,6 +155,7 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 			if (trigger->IsMonsterInArea(Vec3(pos[0], pos[1], pos[2])))
 			{
 				trigger->AddMonster(object);
+				break;
 			}
 		}
 

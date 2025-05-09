@@ -285,8 +285,12 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		const Protocol::MonsterInfo& info = pkt.monster_info(i);
 		uint32_t objectId = info.object_id();
 
-		CMonster* monster = monsterMap[objectId];
+		const Protocol::PosInfo& posInfo = info.object_info().pos_info();
+		const Protocol::Vector3& pos = posInfo.position();
+		const Protocol::Vector3& rot = posInfo.rotation();
+		Protocol::MoveState state = posInfo.state();
 
+		CMonster* monster = monsterMap[objectId];
 		if (nullptr == monster)
 		{
 			monster = new CMonster();
@@ -297,10 +301,6 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 			level->SafeAddGameObject(monster, LAYER_MONSTER, false);
 		}
 
-		const Protocol::PosInfo& posInfo = info.object_info().pos_info();
-		const Protocol::Vector3& pos = posInfo.position();
-		const Protocol::Vector3& rot = posInfo.rotation();
-		Protocol::MoveState state = posInfo.state();
 
 		if (state == Protocol::MOVE_STATE_NONE)
 		{
@@ -436,7 +436,7 @@ bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 	const Protocol::Vector3& rotation = pkt.player_move_info().pos_info().rotation();
 	Protocol::MoveState state = pkt.player_move_info().pos_info().state();
 	CLevelManager::GetInst()->GetPlayer(id)->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
-
+	CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(Vec3(rotation.x(), rotation.y(), rotation.z()));
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
 	return true;
 }
@@ -449,7 +449,7 @@ bool Handle_S_ACT(CPacketSessionRef& session, Protocol::S_ACT& pkt)
 	const Protocol::Vector3& rotation = pkt.player_move_info().pos_info().rotation();
 	Protocol::MoveState state = pkt.player_move_info().pos_info().state();
 	CLevelManager::GetInst()->GetPlayer(id)->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
-
+	CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(Vec3(rotation.x(), rotation.y(), rotation.z()));
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
 	return true;
 }

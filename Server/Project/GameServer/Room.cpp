@@ -59,7 +59,7 @@ void CRoom::Init()
 	{
 		CMonseterTriggerBoxRef box = CObjectUtil::CreateObject<CMonseterTriggerBox>();
 		box->SetTriggerBox(Vec3(4850, 0.f, 3875.f), Vec3(100.f, 100.f, 850.f));
-		box->SetArea(Vec3(3810.f, 0.f, 4350.f), Vec3(2080.f, 100.f, 1100.f));
+		box->SetArea(Vec3(4000.f, 0.f, 3900), Vec3(2080.f, 100.f, 2400.f));
 		box->PushGateInfo(Vec3(5000.f, 450.f, 3875.f), Vec3(1000.f, 1000.f, 1.f), Vec3(-1.f, 0.f, 0.f), 90.f);
 		box->PushGateInfo(Vec3(2750.f, 450.f, 3875.f), Vec3(1000.f, 1000.f, 1.f), Vec3(1.f, 0.f, 0.f), 90.f);
 		AddObject((uint32)EObject_Type::TRIGGER, box);

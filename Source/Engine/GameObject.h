@@ -73,6 +73,7 @@ public:
 
         // 너무 멀면 보간안하고 즉시 반영 (ex: 순간이동)
         float dist = (newPos - m_PrevPos).Length();
+        float distRot = (newRot - m_PrevRot).Length();
         constexpr float MAX_ALLOWED_DIST = 300.f;
         constexpr float MIN_ALLOWED_DIST = 1.f;
         if (dist > MAX_ALLOWED_DIST || dist < MIN_ALLOWED_DIST)
