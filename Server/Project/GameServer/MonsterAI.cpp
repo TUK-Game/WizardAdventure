@@ -20,6 +20,58 @@ void CMonsterAI::Update(float deltaTime)
 	UpdateAI(deltaTime);      // 상태 전이 결정
 }
 
+void CMonsterAI::UpdateType(EMonsterType type)
+{
+
+    switch (type) {
+    case EMonsterType::Crab:
+        m_DetectRange = 5000.f;
+        m_AttackRange = 500.f;
+
+        m_AttackTime = 0.f;
+        m_AttackDuration = 1.5f;
+
+        m_DamagedTime = 0.f;
+        m_DamagedDuration = 0.666667f;
+
+        m_DeathTime = 0.f;
+        m_DeathDuration = 3.f;
+
+        m_DissolveTime = 0.f;
+        m_DissolveDuration = 1.f;
+
+        m_SpawnTime = 0.f;
+        m_SpawnDuration = 3.5f;
+
+        m_AngleThresholdDeg = 20.f;
+        break;
+
+    case EMonsterType::Adc:
+        m_DetectRange = 5000.f;
+        m_AttackRange = 2000.f;
+
+        m_AttackTime = 0.f;
+        m_AttackDuration = 1.5f;
+
+        m_DamagedTime = 0.f;
+        m_DamagedDuration = 0.666667f;
+
+        m_DeathTime = 0.f;
+        m_DeathDuration = 3.f;
+
+        m_DissolveTime = 0.f;
+        m_DissolveDuration = 1.f;
+
+        m_SpawnTime = 0.f;
+        m_SpawnDuration = 3.5f;
+
+        m_AngleThresholdDeg = 1.f;
+
+        break;
+    }
+    
+}
+
 void CMonsterAI::RotateToTarget(float deltaTime)
 {
     const auto& myPosInfo = m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info();
@@ -169,12 +221,13 @@ void CMonsterAI::UpdateAI(float deltaTime)
             g_Room->RemoveObject((uint32)EObject_Type::Monster, m_Owner->MonsterInfo->object_id());
         }
         return;
-    }    // temp -----------------------------------------------------------------
+    }  
+    // temp -----------------------------------------------------------------
 
 
     float distance = (targetPosition - myPosition).Length();
 
-    if ((distance <= m_AttackRange && IsFacingTarget(20.f)) || m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_Q)
+    if ((distance <= m_AttackRange && IsFacingTarget(m_AngleThresholdDeg)) || m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_Q)
     {
         m_AttackTime += deltaTime;
         if (m_AttackTime >= m_AttackDuration)

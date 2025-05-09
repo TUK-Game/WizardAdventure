@@ -65,3 +65,11 @@ void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 void CMonster::CollisionEvent(CBoxCollider* src, CBoxCollider* dest)
 {
 }
+
+void CMonster::SetType(EMonsterType type)
+{
+	m_Type = type;
+
+	if (m_Ai)
+		m_Ai->UpdateType(m_Type);
+}

@@ -1,4 +1,5 @@
 #pragma once
+#include "Monster.h"
 
 class CMonsterAI
 {
@@ -15,6 +16,7 @@ public:
     float GetTargetAngle() const { return m_TargetAngle; }
     void RotateToTarget(float deltaTime);
     bool IsFacingTarget(float angleThresholdDeg = 20.f);
+    void UpdateType(EMonsterType type);
 private:
     void DetectTarget();
     void UpdateAI(float deltaTime);
@@ -39,6 +41,8 @@ private:
 
     float m_SpawnTime = 0.f;
     float m_SpawnDuration = 3.5f;
+
+    float m_AngleThresholdDeg = 20.f;
 
     float m_TargetAngle = 0.f;
     CPlayerRef m_Target = nullptr;
