@@ -24,6 +24,7 @@ CProjectileRef CProjectilePool::Allocate()
 		{
 			m_nextProjectileId = i;
 			used[i] = true;
+			pool[i]->GetCollider()->SetCollisionProfile("Projectile");
 			return pool[i];
 		}
 	}
