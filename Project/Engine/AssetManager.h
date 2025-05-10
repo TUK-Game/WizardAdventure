@@ -73,6 +73,8 @@ private:
 	int CreateSphereMesh();
 	int CreateRectangleMesh();
 	int CreateCircleMesh();
+	int CreateHollowCylinderMesh();
+
 
 
 private:

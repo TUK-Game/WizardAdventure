@@ -33,6 +33,7 @@
 #include <Engine/ServerSession.h>
 #include <Engine/Engine.h>
 #include <Engine/NPC.h>
+#include <Engine/Portal.h>
 
 CLevel_1::CLevel_1()
 {
@@ -264,25 +265,11 @@ void CLevel_1::Init()
 
 #pragma endregion
 
-#pragma region EFFECT_TEST
+#pragma region PORTAL_TEST
 	{
-		CAnimatedBillboardEffect* effect = new CAnimatedBillboardEffect;
-		effect->SetName(L"Effect_Test");
-		BillboardEffectDesc desc;
-		desc.textureKey = L"FireSheet";
-		desc.spriteX = 6;
-		desc.spriteY = 6;
-		desc.framePerSecond = 36.f;
-		desc.loop = true;
-		desc.scaleOverTime = false;
-		desc.startScale = 10.f;
-		desc.endScale = 10.0f;
-		desc.startAlpha = 1.f;
-		desc.endAlpha = 1.f;
-
-		effect->Init(desc);
-		effect->GetTransform()->SetRelativePosition({ 0.f, 0.f, 0.f });
-		this->AddGameObject(effect, LAYER_EFFECT, false);
+		CPortal* portal = new CPortal();
+		portal->GetTransform()->SetRelativePosition(Vec3(-1334.f, 0.f, 12166.f));
+		this->AddGameObject(portal, LAYER_GATE, true);
 	}
 #pragma endregion
 

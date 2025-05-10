@@ -160,6 +160,26 @@ float4 PS_TexWorld_Tinted(VS_TEX_OUT_WORLD input) : SV_Target
     return color;
 }
 
+float4 PS_Portal(VS_TEX_OUT_WORLD input) : SV_Target
+{
+    float4 color = float4(1.f, 1.f, 1.f, 1.f);
+
+    if (tex_on_0)
+        color = tex_0.Sample(sam_0, input.uv);
+
+    float luminance = dot(color.rgb, float3(0.299f, 0.587f, 0.114f));
+    float4 finalColor = float4(color.rgb, luminance);
+
+    if (any(vec4_0 != float4(0.f, 0.f, 0.f, 0.f)))
+    {
+        finalColor *= vec4_0;
+    }
+    return finalColor;
+}
+
+
+
+
 
 
 // [BillboardAnimated Shader]

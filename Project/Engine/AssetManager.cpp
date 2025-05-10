@@ -89,6 +89,9 @@ int CAssetManager::LoadMesh()
 	if (FAILED(CreateCircleMesh()))
 		return E_FAIL;
 
+	if (FAILED(CreateHollowCylinderMesh()))
+		return E_FAIL;
+	
 	return S_OK;
 }
 
@@ -283,6 +286,14 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"Circle", tex);
 
 	tex = new CTexture;
+	tex->Init(path / L"Mask1.png");
+	AddAsset(L"Mask1", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"MagicCircle.png");
+	AddAsset(L"MagicCircle", tex);
+
+	tex = new CTexture;
 	tex->Init(path / L"Red.jpg");
 	AddAsset(L"Red", tex);
 
@@ -409,6 +420,16 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Texture_World_Tinted"));
 	material->SetTexture(0, FindAsset<CTexture>(L"Circle"));
 	AddAsset(L"Circle", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Portal_Tinted"));
+	material->SetTexture(0, FindAsset<CTexture>(L"Mask1"));
+	AddAsset(L"Mask1", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Portal_Tinted"));
+	material->SetTexture(0, FindAsset<CTexture>(L"MagicCircle"));
+	AddAsset(L"MagicCircle", material);
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Texture_World_Tinted"));
@@ -630,6 +651,11 @@ int CAssetManager::LoadGraphicShader()
 	name = L"Forward.hlsl";
 	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND }, "VS_TexWorld", "PS_TexWorld_Tinted");
 	AddAsset(L"Texture_World_Tinted", shader);
+
+	shader = new CGraphicShader;
+	name = L"Forward.hlsl";
+	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND }, "VS_TexWorld", "PS_Portal");
+	AddAsset(L"Portal_Tinted", shader);
 
 	shader = new CGraphicShader;
 	name = L"Forward.hlsl";
@@ -993,6 +1019,65 @@ int CAssetManager::CreateRectangleMesh()
 
 	AddAsset(L"Rectangle", mesh);
 
+	return S_OK;
+}
+
+int CAssetManager::CreateHollowCylinderMesh()
+{
+	float radius = 0.5f;
+	float height = 1.0f;
+	UINT sliceCount = 32;
+
+	std::vector<Vertex> vecVertex;
+	std::vector<UINT> vecIndex;
+
+	float deltaAngle = XM_2PI / static_cast<float>(sliceCount);
+	float deltaU = 1.f / static_cast<float>(sliceCount);
+
+	// 하단(y=0)부터 상단(y=height)까지 두 개의 링 생성
+	for (UINT y = 0; y <= 1; ++y) // 0 = bottom, 1 = top
+	{
+		float v = static_cast<float>(y); // UV.y
+
+		for (UINT i = 0; i <= sliceCount; ++i)
+		{
+			float angle = i * deltaAngle;
+			float x = radius * cosf(angle);
+			float z = radius * sinf(angle);
+			float yPos = y * height; // 변경: 바닥이 0, 위가 height
+
+			Vertex vtx;
+			vtx.Pos = Vec3(x, yPos, z);
+			vtx.Normal = Vec3(x, 0.f, z);
+			vtx.Normal.Normalize();
+			vtx.Tangent = Vec3(-sinf(angle), 0.f, cosf(angle)); // 옆면 tangent
+			vtx.UV = Vec2(deltaU * i, 1.0f - v);
+
+			vecVertex.push_back(vtx);
+		}
+	}
+
+	// 인덱스 생성
+	UINT ringVertexCount = sliceCount + 1;
+	for (UINT i = 0; i < sliceCount; ++i)
+	{
+		// 아래 삼각형
+		vecIndex.push_back(i);
+		vecIndex.push_back(i + ringVertexCount);
+		vecIndex.push_back(i + 1);
+
+		// 위 삼각형
+		vecIndex.push_back(i + 1);
+		vecIndex.push_back(i + ringVertexCount);
+		vecIndex.push_back(i + ringVertexCount + 1);
+	}
+
+	// 메쉬 생성
+	CMesh* mesh = new CMesh;
+	if (FAILED(mesh->Init(vecVertex, vecIndex)))
+		return E_FAIL;
+
+	AddAsset(L"HollowCylinder", mesh);
 	return S_OK;
 }
 

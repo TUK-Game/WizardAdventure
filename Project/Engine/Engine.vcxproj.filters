@@ -737,6 +737,9 @@
     <ClInclude Include="AdcBall.h">
       <Filter>03. GameObject\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>03. GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1155,6 +1158,9 @@
     </ClCompile>
     <ClCompile Include="AdcBall.cpp">
       <Filter>03. GameObject\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>03. GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
