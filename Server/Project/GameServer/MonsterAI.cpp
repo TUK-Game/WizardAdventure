@@ -5,6 +5,7 @@
 #include "Room.h"
 #include "BoxCollider.h"
 #include "LevelCollision.h"
+#include "ProjectilePool.h"
 
 CMonsterAI::CMonsterAI()
 {
@@ -112,6 +113,8 @@ void CMonsterAI::UpdateAI(float deltaTime)
 
     Vec3 dir = targetPosition - myPosition;
     dir.y = 0.f;
+    m_Owner->SetDir(dir);
+
     if (dir.Length() > 0.001f)
     {
         dir.Normalize();
@@ -119,11 +122,9 @@ void CMonsterAI::UpdateAI(float deltaTime)
         m_TargetAngle = angle + 180.f;
     }
 
-    // temp -----------------------------------------------------------------
     if (m_Owner->GetState() == Protocol::MOVE_STATE_SPAWN)  // spawn
     {
         m_SpawnTime += deltaTime;
-        std::cout << "들어옴" << std::endl;
         if (m_SpawnTime >= m_SpawnDuration)
         {
             // 현재 위치에서 y축으로 300만큼 +해야함
@@ -153,6 +154,12 @@ void CMonsterAI::UpdateAI(float deltaTime)
         if (m_DeathTime + 0.1f >= m_DeathDuration)
         {
             m_DeathTime = 0.f;  
+            for (uint32 id : m_ProjectileIds)
+            {
+                g_Room->RemoveObject((uint32)EObject_Type::Projectile, id);
+            }
+            m_ProjectileIds.clear();
+            m_Owner->ClearProjectileIds();
             // dissolve Start
             m_Owner->SetState(Protocol::MOVE_STATE_DISSOVE);
         }
@@ -169,8 +176,7 @@ void CMonsterAI::UpdateAI(float deltaTime)
             g_Room->RemoveObject((uint32)EObject_Type::Monster, m_Owner->MonsterInfo->object_id());
         }
         return;
-    }    // temp -----------------------------------------------------------------
-
+    } 
 
     float distance = (targetPosition - myPosition).Length();
 
@@ -181,8 +187,24 @@ void CMonsterAI::UpdateAI(float deltaTime)
         {
             m_AttackTime = 0;
             m_Owner->SetState(Protocol::MOVE_STATE_IDLE);
+            m_bAttack = false;
+            auto objects = g_Room->GetLayerObjects((uint32)EObject_Type::Projectile);
+            for (uint32 id : m_ProjectileIds)
+            {
+                g_pool->Release(std::dynamic_pointer_cast<CProjectile>(objects[id]));
+                objects.erase(id);
+            }
+            m_ProjectileIds.clear();
+            m_Owner->ClearProjectileIds();
             return;
         }
+        if (!m_bAttack)
+        {
+            m_Owner->SpawnAttackObject();
+            m_ProjectileIds = m_Owner->GetProjectileIds();
+            m_bAttack = true;
+        }
+
         m_Owner->SetState(Protocol::MOVE_STATE_SKILL_Q);
     }
     else if (distance <= m_DetectRange)
@@ -213,13 +235,12 @@ void CMonsterAI::HandleMoveMonster(float deltaTime)
     Vec3 myPosition = Vec3(myPos.x(), myPos.y(), myPos.z());
     Vec3 targetPosition = Vec3(targetPos.x(), targetPos.y(), targetPos.z());
 
-    Vec3 dir = targetPosition - myPosition;
+    Vec3 dir = m_Owner->GetDir();
     float dist = dir.Length();
 
     if (dist < 1.f) 
         return; 
 
-    dir.y = 0.f;
     dir.Normalize();
 
     int step = 1;

@@ -273,4 +273,9 @@ void CServerSession::BuySkill(uint32 skillId)
 	Send(sendBuffer);
 }
 
+void CServerSession::SpawnProjectileByMonster(CGameObject* object)
+{
+
+}
+
 

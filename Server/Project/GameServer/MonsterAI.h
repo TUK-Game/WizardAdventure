@@ -43,5 +43,9 @@ private:
     float m_TargetAngle = 0.f;
     CPlayerRef m_Target = nullptr;
     CMonster* m_Owner = nullptr;
+
+    bool m_bAttack{};
+
+    std::vector<uint32> m_ProjectileIds;
 };
 

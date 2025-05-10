@@ -30,7 +30,7 @@ public:
 	virtual ~CCreature();
 
 public:
-	Ablity* GetAblity() const { return m_Stats; }
+	Ablity* GetAbility() const { return m_Stats; }
 
 	void Damaged(int damage) { m_Stats->currentHp -= damage; }
 

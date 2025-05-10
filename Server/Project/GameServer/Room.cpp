@@ -170,7 +170,7 @@ void CRoom::UpdateMonster()
 
 		destPosInfo->set_state(monster->GetState());
 
-		const auto& stats = monster->GetAblity();
+		const auto& stats = monster->GetAbility();
 		info->mutable_monster_ablity()->set_hp(stats->currentHp);
 		info->mutable_monster_ablity()->set_maxhp(stats->maxHp);
 	}
@@ -528,8 +528,8 @@ bool CRoom::UpdatePlayerGravity(CPlayerRef player, float deltaTime)
 
 		if (now->y() <= -1000.f)
 		{
-			player->GetAblity()->currentHp -= 20.f;
-			if (player->GetAblity()->currentHp <= 0.f)
+			player->GetAbility()->currentHp -= 20.f;
+			if (player->GetAbility()->currentHp <= 0.f)
 			{
 				player->SetState(Protocol::MOVE_STATE_DEATH);
 			}
@@ -580,7 +580,7 @@ bool CRoom::UpdatePlayerGravity(CPlayerRef player, float deltaTime)
 bool CRoom::UpdatePlayerAbility(CPlayerRef player)
 {
 	Protocol::S_UPDATE_PLAYER_STATS pkt;
-	const auto& ablity = player->GetAblity();
+	const auto& ablity = player->GetAbility();
 	pkt.set_player_id(player->PlayerInfo->player_id());
 	pkt.mutable_player_ability()->set_damage(ablity->attack);
 	pkt.mutable_player_ability()->set_hp(ablity->currentHp);

@@ -5,6 +5,7 @@
 #include "Monster.h"
 #include "Item.h"
 #include "Skill.h"
+#include "Projectile.h"
 
 CPlayer::CPlayer()
 {
@@ -34,10 +35,10 @@ bool CPlayer::BuyItem(CItemRef item)
 		return false;
 
 	float price = item->GetItemInfo().price;
-	if (price > GetAblity()->gold)
+	if (price > GetAbility()->gold)
 		return false;
 
-	GetAblity()->gold -= price;
+	GetAbility()->gold -= price;
 	if (CalculateAbility(item))
 	{
 		m_Items.emplace_back(item);
@@ -56,10 +57,10 @@ bool CPlayer::BuySkill(CSkillRef skill)
 		return false;
 
 	float price = skill->GetSkillInfo().price;
-	//if (price > GetAblity()->gold)
+	//if (price > GetAbility()->gold)
 	//	return false;
 
-	GetAblity()->gold -= price;
+	GetAbility()->gold -= price;
 
 	m_Skills.emplace_back(skill);
 	g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
@@ -73,23 +74,23 @@ bool CPlayer::CalculateAbility(CItemRef item)
 	{
 	case EITEM_PART::ATTACK:
 	{
-		GetAblity()->attack += info.amount;
+		GetAbility()->attack += info.amount;
 	}
 	break;
 	case EITEM_PART::MAXHP:
 	{
-		GetAblity()->maxHp += info.amount;
-		GetAblity()->currentHp += info.amount;
+		GetAbility()->maxHp += info.amount;
+		GetAbility()->currentHp += info.amount;
 	}
 	break;
 	case EITEM_PART::SPEED:
 	{
-		GetAblity()->moveSpeed += info.amount;
+		GetAbility()->moveSpeed += info.amount;
 	}
 	break;
 	case EITEM_PART::HEAL:
 	{
-		GetAblity()->currentHp = (std::min)((int)info.amount + GetAblity()->currentHp, GetAblity()->maxHp);
+		GetAbility()->currentHp = (std::min)((int)info.amount + GetAbility()->currentHp, GetAbility()->maxHp);
 		return false;
 	}
 	break;
@@ -160,15 +161,32 @@ void CPlayer::Update(float deltaTime)
 
 void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
+	if (dest->GetProfile()->channel == ECollision_Channel::MonsterProjectile)
+	{
+		std::cout << "eee\n";
+		CProjectile* projectile = (dynamic_cast<CProjectile*>(dest->GetOwner()));
+		//GetAbility()->currentHp -= projectile->GetAttack();
+		/*if (GetAbility()->currentHp <= 0)
+		{
+			SetState(Protocol::MOVE_STATE_DEATH);
+		}
+		else
+		{
+			SetState(Protocol::MOVE_STATE_DAMAGED);
+		}
+		g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
+		g_Room->UpdatePlayerState(m_Session.lock()->Player);*/
+	}
+
 	if (dest->GetProfile()->channel == ECollision_Channel::Monster)
 	{
 		CMonster* monster = (dynamic_cast<CMonster*>(dest->GetOwner()));
 
-		if (monster->GetAblity()->currentHp <= 0)
+		if (monster->GetAbility()->currentHp <= 0)
 			return;
 
-		GetAblity()->currentHp -= monster->GetAblity()->attack;
-		if(GetAblity()->currentHp <= 0)
+		GetAbility()->currentHp -= monster->GetAbility()->attack;
+		if(GetAbility()->currentHp <= 0)
 		{
 			SetState(Protocol::MOVE_STATE_DEATH);
 		}
