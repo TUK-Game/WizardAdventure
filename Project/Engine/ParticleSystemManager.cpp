@@ -41,6 +41,20 @@ void CParticleSystemManager::Init(CLevel* level)
 
     m_ParticleObjects.insert({L"Spark", obj });
 
+    // light
+    obj = new CGameObject();
+    ps = new CParticleSystem();
+
+    ps->SetTexture(L"Light");
+    ps->SetCreateInterval(0.02f);
+    obj->AddComponent(ps);
+    obj->AddComponent(new CTransform());
+    obj->SetName(L"LightParticle");
+
+    level->AddGameObject(obj, LAYER_EFFECT, false);
+
+    m_ParticleObjects.insert({ L"Light", obj });
+
 }
 
 int CParticleSystemManager::AddEmitter(const std::wstring& name, const Vec3& pos)

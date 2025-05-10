@@ -734,6 +734,9 @@
     <ClInclude Include="AttackRangeRect.h">
       <Filter>03. GameObject\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="AdcBall.h">
+      <Filter>03. GameObject\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1148,6 +1151,9 @@
       <Filter>01. Manager\15. State</Filter>
     </ClCompile>
     <ClCompile Include="AttackRangeRect.cpp">
+      <Filter>03. GameObject\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="AdcBall.cpp">
       <Filter>03. GameObject\Monster</Filter>
     </ClCompile>
   </ItemGroup>

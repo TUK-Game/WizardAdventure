@@ -42,6 +42,7 @@ public:
 	void SetTexture(const std::wstring& name);
 	void SetEmit(bool value) { m_bEmit = value; }
 	bool IsEmitting() const { return m_bEmit; }
+	void SetCreateInterval(float interval) { m_CreateInterval = interval; }
 
 
 	int AddEmitter(const Vec3& basePos);

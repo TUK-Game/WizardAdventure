@@ -251,6 +251,14 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"Smoke", tex);
 
 	tex = new CTexture;
+	tex->Init(path / L"Light.png");
+	AddAsset(L"Light", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"YellowBackGround.png");
+	AddAsset(L"LightBack", tex);
+
+	tex = new CTexture;
 	tex->Init(path / L"explosionSheet.png");
 	AddAsset(L"explosionSheet", tex);
 
@@ -435,6 +443,11 @@ int CAssetManager::LoadMaterial()
 	material->SetTexture(0, FindAsset<CTexture>(L"Lava"));
 	material->SetTexture(1, FindAsset<CTexture>(L"Lava_Normal"));
 	AddAsset(L"Lava", material);
+
+	material = new CMaterial;
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
+	material->SetTexture(0, FindAsset<CTexture>(L"LightBack"));
+	AddAsset(L"LightBack", material);
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Deferred"));
@@ -625,7 +638,7 @@ int CAssetManager::LoadGraphicShader()
 
 	shader = new CGraphicShader;
 	name = L"Forward.hlsl";
-	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE, BLEND_TYPE::ALPHA_BLEND, D3D_PRIMITIVE_TOPOLOGY_POINTLIST }, "VS_BillboardAnimated", "PS_BillboardAnimated", "GS_BillboardAnimated");
+	LoadShader(shader, name, { SHADER_TYPE::FORWARD, RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_NO_WRITE, BLEND_TYPE::ALPHA_BLEND, D3D_PRIMITIVE_TOPOLOGY_POINTLIST }, "VS_BillboardAnimated", "PS_BillboardAnimated", "GS_BillboardAnimated");
 	AddAsset(L"BillboardAnimated", shader);
 
 	shader = new CGraphicShader;

@@ -8,6 +8,8 @@
 #include "AttackRangeRect.h"
 #include "LevelManager.h"
 #include "Level.h"
+#include "AdcBall.h"
+#include "RigidBody.h"
 
 void CMonsterAttackState::Enter(CGameObject* entity)
 {
@@ -25,7 +27,7 @@ void CMonsterAttackState::Enter(CGameObject* entity)
 
     }
     m_ElapsedTime = 0.f;
-
+    m_bDoAttack = false;
 
     CAttackRangeCircle* attackRangeCircle = new CAttackRangeCircle;
     Vec3 offset = -entity->GetTransform()->GetWorldDir(EDir::Front) * 400.f;
@@ -47,8 +49,9 @@ void CMonsterAttackState::Enter(CGameObject* entity)
 
     attackRangeRect->GetTransform()->SetRelativeRotation(90.f, yawDegree, 0.f);
 
-    attackRangeRect->SetScaleRange(Vec3(100.f, 0.1f, 0.1f), Vec3(100.f, 500.f, 1.f));
-    attackRangeRect->SetDuration(m_AttackDuration * 0.8f);
+    attackRangeRect->SetScaleRange(Vec3(70.f, 0.1f, 0.1f), Vec3(70.f, 800.f, 1.f));
+    m_AttackTime = m_AttackDuration * 0.5122;
+    attackRangeRect->SetDuration(m_AttackTime);
     attackRangeRect->SetInitialPosition(entity->GetTransform()->GetRelativePosition());
 
 
@@ -56,11 +59,31 @@ void CMonsterAttackState::Enter(CGameObject* entity)
 
 
 
+
+
 }
 
 void CMonsterAttackState::Update(CGameObject* entity, float deltaTime)
 {
-    //m_ElapsedTime += deltaTime;
+    m_ElapsedTime += deltaTime;
+
+    if (m_ElapsedTime >= m_AttackTime) {
+        if (!m_bDoAttack) {
+            Vec3 spawnPos = entity->GetTransform()->GetWorldPosition();
+            Vec3 AttackDir = -entity->GetTransform()->GetWorldDir(EDir::Front);
+            AttackDir.Normalize();
+
+            CAdcBall* adcbBall = new CAdcBall();
+            Vec3 offset = AttackDir * 50.f + Vec3(0.f, 130.f, 0.f);
+            adcbBall->GetTransform()->SetRelativePosition(spawnPos + offset);
+            Vec3 velocity = AttackDir * 2000.f;
+            adcbBall->GetRigidBody()->SetVelocity(velocity);
+
+            CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(adcbBall, LAYER_PROJECTILE, false);
+            m_bDoAttack = true;
+        }
+    }
+
     //if (m_ElapsedTime >= m_AttackDuration)
     //    entity->GetStateManager()->HandleEvent(entity, "Idle");
 }
