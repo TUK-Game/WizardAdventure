@@ -62,6 +62,10 @@ private:
 	float m_FallingDuration = 6.6f;
 	float m_FallingElapsedTime = 0.f;
 
+	float m_DamageDelayElapsedTime = 0.f;
+	float m_DamageDelayDuration = 2.f;
+	float m_bDamageDelay{};
+
 	std::weak_ptr<CGameSession>	m_Session;
 	Protocol::MoveState m_State;
 	Protocol::Vector3 m_Dir;

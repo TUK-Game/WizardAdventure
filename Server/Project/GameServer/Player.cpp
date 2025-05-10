@@ -101,13 +101,28 @@ bool CPlayer::CalculateAbility(CItemRef item)
 void CPlayer::Update(float deltaTime)
 {
 	CGameObject::Update(deltaTime);
+
+	if (m_bDamageDelay)
+	{
+		m_DamageDelayElapsedTime += deltaTime;
+		std::cout << m_DamageDelayElapsedTime << '\n';
+		std::cout << "¹«Àû\n";
+		if (m_DamageDelayElapsedTime >= m_DamageDelayDuration)
+		{
+			m_DamageDelayElapsedTime = 0;
+			m_State = Protocol::MOVE_STATE_DAMAGE_DELAY_END;
+			g_Room->UpdatePlayerState(m_Session.lock()->Player);
+			m_bDamageDelay = false;
+		}
+	}
+
 	if (m_State == Protocol::MOVE_STATE_DASH)
 	{
-		float deltaTime = g_Timer->GetDeltaTime();
 		m_DashElapsedTime += deltaTime;
 		if (m_DashElapsedTime >= m_DashDuration)
 		{
 			m_State = Protocol::MOVE_STATE_DASH_END;
+			g_Room->UpdatePlayerState(m_Session.lock()->Player);
 			m_DashElapsedTime = 0;
 		}
 		else
@@ -126,12 +141,14 @@ void CPlayer::Update(float deltaTime)
 	}
 	else if (m_State == Protocol::MOVE_STATE_DAMAGED)
 	{
-		float deltaTime = g_Timer->GetDeltaTime();
 		m_DamageElapsedTime += deltaTime;
 		if (m_DamageElapsedTime >= m_DamageDuration)
 		{
-			m_State = Protocol::MOVE_STATE_DAMAGED_END;
+			m_State = Protocol::MOVE_STATE_DAMAGE_DELAY;
+			g_Room->UpdatePlayerState(m_Session.lock()->Player);
+			//m_State = Protocol::MOVE_STATE_DAMAGED_END;
 			m_DamageElapsedTime = 0;
+			m_bDamageDelay = true;
 		}
 		else
 		{
@@ -148,7 +165,6 @@ void CPlayer::Update(float deltaTime)
 	}
 	else if (m_State == Protocol::MOVE_STATE_DEATH)
 	{
-		float deltaTime = g_Timer->GetDeltaTime();
 		m_DeathElapsedTime += deltaTime;
 		if (m_DeathElapsedTime + 0.1f >= m_DeathDuration)
 		{
@@ -161,7 +177,7 @@ void CPlayer::Update(float deltaTime)
 
 void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
-	if (GetAbility()->currentHp <= 0)
+	if (GetAbility()->currentHp <= 0 || m_bDamageDelay || m_State == Protocol::MOVE_STATE_DAMAGED)
 		return;
 
 	if (dest->GetProfile()->channel == ECollision_Channel::MonsterProjectile || dest->GetProfile()->channel == ECollision_Channel::Monster)

@@ -17,6 +17,7 @@
 #include "SubLevel.h"
 #include "StateManager.h"
 #include "Protocol.pb.h"
+#include "Player.h"
 
 CGameObject::CGameObject()
 	: m_arrComponent{}
@@ -143,7 +144,7 @@ void CGameObject::FinalUpdate()
 
 void CGameObject::Render()
 {
-	if (!m_RenderComponent)
+	if (!m_RenderComponent || !m_bRender)
 		return;
 
 	m_RenderComponent->Render();
@@ -274,7 +275,26 @@ void CGameObject::SetProtocolStateForClient(Protocol::MoveState state)
 		m_StateManager->HandleEvent(this, "Fall");
 		break;
 	case Protocol::MOVE_STATE_FALLING_END:
+		static_cast<CPlayer*>(this)->SetDamageDelay(true);
 		m_StateManager->HandleEvent(this, "EndFall");
+		break;
+	case Protocol::MOVE_STATE_DAMAGE_DELAY:
+		static_cast<CPlayer*>(this)->SetDamageDelay(true);
+		m_StateManager->HandleEvent(this, "EndKnockback");
+		break;
+	case Protocol::MOVE_STATE_DAMAGE_DELAY_END:
+	{
+		static_cast<CPlayer*>(this)->SetDamageDelay(false);
+		static_cast<CPlayer*>(this)->SetIsRenderon(true);
+		static_cast<CPlayer*>(this)->SetBlinkTime(0.f);
+		m_StateManager->HandleEvent(this, "Move");
+
+		const auto& childs = GetChild();
+		for (auto& child : childs)
+		{
+			child->SetIsRender(true);
+		}
+	}
 		break;
 	default:
 		break;

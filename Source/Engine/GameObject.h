@@ -200,9 +200,11 @@ public:
     void SetProtocolStateForClientMonster(Protocol::MoveState state);
     virtual void SetTarget(const Vec3& pos, const Vec3& rot) {}
     void SetTotalMeshSize(const Vec3& size) { m_TotalMeshSize = size; }
+    void SetIsRender(bool b) { m_bRender = b; }
 
     int GetLayerIndex() { return m_LayerIndex; }
     std::wstring GetTag() const { return m_Tag; }
+    bool GetIsRender() { return m_bRender; }
 
     void AddComponent(CComponent* component);
     void AddComponent(EComponent_Type type);
@@ -252,4 +254,5 @@ protected:
     // dissolve
     float m_Threshold{};
     bool m_bDissolve;
+    bool m_bRender{ true };
 };

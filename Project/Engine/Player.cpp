@@ -128,10 +128,28 @@ void CPlayer::Update()
 #ifndef DEBUG_SOLOPLAY
     m_Interpolator->Update(time);
     GetTransform()->SetRelativePosition((m_Interpolator->GetInterpolatedPos()));
-    //GetTransform()->SetRelativeRotation((m_Interpolator->GetInterpolatedRot()));
+    GetTransform()->SetRelativeRotation((m_Interpolator->GetInterpolatedRot()));
 #endif // DEBUG_SOLOPLAY
 
     CGameObject::Update();
+
+
+    constexpr float blink = 0.2f;
+    if (m_bDamageDelay)
+    {
+        m_BlinkTime+= time;
+        if (m_BlinkTime >= blink)
+        {
+            m_BlinkTime = 0.f;
+            m_bRenderOn = !m_bRenderOn;
+        }
+
+        auto& childs = GetChild();
+        for (auto child : childs)
+        {
+            child->SetIsRender(m_bRenderOn);
+        }
+    }
 }
 
 void CPlayer::FinalUpdate()
@@ -285,7 +303,6 @@ bool CPlayer::DetectNPC()
 
     if (nullptr == npc)
         return false;
-    std::cout << "NPC발견\n";
     npc->Interation();
     MoveCamera(camera, npc, ECamera_Type::Interaction_Start, Vec3(200.f, 0.f, 500.f));
     return true;
