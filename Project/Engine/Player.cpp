@@ -59,7 +59,7 @@ CPlayer::CPlayer(EPlayerAttribute attribute, bool Owner, const Vec3& pos)
     }
     break;
     }
-
+     
     std::vector<CGameObject*> obj = data->Instantiate(ECollision_Channel::Player);
 
    SetName(L"Mage");

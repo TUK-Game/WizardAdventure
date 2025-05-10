@@ -52,6 +52,12 @@ public:
         return a + delta * t;
     }
 
+    float NormalizeAngle(float angle)
+    {
+        return fmodf(fmodf(angle, 360.f) + 360.f, 360.f);
+    }
+
+
     void SetTarget(const Vec3& newPos, const Vec3& newRot)
     {
         auto now = std::chrono::high_resolution_clock::now();
@@ -70,6 +76,10 @@ public:
 
         m_PrevPos = GetInterpolatedPos();
         m_PrevRot = GetInterpolatedRot();
+
+        m_PrevRot.x = NormalizeAngle(m_PrevRot.x);
+        m_PrevRot.y = NormalizeAngle(m_PrevRot.y);
+        m_PrevRot.z = NormalizeAngle(m_PrevRot.z);
 
         // 너무 멀면 보간안하고 즉시 반영 (ex: 순간이동)
         float dist = (newPos - m_PrevPos).Length();
@@ -90,6 +100,10 @@ public:
 
         m_TargetPos = newPos;
         m_TargetRot = newRot;
+
+        m_TargetRot.x = NormalizeAngle(m_TargetRot.x);
+        m_TargetRot.y = NormalizeAngle(m_TargetRot.y);
+        m_TargetRot.z = NormalizeAngle(m_TargetRot.z);
 
         // 서버에서 마지막 패킷 받은지 얼마나 지났는지
         m_Duration = std::chrono::duration<float>(now - m_LastRecvTime).count();
