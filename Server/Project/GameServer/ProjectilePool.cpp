@@ -37,7 +37,7 @@ void CProjectilePool::Release(CProjectileRef obj)
 		if (pool[i] == obj)
 		{
 			used[i] = false;
-			obj->GetCollider()->ClearCollisionList();
+			//obj->GetCollider()->ClearCollisionList();
 			return;
 		}
 	}

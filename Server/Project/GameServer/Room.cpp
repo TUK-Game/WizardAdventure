@@ -610,6 +610,7 @@ bool CRoom::UpdatePlayerAbility(CPlayerRef player)
 	pkt.mutable_player_ability()->set_gold(ablity->gold);
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
+	//std::cout << ablity->currentHp << '\n';
 	return true;
 }
 

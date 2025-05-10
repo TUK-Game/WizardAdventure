@@ -52,8 +52,8 @@ void CMonster::Update(float deltaTime)
 {
 	if (m_bActive)
 	{
-		m_Ai->Update(deltaTime);
 		CGameObject::Update(deltaTime);
+		m_Ai->Update(deltaTime);
 	}
 }
 
