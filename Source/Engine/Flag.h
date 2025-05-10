@@ -157,6 +157,7 @@ enum class EState_Type
 	Talk,
 	Buy,
 	Dissolve,
+	Falling,
 	END
 };
 

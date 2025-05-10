@@ -18,6 +18,7 @@ void CPlayerStateManager::ChangeState(CGameObject* entity, EState_Type newState)
 	}
 
 	m_CurrentState = m_States[newState];
+	assert(m_CurrentState != nullptr);
 
 	if (m_CurrentState)
 		m_CurrentState->Enter(entity);

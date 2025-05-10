@@ -734,6 +734,9 @@
     <ClInclude Include="NPCFailState.h">
       <Filter>06. State\NPCState</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerFallingState.h">
+      <Filter>06. State\PlayerState\Move</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1149,6 +1152,9 @@
     </ClCompile>
     <ClCompile Include="NPCFailState.cpp">
       <Filter>06. State\NPCState</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerFallingState.cpp">
+      <Filter>06. State\PlayerState\Move</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

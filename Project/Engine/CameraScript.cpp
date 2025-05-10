@@ -166,7 +166,7 @@ void CCameraScript::FixedMove()
 	if (GetOwner()->GetCamera()->GetTarget())
 	{
 		Vec3 pos = m_TargetTransform->GetRelativePosition();
-		GetTransform()->SetRelativePosition(pos + m_Offset);
+		GetTransform()->SetRelativePosition(Vec3(pos.x + m_Offset.x, m_Offset.y, pos.z + m_Offset.z));
 
 		//UpdateDirectionalLight();
 	}

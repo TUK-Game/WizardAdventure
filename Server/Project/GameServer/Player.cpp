@@ -56,8 +56,8 @@ bool CPlayer::BuySkill(CSkillRef skill)
 		return false;
 
 	float price = skill->GetSkillInfo().price;
-	if (price > GetAblity()->gold)
-		return false;
+	//if (price > GetAblity()->gold)
+	//	return false;
 
 	GetAblity()->gold -= price;
 
@@ -111,7 +111,7 @@ void CPlayer::Update(float deltaTime)
 		}
 		else
 		{
-			float scale = m_DashDuration * deltaTime * m_Speed;
+			float scale = deltaTime * m_Speed * 0.2;
 			XMFLOAT3 scaledDir =
 			{
 				m_Dir.x() * scale,
@@ -149,22 +149,11 @@ void CPlayer::Update(float deltaTime)
 	{
 		float deltaTime = g_Timer->GetDeltaTime();
 		m_DeathElapsedTime += deltaTime;
-		std::cout << "ss\n";
 		if (m_DeathElapsedTime + 0.1f >= m_DeathDuration)
 		{
 			m_State = Protocol::MOVE_STATE_DEATH_END;
 			g_Room->UpdatePlayerState(m_Session.lock()->Player);
 			m_DeathElapsedTime = 0;
-		}
-	}
-	else
-	{
-		if (PlayerInfo->object_info().pos_info().position().y() <= -200.f)
-		{
-			const auto& pos = PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
-			pos->set_x(m_SafePos.x);
-			pos->set_y(m_SafePos.y);
-			pos->set_z(m_SafePos.z);
 		}
 	}
 }

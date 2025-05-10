@@ -213,6 +213,8 @@ Protocol::MoveState CGameObject::GetStateForProtocol()
 	case EState_Type::Death:
 		return Protocol::MOVE_STATE_DEATH;
 		break;
+	case EState_Type::Falling:
+		return Protocol::MOVE_STATE_FALLING;
 	case EState_Type::END:
 		break;
 	}
@@ -267,6 +269,12 @@ void CGameObject::SetProtocolStateForClient(Protocol::MoveState state)
 		break;
 	case Protocol::MOVE_STATE_DEATH_END:
 		m_StateManager->HandleEvent(this, "EndDeath");
+		break;
+	case Protocol::MOVE_STATE_FALLING:
+		m_StateManager->HandleEvent(this, "Fall");
+		break;
+	case Protocol::MOVE_STATE_FALLING_END:
+		m_StateManager->HandleEvent(this, "EndFall");
 		break;
 	default:
 		break;

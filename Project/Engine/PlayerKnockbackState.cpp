@@ -4,7 +4,6 @@
 #include "Animator.h"
 #include "StateManager.h"
 #include "NetworkManager.h"
-#include "Player.h"
 #include "Transform.h"
 
 void CPlayerKnockbackState::Enter(CGameObject* entity)
@@ -23,6 +22,7 @@ void CPlayerKnockbackState::Enter(CGameObject* entity)
         CAnimator* ani = o->GetAnimator();
         ani->Play(L"KNOCKBACK"); 
         m_Duration = ani->GetDuration();
+        std::cout << m_Duration << '\n';
     }
 }
 

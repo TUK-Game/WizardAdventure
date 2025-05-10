@@ -53,11 +53,14 @@ public:
 	float m_DashDuration = 0.2f;
 	float m_DashElapsedTime = 0.f;
 private:
-	float m_DamageDuration = 1.2f;
+	float m_DamageDuration = 0.36f;
 	float m_DamageElapsedTime = 0.f;	
 
 	float m_DeathDuration = 2.6f;
 	float m_DeathElapsedTime = 0.f;
+
+	float m_FallingDuration = 6.6f;
+	float m_FallingElapsedTime = 0.f;
 
 	std::weak_ptr<CGameSession>	m_Session;
 	Protocol::MoveState m_State;

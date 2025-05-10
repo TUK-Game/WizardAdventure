@@ -4,7 +4,7 @@ int main()
 {
 	CFBXConverter* converter = new CFBXConverter();
 
-	converter->LoadFBX("StoreNPC");
+	converter->LoadFBX("Mage");
 
 	delete converter;
 }

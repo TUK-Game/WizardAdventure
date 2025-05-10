@@ -10,6 +10,7 @@
 #include "PlayerAttackLButtonState.h"
 #include "PlayerAttackRButtonState.h"
 #include "PlayerKnockbackState.h"
+#include "PlayerFallingState.h"
 #include "PlayerDeathState.h"
 #include "Transform.h"
 #include "Engine.h"
@@ -166,6 +167,7 @@ void CPlayer::CreateStateManager()
     m_StateManager->AddState(new CPlayerAttackRButtonState);
     m_StateManager->AddState(new CPlayerKnockbackState);
     m_StateManager->AddState(new CPlayerDeathState);
+    m_StateManager->AddState(new CPlayerFallingState);
 
     // idle -> others
     m_StateManager->SetTransition(EState_Type::Idle, "Move", EState_Type::Run);
@@ -177,6 +179,7 @@ void CPlayer::CreateStateManager()
     m_StateManager->SetTransition(EState_Type::Idle, "Attack_RButton", EState_Type::Attack_RButton);
     m_StateManager->SetTransition(EState_Type::Idle, "Knockback", EState_Type::Knockback);
     m_StateManager->SetTransition(EState_Type::Idle, "Death", EState_Type::Death);
+    m_StateManager->SetTransition(EState_Type::Idle, "Fall", EState_Type::Falling);
     
     // run -> others
     m_StateManager->SetTransition(EState_Type::Run, "Stop", EState_Type::Idle);
@@ -188,12 +191,15 @@ void CPlayer::CreateStateManager()
     m_StateManager->SetTransition(EState_Type::Run, "Attack_RButton", EState_Type::Attack_RButton);
     m_StateManager->SetTransition(EState_Type::Run, "Knockback", EState_Type::Knockback);
     m_StateManager->SetTransition(EState_Type::Run, "Death", EState_Type::Death);
+    m_StateManager->SetTransition(EState_Type::Run, "Fall", EState_Type::Falling);
 
     // dash -> run
     m_StateManager->SetTransition(EState_Type::Dash, "EndDash", EState_Type::Run);
+    m_StateManager->SetTransition(EState_Type::Dash, "Fall", EState_Type::Falling);
 
     // knockback -> idle
     m_StateManager->SetTransition(EState_Type::Knockback, "EndKnockback", EState_Type::Idle);
+    m_StateManager->SetTransition(EState_Type::Knockback, "Fall", EState_Type::Falling);
 
     // attack -> idle
     m_StateManager->SetTransition(EState_Type::Attack_Q, "EndAttack", EState_Type::Idle);
@@ -219,6 +225,7 @@ void CPlayer::CreateStateManager()
     // temp
     m_StateManager->SetTransition(EState_Type::Death, "EndDeath", EState_Type::Idle);
 
+    m_StateManager->SetTransition(EState_Type::Falling, "EndFall", EState_Type::Idle);
 }
 
 void CPlayer::Move(Vec3 moveDir, bool shouldRotate, float speedScale)
