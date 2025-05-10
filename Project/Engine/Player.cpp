@@ -226,6 +226,7 @@ void CPlayer::CreateStateManager()
     m_StateManager->SetTransition(EState_Type::Death, "EndDeath", EState_Type::Idle);
 
     m_StateManager->SetTransition(EState_Type::Falling, "EndFall", EState_Type::Idle);
+    m_StateManager->SetTransition(EState_Type::Falling, "Death", EState_Type::Death);
 }
 
 void CPlayer::Move(Vec3 moveDir, bool shouldRotate, float speedScale)

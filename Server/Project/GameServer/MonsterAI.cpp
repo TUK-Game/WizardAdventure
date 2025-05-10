@@ -267,9 +267,6 @@ void CMonsterAI::HandleGravityMonster(float deltaTime)
 
     float moveAmount = -GRAVITY * deltaTime;
 
-    moveAmount;
-    moveAmount;
-
     for (int i = 1; i <= step; ++i)
     {
         nowPos.y += moveAmount;

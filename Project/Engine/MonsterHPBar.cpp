@@ -6,6 +6,7 @@
 #include "RenderManager.h"
 #include "Camera.h"
 #include "Monster.h"
+#include "StateManager.h"
 
 CMonsterHPBar::CMonsterHPBar()
 {

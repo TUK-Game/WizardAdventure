@@ -528,11 +528,20 @@ bool CRoom::UpdatePlayerGravity(CPlayerRef player, float deltaTime)
 
 		if (now->y() <= -1000.f)
 		{
-			player->SetState(Protocol::MOVE_STATE_FALLING_END);
+			player->GetAblity()->currentHp -= 20.f;
+			if (player->GetAblity()->currentHp <= 0.f)
+			{
+				player->SetState(Protocol::MOVE_STATE_DEATH);
+			}
+			else
+			{
+				player->SetState(Protocol::MOVE_STATE_FALLING_END);
+			}
 			Vec3 safePos = player->GetSafePosition();
 			now->set_x(safePos.x);
 			now->set_y(safePos.y);
 			now->set_z(safePos.z);
+			UpdatePlayerAbility(player);
 		}
 
 
