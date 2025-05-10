@@ -59,7 +59,7 @@ void CMonster::Update(float deltaTime)
 
 void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
-	if (GetAbility()->currentHp <= 0)
+	if (GetAbility()->currentHp <= 0 || m_State == Protocol::MOVE_STATE_SPAWN)
 		return;
 
 	if (dest->GetProfile()->channel == ECollision_Channel::Projectile &&
