@@ -258,6 +258,10 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"Light", tex);
 
 	tex = new CTexture;
+	tex->Init(path / L"BlueLight.png");
+	AddAsset(L"BlueLight", tex);
+
+	tex = new CTexture;
 	tex->Init(path / L"YellowBackGround.png");
 	AddAsset(L"LightBack", tex);
 
@@ -544,6 +548,10 @@ int CAssetManager::LoadMaterial()
 		AddAsset(L"ComputeParticle", material);
 
 		material = new CMaterial;
+		material->SetComputeShader(FindAsset<CComputeShader>(L"ComputePortalParticle"));
+		AddAsset(L"ComputePortalParticle", material);
+
+		material = new CMaterial;
 		material->SetComputeShader(FindAsset<CComputeShader>(L"Compute"));
 		AddAsset(L"Compute", material);
 
@@ -721,6 +729,11 @@ int CAssetManager::LoadComputeShader()
 	name = L"particle.hlsl";
 	LoadShader(shader, name, { SHADER_TYPE::COMPUTE }, "", "", "", "CS_Main");
 	AddAsset(L"ComputeParticle", shader);
+
+	shader = new CComputeShader;
+	name = L"particle.hlsl";
+	LoadShader(shader, name, { SHADER_TYPE::COMPUTE }, "", "", "", "CS_Main_Portal");
+	AddAsset(L"ComputePortalParticle", shader);
 
 	shader = new CComputeShader;
 	name = L"Animation.hlsl";

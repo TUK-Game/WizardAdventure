@@ -34,6 +34,7 @@
 #include <Engine/Engine.h>
 #include <Engine/NPC.h>
 #include <Engine/Portal.h>
+#include <Engine/ParticleSystem.h>
 
 CLevel_1::CLevel_1()
 {
@@ -270,6 +271,7 @@ void CLevel_1::Init()
 		CPortal* portal = new CPortal();
 		portal->GetTransform()->SetRelativePosition(Vec3(-1334.f, 0.f, 12166.f));
 		this->AddGameObject(portal, LAYER_GATE, true);
+
 	}
 #pragma endregion
 

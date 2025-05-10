@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "ParticleSystemManager.h"
+#include "ParticleSystem.h"
 #include "GameObject.h"
 #include "Level.h"
-#include "ParticleSystem.h"
 #include "Transform.h"
+#include "AssetManager.h"
 
 CParticleSystemManager::CParticleSystemManager()
 {
@@ -54,6 +55,21 @@ void CParticleSystemManager::Init(CLevel* level)
     level->AddGameObject(obj, LAYER_EFFECT, false);
 
     m_ParticleObjects.insert({ L"Light", obj });
+
+    // portal
+    obj = new CGameObject();
+    ps = new CParticleSystem();
+
+    ps->SetTexture(L"BlueLight");
+    ps->SetCreateInterval(0.1f);
+    ps->SetComputeMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"ComputePortalParticle"));
+    obj->AddComponent(ps);
+    obj->AddComponent(new CTransform());
+    obj->SetName(L"PortalParticle");
+
+    level->AddGameObject(obj, LAYER_EFFECT, false);
+
+    m_ParticleObjects.insert({ L"Portal", obj });
 
 }
 

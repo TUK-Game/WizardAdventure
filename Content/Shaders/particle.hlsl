@@ -3,7 +3,7 @@
 
 #include "Params.hlsl"
 #include "utils.hlsl"
-
+#define TWO_PI 6.28318530718f
 struct Particle
 {
     float3  worldPos;
@@ -207,6 +207,97 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
 
             //g_particle[threadIndex.x].worldPos = (noise.xyz - 0.5f) * 25;
             g_particle[threadIndex.x].worldPos = basePos + (noise.xyz - 0.5f) * 25;
+            g_particle[threadIndex.x].lifeTime = ((maxLifeTime - minLifeTime) * noise.x) + minLifeTime;
+            g_particle[threadIndex.x].curTime = 0.f;
+        }
+    }
+    else
+    {
+        g_particle[threadIndex.x].curTime += deltaTime;
+        if (g_particle[threadIndex.x].lifeTime < g_particle[threadIndex.x].curTime)
+        {
+            g_particle[threadIndex.x].alive = 0;
+            return;
+        }
+
+        float ratio = g_particle[threadIndex.x].curTime / g_particle[threadIndex.x].lifeTime;
+        float speed = (maxSpeed - minSpeed) * ratio + minSpeed;
+        g_particle[threadIndex.x].worldPos += g_particle[threadIndex.x].worldDir * speed * deltaTime;
+    }
+}
+
+
+[numthreads(1024, 1, 1)]
+void CS_Main_Portal(int3 threadIndex : SV_DispatchThreadID)
+{
+    if (threadIndex.x >= int_0)
+        return;
+
+    int maxCount = int_0;
+    int addCount = int_1;
+    int frameNumber = int_2;
+    int emitterCount = int_3;
+    float deltaTime = vec2_1.x;
+    float accTime = vec2_1.y;
+    float minLifeTime = vec4_0.x;
+    float maxLifeTime = vec4_0.y;
+    float minSpeed = vec4_0.z;
+    float maxSpeed = vec4_0.w;
+
+    g_shared[0].addCount = addCount;
+    GroupMemoryBarrierWithGroupSync();
+
+    if (g_particle[threadIndex.x].alive == 0)
+    {
+        while (true)
+        {
+            int remaining = g_shared[0].addCount;
+            if (remaining <= 0)
+                break;
+
+            int expected = remaining;
+            int desired = remaining - 1;
+            int originalValue;
+            InterlockedCompareExchange(g_shared[0].addCount, expected, desired, originalValue);
+
+            if (originalValue == expected)
+            {
+                g_particle[threadIndex.x].alive = 1;
+                break;
+            }
+        }
+
+        if (g_particle[threadIndex.x].alive == 1)
+        {
+            float x = ((float)threadIndex.x / (float)maxCount) + accTime;
+
+            float r1 = Rand(float2(x, accTime));
+            float r2 = Rand(float2(x * accTime, accTime));
+            float r3 = Rand(float2(x * accTime * accTime, accTime * accTime));
+
+            float3 noise =
+            {
+                2 * r1 - 1,
+                2 * r2 - 1,
+                2 * r3 - 1
+            };
+
+            // [1] 반지름 150의 원판 내 랜덤 위치
+            float angle = noise.x * TWO_PI;
+            float radius = sqrt(noise.y) * 150.f;
+            float3 offsetXZ = float3(cos(angle), 0.f, sin(angle)) * radius;
+
+            int emitterIdx = threadIndex.x % emitterCount;
+            g_particle[threadIndex.x].emitterID = emitterIdx;
+            float3 basePos = g_emitters[emitterIdx].basePos;
+
+            g_particle[threadIndex.x].worldPos = basePos + offsetXZ;
+
+            // [2] 위로 올라가는 방향 (조금 퍼지는 느낌)
+            float3 upward = float3((noise.z - 0.5f) * 0.2f, 1.0f, (noise.x - 0.5f) * 0.2f);
+            g_particle[threadIndex.x].worldDir = normalize(upward);
+
+            // [3] 수명
             g_particle[threadIndex.x].lifeTime = ((maxLifeTime - minLifeTime) * noise.x) + minLifeTime;
             g_particle[threadIndex.x].curTime = 0.f;
         }
