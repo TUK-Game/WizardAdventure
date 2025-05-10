@@ -28,10 +28,13 @@ void CMonsterAttackState::Enter(CGameObject* entity)
 
     CAttackRangeCircle* attackRangeCircle = new CAttackRangeCircle;
     Vec3 offset = -entity->GetTransform()->GetWorldDir(EDir::Front) * 400.f;
+    std::cout << "DIR: " << -entity->GetTransform()->GetWorldDir(EDir::Front).x << " " << -entity->GetTransform()->GetWorldDir(EDir::Front).y << " " << -entity->GetTransform()->GetWorldDir(EDir::Front).z << '\n';
     attackRangeCircle->GetTransform()->SetRelativePosition(entity->GetTransform()->GetRelativePosition() + offset);
     attackRangeCircle->SetDuration(m_AttackDuration * 0.5122);    
     attackRangeCircle->SetScaleRange(Vec3(0.1f, 0.1f, 0.1f), Vec3(300.f, 300.f, 10.f));
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(attackRangeCircle, LAYER_PROJECTILE, false);
+    std::cout << attackRangeCircle->GetTransform()->GetRelativePosition().x << " " << attackRangeCircle->GetTransform()->GetRelativePosition().y << " "
+        << attackRangeCircle->GetTransform()->GetRelativePosition().z << "\n\n";
 }
 
 void CMonsterAttackState::Update(CGameObject* entity, float deltaTime)

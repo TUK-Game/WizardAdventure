@@ -25,7 +25,8 @@ void CMonsterCollider::Update()
     XMVECTOR q = XMQuaternionMultiply(quatX, XMQuaternionMultiply(quatY, quatZ));
 
     XMStoreFloat4(&m_BoundingBox.Orientation, q);
-
+    //std::cout << m_BoundingBox.Center.x << " " << m_BoundingBox.Center.y << " " << m_BoundingBox.Center.z << '\n';
+    //std::cout << m_BoundingBox.Extents.x << " " << m_BoundingBox.Extents.y << " " << m_BoundingBox.Extents.z << "\n\n";
 	g_Room->GetLevelCollision()->AddCollider(this, m_Channel);
 }
 

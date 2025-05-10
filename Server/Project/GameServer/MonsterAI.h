@@ -26,10 +26,11 @@ private:
     float m_AttackRange = 500.f;
 
     float m_AttackTime = 0.f;
-    float m_AttackDuration = 1.5f;
+    float m_AttackDuration = 1.4f;
+    float m_AttackSpawn = m_AttackDuration * 0.53;
 
     float m_DamagedTime = 0.f;
-    float m_DamagedDuration = 0.666667f;
+    float m_DamagedDuration = 0.6f;
 
     float m_DeathTime = 0.f;
     float m_DeathDuration = 3.f;

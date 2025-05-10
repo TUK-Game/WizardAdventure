@@ -136,6 +136,9 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 
 		object->GetCollider()->SetCollisionProfile("Monster");
 		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(pos[0]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(pos[1]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(pos[2]); 
 		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_size()->set_x(scale[0]); 
 		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_size()->set_y(scale[1]); 
 		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_size()->set_z(scale[2]); 
@@ -158,7 +161,7 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 				break;
 			}
 		}
-
+		return;
 		//room->AddObject((uint32)EObject_Type::Monster, object);
 		//break;
 	}

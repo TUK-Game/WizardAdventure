@@ -17,7 +17,7 @@ public:
 
 	void SetIsActive(bool b) { m_bActive = b; }
 	void SetState(Protocol::MoveState state) { m_State = state; }
-	void SetDir(const Vec3& dir) { m_Dir = dir; }
+	void SetDir(float y);
 	void ClearProjectileIds() { m_ProjectileIds.clear(); }
 public:
 	Protocol::MonsterInfo* MonsterInfo;

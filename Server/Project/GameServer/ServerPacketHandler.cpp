@@ -134,7 +134,6 @@ bool Handle_C_MOVE(CPacketSessionRef& session, Protocol::C_MOVE& pkt)
 bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PROJECTILE& pkt)
 {
 	const auto& info = pkt.info();
-
 	CProjectileRef projectile = g_pool->Allocate();
 	assert(projectile != nullptr);
 
@@ -159,6 +158,8 @@ bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PRO
 	projectile->SetCollisionBoxInfo(Vec3(info.spawn_pos().x(), info.spawn_pos().y(), info.spawn_pos().z()), state.Size * projectile->GetMeshSize(), Vec3(0.f, 0.f, 0.f));
 	projectile->m_meshType = pkt.mesh();
 	g_Room->DoAsync(&CRoom::HandleSpawnProjectile, projectile);
+
+	std::cout << info.spawn_pos().x() << " " << info.spawn_pos().y() << " " << info.spawn_pos().z() << '\n';
 	return true;
 }
 

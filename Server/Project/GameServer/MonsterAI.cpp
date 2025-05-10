@@ -44,6 +44,7 @@ void CMonsterAI::RotateToTarget(float deltaTime)
     else
         currentY += (diff > 0 ? deltaAngle : -deltaAngle);
 
+    m_Owner->SetDir(currentY);
     m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_y(currentY);
 }
 
@@ -113,7 +114,7 @@ void CMonsterAI::UpdateAI(float deltaTime)
 
     Vec3 dir = targetPosition - myPosition;
     dir.y = 0.f;
-    m_Owner->SetDir(dir);
+    //m_Owner->SetDir(dir);
 
     if (dir.Length() > 0.001f)
     {
@@ -153,15 +154,18 @@ void CMonsterAI::UpdateAI(float deltaTime)
         m_DeathTime += deltaTime;
         if (m_DeathTime + 0.1f >= m_DeathDuration)
         {
-            m_DeathTime = 0.f;  
+            m_DeathTime = 0.f; 
+            // dissolve Start
+            m_Owner->SetState(Protocol::MOVE_STATE_DISSOVE);
+            m_bAttack = false;
+            auto& objects = g_Room->GetLayerObjects((uint32)EObject_Type::Projectile);
             for (uint32 id : m_ProjectileIds)
             {
-                g_Room->RemoveObject((uint32)EObject_Type::Projectile, id);
+                g_pool->Release(std::dynamic_pointer_cast<CProjectile>(objects[id]));
+                objects.erase(id);
             }
             m_ProjectileIds.clear();
             m_Owner->ClearProjectileIds();
-            // dissolve Start
-            m_Owner->SetState(Protocol::MOVE_STATE_DISSOVE);
         }
         return;
     }
@@ -188,7 +192,7 @@ void CMonsterAI::UpdateAI(float deltaTime)
             m_AttackTime = 0;
             m_Owner->SetState(Protocol::MOVE_STATE_IDLE);
             m_bAttack = false;
-            auto objects = g_Room->GetLayerObjects((uint32)EObject_Type::Projectile);
+            auto& objects = g_Room->GetLayerObjects((uint32)EObject_Type::Projectile);
             for (uint32 id : m_ProjectileIds)
             {
                 g_pool->Release(std::dynamic_pointer_cast<CProjectile>(objects[id]));
@@ -198,7 +202,7 @@ void CMonsterAI::UpdateAI(float deltaTime)
             m_Owner->ClearProjectileIds();
             return;
         }
-        if (!m_bAttack)
+        if (!m_bAttack && m_AttackTime >= m_AttackSpawn)
         {
             m_Owner->SpawnAttackObject();
             m_ProjectileIds = m_Owner->GetProjectileIds();
@@ -225,7 +229,7 @@ void CMonsterAI::Chase(float deltaTime)
     RotateToTarget(deltaTime);
 
     HandleMoveMonster(deltaTime);
-    HandleGravityMonster(deltaTime);
+    //HandleGravityMonster(deltaTime);
 }
 
 void CMonsterAI::HandleMoveMonster(float deltaTime)
@@ -235,12 +239,13 @@ void CMonsterAI::HandleMoveMonster(float deltaTime)
     Vec3 myPosition = Vec3(myPos.x(), myPos.y(), myPos.z());
     Vec3 targetPosition = Vec3(targetPos.x(), targetPos.y(), targetPos.z());
 
-    Vec3 dir = m_Owner->GetDir();
+    Vec3 dir = targetPosition - myPosition;
     float dist = dir.Length();
 
     if (dist < 1.f) 
         return; 
 
+    dir.y = 0.f;
     dir.Normalize();
 
     int step = 1;
@@ -299,7 +304,7 @@ void CMonsterAI::HandleGravityMonster(float deltaTime)
         box->SetBoxHeight(0.f);
         if (g_Room->GetLevelCollision()->CollisionWithWall(box))
         {
-            if (nowPos.y > -20.f)
+            if (nowPos.y > -200.f)
             {
                 nowPos.y = 0.f;
                 ToProtoVector3(&protoNow, nowPos);

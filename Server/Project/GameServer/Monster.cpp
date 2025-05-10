@@ -39,7 +39,14 @@ CMonster::~CMonster()
 Vec3 CMonster::GetFrontVec()
 {
 	m_Dir.Normalize();
+	std::cout << "DIR: " << m_Dir.x << " " << m_Dir.y << " " << m_Dir.z << '\n';
 	return m_Dir;
+}
+
+void CMonster::SetDir(float y)
+{
+	float rad = XMConvertToRadians(y);
+	m_Dir = Vec3(-sinf(rad), 0.f, -cosf(rad));
 }
 
 void CMonster::Update(float deltaTime)
@@ -101,7 +108,6 @@ void CMonster::SpawnAttackObject()
 	Vec3 p = Vec3(pos.x(), pos.y(), pos.z());
 	Vec3 spawnPos = p + state.Direction * 400.f;
 
-	std::cout << spawnPos.x << " " << spawnPos.y << " " << spawnPos.z << '\n';
 	projectile->SetProjectileState(state);
 	projectile->SetProjectileState(state);
 	projectile->SetCollisionExplosion(false);

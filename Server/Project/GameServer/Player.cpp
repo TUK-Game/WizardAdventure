@@ -163,10 +163,9 @@ void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
 	if (dest->GetProfile()->channel == ECollision_Channel::MonsterProjectile)
 	{
-		std::cout << "eee\n";
 		CProjectile* projectile = (dynamic_cast<CProjectile*>(dest->GetOwner()));
-		//GetAbility()->currentHp -= projectile->GetAttack();
-		/*if (GetAbility()->currentHp <= 0)
+		GetAbility()->currentHp -= projectile->GetAttack();
+		if (GetAbility()->currentHp <= 0)
 		{
 			SetState(Protocol::MOVE_STATE_DEATH);
 		}
@@ -175,7 +174,7 @@ void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 			SetState(Protocol::MOVE_STATE_DAMAGED);
 		}
 		g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
-		g_Room->UpdatePlayerState(m_Session.lock()->Player);*/
+		g_Room->UpdatePlayerState(m_Session.lock()->Player);
 	}
 
 	if (dest->GetProfile()->channel == ECollision_Channel::Monster)
