@@ -26,17 +26,19 @@ void CPlayerDeathState::Enter(CGameObject* entity)
 
 void CPlayerDeathState::Update(CGameObject* entity, float deltaTime)
 {
-    m_ElapsedTime += deltaTime;
-
-    if (m_ElapsedTime >= m_DeathDuration)
-    {
-        // temp
-        entity->GetStateManager()->HandleEvent(entity, "EndDeath");
-    }
 }
 
 void CPlayerDeathState::Exit(CGameObject* entity)
 {
+    std::vector<CGameObject*> objs = entity->GetChild();
+    for (const auto o : objs) {
+
+        auto ani = o->GetAnimator();
+        if (ani) {
+            ani->Pause();
+        }
+    }
+    std::cout << "Á¾·á\n";
 #ifdef _DEBUG
     std::cout << "Exiting Death State" << std::endl;
 #endif

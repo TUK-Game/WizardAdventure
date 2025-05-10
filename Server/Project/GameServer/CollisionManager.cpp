@@ -30,6 +30,7 @@ void CCollisionManager::Init()
 	CreateProfile("NPC", ECollision_Channel::NPC, true);
 	CreateProfile("TRIGGER", ECollision_Channel::TRIGGER, true, ECollision_Interaction::Ignore);
 	CreateProfile("NPC", ECollision_Channel::NPC, true, ECollision_Interaction::Ignore);
+	CreateProfile("MonsterProjectile", ECollision_Channel::MonsterProjectile, true, ECollision_Interaction::Ignore);
 
 	SetCollisionInteraction("TRIGGER", ECollision_Channel::Player, ECollision_Interaction::Collision);
 
@@ -39,6 +40,9 @@ void CCollisionManager::Init()
 	SetCollisionInteraction("Projectile", ECollision_Channel::Projectile, ECollision_Interaction::Ignore);
 
 	SetCollisionInteraction("Wall", ECollision_Channel::Wall, ECollision_Interaction::Ignore);
+
+	SetCollisionInteraction("MonsterProjectile", ECollision_Channel::Wall, ECollision_Interaction::Collision);
+	SetCollisionInteraction("MonsterProjectile", ECollision_Channel::Player, ECollision_Interaction::Collision);
 }
 
 bool CCollisionManager::CreateProfile(const std::string& name, ECollision_Channel channel, bool enable, ECollision_Interaction baseInteraction)

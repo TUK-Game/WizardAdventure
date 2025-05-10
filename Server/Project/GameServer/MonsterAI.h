@@ -28,10 +28,12 @@ private:
     float m_AttackRange = 500.f;
 
     float m_AttackTime = 0.f;
-    float m_AttackDuration = 1.5f;
+    float m_AttackDuration = 1.4f;
+    float m_AttackSpawn = m_AttackDuration * 0.53;
+    float m_AttackDelete = m_AttackDuration * 0.63;
 
     float m_DamagedTime = 0.f;
-    float m_DamagedDuration = 0.666667f;
+    float m_DamagedDuration = 0.6f;
 
     float m_DeathTime = 0.f;
     float m_DeathDuration = 3.f;
@@ -47,5 +49,9 @@ private:
     float m_TargetAngle = 0.f;
     CPlayerRef m_Target = nullptr;
     CMonster* m_Owner = nullptr;
+
+    bool m_bAttack{};
+
+    std::vector<uint32> m_ProjectileIds;
 };
 

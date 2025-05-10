@@ -36,7 +36,7 @@ CRoom::CRoom()
 
 CRoom::~CRoom()
 {
-	if(m_LevelCollision)
+	if (m_LevelCollision)
 	{
 		delete m_LevelCollision;
 		m_LevelCollision = nullptr;
@@ -58,10 +58,32 @@ void CRoom::Init()
 
 	{
 		CMonseterTriggerBoxRef box = CObjectUtil::CreateObject<CMonseterTriggerBox>();
+		box->SetTriggerBox(Vec3(8700.f, 0.f, 3840.f), Vec3(100.f, 100.f, 600.f));
+		box->SetArea(Vec3(7425.f, 0.f, 3850.f), Vec3(3000.f, 100.f, 2400.f));
+		box->PushGateInfo(Vec3(8700.f, 750.f, 3840.f), Vec3(2000.f, 2000.f, 1.f), Vec3(-1.f, 0.f, 0.f), 90.f);
+		box->PushGateInfo(Vec3(5950.f, 750.f, 3850.f), Vec3(2000.f, 2000.f, 1.f), Vec3(1.f, 0.f, 0.f), 90.f);
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CMonseterTriggerBox>();
 		box->SetTriggerBox(Vec3(4850, 0.f, 3875.f), Vec3(100.f, 100.f, 850.f));
-		box->SetArea(Vec3(3810.f, 0.f, 4350.f), Vec3(2080.f, 100.f, 1100.f));
-		box->PushGateInfo(Vec3(5000.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 1000.f), Vec3(-1.f, 0.f, 0.f), 0.f);
-		box->PushGateInfo(Vec3(2750.f, 0.f, 3875.f), Vec3(50.f, 1000.f, 600.f), Vec3(1.f, 0.f, 0.f), 0.f);
+		box->SetArea(Vec3(4000.f, 0.f, 3900), Vec3(2080.f, 100.f, 2400.f));
+		box->PushGateInfo(Vec3(5000.f, 750.f, 3875.f), Vec3(2000.f, 2000.f, 1.f), Vec3(-1.f, 0.f, 0.f), 90.f);
+		box->PushGateInfo(Vec3(2750.f, 750.f, 3875.f), Vec3(2000.f, 2000.f, 1.f), Vec3(1.f, 0.f, 0.f), 90.f);
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CMonseterTriggerBox>();
+		box->SetTriggerBox(Vec3(1155, 0.f, 3950.f), Vec3(30.f, 100.f, 500.f));
+		box->SetArea(Vec3(0.f, 0.f, 3400), Vec3(1200.f, 100.f, 2400.f));
+		box->PushGateInfo(Vec3(1200.f, 250.f, 3900.f), Vec3(500.f, 500.f, 1.f), Vec3(-1.f, 0.f, 0.f), 90.f);
+		box->PushGateInfo(Vec3(-1100.f, 250.f, 4050.f), Vec3(500.f, 500.f, 1.f), Vec3(1.f, 0.f, 0.f), 90.f);
+		box->PushGateInfo(Vec3(-375.f, 750.f, 2300.f), Vec3(2000.f, 2000.f, 1.f), Vec3(1.f, 0.f, 0.f), 0.f);
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CMonseterTriggerBox>();
+		box->SetTriggerBox(Vec3(-1350.f, 0.f, 6650.f), Vec3(500.f, 100.f, 100.f));
+		box->SetArea(Vec3(-1400.f, 0.f, 7650.f), Vec3(2000.f, 100.f, 2500.f));
+		box->PushGateInfo(Vec3(-1350.f, 250.f, 8600.f), Vec3(500.f, 500.f, 1.f), Vec3(-1.f, 0.f, 0.f), 0.f);
+		box->PushGateInfo(Vec3(-1350.f, 250.f, 6700.f), Vec3(500.f, 500.f, 1.f), Vec3(1.f, 0.f, 0.f), 0.f);
 		AddObject((uint32)EObject_Type::TRIGGER, box);
 	}
 
@@ -100,7 +122,7 @@ void CRoom::Update()
 		for (const auto object : layer)
 		{
 			auto& gameObject = object.second;
-			if(gameObject)
+			if (gameObject)
 			{
 				gameObject->Update(m_DeltaTime);
 			}
@@ -109,10 +131,10 @@ void CRoom::Update()
 
 	for (const auto& player : m_Players)
 	{
-		if(player)
+		if (player)
 		{
 			player->Update(m_DeltaTime);
-			UpdatePlayer(player, m_DeltaTime);
+			UpdatePlayerGravity(player, m_DeltaTime);
 		}
 	}
 
@@ -163,9 +185,14 @@ void CRoom::UpdateMonster()
 		rot->set_y(srcPosInfo.rotation().y());
 		rot->set_z(srcPosInfo.rotation().z());
 
+		Protocol::Vector3* scale = destPosInfo->mutable_size();
+		scale->set_x(srcPosInfo.size().x());
+		scale->set_y(srcPosInfo.size().y());
+		scale->set_z(srcPosInfo.size().z());
+
 		destPosInfo->set_state(monster->GetState());
 
-		const auto& stats = monster->GetAblity();
+		const auto& stats = monster->GetAbility();
 		info->mutable_monster_ablity()->set_hp(stats->currentHp);
 		info->mutable_monster_ablity()->set_maxhp(stats->maxHp);
 	}
@@ -184,7 +211,7 @@ void CRoom::UpdateAreas()
 	{
 		auto& monstersId = m_Areas[i]->GetMonstersId();
 		monstersId.erase(std::remove_if(monstersId.begin(), monstersId.end(),
-				[&](uint32 id) { return monsters.find(id) == monsters.end(); }), monstersId.end());
+			[&](uint32 id) { return monsters.find(id) == monsters.end(); }), monstersId.end());
 
 		if (monstersId.empty())
 		{
@@ -262,7 +289,7 @@ bool CRoom::EnterRoom(CPlayerRef newPlayer, bool bRandPos /*= true*/)
 
 		Protocol::PlayerInfo* playerInfo = new Protocol::PlayerInfo();
 		playerInfo->CopyFrom(*newPlayer->PlayerInfo);
-		enterGamePkt.set_allocated_player(playerInfo);	
+		enterGamePkt.set_allocated_player(playerInfo);
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(enterGamePkt);
 		if (auto session = newPlayer->GetSession())
@@ -328,14 +355,14 @@ bool CRoom::LeaveRoom(CPlayerRef leavePlayer)
 
 	// 퇴장 사실을 알린다
 	{
-		Protocol::S_DESPAWN_PLAYER despawnPkt;	
+		Protocol::S_DESPAWN_PLAYER despawnPkt;
 		despawnPkt.set_player_ids(playerId);
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(despawnPkt);
 		Broadcast(sendBuffer, playerId);
 
-	/*	if (auto session = leavePlayer->GetSession())
-			session->Send(sendBuffer);*/
+		/*	if (auto session = leavePlayer->GetSession())
+				session->Send(sendBuffer);*/
 	}
 
 	return success;
@@ -389,7 +416,7 @@ bool CRoom::HandleSpawnNPC(CPlayerRef player)
 		{
 			info->add_skill_id(skill->GetSkillInfo().id);
 		}
-	}	
+	}
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	if (auto session = player->GetSession())
 		session->Send(sendBuffer);
@@ -399,7 +426,7 @@ bool CRoom::HandleSpawnNPC(CPlayerRef player)
 
 bool CRoom::HandlePlayerInit(CPlayerRef player)
 {
-	
+
 
 	return true;
 }
@@ -446,7 +473,7 @@ bool CRoom::HandleMovePlayer(CPlayerRef player)
 
 			XMVECTOR dirVec = XMVectorSet(dir.x(), dir.y(), dir.z(), 0.0f);
 			dirVec = XMVector3Normalize(dirVec);
-			if(player->GetState() != Protocol::MOVE_STATE_DASH && player->GetState() != Protocol::MOVE_STATE_DASH_END &&
+			if (player->GetState() != Protocol::MOVE_STATE_DASH && player->GetState() != Protocol::MOVE_STATE_DASH_END &&
 				player->GetState() != Protocol::MOVE_STATE_DAMAGED && player->GetState() != Protocol::MOVE_STATE_DAMAGED_END)
 			{
 				dirVec = XMVectorScale(dirVec, -20);
@@ -509,64 +536,81 @@ bool CRoom::HandleActPlayer(CPlayerRef player)
 	return true;
 }
 
-bool CRoom::UpdatePlayer(CPlayerRef player, float deltaTime)
+bool CRoom::UpdatePlayerGravity(CPlayerRef player, float deltaTime)
 {
-	int step = 1;
-	auto& protoNow = *player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
-	XMFLOAT3 nowPos(protoNow.x(), protoNow.y(), protoNow.z());
-	// 이동량
-	XMFLOAT3 moveAmount = XMFLOAT3(0.f, -deltaTime * GRAVITY, 0.f);
+	if (player->GetState() == Protocol::MOVE_STATE_DASH || player->GetState() == Protocol::MOVE_STATE_FALLING_END)
+		return true;
 
-	moveAmount.y /= static_cast<float>(step);
 
-	for (int i = 1; i <= step; ++i)
+	if (player->GetState() == Protocol::MOVE_STATE_FALLING)
 	{
-		nowPos.y += moveAmount.y;
+		XMFLOAT3 moveAmount = XMFLOAT3(0.f, deltaTime * GRAVITY * 10, 0.f);
+		const auto& now = player->PlayerInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+		now->set_y(now->y() - moveAmount.y);
 
-		ToProtoVector3(&protoNow, nowPos);	
+		if (now->y() <= -1000.f)
+		{
+			player->GetAbility()->currentHp -= 20.f;
+			if (player->GetAbility()->currentHp <= 0.f)
+			{
+				player->SetState(Protocol::MOVE_STATE_DEATH);
+			}
+			else
+			{
+				player->SetState(Protocol::MOVE_STATE_FALLING_END);
+			}
+			Vec3 safePos = player->GetSafePosition();
+			now->set_x(safePos.x);
+			now->set_y(safePos.y);
+			now->set_z(safePos.z);
+			UpdatePlayerAbility(player);
+		}
 
-		player->GetCollider()->Update();
+
+
+		Protocol::S_MOVE movePkt;
+		auto* moveInfo = movePkt.mutable_player_move_info();
+		moveInfo->set_player_id(player->PlayerInfo->player_id());
+		auto* posInfo = moveInfo->mutable_pos_info();
+		posInfo->mutable_position()->set_x(now->x());
+		posInfo->mutable_position()->set_y(now->y());
+		posInfo->mutable_position()->set_z(now->z());
+
+		const auto& rot = player->PlayerInfo->object_info().pos_info().rotation();
+		ToProtoVector3(posInfo->mutable_rotation(), XMFLOAT3(rot.x(), rot.y(), rot.z()));
+
+
+		posInfo->set_state(player->GetState());
+
+		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
+		if (auto session = player->GetSession())
+			session->Send(sendBuffer);
+	}
+	else
+	{
 		auto box = player->GetCollider();
 		box->SetBoxHeight(0.f);
-		if (m_LevelCollision->CollisionWithWall(box))
+		if (!m_LevelCollision->CollisionWithWall(box))
 		{
-			if(nowPos.y > -20.f)
-			{
-				nowPos.y = 0.f;
-				ToProtoVector3(&protoNow, nowPos);
-			}
-			return true;
+			player->SetState(Protocol::MOVE_STATE_FALLING);
+			UpdatePlayerState(player);
 		}
 	}
-
-	Protocol::S_UPDATE_PLAYER pkt;
-	auto* info = pkt.mutable_player_update_info();
-	info->set_player_id(player->PlayerInfo->player_id());
-
-	auto* posInfo = info->mutable_pos_info();
-	ToProtoVector3(posInfo->mutable_position(), nowPos);
-
-	const auto& rot = player->PlayerInfo->object_info().pos_info().rotation();
-	ToProtoVector3(posInfo->mutable_rotation(), XMFLOAT3(rot.x(), rot.y(), rot.z()));
-
-	//posInfo->set_state(player->GetState());
-
-	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
-	Broadcast(sendBuffer, -1);
-
 	return true;
 }
 
 bool CRoom::UpdatePlayerAbility(CPlayerRef player)
 {
 	Protocol::S_UPDATE_PLAYER_STATS pkt;
-	const auto& ablity = player->GetAblity();
+	const auto& ablity = player->GetAbility();
 	pkt.set_player_id(player->PlayerInfo->player_id());
-	pkt.mutable_player_ability()->set_damage(ablity->attack);	
+	pkt.mutable_player_ability()->set_damage(ablity->attack);
 	pkt.mutable_player_ability()->set_hp(ablity->currentHp);
 	pkt.mutable_player_ability()->set_maxhp(ablity->maxHp);
+	pkt.mutable_player_ability()->set_gold(ablity->gold);
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
+	//std::cout << ablity->currentHp << '\n';
 	return true;
 }
 
@@ -706,6 +750,7 @@ bool CRoom::HandleBuyItem(CPlayerRef player, CItemRef item)
 			else
 			{
 				// 실패메시지 전달
+				std::cout << "실패\n";
 				IsBuyItem(player, nullptr, false);
 			}
 		}
@@ -758,7 +803,10 @@ bool CRoom::IsBuySkill(CPlayerRef player, CSkillRef skill, bool isBuy)
 	Protocol::S_BUY_SKILL pkt;
 	pkt.set_player_id(player->PlayerInfo->player_id());
 	pkt.set_is_success(isBuy);
-	pkt.set_skill_id(skill->GetSkillInfo().id);
+	if (skill)
+	{
+		pkt.set_skill_id(skill->GetSkillInfo().id);
+	}
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	Broadcast(sendBuffer, -1);
 	return true;
@@ -769,7 +817,10 @@ bool CRoom::IsBuyItem(CPlayerRef player, CItemRef item, bool isBuy)
 	Protocol::S_BUY_ITEM pkt;
 	pkt.set_player_id(player->PlayerInfo->player_id());
 	pkt.set_is_success(isBuy);
-	pkt.set_item_id(item->GetItemInfo().id);
+	if (item)
+	{
+		pkt.set_item_id(item->GetItemInfo().id);
+	}
 	CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
 	if (auto session = player->GetSession())
 		session->Send(sendBuffer);

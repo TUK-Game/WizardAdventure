@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ProjectilePool.h"
 #include "ObjectUtil.h"
+#include "BoxCollider.h"
 
 CProjectilePoolRef g_pool = std::make_shared<CProjectilePool>();
 
@@ -23,6 +24,7 @@ CProjectileRef CProjectilePool::Allocate()
 		{
 			m_nextProjectileId = i;
 			used[i] = true;
+			pool[i]->GetCollider()->SetCollisionProfile("Projectile");
 			return pool[i];
 		}
 	}
@@ -36,6 +38,7 @@ void CProjectilePool::Release(CProjectileRef obj)
 		if (pool[i] == obj)
 		{
 			used[i] = false;
+			//obj->GetCollider()->ClearCollisionList();
 			return;
 		}
 	}

@@ -73,6 +73,7 @@ public:
 
         // 너무 멀면 보간안하고 즉시 반영 (ex: 순간이동)
         float dist = (newPos - m_PrevPos).Length();
+        float distRot = (newRot - m_PrevRot).Length();
         constexpr float MAX_ALLOWED_DIST = 300.f;
         constexpr float MIN_ALLOWED_DIST = 1.f;
         if (dist > MAX_ALLOWED_DIST || dist < MIN_ALLOWED_DIST)
@@ -84,7 +85,6 @@ public:
             m_ElapsedTime = 0.f;
             m_Duration = 0.1f;
             m_LastRecvTime = now;
-            std::cout << "보간 안함\n";
             return;
         }
 
@@ -200,9 +200,11 @@ public:
     void SetProtocolStateForClientMonster(Protocol::MoveState state);
     virtual void SetTarget(const Vec3& pos, const Vec3& rot) {}
     void SetTotalMeshSize(const Vec3& size) { m_TotalMeshSize = size; }
+    void SetIsRender(bool b) { m_bRender = b; }
 
     int GetLayerIndex() { return m_LayerIndex; }
     std::wstring GetTag() const { return m_Tag; }
+    bool GetIsRender() { return m_bRender; }
 
     void AddComponent(CComponent* component);
     void AddComponent(EComponent_Type type);
@@ -211,6 +213,7 @@ public:
     void RemoveChild(CGameObject* obj);
     void RemoveFromParent();
 
+    virtual void SetBeforeRenderPushParmater() {};
 
     Vec3 InteractionCameraPos(Vec3& rot, const Vec3& offset);
 
@@ -251,4 +254,5 @@ protected:
     // dissolve
     float m_Threshold{};
     bool m_bDissolve;
+    bool m_bRender{ true };
 };

@@ -8,10 +8,8 @@ void CProjectileCollider::Update()
 {
 	const auto& pos = ((CProjectile*)m_Owner)->ProjectileInfo->object_info().pos_info().position();
 	const auto& rotation = ((CProjectile*)m_Owner)->ProjectileInfo->object_info().pos_info().rotation();
-	//const auto& size = ((CProjectile*)m_Owner)->ProjectileInfo->object_info().pos_info().size();
     Vec3 ms = ((CProjectile*)m_Owner)->GetMeshSize();
 	m_BoundingBox.Center = Vec3(pos.x() + m_Offset.x, pos.y() + m_Offset.y, pos.z() + m_Offset.z);
-    //m_BoundingBox.Extents = XMFLOAT3(size.x() * ms.x, size.y() * ms.y, size.z() * ms.z);
 
     XMVECTOR rotRad = XMVectorSet(
         XMConvertToRadians(rotation.x()),

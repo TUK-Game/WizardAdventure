@@ -38,6 +38,5 @@ void CProjectile::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 	if(m_bCollisionExplosion)
 	{
 		ProjectileInfo->set_state(Protocol::COLLISION);
-		std::cout << "Ãæµ¹\n";
 	}
 }

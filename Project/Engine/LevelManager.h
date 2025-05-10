@@ -20,6 +20,7 @@ public:
 	void ChangeLevel(CLevel* newLevel);
 	CGameObject* GetOwnPlayer() { return m_OwnPlayer; }
 	CGameObject* GetPlayer(UINT64 playerId) { return m_Players[playerId]; }
+	std::array<CGameObject*, MAX_PLAYERS>& GetPlayers() { return m_Players; }
 	void SetOwnPlayer(CGameObject* player) { m_OwnPlayer = player; }
 	void SetPlayer(CGameObject* player, UINT64 playerId) { m_Players[playerId] = player; }
 

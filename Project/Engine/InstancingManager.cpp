@@ -48,7 +48,8 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects, const st
 			}
 			else
 			{
-				vec[0]->GetMeshRenderer()->Render();
+				vec[0]->SetBeforeRenderPushParmater();
+				vec[0]->Render();
 			}
 		}
 		else
@@ -73,6 +74,7 @@ void CInstancingManager::Render(std::vector<CGameObject*>& gameObjects, const st
 					}
 					else
 					{
+						obj->SetBeforeRenderPushParmater();
 						obj->GetMeshRenderer()->Render();
 					}
 				}

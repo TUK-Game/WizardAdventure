@@ -44,7 +44,7 @@ CPlayWidgetWindow::~CPlayWidgetWindow()
 bool CPlayWidgetWindow::Init(CPlayer* player)
 {
 	CWidgetWindow::Init(player);
-	
+
 	{
 		CImageWidget* SkillWidget = CreateWidget<CImageWidget>(L"SkillWidget", player);
 		SkillWidget->SetTexture(L"SkillWidgetTexture");
@@ -72,7 +72,7 @@ bool CPlayWidgetWindow::Init(CPlayer* player)
 	}
 
 	{
-		
+
 		CSkillWidget* SkillWidget = CreateWidget<CSkillWidget>(L"Skill1", player);
 		SkillWidget->GetTransform()->SetRelativePosition(-0.73f, -0.722f, 1.f);
 		SkillWidget->GetTransform()->SetRelativeScale(0.088f, 0.135f, 0.2f);
@@ -104,6 +104,12 @@ bool CPlayWidgetWindow::Init(CPlayer* player)
 		SkillWidget->SetCoolTime(100.f);
 	}
 
+	{
+		Stats* stats = player->GetStats();
+		CTextWidget* gold = CreateWidget<CTextWidget>(L"PGold", player);
+		gold->GetTransform()->SetRelativePosition(-0.75f, -1.42f, 1.f);
+		gold->SetBasicInfo(std::format(L"{}", stats->gold), L"맑은 고딕_20", L"Yellow", Vec2(0.f, 0.f), Vec2(500.f, 100.f));
+	}
 
 	return true;
 }
@@ -111,6 +117,14 @@ bool CPlayWidgetWindow::Init(CPlayer* player)
 void CPlayWidgetWindow::Update()
 {
 	CWidgetWindow::Update();
+}
+
+void CPlayWidgetWindow::SetGold()
+{
+	Stats* stats = m_OwnerPlayer->GetStats();
+	std::wstring name = L"PGold";
+	CTextWidget* widget = dynamic_cast<CTextWidget*>(FindWidget(name));
+	widget->SetBasicInfo(std::format(L"{}", stats->gold), L"맑은 고딕_20", L"Yellow", Vec2(0.f, 0.f), Vec2(500.f, 100.f));
 }
 
 void CPlayWidgetWindow::SetSkill(ESkillType type, float coolTime, ESkillSlot slot)
@@ -123,7 +137,7 @@ void CPlayWidgetWindow::SetSkill(ESkillType type, float coolTime, ESkillSlot slo
 		widget->SetTexture(skillName);
 		widget->SetOriginCoolTime(coolTime);
 		widget->SetCoolTime(0.f);
-		widget->SetSlot(slot);	
+		widget->SetSlot(slot);
 	}
 }
 

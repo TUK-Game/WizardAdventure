@@ -131,10 +131,22 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 		std::vector<float> size = obj["size"];
 
 		CMonsterRef object = CObjectUtil::CreateMonster();
-		object->GetCollider()->SetBoxInfo(Vec3(pos[0], pos[1], pos[2]), Vec3(size[0], size[1], size[2]), Vec3(rot[0], rot[1], rot[2]), Vec3(0, size[1] + 50.f, 0));
+		object->GetCollider()->SetBoxInfo(Vec3(pos[0], pos[1], pos[2]), Vec3(size[0] * scale[0], size[1] * scale[1], size[2] * scale[2]),
+			Vec3(rot[0], rot[1], rot[2]), Vec3(0, size[1] * scale[1] / 2, 0));
+
 		object->GetCollider()->SetCollisionProfile("Monster");
 		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
-		object->SetState(Protocol::MOVE_STATE_SKILL_MOUSE_L);	// spawn
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_x(pos[0]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_y(pos[1]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position()->set_z(pos[2]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_size()->set_x(scale[0]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_size()->set_y(scale[1]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_size()->set_z(scale[2]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_x(rot[0]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_y(rot[1]); 
+		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_z(rot[2]); 
+
+		object->SetState(Protocol::MOVE_STATE_SPAWN);	// spawn
 		room->AddMonster(object);
 
 		for (const auto& box : mo)
@@ -146,9 +158,10 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 			if (trigger->IsMonsterInArea(Vec3(pos[0], pos[1], pos[2])))
 			{
 				trigger->AddMonster(object);
+				break;
 			}
 		}
-
+		//return;
 		//room->AddObject((uint32)EObject_Type::Monster, object);
 		//break;
 	}

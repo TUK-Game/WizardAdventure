@@ -35,6 +35,7 @@ enum class ECollision_Channel
 	Projectile,
 	NPC,
 	TRIGGER,
+	MonsterProjectile,
 	Max
 };
 

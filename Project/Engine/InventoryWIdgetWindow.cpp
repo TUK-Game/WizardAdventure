@@ -155,7 +155,6 @@ void CInventoryWIdgetWindow::UpdateStatsText()
 			widget->SetText(std::format(L"공격력: {}                   골드: {}", stats->attack, stats->gold));
 		}
 	}
-	std::cout << stats->maxHp << " " << stats->currentHp << " " << stats->attack << " " << stats->gold << '\n';
 }
 
 void CInventoryWIdgetWindow::SetEvent(CItemButtonWidget* widget, CToolTip* tooltip, CImageWidget* pannel)

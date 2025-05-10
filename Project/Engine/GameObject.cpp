@@ -17,6 +17,7 @@
 #include "SubLevel.h"
 #include "StateManager.h"
 #include "Protocol.pb.h"
+#include "Player.h"
 
 CGameObject::CGameObject()
 	: m_arrComponent{}
@@ -143,7 +144,7 @@ void CGameObject::FinalUpdate()
 
 void CGameObject::Render()
 {
-	if (!m_RenderComponent)
+	if (!m_RenderComponent || !m_bRender)
 		return;
 
 	m_RenderComponent->Render();
@@ -211,7 +212,10 @@ Protocol::MoveState CGameObject::GetStateForProtocol()
 	case EState_Type::Hit:
 		break;
 	case EState_Type::Death:
+		return Protocol::MOVE_STATE_DEATH;
 		break;
+	case EState_Type::Falling:
+		return Protocol::MOVE_STATE_FALLING;
 	case EState_Type::END:
 		break;
 	}
@@ -257,15 +261,40 @@ void CGameObject::SetProtocolStateForClient(Protocol::MoveState state)
 		break;
 	case Protocol::MOVE_STATE_DAMAGED:
 		m_StateManager->HandleEvent(this, "Knockback");
-		std::cout << "Damaged!!\n";
 		break;
 	case Protocol::MOVE_STATE_DAMAGED_END:
 		m_StateManager->HandleEvent(this, "EndKnockback");
-		std::cout << "DamagedEnd!!\n";
 		break;
 	case Protocol::MOVE_STATE_DEATH:
 		m_StateManager->HandleEvent(this, "Death");
-		std::cout << "Death!!\n";
+		break;
+	case Protocol::MOVE_STATE_DEATH_END:
+		m_StateManager->HandleEvent(this, "EndDeath");
+		break;
+	case Protocol::MOVE_STATE_FALLING:
+		m_StateManager->HandleEvent(this, "Fall");
+		break;
+	case Protocol::MOVE_STATE_FALLING_END:
+		static_cast<CPlayer*>(this)->SetDamageDelay(true);
+		m_StateManager->HandleEvent(this, "EndFall");
+		break;
+	case Protocol::MOVE_STATE_DAMAGE_DELAY:
+		static_cast<CPlayer*>(this)->SetDamageDelay(true);
+		m_StateManager->HandleEvent(this, "EndKnockback");
+		break;
+	case Protocol::MOVE_STATE_DAMAGE_DELAY_END:
+	{
+		static_cast<CPlayer*>(this)->SetDamageDelay(false);
+		static_cast<CPlayer*>(this)->SetIsRenderon(true);
+		static_cast<CPlayer*>(this)->SetBlinkTime(0.f);
+		m_StateManager->HandleEvent(this, "Move");
+
+		const auto& childs = GetChild();
+		for (auto& child : childs)
+		{
+			child->SetIsRender(true);
+		}
+	}
 		break;
 	default:
 		break;
@@ -284,30 +313,26 @@ void CGameObject::SetProtocolStateForClientMonster(Protocol::MoveState state)
 	case Protocol::MOVE_STATE_RUN:
 		m_StateManager->HandleEvent(this, "Chase");
 		break;
-	// temp ------------------------------------------------
-	case Protocol::MOVE_STATE_DASH:
+	case Protocol::MOVE_STATE_DISSOVE:
 		m_StateManager->HandleEvent(this, "Dissolve");
 		break;
-	// temp ------------------------------------------------
 	case Protocol::MOVE_STATE_DASH_END:
 		break;
 	case Protocol::MOVE_STATE_SKILL_Q:
 		m_StateManager->HandleEvent(this, "Attack");
 		break;
-		// temp ------------------------------------------------
-	case Protocol::MOVE_STATE_SKILL_E:
+	case Protocol::MOVE_STATE_DAMAGED:
 		std::cout << "Damaged!!!" << std::endl;
 		m_StateManager->HandleEvent(this, "Damaged");
 		break;
-	case Protocol::MOVE_STATE_SKILL_R:
+	case Protocol::MOVE_STATE_DAMAGED_END:
 		std::cout << "EndDamaged!!!" << std::endl;
 		m_StateManager->HandleEvent(this, "EndDamaged");
 		break;
-	case Protocol::MOVE_STATE_SKILL_MOUSE_R:
+	case Protocol::MOVE_STATE_DEATH:
 		std::cout << "Death!!!" << std::endl;
 		m_StateManager->HandleEvent(this, "Death");
 		break;
-		// temp ------------------------------------------------
 	case Protocol::MOVE_STATE_SKILL_MOUSE_L:
 		break;
 	}

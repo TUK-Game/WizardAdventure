@@ -8,6 +8,7 @@ struct Ablity
 	int currentHp = 100;
 	int attack = 10;
 	float moveSpeed = 300.f;
+	int gold = 1000;
 
 	void TakeDamage(int damage) {
 		currentHp = max(currentHp - damage, 0);
@@ -29,7 +30,7 @@ public:
 	virtual ~CCreature();
 
 public:
-	Ablity* GetAblity() const { return m_Stats; }
+	Ablity* GetAbility() const { return m_Stats; }
 
 	void Damaged(int damage) { m_Stats->currentHp -= damage; }
 

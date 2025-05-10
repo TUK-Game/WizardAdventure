@@ -5,6 +5,7 @@
 #include "Room.h"
 #include "BoxCollider.h"
 #include "LevelCollision.h"
+#include "ProjectilePool.h"
 
 CMonsterAI::CMonsterAI()
 {
@@ -16,8 +17,8 @@ CMonsterAI::~CMonsterAI()
 
 void CMonsterAI::Update(float deltaTime)
 {
-	DetectTarget();  // Å¸°Ù Å½»ö
-	UpdateAI(deltaTime);      // »óÅÂ ÀüÀÌ °áÁ¤
+	DetectTarget();  // Å¸ï¿½ï¿½ Å½ï¿½ï¿½
+	UpdateAI(deltaTime);      // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }
 
 void CMonsterAI::UpdateType(EMonsterType type)
@@ -78,12 +79,12 @@ void CMonsterAI::RotateToTarget(float deltaTime)
     float currentY = myPosInfo->rotation().y();
     float targetY = m_TargetAngle;
 
-    // ÃÖ¼Ò È¸Àü °¢µµ·Î º¸Á¤
+    // ï¿½Ö¼ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     float diff = targetY - currentY;
     while (diff > 180.f) diff -= 360.f;
     while (diff < -180.f) diff += 360.f;
 
-    float rotationSpeed = 180.f; // µµ/ÃÊ
+    float rotationSpeed = 180.f; // ï¿½ï¿½/ï¿½ï¿½
     float deltaAngle = rotationSpeed * deltaTime;
 
     if (fabsf(diff) < 0.01f)
@@ -95,6 +96,7 @@ void CMonsterAI::RotateToTarget(float deltaTime)
     else
         currentY += (diff > 0 ? deltaAngle : -deltaAngle);
 
+    m_Owner->SetDir(currentY);
     m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_rotation()->set_y(currentY);
 }
 
@@ -113,14 +115,14 @@ bool CMonsterAI::IsFacingTarget(float angleThresholdDeg)
     toTarget.y = 0.f;
 
     if (toTarget.Length() < 0.001f)
-        return true; // ³Ê¹« °¡±î¿ì¸é ±×³É true
+        return true; // ï¿½Ê¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×³ï¿½ true
 
     toTarget.Normalize();
     float targetAngle = atan2(toTarget.x, toTarget.z) * (180.0f / XM_PI) + 180.f;
 
     float diff = targetAngle - currentAngle;
 
-    // -180 ~ 180 ¹üÀ§·Î Á¤±ÔÈ­
+    // -180 ~ 180 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­
     if (diff > 180.f) diff -= 360.f;
     else if (diff < -180.f) diff += 360.f;
 
@@ -164,6 +166,7 @@ void CMonsterAI::UpdateAI(float deltaTime)
 
     Vec3 dir = targetPosition - myPosition;
     dir.y = 0.f;
+
     if (dir.Length() > 0.001f)
     {
         dir.Normalize();
@@ -171,16 +174,14 @@ void CMonsterAI::UpdateAI(float deltaTime)
         m_TargetAngle = angle + 180.f;
     }
 
-    // temp -----------------------------------------------------------------
-    if (m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_MOUSE_L)  // spawn
+    if (m_Owner->GetState() == Protocol::MOVE_STATE_SPAWN)  // spawn
     {
         m_SpawnTime += deltaTime;
-        std::cout << "µé¾î¿È" << std::endl;
         if (m_SpawnTime >= m_SpawnDuration)
         {
-            // ÇöÀç À§Ä¡¿¡¼­ yÃàÀ¸·Î 300¸¸Å­ +ÇØ¾ßÇÔ
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 300ï¿½ï¿½Å­ +ï¿½Ø¾ï¿½ï¿½ï¿½
             Protocol::Vector3* pos = m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
-            pos->set_y(pos->y() + 300.f);
+            pos->set_y(pos->y() + 150.f);
 
             m_SpawnTime = 0.f;
             m_Owner->SetState(Protocol::MOVE_STATE_IDLE);
@@ -188,30 +189,39 @@ void CMonsterAI::UpdateAI(float deltaTime)
         return;
     }
 
-    if (m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_E)        // damaged
+    if (m_Owner->GetState() == Protocol::MOVE_STATE_DAMAGED)        // damaged
     {
         m_DamagedTime += deltaTime;
         if (m_DamagedTime >= m_DamagedDuration)
         {
             m_DamagedTime = 0.f;
-            m_Owner->SetState(Protocol::MOVE_STATE_SKILL_R);        // endDamaged
+            m_Owner->SetState(Protocol::MOVE_STATE_DAMAGED_END);        // endDamaged
         }
         return;
     }
     
-    if (m_Owner->GetState() == Protocol::MOVE_STATE_SKILL_MOUSE_R)  // death
+    if (m_Owner->GetState() == Protocol::MOVE_STATE_DEATH)  // death
     {
         m_DeathTime += deltaTime;
         if (m_DeathTime + 0.1f >= m_DeathDuration)
         {
-            m_DeathTime = 0.f;  
+            m_DeathTime = 0.f; 
             // dissolve Start
-            m_Owner->SetState(Protocol::MOVE_STATE_DASH);
+            m_Owner->SetState(Protocol::MOVE_STATE_DISSOVE);
+            m_bAttack = false;
+            auto& objects = g_Room->GetLayerObjects((uint32)EObject_Type::Projectile);
+            for (uint32 id : m_ProjectileIds)
+            {
+                g_pool->Release(std::dynamic_pointer_cast<CProjectile>(objects[id]));
+                objects.erase(id);
+            }
+            m_ProjectileIds.clear();
+            m_Owner->ClearProjectileIds();
         }
         return;
     }
 
-    if (m_Owner->GetState() == Protocol::MOVE_STATE_DASH)  // dissolve
+    if (m_Owner->GetState() == Protocol::MOVE_STATE_DISSOVE)  // dissolve
     {
         m_DissolveTime += deltaTime;
         if (m_DissolveTime >= m_DissolveDuration)
@@ -221,9 +231,7 @@ void CMonsterAI::UpdateAI(float deltaTime)
             g_Room->RemoveObject((uint32)EObject_Type::Monster, m_Owner->MonsterInfo->object_id());
         }
         return;
-    }  
-    // temp -----------------------------------------------------------------
-
+    } 
 
     float distance = (targetPosition - myPosition).Length();
 
@@ -234,8 +242,27 @@ void CMonsterAI::UpdateAI(float deltaTime)
         {
             m_AttackTime = 0;
             m_Owner->SetState(Protocol::MOVE_STATE_IDLE);
+            m_bAttack = false;
             return;
         }
+        if (m_bAttack && m_AttackTime >= m_AttackDelete)
+        {
+            auto& objects = g_Room->GetLayerObjects((uint32)EObject_Type::Projectile);
+            for (uint32 id : m_ProjectileIds)
+            {
+                g_pool->Release(std::dynamic_pointer_cast<CProjectile>(objects[id]));
+                objects.erase(id);
+            }
+            m_ProjectileIds.clear();
+            m_Owner->ClearProjectileIds();
+        }
+        else if (!m_bAttack && m_AttackTime >= m_AttackSpawn && m_AttackTime < m_AttackDelete)
+        {
+            m_Owner->SpawnAttackObject();
+            m_ProjectileIds = m_Owner->GetProjectileIds();
+            m_bAttack = true;
+        }
+
         m_Owner->SetState(Protocol::MOVE_STATE_SKILL_Q);
     }
     else if (distance <= m_DetectRange)
@@ -256,7 +283,7 @@ void CMonsterAI::Chase(float deltaTime)
     RotateToTarget(deltaTime);
 
     HandleMoveMonster(deltaTime);
-    HandleGravityMonster(deltaTime);
+    //HandleGravityMonster(deltaTime);
 }
 
 void CMonsterAI::HandleMoveMonster(float deltaTime)
@@ -320,9 +347,6 @@ void CMonsterAI::HandleGravityMonster(float deltaTime)
 
     float moveAmount = -GRAVITY * deltaTime;
 
-    moveAmount;
-    moveAmount;
-
     for (int i = 1; i <= step; ++i)
     {
         nowPos.y += moveAmount;
@@ -334,7 +358,7 @@ void CMonsterAI::HandleGravityMonster(float deltaTime)
         box->SetBoxHeight(0.f);
         if (g_Room->GetLevelCollision()->CollisionWithWall(box))
         {
-            if (nowPos.y > -20.f)
+            if (nowPos.y > -200.f)
             {
                 nowPos.y = 0.f;
                 ToProtoVector3(&protoNow, nowPos);

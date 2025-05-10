@@ -61,6 +61,7 @@ message PlayerAblity
 	uint32 damage = 3;
 	float signaturegage = 4;
 	float maxsignaturegage = 5;
+	uint32 gold = 6;
 }
 
 message PlayerUpdateInfo

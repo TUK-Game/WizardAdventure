@@ -52,7 +52,7 @@ void CLevelCollision::Collision()
 
 					if (src->Collision(dest))
 					{
-						if (!src->CheckCollisionList(dest))
+						if (!dest->CheckCollisionList(src))
 						{
 							src->AddCollisionList(dest);
 							dest->AddCollisionList(src);
@@ -66,7 +66,7 @@ void CLevelCollision::Collision()
 							dest->CollisionEvent(src);
 						}
 					}
-					else if (src->CheckCollisionList(dest))
+					else if (dest->CheckCollisionList(src))
 					{
 						src->DeleteCollisionList(dest);
 						dest->DeleteCollisionList(src);

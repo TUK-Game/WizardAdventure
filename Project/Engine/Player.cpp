@@ -10,6 +10,7 @@
 #include "PlayerAttackLButtonState.h"
 #include "PlayerAttackRButtonState.h"
 #include "PlayerKnockbackState.h"
+#include "PlayerFallingState.h"
 #include "PlayerDeathState.h"
 #include "Transform.h"
 #include "Engine.h"
@@ -131,6 +132,24 @@ void CPlayer::Update()
 #endif // DEBUG_SOLOPLAY
 
     CGameObject::Update();
+
+
+    constexpr float blink = 0.2f;
+    if (m_bDamageDelay)
+    {
+        m_BlinkTime+= time;
+        if (m_BlinkTime >= blink)
+        {
+            m_BlinkTime = 0.f;
+            m_bRenderOn = !m_bRenderOn;
+        }
+
+        auto& childs = GetChild();
+        for (auto child : childs)
+        {
+            child->SetIsRender(m_bRenderOn);
+        }
+    }
 }
 
 void CPlayer::FinalUpdate()
@@ -166,6 +185,7 @@ void CPlayer::CreateStateManager()
     m_StateManager->AddState(new CPlayerAttackRButtonState);
     m_StateManager->AddState(new CPlayerKnockbackState);
     m_StateManager->AddState(new CPlayerDeathState);
+    m_StateManager->AddState(new CPlayerFallingState);
 
     // idle -> others
     m_StateManager->SetTransition(EState_Type::Idle, "Move", EState_Type::Run);
@@ -177,6 +197,7 @@ void CPlayer::CreateStateManager()
     m_StateManager->SetTransition(EState_Type::Idle, "Attack_RButton", EState_Type::Attack_RButton);
     m_StateManager->SetTransition(EState_Type::Idle, "Knockback", EState_Type::Knockback);
     m_StateManager->SetTransition(EState_Type::Idle, "Death", EState_Type::Death);
+    m_StateManager->SetTransition(EState_Type::Idle, "Fall", EState_Type::Falling);
     
     // run -> others
     m_StateManager->SetTransition(EState_Type::Run, "Stop", EState_Type::Idle);
@@ -188,12 +209,15 @@ void CPlayer::CreateStateManager()
     m_StateManager->SetTransition(EState_Type::Run, "Attack_RButton", EState_Type::Attack_RButton);
     m_StateManager->SetTransition(EState_Type::Run, "Knockback", EState_Type::Knockback);
     m_StateManager->SetTransition(EState_Type::Run, "Death", EState_Type::Death);
+    m_StateManager->SetTransition(EState_Type::Run, "Fall", EState_Type::Falling);
 
     // dash -> run
     m_StateManager->SetTransition(EState_Type::Dash, "EndDash", EState_Type::Run);
+    m_StateManager->SetTransition(EState_Type::Dash, "Fall", EState_Type::Falling);
 
     // knockback -> idle
     m_StateManager->SetTransition(EState_Type::Knockback, "EndKnockback", EState_Type::Idle);
+    m_StateManager->SetTransition(EState_Type::Knockback, "Fall", EState_Type::Falling);
 
     // attack -> idle
     m_StateManager->SetTransition(EState_Type::Attack_Q, "EndAttack", EState_Type::Idle);
@@ -219,6 +243,8 @@ void CPlayer::CreateStateManager()
     // temp
     m_StateManager->SetTransition(EState_Type::Death, "EndDeath", EState_Type::Idle);
 
+    m_StateManager->SetTransition(EState_Type::Falling, "EndFall", EState_Type::Idle);
+    m_StateManager->SetTransition(EState_Type::Falling, "Death", EState_Type::Death);
 }
 
 void CPlayer::Move(Vec3 moveDir, bool shouldRotate, float speedScale)
@@ -242,7 +268,9 @@ void CPlayer::Move(Vec3 moveDir, bool shouldRotate, float speedScale)
         }
 #ifndef DEBUG_SOLOPLAY
         if(m_StateManager->GetCurrentStateType() != EState_Type::Dash)
+        {
             CNetworkManager::GetInst()->s_GameSession->OnMovePlayer();
+        }
 #endif 
     }
 }
@@ -256,12 +284,13 @@ void CPlayer::Attack(int skillIndex, float duration)
 
 }
 
-void CPlayer::InitStats(int maxHp, int hp, int attack, float speed)
+void CPlayer::InitStats(int maxHp, int hp, int attack, float speed, int gold)
 {
     m_Stats->maxHp = maxHp;
     m_Stats->currentHp = hp;
     m_Stats->attack = attack;
     m_Stats->moveSpeed = speed;
+    m_Stats->gold = gold;
 }
 
 bool CPlayer::DetectNPC()
@@ -274,7 +303,6 @@ bool CPlayer::DetectNPC()
 
     if (nullptr == npc)
         return false;
-    std::cout << "NPC발견\n";
     npc->Interation();
     MoveCamera(camera, npc, ECamera_Type::Interaction_Start, Vec3(200.f, 0.f, 500.f));
     return true;

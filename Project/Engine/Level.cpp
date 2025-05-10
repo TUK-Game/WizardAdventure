@@ -62,7 +62,12 @@ void CLevel::Update()
 	for (auto& widget : m_vecWidgetWindow)
 	{
 		if(widget && widget->GetEnable())
+		{
+			if (m_WindowType != EWIDGETWINDOW_TYPE::END && m_WindowType != widget->GetWindowType())
+				continue;
+
 			widget->Update();
+		}
 	}
 }
 

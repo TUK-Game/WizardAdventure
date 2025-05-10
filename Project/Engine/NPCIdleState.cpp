@@ -20,11 +20,6 @@ void CNPCIdleState::Enter(CGameObject* entity)
 
 void CNPCIdleState::Update(CGameObject* entity, float deltaTime)
 {
-	//m_ElapsedTime += deltaTime;
-	//if (m_ElapsedTime > m_Duration)
-	//{
-	//	entity->GetStateManager()->HandleEvent(entity, "Talk");
-	//}
 }
 
 void CNPCIdleState::Exit(CGameObject* entity)

@@ -1532,6 +1532,7 @@ class PlayerAblity final :
     kDamageFieldNumber = 3,
     kSignaturegageFieldNumber = 4,
     kMaxsignaturegageFieldNumber = 5,
+    kGoldFieldNumber = 6,
   };
   // uint32 maxhp = 1;
   void clear_maxhp();
@@ -1578,6 +1579,15 @@ class PlayerAblity final :
   void _internal_set_maxsignaturegage(float value);
   public:
 
+  // uint32 gold = 6;
+  void clear_gold();
+  uint32_t gold() const;
+  void set_gold(uint32_t value);
+  private:
+  uint32_t _internal_gold() const;
+  void _internal_set_gold(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.PlayerAblity)
  private:
   class _Internal;
@@ -1591,6 +1601,7 @@ class PlayerAblity final :
     uint32_t damage_;
     float signaturegage_;
     float maxsignaturegage_;
+    uint32_t gold_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4148,6 +4159,26 @@ inline void PlayerAblity::_internal_set_maxsignaturegage(float value) {
 inline void PlayerAblity::set_maxsignaturegage(float value) {
   _internal_set_maxsignaturegage(value);
   // @@protoc_insertion_point(field_set:Protocol.PlayerAblity.maxsignaturegage)
+}
+
+// uint32 gold = 6;
+inline void PlayerAblity::clear_gold() {
+  _impl_.gold_ = 0u;
+}
+inline uint32_t PlayerAblity::_internal_gold() const {
+  return _impl_.gold_;
+}
+inline uint32_t PlayerAblity::gold() const {
+  // @@protoc_insertion_point(field_get:Protocol.PlayerAblity.gold)
+  return _internal_gold();
+}
+inline void PlayerAblity::_internal_set_gold(uint32_t value) {
+  
+  _impl_.gold_ = value;
+}
+inline void PlayerAblity::set_gold(uint32_t value) {
+  _internal_set_gold(value);
+  // @@protoc_insertion_point(field_set:Protocol.PlayerAblity.gold)
 }
 
 // -------------------------------------------------------------------

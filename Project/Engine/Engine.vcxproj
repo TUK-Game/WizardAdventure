@@ -217,10 +217,12 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="NPCBuyState.h" />
+    <ClInclude Include="NPCFailState.h" />
     <ClInclude Include="NPCIdleState.h" />
     <ClInclude Include="NPCTalkState.h" />
     <ClInclude Include="ParticleSystemManager.h" />
     <ClInclude Include="PlayerDeathState.h" />
+    <ClInclude Include="PlayerFallingState.h" />
     <ClInclude Include="PlayerKnockbackState.h" />
     <ClInclude Include="PlayerStateManager.h" />
     <ClInclude Include="Portal.h" />
@@ -414,10 +416,12 @@ call protoc-21.12-win64\bin\GenPackets.bat</Command>
     <ClCompile Include="ItemManager.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="NPCBuyState.cpp" />
+    <ClCompile Include="NPCFailState.cpp" />
     <ClCompile Include="NPCIdleState.cpp" />
     <ClCompile Include="NPCTalkState.cpp" />
     <ClCompile Include="ParticleSystemManager.cpp" />
     <ClCompile Include="PlayerDeathState.cpp" />
+    <ClCompile Include="PlayerFallingState.cpp" />
     <ClCompile Include="PlayerKnockbackState.cpp" />
     <ClCompile Include="PlayerStateManager.cpp" />
     <ClCompile Include="Portal.cpp" />

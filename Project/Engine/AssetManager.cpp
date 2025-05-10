@@ -296,6 +296,10 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"MagicCircle.png");
 	AddAsset(L"MagicCircle", tex);
+	
+	tex = new CTexture;
+	tex->Init(path / L"WallMark.png");
+	AddAsset(L"WallMark", tex);
 
 	tex = new CTexture;
 	tex->Init(path / L"Red.jpg");
@@ -439,6 +443,11 @@ int CAssetManager::LoadMaterial()
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Texture_World_Tinted"));
 	material->SetTexture(0, FindAsset<CTexture>(L"RectWarning"));
 	AddAsset(L"RectWarning", material);
+	
+	material = new CMaterial;	
+	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Texture_World_Tinted"));
+	material->SetTexture(0, FindAsset<CTexture>(L"WallMark"));
+	AddAsset(L"WallMark", material);
 
 	material = new CMaterial;
 	material->SetGraphicsShader(FindAsset<CGraphicShader>(L"Tex_World_Billboard"));

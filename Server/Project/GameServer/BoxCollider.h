@@ -31,6 +31,7 @@ public:
 	void CallCollisionBegin(CBoxCollider* dest);
 	void CollisionEvent(CBoxCollider* dest);
 	void CallCollisionEnd(CBoxCollider* dest);
+
 public:
 	virtual void Update();
 

@@ -34,7 +34,6 @@ CMonster::CMonster()
 	AddComponent(new CTransform);
 	AddComponent(new COrientedBoxCollider);
 	GetCollider()->SetProfile(CCollisionManager::GetInst()->FindProfile("Player")); // temp
-	GetTransform()->SetRelativePosition(11000, 20, 3500);
 
 	Vec3 ms;
 	for (auto& o : obj2)
@@ -58,6 +57,9 @@ CMonster::CMonster()
 	hpBar->SetOffsetY(450.f);
 	AddChild(hpBar);
 
+	// temp
+	GetStat()->gold = 100.f;
+
 	Begin();	
 }
 
@@ -73,8 +75,7 @@ void CMonster::Begin()
 {
 	CGameObject::Begin();
 	m_StateManager->ChangeState(this, EState_Type::Spawn);
-	m_Interpolator->SetTarget(GetTransform()->GetRelativePosition(), GetTransform()->GetRelativeRotation());
-	
+	//m_Interpolator->SetTarget(GetTransform()->GetRelativePosition(), GetTransform()->GetRelativeRotation());
 }
 
 void CMonster::Update()

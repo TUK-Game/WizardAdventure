@@ -33,7 +33,7 @@ void CMonsterCollider::SetBoxInfo(const Vec3& centerPos, const Vec3& size, const
 {
 	m_BoundingBox.Center = centerPos;
 
-	m_BoundingBox.Extents = Vec3(size.x * 0.8f, size.y * 0.8f, size.z * 0.7f);
+	m_BoundingBox.Extents = Vec3(size.x / 2, size.y / 2, size.z / 2);
 
     XMVECTOR rotRad = XMVectorSet(
         XMConvertToRadians(rotation.x),

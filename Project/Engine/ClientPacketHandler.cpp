@@ -132,35 +132,35 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	case EPlayerAttribute::Fire:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_FIRE);
-		player->InitStats(100, 100, 30, 300.f);
+		player->InitStats(100, 100, 30, 300.f, 1000);
 		// temp
 
 		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
 		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
-		player->GetSkillManager()->LearnSkill(ESkillSlot::Q, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireballExplosion")));
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::Q, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireballExplosion")));
 		//player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
 		//player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
 
 		gamewindow->SetSkill(ESkillType::FireBallTowardMouse, Skill::FireBall.cooldown, ESkillSlot::LButton);
 		gamewindow->SetSkill(ESkillType::Meteor, Skill::Meteor.cooldown, ESkillSlot::RButton);
-		gamewindow->SetSkill(ESkillType::FireBallTowardQ, Skill::FireBallQ.cooldown, ESkillSlot::Q);
+		//gamewindow->SetSkill(ESkillType::FireBallTowardQ, Skill::FireBallQ.cooldown, ESkillSlot::Q);
 		// gamewindow->SetSkill(ESkillType::FireTower, Skill::FireTower.cooldown, ESkillSlot::E);
 		// gamewindow->SetSkill(ESkillType::FireSwordSpread, Skill::FireSword.cooldown, ESkillSlot::R);
 		gamewindow->SetGauge(L"HPBar", 100, true);
 		gamewindow->SetGauge(L"SignautreGage", 0, false);
-
+		gamewindow->SetGold();
 	}
 	break;
 	case EPlayerAttribute::Ice:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_ICE);
-		player->InitStats(100, 100, 30, 300.f);
+		player->InitStats(100, 100, 30, 300.f, 1000);
 	}
 	break;
 	case EPlayerAttribute::Electric:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
-		player->InitStats(100, 100, 30, 300.f);
+		player->InitStats(100, 100, 30, 300.f, 1000);
 	}
 	break;
 	}
@@ -181,7 +181,7 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 	case Protocol::PLAYER_TYPE_FIRE:
 	{
 		player = new CPlayer(EPlayerAttribute::Fire, false, Vec3(11240.f, 0.f, 1127.f));
-		player->InitStats(100, 100, 30, 300.f);
+		player->InitStats(100, 100, 30, 300.f, 1000);
 
 		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
 		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
@@ -230,7 +230,7 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 		case Protocol::PLAYER_TYPE_FIRE:
 		{
 			player = new CPlayer(EPlayerAttribute::Fire, false, Vec3(position.x(), position.y(), position.z()));
-			player->InitStats(100, 100, 30, 300.f);
+			player->InitStats(100, 100, 30, 300.f, 1000);
 
 			player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
 			player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
@@ -285,28 +285,30 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		const Protocol::MonsterInfo& info = pkt.monster_info(i);
 		uint32_t objectId = info.object_id();
 
-		CMonster* monster = monsterMap[objectId];
-
-		if (nullptr == monster)
-		{
-			monster = new CMonster();
-			monsterMap[objectId] = monster;
-			level->SafeAddGameObject(monster, LAYER_MONSTER, false);
-		}
-
 		const Protocol::PosInfo& posInfo = info.object_info().pos_info();
 		const Protocol::Vector3& pos = posInfo.position();
 		const Protocol::Vector3& rot = posInfo.rotation();
 		Protocol::MoveState state = posInfo.state();
 
+		CMonster* monster = monsterMap[objectId];
+		if (nullptr == monster)
+		{
+			monster = new CMonster();
+			monster->GetTransform()->SetRelativeScale(Vec3(info.object_info().pos_info().size().x(), 
+				info.object_info().pos_info().size().y(),
+				info.object_info().pos_info().size().z()));
+			monsterMap[objectId] = monster;
+			level->SafeAddGameObject(monster, LAYER_MONSTER, false);
+		}
+
+
 		if (state == Protocol::MOVE_STATE_NONE)
 		{
-			level->GetLayer(LAYER_MONSTER)->SafeRemoveGameObject(monsterMap[objectId]);
+			level->GetLayer(LAYER_MONSTER)->SafeRemoveGameObject(monster);
 			monsterMap.erase(objectId);
 			continue;
 		}
 
-		// ���� ���� ����
 		monster->SetTarget(Vec3(pos.x(), pos.y(), pos.z()), Vec3(rot.x(), rot.y(), rot.z()));
 		monster->SetProtocolStateForClientMonster(state);
 		monster->SetStats(info.monster_ablity().maxhp(), info.monster_ablity().hp());
@@ -434,7 +436,7 @@ bool Handle_S_MOVE(CPacketSessionRef& session, Protocol::S_MOVE& pkt)
 	const Protocol::Vector3& rotation = pkt.player_move_info().pos_info().rotation();
 	Protocol::MoveState state = pkt.player_move_info().pos_info().state();
 	CLevelManager::GetInst()->GetPlayer(id)->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
-
+	CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(Vec3(rotation.x(), rotation.y(), rotation.z()));
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
 	return true;
 }
@@ -447,7 +449,7 @@ bool Handle_S_ACT(CPacketSessionRef& session, Protocol::S_ACT& pkt)
 	const Protocol::Vector3& rotation = pkt.player_move_info().pos_info().rotation();
 	Protocol::MoveState state = pkt.player_move_info().pos_info().state();
 	CLevelManager::GetInst()->GetPlayer(id)->SetTarget(Vec3(position.x(), position.y(), position.z()), Vec3(rotation.x(), rotation.y(), rotation.z()));
-
+	CLevelManager::GetInst()->GetPlayer(id)->GetTransform()->SetRelativeRotation(Vec3(rotation.x(), rotation.y(), rotation.z()));
 	CLevelManager::GetInst()->GetPlayer(id)->SetProtocolStateForClient(state);
 	return true;
 }
@@ -473,7 +475,7 @@ bool Handle_S_UPDATE_PLAYER_STATS(CPacketSessionRef& session, Protocol::S_UPDATE
 	const auto& player = CLevelManager::GetInst()->GetPlayer(id);
 
 	const auto& stats = pkt.player_ability();
-	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp(), stats.damage());
+	(static_cast<CPlayer*>(player))->SetStats(stats.maxhp(), stats.hp(), stats.damage(), stats.gold());
 
 	CInventoryWIdgetWindow* inven = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
 	CPlayWidgetWindow* gamewindow = dynamic_cast<CPlayWidgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::GAME_WINDOW));
@@ -481,6 +483,7 @@ bool Handle_S_UPDATE_PLAYER_STATS(CPacketSessionRef& session, Protocol::S_UPDATE
 	{
 		inven->UpdateStatsText();
 		gamewindow->SetGauge(L"HPBar", stats.maxhp(), true);
+		gamewindow->SetGold();
 	}
 	return true;
 }
@@ -533,8 +536,8 @@ bool Handle_S_GATE_OPNE(CPacketSessionRef& session, Protocol::S_GATE_OPNE& pkt)
 		object->m_ObjectId = info.object_id();
 		std::wstring name = std::to_wstring(info.object_id());
 		object->SetName(name);
-		object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Kita"));
-		object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Cube"));
+		object->GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"WallMark"));
+		object->GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
 		object->GetTransform()->SetRelativePosition(posInfo.x(), posInfo.y(), posInfo.z());
 		object->GetTransform()->SetRelativeScale(sizeInfo.x(), sizeInfo.y(), sizeInfo.z());
 		object->GetTransform()->SetRelativeRotation(rotInfo.x(), rotInfo.y(), rotInfo.z());
@@ -684,12 +687,24 @@ bool Handle_S_BUY_ITEM(CPacketSessionRef& session, Protocol::S_BUY_ITEM& pkt)
 			npc->SuccessInteration();
 		}
 		const auto& item = CItemManager::GetInst()->FindItem(itemId);
+		if (item->GetItemInfo().name == L"HP포션")
+			return true;
+
 		CPlayer* player = dynamic_cast<CPlayer*>(CLevelManager::GetInst()->GetPlayer(playerId));
 		CInventoryWIdgetWindow* inven = dynamic_cast<CInventoryWIdgetWindow*>(CLevelManager::GetInst()->GetCurrentLevel()->FindWidgetWindow(EWIDGETWINDOW_TYPE::INVENTORY_WINDOW));
 		if(item && player && inven)
 		{
 			player->AddItem(item);
 			inven->UpdateInventory();
+		}
+	}
+	else
+	{
+		const auto& objects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_NPC)->GetParentObjects();
+		CNPC* npc = dynamic_cast<CNPC*>(objects[0]);
+		if (npc)
+		{
+			npc->FailInteration();
 		}
 	}
 	return true;
@@ -721,6 +736,15 @@ bool Handle_S_BUY_SKILL(CPacketSessionRef& session, Protocol::S_BUY_SKILL& pkt)
 			}
 			player->AddSkill(skill);
 			inven->UpdateInventory();
+		}
+	}
+	else
+	{
+		const auto& objects = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_NPC)->GetParentObjects();
+		CNPC* npc = dynamic_cast<CNPC*>(objects[0]);
+		if (npc)
+		{
+			npc->FailInteration();
 		}
 	}
 	return true; 
