@@ -2,7 +2,7 @@
   {
     "Id": "10001",
     "Name": "요정의 머리띠",
-    "Description": "요정의 머리띠임",
+    "Description": "공격력 10상승",
     "Amount": 10.0,
     "Where": "ATK",
     "Price": 100.0,
@@ -11,7 +11,7 @@
   {
     "Id": "10002",
     "Name": "요정의 반지",
-    "Description": "요정의 반지임",
+    "Description": "공격력 20상승",
     "Amount": 20.0,
     "Where": "ATK",
     "Price": 200.0,
@@ -20,7 +20,7 @@
   {
     "Id": "10003",
     "Name": "요정의 큰반지",
-    "Description": "요정의 큰반지임",
+    "Description": "최대체력 30 상승",
     "Amount": 30.0,
     "Where": "HP",
     "Price": 300.0,
@@ -29,7 +29,7 @@
   {
     "Id": "10004",
     "Name": "요정의 펜던트",
-    "Description": "요정의 펜던트임",
+    "Description": "공격력 40상승",
     "Amount": 40.0,
     "Where": "ATK",
     "Price": 400.0,
@@ -38,7 +38,7 @@
   {
     "Id": "10005",
     "Name": "요정의 이슬",
-    "Description": "요정의 이슬임",
+    "Description": "최대체력 50상승",
     "Amount": 50.0,
     "Where": "HP",
     "Price": 500.0,
@@ -47,7 +47,7 @@
   {
     "Id": "10006",
     "Name": "깃발",
-    "Description": "깃발임",
+    "Description": "공격력 20상승",
     "Amount": 20.0,
     "Where": "ATK",
     "Price": 300.0,
@@ -56,7 +56,7 @@
   {
     "Id": "10007",
     "Name": "팔목보호대",
-    "Description": "팔목보호대임",
+    "Description": "최대체력 30상승",
     "Amount": 30.0,
     "Where": "HP",
     "Price": 300.0,
@@ -65,7 +65,7 @@
   {
     "Id": "10008",
     "Name": "목걸이",
-    "Description": "목걸이임",
+    "Description": "공격력10상승",
     "Amount": 10.0,
     "Where": "ATK",
     "Price": 100.0,
@@ -74,7 +74,7 @@
   {
     "Id": "10009",
     "Name": "반지",
-    "Description": "반지임",
+    "Description": "공격력 20상승",
     "Amount": 20.0,
     "Where": "ATK",
     "Price": 100.0,
@@ -83,7 +83,7 @@
   {
     "Id": "10010",
     "Name": "HP포션",
-    "Description": "포션임",
+    "Description": "체력 50회복",
     "Amount": 50.0,
     "Where": "HEAL",
     "Price": 200.0,
@@ -92,7 +92,7 @@
   {
     "Id": "10011",
     "Name": "신발",
-    "Description": "신발임",
+    "Description": "아직 효과 없음",
     "Amount": 10.0,
     "Where": "SPEED",
     "Price": 500.0,
@@ -101,7 +101,7 @@
   {
     "Id": "10012",
     "Name": "왕관",
-    "Description": "왕관임",
+    "Description": "공격력 50상승",
     "Amount": 50.0,
     "Where": "ATK",
     "Price": 1000.0,
