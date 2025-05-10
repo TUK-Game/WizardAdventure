@@ -39,7 +39,6 @@ CMonster::~CMonster()
 Vec3 CMonster::GetFrontVec()
 {
 	m_Dir.Normalize();
-	std::cout << "DIR: " << m_Dir.x << " " << m_Dir.y << " " << m_Dir.z << '\n';
 	return m_Dir;
 }
 
@@ -53,8 +52,8 @@ void CMonster::Update(float deltaTime)
 {
 	if (m_bActive)
 	{
-		CGameObject::Update(deltaTime);
 		m_Ai->Update(deltaTime);
+		CGameObject::Update(deltaTime);
 	}
 }
 

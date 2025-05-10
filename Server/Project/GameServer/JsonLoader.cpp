@@ -161,7 +161,7 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 				break;
 			}
 		}
-		return;
+		//return;
 		//room->AddObject((uint32)EObject_Type::Monster, object);
 		//break;
 	}

@@ -58,10 +58,32 @@ void CRoom::Init()
 
 	{
 		CMonseterTriggerBoxRef box = CObjectUtil::CreateObject<CMonseterTriggerBox>();
+		box->SetTriggerBox(Vec3(8700.f, 0.f, 3840.f), Vec3(100.f, 100.f, 600.f));
+		box->SetArea(Vec3(7425.f, 0.f, 3850.f), Vec3(3000.f, 100.f, 2400.f));
+		box->PushGateInfo(Vec3(8700.f, 450.f, 3840.f), Vec3(1000.f, 1000.f, 1.f), Vec3(-1.f, 0.f, 0.f), 90.f);
+		box->PushGateInfo(Vec3(5950.f, 450.f, 3850.f), Vec3(1000.f, 1000.f, 1.f), Vec3(1.f, 0.f, 0.f), 90.f);
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CMonseterTriggerBox>();
 		box->SetTriggerBox(Vec3(4850, 0.f, 3875.f), Vec3(100.f, 100.f, 850.f));
 		box->SetArea(Vec3(4000.f, 0.f, 3900), Vec3(2080.f, 100.f, 2400.f));
 		box->PushGateInfo(Vec3(5000.f, 450.f, 3875.f), Vec3(1000.f, 1000.f, 1.f), Vec3(-1.f, 0.f, 0.f), 90.f);
 		box->PushGateInfo(Vec3(2750.f, 450.f, 3875.f), Vec3(1000.f, 1000.f, 1.f), Vec3(1.f, 0.f, 0.f), 90.f);
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CMonseterTriggerBox>();
+		box->SetTriggerBox(Vec3(1155, 0.f, 3950.f), Vec3(30.f, 100.f, 500.f));
+		box->SetArea(Vec3(0.f, 0.f, 3400), Vec3(1200.f, 100.f, 2400.f));
+		box->PushGateInfo(Vec3(1200.f, 250.f, 3900.f), Vec3(500.f, 500.f, 1.f), Vec3(-1.f, 0.f, 0.f), 90.f);
+		box->PushGateInfo(Vec3(-1100.f, 250.f, 4050.f), Vec3(500.f, 500.f, 1.f), Vec3(1.f, 0.f, 0.f), 90.f);
+		box->PushGateInfo(Vec3(-375.f, 450.f, 2300.f), Vec3(1000.f, 1000.f, 1.f), Vec3(1.f, 0.f, 0.f), 0.f);
+		AddObject((uint32)EObject_Type::TRIGGER, box);
+
+		box = CObjectUtil::CreateObject<CMonseterTriggerBox>();
+		box->SetTriggerBox(Vec3(-1350.f, 0.f, 6650.f), Vec3(500.f, 100.f, 100.f));
+		box->SetArea(Vec3(-1400.f, 0.f, 7650.f), Vec3(1000.f, 100.f, 2500.f));
+		box->PushGateInfo(Vec3(-1350.f, 250.f, 8600.f), Vec3(500.f, 500.f, 1.f), Vec3(-1.f, 0.f, 0.f), 0.f);
+		box->PushGateInfo(Vec3(-1350.f, 250.f, 6700.f), Vec3(500.f, 500.f, 1.f), Vec3(1.f, 0.f, 0.f), 0.f);
 		AddObject((uint32)EObject_Type::TRIGGER, box);
 	}
 

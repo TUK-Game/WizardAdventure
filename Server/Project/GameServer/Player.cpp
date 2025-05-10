@@ -35,8 +35,8 @@ bool CPlayer::BuyItem(CItemRef item)
 		return false;
 
 	float price = item->GetItemInfo().price;
-	if (price > GetAbility()->gold)
-		return false;
+	//if (price > GetAbility()->gold)
+	//	return false;
 
 	GetAbility()->gold -= price;
 	if (CalculateAbility(item))

@@ -159,7 +159,6 @@ bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PRO
 	projectile->m_meshType = pkt.mesh();
 	g_Room->DoAsync(&CRoom::HandleSpawnProjectile, projectile);
 
-	std::cout << info.spawn_pos().x() << " " << info.spawn_pos().y() << " " << info.spawn_pos().z() << '\n';
 	return true;
 }
 

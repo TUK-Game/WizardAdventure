@@ -114,7 +114,6 @@ void CMonsterAI::UpdateAI(float deltaTime)
 
     Vec3 dir = targetPosition - myPosition;
     dir.y = 0.f;
-    //m_Owner->SetDir(dir);
 
     if (dir.Length() > 0.001f)
     {
@@ -192,6 +191,10 @@ void CMonsterAI::UpdateAI(float deltaTime)
             m_AttackTime = 0;
             m_Owner->SetState(Protocol::MOVE_STATE_IDLE);
             m_bAttack = false;
+            return;
+        }
+        if (m_bAttack && m_AttackTime >= m_AttackDelete)
+        {
             auto& objects = g_Room->GetLayerObjects((uint32)EObject_Type::Projectile);
             for (uint32 id : m_ProjectileIds)
             {
@@ -200,9 +203,8 @@ void CMonsterAI::UpdateAI(float deltaTime)
             }
             m_ProjectileIds.clear();
             m_Owner->ClearProjectileIds();
-            return;
         }
-        if (!m_bAttack && m_AttackTime >= m_AttackSpawn)
+        else if (!m_bAttack && m_AttackTime >= m_AttackSpawn && m_AttackTime < m_AttackDelete)
         {
             m_Owner->SpawnAttackObject();
             m_ProjectileIds = m_Owner->GetProjectileIds();

@@ -28,6 +28,7 @@ private:
     float m_AttackTime = 0.f;
     float m_AttackDuration = 1.4f;
     float m_AttackSpawn = m_AttackDuration * 0.53;
+    float m_AttackDelete = m_AttackDuration * 0.63;
 
     float m_DamagedTime = 0.f;
     float m_DamagedDuration = 0.6f;
