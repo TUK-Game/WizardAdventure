@@ -44,7 +44,6 @@ void CAdcBall::FinalUpdate()
 	if (m_bOwn)
 	{
 		m_ElapsedTime += DELTA_TIME;
-		std::cout << m_ElapsedTime << '\n';
 		if (m_ElapsedTime >= m_Duration)
 		{
 			m_bDelete = true;

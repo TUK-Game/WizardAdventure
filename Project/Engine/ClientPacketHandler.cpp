@@ -149,18 +149,21 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 		gamewindow->SetGauge(L"HPBar", 100, true);
 		gamewindow->SetGauge(L"SignautreGage", 0, false);
 		gamewindow->SetGold();
+		gamewindow->SetFace(L"FireMage_Face");
 	}
 	break;
 	case EPlayerAttribute::Ice:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_ICE);
 		player->InitStats(100, 100, 30, 300.f, 1000);
+		gamewindow->SetFace(L"IceMage_Face");
 	}
 	break;
 	case EPlayerAttribute::Electric:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
 		player->InitStats(100, 100, 30, 300.f, 1000);
+		gamewindow->SetFace(L"LightningMage_Face");
 	}
 	break;
 	}
