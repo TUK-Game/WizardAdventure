@@ -22,21 +22,21 @@ bool CMapPlayerWidget::InitPlayer(CPlayer* player, int idx)
 	m_MapMax = CLevelManager::GetInst()->GetCurrentLevel()->GetMapMaxToCamera();
 	m_MapMin = CLevelManager::GetInst()->GetCurrentLevel()->GetMapMinToCamera();
 
-	switch (idx)
+	switch (player->GetAttribute())
 	{
-	case 0:
+	case EPlayerAttribute::Fire:
 	{
-		SetTexture(L"Kita");
+		SetTexture(L"FireMage_Face");
 	}
 	break;
-	case 1:
+	case EPlayerAttribute::Ice:
 	{
-		SetTexture(L"Nigika");
+		SetTexture(L"IceMage_Face");
 	}
 	break;
-	case 2:
+	case EPlayerAttribute::Electric:
 	{
-		SetTexture(L"Hitori");
+		SetTexture(L"LightningMage_Face");
 	}
 	break;
 	}

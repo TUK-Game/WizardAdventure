@@ -156,6 +156,20 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_ICE);
 		player->InitStats(100, 100, 30, 300.f, 10000);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
+		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::Q, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireballExplosion")));
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
+
+		gamewindow->SetSkill(ESkillType::FireBallTowardMouse, Skill::FireBall.cooldown, ESkillSlot::LButton);
+		gamewindow->SetSkill(ESkillType::Meteor, Skill::Meteor.cooldown, ESkillSlot::RButton);
+		//gamewindow->SetSkill(ESkillType::FireBallTowardQ, Skill::FireBallQ.cooldown, ESkillSlot::Q);
+		// gamewindow->SetSkill(ESkillType::FireTower, Skill::FireTower.cooldown, ESkillSlot::E);
+		// gamewindow->SetSkill(ESkillType::FireSwordSpread, Skill::FireSword.cooldown, ESkillSlot::R);
+		gamewindow->SetGauge(L"HPBar", 100, true);
+		gamewindow->SetGauge(L"SignautreGage", 0, false);
+		gamewindow->SetGold();
 		gamewindow->SetFace(L"IceMage_Face");
 	}
 	break;
@@ -163,6 +177,20 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
 		player->InitStats(100, 100, 30, 300.f, 10000);
+		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
+		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::Q, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireballExplosion")));
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::E, ESkillType::FireTower);
+		//player->GetSkillManager()->LearnSkill(ESkillSlot::R, ESkillType::FireSwordSpread);
+
+		gamewindow->SetSkill(ESkillType::FireBallTowardMouse, Skill::FireBall.cooldown, ESkillSlot::LButton);
+		gamewindow->SetSkill(ESkillType::Meteor, Skill::Meteor.cooldown, ESkillSlot::RButton);
+		//gamewindow->SetSkill(ESkillType::FireBallTowardQ, Skill::FireBallQ.cooldown, ESkillSlot::Q);
+		// gamewindow->SetSkill(ESkillType::FireTower, Skill::FireTower.cooldown, ESkillSlot::E);
+		// gamewindow->SetSkill(ESkillType::FireSwordSpread, Skill::FireSword.cooldown, ESkillSlot::R);
+		gamewindow->SetGauge(L"HPBar", 100, true);
+		gamewindow->SetGauge(L"SignautreGage", 0, false);
+		gamewindow->SetGold();
 		gamewindow->SetFace(L"LightningMage_Face");
 	}
 	break;
@@ -184,7 +212,7 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 	case Protocol::PLAYER_TYPE_FIRE:
 	{
 		player = new CPlayer(EPlayerAttribute::Fire, false, Vec3(11240.f, 0.f, 1127.f));
-		player->InitStats(100, 100, 30, 300.f, 1000);
+		player->InitStats(100, 100, 30, 300.f, 10000);
 
 		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
 		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
@@ -196,11 +224,19 @@ bool Handle_S_SPAWN_NEW_PLAYER(CPacketSessionRef& session, Protocol::S_SPAWN_NEW
 	case Protocol::PLAYER_TYPE_ICE:
 	{
 		player = new CPlayer(EPlayerAttribute::Ice, false, Vec3(11240.f, 0.f, 1127.f));
+		player->InitStats(100, 100, 30, 300.f, 10000);
+
+		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
+		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
 	}
 	break;
 	case Protocol::PLAYER_TYPE_LIGHTNING:
 	{
 		player = new CPlayer(EPlayerAttribute::Electric, false, Vec3(11240.f, 0.f, 1127.f));
+		player->InitStats(100, 100, 30, 300.f, 10000);
+
+		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
+		player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
 	}
 	break;
 	}
@@ -233,7 +269,7 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 		case Protocol::PLAYER_TYPE_FIRE:
 		{
 			player = new CPlayer(EPlayerAttribute::Fire, false, Vec3(position.x(), position.y(), position.z()));
-			player->InitStats(100, 100, 30, 300.f, 1000);
+			player->InitStats(100, 100, 30, 300.f, 10000);
 
 			player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
 			player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
@@ -245,11 +281,19 @@ bool Handle_S_SPAWN_EXISTING_PLAYER(CPacketSessionRef& session, Protocol::S_SPAW
 		case Protocol::PLAYER_TYPE_ICE:
 		{
 			player = new CPlayer(EPlayerAttribute::Ice, false, Vec3(position.x(), position.y(), position.z()));
+			player->InitStats(100, 100, 30, 300.f, 10000);
+
+			player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
+			player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
 		}
 		break;
 		case Protocol::PLAYER_TYPE_LIGHTNING:
 		{
 			player = new CPlayer(EPlayerAttribute::Electric, false, Vec3(position.x(), position.y(), position.z()));
+			player->InitStats(100, 100, 30, 300.f, 10000);
+
+			player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
+			player->GetSkillManager()->LearnSkill(ESkillSlot::RButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireRain")));
 		}
 		break;
 		}
