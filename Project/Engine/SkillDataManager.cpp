@@ -3,6 +3,7 @@
 #include "PathManager.h"
 #include "SkillData.h"
 #include "fstream"
+#include "AssetManager.h"
 #include "JSON/json.hpp"
 
 using json = nlohmann::json;
@@ -42,6 +43,16 @@ bool CSkillDataManager::Init()
 		float ratio = s["DamageRatio"];
 		float cooltime = s["CoolTime"];
 		float explosionime = s["ExplosionTime"];
+
+		CTexture* texture = CAssetManager::GetInst()->FindAsset<CTexture>(name);
+		if (!texture)
+		{
+			auto path = CPathManager::GetInst()->FindPath(TEXTURE_PATH);
+			std::wstring fullPath = path / (L"Skill\\" + name + L".png");
+			texture = new CTexture;
+			texture->Init(fullPath);
+			CAssetManager::GetInst()->AddAsset(name, texture);
+		}
 
 		std::shared_ptr<CSkillData> skill = std::make_shared<CSkillData>(SkillInfo(id, name, description, ratio, attribute, price, keytype, cooltime, animationName, explosionime));
 		skill->SetSkillType(ConvertSkillNameToType(name));

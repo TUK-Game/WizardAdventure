@@ -3,6 +3,7 @@
 #include "PathManager.h"
 #include "Item.h"
 #include "fstream"
+#include "AssetManager.h"
 #include "JSON/json.hpp"
 
 using json = nlohmann::json;
@@ -39,6 +40,17 @@ bool CItemManager::Init()
 		uint32 id = std::stoi(s2wsForJson(item["Id"]));
 		float amount = item["Amount"];
 		uint32 price = item["Price"];
+
+		CTexture* texture = CAssetManager::GetInst()->FindAsset<CTexture>(name);
+		if (!texture)
+		{
+			auto path = CPathManager::GetInst()->FindPath(TEXTURE_PATH);
+			std::wstring fullPath = path / (L"Item\\" + name + L".png");
+			texture = new CTexture;
+			texture->Init(fullPath);
+			CAssetManager::GetInst()->AddAsset(name, texture);
+		}
+
 
 		std::shared_ptr<CItem> item = std::make_shared<CItem>(ItemInfo(id, name, description, amount, part, price, rank));
 		m_ItemList[id] = item;

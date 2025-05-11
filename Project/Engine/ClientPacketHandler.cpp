@@ -594,15 +594,7 @@ bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
 
 			std::wstring itemName = item->GetItemInfo().name;
 			CTexture* texture = CAssetManager::GetInst()->FindAsset<CTexture>(itemName);
-			if (!texture)
-			{
-				auto path = CPathManager::GetInst()->FindPath(TEXTURE_PATH);
-				std::wstring fullPath = path / (L"Item\\" + itemName + L".png");
-				texture = new CTexture;
-				texture->Init(fullPath);
-				CAssetManager::GetInst()->AddAsset(itemName, texture);
-			}
-
+			
 			CItemButtonWidget* widget = dynamic_cast<CItemButtonWidget*>(win->FindWidget(L"Item" + std::to_wstring(j + 1)));
 			if(widget)
 			{

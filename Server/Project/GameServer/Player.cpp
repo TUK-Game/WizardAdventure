@@ -105,7 +105,6 @@ void CPlayer::Update(float deltaTime)
 	if (m_bDamageDelay)
 	{
 		m_DamageDelayElapsedTime += deltaTime;
-		std::cout << m_DamageDelayElapsedTime << '\n';
 		std::cout << "¹«Àû\n";
 		if (m_DamageDelayElapsedTime >= m_DamageDelayDuration)
 		{
@@ -177,7 +176,7 @@ void CPlayer::Update(float deltaTime)
 
 void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
-	if (GetAbility()->currentHp <= 0 || m_bDamageDelay || m_State == Protocol::MOVE_STATE_DAMAGED)
+	if (GetAbility()->currentHp <= 0 || m_bDamageDelay || m_State == Protocol::MOVE_STATE_DAMAGED || m_State == Protocol::MOVE_STATE_DASH)
 		return;
 
 	if (dest->GetProfile()->channel == ECollision_Channel::MonsterProjectile || dest->GetProfile()->channel == ECollision_Channel::Monster)
@@ -212,4 +211,65 @@ void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 
 void CPlayer::CollisionEvent(CBoxCollider* src, CBoxCollider* dest)
 {
+	if (GetAbility()->currentHp <= 0 || m_bDamageDelay || m_State == Protocol::MOVE_STATE_DAMAGED || m_State == Protocol::MOVE_STATE_DASH)
+		return;
+
+	if (dest->GetProfile()->channel == ECollision_Channel::MonsterProjectile || dest->GetProfile()->channel == ECollision_Channel::Monster)
+	{
+		if (dest->GetProfile()->channel == ECollision_Channel::MonsterProjectile)
+		{
+			CProjectile* projectile = (dynamic_cast<CProjectile*>(dest->GetOwner()));
+			GetAbility()->currentHp -= projectile->GetAttack();
+		}
+		else if (dest->GetProfile()->channel == ECollision_Channel::Monster)
+		{
+			CMonster* monster = (dynamic_cast<CMonster*>(dest->GetOwner()));
+			if (GetAbility()->currentHp <= 0 || m_bDamageDelay || m_State == Protocol::MOVE_STATE_DAMAGED || m_State == Protocol::MOVE_STATE_DASH)
+				return;
+
+			if (dest->GetProfile()->channel == ECollision_Channel::MonsterProjectile || dest->GetProfile()->channel == ECollision_Channel::Monster)
+			{
+				if (dest->GetProfile()->channel == ECollision_Channel::MonsterProjectile)
+				{
+					CProjectile* projectile = (dynamic_cast<CProjectile*>(dest->GetOwner()));
+					GetAbility()->currentHp -= projectile->GetAttack();
+				}
+				else if (dest->GetProfile()->channel == ECollision_Channel::Monster)
+				{
+					CMonster* monster = (dynamic_cast<CMonster*>(dest->GetOwner()));
+
+					if (monster->GetAbility()->currentHp <= 0)
+						return;
+					GetAbility()->currentHp -= monster->GetAbility()->attack;
+				}
+
+				if (GetAbility()->currentHp <= 0)
+				{
+					SetState(Protocol::MOVE_STATE_DEATH);
+					std::cout << "Á×À½\n";
+				}
+				else
+				{
+					SetState(Protocol::MOVE_STATE_DAMAGED);
+				}
+				g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
+				g_Room->UpdatePlayerState(m_Session.lock()->Player);
+			}
+			if (monster->GetAbility()->currentHp <= 0)
+				return;
+			GetAbility()->currentHp -= monster->GetAbility()->attack;
+		}
+
+		if (GetAbility()->currentHp <= 0)
+		{
+			SetState(Protocol::MOVE_STATE_DEATH);
+			std::cout << "Á×À½\n";
+		}
+		else
+		{
+			SetState(Protocol::MOVE_STATE_DAMAGED);
+		}
+		g_Room->UpdatePlayerAbility(m_Session.lock()->Player);
+		g_Room->UpdatePlayerState(m_Session.lock()->Player);
+	}
 }
