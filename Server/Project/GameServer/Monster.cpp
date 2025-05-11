@@ -71,7 +71,6 @@ void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 			m_State = Protocol::MOVE_STATE_DAMAGED;			// damage state
 			if (GetAbility()->currentHp <= 0)
 			{
-				std::cout << "���� ����\n";
 				m_State = Protocol::MOVE_STATE_DEATH;		// death state
 
 				const auto& players = g_Room->GetPlayers();
@@ -136,6 +135,7 @@ void CMonster::CrabAttack()
 	projectile->SetMeshSize(Vec3(1.f, 1.f, 1.f));
 	projectile->SetCollisionBoxInfo(spawnPos, state.Size * projectile->GetMeshSize(), Vec3(0.f, 0.f, 0.f));
 	//projectile->m_meshType = pkt.mesh();
+	std::cout << p.x << " " << p.y << " " << p.z << '\n';
 	g_Room->AddProjectile(projectile);
 	m_ProjectileIds.push_back(projectile->ProjectileInfo->projectile_id());
 }

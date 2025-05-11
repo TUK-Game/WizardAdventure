@@ -33,7 +33,7 @@ CMonster::CMonster()
 		data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
 		obj2 = data2->Instantiate(ECollision_Channel::Player);
 	}
-	else if(m_Type == EMonsterType::adc)
+	else if(m_Type == EMonsterType::Adc)
 	{
 		data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"adc");
 		obj2 = data2->Instantiate(ECollision_Channel::Player);

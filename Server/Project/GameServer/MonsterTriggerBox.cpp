@@ -45,7 +45,7 @@ void CMonseterTriggerBox::CollisionEnd(CBoxCollider* src, CBoxCollider* dest)
 	for (const auto& monster : m_AreaMonsters)
 	{
 		monster->SetIsActive(true);
-		monster->SetType(EMonsterType::Adc);
+		//monster->SetType(EMonsterType::Adc);
 		area->PushMonsterId(monster->MonsterInfo->object_id());
 	}
 	g_Room->GetAreas().push_back(area);

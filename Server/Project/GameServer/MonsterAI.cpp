@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "MonsterAI.h"
 #include "Monster.h"
 #include "Player.h"
@@ -244,6 +244,7 @@ void CMonsterAI::UpdateAI(float deltaTime)
             m_AttackTime = 0;
             m_Owner->SetState(Protocol::MOVE_STATE_IDLE);
             m_bAttack = false;
+            std::cout << "공격끝\n";
             return;
         }
         if (m_bAttack && m_AttackTime >= m_AttackDelete)
@@ -254,11 +255,13 @@ void CMonsterAI::UpdateAI(float deltaTime)
                 g_pool->Release(std::dynamic_pointer_cast<CProjectile>(objects[id]));
                 objects.erase(id);
             }
+            std::cout << "공격삭제\n";
             m_ProjectileIds.clear();
             m_Owner->ClearProjectileIds();
         }
         else if (!m_bAttack && m_AttackTime >= m_AttackSpawn && m_AttackTime < m_AttackDelete)
         {
+            std::cout << "공격\n";
             m_Owner->SpawnAttackObject();
             m_ProjectileIds = m_Owner->GetProjectileIds();
             m_bAttack = true;
