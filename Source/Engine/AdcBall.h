@@ -3,7 +3,7 @@
 
 
 class CAdcBall :
-    public CGameObject
+    public CSkillObject
 {
 public:
     CAdcBall();
@@ -13,6 +13,7 @@ public:
     virtual void FinalUpdate();
 
     virtual void CollisionBegin(CBaseCollider* src, CBaseCollider* dest) override;
+    virtual void OffParticles();
 
 private:
     int m_LightParticleId = -1;

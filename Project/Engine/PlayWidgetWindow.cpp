@@ -53,6 +53,12 @@ bool CPlayWidgetWindow::Init(CPlayer* player)
 	}
 
 	{
+		CImageWidget* face = CreateWidget<CImageWidget>(L"Face", player);
+		face->GetTransform()->SetRelativePosition(-0.89f, -0.805f, 1.f);
+		face->GetTransform()->SetRelativeScale(0.163f, 0.27f, 0.2f);
+	}
+
+	{
 		CHpBar* widget = CreateWidget<CHpBar>(L"HPBar", player);
 		widget->SetTexture(L"Red");
 		widget->GetTransform()->SetRelativePosition(-0.547f, -0.855f, 1.f);
@@ -156,4 +162,15 @@ void CPlayWidgetWindow::SetGauge(const std::wstring& name, int gauge, bool bMax)
 
 void CPlayWidgetWindow::SetMaxHp(int maxHp)
 {
+}
+
+void CPlayWidgetWindow::SetFace(const std::wstring& name)
+{
+	std::wstring wname = L"Face";
+	CImageWidget* widget = dynamic_cast<CImageWidget*>(FindWidget(wname));
+	
+	if (widget)
+	{
+		widget->SetTexture(name);
+	}
 }

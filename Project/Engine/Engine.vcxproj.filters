@@ -99,9 +99,6 @@
     <Filter Include="05. Asset\02. Material">
       <UniqueIdentifier>{49c3bce8-aa65-43df-805b-371af99023e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05. Asset\03. Texture">
-      <UniqueIdentifier>{023782df-5e16-4d35-87d0-232570d69666}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05. Asset\04. Shader">
       <UniqueIdentifier>{d1efdb37-6524-4220-9f2b-162a94794f40}</UniqueIdentifier>
     </Filter>
@@ -263,6 +260,9 @@
     </Filter>
     <Filter Include="03. GameObject\Skill">
       <UniqueIdentifier>{e6075d9a-db01-4deb-8299-556251e7883b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Asset\03. Texture">
+      <UniqueIdentifier>{023782df-5e16-4d35-87d0-232570d69666}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -16,5 +16,6 @@ public:
 	void SetSkill(ESkillType type, float coolTime, ESkillSlot slot);
 	void SetGauge(const std::wstring& name, int gauge, bool bMax = false);
 	void SetMaxHp(int maxHp);
+	void SetFace(const std::wstring& name);
 };
 

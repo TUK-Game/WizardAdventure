@@ -75,7 +75,6 @@ int CEngine::Init(HINSTANCE hInstance, HACCEL hAccelTable, const WNDCLASSEXW& wc
     if (FAILED(CTextRenderManager::GetInst()->Init()))
         return E_FAIL;
 
-
     return S_OK;
 }
 

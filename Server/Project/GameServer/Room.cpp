@@ -557,6 +557,7 @@ bool CRoom::UpdatePlayerGravity(CPlayerRef player, float deltaTime)
 			}
 			else
 			{
+				player->SetIsDamageDelay(true);
 				player->SetState(Protocol::MOVE_STATE_FALLING_END);
 			}
 			Vec3 safePos = player->GetSafePosition();

@@ -49,7 +49,7 @@ int CClientManager::Init(HINSTANCE instance)
 
     CLevel_Start* level = new CLevel_Start;
     if (FAILED(InitEngine()))
-        return E_FAIL;
+        return E_FAIL;  
 
     std::cout << "====== 서버 연동(NUMPAD 0) ======" << std::endl;
     std::cout << std::endl;

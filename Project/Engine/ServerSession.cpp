@@ -199,7 +199,8 @@ void CServerSession::SpawnSkill(CSkillObject* object)
 	}
 
 	pkt.mutable_info()->set_damage(object->GetDamage());
-	
+	pkt.set_who(0);
+
 	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_PROJECTILE)->GetProjectileMap();
 	map[object->m_ProjectileId] = object;
 
@@ -253,6 +254,93 @@ void CServerSession::MoveSkill(CSkillObject* object)
 	Send(sendBuffer);
 }
 
+void CServerSession::SpawnProjectileByMonster(CSkillObject* object)
+{
+	CTransform* transform = object->GetTransform();
+	const Vec3& pos = transform->GetRelativePosition();
+	const Vec3& scale = transform->GetRelativeScale();
+	const Vec3& size = object->GetTotalMeshSize();
+	Protocol::C_SPAWN_PROJECTILE pkt;
+	auto* info = pkt.mutable_info();
+
+	object->m_ProjectileId = m_projectileId;
+	info->set_new_projectile_id(m_projectileId++);
+	info->set_player_id(m_Id);
+	info->mutable_dir()->set_x(1);
+	info->set_bcollisionexplosion(object->GetCollisionExplosion());
+
+	auto* posInfo = pkt.mutable_info()->mutable_spawn_pos();
+	posInfo->set_x(pos.x);
+	posInfo->set_y(pos.y);
+	posInfo->set_z(pos.z);
+
+	auto* sizeInfo = pkt.mutable_info()->mutable_size();
+	sizeInfo->set_x(scale.x);
+	sizeInfo->set_y(scale.y);
+	sizeInfo->set_z(scale.z);
+
+	pkt.mutable_size()->set_x(size.x);
+	pkt.mutable_size()->set_y(size.y);
+	pkt.mutable_size()->set_z(size.z);
+
+
+	switch (object->GetSkillType())
+	{
+	case SKILL::ADC_BALL:
+	{
+		pkt.set_mesh(Protocol::ADC_BALL);
+	}
+	break;
+	}
+
+	pkt.mutable_info()->set_damage(object->GetDamage());
+	pkt.set_who(1);
+	auto& map = CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(LAYER_PROJECTILE)->GetProjectileMap();
+	map[object->m_ProjectileId] = object;
+
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
+}
+
+void CServerSession::MoveSkillByMonster(CSkillObject* object)
+{
+	CTransform* transform = object->GetTransform();
+	const Vec3& pos = transform->GetRelativePosition();
+	const Vec3& scale = transform->GetRelativeScale();
+	const Vec3& rot = transform->GetRelativeRotation();
+	Protocol::C_MOVE_PROJECTILE pkt;
+	auto* info = pkt.mutable_projectile_info();
+	info->set_projectile_id(object->m_ProjectileId);
+
+	if (object->m_bDelete)
+	{
+		info->set_state(Protocol::COLLISION);
+	}
+	else
+	{
+		info->set_state(Protocol::MOVE_STATE);
+	}
+
+	auto* posInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_position();
+	auto* scaleInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_size();
+	auto* rotInfo = pkt.mutable_projectile_info()->mutable_object_info()->mutable_pos_info()->mutable_rotation();
+	posInfo->set_x(pos.x);
+	posInfo->set_y(pos.y);
+	posInfo->set_z(pos.z);
+
+	scaleInfo->set_x(scale.x);
+	scaleInfo->set_y(scale.y);
+	scaleInfo->set_z(scale.z);
+
+	rotInfo->set_x(rot.x);
+	rotInfo->set_y(rot.y);
+	rotInfo->set_z(rot.z);
+
+	std::shared_ptr<CSendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	Send(sendBuffer);
+}
+
+
 void CServerSession::BuyItem(uint32 itemId)
 {
 	Protocol::C_BUY_ITEM pkt;
@@ -273,9 +361,5 @@ void CServerSession::BuySkill(uint32 skillId)
 	Send(sendBuffer);
 }
 
-void CServerSession::SpawnProjectileByMonster(CGameObject* object)
-{
-
-}
 
 

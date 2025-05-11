@@ -36,6 +36,9 @@ public:
 
 	virtual void SpawnAttackObject();
 
+	// temp
+	void CrabAttack();
+
 protected:
 	Protocol::MoveState m_State;
 	Vec3 m_Dir;
@@ -48,7 +51,7 @@ protected:
 	float m_Speed = 5000.f;
 
 	// temp
-	EMonsterType m_Type;
+	EMonsterType m_Type = EMonsterType::Adc;
 
 };
 

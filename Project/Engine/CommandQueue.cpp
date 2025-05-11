@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "CommandQueue.h"
 #include "SwapChain.h"
 #include "Device.h"
@@ -52,7 +52,6 @@ int CGraphicsCommandQueue::Init(ComPtr<ID3D12Device> device, std::shared_ptr<CSw
 		return E_FAIL;
 
 	m_FenceEvent = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
-
 	return S_OK;
 }
 
@@ -116,11 +115,11 @@ void CGraphicsCommandQueue::RenderEnd()
 	m_CmdList->ResourceBarrier(1, &barrier);
 	m_CmdList->Close();
 
-	// Ä¿¸Çµå ¸®½ºÆ® ¼öÇà
+	// ì»¤ë§¨ë“œ ë¦¬ìŠ¤íŠ¸ ìˆ˜í–‰
 	ID3D12CommandList* cmdListArr[] = { m_CmdList.Get() };
 	m_GraphicsCmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
 
-	// ÅØ½ºÆ® ·»´õ¸µ
+	// í…ìŠ¤íŠ¸ ë Œë”ë§
 	CDevice::GetInst()->m_d2dDeviceContext->SetTarget(CDevice::GetInst()->m_d2dRenderTargets[CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex()].Get());
 	ID3D11Resource* ppd3dResources[] = { CDevice::GetInst()->m_d3d11WrappedBackBuffers[CDevice::GetInst()->GetSwapChain()->GetBackBufferIndex()].Get() };
 	CDevice::GetInst()->m_d3d11On12Device->AcquireWrappedResources(ppd3dResources, _countof(ppd3dResources));
@@ -145,7 +144,9 @@ void CGraphicsCommandQueue::RenderEnd()
 
 void CGraphicsCommandQueue::FlushResourceCommandQueue()
 {
-	m_ResCmdList->Close();
+	HRESULT hr = m_ResCmdList->Close();
+
+	assert(SUCCEEDED(hr));
 
 	ID3D12CommandList* cmdListArr[] = { m_ResCmdList.Get() };
 	m_GraphicsCmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
@@ -190,7 +191,7 @@ int CComputeCommandQueue::Init(ComPtr<ID3D12Device> device)
 		return E_FAIL;
 
 	// CreateFence
-	// - CPU¿Í GPUÀÇ µ¿±âÈ­ ¼ö´ÜÀ¸·Î ¾²ÀÎ´Ù
+	// - CPUì™€ GPUì˜ ë™ê¸°í™” ìˆ˜ë‹¨ìœ¼ë¡œ ì“°ì¸ë‹¤
 	if (FAILED(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_Fence))))
 		return E_FAIL;
 

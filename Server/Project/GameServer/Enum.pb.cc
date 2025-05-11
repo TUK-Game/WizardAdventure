@@ -53,15 +53,15 @@ const char descriptor_table_protodef_Enum_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "NG_END\020\021\022\033\n\027MOVE_STATE_DAMAGE_DELAY\020\022\022\037\n"
   "\033MOVE_STATE_DAMAGE_DELAY_END\020\023*D\n\017Projec"
   "tileState\022\016\n\nMOVE_STATE\020\000\022\r\n\tCOLLISION\020\001"
-  "\022\022\n\016SPAWN_PARTICLE\020\002*\206\001\n\tSkillMesh\022\r\n\tFI"
+  "\022\022\n\016SPAWN_PARTICLE\020\002*\224\001\n\tSkillMesh\022\r\n\tFI"
   "RE_BALL\020\000\022\017\n\013FIRE_PILLAR\020\001\022\017\n\013FIRE_CIRCL"
   "E\020\002\022\016\n\nFIRE_SWORD\020\003\022\016\n\nFIRE_TOWER\020\004\022\017\n\013F"
-  "IRE_METEOR\020\005\022\027\n\023FIRE_BALL_EXPLOSION\020\006b\006p"
-  "roto3"
+  "IRE_METEOR\020\005\022\027\n\023FIRE_BALL_EXPLOSION\020\006\022\014\n"
+  "\010ADC_BALL\020\007b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Enum_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto = {
-    false, false, 1125, descriptor_table_protodef_Enum_2eproto,
+    false, false, 1139, descriptor_table_protodef_Enum_2eproto,
     "Enum.proto",
     &descriptor_table_Enum_2eproto_once, nullptr, 0, 0,
     schemas, file_default_instances, TableStruct_Enum_2eproto::offsets,
@@ -196,6 +196,7 @@ bool SkillMesh_IsValid(int value) {
     case 4:
     case 5:
     case 6:
+    case 7:
       return true;
     default:
       return false;

@@ -62,12 +62,12 @@ bool CInventoryWIdgetWindow::Init(CPlayer* player)
 	skillWidget->SetEnable(false);
 
 	CTextWidget* name = CreateWidget<CTextWidget>(L"IText", player);
-	name->GetTransform()->SetRelativePosition(-0.2f, -0.8f, 1.f);
+	name->GetTransform()->SetRelativePosition(0.03f, -0.8f, 1.f);
 	name->SetBasicInfo(L"", L"맑은 고딕_30", L"Yellow", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
 	name->SetEnable(false);
 
 	CTextWidget* description = CreateWidget<CTextWidget>(L"IDescription", player);
-	description->GetTransform()->SetRelativePosition(-0.2f, -1.f, 1.f);
+	description->GetTransform()->SetRelativePosition(0.03f, -1.f, 1.f);
 	description->SetBasicInfo(L"", L"맑은 고딕_20", L"White", Vec2(0.f, 0.f), Vec2(1000.f, 100.f));
 	description->SetEnable(false);
 

@@ -161,7 +161,6 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 				break;
 			}
 		}
-		//return;
 		//room->AddObject((uint32)EObject_Type::Monster, object);
 		//break;
 	}
@@ -174,6 +173,7 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 #define MAX_SKILLS_NUMBER 30003
 void CJsonLoader::LoadNPC(const std::wstring& fileName, CRoomRef room)
 {
+
 	constexpr int maxItem = 8;
 	constexpr int maxSkill = 3;
 

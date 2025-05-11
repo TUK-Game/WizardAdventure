@@ -71,4 +71,5 @@ enum SkillMesh
 	FIRE_TOWER = 4;
 	FIRE_METEOR = 5;
 	FIRE_BALL_EXPLOSION = 6;
+	ADC_BALL = 7;
 }

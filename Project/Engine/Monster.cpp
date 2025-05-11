@@ -25,8 +25,19 @@
 CMonster::CMonster()
 	: m_Interpolator(new CInterpolator())
 {
-	CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"adc");
-	std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
+
+	CMeshData* data2;
+	std::vector<CGameObject*> obj2;
+	if(m_Type == EMonsterType::Crab)
+	{ 
+		data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
+		obj2 = data2->Instantiate(ECollision_Channel::Player);
+	}
+	else if(m_Type == EMonsterType::adc)
+	{
+		data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"adc");
+		obj2 = data2->Instantiate(ECollision_Channel::Player);
+	}
 
 	CreateStateManager();	
 	//AddComponent(new CMonsterAI);

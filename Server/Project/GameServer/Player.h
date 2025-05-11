@@ -33,6 +33,7 @@ public:
 	void SetDir(const Protocol::Vector3& dir) { m_Dir = dir; }
 	void SetAttribute(const EAttribution attri) { m_attribution = attri; }
 	void SetSafePosition(const Vec3& pos) { m_SafePos = pos; }
+	void SetIsDamageDelay(bool b) { m_bDamageDelay = b; }
 
 	bool BuyItem(CItemRef item);
 	bool BuySkill(CSkillRef skill);

@@ -213,6 +213,11 @@ int CAssetManager::LoadTexture()
 	tex->Init(path / L"Character\\FireMage_Hover.png");
 	AddAsset(L"FireMage_Hover", tex);
 
+
+	tex = new CTexture;
+	tex->Init(path / L"Character\\FireMage_Face.png");
+	AddAsset(L"FireMage_Face", tex);
+
 	tex = new CTexture;
 	tex->Init(path / L"Character\\IceMage.png");
 	AddAsset(L"IceMage", tex);
@@ -226,6 +231,10 @@ int CAssetManager::LoadTexture()
 	AddAsset(L"IceMage_Hover", tex);
 
 	tex = new CTexture;
+	tex->Init(path / L"Character\\IceMage_Face.png");
+	AddAsset(L"IceMage_Face", tex);
+
+	tex = new CTexture;
 	tex->Init(path / L"Character\\LightningMage.png");
 	AddAsset(L"LightningMage", tex);
 
@@ -236,6 +245,10 @@ int CAssetManager::LoadTexture()
 	tex = new CTexture;
 	tex->Init(path / L"Character\\LightningMage_Hover.png");
 	AddAsset(L"LightningMage_Hover", tex);
+
+	tex = new CTexture;
+	tex->Init(path / L"Character\\LightningMage_Face.png");
+	AddAsset(L"LightningMage_Face", tex);
 
 	tex = new CTexture;
 	tex->Init(path / L"Character\\SelectBackground.png");

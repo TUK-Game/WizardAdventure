@@ -29,29 +29,40 @@ CAdcBall::CAdcBall()
 
 void CAdcBall::Update()
 {
-	CGameObject::Update();
+	CSkillObject::Update();
 }
 
 void CAdcBall::FinalUpdate()
 {
-	m_ElapsedTime += DELTA_TIME;
 	Vec3 pos = GetTransform()->GetRelativePosition();
 
 	if (0 <= m_LightParticleId)
 		CParticleSystemManager::GetInst()->UpdateEmitterPos(L"Light", m_LightParticleId, pos);
 
-	CGameObject::FinalUpdate();
-	if (m_ElapsedTime >= m_Duration) {
-		if (0 <= m_LightParticleId)
+	CSkillObject::FinalUpdate();
+
+	if (m_bOwn)
+	{
+		m_ElapsedTime += DELTA_TIME;
+		if (m_ElapsedTime >= m_Duration)
 		{
-			CParticleSystemManager::GetInst()->RemoveEmitter(L"Light", m_LightParticleId);
-			m_LightParticleId = -1;
+			m_bDelete = true;
+			std::cout << "삭제진행\n";
 		}
-		CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
 	}
 }
 
 void CAdcBall::CollisionBegin(CBaseCollider* src, CBaseCollider* dest)
 {
 	//CSkillObject::CollisionBegin(src, dest);
+}
+
+void CAdcBall::OffParticles()
+{
+	if (0 <= m_LightParticleId)
+	{
+		CParticleSystemManager::GetInst()->RemoveEmitter(L"Light", m_LightParticleId);
+		m_LightParticleId = -1;
+	}
+	std::cout << "삭제\n";
 }

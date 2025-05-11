@@ -28,6 +28,11 @@ void CProjectile::SetCollisionBoxInfo(const Vec3& pos, const Vec3& size, const V
 	m_BoxCollider->SetBoxInfo(pos, size, rot);
 }
 
+void CProjectile::SetIsServerUpdate(bool b)
+{
+	m_bServerUpdate = b;
+}
+
 void CProjectile::Update(float deltaTime)
 {
 	CGameObject::Update(deltaTime);

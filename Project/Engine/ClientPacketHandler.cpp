@@ -149,18 +149,21 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 		gamewindow->SetGauge(L"HPBar", 100, true);
 		gamewindow->SetGauge(L"SignautreGage", 0, false);
 		gamewindow->SetGold();
+		gamewindow->SetFace(L"FireMage_Face");
 	}
 	break;
 	case EPlayerAttribute::Ice:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_ICE);
 		player->InitStats(100, 100, 30, 300.f, 1000);
+		gamewindow->SetFace(L"IceMage_Face");
 	}
 	break;
 	case EPlayerAttribute::Electric:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
 		player->InitStats(100, 100, 30, 300.f, 1000);
+		gamewindow->SetFace(L"LightningMage_Face");
 	}
 	break;
 	}
@@ -594,15 +597,7 @@ bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
 
 			std::wstring itemName = item->GetItemInfo().name;
 			CTexture* texture = CAssetManager::GetInst()->FindAsset<CTexture>(itemName);
-			if (!texture)
-			{
-				auto path = CPathManager::GetInst()->FindPath(TEXTURE_PATH);
-				std::wstring fullPath = path / (L"Item\\" + itemName + L".png");
-				texture = new CTexture;
-				texture->Init(fullPath);
-				CAssetManager::GetInst()->AddAsset(itemName, texture);
-			}
-
+			
 			CItemButtonWidget* widget = dynamic_cast<CItemButtonWidget*>(win->FindWidget(L"Item" + std::to_wstring(j + 1)));
 			if(widget)
 			{
