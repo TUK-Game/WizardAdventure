@@ -77,6 +77,7 @@ void CStructuredBuffer::Init(UINT32 elementSize, UINT32 elementCount, void* init
 
 		DEVICE->CreateUnorderedAccessView(m_Buffer.Get(), nullptr, &uavDesc, m_UavHeapBegin);
 	}
+
 }
 
 void CStructuredBuffer::UpdateData(void* srcData, UINT32 elementCount)

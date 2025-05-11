@@ -25,6 +25,7 @@ CProjectileRef CProjectilePool::Allocate()
 			m_nextProjectileId = i;
 			used[i] = true;
 			pool[i]->GetCollider()->SetCollisionProfile("Projectile");
+			pool[i]->SetIsServerUpdate(false);
 			return pool[i];
 		}
 	}

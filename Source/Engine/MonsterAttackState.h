@@ -14,5 +14,8 @@ private:
     float m_AttackTime;
     float m_ElapsedTime = 0.f;
     bool m_bDoAttack = false;
+
+    // temp
+    EMonsterType m_MonsterType;
 };
 

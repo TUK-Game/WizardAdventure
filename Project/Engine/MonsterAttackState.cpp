@@ -10,6 +10,9 @@
 #include "Level.h"
 #include "AdcBall.h"
 #include "RigidBody.h"
+#include "Monster.h"
+#include "NetworkManager.h"
+#include "ServerSession.h"
 
 void CMonsterAttackState::Enter(CGameObject* entity)
 {
@@ -29,34 +32,39 @@ void CMonsterAttackState::Enter(CGameObject* entity)
     m_ElapsedTime = 0.f;
     m_bDoAttack = false;
 
-    CAttackRangeCircle* attackRangeCircle = new CAttackRangeCircle;
-    Vec3 offset = -entity->GetTransform()->GetWorldDir(EDir::Front) * 400.f;
-    attackRangeCircle->GetTransform()->SetRelativePosition(entity->GetTransform()->GetRelativePosition() + offset);
-    attackRangeCircle->SetDuration(m_AttackDuration * 0.5122);    
-    attackRangeCircle->SetScaleRange(Vec3(0.1f, 0.1f, 0.1f), Vec3(300.f, 300.f, 10.f));
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(attackRangeCircle, LAYER_PROJECTILE, false);
+    CMonster* monster = dynamic_cast<CMonster*>(entity);
+    m_MonsterType = monster->GetMonsterType();
+    if (m_MonsterType == EMonsterType::Crab)
+    {
+        CAttackRangeCircle* attackRangeCircle = new CAttackRangeCircle;
+        Vec3 offset = -entity->GetTransform()->GetWorldDir(EDir::Front) * 400.f;
+        attackRangeCircle->GetTransform()->SetRelativePosition(entity->GetTransform()->GetRelativePosition() + offset);
+        attackRangeCircle->SetDuration(m_AttackDuration * 0.5122);
+        attackRangeCircle->SetScaleRange(Vec3(0.1f, 0.1f, 0.1f), Vec3(300.f, 300.f, 10.f));
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(attackRangeCircle, LAYER_PROJECTILE, false);
+    }
+    else if (m_MonsterType == EMonsterType::Adc)
+    {
+        Vec3 front = entity->GetTransform()->GetWorldDir(EDir::Front);
+        front.Normalize();
+
+        float yaw = atan2f(front.x, front.z); // 라디안
+        float yawDegree = XMConvertToDegrees(yaw); // 디그리로 변환
+
+        CAttackRangeRect* attackRangeRect = new CAttackRangeRect;
+
+        attackRangeRect->GetTransform()->SetRelativePosition(entity->GetTransform()->GetRelativePosition());
+
+        attackRangeRect->GetTransform()->SetRelativeRotation(90.f, yawDegree, 0.f);
+
+        attackRangeRect->SetScaleRange(Vec3(70.f, 0.1f, 0.1f), Vec3(70.f, 800.f, 1.f));
+        m_AttackTime = m_AttackDuration * 0.5122;
+        attackRangeRect->SetDuration(m_AttackTime);
+        attackRangeRect->SetInitialPosition(entity->GetTransform()->GetRelativePosition());
 
 
-    Vec3 front = entity->GetTransform()->GetWorldDir(EDir::Front);
-    front.Normalize();
-
-    float yaw = atan2f(front.x, front.z); // 라디안
-    float yawDegree = XMConvertToDegrees(yaw); // 디그리로 변환
-
-    CAttackRangeRect* attackRangeRect = new CAttackRangeRect;
-
-    attackRangeRect->GetTransform()->SetRelativePosition(entity->GetTransform()->GetRelativePosition());
-
-    attackRangeRect->GetTransform()->SetRelativeRotation(90.f, yawDegree, 0.f);
-
-    attackRangeRect->SetScaleRange(Vec3(70.f, 0.1f, 0.1f), Vec3(70.f, 800.f, 1.f));
-    m_AttackTime = m_AttackDuration * 0.5122;
-    attackRangeRect->SetDuration(m_AttackTime);
-    attackRangeRect->SetInitialPosition(entity->GetTransform()->GetRelativePosition());
-
-
-    CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(attackRangeRect, LAYER_PROJECTILE, false);
-
+        CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(attackRangeRect, LAYER_PROJECTILE, false);
+    }
 
 
 
@@ -67,23 +75,33 @@ void CMonsterAttackState::Update(CGameObject* entity, float deltaTime)
 {
     m_ElapsedTime += deltaTime;
 
-    if (m_ElapsedTime >= m_AttackTime) {
-        if (!m_bDoAttack) {
-            Vec3 spawnPos = entity->GetTransform()->GetWorldPosition();
-            Vec3 AttackDir = -entity->GetTransform()->GetWorldDir(EDir::Front);
-            AttackDir.Normalize();
+    if (m_MonsterType == EMonsterType::Adc)
+    {
+        if (CNetworkManager::GetInst()->s_GameSession->GetClientID() != 0)
+            return;
 
-            CAdcBall* adcbBall = new CAdcBall();
-            Vec3 offset = AttackDir * 50.f + Vec3(0.f, 130.f, 0.f);
-            adcbBall->GetTransform()->SetRelativePosition(spawnPos + offset);
-            Vec3 velocity = AttackDir * 2000.f;
-            adcbBall->GetRigidBody()->SetVelocity(velocity);
 
-            CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(adcbBall, LAYER_PROJECTILE, false);
-            m_bDoAttack = true;
+        if (m_ElapsedTime >= m_AttackTime) {
+            if (!m_bDoAttack) {
+                Vec3 spawnPos = entity->GetTransform()->GetWorldPosition();
+                Vec3 AttackDir = -entity->GetTransform()->GetWorldDir(EDir::Front);
+                AttackDir.Normalize();
+
+                CAdcBall* adcbBall = new CAdcBall();
+                Vec3 offset = AttackDir * 50.f + Vec3(0.f, 130.f, 0.f);
+                adcbBall->GetTransform()->SetRelativePosition(spawnPos + offset);
+                Vec3 velocity = AttackDir * 2000.f;
+                adcbBall->GetRigidBody()->SetVelocity(velocity);
+                adcbBall->SetDamage(10.f);
+                adcbBall->SetEnable(false);
+                adcbBall->SetCollisionExplosion(true);
+                adcbBall->SetIsOwn();
+                CNetworkManager::GetInst()->s_GameSession->SpawnProjectileByMonster(adcbBall);
+                CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(adcbBall, LAYER_PROJECTILE, false);
+                m_bDoAttack = true;
+            }
         }
     }
-
     //if (m_ElapsedTime >= m_AttackDuration)
     //    entity->GetStateManager()->HandleEvent(entity, "Idle");
 }

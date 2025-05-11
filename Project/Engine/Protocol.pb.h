@@ -1168,6 +1168,7 @@ class C_SPAWN_PROJECTILE final :
     kInfoFieldNumber = 1,
     kSizeFieldNumber = 3,
     kMeshFieldNumber = 2,
+    kWhoFieldNumber = 4,
   };
   // .Protocol.ProjectileBasicInfo info = 1;
   bool has_info() const;
@@ -1214,6 +1215,15 @@ class C_SPAWN_PROJECTILE final :
   void _internal_set_mesh(::Protocol::SkillMesh value);
   public:
 
+  // uint32 who = 4;
+  void clear_who();
+  uint32_t who() const;
+  void set_who(uint32_t value);
+  private:
+  uint32_t _internal_who() const;
+  void _internal_set_who(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.C_SPAWN_PROJECTILE)
  private:
   class _Internal;
@@ -1225,6 +1235,7 @@ class C_SPAWN_PROJECTILE final :
     ::Protocol::ProjectileBasicInfo* info_;
     ::Protocol::Vector3* size_;
     int mesh_;
+    uint32_t who_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -5820,6 +5831,26 @@ inline void C_SPAWN_PROJECTILE::set_allocated_size(::Protocol::Vector3* size) {
   }
   _impl_.size_ = size;
   // @@protoc_insertion_point(field_set_allocated:Protocol.C_SPAWN_PROJECTILE.size)
+}
+
+// uint32 who = 4;
+inline void C_SPAWN_PROJECTILE::clear_who() {
+  _impl_.who_ = 0u;
+}
+inline uint32_t C_SPAWN_PROJECTILE::_internal_who() const {
+  return _impl_.who_;
+}
+inline uint32_t C_SPAWN_PROJECTILE::who() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_SPAWN_PROJECTILE.who)
+  return _internal_who();
+}
+inline void C_SPAWN_PROJECTILE::_internal_set_who(uint32_t value) {
+  
+  _impl_.who_ = value;
+}
+inline void C_SPAWN_PROJECTILE::set_who(uint32_t value) {
+  _internal_set_who(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_SPAWN_PROJECTILE.who)
 }
 
 // -------------------------------------------------------------------

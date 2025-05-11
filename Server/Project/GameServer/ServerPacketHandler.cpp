@@ -9,6 +9,7 @@
 #include "ProjectilePool.h"
 #include "ItemManager.h"
 #include "SkillManager.h"
+#include "BoxCollider.h"
 
 PacketHandlerFunc g_PacketHandler[UINT16_MAX];
 
@@ -157,6 +158,12 @@ bool Handle_C_SPAWN_PROJECTILE(CPacketSessionRef& session, Protocol::C_SPAWN_PRO
 	projectile->SetMeshSize(Vec3(pkt.size().x(), pkt.size().y(), pkt.size().z()));
 	projectile->SetCollisionBoxInfo(Vec3(info.spawn_pos().x(), info.spawn_pos().y(), info.spawn_pos().z()), state.Size * projectile->GetMeshSize(), Vec3(0.f, 0.f, 0.f));
 	projectile->m_meshType = pkt.mesh();
+
+	if (pkt.who() == 1)
+	{
+		projectile->GetCollider()->SetCollisionProfile("MonsterProjectile");
+	}
+
 	g_Room->DoAsync(&CRoom::HandleSpawnProjectile, projectile);
 
 	return true;
@@ -195,7 +202,7 @@ bool Handle_C_MOVE_PROJECTILE(CPacketSessionRef& session, Protocol::C_MOVE_PROJE
 	{
 		object->ProjectileInfo->set_state(state);
 	}
-	
+
 	g_Room->DoAsync(&CRoom::HandleMoveProjectile, object);
 	return true;
 }

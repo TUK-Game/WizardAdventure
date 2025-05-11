@@ -170,7 +170,11 @@ enum class EPlayerAttribute
 
 enum class EMonsterType
 {
-	Slime
+	Crab,
+	Adc,
+
+
+	END
 };
 
 enum ESkillSlot

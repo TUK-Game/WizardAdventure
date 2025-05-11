@@ -30,10 +30,12 @@ public:
 	void SpawnSkill(class CSkillObject* object);
 	void SpawnSkillEffect(class CSkillObject* object);
 
+	void SpawnProjectileByMonster(class CSkillObject* object);
+	void MoveSkillByMonster(class CSkillObject* object);
+
 	void BuyItem(uint32 itemId);
 	void BuySkill(uint32 skillId);
 
-	void SpawnProjectileByMonster(class CGameObject* object);
 private:
 	class CPlayer* m_OwnPlayer;
 	UINT64			m_Id;

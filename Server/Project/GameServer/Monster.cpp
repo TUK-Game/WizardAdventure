@@ -99,6 +99,14 @@ void CMonster::SetType(EMonsterType type)
 
 void CMonster::SpawnAttackObject()
 {
+	if (m_Type == EMonsterType::Crab)
+	{
+		CrabAttack();
+	}
+}
+
+void CMonster::CrabAttack()
+{
 	CProjectileRef projectile = g_pool->Allocate();
 	assert(projectile != nullptr);
 
@@ -131,3 +139,4 @@ void CMonster::SpawnAttackObject()
 	g_Room->AddProjectile(projectile);
 	m_ProjectileIds.push_back(projectile->ProjectileInfo->projectile_id());
 }
+

@@ -24,6 +24,7 @@ public:
 	void SetCollisionBoxInfo(const Vec3& pos, const Vec3& size, const Vec3& rot);
 	void SetCollisionExplosion(bool b) { m_bCollisionExplosion = b; }
 	void SetMeshSize(const Vec3& size) { m_MeshSize = size; }
+	void SetIsServerUpdate(bool b);
 
 	Vec3 GetMeshSize() { return m_MeshSize; }
 	bool GetCollisionExplosion() { return m_bCollisionExplosion; }
@@ -42,5 +43,8 @@ protected:
 	bool m_bCollisionExplosion{};
 	ProjectileState m_Stats{};
 	CProjectileCollider* m_box;
+
+	// temp
+	bool m_bServerUpdate{};
 };
 

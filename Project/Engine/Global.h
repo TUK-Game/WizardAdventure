@@ -197,6 +197,7 @@ enum class SKILL
 	FIRE_METEORS,
 	FIRE_BALL_EXPLOSION,
 
+	ADC_BALL,
 	MAX
 };
 

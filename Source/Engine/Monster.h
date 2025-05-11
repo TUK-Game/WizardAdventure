@@ -15,8 +15,9 @@ public:
     virtual void SetTarget(const Vec3& pos, const Vec3& rot) { m_Interpolator->SetTarget(pos, rot); }
     void SetStats(int maxHp, int hp) { m_Stats->maxHp = maxHp; m_Stats->currentHp = hp; }
     Stats* GetStat() { return m_Stats; }
+    void SetMonsterType(EMonsterType type) { m_Type = type; }
 
-    EMonsterType GetType() const { return m_Type; }
+    EMonsterType GetMonsterType() const { return m_Type; }
 
     void CreateStateManager();
 
@@ -25,7 +26,7 @@ public:
     void OnDeath();
 
 protected:
-    EMonsterType m_Type;
+    EMonsterType m_Type = EMonsterType::Adc;
     Stats* m_Stats;
     CInterpolator* m_Interpolator;
 };
