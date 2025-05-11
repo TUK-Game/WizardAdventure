@@ -28,6 +28,8 @@ CMonster::CMonster()
 
 	m_Ai = new CMonsterAI();
 	m_Ai->SetOwner(this);
+
+	GetAbility()->gold = 1000.f;
 }
 
 CMonster::~CMonster()
@@ -78,6 +80,7 @@ void CMonster::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 				{
 					if (!player) continue;
 					player->GetAbility()->gold += GetAbility()->gold;
+					g_Room->UpdatePlayerAbility(player);
 				}
 			}
 		}

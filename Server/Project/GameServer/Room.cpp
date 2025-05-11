@@ -595,8 +595,7 @@ bool CRoom::UpdatePlayerGravity(CPlayerRef player, float deltaTime)
 		posInfo->set_state(player->GetState());
 
 		CSendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(movePkt);
-		if (auto session = player->GetSession())
-			session->Send(sendBuffer);
+		Broadcast(sendBuffer, -1);
 	}
 	else
 	{

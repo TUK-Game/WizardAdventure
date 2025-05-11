@@ -132,7 +132,7 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	case EPlayerAttribute::Fire:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_FIRE);
-		player->InitStats(100, 100, 30, 300.f, 1000);
+		player->InitStats(100, 100, 30, 300.f, 10000);
 		// temp
 
 		player->GetSkillManager()->LearnSkill(ESkillSlot::LButton, CSkillDataManager::GetInst()->FindSkill(CSkillDataManager::GetInst()->FindSkillId(L"FireShot")));
@@ -155,14 +155,14 @@ bool Handle_S_ENTER_GAME(CPacketSessionRef& session, Protocol::S_ENTER_GAME& pkt
 	case EPlayerAttribute::Ice:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_ICE);
-		player->InitStats(100, 100, 30, 300.f, 1000);
+		player->InitStats(100, 100, 30, 300.f, 10000);
 		gamewindow->SetFace(L"IceMage_Face");
 	}
 	break;
 	case EPlayerAttribute::Electric:
 	{
 		GSpkt.mutable_player()->set_player_type(Protocol::PLAYER_TYPE_LIGHTNING);
-		player->InitStats(100, 100, 30, 300.f, 1000);
+		player->InitStats(100, 100, 30, 300.f, 10000);
 		gamewindow->SetFace(L"LightningMage_Face");
 	}
 	break;

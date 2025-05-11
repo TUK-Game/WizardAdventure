@@ -35,8 +35,8 @@ bool CPlayer::BuyItem(CItemRef item)
 		return false;
 
 	float price = item->GetItemInfo().price;
-	//if (price > GetAbility()->gold)
-	//	return false;
+	if (price > GetAbility()->gold)
+		return false;
 
 	GetAbility()->gold -= price;
 	if (CalculateAbility(item))
@@ -57,8 +57,8 @@ bool CPlayer::BuySkill(CSkillRef skill)
 		return false;
 
 	float price = skill->GetSkillInfo().price;
-	//if (price > GetAbility()->gold)
-	//	return false;
+	if (price > GetAbility()->gold)
+		return false;
 
 	GetAbility()->gold -= price;
 
@@ -126,7 +126,7 @@ void CPlayer::Update(float deltaTime)
 		}
 		else
 		{
-			float scale = deltaTime * m_Speed * 0.2;
+			float scale = deltaTime * m_Speed * 0.3;
 			XMFLOAT3 scaledDir =
 			{
 				m_Dir.x() * scale,
@@ -176,7 +176,7 @@ void CPlayer::Update(float deltaTime)
 
 void CPlayer::CollisionBegin(CBoxCollider* src, CBoxCollider* dest)
 {
-	if (GetAbility()->currentHp <= 0 || m_bDamageDelay || m_State == Protocol::MOVE_STATE_DAMAGED || m_State == Protocol::MOVE_STATE_DASH)
+	if (GetAbility()->currentHp <= 0 || m_bDamageDelay || m_State == Protocol::MOVE_STATE_DAMAGED || m_State == Protocol::MOVE_STATE_DASH || m_State == Protocol::MOVE_STATE_DASH_END)
 		return;
 
 	if (dest->GetProfile()->channel == ECollision_Channel::MonsterProjectile || dest->GetProfile()->channel == ECollision_Channel::Monster)

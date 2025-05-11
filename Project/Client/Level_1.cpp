@@ -83,7 +83,7 @@ void CLevel_1::Init()
 	this->GetLayer(15)->SetName(L"NPC");	
 
 	CAssetManager::GetInst()->LoadSound("BGM", "Play", false, "e.mp3");
-	CAssetManager::GetInst()->LoadSound("BGM", "Level_1_BGM", false, "Level_1_BGM.mp3");
+	CAssetManager::GetInst()->LoadSound("BGM", "Level_1_BGM", true, "Level_1_BGM.mp3");
 	CAssetManager::GetInst()->SetVolume("BGM", 100);
 	CAssetManager::GetInst()->SoundPlay("Level_1_BGM");
 
