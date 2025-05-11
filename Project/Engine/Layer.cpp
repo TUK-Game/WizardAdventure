@@ -90,8 +90,10 @@ void CLayer::RemoveGameObject(CGameObject* object)
 	// 최상위 부모 오브젝트 벡터에서도 제거
 	m_vecParentObjects.erase(std::remove(m_vecParentObjects.begin(), m_vecParentObjects.end(), object), m_vecParentObjects.end());
 
-	if (object) 
+	if (object) {
 		delete object;
+		object = nullptr;
+	}
 }
 
 void CLayer::RemoveGameObjectInLevel(CGameObject* object)

@@ -14,7 +14,6 @@ public:
     }
 
     Vec3 GetEndScale() const { return m_EndScale; }
-
     virtual void Update() override;
     virtual void FinalUpdate() override;
 

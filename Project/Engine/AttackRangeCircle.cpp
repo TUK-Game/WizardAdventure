@@ -39,8 +39,7 @@ void CAttackRangeCircle::FinalUpdate()
     if (m_ElapsedTime >= m_Duration)
     {
         //m_bDelete = true;
-
-        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+        SetEnable(false);
     }
 
     // ╨сю╨ tint х©╟З

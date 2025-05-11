@@ -46,7 +46,7 @@ void CAttackRangeRect::FinalUpdate()
 
     if (m_ElapsedTime >= m_Duration)
     {
-        CLevelManager::GetInst()->GetCurrentLevel()->GetLayer(GetLayerIndex())->SafeRemoveGameObject(this);
+        SetEnable(false);
     }
 
     GetMeshRenderer()->GetMaterial()->SetVec4(0, Vec4(1.f, 0.f, 0.f, 1.f)); // ╨сю╨╩Ж tint

@@ -195,6 +195,7 @@ void CMonsterAI::UpdateAI(float deltaTime)
         if (m_DamagedTime >= m_DamagedDuration)
         {
             m_DamagedTime = 0.f;
+            m_AttackTime = 0.f; // attack 도중 damaged 상태 들어왔을 때 damaged 나갈 때 attak도 초기화
             m_Owner->SetState(Protocol::MOVE_STATE_DAMAGED_END);        // endDamaged
         }
         return;
