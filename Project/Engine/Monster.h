@@ -4,7 +4,7 @@
 class CMonster : public CGameObject
 {
 public:
-    CMonster();
+    CMonster(EMonsterType type = EMonsterType::Crab);
     virtual ~CMonster();
 
     virtual void Begin();
@@ -26,7 +26,7 @@ public:
     void OnDeath();
 
 protected:
-    EMonsterType m_Type = EMonsterType::Adc;
+    EMonsterType m_Type = EMonsterType::Crab;
     Stats* m_Stats;
     CInterpolator* m_Interpolator;
 };

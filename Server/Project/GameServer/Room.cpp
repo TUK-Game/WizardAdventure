@@ -169,7 +169,7 @@ void CRoom::UpdateMonster()
 		Protocol::MonsterInfo* info = pkt.add_monster_info();
 
 		info->set_object_id(monster->MonsterInfo->object_id());
-		info->set_monster_type(monster->MonsterInfo->monster_type());
+		info->set_monster_type(ConvertMonsterTypeToProtocol(monster->GetType()));
 
 		const Protocol::PosInfo& srcPosInfo = monster->MonsterInfo->object_info().pos_info();
 
@@ -366,6 +366,17 @@ bool CRoom::LeaveRoom(CPlayerRef leavePlayer)
 	}
 
 	return success;
+}
+
+Protocol::MonsterType CRoom::ConvertMonsterTypeToProtocol(EMonsterType type)
+{
+	switch (type)
+	{
+	case EMonsterType::Crab:
+		return Protocol::Monster_TYPE_CRAB;
+	case EMonsterType::Adc:
+		return Protocol::Monster_TYPE_ADC;
+	}
 }
 
 bool CRoom::HandleEnterPlayer(CPlayerRef player)

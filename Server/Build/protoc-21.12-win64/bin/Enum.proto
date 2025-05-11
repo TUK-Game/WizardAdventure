@@ -28,6 +28,8 @@ enum PlayerType
 enum MonsterType
 {
 	Monster_TYPE_Default = 0;
+	Monster_TYPE_CRAB = 1;
+	Monster_TYPE_ADC = 2;
 }
 
 

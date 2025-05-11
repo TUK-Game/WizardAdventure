@@ -67,6 +67,8 @@ private:
 	bool EnterRoom(CPlayerRef object, bool bRandPos = true);
 	bool LeaveRoom(CPlayerRef object);
 
+	Protocol::MonsterType ConvertMonsterTypeToProtocol(EMonsterType type);
+
 private:
 	void Broadcast(CSendBufferRef sendBuffer, uint64 exceptId = 0);
 

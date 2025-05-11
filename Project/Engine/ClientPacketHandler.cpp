@@ -296,7 +296,19 @@ bool Handle_S_MONSTER_INFO(CPacketSessionRef& session, Protocol::S_MONSTER_INFO&
 		CMonster* monster = monsterMap[objectId];
 		if (nullptr == monster)
 		{
-			monster = new CMonster();
+			switch (info.monster_type())
+			{
+			case Protocol::Monster_TYPE_CRAB:
+			{
+				monster = new CMonster(EMonsterType::Crab);
+			}
+			break;
+			case Protocol::Monster_TYPE_ADC:
+			{
+				monster = new CMonster(EMonsterType::Adc);
+			}
+			break;
+			}
 			monster->GetTransform()->SetRelativeScale(Vec3(info.object_info().pos_info().size().x(), 
 				info.object_info().pos_info().size().y(),
 				info.object_info().pos_info().size().z()));

@@ -22,6 +22,7 @@ public:
 
 		return object;
 	}
+
 private:
 	static std::atomic<int64>	s_IdGenerator;
 };

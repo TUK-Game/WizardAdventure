@@ -130,12 +130,14 @@ inline bool PlayerType_Parse(
 }
 enum MonsterType : int {
   Monster_TYPE_Default = 0,
+  Monster_TYPE_CRAB = 1,
+  Monster_TYPE_ADC = 2,
   MonsterType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   MonsterType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool MonsterType_IsValid(int value);
 constexpr MonsterType MonsterType_MIN = Monster_TYPE_Default;
-constexpr MonsterType MonsterType_MAX = Monster_TYPE_Default;
+constexpr MonsterType MonsterType_MAX = Monster_TYPE_ADC;
 constexpr int MonsterType_ARRAYSIZE = MonsterType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MonsterType_descriptor();

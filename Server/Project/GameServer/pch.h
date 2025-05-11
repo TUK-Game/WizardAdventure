@@ -106,3 +106,8 @@ struct WorldTriangle
 };
 
 std::wstring s2ws(const std::string& str);
+
+enum class EMonsterType {
+	Crab,
+	Adc,
+};

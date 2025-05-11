@@ -129,10 +129,13 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 		std::vector<float> rot = obj["rotation"];
 		std::vector<float> scale = obj["scale"];
 		std::vector<float> size = obj["size"];
+		std::string type = obj["type"];
 
 		CMonsterRef object = CObjectUtil::CreateMonster();
 		object->GetCollider()->SetBoxInfo(Vec3(pos[0], pos[1], pos[2]), Vec3(size[0] * scale[0], size[1] * scale[1], size[2] * scale[2]),
 			Vec3(rot[0], rot[1], rot[2]), Vec3(0, size[1] * scale[1] / 2, 0));
+
+		object->SetType(CJsonLoader::ConvertNameToMonsterType(type));
 
 		object->GetCollider()->SetCollisionProfile("Monster");
 		object->MonsterInfo->mutable_object_info()->mutable_pos_info()->set_state(Protocol::MOVE_STATE_IDLE);
@@ -161,7 +164,6 @@ void CJsonLoader::LoadMonster(const std::wstring& fileName, CRoomRef room)
 				break;
 			}
 		}
-		return;
 		//room->AddObject((uint32)EObject_Type::Monster, object);
 		//break;
 	}
@@ -308,4 +310,12 @@ void CJsonLoader::LoadSkill(const std::wstring& fileName, std::unordered_map<uin
 		CSkillRef skill = std::make_shared<CSkill>(SkillInfo(id, name, description, ratio, attribute, price, keytype, cooltime));
 		skillMap[id] = skill;
 	}
+}
+
+EMonsterType CJsonLoader::ConvertNameToMonsterType(const std::string& name)
+{
+	if (name == "Crab")
+		return EMonsterType::Crab;
+	if (name == "Adc")
+		return EMonsterType::Adc;
 }

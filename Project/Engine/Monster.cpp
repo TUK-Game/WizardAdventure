@@ -22,9 +22,10 @@
 
 #include <iostream>
 
-CMonster::CMonster()
+CMonster::CMonster(EMonsterType type)
 	: m_Interpolator(new CInterpolator())
 {
+	m_Type = type;
 
 	CMeshData* data2;
 	std::vector<CGameObject*> obj2;

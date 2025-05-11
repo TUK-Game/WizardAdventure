@@ -2,11 +2,6 @@
 
 #include "Creature.h"
 
-enum class EMonsterType {
-	Crab,
-	Adc,
-};
-
 class CMonster : public CCreature
 {
 public:
@@ -51,7 +46,7 @@ protected:
 	float m_Speed = 5000.f;
 
 	// temp
-	EMonsterType m_Type = EMonsterType::Adc;
+	EMonsterType m_Type = EMonsterType::Crab;
 
 };
 

@@ -11,6 +11,7 @@
 #include "PathManager.h"
 #include "BaseCollider.h"
 #include "Layer.h"
+#include "Monster.h"
 
 using json = nlohmann::json;
 
@@ -107,6 +108,19 @@ void CJsonConverter::SaveMonster(const std::wstring& fileName)
         obj["rotation"] = { rot.x, rot.y, rot.z };
         obj["scale"] = { scale.x, scale.y, scale.z };
         obj["size"] = { collider->size.x, collider->size.y, collider->size.z };
+
+        CMonster* monster = dynamic_cast<CMonster*>(object);
+        assert(monster != nullptr);
+
+        switch (monster->GetMonsterType())
+        {
+        case EMonsterType::Crab:
+            obj["type"] = "Crab";
+            break;
+        case EMonsterType::Adc:
+            obj["type"] = "Adc";
+            break;
+        }
 
         if (um[name])
         {

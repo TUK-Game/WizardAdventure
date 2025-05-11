@@ -203,17 +203,26 @@ void CLevel_1::Init()
 	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
 	//	this->AddGameObject(monster, LAYER_MONSTER, false);
-	//} {
+	//}
+	//{
 	//	CMonster* monster = new CMonster();
 	//	monster->SetName(L"crab3");
-	//	monster->GetTransform()->SetRelativePosition(6300, -300 * 0.5, 4300);
+	//	monster->GetTransform()->SetRelativePosition(7500, -300 * 0.5, 3850.f);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//}
+	//{
+	//	CMonster* monster = new CMonster(EMonsterType::Adc);
+	//	monster->SetName(L"adc1");
+	//	monster->GetTransform()->SetRelativePosition(6300, 20, 4300);
 	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
 	//	this->AddGameObject(monster, LAYER_MONSTER, false);
 	//} {
-	//	CMonster* monster = new CMonster();
-	//	monster->SetName(L"crab4");
-	//	monster->GetTransform()->SetRelativePosition(6300, -300 * 0.5, 3400);
+	//	CMonster* monster = new CMonster(EMonsterType::Adc);
+	//	monster->SetName(L"adc2");
+	//	monster->GetTransform()->SetRelativePosition(6300, 20, 3400);
 	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
 	//	this->AddGameObject(monster, LAYER_MONSTER, false);
@@ -222,7 +231,7 @@ void CLevel_1::Init()
 	//// 2번
 	//{
 	//	CMonster* monster = new CMonster();
-	//	monster->SetName(L"crab5");
+	//	monster->SetName(L"crab4");
 	//	monster->GetTransform()->SetRelativePosition(4000, -300 * 0.5, 3200);
 	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
@@ -230,22 +239,22 @@ void CLevel_1::Init()
 	//} 
 	//{
 	//	CMonster* monster = new CMonster();
-	//	monster->SetName(L"crab6");
+	//	monster->SetName(L"crab5");
 	//	monster->GetTransform()->SetRelativePosition(4000, -300 * 0.5, 4500);
 	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
 	//	this->AddGameObject(monster, LAYER_MONSTER, false);
 	//} {
-	//	CMonster* monster = new CMonster();
-	//	monster->SetName(L"crab7");
-	//	monster->GetTransform()->SetRelativePosition(3275, -300 * 0.5, 3975);
+	//	CMonster* monster = new CMonster(EMonsterType::Adc);
+	//	monster->SetName(L"adc3");
+	//	monster->GetTransform()->SetRelativePosition(3275, 20, 3975);
 	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
 	//	this->AddGameObject(monster, LAYER_MONSTER, false);
 	//} {
-	//	CMonster* monster = new CMonster();
-	//	monster->SetName(L"crab8");
-	//	monster->GetTransform()->SetRelativePosition(3275, -300 * 0.5, 3675);
+	//	CMonster* monster = new CMonster(EMonsterType::Adc);
+	//	monster->SetName(L"adc4");
+	//	monster->GetTransform()->SetRelativePosition(3275, 20, 3675);
 	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
 	//	this->AddGameObject(monster, LAYER_MONSTER, false);
@@ -254,20 +263,28 @@ void CLevel_1::Init()
 	//// 3번
 	//{
 	//	CMonster* monster = new CMonster();
-	//	monster->SetName(L"crab9");
-	//	monster->GetTransform()->SetRelativePosition(-500, -300 * 0.5, 3850);
+	//	monster->SetName(L"crab6");
+	//	monster->GetTransform()->SetRelativePosition(0, -300 * 0.5, 3850);
 	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
 	//	this->AddGameObject(monster, LAYER_MONSTER, false);
 	//}
 	//{
 	//	CMonster* monster = new CMonster();
-	//	monster->SetName(L"crab10");
+	//	monster->SetName(L"crab7");
 	//	monster->GetTransform()->SetRelativePosition(-300, -300 * 0.5, 2500);
 	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
 	//	this->AddGameObject(monster, LAYER_MONSTER, false);
 	//} 
+	//{
+	//	CMonster* monster = new CMonster(EMonsterType::Adc);
+	//	monster->SetName(L"adc5");
+	//	monster->GetTransform()->SetRelativePosition(-500, 20, 3850);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	monster->GetTransform()->SetRelativeRotation(0.f, 270.f, 0.f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//}
 
 	//// 4번
 	//{
@@ -290,6 +307,38 @@ void CLevel_1::Init()
 	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
 	//	this->AddGameObject(monster, LAYER_MONSTER, false);
 	//} 
+	//{
+	//	CMonster* monster = new CMonster(EMonsterType::Adc);
+	//	monster->SetName(L"adc6");
+	//	monster->GetTransform()->SetRelativePosition(-650, 20, 7050);
+	//	monster->GetTransform()->SetRelativeRotation(0, 90, 0);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//}
+	//{
+	//	CMonster* monster = new CMonster(EMonsterType::Adc);
+	//	monster->SetName(L"adc7");
+	//	monster->GetTransform()->SetRelativePosition(-650, 20, 8250);
+	//	monster->GetTransform()->SetRelativeRotation(0, 45, 0);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//}
+	//{
+	//	CMonster* monster = new CMonster(EMonsterType::Adc);
+	//	monster->SetName(L"adc8");
+	//	monster->GetTransform()->SetRelativePosition(-2000, 20, 7050);
+	//	monster->GetTransform()->SetRelativeRotation(0, -90, 0);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//}
+	//{
+	//	CMonster* monster = new CMonster(EMonsterType::Adc);
+	//	monster->SetName(L"adc9");
+	//	monster->GetTransform()->SetRelativePosition(-2000, 20, 8250);
+	//	monster->GetTransform()->SetRelativeRotation(0, -45, 0);
+	//	monster->GetTransform()->SetRelativeScale(0.5f, 0.5f, 0.5f);
+	//	this->AddGameObject(monster, LAYER_MONSTER, false);
+	//}
 
 	//{
 	//	CNPC* npc = new CNPC();
