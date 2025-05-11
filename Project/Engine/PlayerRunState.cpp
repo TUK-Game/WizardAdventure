@@ -7,6 +7,7 @@
 #include "LevelManager.h"
 #include "ServerSession.h"
 #include "NetworkManager.h"
+#include "AssetManager.h"
 
 void CPlayerRunState::Enter(CGameObject* entity)
 {
@@ -18,6 +19,7 @@ void CPlayerRunState::Enter(CGameObject* entity)
         if(o->GetAnimator())
             o->GetAnimator()->Play(L"RUNNING");
     }
+
 }
 
 void CPlayerRunState::Update(CGameObject* entity, float deltaTime)
@@ -50,4 +52,5 @@ void CPlayerRunState::Exit(CGameObject* entity)
 #ifdef _DEBUG;
     std::cout << "Exiting Run State" << std::endl;
 #endif
+
 }

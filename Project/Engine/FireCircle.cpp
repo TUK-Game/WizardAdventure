@@ -16,7 +16,7 @@ CFireCircle::CFireCircle()
     GetTransform()->SetRelativeRotation(90.f, 0.f, 0.f);
         
     GetMeshRenderer()->SetMesh(CAssetManager::GetInst()->FindAsset<CMesh>(L"Rectangle"));
-    GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Circle"));
+    GetMeshRenderer()->SetMaterial(CAssetManager::GetInst()->FindAsset<CMaterial>(L"Circle")->Clone());
 }
 
 void CFireCircle::Update()

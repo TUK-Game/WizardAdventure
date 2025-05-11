@@ -111,6 +111,7 @@ void CFireTower::FinalUpdate()
 		if (m_ElapsedTime >= m_Duration) 
 		{
 			// dissolve·Î ÀüÈ¯
+			CAssetManager::GetInst()->SoundPlay("FireTowerDissolve");
 			root->SetDissolve(true);
 			root->SetThreshold(0.f);
 			for (auto o : objs)
@@ -224,4 +225,6 @@ void CFireTower::FireAtEnemy(CGameObject* enemy)
 	CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
 
 	CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, LAYER_PROJECTILE, false);
+	CAssetManager::GetInst()->SoundPlay("FireBall");
+
 }

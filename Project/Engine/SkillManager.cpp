@@ -23,6 +23,7 @@
 #include "InventoryWIdgetWindow.h"
 #include "StoreWidgetWindow.h"
 #include "SkillData.h"
+#include "AssetManager.h"
 
 CSkillManager::CSkillManager(EPlayerAttribute attribute, CGameObject* owner)
     : m_Attribute(attribute), m_Owner(owner) {}
@@ -149,6 +150,7 @@ void CSkillManager::CastFireballTowardMouse(float damageRatio)
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
 
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, LAYER_PROJECTILE, false);
+    CAssetManager::GetInst()->SoundPlay("FireBall");
 }
 
 void CSkillManager::CastFireballTowardQ(float damageRatio, float duration)
@@ -188,6 +190,8 @@ void CSkillManager::CastFireballTowardQ(float damageRatio, float duration)
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(fireBall);
 
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(fireBall, LAYER_PROJECTILE, false);
+    CAssetManager::GetInst()->SoundPlay("FireBallQShoot");
+
 }
 
 void CSkillManager::SpawnFireTowerAtMouse(float damageRatio, float duration)
@@ -210,6 +214,7 @@ void CSkillManager::SpawnFireTowerAtMouse(float damageRatio, float duration)
     CNetworkManager::GetInst()->s_GameSession->SpawnSkill(tower);
 
     CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(tower, LAYER_PROJECTILE, false);
+    CAssetManager::GetInst()->SoundPlay("FireTower");
 
 }
 

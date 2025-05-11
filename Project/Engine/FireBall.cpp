@@ -93,6 +93,7 @@ void CFireBall::OffParticles()
 	break;
 	case EFireBallMode::QSkill:
 	{
+		CAssetManager::GetInst()->SoundPlay("FireBallQExplosion");
 		CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
 		CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);
 		CEffectManager::GetInst()->SpawnEffect(L"Shockwave", pos);
@@ -106,7 +107,7 @@ void CFireBall::OffParticles()
 			CParticleSystemManager::GetInst()->RemoveEmitter(L"Smoke", m_SmokeParticleId);
 			m_SmokeParticleId = -1;
 		}
-
+		CAssetManager::GetInst()->SoundPlay("MeteorExplosion");
 		CEffectManager::GetInst()->SpawnRadialSmoke(pos);
 		CEffectManager::GetInst()->SpawnEffect(L"Explosion", pos);
 		CEffectManager::GetInst()->SpawnEffect(L"Explosion1", pos);

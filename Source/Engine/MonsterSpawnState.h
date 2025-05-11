@@ -7,7 +7,5 @@ class CMonsterSpawnState :
     void Update(CGameObject* entity, float deltaTime) override;
     void Exit(CGameObject* entity) override;
     EState_Type GetStateType() const override { return EState_Type::Spawn; }
-private:
-    float m_duaration = 0.f;
 };
 

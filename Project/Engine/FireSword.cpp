@@ -81,6 +81,8 @@ void CFireSword::Update()
 
 			if (m_Elapsed >= m_RotateWaitTime)
 			{
+				CAssetManager::GetInst()->SoundPlay("FireSword");
+
 				m_ReadyToFire = true;
 				m_Elapsed = 0.f;
 				CNetworkManager::GetInst()->s_GameSession->SpawnSkillEffect(this);

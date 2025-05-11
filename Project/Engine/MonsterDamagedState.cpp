@@ -4,6 +4,7 @@
 #include "Animator.h"
 #include "MonsterAI.h"
 #include "StateManager.h"
+#include "AssetManager.h"
 
 void CMonsterDamagedState::Enter(CGameObject* entity)
 {

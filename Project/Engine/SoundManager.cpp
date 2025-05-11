@@ -44,8 +44,9 @@ bool CSoundManager::Init()
     m_mapChannelGroup.insert(std::make_pair("Master", m_masterGroup));
 
     CreateSoundChannel("BGM");
-    CreateSoundChannel("Effect");
+    CreateSoundChannel("EFFECT");
     CreateSoundChannel("UI");
+    CreateSoundChannel("SKILL");
 
     return true;
 }

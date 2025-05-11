@@ -21,7 +21,7 @@ void CMonsterDissolveState::Enter(CGameObject* entity)
             // µðÁ¹ºê ¼ÎÀÌ´õ ±³Ã¼
             auto renderer = o->GetMeshRenderer();
             if (renderer) {
-                auto dissolveMat = CAssetManager::GetInst()->FindAsset<CMaterial>(L"Dissolve");
+                auto dissolveMat = CAssetManager::GetInst()->FindAsset<CMaterial>(L"Dissolve")->Clone();
                 if (dissolveMat) {
                     dissolveMat->SetTexture(0, renderer->GetMaterial()->GetTexture(0));
                     dissolveMat->SetTexture(1, renderer->GetMaterial()->GetTexture(1));

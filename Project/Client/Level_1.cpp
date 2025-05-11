@@ -83,11 +83,25 @@ void CLevel_1::Init()
 	this->GetLayer(15)->SetName(L"NPC");	
 
 	CAssetManager::GetInst()->LoadSound("BGM", "Play", false, "e.mp3");
-	CAssetManager::GetInst()->SetVolume("BGM", 30);
-	CAssetManager::GetInst()->SoundPlay("Play");
+	CAssetManager::GetInst()->LoadSound("BGM", "Level_1_BGM", false, "Level_1_BGM.mp3");
+	CAssetManager::GetInst()->SetVolume("BGM", 100);
+	CAssetManager::GetInst()->SoundPlay("Level_1_BGM");
 
 	CAssetManager::GetInst()->LoadSound("UI", "Click", false, "click.mp3");
 	CAssetManager::GetInst()->SetVolume("UI", 30);
+
+	CAssetManager::GetInst()->LoadSound("EFFECT", "Damaged", false, "Damaged.mp3");
+	CAssetManager::GetInst()->LoadSound("EFFECT", "Move", false, "Move.mp3");
+	CAssetManager::GetInst()->LoadSound("SKILL", "FireBall", false, "FireBall.mp3");
+	CAssetManager::GetInst()->LoadSound("SKILL", "FireTower", false, "FireTower.mp3");
+	CAssetManager::GetInst()->LoadSound("SKILL", "FireTowerDissolve", false, "FireTowerDissolve.mp3");
+	CAssetManager::GetInst()->LoadSound("SKILL", "FireBallQShoot", false, "FireBallQShoot.mp3");
+	CAssetManager::GetInst()->LoadSound("SKILL", "FireBallQExplosion", false, "FireBallQExplosion.mp3");
+	CAssetManager::GetInst()->LoadSound("SKILL", "MeteorExplosion", false, "MeteorExplosion.mp3");
+	CAssetManager::GetInst()->LoadSound("SKILL", "FireSword", false, "FireSword.mp3");
+	
+	CAssetManager::GetInst()->SetVolume("SKILL", 100);
+
 
 #pragma endregion
 
