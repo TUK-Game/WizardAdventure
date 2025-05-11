@@ -26,8 +26,8 @@ void CMonsterAI::UpdateType(EMonsterType type)
 
     switch (type) {
     case EMonsterType::Crab:
-        m_DetectRange = 5000.f;
-        m_AttackRange = 500.f;
+        m_DetectRange = 2000.f;
+        m_AttackRange = 400.f;
 
         m_AttackTime = 0.f;
         m_AttackDuration = 1.5f;
@@ -48,23 +48,23 @@ void CMonsterAI::UpdateType(EMonsterType type)
         break;
 
     case EMonsterType::Adc:
-        m_DetectRange = 5000.f;
-        m_AttackRange = 2000.f;
+        m_DetectRange = 2000.f;
+        m_AttackRange = 700.f;
 
         m_AttackTime = 0.f;
-        m_AttackDuration = 1.5f;
+        m_AttackDuration = 1.f;
 
         m_DamagedTime = 0.f;
-        m_DamagedDuration = 0.666667f;
+        m_DamagedDuration = 0.833333f;
 
         m_DeathTime = 0.f;
-        m_DeathDuration = 3.f;
+        m_DeathDuration = 1.2f;
 
         m_DissolveTime = 0.f;
         m_DissolveDuration = 1.f;
 
         m_SpawnTime = 0.f;
-        m_SpawnDuration = 3.5f;
+        m_SpawnDuration = 2.333333f;
 
         m_AngleThresholdDeg = 1.f;
 

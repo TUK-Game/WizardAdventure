@@ -25,7 +25,7 @@
 CMonster::CMonster()
 	: m_Interpolator(new CInterpolator())
 {
-	CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"Crab");
+	CMeshData* data2 = CAssetManager::GetInst()->FindAsset<CMeshData>(L"adc");
 	std::vector<CGameObject*> obj2 = data2->Instantiate(ECollision_Channel::Player); // temp
 
 	CreateStateManager();	
