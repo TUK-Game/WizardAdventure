@@ -179,12 +179,22 @@ void CMonsterAI::UpdateAI(float deltaTime)
         m_SpawnTime += deltaTime;
         if (m_SpawnTime >= m_SpawnDuration)
         {
-            // ���� ��ġ���� y������ 300��ŭ +�ؾ���
-            Protocol::Vector3* pos = m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
-            pos->set_y(pos->y() + 150.f);
+            if (m_Owner->GetType() == EMonsterType::Crab)
+            {
+                Protocol::Vector3* pos = m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+                pos->set_y(pos->y() + 150.f);
 
-            m_SpawnTime = 0.f;
-            m_Owner->SetState(Protocol::MOVE_STATE_IDLE);
+                m_SpawnTime = 0.f;
+                m_Owner->SetState(Protocol::MOVE_STATE_IDLE);
+            }
+            else
+            {
+                Protocol::Vector3* pos = m_Owner->MonsterInfo->mutable_object_info()->mutable_pos_info()->mutable_position();
+                pos->set_y(pos->y() - 20.f);
+
+                m_SpawnTime = 0.f;
+                m_Owner->SetState(Protocol::MOVE_STATE_IDLE);
+            }
         }
         return;
     }
