@@ -150,7 +150,7 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 		}
 		else if (!strcmp(pstrToken, "Transform:\n"))
 		{
-			FbxAMatrix num;
+			Matrix num;
 			file.read(reinterpret_cast<char*>(&num), sizeof(num));
 			meshInfo->matrix = num;
 		}
@@ -211,12 +211,12 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 			{
 				INT32 iNum;
 				double dNum;
-				FbxAMatrix matrix;
+				Matrix matrix;
 				char mName[100] = { '\0' };
 				file.read(reinterpret_cast<char*>(&length), sizeof(length));
 				file.read(mName, length);
 				file.read(reinterpret_cast<char*>(&iNum), sizeof(INT32));
-				file.read(reinterpret_cast<char*>(&matrix), sizeof(FbxAMatrix));
+				file.read(reinterpret_cast<char*>(&matrix), sizeof(Matrix));
 
 				boneInfo[j] = std::make_shared<FbxBoneInfo>();
 				boneInfo[j]->boneName = s2ws(mName);
@@ -236,22 +236,25 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 
 				size_t outSize, innerSize;
 				char mName[100] = { '\0' };
-				long long time;
-				FbxTime::EMode mode;
+				double time;
+				INT32 frame;
+
 				int meshNum;
 				file.read(reinterpret_cast<char*>(&length), sizeof(length));
 				file.read(mName, length);
-				file.read(reinterpret_cast<char*>(&time), sizeof(long long));
+				file.read(reinterpret_cast<char*>(&time), sizeof(double));
+				file.read(reinterpret_cast<char*>(&frame), sizeof(INT32));
 				m_AnimClips[j]->startTime = time;
+				m_AnimClips[j]->startFrame = frame;
 
-				file.read(reinterpret_cast<char*>(&time), sizeof(long long));
+				file.read(reinterpret_cast<char*>(&time), sizeof(double));
+				file.read(reinterpret_cast<char*>(&frame), sizeof(INT32));
 				m_AnimClips[j]->endTime = time;
+				m_AnimClips[j]->endFrame = frame;
 
-				file.read(reinterpret_cast<char*>(&mode), sizeof(mode));
 				file.read(reinterpret_cast<char*>(&meshNum), sizeof(meshNum));
 
 				m_AnimClips[j]->name = s2ws(mName);
-				m_AnimClips[j]->mode = mode;
 				m_AnimClips[j]->keyFrames.resize(meshNum);
 				for (int t = 0; t < meshNum; ++t)
 				{
@@ -265,7 +268,7 @@ void CJHDLoader::LoadFile(const char* filename, const std::wstring& textureFilen
 						{
 							FbxKeyFrameInfo in;
 							file.read(reinterpret_cast<char*>(&in.time), sizeof(double));
-							file.read(reinterpret_cast<char*>(&in.matTransform), sizeof(FbxAMatrix));
+							file.read(reinterpret_cast<char*>(&in.matTransform), sizeof(Matrix));
 							m_AnimClips[j]->keyFrames[t][k][m].matTransform = in.matTransform;
 							m_AnimClips[j]->keyFrames[t][k][m].time = in.time;
 						}

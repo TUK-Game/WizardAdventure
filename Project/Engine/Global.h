@@ -28,7 +28,7 @@
 #include <DirectXTex/DirectXTex.h>
 #include <DirectXTex/DirectXTex.inl>
 #include <ServerCore/CoreGlobal.h>
-#include <FBX/fbxsdk.h>
+//#include <FBX/fbxsdk.h>
 #include "d3dx12.h"
 #include "SimpleMath.h"
 #include "fmod.hpp"
@@ -65,15 +65,15 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "DirectxTex/DirectXTex_d.lib")
 #endif
 
-#ifdef _DEBUG
-#pragma comment(lib, "FBX/lib/debug/libfbxsdk-md.lib")
-#pragma comment(lib, "FBX/lib/debug/libxml2-md.lib")
-#pragma comment(lib, "FBX/lib/debug/zlib-md.lib")
-#else
-#pragma comment(lib, "FBX/lib/release/libfbxsdk-md.lib")
-#pragma comment(lib, "FBX/lib/release/libxml2-md.lib")
-#pragma comment(lib, "FBX/lib/release/zlib-md.lib")
-#endif 
+//#ifdef _DEBUG
+//#pragma comment(lib, "FBX/lib/debug/libfbxsdk-md.lib")
+//#pragma comment(lib, "FBX/lib/debug/libxml2-md.lib")
+//#pragma comment(lib, "FBX/lib/debug/zlib-md.lib")
+//#else
+//#pragma comment(lib, "FBX/lib/release/libfbxsdk-md.lib")
+//#pragma comment(lib, "FBX/lib/release/libxml2-md.lib")
+//#pragma comment(lib, "FBX/lib/release/zlib-md.lib")
+//#endif 
 
 #ifndef _DEBUG
 #pragma comment(lib, "PhysX/release/PhysXCommon_64.lib")

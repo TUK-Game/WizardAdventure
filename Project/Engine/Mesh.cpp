@@ -228,10 +228,10 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader, int index)
 		AnimClipInfo info = {};
 
 		info.animName = ac->name;
-		info.duration = ac->endTime.GetSecondDouble() - ac->startTime.GetSecondDouble();
+		info.duration = ac->endTime - ac->startTime;
 
-		INT32 startFrame = static_cast<INT32>(ac->startTime.GetFrameCount(ac->mode));
-		INT32 endFrame = static_cast<INT32>(ac->endTime.GetFrameCount(ac->mode));
+		INT32 startFrame = static_cast<INT32>(ac->startFrame);
+		INT32 endFrame = static_cast<INT32>(ac->endFrame);
 		info.frameCount = endFrame - startFrame;
 
 		info.keyFrames.resize(ac->keyFrames.size());
@@ -253,16 +253,29 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader, int index)
 				KeyFrameInfo& kfInfo = info.keyFrames[index][b][f];
 				kfInfo.time = kf.time;
 				kfInfo.frame = static_cast<INT32>(size);
-				kfInfo.scale.x = static_cast<float>(kf.matTransform.GetS().mData[0]);
-				kfInfo.scale.y = static_cast<float>(kf.matTransform.GetS().mData[1]);
-				kfInfo.scale.z = static_cast<float>(kf.matTransform.GetS().mData[2]);
-				kfInfo.rotation.x = static_cast<float>(kf.matTransform.GetQ().mData[0]);
-				kfInfo.rotation.y = static_cast<float>(kf.matTransform.GetQ().mData[1]);
-				kfInfo.rotation.z = static_cast<float>(kf.matTransform.GetQ().mData[2]);
-				kfInfo.rotation.w = static_cast<float>(kf.matTransform.GetQ().mData[3]);
-				kfInfo.translate.x = static_cast<float>(kf.matTransform.GetT().mData[0]);
-				kfInfo.translate.y = static_cast<float>(kf.matTransform.GetT().mData[1]);
-				kfInfo.translate.z = static_cast<float>(kf.matTransform.GetT().mData[2]);
+				// Translation
+				Matrix mat = kf.matTransform;
+				kfInfo.translate = Vector3(mat._41, mat._42, mat._43);
+
+				// Scale
+				Vector3 scaleX(mat._11, mat._12, mat._13);
+				Vector3 scaleY(mat._21, mat._22, mat._23);
+				Vector3 scaleZ(mat._31, mat._32, mat._33);
+
+				kfInfo.scale.x = scaleX.Length();
+				kfInfo.scale.y = scaleY.Length();
+				kfInfo.scale.z = scaleZ.Length();
+
+				// Normalize 회전행렬
+				Matrix rotationMatrix;
+				rotationMatrix._11 = mat._11 / kfInfo.scale.x; rotationMatrix._12 = mat._12 / kfInfo.scale.x; rotationMatrix._13 = mat._13 / kfInfo.scale.x; rotationMatrix._14 = 0.f;
+				rotationMatrix._21 = mat._21 / kfInfo.scale.y; rotationMatrix._22 = mat._22 / kfInfo.scale.y; rotationMatrix._23 = mat._23 / kfInfo.scale.y; rotationMatrix._24 = 0.f;
+				rotationMatrix._31 = mat._31 / kfInfo.scale.z; rotationMatrix._32 = mat._32 / kfInfo.scale.z; rotationMatrix._33 = mat._33 / kfInfo.scale.z; rotationMatrix._34 = 0.f;
+				rotationMatrix._41 = 0.f; rotationMatrix._42 = 0.f; rotationMatrix._43 = 0.f; rotationMatrix._44 = 1.f;
+
+				// Quaternion 변환
+				Quaternion q = Quaternion::CreateFromRotationMatrix(rotationMatrix);
+				kfInfo.rotation = q;
 			}
 		}
 
@@ -276,7 +289,7 @@ void CMesh::CreateBonesAndAnimations(CJHDLoader& loader, int index)
 	{
 		BoneInfo boneInfo = {};
 		boneInfo.parentIdx = bone->parentIndex;
-		boneInfo.matOffset = GetMatrix(bone->matOffset);
+		boneInfo.matOffset = (bone->matOffset);
 		boneInfo.boneName = bone->boneName;
 		m_Bones.push_back(boneInfo);
 	}

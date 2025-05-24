@@ -127,7 +127,7 @@ struct FbxMeshInfo
 	float minPos[3];
 	float maxPos[3];
 	float centerPos[4];
-	FbxAMatrix matrix;
+	Matrix matrix;
 	float translate[4];
 	float rotation[4];
 	float scale[4];
@@ -135,7 +135,7 @@ struct FbxMeshInfo
 
 struct FbxKeyFrameInfo
 {
-	FbxAMatrix  matTransform;
+	Matrix  matTransform;
 	double		time;
 };
 
@@ -143,7 +143,7 @@ struct FbxBoneInfo
 {
 	std::wstring			boneName;
 	INT32					parentIndex;
-	FbxAMatrix				matOffset;
+	Matrix				matOffset;
 };
 
 struct FbxAnimClipInfo

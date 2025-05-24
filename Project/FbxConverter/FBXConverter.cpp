@@ -68,7 +68,7 @@ void CFBXConverter::LoadMesh(FbxMesh* mesh)
     FbxNode* node = mesh->GetNode();
     FbxAMatrix worldTransform = node->EvaluateGlobalTransform();
 
-    meshInfo.matrix = worldTransform;
+    meshInfo.matrix = GetMatrix(worldTransform);
     FbxVector4 trans = worldTransform.GetT();
     FbxVector4 Rot = worldTransform.GetR();
     FbxVector4 scale = worldTransform.GetS();
@@ -336,7 +336,7 @@ void CFBXConverter::LoadOffsetMatrix(FbxCluster* cluster, const FbxAMatrix& matN
     matOffset = matClusterLinkTrans.Inverse() * matClusterTrans;
     matOffset = matReflect * matOffset * matReflect;
 
-    m_Bones[boneIdx]->matOffset = matOffset.Transpose();
+    m_Bones[boneIdx]->matOffset = GetMatrix(matOffset.Transpose());
 }
 
 void CFBXConverter::LoadKeyframe(INT32 animIndex, FbxNode* node, FbxCluster* cluster, const FbxAMatrix& matNodeTransform, INT32 boneIdx, FbxMeshInfo* container)
@@ -376,7 +376,7 @@ void CFBXConverter::LoadKeyframe(INT32 animIndex, FbxNode* node, FbxCluster* clu
         matTransform = matReflect * matTransform * matReflect;
 
         keyFrameInfo.time = fbxTime.GetSecondDouble();
-        keyFrameInfo.matTransform = matTransform;
+        keyFrameInfo.matTransform = GetMatrix(matTransform);
 
         m_AnimClips[animIndex]->keyFrames[meshNum][boneIdx].push_back(keyFrameInfo);
     }
@@ -850,8 +850,8 @@ void CFBXConverter::SaveBinary(const char* filename, const std::vector<FbxMeshIn
             std::string temp = ws2s(bone->boneName);
             WriteString(temp, file);
             file.write(reinterpret_cast<const char*>(&(bone->parentIndex)), sizeof(INT32));
-            FbxAMatrix mat = bone->matOffset;
-            file.write(reinterpret_cast<const char*>(&(bone->matOffset)), sizeof(FbxAMatrix));
+            Matrix mat = bone->matOffset;
+            file.write(reinterpret_cast<const char*>(&(mat)), sizeof(Matrix));
         }
 
         // 요주
@@ -865,11 +865,14 @@ void CFBXConverter::SaveBinary(const char* filename, const std::vector<FbxMeshIn
     {
         std::string temp = ws2s(clipInfo->name);
         WriteString(temp, file);
-        long long timeValue = clipInfo->startTime.Get();
-        file.write(reinterpret_cast<const char*>(&timeValue), sizeof(long long));
-        timeValue = clipInfo->endTime.Get();
-        file.write(reinterpret_cast<const char*>(&timeValue), sizeof(long long));
-        file.write(reinterpret_cast<const char*>(&clipInfo->mode), sizeof(clipInfo->mode));
+        double timeValue = clipInfo->startTime.GetSecondDouble();
+        INT32 startFrame = static_cast<INT32>(clipInfo->startTime.GetFrameCount(clipInfo->mode));
+        file.write(reinterpret_cast<const char*>(&timeValue), sizeof(double));
+        file.write(reinterpret_cast<const char*>(&startFrame), sizeof(INT32));
+        timeValue = clipInfo->endTime.GetSecondDouble();
+        INT32 endFrame = static_cast<INT32>(clipInfo->endTime.GetFrameCount(clipInfo->mode));
+        file.write(reinterpret_cast<const char*>(&timeValue), sizeof(double));
+        file.write(reinterpret_cast<const char*>(&endFrame), sizeof(INT32));
         file.write(reinterpret_cast<const char*>(&meshNum), sizeof(meshNum));
         for (int i = 0; i < meshNum; ++i)
         {

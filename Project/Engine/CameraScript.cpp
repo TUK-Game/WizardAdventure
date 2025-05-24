@@ -58,7 +58,6 @@ void CCameraScript::Update()
 	if (!GetCamera())
 		return;
 
-
 	if (KEY_PUSH(EKey::Esc))
 	{
 		PostQuitMessage(0);

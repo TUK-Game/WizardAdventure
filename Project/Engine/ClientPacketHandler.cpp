@@ -628,7 +628,7 @@ bool Handle_S_GATE_CLOSE(CPacketSessionRef& session, Protocol::S_GATE_CLOSE& pkt
 
 bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
 {
-	CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
+	/*CLevel* level = CLevelManager::GetInst()->GetCurrentLevel();
 	const auto& win = level->FindWidgetWindow(EWIDGETWINDOW_TYPE::STORE_WINDOW);
 	win->SetEnable(false);
 
@@ -690,7 +690,7 @@ bool Handle_S_SPAWN_NPC(CPacketSessionRef& session, Protocol::S_SPAWN_NPC& pkt)
 
 		npc->Begin();
 		CLevelManager::GetInst()->GetCurrentLevel()->SafeAddGameObject(npc, LAYER_NPC, false);
-	}
+	}*/
 
 	return true;
 }

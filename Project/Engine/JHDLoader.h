@@ -29,7 +29,7 @@ struct JHDMeshInfo : public CAsset
 	std::vector<JHDMaterialInfo>			materials;
 	std::vector<BoneWeight>					boneWeights; // »À °¡ÁßÄ¡
 	bool									hasAnimation = false;
-	FbxAMatrix matrix;
+	Matrix matrix;
 	Vec4 translate;
 	Vec4 rotation;
 	Vec4 scale;
@@ -43,7 +43,7 @@ struct JHDMeshInfo : public CAsset
 
 struct FbxKeyFrameInfo
 {
-	FbxAMatrix  matTransform;
+	Matrix  matTransform;
 	double		time;
 };
 
@@ -51,15 +51,16 @@ struct FbxBoneInfo
 {
 	std::wstring			boneName;
 	INT32					parentIndex;
-	FbxAMatrix				matOffset;
+	Matrix				matOffset;
 };
 
 struct FbxAnimClipInfo
 {
 	std::wstring			name;
-	FbxTime					startTime;
-	FbxTime					endTime;
-	FbxTime::EMode			mode;
+	double					startTime;
+	double					endTime;
+	INT32					startFrame;
+	INT32					endFrame;
 	std::vector<std::vector<std::vector<FbxKeyFrameInfo>>>	keyFrames;
 };
 

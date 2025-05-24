@@ -50,7 +50,7 @@ CMeshData* CMeshData::LoadFromJHD(const std::wstring& path, const std::wstring& 
 		MeshRenderInfo info = {};
 		info.mesh = mesh;
 		info.materials = materials;
-		info.matrix = GetMatrix(loader.GetMesh(i).matrix);
+		info.matrix = (loader.GetMesh(i).matrix);
 		info.boundingBoxMax = loader.GetMesh(i).BoundingBoxMax;
 		info.boundingBoxMin = loader.GetMesh(i).BoundingBoxMin;
 		info.centerPos = loader.GetMesh(i).centerPos;
